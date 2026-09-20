@@ -29,6 +29,9 @@ MAX_DEPTH = 6
 # these read like ingredients but are not items we can track
 SKIP = {"mystic forge", "the mystic forge"}
 
+# descriptions carry markup like <c=@reminder>...</c>
+TAGS = re.compile(r"<[^>]*>")
+
 
 def get(path, params=None):
     url = API + path
@@ -63,6 +66,11 @@ def fetch_all_items(lang):
     return items
 
 
+def deplural(name):
+    """rough plural stripper, good enough for english and french"""
+    return " ".join(w[:-1] if len(w) > 3 and w.endswith("s") else w for w in name.lower().split())
+
+
 def singular_candidates(name):
     """Item names in descriptions are plural: 'Globs of Ectoplasm'."""
     out = [name]
@@ -87,11 +95,11 @@ PIECE = re.compile(r"(?:(\d[\d,]*)|an?)\s+(.+)")
 def parse_ingredients(description):
     if not description:
         return []
-    text = description.replace("\n", " ")
+    text = TAGS.sub(" ", description).replace("\n", " ")
     out = []
-    if "Mystic Forge" in text or "Mystic Toilet" in text:
-        for qty, name in BULLET.findall(text):
-            out.append((int(qty.replace(",", "")), name.strip(" .,")))
+    # bullet lists look the same in every language, so no keyword check here
+    for qty, name in BULLET.findall(text):
+        out.append((int(qty.replace(",", "")), name.strip(" .,")))
     if not out:
         m = COMBINE.search(text)
         if m:
@@ -108,7 +116,7 @@ def parse_ingredients(description):
     return [(q, n) for q, n in out if n.lower() not in SKIP]
 
 
-def build_tree(item, items, by_name, depth, seen, unresolved):
+def build_tree(item, items, by_name, loose, depth, seen, unresolved):
     node = {
         "id": item["id"],
         "name": item["name"],
@@ -125,10 +133,12 @@ def build_tree(item, items, by_name, depth, seen, unresolved):
             if child_id:
                 break
         if not child_id:
+            child_id = loose.get(deplural(raw))
+        if not child_id:
             unresolved.add(raw)
             children.append({"id": None, "name": raw, "count": qty})
             continue
-        child = build_tree(items[child_id], items, by_name, depth + 1, seen | {item["id"]}, unresolved)
+        child = build_tree(items[child_id], items, by_name, loose, depth + 1, seen | {item["id"]}, unresolved)
         child["count"] = qty
         children.append(child)
     if children:
@@ -143,29 +153,41 @@ def main():
     for lang in langs:
         items = fetch_all_items(lang)
         by_name = {}
+        loose = {}
         for row in items.values():
             by_name.setdefault(row["name"].lower(), row["id"])
+            loose.setdefault(deplural(row["name"]), row["id"])
 
-        legendaries = [
-            row for row in items.values()
-            if row.get("rarity") == "Legendary" and row.get("type") in ("Weapon", "Armor", "Back", "Trinket")
-            and row.get("description")
-        ]
-        legendaries.sort(key=lambda r: r["name"])
+        # roots are the things worth showing as a goal: legendary gear and
+        # every gift/tribute that has a forge recipe of its own
+        roots = []
+        for row in items.values():
+            if not row.get("description"):
+                continue
+            ingredients = parse_ingredients(row["description"])
+            if len(ingredients) < 2:
+                continue
+            legendary = row.get("rarity") == "Legendary"
+            if not legendary and row.get("rarity") not in ("Exotic", "Ascended"):
+                continue
+            roots.append((row, legendary))
+        roots.sort(key=lambda r: (not r[1], r[0]["name"]))
 
         unresolved = set()
         trees = []
-        for row in legendaries:
-            tree = build_tree(row, items, by_name, 0, set(), unresolved)
-            # only keep things that actually have a forge recipe
-            if tree.get("children"):
-                tree["type"] = row.get("type")
-                trees.append(tree)
-        print("%s: %d legendaries with a recipe, %d unresolved names"
-              % (lang, len(trees), len(unresolved)), flush=True)
-        for name in sorted(unresolved)[:20]:
+        for row, legendary in roots:
+            tree = build_tree(row, items, by_name, loose, 0, set(), unresolved)
+            if not tree.get("children"):
+                continue
+            tree["type"] = row.get("type")
+            tree["kind"] = "legendary" if legendary else "gift"
+            trees.append(tree)
+        print("%s: %d recipes (%d legendary), %d unresolved names"
+              % (lang, len(trees), sum(1 for t in trees if t["kind"] == "legendary"), len(unresolved)),
+              flush=True)
+        for name in sorted(unresolved)[:30]:
             print("  unresolved: " + name, flush=True)
-        result["languages"][lang] = trees
+        result["languages"][lang] = {"roots": trees, "unresolved": sorted(unresolved)}
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
