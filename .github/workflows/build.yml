@@ -62,3 +62,5 @@ jobs:
         with:
           files: tyria-codex.apk
           generate_release_notes: true
+          make_latest: true
+          fail_on_unmatched_files: true
