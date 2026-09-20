@@ -26,6 +26,13 @@ jobs:
           channel: stable
           cache: true
 
+      # every runner generates its own debug key, which would give every apk a
+      # different signature and break installing over the previous version
+      - name: Use the stable signing key
+        run: |
+          mkdir -p ~/.android
+          cp ci/debug.keystore ~/.android/debug.keystore
+
       # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
         run: flutter create --platforms=android --org com.yesanith --project-name tyria_codex .

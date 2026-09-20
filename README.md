@@ -44,6 +44,13 @@ flutter build apk --release
 The app needs the `INTERNET` permission in `android/app/src/main/AndroidManifest.xml` for
 release builds. The CI workflow adds it automatically.
 
+## Signing
+
+Release builds are signed with `ci/debug.keystore`, a throwaway key checked into the repo so
+that every build has the same signature and APKs install over each other. It is not a
+security boundary. A real upload key belongs in repository secrets if the app ever goes to a
+store.
+
 ## Releases
 
 Push a tag starting with `v` (for example `v0.2.0`) and the workflow attaches the APK to a
