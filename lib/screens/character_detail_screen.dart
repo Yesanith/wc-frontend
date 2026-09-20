@@ -252,7 +252,7 @@ class _BuildTab extends ConsumerWidget {
     }
     // the character endpoint leaves the profession out of the build object
     final withProfession = {'profession': c['profession'], ...build};
-    return BuildView(build: withProfession, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24));
+    return BuildView(buildData: withProfession, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24));
   }
 }
 

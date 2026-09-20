@@ -10,18 +10,19 @@ import '../widgets/common.dart';
 /// full view of one build: the three lines with their chosen traits, the
 /// skill bar and, for rangers, the pets
 class BuildView extends ConsumerWidget {
-  const BuildView({super.key, required this.build, this.padding = const EdgeInsets.all(20)});
+  const BuildView({super.key, required this.buildData, this.padding = const EdgeInsets.all(20)});
 
-  final Json build;
+  /// not named "build", that collides with the widget's own build method
+  final Json buildData;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final key = buildKey(build);
+    final key = buildKey(buildData);
     final detail = ref.watch(buildDetailProvider(key));
-    final profession = '${build['profession'] ?? ''}';
-    final skills = build['skills'] is Map ? build['skills'] as Map : const {};
+    final profession = '${buildData['profession'] ?? ''}';
+    final skills = buildData['skills'] is Map ? buildData['skills'] as Map : const {};
 
     return AsyncView<BuildDetail>(
       value: detail,
@@ -33,7 +34,7 @@ class BuildView extends ConsumerWidget {
           asInt(skills['elite']),
         ];
         final petIds = [
-          for (final p in (build['pets'] as List?) ?? const [])
+          for (final p in (buildData['pets'] as List?) ?? const [])
             if (p != null) asInt(p),
         ];
 
@@ -55,7 +56,9 @@ class BuildView extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${build['name'] ?? ''}'.trim().isEmpty ? s.t('unnamed_build') : '${build['name']}',
+                      Text('${buildData['name'] ?? ''}'.trim().isEmpty
+                              ? s.t('unnamed_build')
+                              : '${buildData['name']}',
                           style: display(20)),
                       Text(profession,
                           style: TextStyle(
@@ -68,7 +71,7 @@ class BuildView extends ConsumerWidget {
             const SizedBox(height: 18),
             SectionHeader(title: s.t('specializations')),
             const SizedBox(height: 10),
-            for (final spec in (build['specializations'] as List?) ?? const [])
+            for (final spec in (buildData['specializations'] as List?) ?? const [])
               if (spec is Map) ...[
                 _SpecCard(spec: Map<String, dynamic>.from(spec), detail: d),
                 const SizedBox(height: 8),
@@ -246,9 +249,9 @@ class _SkillRow extends StatelessWidget {
 }
 
 class BuildDetailScreen extends ConsumerWidget {
-  const BuildDetailScreen({super.key, required this.build});
+  const BuildDetailScreen({super.key, required this.buildData});
 
-  final Json build;
+  final Json buildData;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -259,7 +262,7 @@ class BuildDetailScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(s.t('build'), style: display(20)),
       ),
-      body: BuildView(build: build, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24)),
+      body: BuildView(buildData: buildData, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24)),
     );
   }
 }

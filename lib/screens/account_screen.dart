@@ -395,7 +395,7 @@ class _BuildsTab extends ConsumerWidget {
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => BuildDetailScreen(build: build)),
+                  MaterialPageRoute<void>(builder: (_) => BuildDetailScreen(buildData: build)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(14),
