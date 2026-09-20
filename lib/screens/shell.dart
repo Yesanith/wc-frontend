@@ -11,6 +11,7 @@ import 'collections_screen.dart';
 import 'events_screen.dart';
 import 'goals_screen.dart';
 import 'home_screen.dart';
+import 'recipes_screen.dart';
 import 'settings_screen.dart';
 import 'trading_screen.dart';
 import 'wiki_screen.dart';
@@ -23,6 +24,7 @@ const _titleKeys = {
   AppSection.trading: 'trading_post',
   AppSection.bosses: 'world_bosses',
   AppSection.goals: 'goals',
+  AppSection.recipes: 'recipes',
   AppSection.wiki: 'nav_wiki',
   AppSection.settings: 'nav_settings',
 };
@@ -35,6 +37,7 @@ const _icons = {
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
   AppSection.goals: (Icons.flag_outlined, Icons.flag),
+  AppSection.recipes: (Icons.account_tree_outlined, Icons.account_tree),
   AppSection.wiki: (Icons.menu_book_outlined, Icons.menu_book),
   AppSection.settings: (Icons.settings_outlined, Icons.settings),
 };
@@ -47,6 +50,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),
       AppSection.goals => const GoalsScreen(embedded: true),
+      AppSection.recipes => const RecipesScreen(),
       AppSection.wiki => const WikiScreen(),
       AppSection.settings => const SettingsScreen(),
     };

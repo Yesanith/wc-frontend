@@ -12,6 +12,8 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - World boss timers in your local time, with pinning and a marker for the ones you already did today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Goals for legendaries or any big craft, tracked against everything your account owns
+- Recipe browser: Mystic Forge trees for legendary gear and gifts, with base materials
+  compared against your account and one tap to turn a recipe into a goal
 - Shareable hero cards for your characters
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
 - Backup: export and import goals, watchlist, pinned bosses and language as json
@@ -55,10 +57,18 @@ lib/
   data/       static data such as the world boss schedule
   l10n/       UI strings for every language
   screens/    one file per screen
-  services/   disk cache and backup import/export
+  services/   disk cache, backup import/export and the recipe library
+tools/        scripts run by CI, currently the recipe extractor
   state/      Riverpod providers and persisted settings
   widgets/    shared widgets
 ```
+
+## Recipe data
+
+Mystic Forge recipes are not exposed by `/v2/recipes`, but every gift describes its own
+ingredients in game. `tools/build_recipes.py` walks those descriptions, resolves the names
+to item ids and writes `assets/data/legendary_recipes.json`. The `Build recipe data`
+workflow regenerates it monthly and commits the result, so nothing is maintained by hand.
 
 ## Disclaimer
 
