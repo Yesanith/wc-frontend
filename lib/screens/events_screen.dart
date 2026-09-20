@@ -24,7 +24,10 @@ String untilText(S s, DateTime start, DateTime now) {
 }
 
 class EventsScreen extends ConsumerStatefulWidget {
-  const EventsScreen({super.key});
+  const EventsScreen({super.key, this.embedded = false});
+
+  /// true when shown inside the drawer shell, which brings its own app bar
+  final bool embedded;
 
   @override
   ConsumerState<EventsScreen> createState() => _EventsScreenState();
@@ -68,13 +71,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final top = featured;
     final rest = spawns.where((e) => e != top).toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t('world_bosses'), style: display(20)),
-      ),
-      body: ListView(
+    final body = ListView(
         padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         children: [
           Text(s.t('local_time_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
@@ -102,7 +99,15 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           const SizedBox(height: 16),
           for (final e in rest) _BossRow(spawn: e, now: now, pinned: pinned.contains(e.boss.id)),
         ],
+    );
+    if (widget.embedded) return body;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: Colors.transparent,
+        title: Text(s.t('world_bosses'), style: display(20)),
       ),
+      body: body,
     );
   }
 }

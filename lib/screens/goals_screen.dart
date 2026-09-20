@@ -43,7 +43,10 @@ Future<String?> _askName(BuildContext context, S s, {String initial = ''}) {
 }
 
 class GoalsScreen extends ConsumerWidget {
-  const GoalsScreen({super.key});
+  const GoalsScreen({super.key, this.embedded = false});
+
+  /// true when shown inside the drawer shell, which brings its own app bar
+  final bool embedded;
 
   Future<void> _create(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
@@ -61,20 +64,7 @@ class GoalsScreen extends ConsumerWidget {
     final goals = ref.watch(goalsProvider);
     final totals = ref.watch(accountTotalsProvider).valueOrNull ?? const <int, int>{};
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t('goals'), style: display(20)),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _create(context, ref),
-        backgroundColor: AppColors.gold,
-        foregroundColor: AppColors.onGold,
-        icon: const Icon(Icons.add),
-        label: Text(s.t('new_goal')),
-      ),
-      body: goals.isEmpty
+    final body = goals.isEmpty
           ? Padding(
               padding: const EdgeInsets.all(28),
               child: Center(
@@ -123,7 +113,32 @@ class GoalsScreen extends ConsumerWidget {
                   ),
                 );
               },
-            ),
+            );
+
+    final fab = FloatingActionButton.extended(
+      onPressed: () => _create(context, ref),
+      backgroundColor: AppColors.gold,
+      foregroundColor: AppColors.onGold,
+      icon: const Icon(Icons.add),
+      label: Text(s.t('new_goal')),
+    );
+    if (embedded) {
+      // the shell scaffold has no fab slot for us, so stack it ourselves
+      return Stack(
+        children: [
+          Positioned.fill(child: body),
+          Positioned(right: 16, bottom: 16, child: fab),
+        ],
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: Colors.transparent,
+        title: Text(s.t('goals'), style: display(20)),
+      ),
+      floatingActionButton: fab,
+      body: body,
     );
   }
 }

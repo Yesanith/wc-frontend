@@ -45,8 +45,6 @@ class SettingsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        Text(s.t('nav_settings'), style: display(28)),
-        const SizedBox(height: 16),
         Panel(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Column(

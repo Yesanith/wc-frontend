@@ -44,7 +44,6 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(child: Text(s.t('characters'), style: display(28))),
               if (count != null)
                 Text(s.t('n_characters', {'n': count}),
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),

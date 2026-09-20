@@ -111,6 +111,26 @@ class Gw2Api {
     return out;
   }
 
+  /// needs the tradingpost permission. kind is current/buys, current/sells,
+  /// history/buys or history/sells. history only goes back 90 days
+  Future<List<Json>> transactions(String kind) async =>
+      _list(await get('/commerce/transactions/$kind', {'page_size': '200'}));
+
+  /// coins and items waiting to be picked up at a trading post npc
+  Future<Json> delivery() async => Map<String, dynamic>.from(await get('/commerce/delivery') as Map);
+
+  /// how many coins you get for [gems] gems
+  Future<int> coinsForGems(int gems) async {
+    final r = await get('/commerce/exchange/gems', {'quantity': '$gems'}) as Map;
+    return asInt(r['quantity']);
+  }
+
+  /// how many gems you get for [coins] copper
+  Future<int> gemsForCoins(int coins) async {
+    final r = await get('/commerce/exchange/coins', {'quantity': '$coins'}) as Map;
+    return asInt(r['quantity']);
+  }
+
   Future<Json> vaultDaily() async =>
       Map<String, dynamic>.from(await get('/account/wizardsvault/daily') as Map);
 

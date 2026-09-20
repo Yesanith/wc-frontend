@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/world_bosses.dart';
+import '../state/navigation.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import 'events_screen.dart';
-import 'goals_screen.dart';
-import 'trading_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -204,7 +203,7 @@ class _QuickLinks extends ConsumerWidget {
     final spawns = upcomingSpawns(now, ahead: const Duration(hours: 3));
     final next = spawns.isEmpty ? null : spawns.first;
 
-    void open(Widget page) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
+    void open(AppSection section) => ref.read(sectionProvider.notifier).state = section;
 
     return Column(
       children: [
@@ -216,7 +215,7 @@ class _QuickLinks extends ConsumerWidget {
               : next.isActive(now)
                   ? '${next.boss.name} · ${s.t('active_now')}'
                   : '${next.boss.name} · ${untilText(s, next.start, now)}',
-          onTap: () => open(const EventsScreen()),
+          onTap: () => open(AppSection.bosses),
         ),
         const SizedBox(height: 8),
         Row(
@@ -226,7 +225,7 @@ class _QuickLinks extends ConsumerWidget {
                 icon: Icons.flag_outlined,
                 title: s.t('goals'),
                 subtitle: s.t('n_goals', {'n': goals.length}),
-                onTap: () => open(const GoalsScreen()),
+                onTap: () => open(AppSection.goals),
               ),
             ),
             const SizedBox(width: 8),
@@ -235,7 +234,7 @@ class _QuickLinks extends ConsumerWidget {
                 icon: Icons.storefront_outlined,
                 title: s.t('watchlist'),
                 subtitle: s.t('n_items', {'n': watch.length}),
-                onTap: () => open(const WatchlistScreen()),
+                onTap: () => open(AppSection.trading),
               ),
             ),
           ],

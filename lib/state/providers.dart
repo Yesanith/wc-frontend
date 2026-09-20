@@ -225,3 +225,46 @@ final goalItemsProvider = FutureProvider<Map<int, Json>>((ref) async {
   if (ids.isEmpty) return const {};
   return api.items(ids);
 });
+
+class TxRow {
+  const TxRow(this.tx, this.item);
+  final Json tx;
+  final Json? item;
+}
+
+final transactionsProvider = FutureProvider.family<List<TxRow>, String>((ref, kind) async {
+  final api = ref.watch(gw2ApiProvider);
+  final txs = await api.transactions(kind);
+  final items = await api.items(txs.map((t) => asInt(t['item_id'])));
+  return [for (final t in txs) TxRow(t, items[asInt(t['item_id'])])];
+});
+
+class Delivery {
+  const Delivery(this.coins, this.items);
+  final int coins;
+  final List<ItemSlot> items;
+}
+
+final deliveryProvider = FutureProvider<Delivery>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final raw = await api.delivery();
+  final slots = ((raw['items'] as List?) ?? const []).whereType<Map>().toList();
+  final items = await api.items(slots.map((e) => asInt(e['id'])));
+  return Delivery(asInt(raw['coins']), [
+    for (final e in slots) ItemSlot(asInt(e['id']), asInt(e['count']), items[asInt(e['id'])]),
+  ]);
+});
+
+class GemRates {
+  const GemRates(this.coinsFor100Gems, this.gemsFor100Gold);
+  final int coinsFor100Gems;
+  final int gemsFor100Gold;
+}
+
+final gemRatesProvider = FutureProvider<GemRates>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final coins = await api.coinsForGems(100);
+  // 100 gold = 1,000,000 copper
+  final gems = await api.gemsForCoins(1000000);
+  return GemRates(coins, gems);
+});

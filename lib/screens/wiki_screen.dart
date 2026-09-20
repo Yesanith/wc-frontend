@@ -96,7 +96,6 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        Text(s.t('nav_wiki'), style: display(28)),
         Text(Uri.parse(lang.wikiBase).host, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
         const SizedBox(height: 14),
         TextField(

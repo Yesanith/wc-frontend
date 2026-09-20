@@ -18,10 +18,10 @@ class AccountScreen extends ConsumerWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
+            padding: const EdgeInsets.fromLTRB(20, 0, 12, 0),
             child: Row(
               children: [
-                Expanded(child: Text(s.t('account'), style: display(28))),
+                const Spacer(),
                 IconButton(
                   tooltip: s.t('refresh'),
                   onPressed: () {

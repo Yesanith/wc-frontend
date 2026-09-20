@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -197,98 +198,361 @@ class _PricePanel extends ConsumerWidget {
   }
 }
 
-class WatchlistScreen extends ConsumerWidget {
-  const WatchlistScreen({super.key});
+class WatchRow extends ConsumerWidget {
+  const WatchRow(this.w, {super.key});
+
+  final WatchedItem w;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final list = ref.watch(watchlistPricesProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t('watchlist'), style: display(20)),
+    final sells = w.price?['sells'] is Map ? w.price!['sells'] as Map : const {};
+    final buys = w.price?['buys'] is Map ? w.price!['buys'] as Map : const {};
+    final name = (w.item?['name'] as String?) ?? s.t('item_n', {'id': w.id});
+    return _ItemTile(
+      itemId: w.id,
+      item: w.item,
+      title: name,
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          CoinText(asInt(sells['unit_price']), size: 15),
+          const SizedBox(height: 2),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${s.t('buy_short')} ', style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+              CoinText(asInt(buys['unit_price']), size: 12),
+            ],
+          ),
+        ],
       ),
-      body: RefreshIndicator(
-        color: AppColors.gold,
-        onRefresh: () async {
-          ref.invalidate(watchlistPricesProvider);
-          try {
-            await ref.read(watchlistPricesProvider.future);
-          } catch (_) {}
-        },
-        child: AsyncView<List<WatchedItem>>(
-          value: list,
-          onRetry: () => ref.invalidate(watchlistPricesProvider),
-          builder: (items) {
-            if (items.isEmpty) {
-              return ListView(
-                padding: const EdgeInsets.all(24),
-                children: [
-                  Text(s.t('watchlist_empty'),
-                      textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
-                ],
-              );
-            }
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (context, i) {
-                final w = items[i];
-                final sells = w.price?['sells'] is Map ? w.price!['sells'] as Map : const {};
-                final buys = w.price?['buys'] is Map ? w.price!['buys'] as Map : const {};
-                final name = (w.item?['name'] as String?) ?? s.t('item_n', {'id': w.id});
-                return Material(
-                  color: AppColors.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    side: const BorderSide(color: AppColors.line),
+    );
+  }
+}
+
+/// item row that opens the trading post page for the item
+class _ItemTile extends StatelessWidget {
+  const _ItemTile({required this.itemId, required this.item, required this.title, this.subtitle, required this.trailing});
+
+  final int itemId;
+  final Json? item;
+  final String title;
+  final String? subtitle;
+  final Widget trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final sub = subtitle;
+    return Material(
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: AppColors.line),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 44),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                    if (sub != null) Text(sub, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              trailing,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// like AsyncView but shows a hint instead of an error when the key
+/// is missing the tradingpost permission
+class _TpAsync<T> extends ConsumerWidget {
+  const _TpAsync({required this.value, required this.builder, required this.onRetry});
+
+  final AsyncValue<T> value;
+  final Widget Function(T data) builder;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return value.when(
+      data: builder,
+      loading: () => const Padding(
+        padding: EdgeInsets.all(20),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (e, _) {
+        if (e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
+          return Panel(child: Text(s.t('needs_tp_perm'), style: const TextStyle(color: AppColors.muted, height: 1.5)));
+        }
+        return ErrorBox(message: '$e', onRetry: onRetry);
+      },
+    );
+  }
+}
+
+/// the trading post section of the drawer
+class TradingHubScreen extends ConsumerWidget {
+  const TradingHubScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        children: [
+          TabBar(
+            labelColor: AppColors.gold,
+            unselectedLabelColor: AppColors.muted,
+            indicatorColor: AppColors.gold,
+            dividerColor: AppColors.track,
+            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+            tabs: [
+              Tab(text: s.t('overview')),
+              Tab(text: s.t('orders')),
+              Tab(text: s.t('history')),
+            ],
+          ),
+          const Expanded(
+            child: TabBarView(
+              children: [
+                _OverviewTab(),
+                _TxTab(first: 'current/buys', second: 'current/sells', firstKey: 'buying', secondKey: 'selling'),
+                _TxTab(first: 'history/sells', second: 'history/buys', firstKey: 'sold', secondKey: 'bought'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OverviewTab extends ConsumerWidget {
+  const _OverviewTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final rates = ref.watch(gemRatesProvider);
+    final delivery = ref.watch(deliveryProvider);
+    final watch = ref.watch(watchlistPricesProvider);
+
+    return RefreshIndicator(
+      color: AppColors.gold,
+      onRefresh: () async {
+        ref.invalidate(gemRatesProvider);
+        ref.invalidate(deliveryProvider);
+        ref.invalidate(watchlistPricesProvider);
+        try {
+          await ref.read(watchlistPricesProvider.future);
+        } catch (_) {}
+      },
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        children: [
+          Panel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Kicker(s.t('gem_exchange').toUpperCase()),
+                const SizedBox(height: 12),
+                AsyncView<GemRates>(
+                  value: rates,
+                  onRetry: () => ref.invalidate(gemRatesProvider),
+                  builder: (r) => Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(s.t('gems_to_gold'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            const SizedBox(height: 4),
+                            CoinText(r.coinsFor100Gems, size: 17),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(s.t('gold_to_gems'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            const SizedBox(height: 4),
+                            Text(s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
+                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: w.id)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          ItemIcon(url: w.item?['icon'] as String?, rarity: w.item?['rarity'] as String?, size: 44),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(name,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                          ),
-                          const SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Panel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Kicker(s.t('delivery').toUpperCase()),
+                const SizedBox(height: 12),
+                _TpAsync<Delivery>(
+                  value: delivery,
+                  onRetry: () => ref.invalidate(deliveryProvider),
+                  builder: (d) {
+                    if (d.coins == 0 && d.items.isEmpty) {
+                      return Text(s.t('delivery_empty'), style: const TextStyle(color: AppColors.muted));
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CoinText(d.coins, size: 20),
+                        if (d.items.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
                             children: [
-                              CoinText(asInt(sells['unit_price']), size: 15),
-                              const SizedBox(height: 2),
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('${s.t('buy_short')} ',
-                                      style: const TextStyle(fontSize: 11, color: AppColors.muted)),
-                                  CoinText(asInt(buys['unit_price']), size: 12),
-                                ],
-                              ),
+                              for (final it in d.items)
+                                GestureDetector(
+                                  onTap: () => showItemSheet(
+                                    context,
+                                    id: it.id,
+                                    name: it.name,
+                                    icon: it.icon,
+                                    rarity: it.rarity,
+                                    type: it.type,
+                                    count: it.count,
+                                  ),
+                                  child: ItemIcon(url: it.icon, rarity: it.rarity, count: it.count, size: 42),
+                                ),
                             ],
                           ),
                         ],
-                      ),
-                    ),
+                        const SizedBox(height: 10),
+                        Text(s.t('pickup_note'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 22),
+          SectionHeader(title: s.t('watchlist')),
+          const SizedBox(height: 10),
+          AsyncView<List<WatchedItem>>(
+            value: watch,
+            onRetry: () => ref.invalidate(watchlistPricesProvider),
+            builder: (items) => items.isEmpty
+                ? Panel(child: Text(s.t('watchlist_empty'), style: const TextStyle(color: AppColors.muted, height: 1.5)))
+                : Column(
+                    children: [
+                      for (final w in items)
+                        Padding(padding: const EdgeInsets.only(bottom: 8), child: WatchRow(w)),
+                    ],
                   ),
-                );
-              },
-            );
-          },
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TxTab extends ConsumerWidget {
+  const _TxTab({required this.first, required this.second, required this.firstKey, required this.secondKey});
+
+  final String first;
+  final String second;
+  final String firstKey;
+  final String secondKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final a = ref.watch(transactionsProvider(first));
+    final b = ref.watch(transactionsProvider(second));
+
+    Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => _TpAsync<List<TxRow>>(
+          value: value,
+          onRetry: () => ref.invalidate(transactionsProvider(kind)),
+          builder: (rows) => rows.isEmpty
+              ? Panel(child: Text(s.t(emptyKey), style: const TextStyle(color: AppColors.muted)))
+              : Column(
+                  children: [
+                    for (final r in rows) Padding(padding: const EdgeInsets.only(bottom: 8), child: _TxRowTile(r)),
+                  ],
+                ),
+        );
+
+    return RefreshIndicator(
+      color: AppColors.gold,
+      onRefresh: () async {
+        ref.invalidate(transactionsProvider(first));
+        ref.invalidate(transactionsProvider(second));
+        try {
+          await ref.read(transactionsProvider(first).future);
+        } catch (_) {}
+      },
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        children: [
+          SectionHeader(title: s.t(firstKey), trailing: a.valueOrNull == null ? null : '${a.valueOrNull!.length}'),
+          const SizedBox(height: 10),
+          list(a, first, 'nothing_here'),
+          const SizedBox(height: 22),
+          SectionHeader(title: s.t(secondKey), trailing: b.valueOrNull == null ? null : '${b.valueOrNull!.length}'),
+          const SizedBox(height: 10),
+          list(b, second, 'nothing_here'),
+        ],
+      ),
+    );
+  }
+}
+
+class _TxRowTile extends ConsumerWidget {
+  const _TxRowTile(this.r);
+
+  final TxRow r;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final id = asInt(r.tx['item_id']);
+    final qty = asInt(r.tx['quantity']);
+    final date = '${r.tx['purchased'] ?? r.tx['created'] ?? ''}';
+    return _ItemTile(
+      itemId: id,
+      item: r.item,
+      title: (r.item?['name'] as String?) ?? s.t('item_n', {'id': id}),
+      subtitle: date.length >= 10 ? date.substring(0, 10) : null,
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          CoinText(asInt(r.tx['price']), size: 15),
+          Text('x${fmtInt(qty)}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
       ),
     );
   }
