@@ -18,6 +18,7 @@ import os
 import re
 import sys
 import time
+import unicodedata
 import urllib.error
 import urllib.request
 
@@ -66,9 +67,50 @@ def fetch_all_items(lang):
     return items
 
 
+def strip_accents(text):
+    return "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
+
+
+# words that only glue a sentence together
+LEADING = {"de", "du", "des", "la", "le", "les", "un", "une", "of", "the", "a", "an",
+           "unites", "unite", "d", "and", "with"}
+
+# descriptions often continue after the item name
+CUTS = [" in the mystic forge", " in der mystischen", " dans la forge", " with ", " and ",
+        " from ", " to create", " for ", " at ", " dropped ", "\u2014", " \u2013 "]
+
+
+def clean_name(raw):
+    name = TAGS.sub(" ", raw)
+    name = re.sub(r"\([^)]*\)", " ", name)
+    lowered = name.lower()
+    for cut in CUTS:
+        idx = lowered.find(cut)
+        if idx > 0:
+            name = name[:idx]
+            lowered = name.lower()
+    name = re.sub(r"^\s*\d[\d,]*\s+", "", name)
+    words = name.strip(" .,:;\u2022*").split()
+    while words and strip_accents(words[0].lower()).strip("'") in LEADING:
+        words.pop(0)
+    return " ".join(words)
+
+
 def deplural(name):
     """rough plural stripper, good enough for english and french"""
     return " ".join(w[:-1] if len(w) > 3 and w.endswith("s") else w for w in name.lower().split())
+
+
+def fuzzy(name):
+    """last resort key: no accents, no case, no plural endings.
+    turns 'Gaben der Kondensierten Macht' and 'Gabe der kondensierten Macht'
+    into the same string"""
+    out = []
+    for word in strip_accents(name.lower()).replace("'", " ").split():
+        while len(word) > 3 and word[-1] in "neris":
+            word = word[:-1]
+        out.append(word)
+    return " ".join(out)
 
 
 def singular_candidates(name):
@@ -85,38 +127,33 @@ def singular_candidates(name):
     return out
 
 
-# "* 250 Globs of Ectoplasm" or "* 1 Gift of Might"
-BULLET = re.compile(r"[\u2022\*]\s*(\d[\d,]*)\s+([^\u2022\*\n]+)")
-# "combine 9 Mystic Clovers, a Gift of Research, and a Gift of Craftmanship to create"
-COMBINE = re.compile(r"combine (.+?) to create", re.IGNORECASE | re.DOTALL)
-PIECE = re.compile(r"(?:(\d[\d,]*)|an?)\s+(.+)")
+def index_items(items):
+    exact, loose, rough = {}, {}, {}
+    for row in items.values():
+        name = row["name"]
+        exact.setdefault(name.lower(), row["id"])
+        loose.setdefault(deplural(name), row["id"])
+        key = fuzzy(name)
+        if key in rough and rough[key] != row["id"]:
+            rough[key] = None  # ambiguous, do not guess
+        else:
+            rough.setdefault(key, row["id"])
+    return exact, loose, rough
 
 
-def parse_ingredients(description):
-    if not description:
-        return []
-    text = TAGS.sub(" ", description).replace("\n", " ")
-    out = []
-    # bullet lists look the same in every language, so no keyword check here
-    for qty, name in BULLET.findall(text):
-        out.append((int(qty.replace(",", "")), name.strip(" .,")))
-    if not out:
-        m = COMBINE.search(text)
-        if m:
-            body = m.group(1).replace(" and ", ", ")
-            for piece in body.split(","):
-                piece = piece.strip(" .")
-                if not piece:
-                    continue
-                pm = PIECE.match(piece)
-                if not pm:
-                    continue
-                qty = pm.group(1)
-                out.append((int(qty.replace(",", "")) if qty else 1, pm.group(2).strip(" .")))
-    return [(q, n) for q, n in out if n.lower() not in SKIP]
+def resolve(raw, exact, loose, rough):
+    name = clean_name(raw)
+    if not name:
+        return None, name
+    for candidate in singular_candidates(name):
+        found = exact.get(candidate.lower())
+        if found:
+            return found, name
+    found = loose.get(deplural(name)) or rough.get(fuzzy(name))
+    return found, name
 
 
-def build_tree(item, items, by_name, loose, depth, seen, unresolved):
+def build_tree(item, items, index, depth, seen, unresolved):
     node = {
         "id": item["id"],
         "name": item["name"],
@@ -127,18 +164,13 @@ def build_tree(item, items, by_name, loose, depth, seen, unresolved):
         return node
     children = []
     for qty, raw in parse_ingredients(item.get("description")):
-        child_id = None
-        for candidate in singular_candidates(raw):
-            child_id = by_name.get(candidate.lower())
-            if child_id:
-                break
+        child_id, name = resolve(raw, *index)
         if not child_id:
-            child_id = loose.get(deplural(raw))
-        if not child_id:
-            unresolved.add(raw)
-            children.append({"id": None, "name": raw, "count": qty})
+            if name:
+                unresolved.add(name)
+                children.append({"id": None, "name": name, "count": qty})
             continue
-        child = build_tree(items[child_id], items, by_name, loose, depth + 1, seen | {item["id"]}, unresolved)
+        child = build_tree(items[child_id], items, index, depth + 1, seen | {item["id"]}, unresolved)
         child["count"] = qty
         children.append(child)
     if children:
@@ -146,48 +178,72 @@ def build_tree(item, items, by_name, loose, depth, seen, unresolved):
     return node
 
 
+def collect_ids(node, out):
+    if node.get("id"):
+        out.add(node["id"])
+    for child in node.get("children", []):
+        collect_ids(child, out)
+
+
 def main():
     langs = sys.argv[1:] or ["en"]
-    result = {"generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "languages": {}}
+    items = fetch_all_items("en")
+    index = index_items(items)
 
+    # roots are the things worth showing as a goal: legendary gear and every
+    # gift or tribute that has a forge recipe of its own
+    roots = []
+    for row in items.values():
+        if not row.get("description"):
+            continue
+        if len(parse_ingredients(row["description"])) < 2:
+            continue
+        legendary = row.get("rarity") == "Legendary"
+        if not legendary and row.get("rarity") not in ("Exotic", "Ascended"):
+            continue
+        roots.append((row, legendary))
+    roots.sort(key=lambda r: (not r[1], r[0]["name"]))
+
+    unresolved = set()
+    trees = []
+    for row, legendary in roots:
+        tree = build_tree(row, items, index, 0, set(), unresolved)
+        if not tree.get("children"):
+            continue
+        tree["type"] = row.get("type")
+        tree["kind"] = "legendary" if legendary else "gift"
+        trees.append(tree)
+
+    print("%d recipes (%d legendary), %d unresolved names"
+          % (len(trees), sum(1 for t in trees if t["kind"] == "legendary"), len(unresolved)), flush=True)
+    for name in sorted(unresolved):
+        print("  unresolved: " + name, flush=True)
+
+    # every id the trees touch, so the other languages only need these
+    used = set()
+    for tree in trees:
+        collect_ids(tree, used)
+    used_ids = sorted(used)
+    print("%d items used by the trees" % len(used_ids), flush=True)
+
+    names = {}
     for lang in langs:
-        items = fetch_all_items(lang)
-        by_name = {}
-        loose = {}
-        for row in items.values():
-            by_name.setdefault(row["name"].lower(), row["id"])
-            loose.setdefault(deplural(row["name"]), row["id"])
+        if lang == "en":
+            continue
+        rows = {}
+        for i in range(0, len(used_ids), BATCH):
+            chunk = used_ids[i:i + BATCH]
+            for row in get("/items", {"ids": ",".join(str(x) for x in chunk), "lang": lang}):
+                rows[str(row["id"])] = row["name"]
+        names[lang] = rows
+        print("%s: %d names" % (lang, len(rows)), flush=True)
 
-        # roots are the things worth showing as a goal: legendary gear and
-        # every gift/tribute that has a forge recipe of its own
-        roots = []
-        for row in items.values():
-            if not row.get("description"):
-                continue
-            ingredients = parse_ingredients(row["description"])
-            if len(ingredients) < 2:
-                continue
-            legendary = row.get("rarity") == "Legendary"
-            if not legendary and row.get("rarity") not in ("Exotic", "Ascended"):
-                continue
-            roots.append((row, legendary))
-        roots.sort(key=lambda r: (not r[1], r[0]["name"]))
-
-        unresolved = set()
-        trees = []
-        for row, legendary in roots:
-            tree = build_tree(row, items, by_name, loose, 0, set(), unresolved)
-            if not tree.get("children"):
-                continue
-            tree["type"] = row.get("type")
-            tree["kind"] = "legendary" if legendary else "gift"
-            trees.append(tree)
-        print("%s: %d recipes (%d legendary), %d unresolved names"
-              % (lang, len(trees), sum(1 for t in trees if t["kind"] == "legendary"), len(unresolved)),
-              flush=True)
-        for name in sorted(unresolved)[:30]:
-            print("  unresolved: " + name, flush=True)
-        result["languages"][lang] = {"roots": trees, "unresolved": sorted(unresolved)}
+    result = {
+        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "roots": trees,
+        "names": names,
+        "unresolved": sorted(unresolved),
+    }
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
