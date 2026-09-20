@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n/strings.dart';
 import 'screens/onboarding_screen.dart';
+import 'services/cache.dart';
 import 'screens/shell.dart';
 import 'state/providers.dart';
 import 'state/settings.dart';
@@ -13,9 +14,13 @@ import 'util.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
+  final cache = await DiskCache.open();
   runApp(
     ProviderScope(
-      overrides: [prefsProvider.overrideWithValue(prefs)],
+      overrides: [
+        prefsProvider.overrideWithValue(prefs),
+        diskCacheProvider.overrideWithValue(cache),
+      ],
       child: const TyriaCodexApp(),
     ),
   );

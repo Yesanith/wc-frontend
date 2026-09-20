@@ -3,6 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../api/gw2_api.dart';
 import '../api/wiki_api.dart';
+import '../data/collections.dart';
+import '../services/cache.dart';
 import '../util.dart';
 import 'settings.dart';
 
@@ -27,9 +29,16 @@ class ApiKeyNotifier extends AsyncNotifier<String?> {
 
 final apiKeyProvider = AsyncNotifierProvider<ApiKeyNotifier, String?>(ApiKeyNotifier.new);
 
+/// overridden in main() once the cache directory is ready
+final diskCacheProvider = Provider<DiskCache?>((ref) => null);
+
 final gw2ApiProvider = Provider<Gw2Api>((ref) {
   final lang = ref.watch(langProvider);
-  return Gw2Api(ref.watch(apiKeyProvider).valueOrNull, lang: lang.apiLang);
+  return Gw2Api(
+    ref.watch(apiKeyProvider).valueOrNull,
+    lang: lang.apiLang,
+    cache: ref.watch(diskCacheProvider),
+  );
 });
 
 final wikiApiProvider = Provider<WikiApi>((ref) => WikiApi(ref.watch(langProvider).wikiBase));
@@ -267,4 +276,94 @@ final gemRatesProvider = FutureProvider<GemRates>((ref) async {
   // 100 gold = 1,000,000 copper
   final gems = await api.gemsForCoins(1000000);
   return GemRates(coins, gems);
+});
+
+/// world bosses, daily crafts and map chests already done today.
+/// needs the progression permission, empty when it is missing
+final doneTodayProvider = FutureProvider.family<Set<String>, String>((ref, path) async {
+  final api = ref.watch(gw2ApiProvider);
+  try {
+    return (await api.get('/account/$path') as List).map((e) => '$e').toSet();
+  } catch (_) {
+    return <String>{};
+  }
+});
+
+class CollectionProgress {
+  const CollectionProgress(this.unlocked, this.total);
+  final int unlocked;
+  final int total;
+
+  double get ratio => total == 0 ? 0 : unlocked / total;
+}
+
+/// all ids of a static collection endpoint, kept on disk for a month
+final collectionIdsProvider = FutureProvider.family<List<String>, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final kind = collectionKinds.firstWhere((k) => k.key == key);
+  final name = 'collection_ids_${kind.key}';
+  final cached = await cache?.read(name, maxAge: const Duration(days: 30));
+  final cachedIds = cached?['ids'];
+  if (cachedIds is List && cachedIds.isNotEmpty) return cachedIds.map((e) => '$e').toList();
+  final ids = await api.idList(kind.staticPath);
+  await cache?.write(name, {'ids': ids});
+  return ids;
+});
+
+final collectionUnlockedProvider = FutureProvider.family<Set<String>, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final kind = collectionKinds.firstWhere((k) => k.key == key);
+  return (await api.unlockedIds(kind.accountPath)).toSet();
+});
+
+final collectionProgressProvider = FutureProvider.family<CollectionProgress, String>((ref, key) async {
+  final ids = ref.watch(collectionIdsProvider(key).future);
+  final unlocked = ref.watch(collectionUnlockedProvider(key).future);
+  final all = await ids;
+  final owned = await unlocked;
+  return CollectionProgress(owned.where(all.contains).length, all.length);
+});
+
+class CollectionEntry {
+  const CollectionEntry(this.id, this.name, this.icon, this.unlocked);
+  final String id;
+  final String name;
+  final String? icon;
+  final bool unlocked;
+}
+
+/// every entry of a collection with its unlock state. details are cached
+/// on disk because they only change with a patch
+final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final lang = ref.watch(langProvider);
+  final kind = collectionKinds.firstWhere((k) => k.key == key);
+  final idsFuture = ref.watch(collectionIdsProvider(key).future);
+  final unlockedFuture = ref.watch(collectionUnlockedProvider(key).future);
+  final ids = await idsFuture;
+  final unlocked = await unlockedFuture;
+
+  final name = 'collection_${kind.key}_${lang.apiLang}';
+  var rows = <Json>[];
+  final cached = await cache?.read(name, maxAge: const Duration(days: 30));
+  final cachedRows = cached?['rows'];
+  if (cachedRows is List && cachedRows.isNotEmpty) {
+    rows = cachedRows.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+  } else {
+    rows = await api.details(kind.staticPath, ids);
+    await cache?.write(name, {'rows': rows});
+  }
+
+  final byId = {for (final r in rows) '${r['id']}': r};
+  return [
+    for (final id in ids)
+      CollectionEntry(
+        id,
+        (byId[id]?['name'] as String?) ?? id.replaceAll('_', ' '),
+        byId[id]?['icon'] as String?,
+        unlocked.contains(id),
+      ),
+  ]..sort((a, b) => a.name.compareTo(b.name));
 });

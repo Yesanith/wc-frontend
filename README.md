@@ -5,13 +5,17 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 ## Features
 
 - Side drawer navigation across every section
+- Collections: mounts, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
+  titles, emotes and wardrobe progress, with unlocked/missing filters
 - Account overview with wallet, Wizard's Vault dailies, bank and material storage
 - Character list and details: equipment, active build, bags and crafting
-- World boss timers in your local time, with pinning
+- World boss timers in your local time, with pinning and a marker for the ones you already did today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Goals for legendaries or any big craft, tracked against everything your account owns
 - Shareable hero cards for your characters
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
+- Backup: export and import goals, watchlist, pinned bosses and language as json
+- Game data (items, colors, collection entries) is cached on disk for a month
 - English, German, French and Turkish UI. Item names and the wiki follow the selected
   language where the API and wiki support it (Turkish falls back to English data)
 
@@ -51,6 +55,7 @@ lib/
   data/       static data such as the world boss schedule
   l10n/       UI strings for every language
   screens/    one file per screen
+  services/   disk cache and backup import/export
   state/      Riverpod providers and persisted settings
   widgets/    shared widgets
 ```

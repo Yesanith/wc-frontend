@@ -7,6 +7,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
+import 'collections_screen.dart';
 import 'events_screen.dart';
 import 'goals_screen.dart';
 import 'home_screen.dart';
@@ -17,6 +18,7 @@ import 'wiki_screen.dart';
 const _titleKeys = {
   AppSection.home: 'nav_home',
   AppSection.characters: 'nav_characters',
+  AppSection.collections: 'collections',
   AppSection.account: 'nav_account',
   AppSection.trading: 'trading_post',
   AppSection.bosses: 'world_bosses',
@@ -28,6 +30,7 @@ const _titleKeys = {
 const _icons = {
   AppSection.home: (Icons.home_outlined, Icons.home),
   AppSection.characters: (Icons.shield_outlined, Icons.shield),
+  AppSection.collections: (Icons.auto_awesome_outlined, Icons.auto_awesome),
   AppSection.account: (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
@@ -39,6 +42,7 @@ const _icons = {
 Widget _page(AppSection section) => switch (section) {
       AppSection.home => const HomeScreen(),
       AppSection.characters => const CharactersScreen(),
+      AppSection.collections => const CollectionsScreen(),
       AppSection.account => const AccountScreen(),
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),

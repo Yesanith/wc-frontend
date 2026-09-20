@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/world_bosses.dart';
 import '../l10n/strings.dart';
+import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -56,6 +57,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final pinned = ref.watch(pinnedEventsProvider);
+    final done = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
     final now = DateTime.now().toUtc();
     var spawns = upcomingSpawns(now, ahead: const Duration(hours: 6));
     if (_pinnedOnly) spawns = spawns.where((e) => pinned.contains(e.boss.id)).toList();
@@ -97,7 +99,13 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           else
             _FeaturedBoss(spawn: top, now: now),
           const SizedBox(height: 16),
-          for (final e in rest) _BossRow(spawn: e, now: now, pinned: pinned.contains(e.boss.id)),
+          for (final e in rest)
+            _BossRow(
+              spawn: e,
+              now: now,
+              pinned: pinned.contains(e.boss.id),
+              done: bossDone(e.boss, done),
+            ),
         ],
     );
     if (widget.embedded) return body;
@@ -112,6 +120,14 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   }
 }
 
+/// the /account/worldbosses endpoint uses snake_case names, our own ids
+/// match some of them, so check both
+bool bossDone(WorldBoss boss, Set<String> done) {
+  if (done.isEmpty) return false;
+  final fromName = boss.name.toLowerCase().replaceAll(' ', '_');
+  return done.contains(boss.id) || done.contains(fromName);
+}
+
 class _FeaturedBoss extends ConsumerWidget {
   const _FeaturedBoss({required this.spawn, required this.now});
 
@@ -121,6 +137,7 @@ class _FeaturedBoss extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
+    final done = bossDone(spawn.boss, ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const {});
     final active = spawn.isActive(now);
     final elapsed = now.difference(spawn.start).inSeconds / bossWindow.inSeconds;
 
@@ -135,6 +152,10 @@ class _FeaturedBoss extends ConsumerWidget {
                 color: active ? AppColors.onGold : AppColors.gold,
                 background: active ? AppColors.gold : AppColors.surface2,
               ),
+              if (done) ...[
+                const SizedBox(width: 8),
+                Pill(s.t('done_today'), color: AppColors.green, background: AppColors.surface2),
+              ],
               const Spacer(),
               Text(
                 active
@@ -170,11 +191,12 @@ class _FeaturedBoss extends ConsumerWidget {
 }
 
 class _BossRow extends ConsumerWidget {
-  const _BossRow({required this.spawn, required this.now, required this.pinned});
+  const _BossRow({required this.spawn, required this.now, required this.pinned, required this.done});
 
   final BossSpawn spawn;
   final DateTime now;
   final bool pinned;
+  final bool done;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -210,7 +232,26 @@ class _BossRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(spawn.boss.name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                  Row(
+                    children: [
+                      if (done) ...[
+                        const Icon(Icons.check_circle, size: 14, color: AppColors.green),
+                        const SizedBox(width: 5),
+                      ],
+                      Flexible(
+                        child: Text(
+                          spawn.boss.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: done ? AppColors.muted : AppColors.text,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(spawn.boss.map, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),

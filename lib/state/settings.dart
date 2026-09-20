@@ -42,6 +42,11 @@ class WatchlistNotifier extends Notifier<List<int>> {
 
   bool contains(int id) => state.contains(id);
 
+  Future<void> replaceAll(List<int> ids) async {
+    state = ids;
+    await ref.read(prefsProvider).setStringList(_key, ids.map((e) => '$e').toList());
+  }
+
   Future<void> toggle(int id) async {
     state = state.contains(id) ? state.where((e) => e != id).toList() : [...state, id];
     await ref.read(prefsProvider).setStringList(_key, state.map((e) => '$e').toList());
@@ -59,8 +64,12 @@ class PinnedEventsNotifier extends Notifier<Set<String>> {
   Future<void> toggle(String id) async {
     final next = {...state};
     if (!next.remove(id)) next.add(id);
-    state = next;
-    await ref.read(prefsProvider).setStringList(_key, next.toList());
+    await replaceAll(next);
+  }
+
+  Future<void> replaceAll(Set<String> ids) async {
+    state = ids;
+    await ref.read(prefsProvider).setStringList(_key, ids.toList());
   }
 }
 
@@ -116,6 +125,8 @@ class GoalsNotifier extends Notifier<List<Goal>> {
     state = next;
     await ref.read(prefsProvider).setString(_key, jsonEncode(next.map((g) => g.toJson()).toList()));
   }
+
+  Future<void> replaceAll(List<Goal> goals) => _save(goals);
 
   Future<Goal> create(String name) async {
     final goal = Goal(DateTime.now().microsecondsSinceEpoch.toString(), name, const []);
