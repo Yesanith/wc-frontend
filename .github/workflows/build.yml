@@ -1,0 +1,38 @@
+name: Build APK
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip source
+        run: |
+          if [ -f tyria_codex.zip ]; then unzip -o tyria_codex.zip -d .; fi
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Generate Android project
+        run: |
+          if [ ! -d android ]; then
+            flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+          fi
+      - name: Add INTERNET permission
+        run: |
+          M=android/app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.INTERNET' "$M" || sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$M"
+      - name: Set app name
+        run: sed -i 's#android:label="[^"]*"#android:label="Tyria Codex"#' android/app/src/main/AndroidManifest.xml
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tyria-codex-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
