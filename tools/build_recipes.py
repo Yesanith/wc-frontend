@@ -153,6 +153,37 @@ def resolve(raw, exact, loose, rough):
     return found, name
 
 
+# "* 250 Globs of Ectoplasm" or "* 1 Gift of Might"
+BULLET = re.compile(r"[\u2022\*]\s*(\d[\d,]*)\s+([^\u2022\*\n]+)")
+# "combine 9 Mystic Clovers, a Gift of Research, and a Gift of Craftmanship to create"
+COMBINE = re.compile(r"combine (.+?) to create", re.IGNORECASE | re.DOTALL)
+PIECE = re.compile(r"(?:(\d[\d,]*)|an?)\s+(.+)")
+
+
+def parse_ingredients(description):
+    if not description:
+        return []
+    text = TAGS.sub(" ", description).replace("\n", " ")
+    out = []
+    # bullet lists look the same in every language, so no keyword check here
+    for qty, name in BULLET.findall(text):
+        out.append((int(qty.replace(",", "")), name.strip(" .,")))
+    if not out:
+        m = COMBINE.search(text)
+        if m:
+            body = m.group(1).replace(" and ", ", ")
+            for piece in body.split(","):
+                piece = piece.strip(" .")
+                if not piece:
+                    continue
+                pm = PIECE.match(piece)
+                if not pm:
+                    continue
+                qty = pm.group(1)
+                out.append((int(qty.replace(",", "")) if qty else 1, pm.group(2).strip(" .")))
+    return [(q, n) for q, n in out if n.lower() not in SKIP]
+
+
 def build_tree(item, items, index, depth, seen, unresolved):
     node = {
         "id": item["id"],
