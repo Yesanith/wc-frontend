@@ -6,6 +6,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'build_detail_screen.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
@@ -385,14 +386,20 @@ class _BuildsTab extends ConsumerWidget {
             final profession = '${build['profession'] ?? ''}';
             final name = '${build['name'] ?? ''}'.trim();
             final specs = ((build['specializations'] as List?) ?? const []).whereType<Map>().length;
-            return Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
+            return Material(
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.line),
+                side: const BorderSide(color: AppColors.line),
               ),
-              child: Row(
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => BuildDetailScreen(build: build)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
                 children: [
                   Container(
                     width: 8,
@@ -414,7 +421,10 @@ class _BuildsTab extends ConsumerWidget {
                       ],
                     ),
                   ),
-                ],
+                  const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                    ],
+                  ),
+                ),
               ),
             );
           },

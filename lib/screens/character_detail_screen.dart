@@ -7,6 +7,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'build_detail_screen.dart';
 import 'hero_card_screen.dart';
 
 const _slotOrder = [
@@ -243,91 +244,15 @@ class _BuildTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final name = '${c['name']}';
     final build = activeBuild(c);
     if (build == null) {
       return Center(
         child: Text(s.t('no_build'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
       );
     }
-    final specs = ref.watch(characterSpecsProvider(name));
-    final buildName = '${build['name'] ?? ''}'.trim();
-
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      children: [
-        Row(
-          children: [
-            Text('${s.t('template')} · ', style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-            Expanded(
-              child: Text(buildName.isEmpty ? s.t('unnamed_build') : buildName,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        AsyncView<List<Json>>(
-          value: specs,
-          onRetry: () => ref.invalidate(characterSpecsProvider(name)),
-          builder: (list) => Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-            child: Column(
-              children: [
-                for (var i = 0; i < list.length; i++)
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: i == list.length - 1 ? Colors.transparent : AppColors.track),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        ClipOval(
-                          child: SizedBox(
-                            width: 44,
-                            height: 44,
-                            child: list[i]['icon'] is String
-                                ? Image.network(
-                                    list[i]['icon'] as String,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stack) =>
-                                        const ColoredBox(color: AppColors.surface2),
-                                  )
-                                : const ColoredBox(color: AppColors.surface2),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text('${list[i]['name'] ?? ''}',
-                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                        ),
-                        if (list[i]['elite'] == true)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(999),
-                              border: Border.all(color: AppColors.gold),
-                            ),
-                            child: Text(s.t('elite'),
-                                style: const TextStyle(
-                                    fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                          ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        OutlinedButton.icon(
-          onPressed: () => openWikiPage(context, ref, '${c['profession'] ?? 'Profession'}'),
-          icon: const Icon(Icons.menu_book_outlined),
-          label: Text(s.t('profession_wiki', {'p': c['profession'] ?? ''})),
-        ),
-      ],
-    );
+    // the character endpoint leaves the profession out of the build object
+    final withProfession = {'profession': c['profession'], ...build};
+    return BuildView(build: withProfession, padding: const EdgeInsets.fromLTRB(20, 16, 20, 24));
   }
 }
 

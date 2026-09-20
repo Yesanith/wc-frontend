@@ -37,12 +37,18 @@ class Gw2Api {
   final Map<int, Json> _specCache = {};
   final Map<int, Json> _achievementCache = {};
   final Map<int, Json> _masteryCache = {};
+  final Map<int, Json> _traitCache = {};
+  final Map<int, Json> _skillCache = {};
+  final Map<int, Json> _petCache = {};
   late final Map<String, Map<int, Json>> _caches = {
     'items': _itemCache,
     'currencies': _currencyCache,
     'specializations': _specCache,
     'achievements': _achievementCache,
     'masteries': _masteryCache,
+    'traits': _traitCache,
+    'skills': _skillCache,
+    'pets': _petCache,
   };
   final Set<String> _loaded = {};
   final Set<String> _dirty = {};
@@ -247,6 +253,21 @@ class Gw2Api {
       _batch('/achievements', ids, _achievementCache);
 
   Future<Map<int, Json>> masteries(Iterable<int> ids) => _batch('/masteries', ids, _masteryCache);
+
+  Future<Map<int, Json>> traits(Iterable<int> ids) => _batch('/traits', ids, _traitCache);
+
+  Future<Map<int, Json>> skills(Iterable<int> ids) => _batch('/skills', ids, _skillCache);
+
+  Future<Map<int, Json>> pets(Iterable<int> ids) => _batch('/pets', ids, _petCache);
+
+  /// daily crafts and map chests already collected today, both need the
+  /// progression permission
+  Future<List<String>> dailyDone(String path) async =>
+      (await cachedGet('/account/$path', ttl: const Duration(minutes: 5)) as List)
+          .map((e) => '$e')
+          .toList();
+
+  Future<List<String>> dailyAll(String path) async => idList('/$path');
 
   Future<List<Json>> accountAchievements() async => _list(await cachedGet('/account/achievements'));
 

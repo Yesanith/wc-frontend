@@ -488,3 +488,90 @@ final armoryProvider = FutureProvider<List<ItemSlot>>((ref) async {
 final buildStorageProvider = FutureProvider<List<Json>>((ref) async {
   return ref.watch(gw2ApiProvider).buildStorage();
 });
+
+/// everything a stored or equipped build refers to, resolved in one go.
+/// the family key is the build encoded as a sorted id list so riverpod can
+/// cache it properly
+class BuildDetail {
+  const BuildDetail(this.specs, this.traits, this.skills, this.pets);
+  final Map<int, Json> specs;
+  final Map<int, Json> traits;
+  final Map<int, Json> skills;
+  final Map<int, Json> pets;
+}
+
+List<int> _idsOf(Json build, String key) => [
+      for (final v in (build[key] as List?) ?? const [])
+        if (v != null) asInt(v),
+    ];
+
+/// ids used by a build, as a stable string for the provider family
+String buildKey(Json build) {
+  final parts = <String>[];
+  for (final spec in (build['specializations'] as List?) ?? const []) {
+    if (spec is! Map) continue;
+    parts.add('s${asInt(spec['id'])}');
+    for (final t in (spec['traits'] as List?) ?? const []) {
+      if (t != null) parts.add('t${asInt(t)}');
+    }
+  }
+  final skills = build['skills'];
+  if (skills is Map) {
+    parts.add('h${asInt(skills['heal'])}');
+    parts.add('e${asInt(skills['elite'])}');
+    for (final u in (skills['utilities'] as List?) ?? const []) {
+      if (u != null) parts.add('u${asInt(u)}');
+    }
+  }
+  for (final p in _idsOf(build, 'pets')) {
+    parts.add('p$p');
+  }
+  return parts.join(',');
+}
+
+final buildDetailProvider = FutureProvider.family<BuildDetail, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final specIds = <int>[];
+  final traitIds = <int>[];
+  final skillIds = <int>[];
+  final petIds = <int>[];
+  for (final part in key.split(',')) {
+    if (part.isEmpty) continue;
+    final id = int.tryParse(part.substring(1)) ?? 0;
+    if (id <= 0) continue;
+    switch (part[0]) {
+      case 's':
+        specIds.add(id);
+      case 't':
+        traitIds.add(id);
+      case 'p':
+        petIds.add(id);
+      default:
+        skillIds.add(id);
+    }
+  }
+  return BuildDetail(
+    await api.specializations(specIds),
+    await api.traits(traitIds),
+    await api.skills(skillIds),
+    petIds.isEmpty ? const {} : await api.pets(petIds),
+  );
+});
+
+class DailyProgress {
+  const DailyProgress(this.done, this.total);
+  final int done;
+  final int total;
+}
+
+/// daily crafts and map chests: how many of today's are already collected
+final dailyProgressProvider = FutureProvider.family<DailyProgress, String>((ref, path) async {
+  final api = ref.watch(gw2ApiProvider);
+  final all = await api.dailyAll(path);
+  try {
+    final done = await api.dailyDone(path);
+    return DailyProgress(done.where(all.contains).length, all.length);
+  } catch (_) {
+    return DailyProgress(0, all.length);
+  }
+});

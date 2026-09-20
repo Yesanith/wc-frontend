@@ -99,6 +99,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           else
             _FeaturedBoss(spawn: top, now: now),
           const SizedBox(height: 16),
+          const _DailyResets(),
+          const SizedBox(height: 8),
           for (final e in rest)
             _BossRow(
               spawn: e,
@@ -116,6 +118,46 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         title: Text(s.t('world_bosses'), style: display(20)),
       ),
       body: body,
+    );
+  }
+}
+
+/// daily craft and map chest progress for today
+class _DailyResets extends ConsumerWidget {
+  const _DailyResets();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final crafts = ref.watch(dailyProgressProvider('dailycrafts')).valueOrNull;
+    final chests = ref.watch(dailyProgressProvider('mapchests')).valueOrNull;
+    if (crafts == null && chests == null) return const SizedBox.shrink();
+
+    Widget row(String label, DailyProgress? p) {
+      if (p == null) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          children: [
+            Expanded(child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
+            Text('${p.done} / ${p.total}',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: p.done >= p.total && p.total > 0 ? AppColors.green : AppColors.gold)),
+          ],
+        ),
+      );
+    }
+
+    return Panel(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      child: Column(
+        children: [
+          row(s.t('daily_crafts'), crafts),
+          row(s.t('map_chests'), chests),
+        ],
+      ),
     );
   }
 }
