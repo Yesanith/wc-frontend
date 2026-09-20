@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../services/recipes.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
