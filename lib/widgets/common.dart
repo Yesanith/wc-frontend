@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../api/wiki_api.dart';
+import '../screens/goals_screen.dart';
+import '../screens/trading_screen.dart';
+import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 
 class Panel extends StatelessWidget {
@@ -78,15 +81,16 @@ class StatTile extends StatelessWidget {
   }
 }
 
-class ErrorBox extends StatelessWidget {
+class ErrorBox extends ConsumerWidget {
   const ErrorBox({super.key, required this.message, this.onRetry});
 
   final String message;
   final VoidCallback? onRetry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final retry = onRetry;
+    final s = ref.watch(stringsProvider);
     return Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +107,7 @@ class ErrorBox extends StatelessWidget {
           ),
           if (retry != null) ...[
             const SizedBox(height: 8),
-            TextButton(onPressed: retry, child: const Text('Tekrar dene')),
+            TextButton(onPressed: retry, child: Text(s.t('retry'))),
           ],
         ],
       ),
@@ -204,7 +208,7 @@ class ItemIcon extends StatelessWidget {
   }
 }
 
-Future<void> openUrl(BuildContext context, String url) async {
+Future<void> openUrl(BuildContext context, String url, {String failMessage = 'Could not open the page'}) async {
   var ok = false;
   try {
     ok = await launchUrl(Uri.parse(url), mode: LaunchMode.inAppBrowserView);
@@ -212,14 +216,20 @@ Future<void> openUrl(BuildContext context, String url) async {
     ok = false;
   }
   if (!ok && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sayfa açılamadı')));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failMessage)));
   }
 }
 
-Future<void> openWikiPage(BuildContext context, String title) => openUrl(context, WikiApi.pageUrl(title));
+/// opens a wiki page in the in-app browser, using the wiki that matches the app language
+Future<void> openWikiPage(BuildContext context, WidgetRef ref, String title) {
+  final wiki = ref.read(wikiApiProvider);
+  final s = ref.read(stringsProvider);
+  return openUrl(context, wiki.pageUrl(title), failMessage: s.t('open_failed'));
+}
 
 void showItemSheet(
   BuildContext context, {
+  required int id,
   required String name,
   String? icon,
   String? rarity,
@@ -230,46 +240,96 @@ void showItemSheet(
     context: context,
     backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-    builder: (sheetContext) {
-      return SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  ItemIcon(url: icon, rarity: rarity, size: 56),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 4),
-                        Text(
-                          [if (rarity != null) rarity, if (type != null) type, if (count > 1) '×$count'].join(' · '),
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
-                        ),
-                      ],
+    builder: (sheetContext) => Consumer(
+      // keep the outer context for navigation, the sheet one is gone after pop
+      builder: (_, ref, __) {
+        final s = ref.watch(stringsProvider);
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    ItemIcon(url: icon, rarity: rarity, size: 56),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                          const SizedBox(height: 4),
+                          Text(
+                            [if (rarity != null) rarity, if (type != null) type, if (count > 1) 'x$count'].join(' · '),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              FilledButton.icon(
-                onPressed: () {
-                  Navigator.of(sheetContext).pop();
-                  openWikiPage(context, name);
-                },
-                icon: const Icon(Icons.menu_book_outlined),
-                label: const Text("Wiki'de aç"),
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 18),
+                FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    openWikiPage(context, ref, name);
+                  },
+                  icon: const Icon(Icons.menu_book_outlined),
+                  label: Text(s.t('open_in_wiki')),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.of(sheetContext).pop();
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: id)),
+                          );
+                        },
+                        icon: const Icon(Icons.storefront_outlined),
+                        label: Text(s.t('trading_post')),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.of(sheetContext).pop();
+                          showAddToGoalSheet(context, itemId: id, itemName: name);
+                        },
+                        icon: const Icon(Icons.flag_outlined),
+                        label: Text(s.t('add_to_goal')),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
+        );
+      },
+    ),
   );
+}
+
+/// small pill used for chips and filters
+class Pill extends StatelessWidget {
+  const Pill(this.text, {super.key, this.color = AppColors.textSoft, this.background = AppColors.surface2});
+
+  final String text;
+  final Color color;
+  final Color background;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(999)),
+      child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+    );
+  }
 }

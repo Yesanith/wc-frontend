@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/gw2_api.dart';
+import '../l10n/strings.dart';
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 
@@ -35,9 +37,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _connect() async {
+    final s = ref.read(stringsProvider);
     final key = _ctrl.text.trim();
     if (key.isEmpty) {
-      setState(() => _error = 'Önce API key yapıştır.');
+      setState(() => _error = s.t('err_empty_key'));
       return;
     }
     setState(() {
@@ -49,12 +52,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final perms = ((info['permissions'] as List?) ?? const []).map((e) => '$e').toList();
       final missing = _required.where((p) => !perms.contains(p)).toList();
       if (missing.isNotEmpty) {
-        setState(() => _error = 'Key geçerli ama şu izinler eksik: ${missing.join(', ')}');
+        setState(() => _error = s.t('err_missing_perms', {'p': missing.join(', ')}));
         return;
       }
       await ref.read(apiKeyProvider.notifier).save(key);
     } catch (e) {
-      if (mounted) setState(() => _error = 'Key doğrulanamadı: $e');
+      if (mounted) setState(() => _error = s.t('err_key_invalid', {'e': e}));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -62,46 +65,74 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final lang = ref.watch(langProvider);
     final error = _error;
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: PopupMenuButton<AppLang>(
+                tooltip: s.t('language'),
+                initialValue: lang,
+                onSelected: (l) => ref.read(langProvider.notifier).set(l),
+                itemBuilder: (_) => [
+                  for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName)),
+                ],
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.translate, size: 18, color: AppColors.gold),
+                      const SizedBox(width: 6),
+                      Text(lang.nativeName,
+                          style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
             const Center(
               child: SizedBox(width: 72, height: 72, child: CustomPaint(painter: _EmblemPainter())),
             ),
             const SizedBox(height: 12),
             Text('Tyria Codex', textAlign: TextAlign.center, style: display(34)),
             const SizedBox(height: 6),
-            const Text(
-              'Karakterlerin, hesabın ve tüm wiki — tek bir yerde.',
+            Text(
+              s.t('tagline'),
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.muted, fontSize: 15, height: 1.5),
+              style: const TextStyle(color: AppColors.muted, fontSize: 15, height: 1.5),
             ),
             const SizedBox(height: 24),
             Panel(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Kicker('API KEY NASIL ALINIR?'),
+                  Kicker(s.t('how_to_get_key')),
                   const SizedBox(height: 14),
-                  const _Step(1, 'account.arena.net adresinde Uygulamalar sekmesini aç.'),
+                  _Step(1, s.t('step1')),
                   const SizedBox(height: 12),
-                  const _Step(2, 'Yeni Key oluştur ve aşağıdaki izinleri işaretle.'),
+                  _Step(2, s.t('step2')),
                   const SizedBox(height: 12),
-                  const _Step(3, "Oluşan key'i kopyala ve buraya yapıştır."),
+                  _Step(3, s.t('step3')),
                   const SizedBox(height: 8),
                   TextButton.icon(
-                    onPressed: () => openUrl(context, 'https://account.arena.net/applications'),
+                    onPressed: () => openUrl(context, 'https://account.arena.net/applications',
+                        failMessage: s.t('open_failed')),
                     icon: const Icon(Icons.open_in_new, size: 18),
-                    label: const Text('account.arena.net sayfasını aç'),
+                    label: Text(s.t('open_arena_net')),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            const Text('API Key', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
+            Text(s.t('api_key'),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -120,21 +151,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   height: 52,
                   child: IconButton.filledTonal(
                     onPressed: _paste,
-                    tooltip: 'Panodan yapıştır',
+                    tooltip: s.t('paste'),
                     icon: const Icon(Icons.content_paste),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 18),
-            const Kicker('İZİNLER', color: AppColors.muted),
+            Kicker(s.t('permissions'), color: AppColors.muted),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
                 for (final p in _required) _PermChip(p, isRequired: true),
-                for (final p in _optional) _PermChip(p, isRequired: false),
+                for (final p in _optional) _PermChip(s.t('optional_perm', {'p': p}), isRequired: false),
               ],
             ),
             if (error != null) ...[
@@ -157,17 +188,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         height: 22,
                         child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.onGold),
                       )
-                    : const Text('Bağlan', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                    : Text(s.t('connect'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
               ),
             ),
             const SizedBox(height: 14),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.lock_outline, size: 14, color: AppColors.muted),
-                SizedBox(width: 6),
-                Text('Key yalnızca bu cihazda, şifreli olarak saklanır.',
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                const Icon(Icons.lock_outline, size: 14, color: AppColors.muted),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(s.t('key_local_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                ),
               ],
             ),
           ],
@@ -209,9 +241,9 @@ class _Step extends StatelessWidget {
 }
 
 class _PermChip extends StatelessWidget {
-  const _PermChip(this.name, {required this.isRequired});
+  const _PermChip(this.label, {required this.isRequired});
 
-  final String name;
+  final String label;
   final bool isRequired;
 
   @override
@@ -229,7 +261,7 @@ class _PermChip extends StatelessWidget {
           Icon(isRequired ? Icons.check : Icons.add, size: 14, color: isRequired ? AppColors.green : AppColors.muted),
           const SizedBox(width: 6),
           Text(
-            isRequired ? name : '$name (isteğe bağlı)',
+            label,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,

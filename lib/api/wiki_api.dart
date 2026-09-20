@@ -8,12 +8,14 @@ class WikiResult {
   final String url;
 }
 
-/// Search via the MediaWiki API of the official Guild Wars 2 Wiki.
+/// search through the mediawiki api of the official gw2 wiki
+/// (english, german or french edition depending on [base])
 class WikiApi {
-  static const base = 'https://wiki.guildwars2.com';
+  const WikiApi(this.base);
 
-  static String pageUrl(String title) =>
-      '$base/wiki/${Uri.encodeComponent(title.replaceAll(' ', '_'))}';
+  final String base;
+
+  String pageUrl(String title) => '$base/wiki/${Uri.encodeComponent(title.replaceAll(' ', '_'))}';
 
   Future<List<WikiResult>> search(String query) async {
     final q = query.trim();
@@ -29,7 +31,7 @@ class WikiApi {
         .get(uri, headers: {'User-Agent': 'TyriaCodex/0.1 (Flutter GW2 companion app)'})
         .timeout(const Duration(seconds: 15));
     if (res.statusCode != 200) {
-      throw Exception('Wiki hatası (${res.statusCode})');
+      throw Exception('Wiki error (${res.statusCode})');
     }
     final data = jsonDecode(utf8.decode(res.bodyBytes));
     if (data is! List || data.length < 4) return const [];

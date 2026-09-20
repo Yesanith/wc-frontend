@@ -1,39 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'hero_card_screen.dart';
 
-const _slotLabels = <String, String>{
-  'Helm': 'Kask',
-  'Shoulders': 'Omuz',
-  'Coat': 'Göğüs',
-  'Gloves': 'Eldiven',
-  'Leggings': 'Pantolon',
-  'Boots': 'Bot',
-  'WeaponA1': 'Silah A · Ana el',
-  'WeaponA2': 'Silah A · Yan el',
-  'WeaponB1': 'Silah B · Ana el',
-  'WeaponB2': 'Silah B · Yan el',
-  'Backpack': 'Sırt',
-  'Accessory1': 'Aksesuar 1',
-  'Accessory2': 'Aksesuar 2',
-  'Amulet': 'Kolye',
-  'Ring1': 'Yüzük 1',
-  'Ring2': 'Yüzük 2',
-  'Relic': 'Relic',
-  'HelmAquatic': 'Su kaskı',
-  'WeaponAquaticA': 'Su silahı A',
-  'WeaponAquaticB': 'Su silahı B',
-  'Sickle': 'Orak',
-  'Axe': 'Balta',
-  'Pick': 'Kazma',
-};
+const _slotOrder = [
+  'Helm', 'Shoulders', 'Coat', 'Gloves', 'Leggings', 'Boots', //
+  'WeaponA1', 'WeaponA2', 'WeaponB1', 'WeaponB2', //
+  'Backpack', 'Accessory1', 'Accessory2', 'Amulet', 'Ring1', 'Ring2', 'Relic', //
+  'HelmAquatic', 'WeaponAquaticA', 'WeaponAquaticB', 'Sickle', 'Axe', 'Pick',
+];
 
-int _slotOrder(String slot) {
-  final i = _slotLabels.keys.toList().indexOf(slot);
+int _slotIndex(String slot) {
+  final i = _slotOrder.indexOf(slot);
   return i < 0 ? 999 : i;
 }
 
@@ -44,6 +28,7 @@ class CharacterDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final chars = ref.watch(charactersProvider);
     final list = chars.valueOrNull;
     final c = list == null ? null : characterByName(list, name);
@@ -53,17 +38,17 @@ class CharacterDetailScreen extends ConsumerWidget {
       body = Column(
         children: [
           _Hero(c),
-          const TabBar(
+          TabBar(
             labelColor: AppColors.gold,
             unselectedLabelColor: AppColors.muted,
             indicatorColor: AppColors.gold,
             dividerColor: AppColors.track,
-            labelStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
             tabs: [
-              Tab(text: 'Ekipman'),
-              Tab(text: 'Build'),
-              Tab(text: 'Envanter'),
-              Tab(text: 'Crafting'),
+              Tab(text: s.t('equipment')),
+              Tab(text: s.t('build')),
+              Tab(text: s.t('inventory')),
+              Tab(text: s.t('crafting')),
             ],
           ),
           Expanded(
@@ -84,7 +69,7 @@ class CharacterDetailScreen extends ConsumerWidget {
         child: ErrorBox(message: '${chars.error}', onRetry: () => ref.invalidate(charactersProvider)),
       );
     } else if (list != null) {
-      body = const Center(child: Text('Karakter bulunamadı.', style: TextStyle(color: AppColors.muted)));
+      body = Center(child: Text(s.t('character_not_found'), style: const TextStyle(color: AppColors.muted)));
     } else {
       body = const Center(child: CircularProgressIndicator());
     }
@@ -96,6 +81,16 @@ class CharacterDetailScreen extends ConsumerWidget {
           backgroundColor: AppColors.bg,
           surfaceTintColor: Colors.transparent,
           title: Text(name, style: display(20)),
+          actions: [
+            if (c != null)
+              IconButton(
+                tooltip: s.t('hero_card'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => HeroCardScreen(name: name)),
+                ),
+                icon: const Icon(Icons.ios_share, color: AppColors.gold),
+              ),
+          ],
         ),
         body: body,
       ),
@@ -103,13 +98,14 @@ class CharacterDetailScreen extends ConsumerWidget {
   }
 }
 
-class _Hero extends StatelessWidget {
+class _Hero extends ConsumerWidget {
   const _Hero(this.c);
 
   final Json c;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final prof = '${c['profession'] ?? ''}';
     final color = professionColor(prof);
     return Padding(
@@ -137,10 +133,10 @@ class _Hero extends StatelessWidget {
                   spacing: 6,
                   runSpacing: 6,
                   children: [
-                    _Pill('Seviye ${asInt(c['level'])}'),
-                    _Pill('${c['race'] ?? ''}'),
-                    _Pill(fmtHours(c['age'])),
-                    _Pill('${asInt(c['deaths'])} ölüm'),
+                    Pill(s.t('level_n', {'n': asInt(c['level'])})),
+                    Pill('${c['race'] ?? ''}'),
+                    Pill(fmtHours(c['age'], s.t('hours_short'))),
+                    Pill(s.t('deaths_n', {'n': fmtInt(asInt(c['deaths']))})),
                   ],
                 ),
               ],
@@ -152,22 +148,6 @@ class _Hero extends StatelessWidget {
   }
 }
 
-class _Pill extends StatelessWidget {
-  const _Pill(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: AppColors.surface2, borderRadius: BorderRadius.circular(999)),
-      child: Text(text,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
-    );
-  }
-}
-
 class _EquipmentTab extends ConsumerWidget {
   const _EquipmentTab(this.c);
 
@@ -175,15 +155,15 @@ class _EquipmentTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final name = '${c['name']}';
     final items = ref.watch(characterItemsProvider(name));
     final eq = activeEquipment(c)
-      ..sort((a, b) => _slotOrder('${a['slot']}').compareTo(_slotOrder('${b['slot']}')));
+      ..sort((a, b) => _slotIndex('${a['slot']}').compareTo(_slotIndex('${b['slot']}')));
 
     if (eq.isEmpty) {
-      return const Center(
-        child: Text('Ekipman bilgisi yok.\n(characters + builds izni gerekebilir)',
-            textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
+      return Center(
+        child: Text(s.t('no_equipment'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
       );
     }
 
@@ -198,7 +178,7 @@ class _EquipmentTab extends ConsumerWidget {
           final e = eq[i];
           final item = map[asInt(e['id'])];
           final slot = '${e['slot']}';
-          final itemName = (item?['name'] as String?) ?? 'Item #${e['id']}';
+          final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': e['id']});
           final rarity = item?['rarity'] as String?;
           return Material(
             color: AppColors.surface,
@@ -210,6 +190,7 @@ class _EquipmentTab extends ConsumerWidget {
             child: InkWell(
               onTap: () => showItemSheet(
                 context,
+                id: asInt(e['id']),
                 name: itemName,
                 icon: item?['icon'] as String?,
                 rarity: rarity,
@@ -225,7 +206,7 @@ class _EquipmentTab extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text((_slotLabels[slot] ?? slot).toUpperCase(),
+                          Text(s.t('slot_$slot').toUpperCase(),
                               style: const TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
@@ -261,12 +242,12 @@ class _BuildTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final name = '${c['name']}';
     final build = activeBuild(c);
     if (build == null) {
-      return const Center(
-        child: Text('Build bilgisi yok.\n(builds izni gerekebilir)',
-            textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
+      return Center(
+        child: Text(s.t('no_build'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
       );
     }
     final specs = ref.watch(characterSpecsProvider(name));
@@ -277,9 +258,9 @@ class _BuildTab extends ConsumerWidget {
       children: [
         Row(
           children: [
-            const Text('Şablon · ', style: TextStyle(fontSize: 13, color: AppColors.muted)),
+            Text('${s.t('template')} · ', style: const TextStyle(fontSize: 13, color: AppColors.muted)),
             Expanded(
-              child: Text(buildName.isEmpty ? 'İsimsiz build' : buildName,
+              child: Text(buildName.isEmpty ? s.t('unnamed_build') : buildName,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
             ),
           ],
@@ -328,8 +309,9 @@ class _BuildTab extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(999),
                               border: Border.all(color: AppColors.gold),
                             ),
-                            child: const Text('ELİT',
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                            child: Text(s.t('elite'),
+                                style: const TextStyle(
+                                    fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.gold)),
                           ),
                       ],
                     ),
@@ -340,9 +322,9 @@ class _BuildTab extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         OutlinedButton.icon(
-          onPressed: () => openWikiPage(context, '${c['profession'] ?? 'Profession'}'),
+          onPressed: () => openWikiPage(context, ref, '${c['profession'] ?? 'Profession'}'),
           icon: const Icon(Icons.menu_book_outlined),
-          label: Text("${c['profession'] ?? 'Meslek'} wiki sayfası"),
+          label: Text(s.t('profession_wiki', {'p': c['profession'] ?? ''})),
         ),
       ],
     );
@@ -356,12 +338,12 @@ class _InventoryTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final name = '${c['name']}';
     final slots = bagSlots(c);
     if (slots.isEmpty) {
-      return const Center(
-        child: Text('Envanter bilgisi yok.\n(inventories izni gerekebilir)',
-            textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
+      return Center(
+        child: Text(s.t('no_inventory'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
       );
     }
     final used = slots.where((s) => s != null).length;
@@ -377,10 +359,11 @@ class _InventoryTab extends ConsumerWidget {
             sliver: SliverToBoxAdapter(
               child: Row(
                 children: [
-                  const Expanded(
-                    child: Text('Çantalar', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                  Expanded(
+                    child: Text(s.t('bags'),
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
                   ),
-                  Text('$used / ${slots.length} dolu',
+                  Text(s.t('slots_used', {'a': used, 'b': slots.length}),
                       style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ],
               ),
@@ -396,23 +379,24 @@ class _InventoryTab extends ConsumerWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, i) {
-                  final s = slots[i];
-                  if (s == null) return const ItemIcon(empty: true);
-                  final item = map[asInt(s['id'])];
-                  final itemName = (item?['name'] as String?) ?? 'Item #${s['id']}';
+                  final slot = slots[i];
+                  if (slot == null) return const ItemIcon(empty: true);
+                  final item = map[asInt(slot['id'])];
+                  final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': slot['id']});
                   return GestureDetector(
                     onTap: () => showItemSheet(
                       context,
+                      id: asInt(slot['id']),
                       name: itemName,
                       icon: item?['icon'] as String?,
                       rarity: item?['rarity'] as String?,
                       type: item?['type'] as String?,
-                      count: asInt(s['count']),
+                      count: asInt(slot['count']),
                     ),
                     child: ItemIcon(
                       url: item?['icon'] as String?,
                       rarity: item?['rarity'] as String?,
-                      count: asInt(s['count']),
+                      count: asInt(slot['count']),
                     ),
                   );
                 },
@@ -426,16 +410,17 @@ class _InventoryTab extends ConsumerWidget {
   }
 }
 
-class _CraftingTab extends StatelessWidget {
+class _CraftingTab extends ConsumerWidget {
   const _CraftingTab(this.c);
 
   final Json c;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final crafting = ((c['crafting'] as List?) ?? const []).whereType<Map>().toList();
     if (crafting.isEmpty) {
-      return const Center(child: Text('Crafting disiplini yok.', style: TextStyle(color: AppColors.muted)));
+      return Center(child: Text(s.t('no_crafting'), style: const TextStyle(color: AppColors.muted)));
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -444,7 +429,7 @@ class _CraftingTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             children: [
-              for (var i = 0; i < crafting.length; i++) _craftRow(crafting[i], i == crafting.length - 1),
+              for (var i = 0; i < crafting.length; i++) _craftRow(s, crafting[i], i == crafting.length - 1),
             ],
           ),
         ),
@@ -452,9 +437,10 @@ class _CraftingTab extends StatelessWidget {
     );
   }
 
-  Widget _craftRow(Map d, bool last) {
+  Widget _craftRow(S s, Map d, bool last) {
     final discipline = '${d['discipline'] ?? ''}';
     final rating = asInt(d['rating']);
+    // jeweler caps at 400, everything else at 500
     final max = discipline == 'Jeweler' ? 400 : 500;
     final active = d['active'] == true;
     return Container(
@@ -469,7 +455,7 @@ class _CraftingTab extends StatelessWidget {
               Expanded(
                 child: Text(discipline, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
               ),
-              Text(active ? 'AKTİF' : 'PASİF',
+              Text(active ? s.t('active') : s.t('inactive'),
                   style: TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w800, color: active ? AppColors.green : AppColors.hint)),
             ],

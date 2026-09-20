@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/wiki_api.dart';
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 
@@ -16,11 +17,12 @@ class WikiScreen extends ConsumerStatefulWidget {
 }
 
 class _WikiScreenState extends ConsumerState<WikiScreen> {
-  static const _categories = <(String, String, String, Color)>[
-    ('Meta etkinlikler', 'Zamanlayıcı ve rehber', 'Meta event', AppColors.gold),
-    ('Crafting', 'Tarifler ve disiplinler', 'Crafting', Color(0xFF5FC07F)),
-    ("Mastery'ler", 'Tüm genişlemeler', 'Mastery', Color(0xFF72C1D9)),
-    ("Fractal'lar", 'Seviyeler ve mekanikler', 'Fractals of the Mists', Color(0xFFC08BE0)),
+  // key prefix in the strings table, color
+  static const _categories = <(String, Color)>[
+    ('cat_meta', AppColors.gold),
+    ('cat_crafting', Color(0xFF5FC07F)),
+    ('cat_mastery', Color(0xFF72C1D9)),
+    ('cat_fractals', Color(0xFFC08BE0)),
   ];
 
   final _ctrl = TextEditingController();
@@ -44,6 +46,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
   }
 
   Future<void> _search(String q) async {
+    // drop responses that come back after a newer query was sent
     final id = ++_requestId;
     if (q.trim().isEmpty) {
       setState(() {
@@ -63,10 +66,15 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
       setState(() => _results = r);
     } catch (e) {
       if (!mounted || id != _requestId) return;
-      setState(() => _error = 'Arama başarısız: $e');
+      setState(() => _error = ref.read(stringsProvider).t('search_failed', {'e': e}));
     } finally {
       if (mounted && id == _requestId) setState(() => _loading = false);
     }
+  }
+
+  void _searchFor(String q) {
+    _ctrl.text = q;
+    _search(q);
   }
 
   void _open(String title) {
@@ -75,19 +83,21 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
       _recent.insert(0, title);
       if (_recent.length > 8) _recent.removeLast();
     });
-    openWikiPage(context, title);
+    openWikiPage(context, ref, title);
   }
 
   @override
   Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final lang = ref.watch(langProvider);
     final searching = _ctrl.text.trim().isNotEmpty;
     final error = _error;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        Text('Wiki', style: display(28)),
-        const Text("Guild Wars 2 Wiki'den canlı içerik", style: TextStyle(fontSize: 13, color: AppColors.muted)),
+        Text(s.t('nav_wiki'), style: display(28)),
+        Text(Uri.parse(lang.wikiBase).host, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
         const SizedBox(height: 14),
         TextField(
           controller: _ctrl,
@@ -98,11 +108,11 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           onSubmitted: _search,
           textInputAction: TextInputAction.search,
           decoration: fieldDecoration(
-            'Item, boss, harita, mastery…',
+            s.t('search_wiki'),
             prefixIcon: const Icon(Icons.search, color: AppColors.gold),
             suffixIcon: searching
                 ? IconButton(
-                    tooltip: 'Temizle',
+                    tooltip: s.t('clear'),
                     icon: const Icon(Icons.close, color: AppColors.muted),
                     onPressed: () {
                       _ctrl.clear();
@@ -117,9 +127,9 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           if (_loading) const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
           if (error != null) ErrorBox(message: error, onRetry: () => _search(_ctrl.text)),
           if (!_loading && error == null && _results.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: Text('Sonuç yok.', style: TextStyle(color: AppColors.muted))),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Center(child: Text(s.t('no_results'), style: const TextStyle(color: AppColors.muted))),
             ),
           if (_results.isNotEmpty)
             Panel(
@@ -144,16 +154,15 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
             crossAxisSpacing: 10,
             childAspectRatio: 1.55,
             children: [
-              for (final c in _categories) _CategoryCard(c.$1, c.$2, c.$4, () => _open(c.$3)),
+              for (final c in _categories)
+                _CategoryCard(s.t(c.$1), s.t('${c.$1}_sub'), c.$2, () => _searchFor(s.t('${c.$1}_q'))),
             ],
           ),
           const SizedBox(height: 22),
-          const SectionHeader(title: 'Son bakılanlar'),
+          SectionHeader(title: s.t('recently_viewed')),
           const SizedBox(height: 10),
           if (_recent.isEmpty)
-            const Panel(
-              child: Text('Açtığın wiki sayfaları burada listelenir.', style: TextStyle(color: AppColors.muted)),
-            )
+            Panel(child: Text(s.t('recent_empty'), style: const TextStyle(color: AppColors.muted)))
           else
             Panel(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -170,10 +179,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
             ),
         ],
         const SizedBox(height: 20),
-        const Text(
-          "İçerik Guild Wars 2 Wiki'den alınır ve sitenin lisans koşullarına tabidir.",
-          style: TextStyle(fontSize: 11, height: 1.5, color: AppColors.hint),
-        ),
+        Text(s.t('wiki_attribution'), style: const TextStyle(fontSize: 11, height: 1.5, color: AppColors.hint)),
       ],
     );
   }
@@ -221,7 +227,10 @@ class _CategoryCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  Text(title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                   Text(subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

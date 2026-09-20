@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/world_bosses.dart';
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'events_screen.dart';
+import 'goals_screen.dart';
+import 'trading_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -20,6 +25,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final account = ref.watch(accountProvider);
     final wallet = ref.watch(walletProvider);
     final vault = ref.watch(vaultProvider);
@@ -42,9 +48,11 @@ class HomeScreen extends ConsumerWidget {
             onRetry: () => ref.invalidate(walletProvider),
             builder: (w) => _WalletStrip(w),
           ),
+          const SizedBox(height: 14),
+          const _QuickLinks(),
           const SizedBox(height: 24),
           SectionHeader(
-            title: "Wizard's Vault · Günlük",
+            title: s.t('vault_daily'),
             trailing: v == null
                 ? null
                 : '${asInt(v['meta_progress_current'])}/${asInt(v['meta_progress_complete'])}',
@@ -61,13 +69,14 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _AccountHeader extends StatelessWidget {
+class _AccountHeader extends ConsumerWidget {
   const _AccountHeader(this.a);
 
   final Json a;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final wvw = a['wvw'];
     final rank = wvw is Map ? asInt(wvw['rank']) : asInt(a['wvw_rank']);
     final created = '${a['created'] ?? ''}';
@@ -76,7 +85,8 @@ class _AccountHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Hoş geldin', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+        Text(s.t('welcome'),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
         Text('${a['name'] ?? ''}', style: display(26)),
         const SizedBox(height: 14),
         Panel(
@@ -84,15 +94,15 @@ class _AccountHeader extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: StatTile(label: 'Oynama süresi', value: fmtHours(a['age']))),
-                  Expanded(child: StatTile(label: 'WvW rank', value: rank > 0 ? fmtInt(rank) : '-')),
+                  Expanded(child: StatTile(label: s.t('playtime'), value: fmtHours(a['age'], s.t('hours_short')))),
+                  Expanded(child: StatTile(label: s.t('wvw_rank'), value: rank > 0 ? fmtInt(rank) : '-')),
                 ],
               ),
               const SizedBox(height: 14),
               Row(
                 children: [
-                  Expanded(child: StatTile(label: 'Fractal seviyesi', value: '${asInt(a['fractal_level'])}')),
-                  Expanded(child: StatTile(label: 'Hesap açılışı', value: year)),
+                  Expanded(child: StatTile(label: s.t('fractal_level'), value: '${asInt(a['fractal_level'])}')),
+                  Expanded(child: StatTile(label: s.t('account_created'), value: year)),
                 ],
               ),
             ],
@@ -103,7 +113,7 @@ class _AccountHeader extends StatelessWidget {
   }
 }
 
-class _WalletStrip extends StatelessWidget {
+class _WalletStrip extends ConsumerWidget {
   const _WalletStrip(this.entries);
 
   final List<WalletEntry> entries;
@@ -116,25 +126,27 @@ class _WalletStrip extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    // wallet ids: 1 coin, 2 karma, 3 laurel
     final coins = Coins(_value(1));
     return Row(
       children: [
         Expanded(
           child: _MiniCard(
             dot: AppColors.gold,
-            label: 'Altın',
+            label: s.t('gold'),
             value: '${fmtInt(coins.gold)} g',
             sub: '${coins.silver} s ${coins.copper} c',
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: _MiniCard(dot: const Color(0xFFD58CF0), label: 'Karma', value: compact(_value(2))),
+          child: _MiniCard(dot: const Color(0xFFD58CF0), label: s.t('karma'), value: compact(_value(2))),
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: _MiniCard(dot: AppColors.green, label: 'Laurel', value: fmtInt(_value(3))),
+          child: _MiniCard(dot: AppColors.green, label: s.t('laurels'), value: fmtInt(_value(3))),
         ),
       ],
     );
@@ -161,7 +173,10 @@ class _MiniCard extends StatelessWidget {
             children: [
               Container(width: 9, height: 9, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)),
               const SizedBox(width: 6),
-              Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Flexible(
+                child: Text(label,
+                    overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ),
             ],
           ),
           const SizedBox(height: 6),
@@ -177,18 +192,116 @@ class _MiniCard extends StatelessWidget {
   }
 }
 
-class _VaultList extends StatelessWidget {
+class _QuickLinks extends ConsumerWidget {
+  const _QuickLinks();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final goals = ref.watch(goalsProvider);
+    final watch = ref.watch(watchlistProvider);
+    final now = DateTime.now().toUtc();
+    final spawns = upcomingSpawns(now, ahead: const Duration(hours: 3));
+    final next = spawns.isEmpty ? null : spawns.first;
+
+    void open(Widget page) => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page));
+
+    return Column(
+      children: [
+        _LinkTile(
+          icon: Icons.schedule,
+          title: s.t('world_bosses'),
+          subtitle: next == null
+              ? '-'
+              : next.isActive(now)
+                  ? '${next.boss.name} · ${s.t('active_now')}'
+                  : '${next.boss.name} · ${untilText(s, next.start, now)}',
+          onTap: () => open(const EventsScreen()),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: _LinkTile(
+                icon: Icons.flag_outlined,
+                title: s.t('goals'),
+                subtitle: s.t('n_goals', {'n': goals.length}),
+                onTap: () => open(const GoalsScreen()),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _LinkTile(
+                icon: Icons.storefront_outlined,
+                title: s.t('watchlist'),
+                subtitle: s.t('n_items', {'n': watch.length}),
+                onTap: () => open(const WatchlistScreen()),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _LinkTile extends StatelessWidget {
+  const _LinkTile({required this.icon, required this.title, required this.subtitle, required this.onTap});
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppColors.line),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Icon(icon, color: AppColors.gold),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    Text(subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VaultList extends ConsumerWidget {
   const _VaultList(this.data);
 
   final Json data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final objectives = ((data['objectives'] as List?) ?? const []).whereType<Map>().toList();
     if (objectives.isEmpty) {
-      return const Panel(
-        child: Text('Bugün için görev bulunamadı.', style: TextStyle(color: AppColors.muted)),
-      );
+      return Panel(child: Text(s.t('vault_empty'), style: const TextStyle(color: AppColors.muted)));
     }
     return Panel(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

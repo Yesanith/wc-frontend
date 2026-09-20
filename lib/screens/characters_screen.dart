@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
@@ -25,6 +26,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
     final chars = ref.watch(charactersProvider);
     final count = chars.valueOrNull?.length;
 
@@ -42,9 +44,9 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(child: Text('Karakterler', style: display(28))),
+              Expanded(child: Text(s.t('characters'), style: display(28))),
               if (count != null)
-                Text('$count karakter',
+                Text(s.t('n_characters', {'n': count}),
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
@@ -52,7 +54,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
           TextField(
             onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
             decoration: fieldDecoration(
-              'İsim, meslek veya ırk ara',
+              s.t('search_characters'),
               prefixIcon: const Icon(Icons.search, color: AppColors.muted),
             ),
           ),
@@ -63,9 +65,9 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
             builder: (list) {
               final filtered = list.where(_matches).toList();
               if (filtered.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: Text('Eşleşen karakter yok.', style: TextStyle(color: AppColors.muted))),
+                return Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Center(child: Text(s.t('no_match'), style: const TextStyle(color: AppColors.muted))),
                 );
               }
               return Column(
@@ -82,13 +84,14 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
   }
 }
 
-class _CharacterCard extends StatelessWidget {
+class _CharacterCard extends ConsumerWidget {
   const _CharacterCard(this.c);
 
   final Json c;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final name = '${c['name'] ?? ''}';
     final prof = '${c['profession'] ?? ''}';
     final color = professionColor(prof);
@@ -132,15 +135,15 @@ class _CharacterCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(prof, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
                     const SizedBox(height: 2),
-                    Text('${c['race'] ?? ''} · ${fmtHours(c['age'])}',
+                    Text('${c['race'] ?? ''} · ${fmtHours(c['age'], s.t('hours_short'))}',
                         style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),
               Column(
                 children: [
-                  const Text('SV',
-                      style: TextStyle(
+                  Text(s.t('level_short'),
+                      style: const TextStyle(
                           fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
                   Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 ],

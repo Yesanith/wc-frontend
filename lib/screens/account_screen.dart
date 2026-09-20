@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/providers.dart';
+import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
@@ -11,6 +12,7 @@ class AccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -19,9 +21,9 @@ class AccountScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
             child: Row(
               children: [
-                Expanded(child: Text('Hesap', style: display(28))),
+                Expanded(child: Text(s.t('account'), style: display(28))),
                 IconButton(
-                  tooltip: 'Yenile',
+                  tooltip: s.t('refresh'),
                   onPressed: () {
                     ref.invalidate(walletProvider);
                     ref.invalidate(bankProvider);
@@ -32,16 +34,16 @@ class AccountScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const TabBar(
+          TabBar(
             labelColor: AppColors.gold,
             unselectedLabelColor: AppColors.muted,
             indicatorColor: AppColors.gold,
             dividerColor: AppColors.track,
-            labelStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
             tabs: [
-              Tab(text: 'Cüzdan'),
-              Tab(text: 'Banka'),
-              Tab(text: 'Materyaller'),
+              Tab(text: s.t('wallet')),
+              Tab(text: s.t('bank')),
+              Tab(text: s.t('materials')),
             ],
           ),
           const Expanded(
@@ -64,6 +66,7 @@ class _WalletTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final wallet = ref.watch(walletProvider);
     return AsyncView<List<WalletEntry>>(
       value: wallet,
@@ -89,7 +92,7 @@ class _WalletTab extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Kicker('ALTIN'),
+                  Kicker(s.t('gold').toUpperCase()),
                   const SizedBox(height: 6),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.end,
@@ -165,6 +168,7 @@ class _BankTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final bank = ref.watch(bankProvider);
     return AsyncView<List<ItemSlot?>>(
       value: bank,
@@ -176,7 +180,7 @@ class _BankTab extends ConsumerWidget {
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
               sliver: SliverToBoxAdapter(
-                child: Text('$used / ${slots.length} slot dolu',
+                child: Text(s.t('slots_used', {'a': used, 'b': slots.length}),
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ),
             ),
@@ -190,18 +194,19 @@ class _BankTab extends ConsumerWidget {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, i) {
-                    final s = slots[i];
-                    if (s == null) return const ItemIcon(empty: true);
+                    final slot = slots[i];
+                    if (slot == null) return const ItemIcon(empty: true);
                     return GestureDetector(
                       onTap: () => showItemSheet(
                         context,
-                        name: s.name,
-                        icon: s.icon,
-                        rarity: s.rarity,
-                        type: s.type,
-                        count: s.count,
+                        id: slot.id,
+                        name: slot.name,
+                        icon: slot.icon,
+                        rarity: slot.rarity,
+                        type: slot.type,
+                        count: slot.count,
                       ),
-                      child: ItemIcon(url: s.icon, rarity: s.rarity, count: s.count),
+                      child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
                     );
                   },
                   childCount: slots.length,
@@ -220,13 +225,14 @@ class _MaterialsTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final mats = ref.watch(materialsProvider);
     return AsyncView<List<ItemSlot>>(
       value: mats,
       onRetry: () => ref.invalidate(materialsProvider),
       builder: (list) {
         if (list.isEmpty) {
-          return const Center(child: Text('Materyal deposu boş.', style: TextStyle(color: AppColors.muted)));
+          return Center(child: Text(s.t('materials_empty'), style: const TextStyle(color: AppColors.muted)));
         }
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -244,6 +250,7 @@ class _MaterialsTab extends ConsumerWidget {
               child: InkWell(
                 onTap: () => showItemSheet(
                   context,
+                  id: m.id,
                   name: m.name,
                   icon: m.icon,
                   rarity: m.rarity,

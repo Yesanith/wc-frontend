@@ -5,22 +5,25 @@ int asInt(dynamic v) {
   return int.tryParse('$v') ?? 0;
 }
 
-/// 1284567 -> 1.284.567
+/// thousands separator, set by the app root when the language changes
+String groupSeparator = ',';
+
+/// 1284567 -> 1,284,567 (or 1.284.567 etc. depending on the language)
 String fmtInt(int n) {
   final s = n.abs().toString();
   final b = StringBuffer();
   for (var i = 0; i < s.length; i++) {
-    if (i > 0 && (s.length - i) % 3 == 0) b.write('.');
+    if (i > 0 && (s.length - i) % 3 == 0) b.write(groupSeparator);
     b.write(s[i]);
   }
   return (n < 0 ? '-' : '') + b.toString();
 }
 
-String fmtHours(dynamic seconds) => '${fmtInt(asInt(seconds) ~/ 3600)} sa';
+String fmtHours(dynamic seconds, [String unit = 'h']) => '${fmtInt(asInt(seconds) ~/ 3600)} $unit';
 
 String compact(int n) {
-  if (n >= 1000000) return '${(n / 1000000).toStringAsFixed(1).replaceAll('.', ',')} M';
-  if (n >= 10000) return '${(n / 1000).toStringAsFixed(1).replaceAll('.', ',')} B';
+  if (n >= 1000000) return '${(n / 1000000).toStringAsFixed(1)}M';
+  if (n >= 10000) return '${(n / 1000).toStringAsFixed(1)}k';
   return fmtInt(n);
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../api/gw2_api.dart';
 import '../api/wiki_api.dart';
 import '../util.dart';
+import 'settings.dart';
 
 final storageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
 
@@ -26,9 +27,12 @@ class ApiKeyNotifier extends AsyncNotifier<String?> {
 
 final apiKeyProvider = AsyncNotifierProvider<ApiKeyNotifier, String?>(ApiKeyNotifier.new);
 
-final gw2ApiProvider = Provider<Gw2Api>((ref) => Gw2Api(ref.watch(apiKeyProvider).valueOrNull));
+final gw2ApiProvider = Provider<Gw2Api>((ref) {
+  final lang = ref.watch(langProvider);
+  return Gw2Api(ref.watch(apiKeyProvider).valueOrNull, lang: lang.apiLang);
+});
 
-final wikiApiProvider = Provider<WikiApi>((ref) => WikiApi());
+final wikiApiProvider = Provider<WikiApi>((ref) => WikiApi(ref.watch(langProvider).wikiBase));
 
 final tokenInfoProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).tokenInfo());
 
@@ -122,7 +126,7 @@ final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
     list.add(WalletEntry(
       id,
       asInt(e['value']),
-      (c?['name'] as String?) ?? 'Para birimi #$id',
+      (c?['name'] as String?) ?? 'Currency #$id',
       c?['icon'] as String?,
       c == null ? 9999 : asInt(c['order']),
     ));
@@ -154,4 +158,70 @@ final materialsProvider = FutureProvider<List<ItemSlot>>((ref) async {
   return [
     for (final m in top) ItemSlot(asInt(m['id']), asInt(m['count']), items[asInt(m['id'])]),
   ];
+});
+
+final itemProvider = FutureProvider.family<Json?, int>((ref, id) async {
+  final items = await ref.watch(gw2ApiProvider).items([id]);
+  return items[id];
+});
+
+final priceProvider = FutureProvider.family<Json?, int>((ref, id) async {
+  final prices = await ref.watch(gw2ApiProvider).prices([id]);
+  return prices[id];
+});
+
+class WatchedItem {
+  const WatchedItem(this.id, this.item, this.price);
+  final int id;
+  final Json? item;
+  final Json? price;
+}
+
+final watchlistPricesProvider = FutureProvider<List<WatchedItem>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final ids = ref.watch(watchlistProvider);
+  if (ids.isEmpty) return const [];
+  final items = await api.items(ids);
+  final prices = await api.prices(ids);
+  return [for (final id in ids) WatchedItem(id, items[id], prices[id])];
+});
+
+/// how many of each item the account owns: bank + material storage +
+/// shared slots + every character's bags. used by goals and the tp screen
+final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final charsFuture = ref.watch(charactersProvider.future);
+  final totals = <int, int>{};
+  void add(Json? slot) {
+    if (slot == null) return;
+    final id = asInt(slot['id']);
+    if (id <= 0) return;
+    totals[id] = (totals[id] ?? 0) + (slot['count'] == null ? 1 : asInt(slot['count']));
+  }
+
+  final results = await Future.wait([
+    api.bank(),
+    api.materials(),
+    api.sharedInventory().catchError((_) => <Json?>[]),
+  ]);
+  for (final list in results) {
+    for (final slot in list) {
+      add(slot);
+    }
+  }
+  final chars = await charsFuture;
+  for (final c in chars) {
+    for (final slot in bagSlots(c)) {
+      add(slot);
+    }
+  }
+  return totals;
+});
+
+final goalItemsProvider = FutureProvider<Map<int, Json>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final goals = ref.watch(goalsProvider);
+  final ids = {for (final g in goals) for (final i in g.items) i.itemId};
+  if (ids.isEmpty) return const {};
+  return api.items(ids);
 });
