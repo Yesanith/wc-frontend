@@ -4,10 +4,11 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 
 ## Features
 
+- Side drawer navigation across every section
 - Account overview with wallet, Wizard's Vault dailies, bank and material storage
 - Character list and details: equipment, active build, bags and crafting
 - World boss timers in your local time, with pinning
-- Trading Post prices, flip profit after fees and a watchlist
+- Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Goals for legendaries or any big craft, tracked against everything your account owns
 - Shareable hero cards for your characters
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
@@ -20,8 +21,8 @@ Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyr
 Every push to `main` also builds an APK, available under the workflow run's artifacts.
 
 You need a Guild Wars 2 API key from [account.arena.net/applications](https://account.arena.net/applications)
-with at least `account`, `characters`, `inventories` and `wallet`. `builds`, `progression` and
-`unlocks` are optional but unlock more screens. The key is stored encrypted on the device and
+with at least `account`, `characters`, `inventories` and `wallet`. `builds`, `progression`,
+`unlocks` and `tradingpost` are optional but unlock more screens. The key is stored encrypted on the device and
 is only sent to the official API.
 
 ## Building locally
