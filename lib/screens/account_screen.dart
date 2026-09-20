@@ -14,7 +14,7 @@ class AccountScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Column(
         children: [
           Padding(
@@ -35,6 +35,8 @@ class AccountScreen extends ConsumerWidget {
             ),
           ),
           TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             labelColor: AppColors.gold,
             unselectedLabelColor: AppColors.muted,
             indicatorColor: AppColors.gold,
@@ -44,6 +46,8 @@ class AccountScreen extends ConsumerWidget {
               Tab(text: s.t('wallet')),
               Tab(text: s.t('bank')),
               Tab(text: s.t('materials')),
+              Tab(text: s.t('armory')),
+              Tab(text: s.t('builds')),
             ],
           ),
           const Expanded(
@@ -52,6 +56,8 @@ class AccountScreen extends ConsumerWidget {
                 _WalletTab(),
                 _BankTab(),
                 _MaterialsTab(),
+                _ArmoryTab(),
+                _BuildsTab(),
               ],
             ),
           ),
@@ -274,6 +280,141 @@ class _MaterialsTab extends ConsumerWidget {
                     ],
                   ),
                 ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+
+/// legendary items in the armory, shared by every character
+class _ArmoryTab extends ConsumerWidget {
+  const _ArmoryTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final armory = ref.watch(armoryProvider);
+    return AsyncView<List<ItemSlot>>(
+      value: armory,
+      onRetry: () => ref.invalidate(armoryProvider),
+      builder: (list) {
+        if (list.isEmpty) {
+          return Center(child: Text(s.t('armory_empty'), style: const TextStyle(color: AppColors.muted)));
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          itemCount: list.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (context, i) {
+            final item = list[i];
+            return Material(
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: const BorderSide(color: AppColors.line),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => showItemSheet(
+                  context,
+                  id: item.id,
+                  name: item.name,
+                  icon: item.icon,
+                  rarity: item.rarity,
+                  type: item.type,
+                  count: item.count,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      ItemIcon(url: item.icon, rarity: item.rarity, size: 40),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(item.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                      ),
+                      if (item.count > 1)
+                        Text('x${item.count}',
+                            style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+/// saved build templates from the account wide build storage
+class _BuildsTab extends ConsumerWidget {
+  const _BuildsTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final builds = ref.watch(buildStorageProvider);
+    return AsyncView<List<Json>>(
+      value: builds,
+      onRetry: () => ref.invalidate(buildStorageProvider),
+      builder: (list) {
+        if (list.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: Center(
+              child: Text(s.t('builds_empty'),
+                  textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+            ),
+          );
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          itemCount: list.length,
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (context, i) {
+            final build = list[i];
+            final profession = '${build['profession'] ?? ''}';
+            final name = '${build['name'] ?? ''}'.trim();
+            final specs = ((build['specializations'] as List?) ?? const []).whereType<Map>().length;
+            return Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.line),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: professionColor(profession),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(name.isEmpty ? s.t('unnamed_build') : name,
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                        Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                            style: TextStyle(fontSize: 12, color: professionColor(profession))),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           },

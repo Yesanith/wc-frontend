@@ -11,6 +11,7 @@ import 'collections_screen.dart';
 import 'events_screen.dart';
 import 'goals_screen.dart';
 import 'home_screen.dart';
+import 'progression_screen.dart';
 import 'recipes_screen.dart';
 import 'settings_screen.dart';
 import 'trading_screen.dart';
@@ -20,6 +21,7 @@ const _titleKeys = {
   AppSection.home: 'nav_home',
   AppSection.characters: 'nav_characters',
   AppSection.collections: 'collections',
+  AppSection.progression: 'progression',
   AppSection.account: 'nav_account',
   AppSection.trading: 'trading_post',
   AppSection.bosses: 'world_bosses',
@@ -33,6 +35,7 @@ const _icons = {
   AppSection.home: (Icons.home_outlined, Icons.home),
   AppSection.characters: (Icons.shield_outlined, Icons.shield),
   AppSection.collections: (Icons.auto_awesome_outlined, Icons.auto_awesome),
+  AppSection.progression: (Icons.emoji_events_outlined, Icons.emoji_events),
   AppSection.account: (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
@@ -46,6 +49,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.home => const HomeScreen(),
       AppSection.characters => const CharactersScreen(),
       AppSection.collections => const CollectionsScreen(),
+      AppSection.progression => const ProgressionScreen(),
       AppSection.account => const AccountScreen(),
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),

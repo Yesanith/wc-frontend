@@ -5,6 +5,8 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 ## Features
 
 - Side drawer navigation across every section
+- Progression: achievements in progress, mastery tracks and mastery points per region
+- Legendary armory and saved build templates in the account section
 - Collections: mounts, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
   titles, emotes and wardrobe progress, with unlocked/missing filters
 - Account overview with wallet, Wizard's Vault dailies, bank and material storage

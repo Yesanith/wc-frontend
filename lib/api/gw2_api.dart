@@ -35,10 +35,14 @@ class Gw2Api {
   final Map<int, Json> _itemCache = {};
   final Map<int, Json> _currencyCache = {};
   final Map<int, Json> _specCache = {};
+  final Map<int, Json> _achievementCache = {};
+  final Map<int, Json> _masteryCache = {};
   late final Map<String, Map<int, Json>> _caches = {
     'items': _itemCache,
     'currencies': _currencyCache,
     'specializations': _specCache,
+    'achievements': _achievementCache,
+    'masteries': _masteryCache,
   };
   final Set<String> _loaded = {};
   final Set<String> _dirty = {};
@@ -238,6 +242,33 @@ class Gw2Api {
 
   Future<Map<int, Json>> specializations(Iterable<int> ids) =>
       _batch('/specializations', ids, _specCache);
+
+  Future<Map<int, Json>> achievements(Iterable<int> ids) =>
+      _batch('/achievements', ids, _achievementCache);
+
+  Future<Map<int, Json>> masteries(Iterable<int> ids) => _batch('/masteries', ids, _masteryCache);
+
+  Future<List<Json>> accountAchievements() async => _list(await cachedGet('/account/achievements'));
+
+  Future<List<Json>> accountMasteries() async => _list(await cachedGet('/account/masteries'));
+
+  Future<Json> masteryPoints() async =>
+      Map<String, dynamic>.from(await cachedGet('/account/mastery/points') as Map);
+
+  Future<List<Json>> legendaryArmory() async => _list(await cachedGet('/account/legendaryarmory'));
+
+  /// stored build templates. the list endpoint gives ids, details come from
+  /// the same path with an ids parameter
+  Future<List<Json>> buildStorage() async {
+    final ids = (await cachedGet('/account/buildstorage') as List).map((e) => '$e').toList();
+    if (ids.isEmpty) return const [];
+    final out = <Json>[];
+    for (var i = 0; i < ids.length; i += 200) {
+      final end = (i + 200 > ids.length) ? ids.length : i + 200;
+      out.addAll(_list(await get('/account/buildstorage', {'ids': ids.sublist(i, end).join(',')})));
+    }
+    return out;
+  }
 
   Future<Map<int, Json>> _batch(String path, Iterable<int> ids, Map<int, Json> store) async {
     final name = path.substring(1);
