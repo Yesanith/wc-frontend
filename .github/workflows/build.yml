@@ -1,38 +1,57 @@
 name: Build APK
+
 on:
   push:
     branches: [main]
+    tags: ['v*']
+  pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unzip source
-        run: |
-          if [ -f tyria_codex.zip ]; then unzip -o tyria_codex.zip -d .; fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           cache: true
+
+      # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
-        run: |
-          if [ ! -d android ]; then
-            flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
-          fi
-      - name: Add INTERNET permission
+        run: flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+
+      - name: Patch manifest
         run: |
           M=android/app/src/main/AndroidManifest.xml
-          grep -q 'android.permission.INTERNET' "$M" || sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$M"
-      - name: Set app name
-        run: sed -i 's#android:label="[^"]*"#android:label="Tyria Codex"#' android/app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.INTERNET' "$M" || \
+            sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$M"
+          sed -i 's#android:label="[^"]*"#android:label="Tyria Codex"#' "$M"
+
       - run: flutter pub get
+
       - run: flutter build apk --release
+
+      - name: Rename APK
+        run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: tyria-codex-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: tyria-codex.apk
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tyria-codex.apk
+          generate_release_notes: true
