@@ -32,6 +32,9 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'missing_cost': 'Missing costs about',
+    'search_items': 'Search any item by name',
+    'no_item_index': 'The item index has not been generated yet.',
     'recipes': 'Recipes',
     'search_recipes': 'Search legendaries and gifts',
     'legendaries': 'Legendary',
@@ -252,6 +255,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'missing_cost': 'Fehlende kosten etwa',
+    'search_items': 'Gegenstand nach Namen suchen',
+    'no_item_index': 'Der Gegenstandsindex wurde noch nicht erzeugt.',
     'recipes': 'Rezepte',
     'search_recipes': 'Legendäre und Geschenke suchen',
     'legendaries': 'Legendär',
@@ -472,6 +478,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'missing_cost': 'Il manque environ',
+    'search_items': 'Chercher un objet par nom',
+    'no_item_index': 'L\'index des objets n\'est pas encore généré.',
     'recipes': 'Recettes',
     'search_recipes': 'Chercher légendaires et cadeaux',
     'legendaries': 'Légendaires',
@@ -692,6 +701,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'missing_cost': 'Eksikler yaklaşık',
+    'search_items': 'İsimle item ara',
+    'no_item_index': 'Item dizini henüz oluşturulmadı.',
     'recipes': 'Tarifler',
     'search_recipes': 'Legendary ve gift ara',
     'legendaries': 'Legendary',

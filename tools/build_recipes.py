@@ -24,6 +24,7 @@ import urllib.request
 
 API = "https://api.guildwars2.com/v2"
 OUT = os.path.join("assets", "data", "legendary_recipes.json")
+INDEX = os.path.join("assets", "data", "item_index_%s.txt")
 BATCH = 200
 MAX_DEPTH = 6
 
@@ -216,9 +217,24 @@ def collect_ids(node, out):
         collect_ids(child, out)
 
 
+def write_item_index(items, lang):
+    """flat "id\tname" lines, small and quick to parse on device.
+    the api has no item search, so the app ships this instead"""
+    path = INDEX % lang
+    rows = sorted(items.values(), key=lambda r: r["id"])
+    with open(path, "w", encoding="utf-8") as f:
+        for row in rows:
+            name = row.get("name") or ""
+            if not name or "\t" in name:
+                continue
+            f.write("%d\t%s\n" % (row["id"], name))
+    print("wrote %s (%d bytes)" % (path, os.path.getsize(path)), flush=True)
+
+
 def main():
     langs = sys.argv[1:] or ["en"]
     items = fetch_all_items("en")
+    write_item_index(items, "en")
     index = index_items(items)
 
     # roots are the things worth showing as a goal: legendary gear and every
@@ -261,13 +277,13 @@ def main():
     for lang in langs:
         if lang == "en":
             continue
-        rows = {}
-        for i in range(0, len(used_ids), BATCH):
-            chunk = used_ids[i:i + BATCH]
-            for row in get("/items", {"ids": ",".join(str(x) for x in chunk), "lang": lang}):
-                rows[str(row["id"])] = row["name"]
-        names[lang] = rows
-        print("%s: %d names" % (lang, len(rows)), flush=True)
+        # the whole catalogue again, this time for that language's search index
+        translated = fetch_all_items(lang)
+        write_item_index(translated, lang)
+        names[lang] = {
+            str(i): translated[i]["name"] for i in used_ids if i in translated
+        }
+        print("%s: %d names" % (lang, len(names[lang])), flush=True)
 
     result = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

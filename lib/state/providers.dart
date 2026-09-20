@@ -367,3 +367,30 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
       ),
   ]..sort((a, b) => a.name.compareTo(b.name));
 });
+
+/// what the missing part of a goal would cost at current sell listings.
+/// returns null while prices are still loading
+final goalCostProvider = FutureProvider.family<int, String>((ref, goalId) async {
+  final api = ref.watch(gw2ApiProvider);
+  final goals = ref.watch(goalsProvider);
+  final totalsFuture = ref.watch(accountTotalsProvider.future);
+  Goal? goal;
+  for (final g in goals) {
+    if (g.id == goalId) goal = g;
+  }
+  if (goal == null || goal.items.isEmpty) return 0;
+  final totals = await totalsFuture;
+  final missing = <int, int>{};
+  for (final item in goal.items) {
+    final have = totals[item.itemId] ?? 0;
+    if (have < item.need) missing[item.itemId] = item.need - have;
+  }
+  if (missing.isEmpty) return 0;
+  final prices = await api.prices(missing.keys);
+  var total = 0;
+  for (final e in missing.entries) {
+    final sells = prices[e.key]?['sells'];
+    if (sells is Map) total += asInt(sells['unit_price']) * e.value;
+  }
+  return total;
+});

@@ -79,6 +79,31 @@ class Gw2Api {
     _dirty.clear();
   }
 
+  /// account data with a short lived disk copy. the cached value is used
+  /// while it is fresh and also as a fallback when the request fails, so the
+  /// app still shows something without a connection
+  Future<dynamic> cachedGet(
+    String path, {
+    Map<String, String>? query,
+    Duration ttl = const Duration(minutes: 3),
+  }) async {
+    final store = cache;
+    if (store == null) return get(path, query);
+    final suffix = query == null ? '' : '_${query.values.join('_')}';
+    final name = 'acct_' + path.replaceAll('/', '_') + suffix + '_' + lang;
+    final fresh = await store.read(name, maxAge: ttl);
+    if (fresh != null && fresh.containsKey('value')) return fresh['value'];
+    try {
+      final value = await get(path, query);
+      await store.write(name, {'value': value});
+      return value;
+    } catch (_) {
+      final stale = await store.read(name, maxAge: const Duration(days: 7));
+      if (stale != null && stale.containsKey('value')) return stale['value'];
+      rethrow;
+    }
+  }
+
   Future<dynamic> get(String path, [Map<String, String>? query]) async {
     final params = <String, String>{
       ...?query,
@@ -121,16 +146,16 @@ class Gw2Api {
 
   Future<Json> tokenInfo() async => Map<String, dynamic>.from(await get('/tokeninfo') as Map);
 
-  Future<Json> account() async => Map<String, dynamic>.from(await get('/account') as Map);
+  Future<Json> account() async => Map<String, dynamic>.from(await cachedGet('/account') as Map);
 
-  Future<List<Json>> characters() async => _list(await get('/characters', {'ids': 'all'}));
+  Future<List<Json>> characters() async => _list(await cachedGet('/characters', query: {'ids': 'all'}));
 
-  Future<List<Json>> wallet() async => _list(await get('/account/wallet'));
+  Future<List<Json>> wallet() async => _list(await cachedGet('/account/wallet'));
 
-  Future<List<Json>> materials() async => _list(await get('/account/materials'));
+  Future<List<Json>> materials() async => _list(await cachedGet('/account/materials'));
 
   Future<List<Json?>> bank() async {
-    final raw = await get('/account/bank') as List;
+    final raw = await cachedGet('/account/bank') as List;
     return raw.map((e) => e is Map ? Map<String, dynamic>.from(e) : null).toList();
   }
 

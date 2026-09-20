@@ -8,6 +8,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'trading_screen.dart';
 
 /// share of the goal that's covered by what the account already owns
 double goalProgress(Goal g, Map<int, int> totals) {
@@ -241,6 +242,8 @@ class GoalDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(s.t('n_items', {'n': g.items.length}),
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 8),
+                        _MissingCost(goalId: g.id),
                         if (totalsAsync.isLoading) ...[
                           const SizedBox(height: 8),
                           const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
@@ -263,6 +266,33 @@ class GoalDetailScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// rough price tag for everything the goal is still missing
+class _MissingCost extends ConsumerWidget {
+  const _MissingCost({required this.goalId});
+
+  final String goalId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final cost = ref.watch(goalCostProvider(goalId));
+    return Row(
+      children: [
+        Text('${s.t('missing_cost')} ', style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+        cost.when(
+          data: (copper) => CoinText(copper, size: 14),
+          loading: () => const SizedBox(
+            width: 12,
+            height: 12,
+            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
+          ),
+          error: (_, __) => const Text('-', style: TextStyle(color: AppColors.muted)),
+        ),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/gw2_api.dart';
+import '../services/item_index.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -349,6 +350,85 @@ class TradingHubScreen extends ConsumerWidget {
   }
 }
 
+/// item search over the shipped index, the api cannot search by name
+class ItemSearchField extends ConsumerStatefulWidget {
+  const ItemSearchField({super.key});
+
+  @override
+  ConsumerState<ItemSearchField> createState() => _ItemSearchFieldState();
+}
+
+class _ItemSearchFieldState extends ConsumerState<ItemSearchField> {
+  final _ctrl = TextEditingController();
+  List<IndexedItem> _results = const [];
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _search(String q) {
+    final index = ref.read(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
+    setState(() => _results = index.search(q));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final index = ref.watch(itemIndexProvider);
+
+    return Column(
+      children: [
+        TextField(
+          controller: _ctrl,
+          onChanged: _search,
+          decoration: fieldDecoration(
+            s.t('search_items'),
+            prefixIcon: const Icon(Icons.search, color: AppColors.gold),
+            suffixIcon: _ctrl.text.isEmpty
+                ? null
+                : IconButton(
+                    icon: const Icon(Icons.close, color: AppColors.muted),
+                    onPressed: () {
+                      _ctrl.clear();
+                      _search('');
+                    },
+                  ),
+          ),
+        ),
+        if (index.isLoading) ...[
+          const SizedBox(height: 8),
+          const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
+        ],
+        if (index.valueOrNull?.isEmpty ?? false) ...[
+          const SizedBox(height: 8),
+          Text(s.t('no_item_index'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+        ],
+        if (_results.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Column(
+              children: [
+                for (final item in _results.take(12))
+                  ListTile(
+                    dense: true,
+                    title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    trailing: const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: item.id)),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 class _OverviewTab extends ConsumerWidget {
   const _OverviewTab();
 
@@ -372,6 +452,8 @@ class _OverviewTab extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
+          const ItemSearchField(),
+          const SizedBox(height: 14),
           Panel(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
