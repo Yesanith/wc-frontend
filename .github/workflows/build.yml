@@ -1,10 +1,9 @@
 name: Build APK
 
 on:
+  # only tags, so a release is built once instead of twice per push
   push:
-    branches: [main]
     tags: ['v*']
-  pull_request:
   workflow_dispatch:
 
 permissions:
