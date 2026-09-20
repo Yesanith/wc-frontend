@@ -3,6 +3,7 @@ name: Build recipe data
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths: ['tools/build_recipes.py', '.github/workflows/data.yml']
   schedule:
     # first of the month, game data only changes with patches
@@ -25,6 +26,8 @@ jobs:
         run: python tools/build_recipes.py en de fr
 
       - name: Commit if changed
+        # tags check out a detached head, only branch runs can push back
+        if: github.ref == 'refs/heads/main'
         run: |
           if git diff --quiet -- assets/data; then
             echo "nothing changed"
@@ -34,4 +37,4 @@ jobs:
           git config user.email "56350783+Yesanith@users.noreply.github.com"
           git add assets/data
           git commit -m "Regenerate legendary recipe data"
-          git push
+          git push origin HEAD:main
