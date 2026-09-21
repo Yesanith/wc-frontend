@@ -312,6 +312,17 @@ class Gw2Api {
     return details('/dungeons', ids);
   }
 
+  /// guild endpoints. most need the guilds permission and some also
+  /// require the account to lead the guild
+  Future<Json> guild(String id) async =>
+      Map<String, dynamic>.from(await cachedGet('/guild/$id', ttl: const Duration(hours: 6)) as Map);
+
+  Future<List<Json>> guildStash(String id) async => _list(await cachedGet('/guild/$id/stash'));
+
+  Future<List<Json>> guildTreasury(String id) async => _list(await cachedGet('/guild/$id/treasury'));
+
+  Future<List<Json>> guildLog(String id) async => _list(await cachedGet('/guild/$id/log'));
+
   Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
 
   /// revenant legends, ids look like "Legend1"

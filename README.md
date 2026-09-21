@@ -8,6 +8,7 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Progression: achievements in progress, mastery tracks and points, raid wings and dungeon
   paths with this week's and today's clears, PvP record per profession and WvW rank
 - Trading stats: 90 days of profit and loss with the best selling items
+- Guilds: treasury progress, stash tabs and the guild log
 - Home instance cats and nodes alongside the other collections
 - Legendary armory and saved build templates, with full build details: the whole trait grid,
   skill facts, underwater skills, pets, revenant legends, toolbelt and chained skills,
