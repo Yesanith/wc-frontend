@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../services/backup.dart';
+import '../services/update_check.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -196,20 +197,7 @@ class SettingsScreen extends ConsumerWidget {
           label: Text(s.t('remove_key')),
         ),
         const SizedBox(height: 22),
-        Panel(
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(s.t('version'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
-              ),
-              // set by the release build from the git tag
-              const Text(
-                String.fromEnvironment('APP_VERSION', defaultValue: 'dev'),
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
-              ),
-            ],
-          ),
-        ),
+        const _UpdatePanel(),
         const SizedBox(height: 22),
         Text(s.t('disclaimer'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
       ],
@@ -230,6 +218,74 @@ class _InfoRow extends StatelessWidget {
         Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.muted))),
         Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ],
+    );
+  }
+}
+
+
+/// shows the installed version and offers the apk of a newer release
+class _UpdatePanel extends ConsumerWidget {
+  const _UpdatePanel();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final update = ref.watch(updateProvider);
+    final latest = update.valueOrNull;
+    final hasUpdate = latest != null && latest.isNewerThan;
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(s.t('version'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+              ),
+              const Text(appVersion,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              IconButton(
+                tooltip: s.t('check_updates'),
+                onPressed: () => ref.invalidate(updateProvider),
+                icon: const Icon(Icons.refresh, size: 20, color: AppColors.muted),
+              ),
+            ],
+          ),
+          if (update.isLoading)
+            Text(s.t('checking'), style: const TextStyle(fontSize: 12, color: AppColors.muted))
+          else if (update.hasError)
+            Text(s.t('check_failed'), style: const TextStyle(fontSize: 12, color: AppColors.muted))
+          else if (hasUpdate) ...[
+            Text(s.t('update_available', {'v': latest.version}),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.green)),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: () => openUrl(
+                      context,
+                      latest.apkUrl ?? latest.pageUrl,
+                      failMessage: s.t('open_failed'),
+                    ),
+                    icon: const Icon(Icons.download, size: 18),
+                    label: Text(s.t('download_update')),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                OutlinedButton(
+                  onPressed: () => openUrl(context, latest.pageUrl, failMessage: s.t('open_failed')),
+                  child: Text(s.t('release_notes')),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(s.t('install_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+          ] else
+            Text(s.t('up_to_date'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
+      ),
     );
   }
 }

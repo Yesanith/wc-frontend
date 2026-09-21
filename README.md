@@ -29,6 +29,12 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - English, German, French and Turkish UI. Item names and the wiki follow the selected
   language where the API and wiki support it (Turkish falls back to English data)
 
+## Updating
+
+Settings shows the installed version and checks the GitHub releases for a newer one. When
+there is one it links straight to the apk, which installs over the current version since
+every build is signed with the same key.
+
 ## Download
 
 Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest).
