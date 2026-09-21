@@ -55,7 +55,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         setState(() => _error = s.t('err_missing_perms', {'p': missing.join(', ')}));
         return;
       }
-      await ref.read(apiKeyProvider.notifier).save(key);
+      // label the key with the account it belongs to
+      var accountName = '${info['name'] ?? ''}';
+      try {
+        final account = await Gw2Api(key).account();
+        accountName = '${account['name'] ?? accountName}';
+      } catch (_) {}
+      await ref.read(keysProvider.notifier).add(key, accountName);
     } catch (e) {
       if (mounted) setState(() => _error = s.t('err_key_invalid', {'e': e}));
     } finally {

@@ -9,14 +9,10 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'onboarding_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-
-  String _mask(String key) {
-    if (key.length <= 12) return '********';
-    return '${key.substring(0, 8)}...${key.substring(key.length - 4)}';
-  }
 
   Future<void> _import(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
@@ -54,25 +50,6 @@ class SettingsScreen extends ConsumerWidget {
     await clearCache(ref.read(diskCacheProvider));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('cache_cleared'))));
-    }
-  }
-
-  Future<void> _confirmRemove(BuildContext context, WidgetRef ref) async {
-    final s = ref.read(stringsProvider);
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: Text(s.t('remove_key')),
-        content: Text(s.t('remove_key_body')),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(s.t('cancel'))),
-          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(s.t('remove'))),
-        ],
-      ),
-    );
-    if (ok == true) {
-      await ref.read(apiKeyProvider.notifier).clear();
     }
   }
 
@@ -117,37 +94,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Panel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Kicker(s.t('api_key').toUpperCase()),
-              const SizedBox(height: 8),
-              Text(_mask(key), style: const TextStyle(fontFamily: 'monospace', fontSize: 14)),
-              const SizedBox(height: 14),
-              AsyncView<Json>(
-                value: info,
-                onRetry: () => ref.invalidate(tokenInfoProvider),
-                builder: (i) {
-                  final perms = ((i['permissions'] as List?) ?? const []).map((e) => '$e').toList();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(s.t('key_name', {'n': i['name'] ?? '-'}),
-                          style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [for (final p in perms) Pill(p)],
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        const _AccountsPanel(),
         const SizedBox(height: 16),
         Panel(
           child: Column(
@@ -184,17 +131,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 16),
-        OutlinedButton.icon(
-          onPressed: () => _confirmRemove(context, ref),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.red,
-            side: const BorderSide(color: AppColors.red),
-            minimumSize: const Size.fromHeight(50),
-          ),
-          icon: const Icon(Icons.logout),
-          label: Text(s.t('remove_key')),
         ),
         const SizedBox(height: 22),
         const _UpdatePanel(),
@@ -284,6 +220,84 @@ class _UpdatePanel extends ConsumerWidget {
             Text(s.t('install_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
           ] else
             Text(s.t('up_to_date'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// switch between saved api keys, add or remove them
+class _AccountsPanel extends ConsumerWidget {
+  const _AccountsPanel();
+
+  String _mask(String key) => key.length <= 12 ? '********' : '${key.substring(0, 8)}...${key.substring(key.length - 4)}';
+
+  Future<void> _remove(BuildContext context, WidgetRef ref, int index, String label) async {
+    final s = ref.read(stringsProvider);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(s.t('remove_key')),
+        content: Text(s.t('remove_key_body')),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(s.t('cancel'))),
+          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(s.t('remove'))),
+        ],
+      ),
+    );
+    if (ok == true) await ref.read(keysProvider.notifier).removeAt(index);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final keys = ref.watch(keysProvider).valueOrNull ?? const <StoredKey>[];
+    final active = ref.watch(activeKeyProvider);
+    final info = ref.watch(tokenInfoProvider);
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('accounts').toUpperCase()),
+          const SizedBox(height: 4),
+          for (var i = 0; i < keys.length; i++)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              onTap: () => ref.read(activeKeyProvider.notifier).set(i),
+              leading: Icon(
+                i == active ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                color: i == active ? AppColors.gold : AppColors.muted,
+              ),
+              title: Text(keys[i].name.isEmpty ? s.t('unnamed_account') : keys[i].name,
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              subtitle: Text(_mask(keys[i].key),
+                  style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.muted)),
+              trailing: IconButton(
+                tooltip: s.t('remove_key'),
+                onPressed: () => _remove(context, ref, i, keys[i].name),
+                icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.muted),
+              ),
+            ),
+          const SizedBox(height: 4),
+          AsyncView<Json>(
+            value: info,
+            onRetry: () => ref.invalidate(tokenInfoProvider),
+            builder: (i) {
+              final perms = ((i['permissions'] as List?) ?? const []).map((e) => '$e').toList();
+              return Wrap(spacing: 6, runSpacing: 6, children: [for (final p in perms) Pill(p)]);
+            },
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const OnboardingScreen()),
+            ),
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(s.t('add_account')),
+          ),
         ],
       ),
     );

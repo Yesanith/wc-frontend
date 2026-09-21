@@ -48,6 +48,8 @@ every build is signed with the same key.
 Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest).
 Every push to `main` also builds an APK, available under the workflow run's artifacts.
 
+Several API keys can be stored and switched from settings, so alt accounts work too.
+
 You need a Guild Wars 2 API key from [account.arena.net/applications](https://account.arena.net/applications)
 with at least `account`, `characters`, `inventories` and `wallet`. `builds`, `progression`,
 `unlocks` and `tradingpost` are optional but unlock more screens. The key is stored encrypted on the device and

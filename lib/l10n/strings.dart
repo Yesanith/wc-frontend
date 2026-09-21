@@ -32,6 +32,9 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'accounts': 'Accounts',
+    'unnamed_account': 'Unnamed key',
+    'add_account': 'Add another account',
     'guilds': 'Guilds',
     'guild': 'Guild',
     'guilds_note': 'Guild data needs the guilds permission, and the stash and log are only visible to members with the right guild rank.',
@@ -318,7 +321,6 @@ const _strings = <String, Map<String, String>>{
     'data_language': 'Game data language',
     'data_lang_fallback': 'English (not available in Turkish)',
     'wiki_source': 'Wiki source',
-    'key_name': 'Key name: {n}',
     'remove_key': 'Remove key',
     'remove_key_body': 'The API key will be deleted from this device and you will go back to the start screen.',
     'disclaimer': 'Tyria Codex is an unofficial fan app. Guild Wars 2, ArenaNet and NCSOFT are trademarks of their respective owners. Data comes from the official GW2 API and the Guild Wars 2 Wiki.',
@@ -347,6 +349,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'accounts': 'Accounts',
+    'unnamed_account': 'Unbenannter Schlüssel',
+    'add_account': 'Weiteren Account hinzufügen',
     'guilds': 'Gilden',
     'guild': 'Gilde',
     'guilds_note': 'Gildendaten benötigen die Berechtigung guilds, Tresor und Protokoll sehen nur Mitglieder mit passendem Gildenrang.',
@@ -633,7 +638,6 @@ const _strings = <String, Map<String, String>>{
     'data_language': 'Sprache der Spieldaten',
     'data_lang_fallback': 'Englisch',
     'wiki_source': 'Wiki-Quelle',
-    'key_name': 'Schlüsselname: {n}',
     'remove_key': 'Schlüssel entfernen',
     'remove_key_body': 'Der API-Schlüssel wird von diesem Gerät gelöscht und du kehrst zum Startbildschirm zurück.',
     'disclaimer': 'Tyria Codex ist eine inoffizielle Fan-App. Guild Wars 2, ArenaNet und NCSOFT sind Marken ihrer jeweiligen Eigentümer. Die Daten stammen aus der offiziellen GW2-API und dem Guild Wars 2 Wiki.',
@@ -662,6 +666,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'accounts': 'Comptes',
+    'unnamed_account': 'Clé sans nom',
+    'add_account': 'Ajouter un autre compte',
     'guilds': 'Guildes',
     'guild': 'Guilde',
     'guilds_note': 'Les données de guilde nécessitent l\'autorisation guilds, et le coffre et le journal ne sont visibles que par les membres ayant le rang adéquat.',
@@ -948,7 +955,6 @@ const _strings = <String, Map<String, String>>{
     'data_language': 'Langue des données du jeu',
     'data_lang_fallback': 'Anglais',
     'wiki_source': 'Source du wiki',
-    'key_name': 'Nom de la clé : {n}',
     'remove_key': 'Retirer la clé',
     'remove_key_body': 'La clé API sera supprimée de cet appareil et tu reviendras à l\'écran de départ.',
     'disclaimer': 'Tyria Codex est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
@@ -977,6 +983,9 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'accounts': 'Hesaplar',
+    'unnamed_account': 'İsimsiz key',
+    'add_account': 'Başka hesap ekle',
     'guilds': 'Loncalar',
     'guild': 'Lonca',
     'guilds_note': 'Lonca verisi için guilds izni gerekir, depo ve kayıt defterini ise sadece yetkili rütbedeki üyeler görebilir.',
@@ -1263,7 +1272,6 @@ const _strings = <String, Map<String, String>>{
     'data_language': 'Oyun verisi dili',
     'data_lang_fallback': 'İngilizce (Türkçe yok)',
     'wiki_source': 'Wiki kaynağı',
-    'key_name': 'Key adı: {n}',
     'remove_key': 'Key\'i kaldır',
     'remove_key_body': 'API key bu cihazdan silinecek ve giriş ekranına döneceksin.',
     'disclaimer': 'Tyria Codex resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
