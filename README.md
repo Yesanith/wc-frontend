@@ -20,6 +20,8 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - World boss timers in your local time, with pinning and a marker for the ones you already did today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Goals for legendaries or any big craft, tracked against everything your account owns
+- Crafting calculator: recipe tree for any craftable item, what your account already covers,
+  the cost of the missing materials and whether buying the item outright is cheaper
 - Recipe browser: Mystic Forge trees for legendary gear and gifts, with base materials
   compared against your account and one tap to turn a recipe into a goal
 - Shareable hero cards for your characters

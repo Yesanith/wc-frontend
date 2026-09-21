@@ -775,3 +775,145 @@ final tradeStatsProvider = FutureProvider<TradeStats>((ref) async {
   final top = perItem.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
   return TradeStats(soldValue, boughtValue, soldCount, boughtCount, top.take(8).toList());
 });
+
+/// one step of a crafting tree. leaves are things you buy or farm
+class CraftNode {
+  CraftNode({
+    required this.itemId,
+    required this.count,
+    required this.item,
+    required this.children,
+    required this.disciplines,
+    required this.outputCount,
+  });
+
+  final int itemId;
+
+  /// how many of this item the parent step needs
+  final int count;
+  final Json? item;
+  final List<CraftNode> children;
+  final List<String> disciplines;
+
+  /// how many the recipe makes in one craft
+  final int outputCount;
+
+  bool get isLeaf => children.isEmpty;
+  String get name => (item?['name'] as String?) ?? 'Item #$itemId';
+}
+
+/// key is "itemId:quantity"
+final craftTreeProvider = FutureProvider.family<CraftNode, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final parts = key.split(':');
+  final rootId = int.tryParse(parts.first) ?? 0;
+  final quantity = parts.length > 1 ? (int.tryParse(parts[1]) ?? 1) : 1;
+
+  Future<CraftNode> expand(int itemId, int count, Set<int> seen, int depth) async {
+    final items = await api.items([itemId]);
+    final item = items[itemId];
+    if (depth >= 6 || seen.contains(itemId)) {
+      return CraftNode(
+        itemId: itemId,
+        count: count,
+        item: item,
+        children: const [],
+        disciplines: const [],
+        outputCount: 1,
+      );
+    }
+    final recipeIds = await api.recipesForOutput(itemId);
+    if (recipeIds.isEmpty) {
+      return CraftNode(
+        itemId: itemId,
+        count: count,
+        item: item,
+        children: const [],
+        disciplines: const [],
+        outputCount: 1,
+      );
+    }
+    final recipes = await api.recipes(recipeIds);
+    final recipe = recipes[recipeIds.first];
+    final outputCount = recipe == null ? 1 : (asInt(recipe['output_item_count']) == 0 ? 1 : asInt(recipe['output_item_count']));
+    // how many times the recipe has to run for the amount we need
+    final runs = (count / outputCount).ceil();
+    final children = <CraftNode>[];
+    for (final ingredient in (recipe?['ingredients'] as List?) ?? const []) {
+      if (ingredient is! Map) continue;
+      final id = asInt(ingredient['item_id'] ?? ingredient['id']);
+      if (id <= 0) continue;
+      children.add(await expand(id, asInt(ingredient['count']) * runs, {...seen, itemId}, depth + 1));
+    }
+    return CraftNode(
+      itemId: itemId,
+      count: count,
+      item: item,
+      children: children,
+      disciplines: [
+        for (final d in (recipe?['disciplines'] as List?) ?? const []) '$d',
+      ],
+      outputCount: outputCount,
+    );
+  }
+
+  return expand(rootId, quantity, <int>{}, 0);
+});
+
+/// everything at the bottom of a crafting tree, with quantities summed
+Map<int, int> craftLeaves(CraftNode node) {
+  final out = <int, int>{};
+  void walk(CraftNode n) {
+    if (n.isLeaf) {
+      out[n.itemId] = (out[n.itemId] ?? 0) + n.count;
+      return;
+    }
+    for (final child in n.children) {
+      walk(child);
+    }
+  }
+
+  for (final child in node.children) {
+    walk(child);
+  }
+  return out;
+}
+
+class CraftCost {
+  const CraftCost(this.missingCost, this.ownedValue, this.buyOutputCost);
+
+  /// what the missing base materials cost at current sell listings
+  final int missingCost;
+
+  /// value of the base materials you already own
+  final int ownedValue;
+
+  /// what the finished item itself costs on the trading post, 0 when it is
+  /// not tradeable
+  final int buyOutputCost;
+}
+
+final craftCostProvider = FutureProvider.family<CraftCost, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final tree = await ref.watch(craftTreeProvider(key).future);
+  final totals = await ref.watch(accountTotalsProvider.future);
+  final leaves = craftLeaves(tree);
+  final prices = await api.prices([...leaves.keys, tree.itemId]);
+
+  var missing = 0;
+  var owned = 0;
+  for (final e in leaves.entries) {
+    final sells = prices[e.key]?['sells'];
+    final unit = sells is Map ? asInt(sells['unit_price']) : 0;
+    final have = totals[e.key] ?? 0;
+    final short = have >= e.value ? 0 : e.value - have;
+    missing += unit * short;
+    owned += unit * (have > e.value ? e.value : have);
+  }
+  final outputSells = prices[tree.itemId]?['sells'];
+  return CraftCost(
+    missing,
+    owned,
+    outputSells is Map ? asInt(outputSells['unit_price']) * tree.count : 0,
+  );
+});

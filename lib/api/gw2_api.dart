@@ -40,6 +40,7 @@ class Gw2Api {
   final Map<int, Json> _traitCache = {};
   final Map<int, Json> _skillCache = {};
   final Map<int, Json> _petCache = {};
+  final Map<int, Json> _recipeCache = {};
   late final Map<String, Map<int, Json>> _caches = {
     'items': _itemCache,
     'currencies': _currencyCache,
@@ -49,6 +50,7 @@ class Gw2Api {
     'traits': _traitCache,
     'skills': _skillCache,
     'pets': _petCache,
+    'recipes': _recipeCache,
   };
   final Set<String> _loaded = {};
   final Set<String> _dirty = {};
@@ -272,6 +274,19 @@ class Gw2Api {
   Future<Map<int, Json>> skills(Iterable<int> ids) => _batch('/skills', ids, _skillCache);
 
   Future<Map<int, Json>> pets(Iterable<int> ids) => _batch('/pets', ids, _petCache);
+
+  Future<Map<int, Json>> recipes(Iterable<int> ids) => _batch('/recipes', ids, _recipeCache);
+
+  /// recipe ids that produce this item, empty when it cannot be crafted
+  Future<List<int>> recipesForOutput(int itemId) async {
+    try {
+      final raw = await get('/recipes/search', {'output': '$itemId'}) as List;
+      return raw.map(asInt).toList();
+    } on Gw2ApiException catch (e) {
+      if (e.status == 404) return const [];
+      rethrow;
+    }
+  }
 
   /// weapons, palettes and skill lists of a profession
   Future<Json> profession(String name) async =>
