@@ -323,6 +323,15 @@ class Gw2Api {
 
   Future<List<Json>> guildLog(String id) async => _list(await cachedGet('/guild/$id/log'));
 
+  /// every map of the game, static data
+  Future<List<Json>> maps() async => _list(await get('/maps', {'ids': 'all'}));
+
+  /// the floor entry of one map, this is where waypoints and their chat
+  /// links live
+  Future<Json> mapDetail(int continent, int floor, int region, int map) async =>
+      Map<String, dynamic>.from(
+          await get('/continents/$continent/floors/$floor/regions/$region/maps/$map') as Map);
+
   Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
 
   /// revenant legends, ids look like "Legend1"

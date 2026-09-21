@@ -33,6 +33,7 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Recipe browser: Mystic Forge trees for legendary gear and gifts, with base materials
   compared against your account and one tap to turn a recipe into a goal
 - Shareable hero cards for your characters
+- Maps with their waypoints and landmarks, chat codes ready to copy
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
 - Backup: export and import goals, watchlist, pinned bosses and language as json
 - Game data (items, colors, collection entries) is cached on disk for a month

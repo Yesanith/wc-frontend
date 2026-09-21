@@ -32,6 +32,11 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'maps': 'Maps',
+    'search_maps': 'Search a map or region',
+    'waypoints': 'Waypoints',
+    'landmarks': 'Landmarks and vistas',
+    'waypoint_note': 'Copy a chat code and paste it in game to link the waypoint.',
     'compare': 'Compare',
     'need_two_characters': 'You need at least two characters to compare.',
     'race': 'Race',
@@ -356,6 +361,11 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'maps': 'Karten',
+    'search_maps': 'Karte oder Region suchen',
+    'waypoints': 'Wegmarken',
+    'landmarks': 'Orte und Aussichtspunkte',
+    'waypoint_note': 'Kopiere einen Chat-Code und füge ihn im Spiel ein, um die Wegmarke zu verlinken.',
     'compare': 'Vergleichen',
     'need_two_characters': 'Zum Vergleichen braucht es mindestens zwei Charaktere.',
     'race': 'Volk',
@@ -680,6 +690,11 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'maps': 'Cartes',
+    'search_maps': 'Chercher une carte ou région',
+    'waypoints': 'Points de passage',
+    'landmarks': 'Sites et panoramas',
+    'waypoint_note': 'Copie un code de chat et colle-le en jeu pour lier le point de passage.',
     'compare': 'Comparer',
     'need_two_characters': 'Il faut au moins deux personnages pour comparer.',
     'race': 'Race',
@@ -1004,6 +1019,11 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'maps': 'Haritalar',
+    'search_maps': 'Harita veya bölge ara',
+    'waypoints': 'Waypointler',
+    'landmarks': 'Noktalar ve manzaralar',
+    'waypoint_note': 'Chat kodunu kopyalayıp oyunda yapıştırınca waypoint bağlantısı çıkar.',
     'compare': 'Karşılaştır',
     'need_two_characters': 'Karşılaştırmak için en az iki karakter gerekir.',
     'race': 'Irk',
