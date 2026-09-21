@@ -21,7 +21,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
     final account = ref.watch(accountProvider);
     final wallet = ref.watch(walletProvider);
 

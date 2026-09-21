@@ -175,7 +175,7 @@ class _EmblemPainter extends CustomPainter {
     final stroke = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size > 90 ? 2 : 1.6;
+      ..strokeWidth = size.width > 90 ? 2 : 1.6;
     final cx = size.width / 2;
     final cy = size.height / 2;
 

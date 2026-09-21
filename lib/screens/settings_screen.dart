@@ -57,8 +57,6 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final lang = ref.watch(langProvider);
-    final info = ref.watch(tokenInfoProvider);
-    final key = ref.watch(apiKeyProvider).valueOrNull ?? '';
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),

@@ -219,7 +219,7 @@ class _GearSummary extends ConsumerWidget {
                 ),
               ),
           if (counts.isEmpty)
-            Text('-', style: const TextStyle(color: AppColors.muted)),
+            const Text('-', style: TextStyle(color: AppColors.muted)),
         ],
       ),
     );

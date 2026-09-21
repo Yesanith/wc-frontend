@@ -1,8 +1,1 @@
 include: package:flutter_lints/flutter.yaml
-
-analyzer:
-  errors:
-    # the app ships without generated l10n, these would be noise
-    unused_import: warning
-    unused_local_variable: warning
-    dead_code: warning

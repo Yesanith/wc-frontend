@@ -102,7 +102,7 @@ class Gw2Api {
     final store = cache;
     if (store == null) return get(path, query);
     final suffix = query == null ? '' : '_${query.values.join('_')}';
-    final name = 'acct_' + path.replaceAll('/', '_') + suffix + '_' + lang;
+    final name = 'acct_${path.replaceAll('/', '_')}${suffix}_$lang';
     final fresh = await store.read(name, maxAge: ttl);
     if (fresh != null && fresh.containsKey('value')) return fresh['value'];
     try {
