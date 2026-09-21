@@ -28,4 +28,6 @@ const collectionKinds = <CollectionKind>[
   CollectionKind('titles', '/account/titles', '/titles'),
   CollectionKind('emotes', '/account/emotes', '/emotes'),
   CollectionKind('wardrobe', '/account/skins', '/skins', hasDetails: false),
+  CollectionKind('home_cats', '/account/home/cats', '/home/cats'),
+  CollectionKind('home_nodes', '/account/home/nodes', '/home/nodes', hasDetails: false),
 ];

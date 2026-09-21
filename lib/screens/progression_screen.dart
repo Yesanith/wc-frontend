@@ -14,10 +14,12 @@ class ProgressionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Column(
         children: [
           TabBar(
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
             labelColor: AppColors.gold,
             unselectedLabelColor: AppColors.muted,
             indicatorColor: AppColors.gold,
@@ -26,10 +28,14 @@ class ProgressionScreen extends ConsumerWidget {
             tabs: [
               Tab(text: s.t('achievements')),
               Tab(text: s.t('masteries')),
+              Tab(text: s.t('instances')),
+              Tab(text: s.t('pvp_wvw')),
             ],
           ),
           const Expanded(
-            child: TabBarView(children: [_AchievementsTab(), _MasteriesTab()]),
+            child: TabBarView(
+              children: [_AchievementsTab(), _MasteriesTab(), _InstancesTab(), _PvpTab()],
+            ),
           ),
         ],
       ),
@@ -219,6 +225,238 @@ class _MasteriesTab extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+/// raid wings reset weekly, dungeon paths daily
+class _InstancesTab extends ConsumerWidget {
+  const _InstancesTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final raids = ref.watch(raidsProvider);
+    final dungeons = ref.watch(dungeonsProvider);
+
+    return RefreshIndicator(
+      color: AppColors.gold,
+      onRefresh: () async {
+        ref.invalidate(raidsProvider);
+        ref.invalidate(dungeonsProvider);
+        try {
+          await ref.read(raidsProvider.future);
+        } catch (_) {}
+      },
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        children: [
+          SectionHeader(title: s.t('raids'), trailing: s.t('weekly')),
+          const SizedBox(height: 10),
+          AsyncView<List<RaidWing>>(
+            value: raids,
+            onRetry: () => ref.invalidate(raidsProvider),
+            builder: (list) => Panel(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Column(
+                children: [
+                  for (final wing in list)
+                    Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        tilePadding: const EdgeInsets.symmetric(horizontal: 8),
+                        iconColor: AppColors.gold,
+                        collapsedIconColor: AppColors.muted,
+                        title: Row(
+                          children: [
+                            Expanded(
+                              child: Text(wing.label,
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                            ),
+                            Text('${wing.done} / ${wing.encounters.length}',
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                    color: wing.done == wing.encounters.length && wing.encounters.isNotEmpty
+                                        ? AppColors.green
+                                        : AppColors.muted)),
+                          ],
+                        ),
+                        children: [
+                          for (final e in wing.encounters)
+                            ListTile(
+                              dense: true,
+                              leading: Icon(
+                                e.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                                size: 20,
+                                color: e.done ? AppColors.green : AppColors.hint,
+                              ),
+                              title: Text(e.label,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: e.done ? AppColors.muted : AppColors.text)),
+                            ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 22),
+          SectionHeader(title: s.t('dungeons'), trailing: s.t('daily')),
+          const SizedBox(height: 10),
+          AsyncView<List<Dungeon>>(
+            value: dungeons,
+            onRetry: () => ref.invalidate(dungeonsProvider),
+            builder: (list) => Panel(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              child: Column(
+                children: [
+                  for (final d in list)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(d.label,
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                          ),
+                          Text('${d.done} / ${d.paths.length}',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w800,
+                                  color: d.done == d.paths.length && d.paths.isNotEmpty
+                                      ? AppColors.green
+                                      : AppColors.muted)),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PvpTab extends ConsumerWidget {
+  const _PvpTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final stats = ref.watch(pvpStatsProvider);
+    final account = ref.watch(accountProvider).valueOrNull;
+    final wvw = account?['wvw'];
+    final wvwRank = wvw is Map ? asInt(wvw['rank']) : asInt(account?['wvw_rank']);
+
+    String ratio(Json? agg) {
+      final wins = asInt(agg?['wins']);
+      final losses = asInt(agg?['losses']);
+      final total = wins + losses;
+      if (total == 0) return '-';
+      return '${(wins / total * 100).round()}%';
+    }
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      children: [
+        AsyncView<Json>(
+          value: stats,
+          onRetry: () => ref.invalidate(pvpStatsProvider),
+          builder: (data) {
+            final aggregate = data['aggregate'] is Map
+                ? Map<String, dynamic>.from(data['aggregate'] as Map)
+                : <String, dynamic>{};
+            final professions = data['professions'] is Map
+                ? Map<String, dynamic>.from(data['professions'] as Map)
+                : <String, dynamic>{};
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Panel(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}')),
+                          Expanded(child: StatTile(label: s.t('win_rate'), value: ratio(aggregate))),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          Expanded(child: StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins'])))),
+                          Expanded(
+                            child: StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 22),
+                SectionHeader(title: s.t('per_profession')),
+                const SizedBox(height: 10),
+                Panel(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  child: Column(
+                    children: [
+                      for (final entry in professions.entries)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: professionColor(
+                                      '${entry.key[0].toUpperCase()}${entry.key.substring(1)}'),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(entry.key,
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                              ),
+                              Text(
+                                ratio(entry.value is Map
+                                    ? Map<String, dynamic>.from(entry.value as Map)
+                                    : null),
+                                style: const TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 22),
+        SectionHeader(title: s.t('wvw')),
+        const SizedBox(height: 10),
+        Panel(
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(s.t('wvw_rank'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+              ),
+              Text(wvwRank > 0 ? fmtInt(wvwRank) : '-',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

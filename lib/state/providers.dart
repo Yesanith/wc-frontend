@@ -363,7 +363,7 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
     for (final id in ids)
       CollectionEntry(
         id,
-        (byId[id]?['name'] as String?) ?? id.replaceAll('_', ' '),
+        (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? id.replaceAll('_', ' '),
         byId[id]?['icon'] as String?,
         unlocked.contains(id),
       ),
@@ -629,4 +629,124 @@ final dailyProgressProvider = FutureProvider.family<DailyProgress, String>((ref,
   } catch (_) {
     return DailyProgress(0, all.length);
   }
+});
+
+class RaidEncounter {
+  const RaidEncounter(this.id, this.type, this.done);
+  final String id;
+  final String type;
+  final bool done;
+
+  String get label => id.replaceAll('_', ' ');
+}
+
+class RaidWing {
+  const RaidWing(this.id, this.encounters);
+  final String id;
+  final List<RaidEncounter> encounters;
+
+  String get label => id.replaceAll('_', ' ');
+  int get done => encounters.where((e) => e.done).length;
+}
+
+/// raid wings with this week's clears marked
+final raidsProvider = FutureProvider<List<RaidWing>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final wings = await api.raidWings();
+  Set<String> cleared;
+  try {
+    cleared = (await api.accountRaids()).toSet();
+  } catch (_) {
+    cleared = <String>{};
+  }
+  final out = <RaidWing>[];
+  for (final raid in wings) {
+    for (final wing in (raid['wings'] as List?) ?? const []) {
+      if (wing is! Map) continue;
+      final encounters = <RaidEncounter>[];
+      for (final event in (wing['events'] as List?) ?? const []) {
+        if (event is! Map) continue;
+        final id = '${event['id']}';
+        encounters.add(RaidEncounter(id, '${event['type'] ?? ''}', cleared.contains(id)));
+      }
+      out.add(RaidWing('${wing['id']}', encounters));
+    }
+  }
+  return out;
+});
+
+class DungeonPath {
+  const DungeonPath(this.id, this.type, this.done);
+  final String id;
+  final String type;
+  final bool done;
+}
+
+class Dungeon {
+  const Dungeon(this.id, this.paths);
+  final String id;
+  final List<DungeonPath> paths;
+
+  String get label => id.replaceAll('_', ' ');
+  int get done => paths.where((p) => p.done).length;
+}
+
+/// dungeon paths, reset daily
+final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final all = await api.dungeons();
+  Set<String> cleared;
+  try {
+    cleared = (await api.accountDungeons()).toSet();
+  } catch (_) {
+    cleared = <String>{};
+  }
+  return [
+    for (final d in all)
+      Dungeon('${d['id']}', [
+        for (final p in (d['paths'] as List?) ?? const [])
+          if (p is Map)
+            DungeonPath('${p['id']}', '${p['type'] ?? ''}', cleared.contains('${p['id']}')),
+      ]),
+  ];
+});
+
+final pvpStatsProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).pvpStats());
+
+class TradeStats {
+  const TradeStats(this.soldValue, this.boughtValue, this.soldCount, this.boughtCount, this.topSold);
+
+  /// what sales brought in after the 15% trading post cut
+  final int soldValue;
+  final int boughtValue;
+  final int soldCount;
+  final int boughtCount;
+  final List<MapEntry<String, int>> topSold;
+
+  int get net => soldValue - boughtValue;
+}
+
+/// rough profit and loss over the 90 days the api keeps
+final tradeStatsProvider = FutureProvider<TradeStats>((ref) async {
+  final sells = await ref.watch(transactionsProvider('history/sells').future);
+  final buys = await ref.watch(transactionsProvider('history/buys').future);
+
+  var soldValue = 0;
+  var soldCount = 0;
+  final perItem = <String, int>{};
+  for (final row in sells) {
+    final value = asInt(row.tx['price']) * asInt(row.tx['quantity']);
+    soldValue += (value * 0.85).floor();
+    soldCount += asInt(row.tx['quantity']);
+    final name = (row.item?['name'] as String?) ?? 'Item #${row.tx['item_id']}';
+    perItem[name] = (perItem[name] ?? 0) + (value * 0.85).floor();
+  }
+  var boughtValue = 0;
+  var boughtCount = 0;
+  for (final row in buys) {
+    boughtValue += asInt(row.tx['price']) * asInt(row.tx['quantity']);
+    boughtCount += asInt(row.tx['quantity']);
+  }
+  final top = perItem.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  return TradeStats(soldValue, boughtValue, soldCount, boughtCount, top.take(8).toList());
 });

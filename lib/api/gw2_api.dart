@@ -264,6 +264,27 @@ class Gw2Api {
   Future<Json> profession(String name) async =>
       Map<String, dynamic>.from(await get('/professions/$name') as Map);
 
+  /// raid encounters cleared this week and the wing layout
+  Future<List<String>> accountRaids() async => (await cachedGet('/account/raids') as List).map((e) => '$e').toList();
+
+  Future<List<Json>> raidWings() async {
+    final ids = await idList('/raids');
+    if (ids.isEmpty) return const [];
+    return details('/raids', ids);
+  }
+
+  /// dungeon paths cleared today
+  Future<List<String>> accountDungeons() async =>
+      (await cachedGet('/account/dungeons') as List).map((e) => '$e').toList();
+
+  Future<List<Json>> dungeons() async {
+    final ids = await idList('/dungeons');
+    if (ids.isEmpty) return const [];
+    return details('/dungeons', ids);
+  }
+
+  Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
+
   /// revenant legends, ids look like "Legend1"
   Future<List<Json>> legends(List<String> ids) async {
     if (ids.isEmpty) return const [];
