@@ -72,3 +72,21 @@ String titleCase(String raw) {
         words[i][0].toUpperCase() + words[i].substring(1).toLowerCase(),
   ].join(' ');
 }
+
+// the api uses its own attribute keys, the game shows different names
+const _attributeNames = {
+  'CritDamage': 'Ferocity',
+  'ConditionDamage': 'Condition Damage',
+  'ConditionDuration': 'Expertise',
+  'BoonDuration': 'Concentration',
+  'Healing': 'Healing Power',
+  'HealingPower': 'Healing Power',
+  'AgonyResistance': 'Agony Resistance',
+};
+
+String attributeName(String raw) {
+  final mapped = _attributeNames[raw];
+  if (mapped != null) return mapped;
+  // split the remaining camel case keys: MagicFind -> Magic Find
+  return raw.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}');
+}

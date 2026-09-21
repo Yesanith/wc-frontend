@@ -86,7 +86,7 @@ class ItemDetailScreen extends ConsumerWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text('${a['attribute']}',
+                            child: Text(attributeName('${a['attribute']}'),
                                 style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
                           ),
                           Text('+${asInt(a['modifier'])}',

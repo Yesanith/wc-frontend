@@ -233,7 +233,7 @@ class _EquipmentRow extends ConsumerWidget {
     final infusions = intList(entry['infusions']);
     final stats = entry['stats'];
     final statName = stats is Map && stats['attributes'] is Map
-        ? (stats['attributes'] as Map).keys.take(2).join(', ')
+        ? (stats['attributes'] as Map).keys.take(2).map((k) => attributeName('$k')).join(', ')
         : '';
 
     return Material(
