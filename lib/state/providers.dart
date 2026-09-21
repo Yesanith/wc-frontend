@@ -363,7 +363,7 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
     for (final id in ids)
       CollectionEntry(
         id,
-        (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? id.replaceAll('_', ' '),
+        (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id),
         byId[id]?['icon'] as String?,
         unlocked.contains(id),
       ),
@@ -637,7 +637,7 @@ class RaidEncounter {
   final String type;
   final bool done;
 
-  String get label => id.replaceAll('_', ' ');
+  String get label => titleCase(id);
 }
 
 class RaidWing {
@@ -645,7 +645,7 @@ class RaidWing {
   final String id;
   final List<RaidEncounter> encounters;
 
-  String get label => id.replaceAll('_', ' ');
+  String get label => titleCase(id);
   int get done => encounters.where((e) => e.done).length;
 }
 
@@ -687,7 +687,7 @@ class Dungeon {
   final String id;
   final List<DungeonPath> paths;
 
-  String get label => id.replaceAll('_', ' ');
+  String get label => titleCase(id);
   int get done => paths.where((p) => p.done).length;
 }
 

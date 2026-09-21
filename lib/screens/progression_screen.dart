@@ -420,14 +420,13 @@ class _PvpTab extends ConsumerWidget {
                                 width: 8,
                                 height: 20,
                                 decoration: BoxDecoration(
-                                  color: professionColor(
-                                      '${entry.key[0].toUpperCase()}${entry.key.substring(1)}'),
+                                  color: professionColor(titleCase(entry.key)),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(entry.key,
+                                child: Text(titleCase(entry.key),
                                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
                               Text(

@@ -56,3 +56,19 @@ class ItemSlot {
   String? get rarity => item?['rarity'] as String?;
   String? get type => item?['type'] as String?;
 }
+
+// words that stay lowercase inside a name, unless they start it
+const _minorWords = {'of', 'the', 'and', 'in', 'to', 'a', 'an'};
+
+/// api ids like "stronghold_of_the_faithful" or "thief" have no display
+/// name in the api, so build one: "Stronghold of the Faithful"
+String titleCase(String raw) {
+  final words = raw.replaceAll('_', ' ').split(' ').where((w) => w.isNotEmpty).toList();
+  return [
+    for (var i = 0; i < words.length; i++)
+      if (i > 0 && _minorWords.contains(words[i].toLowerCase()))
+        words[i].toLowerCase()
+      else
+        words[i][0].toUpperCase() + words[i].substring(1).toLowerCase(),
+  ].join(' ');
+}
