@@ -32,6 +32,7 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'version': 'Version',
     'needs_permission': 'Your API key is missing the {p} permission. Create a new key with it and swap it in settings.',
     'instances': 'Instances',
     'raids': 'Raids',
@@ -308,6 +309,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'version': 'Version',
     'needs_permission': 'Deinem API-Schlüssel fehlt die Berechtigung {p}. Erstelle einen neuen Schlüssel damit und tausche ihn in den Einstellungen.',
     'instances': 'Instanzen',
     'raids': 'Raids',
@@ -584,6 +586,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'version': 'Version',
     'needs_permission': 'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
     'instances': 'Instances',
     'raids': 'Raids',
@@ -860,6 +863,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'version': 'Sürüm',
     'needs_permission': 'API key\'inde {p} izni yok. Bu izinle yeni bir key oluşturup Ayarlar\'dan değiştir.',
     'instances': 'Instance',
     'raids': 'Raid',

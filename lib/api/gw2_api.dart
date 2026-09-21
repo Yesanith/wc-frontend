@@ -228,18 +228,31 @@ class Gw2Api {
     return raw.map((e) => e is Map ? '${e['id']}' : '$e').toList();
   }
 
-  /// details for a static endpoint, in batches of 200
+  /// details for a static endpoint, in batches of 200. a batch that fails
+  /// because one id is unknown gets split instead of dropped, otherwise a
+  /// single bad id would cost 200 names
   Future<List<Json>> details(String path, List<String> ids) async {
     final out = <Json>[];
     for (var i = 0; i < ids.length; i += 200) {
       final end = (i + 200 > ids.length) ? ids.length : i + 200;
-      try {
-        out.addAll(_list(await get(path, {'ids': ids.sublist(i, end).join(',')})));
-      } on Gw2ApiException catch (e) {
-        if (e.status != 404) rethrow;
-      }
+      out.addAll(await _detailChunk(path, ids.sublist(i, end)));
     }
     return out;
+  }
+
+  Future<List<Json>> _detailChunk(String path, List<String> ids) async {
+    if (ids.isEmpty) return const [];
+    try {
+      return _list(await get(path, {'ids': ids.join(',')}));
+    } on Gw2ApiException catch (e) {
+      if (e.status != 404 && e.status != 400) rethrow;
+      if (ids.length == 1) return const [];
+      final middle = ids.length ~/ 2;
+      return [
+        ...await _detailChunk(path, ids.sublist(0, middle)),
+        ...await _detailChunk(path, ids.sublist(middle)),
+      ];
+    }
   }
 
   Future<Map<int, Json>> items(Iterable<int> ids) => _batch('/items', ids, _itemCache);

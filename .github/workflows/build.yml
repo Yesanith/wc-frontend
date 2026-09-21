@@ -49,7 +49,18 @@ jobs:
           KEYSTORE_PASSWORD: ***REMOVED***
           KEY_ALIAS: tyriacodex
           KEY_PASSWORD: ***REMOVED***
-        run: flutter build apk --release
+        run: |
+          # tags carry the version, manual runs fall back to 0.0.0
+          VERSION="${GITHUB_REF_NAME#v}"
+          case "$VERSION" in
+            [0-9]*) ;;
+            *) VERSION="0.0.0" ;;
+          esac
+          echo "building $VERSION ($GITHUB_RUN_NUMBER)"
+          flutter build apk --release \
+            --build-name="$VERSION" \
+            --build-number="$GITHUB_RUN_NUMBER" \
+            --dart-define=APP_VERSION="$VERSION"
 
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk

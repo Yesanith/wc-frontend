@@ -359,6 +359,25 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
   }
 
   final byId = {for (final r in rows) '${r['id']}': r};
+
+  // mount types carry no icon, so borrow the one of their default skin
+  if (kind.key == 'mounts') {
+    final skinIds = [
+      for (final r in rows)
+        if (r['default_skin'] != null) '${asInt(r['default_skin'])}',
+    ];
+    if (skinIds.isNotEmpty) {
+      try {
+        final skins = await api.details('/mounts/skins', skinIds);
+        final iconBySkin = {for (final skin in skins) asInt(skin['id']): skin['icon']};
+        for (final row in rows) {
+          row['icon'] ??= iconBySkin[asInt(row['default_skin'])];
+        }
+      } catch (_) {
+        // no icons is better than no list
+      }
+    }
+  }
   return [
     for (final id in ids)
       CollectionEntry(

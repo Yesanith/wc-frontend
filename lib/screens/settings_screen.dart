@@ -195,7 +195,22 @@ class SettingsScreen extends ConsumerWidget {
           icon: const Icon(Icons.logout),
           label: Text(s.t('remove_key')),
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 22),
+        Panel(
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(s.t('version'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+              ),
+              // set by the release build from the git tag
+              const Text(
+                String.fromEnvironment('APP_VERSION', defaultValue: 'dev'),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
         Text(s.t('disclaimer'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
       ],
     );
