@@ -215,8 +215,9 @@ class Gw2Api {
     return asInt(r['quantity']);
   }
 
-  Future<Json> vaultDaily() async =>
-      Map<String, dynamic>.from(await get('/account/wizardsvault/daily') as Map);
+  /// daily, weekly or special objectives of the wizard's vault
+  Future<Json> vault(String track) async =>
+      Map<String, dynamic>.from(await cachedGet('/account/wizardsvault/$track') as Map);
 
   /// plain id list of a static endpoint, ids can be ints or strings
   Future<List<String>> idList(String path) async {

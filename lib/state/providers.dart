@@ -49,8 +49,6 @@ final tokenInfoProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider
 
 final accountProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).account());
 
-final vaultProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).vaultDaily());
-
 /// track is daily, weekly or special
 final vaultTrackProvider =
     FutureProvider.family<Json, String>((ref, track) => ref.watch(gw2ApiProvider).vault(track));
