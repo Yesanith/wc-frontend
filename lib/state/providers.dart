@@ -776,144 +776,133 @@ final tradeStatsProvider = FutureProvider<TradeStats>((ref) async {
   return TradeStats(soldValue, boughtValue, soldCount, boughtCount, top.take(8).toList());
 });
 
-/// one step of a crafting tree. leaves are things you buy or farm
+/// one step of a crafting tree, independent of how many you want to make.
+/// [perRun] is how many the parent recipe needs for a single run of itself
 class CraftNode {
-  CraftNode({
+  const CraftNode({
     required this.itemId,
-    required this.count,
     required this.item,
+    required this.perRun,
+    required this.outputCount,
     required this.children,
     required this.disciplines,
-    required this.outputCount,
   });
 
   final int itemId;
-
-  /// how many of this item the parent step needs
-  final int count;
   final Json? item;
-  final List<CraftNode> children;
-  final List<String> disciplines;
+  final int perRun;
 
   /// how many the recipe makes in one craft
   final int outputCount;
+  final List<CraftNode> children;
+  final List<String> disciplines;
 
   bool get isLeaf => children.isEmpty;
   String get name => (item?['name'] as String?) ?? 'Item #$itemId';
 }
 
-/// key is "itemId:quantity"
-final craftTreeProvider = FutureProvider.family<CraftNode, String>((ref, key) async {
-  final api = ref.watch(gw2ApiProvider);
-  final parts = key.split(':');
-  final rootId = int.tryParse(parts.first) ?? 0;
-  final quantity = parts.length > 1 ? (int.tryParse(parts[1]) ?? 1) : 1;
+/// the same tree with real amounts filled in for a given quantity
+class CraftLine {
+  const CraftLine(this.node, this.count, this.children);
 
-  Future<CraftNode> expand(int itemId, int count, Set<int> seen, int depth) async {
+  final CraftNode node;
+  final int count;
+  final List<CraftLine> children;
+
+  bool get isLeaf => children.isEmpty;
+  int get itemId => node.itemId;
+  String get name => node.name;
+}
+
+/// scaling happens on device, so changing the quantity never refetches
+CraftLine planFor(CraftNode node, int count) {
+  final runs = node.outputCount <= 0 ? count : (count / node.outputCount).ceil();
+  return CraftLine(
+    node,
+    count,
+    [for (final child in node.children) planFor(child, child.perRun * runs)],
+  );
+}
+
+/// keyed by item id only
+final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) async {
+  final api = ref.watch(gw2ApiProvider);
+
+  Future<CraftNode> expand(int itemId, int perRun, Set<int> seen, int depth) async {
     final items = await api.items([itemId]);
     final item = items[itemId];
-    if (depth >= 6 || seen.contains(itemId)) {
-      return CraftNode(
-        itemId: itemId,
-        count: count,
-        item: item,
-        children: const [],
-        disciplines: const [],
-        outputCount: 1,
-      );
-    }
+    CraftNode leaf() => CraftNode(
+          itemId: itemId,
+          item: item,
+          perRun: perRun,
+          outputCount: 1,
+          children: const [],
+          disciplines: const [],
+        );
+    if (depth >= 6 || seen.contains(itemId)) return leaf();
+
     final recipeIds = await api.recipesForOutput(itemId);
-    if (recipeIds.isEmpty) {
-      return CraftNode(
-        itemId: itemId,
-        count: count,
-        item: item,
-        children: const [],
-        disciplines: const [],
-        outputCount: 1,
-      );
-    }
+    if (recipeIds.isEmpty) return leaf();
     final recipes = await api.recipes(recipeIds);
     final recipe = recipes[recipeIds.first];
-    final outputCount = recipe == null ? 1 : (asInt(recipe['output_item_count']) == 0 ? 1 : asInt(recipe['output_item_count']));
-    // how many times the recipe has to run for the amount we need
-    final runs = (count / outputCount).ceil();
+    if (recipe == null) return leaf();
+
+    final output = asInt(recipe['output_item_count']);
     final children = <CraftNode>[];
-    for (final ingredient in (recipe?['ingredients'] as List?) ?? const []) {
+    for (final ingredient in (recipe['ingredients'] as List?) ?? const []) {
       if (ingredient is! Map) continue;
       final id = asInt(ingredient['item_id'] ?? ingredient['id']);
       if (id <= 0) continue;
-      children.add(await expand(id, asInt(ingredient['count']) * runs, {...seen, itemId}, depth + 1));
+      children.add(await expand(id, asInt(ingredient['count']), {...seen, itemId}, depth + 1));
     }
     return CraftNode(
       itemId: itemId,
-      count: count,
       item: item,
+      perRun: perRun,
+      outputCount: output <= 0 ? 1 : output,
       children: children,
-      disciplines: [
-        for (final d in (recipe?['disciplines'] as List?) ?? const []) '$d',
-      ],
-      outputCount: outputCount,
+      disciplines: [for (final d in (recipe['disciplines'] as List?) ?? const []) '$d'],
     );
   }
 
-  return expand(rootId, quantity, <int>{}, 0);
+  return expand(rootId, 1, <int>{}, 0);
 });
 
-/// everything at the bottom of a crafting tree, with quantities summed
-Map<int, int> craftLeaves(CraftNode node) {
+/// everything at the bottom of a plan, with quantities summed
+Map<int, int> craftLeaves(CraftLine line) {
   final out = <int, int>{};
-  void walk(CraftNode n) {
-    if (n.isLeaf) {
-      out[n.itemId] = (out[n.itemId] ?? 0) + n.count;
+  void walk(CraftLine l) {
+    if (l.isLeaf) {
+      out[l.itemId] = (out[l.itemId] ?? 0) + l.count;
       return;
     }
-    for (final child in n.children) {
+    for (final child in l.children) {
       walk(child);
     }
   }
 
-  for (final child in node.children) {
+  for (final child in line.children) {
     walk(child);
   }
   return out;
 }
 
-class CraftCost {
-  const CraftCost(this.missingCost, this.ownedValue, this.buyOutputCost);
-
-  /// what the missing base materials cost at current sell listings
-  final int missingCost;
-
-  /// value of the base materials you already own
-  final int ownedValue;
-
-  /// what the finished item itself costs on the trading post, 0 when it is
-  /// not tradeable
-  final int buyOutputCost;
-}
-
-final craftCostProvider = FutureProvider.family<CraftCost, String>((ref, key) async {
+/// sell listing price per unit for every item in the tree, fetched once
+final craftPricesProvider = FutureProvider.family<Map<int, int>, int>((ref, rootId) async {
   final api = ref.watch(gw2ApiProvider);
-  final tree = await ref.watch(craftTreeProvider(key).future);
-  final totals = await ref.watch(accountTotalsProvider.future);
-  final leaves = craftLeaves(tree);
-  final prices = await api.prices([...leaves.keys, tree.itemId]);
-
-  var missing = 0;
-  var owned = 0;
-  for (final e in leaves.entries) {
-    final sells = prices[e.key]?['sells'];
-    final unit = sells is Map ? asInt(sells['unit_price']) : 0;
-    final have = totals[e.key] ?? 0;
-    final short = have >= e.value ? 0 : e.value - have;
-    missing += unit * short;
-    owned += unit * (have > e.value ? e.value : have);
+  final root = await ref.watch(craftTreeProvider(rootId).future);
+  final ids = <int>{};
+  void collect(CraftNode n) {
+    ids.add(n.itemId);
+    for (final child in n.children) {
+      collect(child);
+    }
   }
-  final outputSells = prices[tree.itemId]?['sells'];
-  return CraftCost(
-    missing,
-    owned,
-    outputSells is Map ? asInt(outputSells['unit_price']) * tree.count : 0,
-  );
+
+  collect(root);
+  final prices = await api.prices(ids);
+  return {
+    for (final e in prices.entries)
+      if (e.value['sells'] is Map) e.key: asInt((e.value['sells'] as Map)['unit_price']),
+  };
 });

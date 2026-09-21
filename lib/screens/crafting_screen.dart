@@ -94,9 +94,8 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final key = '${widget.itemId}:$_quantity';
-    final tree = ref.watch(craftTreeProvider(key));
-    final cost = ref.watch(craftCostProvider(key));
+    final tree = ref.watch(craftTreeProvider(widget.itemId));
+    final prices = ref.watch(craftPricesProvider(widget.itemId)).valueOrNull ?? const <int, int>{};
     final totals = ref.watch(accountTotalsProvider).valueOrNull ?? const <int, int>{};
     final item = ref.watch(itemProvider(widget.itemId)).valueOrNull;
 
@@ -108,7 +107,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
       ),
       body: AsyncView<CraftNode>(
         value: tree,
-        onRetry: () => ref.invalidate(craftTreeProvider(key)),
+        onRetry: () => ref.invalidate(craftTreeProvider(widget.itemId)),
         builder: (root) {
           if (root.isLeaf) {
             return Padding(
@@ -119,7 +118,19 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
               ),
             );
           }
-          final leaves = craftLeaves(root);
+          // scaling is local, so the plus button never triggers a reload
+          final plan = planFor(root, _quantity);
+          final leaves = craftLeaves(plan);
+          var missingCost = 0;
+          var ownedValue = 0;
+          for (final e in leaves.entries) {
+            final unit = prices[e.key] ?? 0;
+            final have = totals[e.key] ?? 0;
+            missingCost += unit * (have >= e.value ? 0 : e.value - have);
+            ownedValue += unit * (have > e.value ? e.value : have);
+          }
+          final buyInstead = (prices[root.itemId] ?? 0) * _quantity;
+
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
             children: [
@@ -133,8 +144,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                       onPressed: _quantity <= 1 ? null : () => setState(() => _quantity--),
                       icon: const Icon(Icons.remove_circle_outline, color: AppColors.gold),
                     ),
-                    Text('$_quantity',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                    Text('$_quantity', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                     IconButton(
                       onPressed: () => setState(() => _quantity++),
                       icon: const Icon(Icons.add_circle_outline, color: AppColors.gold),
@@ -151,13 +161,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 ),
               ],
               const SizedBox(height: 16),
-              cost.when(
-                data: (c) => _CostPanel(cost: c),
-                loading: () => const Panel(
-                  child: Center(child: Padding(padding: EdgeInsets.all(8), child: CircularProgressIndicator())),
-                ),
-                error: (e, _) => ErrorBox(message: '$e', onRetry: () => ref.invalidate(craftCostProvider(key))),
-              ),
+              _CostPanel(missingCost: missingCost, ownedValue: ownedValue, buyInstead: buyInstead),
               const SizedBox(height: 22),
               SectionHeader(title: s.t('base_materials'), trailing: '${leaves.length}'),
               const SizedBox(height: 10),
@@ -177,7 +181,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Column(
                   children: [
-                    for (final child in root.children) _CraftNodeTile(node: child, totals: totals),
+                    for (final child in plan.children) _CraftNodeTile(line: child, totals: totals),
                   ],
                 ),
               ),
@@ -190,14 +194,16 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
 }
 
 class _CostPanel extends ConsumerWidget {
-  const _CostPanel({required this.cost});
+  const _CostPanel({required this.missingCost, required this.ownedValue, required this.buyInstead});
 
-  final CraftCost cost;
+  final int missingCost;
+  final int ownedValue;
+  final int buyInstead;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final cheaperToBuy = cost.buyOutputCost > 0 && cost.buyOutputCost < cost.missingCost;
+    final cheaperToBuy = buyInstead > 0 && buyInstead < missingCost;
 
     return Panel(
       child: Column(
@@ -209,7 +215,7 @@ class _CostPanel extends ConsumerWidget {
                 child: Text(s.t('missing_materials_cost'),
                     style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
-              CoinText(cost.missingCost, size: 16),
+              CoinText(missingCost, size: 16),
             ],
           ),
           const SizedBox(height: 10),
@@ -219,10 +225,10 @@ class _CostPanel extends ConsumerWidget {
                 child: Text(s.t('already_owned_value'),
                     style: const TextStyle(fontSize: 13, color: AppColors.muted)),
               ),
-              CoinText(cost.ownedValue, size: 13),
+              CoinText(ownedValue, size: 13),
             ],
           ),
-          if (cost.buyOutputCost > 0) ...[
+          if (buyInstead > 0) ...[
             const SizedBox(height: 10),
             const Divider(color: AppColors.track, height: 1),
             const SizedBox(height: 10),
@@ -231,7 +237,7 @@ class _CostPanel extends ConsumerWidget {
                 Expanded(
                   child: Text(s.t('buy_instead'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
                 ),
-                CoinText(cost.buyOutputCost, size: 16),
+                CoinText(buyInstead, size: 16),
               ],
             ),
             const SizedBox(height: 8),
@@ -301,20 +307,20 @@ class _LeafRow extends ConsumerWidget {
 }
 
 class _CraftNodeTile extends StatelessWidget {
-  const _CraftNodeTile({required this.node, required this.totals});
+  const _CraftNodeTile({required this.line, required this.totals});
 
-  final CraftNode node;
+  final CraftLine line;
   final Map<int, int> totals;
 
   @override
   Widget build(BuildContext context) {
-    final have = totals[node.itemId] ?? 0;
+    final have = totals[line.itemId] ?? 0;
     final title = Row(
       children: [
-        ItemIcon(url: node.item?['icon'] as String?, rarity: node.item?['rarity'] as String?, size: 30),
+        ItemIcon(url: line.node.item?['icon'] as String?, rarity: line.node.item?['rarity'] as String?, size: 30),
         const SizedBox(width: 10),
         Expanded(
-          child: Text('${fmtInt(node.count)} x ${node.name}',
+          child: Text('${fmtInt(line.count)} x ${line.name}',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -324,11 +330,11 @@ class _CraftNodeTile extends StatelessWidget {
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: have >= node.count ? AppColors.green : AppColors.muted)),
+                  color: have >= line.count ? AppColors.green : AppColors.muted)),
       ],
     );
 
-    if (node.isLeaf) {
+    if (line.isLeaf) {
       return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7), child: title);
     }
     return Theme(
@@ -340,7 +346,7 @@ class _CraftNodeTile extends StatelessWidget {
         collapsedIconColor: AppColors.muted,
         title: title,
         children: [
-          for (final child in node.children) _CraftNodeTile(node: child, totals: totals),
+          for (final child in line.children) _CraftNodeTile(line: child, totals: totals),
         ],
       ),
     );
