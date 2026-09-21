@@ -40,22 +40,15 @@ class _CollectionTile extends ConsumerWidget {
     final progress = ref.watch(collectionProgressProvider(kind.key));
     final p = progress.valueOrNull;
 
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: kind.hasDetails
+    return AppCard(
+      onTap: kind.hasDetails
             ? () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)),
-                )
+    )
             : null,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
+             padding: const EdgeInsets.all(16),
+             radius: 16,
+             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -81,9 +74,7 @@ class _CollectionTile extends ConsumerWidget {
               ],
             ],
           ),
-        ),
-      ),
-    );
+           );
   }
 }
 

@@ -84,6 +84,11 @@ const _attributeNames = {
   'AgonyResistance': 'Agony Resistance',
 };
 
+List<int> intList(dynamic raw) => [
+      for (final v in (raw as List?) ?? const [])
+        if (v != null) asInt(v),
+    ];
+
 String attributeName(String raw) {
   final mapped = _attributeNames[raw];
   if (mapped != null) return mapped;

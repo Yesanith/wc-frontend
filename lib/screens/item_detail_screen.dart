@@ -223,20 +223,12 @@ class _UpgradeRow extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: AppColors.line),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => Navigator.of(context).push(
+      child: AppCard(
+        onTap: () => Navigator.of(context).push(
             MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: itemId)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
+      ),
+               padding: const EdgeInsets.all(10),
+               child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
@@ -257,9 +249,7 @@ class _UpgradeRow extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
+             ),
     );
   }
 }

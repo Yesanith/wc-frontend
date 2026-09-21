@@ -30,6 +30,177 @@ class Panel extends StatelessWidget {
   }
 }
 
+/// the card every list row and panel is built from, optionally tappable
+/// pull to refresh helper: drop the cached values and keep the spinner
+/// visible long enough to feel deliberate
+Future<void> refreshProviders(WidgetRef ref, List<ProviderOrFamily> providers) async {
+  for (final provider in providers) {
+    ref.invalidate(provider);
+  }
+  await Future<void>.delayed(const Duration(milliseconds: 300));
+}
+
+class AppCard extends StatelessWidget {
+  const AppCard({
+    super.key,
+    required this.child,
+    this.onTap,
+    this.padding = const EdgeInsets.all(14),
+    this.radius = 14,
+  });
+
+  final Widget child;
+  final VoidCallback? onTap;
+  final EdgeInsetsGeometry padding;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final body = Padding(padding: padding, child: child);
+    return Material(
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius),
+        side: const BorderSide(color: AppColors.line),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: onTap == null ? body : InkWell(onTap: onTap, child: body),
+    );
+  }
+}
+
+/// icon, title, optional subtitle and trailing widget. the shape of almost
+/// every list in the app
+class ItemRow extends StatelessWidget {
+  const ItemRow({
+    super.key,
+    this.icon,
+    this.rarity,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    this.iconSize = 40,
+    this.titleLines = 2,
+  });
+
+  final String? icon;
+  final String? rarity;
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final double iconSize;
+  final int titleLines;
+
+  @override
+  Widget build(BuildContext context) {
+    final sub = subtitle;
+    final end = trailing;
+    return AppCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          ItemIcon(url: icon, rarity: rarity, size: iconSize),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    maxLines: titleLines,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                if (sub != null)
+                  Text(sub, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
+          ),
+          if (end != null) ...[const SizedBox(width: 8), end],
+        ],
+      ),
+    );
+  }
+}
+
+/// the tab bar every tabbed screen uses
+class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
+  const AppTabBar({super.key, required this.labels, this.scrollable = false});
+
+  final List<String> labels;
+  final bool scrollable;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(46);
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBar(
+      isScrollable: scrollable,
+      tabAlignment: scrollable ? TabAlignment.start : null,
+      labelColor: AppColors.gold,
+      unselectedLabelColor: AppColors.muted,
+      indicatorColor: AppColors.gold,
+      dividerColor: AppColors.track,
+      labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+      tabs: [for (final label in labels) Tab(text: label)],
+    );
+  }
+}
+
+/// the diamond emblem, drawn on the start screen and the hero card
+class DiamondEmblem extends StatelessWidget {
+  const DiamondEmblem({super.key, required this.size, this.color = AppColors.gold, this.filled = true});
+
+  final double size;
+  final Color color;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _EmblemPainter(color, filled)),
+    );
+  }
+}
+
+class _EmblemPainter extends CustomPainter {
+  const _EmblemPainter(this.color, this.filled);
+
+  final Color color;
+  final bool filled;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final stroke = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size > 90 ? 2 : 1.6;
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+
+    Path diamond(double r) => Path()
+      ..moveTo(cx, cy - r)
+      ..lineTo(cx + r, cy)
+      ..lineTo(cx, cy + r)
+      ..lineTo(cx - r, cy)
+      ..close();
+
+    canvas.drawPath(diamond(size.width / 2 - 2), stroke);
+    canvas.drawPath(diamond(size.width / 2 - size.width * 0.22), stroke);
+    if (filled) {
+      canvas.drawPath(diamond(size.width * 0.1), Paint()..color = color);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _EmblemPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.filled != filled;
+}
+
 class Kicker extends StatelessWidget {
   const Kicker(this.text, {super.key, this.color = AppColors.gold});
 
@@ -117,41 +288,21 @@ class ErrorBox extends ConsumerWidget {
   }
 }
 
-class AsyncView<T> extends StatelessWidget {
-  const AsyncView({super.key, required this.value, required this.builder, this.onRetry});
-
-  final AsyncValue<T> value;
-  final Widget Function(T data) builder;
-  final VoidCallback? onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return value.when(
-      data: builder,
-      loading: () => const Padding(
-        padding: EdgeInsets.all(24),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-      error: (e, _) => ErrorBox(message: '$e', onRetry: onRetry),
-    );
-  }
-}
-
-/// like AsyncView, but a 401 or 403 means the api key is missing a
-/// permission rather than something being broken
-class PermissionAsyncView<T> extends ConsumerWidget {
-  const PermissionAsyncView({
+/// loading, error and data in one place. when [permission] is set, a 401 or
+/// 403 is reported as a missing api key permission instead of an error
+class AsyncView<T> extends ConsumerWidget {
+  const AsyncView({
     super.key,
     required this.value,
     required this.builder,
-    required this.permission,
     this.onRetry,
+    this.permission,
   });
 
   final AsyncValue<T> value;
   final Widget Function(T data) builder;
-  final String permission;
   final VoidCallback? onRetry;
+  final String? permission;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -163,9 +314,10 @@ class PermissionAsyncView<T> extends ConsumerWidget {
         child: Center(child: CircularProgressIndicator()),
       ),
       error: (e, _) {
-        if (e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
+        final needed = permission;
+        if (needed != null && e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
           return Panel(
-            child: Text(s.t('needs_permission', {'p': permission}),
+            child: Text(s.t('needs_permission', {'p': needed}),
                 style: const TextStyle(color: AppColors.muted, height: 1.5)),
           );
         }

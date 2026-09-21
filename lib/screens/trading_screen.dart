@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/gw2_api.dart';
 import '../services/item_index.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
@@ -64,12 +63,7 @@ class TradingItemScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         color: AppColors.gold,
-        onRefresh: () async {
-          ref.invalidate(priceProvider(itemId));
-          try {
-            await ref.read(priceProvider(itemId).future);
-          } catch (_) {}
-        },
+        onRefresh: () => refreshProviders(ref, [priceProvider(itemId)]),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
@@ -246,40 +240,15 @@ class _ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sub = subtitle;
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 44),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                    if (sub != null) Text(sub, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              trailing,
-            ],
-          ),
-        ),
+    return ItemRow(
+      icon: item?['icon'] as String?,
+      rarity: item?['rarity'] as String?,
+      title: title,
+      subtitle: sub,
+      trailing: trailing,
+      iconSize: 44,
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
       ),
     );
   }
@@ -296,21 +265,7 @@ class TradingHubScreen extends ConsumerWidget {
       length: 4,
       child: Column(
         children: [
-          TabBar(
-            labelColor: AppColors.gold,
-            unselectedLabelColor: AppColors.muted,
-            indicatorColor: AppColors.gold,
-            dividerColor: AppColors.track,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            tabs: [
-              Tab(text: s.t('overview')),
-              Tab(text: s.t('orders')),
-              Tab(text: s.t('history')),
-              Tab(text: s.t('stats')),
-            ],
-          ),
+          AppTabBar(scrollable: true, labels: [s.t('overview'), s.t('orders'), s.t('history'), s.t('stats')]),
           const Expanded(
             child: TabBarView(
               children: [
@@ -418,14 +373,7 @@ class _OverviewTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(gemRatesProvider);
-        ref.invalidate(deliveryProvider);
-        ref.invalidate(watchlistPricesProvider);
-        try {
-          await ref.read(watchlistPricesProvider.future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [gemRatesProvider, deliveryProvider, watchlistPricesProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -478,7 +426,7 @@ class _OverviewTab extends ConsumerWidget {
               children: [
                 Kicker(s.t('delivery').toUpperCase()),
                 const SizedBox(height: 12),
-                PermissionAsyncView<Delivery>(
+                AsyncView<Delivery>(
                   permission: 'tradingpost',
                   value: delivery,
                   onRetry: () => ref.invalidate(deliveryProvider),
@@ -556,7 +504,7 @@ class _TxTab extends ConsumerWidget {
     final a = ref.watch(transactionsProvider(first));
     final b = ref.watch(transactionsProvider(second));
 
-    Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => PermissionAsyncView<List<TxRow>>(
+    Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => AsyncView<List<TxRow>>(
           permission: 'tradingpost',
           value: value,
           onRetry: () => ref.invalidate(transactionsProvider(kind)),
@@ -571,13 +519,7 @@ class _TxTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(transactionsProvider(first));
-        ref.invalidate(transactionsProvider(second));
-        try {
-          await ref.read(transactionsProvider(first).future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [transactionsProvider(first), transactionsProvider(second)]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -633,15 +575,8 @@ class _StatsTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(transactionsProvider('history/sells'));
-        ref.invalidate(transactionsProvider('history/buys'));
-        ref.invalidate(tradeStatsProvider);
-        try {
-          await ref.read(tradeStatsProvider.future);
-        } catch (_) {}
-      },
-      child: PermissionAsyncView<TradeStats>(
+      onRefresh: () => refreshProviders(ref, [transactionsProvider('history/sells'), transactionsProvider('history/buys'), tradeStatsProvider]),
+      child: AsyncView<TradeStats>(
         permission: 'tradingpost',
         value: stats,
         onRetry: () => ref.invalidate(tradeStatsProvider),

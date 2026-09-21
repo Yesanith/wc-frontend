@@ -65,20 +65,12 @@ class _MapsScreenState extends ConsumerState<MapsScreen> {
                       ],
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
-                        child: Material(
-                          color: AppColors.surface,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            side: const BorderSide(color: AppColors.line),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: InkWell(
-                            onTap: () => Navigator.of(context).push(
+                        child: AppCard(
+                          onTap: () => Navigator.of(context).push(
                               MaterialPageRoute<void>(builder: (_) => MapDetailScreen(map: map)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Row(
+                        ),
+                                 padding: const EdgeInsets.all(14),
+                                 child: Row(
                                 children: [
                                   Expanded(
                                     child: Text(map.name,
@@ -91,9 +83,7 @@ class _MapsScreenState extends ConsumerState<MapsScreen> {
                                   const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
+                               ),
                       ),
                     ],
                   );

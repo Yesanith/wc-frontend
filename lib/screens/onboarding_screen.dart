@@ -103,9 +103,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            const Center(
-              child: SizedBox(width: 72, height: 72, child: CustomPaint(painter: _EmblemPainter())),
-            ),
+            const Center(child: DiamondEmblem(size: 72)),
             const SizedBox(height: 12),
             Text('Tyria Codex', textAlign: TextAlign.center, style: display(34)),
             const SizedBox(height: 6),
@@ -278,32 +276,4 @@ class _PermChip extends StatelessWidget {
       ),
     );
   }
-}
-
-class _EmblemPainter extends CustomPainter {
-  const _EmblemPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stroke = Paint()
-      ..color = AppColors.gold
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6;
-    final cx = size.width / 2;
-    final cy = size.height / 2;
-
-    Path diamond(double r) => Path()
-      ..moveTo(cx, cy - r)
-      ..lineTo(cx + r, cy)
-      ..lineTo(cx, cy + r)
-      ..lineTo(cx - r, cy)
-      ..close();
-
-    canvas.drawPath(diamond(size.width / 2 - 2), stroke);
-    canvas.drawPath(diamond(size.width / 2 - 16), stroke);
-    canvas.drawCircle(Offset(cx, cy), 5, Paint()..color = AppColors.gold);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

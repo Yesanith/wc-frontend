@@ -17,20 +17,9 @@ class ProgressionScreen extends ConsumerWidget {
       length: 4,
       child: Column(
         children: [
-          TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            labelColor: AppColors.gold,
-            unselectedLabelColor: AppColors.muted,
-            indicatorColor: AppColors.gold,
-            dividerColor: AppColors.track,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            tabs: [
-              Tab(text: s.t('achievements')),
-              Tab(text: s.t('masteries')),
-              Tab(text: s.t('instances')),
-              Tab(text: s.t('pvp_wvw')),
-            ],
+          AppTabBar(
+            scrollable: true,
+            labels: [s.t('achievements'), s.t('masteries'), s.t('instances'), s.t('pvp_wvw')],
           ),
           const Expanded(
             child: TabBarView(
@@ -54,13 +43,7 @@ class _AchievementsTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(achievementsProvider);
-        ref.invalidate(achievementsDoneProvider);
-        try {
-          await ref.read(achievementsProvider.future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [achievementsProvider, achievementsDoneProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -79,7 +62,7 @@ class _AchievementsTab extends ConsumerWidget {
           const SizedBox(height: 16),
           SectionHeader(title: s.t('in_progress')),
           const SizedBox(height: 10),
-          PermissionAsyncView<List<AchievementRow>>(
+          AsyncView<List<AchievementRow>>(
             permission: 'progression',
             value: rows,
             onRetry: () => ref.invalidate(achievementsProvider),
@@ -138,13 +121,7 @@ class _MasteriesTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(masteriesProvider);
-        ref.invalidate(masteryPointsProvider);
-        try {
-          await ref.read(masteriesProvider.future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [masteriesProvider, masteryPointsProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -176,7 +153,7 @@ class _MasteriesTab extends ConsumerWidget {
           ],
           SectionHeader(title: s.t('mastery_tracks')),
           const SizedBox(height: 10),
-          PermissionAsyncView<List<MasteryRow>>(
+          AsyncView<List<MasteryRow>>(
             permission: 'progression',
             value: rows,
             onRetry: () => ref.invalidate(masteriesProvider),
@@ -244,19 +221,13 @@ class _InstancesTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(raidsProvider);
-        ref.invalidate(dungeonsProvider);
-        try {
-          await ref.read(raidsProvider.future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [raidsProvider, dungeonsProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
           SectionHeader(title: s.t('raids'), trailing: s.t('weekly')),
           const SizedBox(height: 10),
-          PermissionAsyncView<List<RaidWing>>(
+          AsyncView<List<RaidWing>>(
             permission: 'progression',
             value: raids,
             onRetry: () => ref.invalidate(raidsProvider),
@@ -310,7 +281,7 @@ class _InstancesTab extends ConsumerWidget {
           const SizedBox(height: 22),
           SectionHeader(title: s.t('dungeons'), trailing: s.t('daily')),
           const SizedBox(height: 10),
-          PermissionAsyncView<List<Dungeon>>(
+          AsyncView<List<Dungeon>>(
             permission: 'progression',
             value: dungeons,
             onRetry: () => ref.invalidate(dungeonsProvider),
@@ -369,7 +340,7 @@ class _PvpTab extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        PermissionAsyncView<Json>(
+        AsyncView<Json>(
           permission: 'pvp',
           value: stats,
           onRetry: () => ref.invalidate(pvpStatsProvider),

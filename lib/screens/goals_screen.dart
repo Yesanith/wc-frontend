@@ -80,20 +80,13 @@ class GoalsScreen extends ConsumerWidget {
               itemBuilder: (context, i) {
                 final g = goals[i];
                 final progress = goalProgress(g, totals);
-                return Material(
-                  color: AppColors.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: const BorderSide(color: AppColors.line),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).push(
+                return AppCard(
+                  onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (_) => GoalDetailScreen(goalId: g.id)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
+                ),
+                         padding: const EdgeInsets.all(16),
+                         radius: 16,
+                         child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -110,9 +103,7 @@ class GoalsScreen extends ConsumerWidget {
                           Bar(value: progress, color: progress >= 1 ? AppColors.green : AppColors.gold),
                         ],
                       ),
-                    ),
-                  ),
-                );
+                       );
               },
             );
 
@@ -201,12 +192,7 @@ class GoalDetailScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         color: AppColors.gold,
-        onRefresh: () async {
-          ref.invalidate(accountTotalsProvider);
-          try {
-            await ref.read(accountTotalsProvider.future);
-          } catch (_) {}
-        },
+        onRefresh: () => refreshProviders(ref, [accountTotalsProvider]),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
@@ -314,36 +300,28 @@ class _GoalItemRow extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final name = (item?['name'] as String?) ?? s.t('item_n', {'id': gi.itemId});
     final done = have >= gi.need;
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => showAddToGoalSheet(context, itemId: gi.itemId, itemName: name, goalId: goalId, need: gi.need),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
+    return AppCard(
+      onTap: () => showAddToGoalSheet(context, itemId: gi.itemId, itemName: name, goalId: goalId, need: gi.need),
+      padding: const EdgeInsets.all(10),
+      child: Row(
             children: [
               ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 42),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
+      child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Expanded(
-                          child: Text(name,
+      child: Text(name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w800,
                                   color: done ? AppColors.muted : AppColors.text)),
-                        ),
+    ),
                         Text('${fmtInt(have)} / ${fmtInt(gi.need)}',
                             style: TextStyle(
                                 fontSize: 13,
@@ -358,9 +336,7 @@ class _GoalItemRow extends ConsumerWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
+           );
   }
 }
 

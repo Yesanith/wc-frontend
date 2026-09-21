@@ -41,19 +41,7 @@ class CharacterDetailScreen extends ConsumerWidget {
       body = Column(
         children: [
           _Hero(c),
-          TabBar(
-            labelColor: AppColors.gold,
-            unselectedLabelColor: AppColors.muted,
-            indicatorColor: AppColors.gold,
-            dividerColor: AppColors.track,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            tabs: [
-              Tab(text: s.t('equipment')),
-              Tab(text: s.t('build')),
-              Tab(text: s.t('inventory')),
-              Tab(text: s.t('crafting')),
-            ],
-          ),
+          AppTabBar(labels: [s.t('equipment'), s.t('build'), s.t('inventory'), s.t('crafting')]),
           Expanded(
             child: TabBarView(
               children: [

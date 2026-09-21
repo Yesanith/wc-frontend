@@ -82,20 +82,12 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, i) {
                   final root = list[i];
-                  return Material(
-                    color: AppColors.surface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      side: const BorderSide(color: AppColors.line),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: () => Navigator.of(context).push(
+                  return AppCard(
+                    onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(builder: (_) => RecipeDetailScreen(root: root)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
+                  ),
+                           padding: const EdgeInsets.all(10),
+                           child: Row(
                           children: [
                             ItemIcon(url: root.node.icon, rarity: root.node.rarity, size: 42),
                             const SizedBox(width: 12),
@@ -106,9 +98,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                             const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
                           ],
                         ),
-                      ),
-                    ),
-                  );
+                         );
                 },
               ),
             ),

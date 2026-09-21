@@ -161,16 +161,7 @@ List<Json> equipmentForTab(Json c, int? tab) {
   ];
 }
 
-List<Json> activeEquipment(Json c) {
-  final eq = (c['equipment'] as List?) ?? const [];
-  final active = c['active_equipment_tab'];
-  return [
-    for (final e in eq)
-      if (e is Map &&
-          (active == null || e['tabs'] is! List || (e['tabs'] as List).contains(active)))
-        Map<String, dynamic>.from(e),
-  ];
-}
+List<Json> activeEquipment(Json c) => equipmentForTab(c, null);
 
 List<Json?> bagSlots(Json c) {
   final out = <Json?>[];
@@ -203,23 +194,6 @@ final characterItemsProvider = FutureProvider.family<Map<int, Json>, String>((re
       if (s != null) asInt(s['id']),
   };
   return api.items(ids);
-});
-
-final characterSpecsProvider = FutureProvider.family<List<Json>, String>((ref, name) async {
-  final api = ref.watch(gw2ApiProvider);
-  final chars = await ref.watch(charactersProvider.future);
-  final c = characterByName(chars, name);
-  final build = c == null ? null : activeBuild(c);
-  if (build == null) return <Json>[];
-  final ids = <int>[
-    for (final s in (build['specializations'] as List?) ?? const [])
-      if (s is Map && s['id'] != null) asInt(s['id']),
-  ];
-  final specs = await api.specializations(ids);
-  return [
-    for (final id in ids)
-      if (specs[id] != null) specs[id]!,
-  ];
 });
 
 final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
@@ -631,11 +605,6 @@ class BuildDetail {
   final List<Json> legends;
   final Json? profession;
 }
-
-List<int> intList(dynamic raw) => [
-      for (final v in (raw as List?) ?? const [])
-        if (v != null) asInt(v),
-    ];
 
 /// pets come as a list on stored builds and as {terrestrial, aquatic} on
 /// characters, so accept both shapes

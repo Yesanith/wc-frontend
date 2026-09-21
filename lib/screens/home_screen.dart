@@ -13,16 +13,11 @@ import 'events_screen.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  Future<void> _refresh(WidgetRef ref) async {
-    ref.invalidate(accountProvider);
-    ref.invalidate(walletProvider);
-    for (final track in ['daily', 'weekly', 'special']) {
-      ref.invalidate(vaultTrackProvider(track));
-    }
-    try {
-      await ref.read(accountProvider.future);
-    } catch (_) {}
-  }
+  Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [
+        accountProvider,
+        walletProvider,
+        vaultTrackProvider,
+      ]);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -294,23 +289,15 @@ class _LinkTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
+    return AppCard(
+      onTap: onTap,
+      radius: 16,
+      child: Row(
             children: [
               Icon(icon, color: AppColors.gold),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
+      child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
@@ -319,14 +306,12 @@ class _LinkTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
-                ),
+    ),
               ),
               const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
             ],
           ),
-        ),
-      ),
-    );
+           );
   }
 }
 

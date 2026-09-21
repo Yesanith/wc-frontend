@@ -50,7 +50,7 @@ String? buildChatCode(Json build, Json? profession, Map<int, Json> specDetails) 
 
     // two bits per tier: 0 none, 1 top, 2 middle, 3 bottom
     final chosen = ((spec['traits'] as List?) ?? const []).toList();
-    final majors = intListOf(specDetails[specId]?['major_traits']);
+    final majors = intList(specDetails[specId]?['major_traits']);
     var packed = 0;
     for (var tier = 0; tier < 3 && tier < chosen.length; tier++) {
       final traitId = asInt(chosen[tier]);
@@ -115,14 +115,9 @@ String? buildChatCode(Json build, Json? profession, Map<int, Json> specDetails) 
 /// null safe list access, avoids relying on newer core extensions
 T? _at<T>(List<T> list, int index) => index >= 0 && index < list.length ? list[index] : null;
 
-List<int> intListOf(dynamic raw) => [
-      for (final v in (raw as List?) ?? const [])
-        if (v != null) asInt(v),
-    ];
-
 List<int> _petList(Json build, String key) {
   final pets = build['pets'];
-  if (pets is Map) return intListOf(pets[key]);
-  if (pets is List && key == 'terrestrial') return intListOf(pets);
+  if (pets is Map) return intList(pets[key]);
+  if (pets is List && key == 'terrestrial') return intList(pets);
   return const [];
 }

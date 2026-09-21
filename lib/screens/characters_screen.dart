@@ -32,12 +32,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(charactersProvider);
-        try {
-          await ref.read(charactersProvider.future);
-        } catch (_) {}
-      },
+      onRefresh: () => refreshProviders(ref, [charactersProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -131,20 +126,13 @@ class _CharacterCard extends ConsumerWidget {
     final color = professionColor(prof);
     final initial = name.isEmpty ? '?' : name.substring(0, 1).toUpperCase();
 
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
+    return AppCard(
+      onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
+    ),
+             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+             radius: 16,
+             child: Row(
             children: [
               Container(
                 width: 50,
@@ -196,8 +184,6 @@ class _CharacterCard extends ConsumerWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
+           );
   }
 }

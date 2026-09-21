@@ -35,21 +35,9 @@ class AccountScreen extends ConsumerWidget {
               ],
             ),
           ),
-          TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            labelColor: AppColors.gold,
-            unselectedLabelColor: AppColors.muted,
-            indicatorColor: AppColors.gold,
-            dividerColor: AppColors.track,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            tabs: [
-              Tab(text: s.t('wallet')),
-              Tab(text: s.t('bank')),
-              Tab(text: s.t('materials')),
-              Tab(text: s.t('armory')),
-              Tab(text: s.t('builds')),
-            ],
+          AppTabBar(
+            scrollable: true,
+            labels: [s.t('wallet'), s.t('bank'), s.t('materials'), s.t('armory'), s.t('builds')],
           ),
           const Expanded(
             child: TabBarView(
@@ -247,40 +235,21 @@ class _MaterialsTab extends ConsumerWidget {
           separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, i) {
             final m = list[i];
-            return Material(
-              color: AppColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: const BorderSide(color: AppColors.line),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () => showItemSheet(
-                  context,
-                  id: m.id,
-                  name: m.name,
-                  icon: m.icon,
-                  rarity: m.rarity,
-                  type: m.type,
-                  count: m.count,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      ItemIcon(url: m.icon, rarity: m.rarity, size: 40),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(m.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                      ),
-                      Text(fmtInt(m.count),
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                    ],
-                  ),
-                ),
+            return ItemRow(
+              icon: m.icon,
+              rarity: m.rarity,
+              title: m.name,
+              titleLines: 1,
+              trailing: Text(fmtInt(m.count),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              onTap: () => showItemSheet(
+                context,
+                id: m.id,
+                name: m.name,
+                icon: m.icon,
+                rarity: m.rarity,
+                type: m.type,
+                count: m.count,
               ),
             );
           },
@@ -312,41 +281,22 @@ class _ArmoryTab extends ConsumerWidget {
           separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, i) {
             final item = list[i];
-            return Material(
-              color: AppColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: const BorderSide(color: AppColors.line),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () => showItemSheet(
-                  context,
-                  id: item.id,
-                  name: item.name,
-                  icon: item.icon,
-                  rarity: item.rarity,
-                  type: item.type,
-                  count: item.count,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      ItemIcon(url: item.icon, rarity: item.rarity, size: 40),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(item.name,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                      ),
-                      if (item.count > 1)
-                        Text('x${item.count}',
-                            style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
-                    ],
-                  ),
-                ),
+            return ItemRow(
+              icon: item.icon,
+              rarity: item.rarity,
+              title: item.name,
+              trailing: item.count > 1
+                  ? Text('x${item.count}',
+                      style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold))
+                  : null,
+              onTap: () => showItemSheet(
+                context,
+                id: item.id,
+                name: item.name,
+                icon: item.icon,
+                rarity: item.rarity,
+                type: item.type,
+                count: item.count,
               ),
             );
           },

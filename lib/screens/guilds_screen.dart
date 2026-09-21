@@ -52,20 +52,13 @@ class _GuildCard extends ConsumerWidget {
     final name = (guild?['name'] as String?) ?? '...';
     final tag = (guild?['tag'] as String?) ?? '';
 
-    return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.line),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
+    return AppCard(
+      onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
+    ),
+             padding: const EdgeInsets.all(16),
+             radius: 16,
+             child: Row(
             children: [
               Expanded(
                 child: Column(
@@ -84,9 +77,7 @@ class _GuildCard extends ConsumerWidget {
               const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
             ],
           ),
-        ),
-      ),
-    );
+           );
   }
 }
 
@@ -108,18 +99,7 @@ class GuildDetailScreen extends ConsumerWidget {
           backgroundColor: AppColors.bg,
           surfaceTintColor: Colors.transparent,
           title: Text(name, style: display(20)),
-          bottom: TabBar(
-            labelColor: AppColors.gold,
-            unselectedLabelColor: AppColors.muted,
-            indicatorColor: AppColors.gold,
-            dividerColor: AppColors.track,
-            labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            tabs: [
-              Tab(text: s.t('treasury')),
-              Tab(text: s.t('stash')),
-              Tab(text: s.t('log')),
-            ],
-          ),
+          bottom: AppTabBar(labels: [s.t('treasury'), s.t('stash'), s.t('log')]),
         ),
         body: TabBarView(
           children: [
@@ -143,7 +123,7 @@ class _TreasuryTab extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final treasury = ref.watch(guildTreasuryProvider(id));
 
-    return PermissionAsyncView<List<TreasuryRow>>(
+    return AsyncView<List<TreasuryRow>>(
       permission: 'guilds',
       value: treasury,
       onRetry: () => ref.invalidate(guildTreasuryProvider(id)),
@@ -211,7 +191,7 @@ class _StashTab extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final stash = ref.watch(guildStashProvider(id));
 
-    return PermissionAsyncView<List<GuildStashSlot>>(
+    return AsyncView<List<GuildStashSlot>>(
       permission: 'guilds',
       value: stash,
       onRetry: () => ref.invalidate(guildStashProvider(id)),
@@ -277,7 +257,7 @@ class _LogTab extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final log = ref.watch(guildLogProvider(id));
 
-    return PermissionAsyncView<List<Json>>(
+    return AsyncView<List<Json>>(
       permission: 'guilds',
       value: log,
       onRetry: () => ref.invalidate(guildLogProvider(id)),

@@ -11,6 +11,7 @@ import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/common.dart';
 
 enum CardStyle { dark, gold, profession }
 
@@ -162,11 +163,7 @@ class _HeroCard extends ConsumerWidget {
           children: [
             Expanded(
               child: Center(
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: CustomPaint(painter: _EmblemPainter(accent)),
-                ),
+                child: DiamondEmblem(size: 120, color: accent),
               ),
             ),
             Text('${c['name'] ?? ''}', textAlign: TextAlign.center, style: display(28, color: fg)),
@@ -193,34 +190,4 @@ class _HeroCard extends ConsumerWidget {
       ),
     );
   }
-}
-
-class _EmblemPainter extends CustomPainter {
-  const _EmblemPainter(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stroke = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    final cx = size.width / 2;
-    final cy = size.height / 2;
-
-    Path diamond(double r) => Path()
-      ..moveTo(cx, cy - r)
-      ..lineTo(cx + r, cy)
-      ..lineTo(cx, cy + r)
-      ..lineTo(cx - r, cy)
-      ..close();
-
-    canvas.drawPath(diamond(size.width / 2 - 2), stroke);
-    canvas.drawPath(diamond(size.width / 2 - 22), stroke);
-    canvas.drawPath(diamond(size.width / 2 - 40), Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(covariant _EmblemPainter oldDelegate) => oldDelegate.color != color;
 }
