@@ -50,7 +50,7 @@ String? buildChatCode(Json build, Json? profession, Map<int, Json> specDetails) 
 
     // two bits per tier: 0 none, 1 top, 2 middle, 3 bottom
     final chosen = ((spec['traits'] as List?) ?? const []).toList();
-    final majors = ((_specMajors(profession, specId)) ?? const <int>[]);
+    final majors = intListOf(specDetails[specId]?['major_traits']);
     var packed = 0;
     for (var tier = 0; tier < 3 && tier < chosen.length; tier++) {
       final traitId = asInt(chosen[tier]);
