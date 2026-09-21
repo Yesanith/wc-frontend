@@ -358,6 +358,9 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
     await cache?.write(name, {'rows': rows});
   }
 
+  // the game string table returns "((208738))" for entries that have no
+  // name yet, usually unreleased content
+  final placeholder = RegExp(r'^\(\(\d+\)\)$');
   final byId = {for (final r in rows) '${r['id']}': r};
 
   // mount types carry no icon, so borrow the one of their default skin
@@ -378,15 +381,18 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
       }
     }
   }
-  return [
-    for (final id in ids)
-      CollectionEntry(
-        id,
-        (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id),
-        byId[id]?['icon'] as String?,
-        unlocked.contains(id),
-      ),
-  ]..sort((a, b) => a.name.compareTo(b.name));
+  final entries = <CollectionEntry>[];
+  for (final id in ids) {
+    var name = (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id);
+    if (name.isEmpty || placeholder.hasMatch(name)) name = '';
+    entries.add(CollectionEntry(id, name, byId[id]?['icon'] as String?, unlocked.contains(id)));
+  }
+  // unnamed entries go last instead of bunching up at the top
+  entries.sort((a, b) {
+    if (a.name.isEmpty != b.name.isEmpty) return a.name.isEmpty ? 1 : -1;
+    return a.name.compareTo(b.name);
+  });
+  return entries;
 });
 
 /// what the missing part of a goal would cost at current sell listings.

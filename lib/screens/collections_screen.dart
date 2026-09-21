@@ -175,7 +175,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              e.name,
+                              e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
