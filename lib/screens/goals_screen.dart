@@ -259,6 +259,10 @@ class GoalDetailScreen extends ConsumerWidget {
               Panel(
                 child: Text(s.t('goal_items_empty'), style: const TextStyle(color: AppColors.muted, height: 1.5)),
               ),
+            if (g.items.isNotEmpty) ...[
+              _ShoppingList(goalId: g.id),
+              const SizedBox(height: 16),
+            ],
             for (final gi in g.items) ...[
               _GoalItemRow(goalId: g.id, gi: gi, item: items[gi.itemId], have: totals[gi.itemId] ?? 0),
               const SizedBox(height: 8),
@@ -474,6 +478,65 @@ class _AddToGoalSheetState extends ConsumerState<_AddToGoalSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+
+/// the missing pieces in the order that costs the least to close first
+class _ShoppingList extends ConsumerWidget {
+  const _ShoppingList({required this.goalId});
+
+  final String goalId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final rows = ref.watch(goalShoppingProvider(goalId)).valueOrNull ?? const <ShoppingRow>[];
+    if (rows.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(title: s.t('buy_first')),
+        const SizedBox(height: 6),
+        Text(s.t('buy_first_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        const SizedBox(height: 10),
+        Panel(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          child: Column(
+            children: [
+              for (final row in rows.take(8))
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      ItemIcon(url: row.item?['icon'] as String?, rarity: row.item?['rarity'] as String?, size: 30),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(row.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                            Text(s.t('still_missing', {'n': fmtInt(row.missing)}),
+                                style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      row.total == 0
+                          ? Text(s.t('not_on_tp'), style: const TextStyle(fontSize: 11, color: AppColors.hint))
+                          : CoinText(row.total, size: 13),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

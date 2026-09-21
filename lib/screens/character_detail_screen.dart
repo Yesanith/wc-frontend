@@ -8,6 +8,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import 'build_detail_screen.dart';
+import 'compare_screen.dart';
 import 'hero_card_screen.dart';
 import 'item_detail_screen.dart';
 
@@ -84,6 +85,14 @@ class CharacterDetailScreen extends ConsumerWidget {
           surfaceTintColor: Colors.transparent,
           title: Text(name, style: display(20)),
           actions: [
+            if (c != null)
+              IconButton(
+                tooltip: s.t('compare'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => CompareScreen(first: name)),
+                ),
+                icon: const Icon(Icons.compare_arrows, color: AppColors.gold),
+              ),
             if (c != null)
               IconButton(
                 tooltip: s.t('hero_card'),

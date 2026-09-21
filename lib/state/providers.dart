@@ -1087,3 +1087,53 @@ final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) asy
   log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
   return log.take(50).toList();
 });
+
+class ShoppingRow {
+  const ShoppingRow(this.itemId, this.item, this.missing, this.unitPrice);
+  final int itemId;
+  final Json? item;
+  final int missing;
+  final int unitPrice;
+
+  int get total => missing * unitPrice;
+  String get name => (item?['name'] as String?) ?? 'Item #$itemId';
+}
+
+/// missing pieces of a goal, cheapest total first, so the next purchase is
+/// obvious. items with no listing end up at the bottom
+final goalShoppingProvider = FutureProvider.family<List<ShoppingRow>, String>((ref, goalId) async {
+  final api = ref.watch(gw2ApiProvider);
+  final goals = ref.watch(goalsProvider);
+  final totalsFuture = ref.watch(accountTotalsProvider.future);
+  Goal? goal;
+  for (final g in goals) {
+    if (g.id == goalId) goal = g;
+  }
+  if (goal == null || goal.items.isEmpty) return const [];
+
+  final totals = await totalsFuture;
+  final missing = <int, int>{};
+  for (final item in goal.items) {
+    final have = totals[item.itemId] ?? 0;
+    if (have < item.need) missing[item.itemId] = item.need - have;
+  }
+  if (missing.isEmpty) return const [];
+
+  final items = await api.items(missing.keys);
+  final prices = await api.prices(missing.keys);
+  final rows = <ShoppingRow>[];
+  for (final e in missing.entries) {
+    final sells = prices[e.key]?['sells'];
+    rows.add(ShoppingRow(
+      e.key,
+      items[e.key],
+      e.value,
+      sells is Map ? asInt(sells['unit_price']) : 0,
+    ));
+  }
+  rows.sort((a, b) {
+    if ((a.total == 0) != (b.total == 0)) return a.total == 0 ? 1 : -1;
+    return a.total.compareTo(b.total);
+  });
+  return rows;
+});
