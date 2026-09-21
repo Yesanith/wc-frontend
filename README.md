@@ -51,10 +51,13 @@ release builds. The CI workflow adds it automatically.
 
 ## Signing
 
-Release builds are signed with `ci/debug.keystore`, a throwaway key checked into the repo so
-that every build has the same signature and APKs install over each other. It is not a
-security boundary. A real upload key belongs in repository secrets if the app ever goes to a
-store.
+Release builds are signed with `ci/release.keystore`, checked into the repo together with its
+password so every build has the same signature and APKs install over each other. It is not a
+security boundary, anyone can build an apk with the same signature. If the app ever goes to a
+store, move the key into repository secrets and rotate it.
+
+`ci/sign.py` rewires the generated gradle project to use that key, because the flutter
+template signs release builds with the public android debug key, which scanners flag.
 
 ## Releases
 

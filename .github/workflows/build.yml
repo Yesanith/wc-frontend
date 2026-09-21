@@ -25,16 +25,14 @@ jobs:
           channel: stable
           cache: true
 
-      # every runner generates its own debug key, which would give every apk a
-      # different signature and break installing over the previous version
-      - name: Use the stable signing key
-        run: |
-          mkdir -p ~/.android
-          cp ci/debug.keystore ~/.android/debug.keystore
-
       # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
         run: flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+
+      # sign with a real release key, the flutter template would use the
+      # public debug key which scanners flag as a test build
+      - name: Use the release signing key
+        run: python3 ci/sign.py
 
       - name: Patch manifest
         run: |
@@ -45,7 +43,13 @@ jobs:
 
       - run: flutter pub get
 
-      - run: flutter build apk --release
+      - name: Build APK
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/ci/release.keystore
+          KEYSTORE_PASSWORD: ***REMOVED***
+          KEY_ALIAS: tyriacodex
+          KEY_PASSWORD: ***REMOVED***
+        run: flutter build apk --release
 
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk
