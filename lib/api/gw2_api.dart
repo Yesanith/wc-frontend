@@ -260,6 +260,16 @@ class Gw2Api {
 
   Future<Map<int, Json>> pets(Iterable<int> ids) => _batch('/pets', ids, _petCache);
 
+  /// weapons, palettes and skill lists of a profession
+  Future<Json> profession(String name) async =>
+      Map<String, dynamic>.from(await get('/professions/$name') as Map);
+
+  /// revenant legends, ids look like "Legend1"
+  Future<List<Json>> legends(List<String> ids) async {
+    if (ids.isEmpty) return const [];
+    return _list(await get('/legends', {'ids': ids.join(',')}));
+  }
+
   /// daily crafts and map chests already collected today, both need the
   /// progression permission
   Future<List<String>> dailyDone(String path) async =>
