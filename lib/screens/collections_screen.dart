@@ -69,7 +69,8 @@ class _CollectionTile extends ConsumerWidget {
               ),
               const SizedBox(height: 4),
               if (progress.hasError)
-                Text(s.t('needs_unlocks_perm'), style: const TextStyle(fontSize: 12, color: AppColors.muted))
+                Text(s.t('needs_permission', {'p': 'unlocks'}),
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted))
               else if (p == null)
                 const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
               else ...[

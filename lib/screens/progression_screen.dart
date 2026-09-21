@@ -79,7 +79,8 @@ class _AchievementsTab extends ConsumerWidget {
           const SizedBox(height: 16),
           SectionHeader(title: s.t('in_progress')),
           const SizedBox(height: 10),
-          AsyncView<List<AchievementRow>>(
+          PermissionAsyncView<List<AchievementRow>>(
+            permission: 'progression',
             value: rows,
             onRetry: () => ref.invalidate(achievementsProvider),
             builder: (list) {
@@ -175,7 +176,8 @@ class _MasteriesTab extends ConsumerWidget {
           ],
           SectionHeader(title: s.t('mastery_tracks')),
           const SizedBox(height: 10),
-          AsyncView<List<MasteryRow>>(
+          PermissionAsyncView<List<MasteryRow>>(
+            permission: 'progression',
             value: rows,
             onRetry: () => ref.invalidate(masteriesProvider),
             builder: (list) {
@@ -254,7 +256,8 @@ class _InstancesTab extends ConsumerWidget {
         children: [
           SectionHeader(title: s.t('raids'), trailing: s.t('weekly')),
           const SizedBox(height: 10),
-          AsyncView<List<RaidWing>>(
+          PermissionAsyncView<List<RaidWing>>(
+            permission: 'progression',
             value: raids,
             onRetry: () => ref.invalidate(raidsProvider),
             builder: (list) => Panel(
@@ -307,7 +310,8 @@ class _InstancesTab extends ConsumerWidget {
           const SizedBox(height: 22),
           SectionHeader(title: s.t('dungeons'), trailing: s.t('daily')),
           const SizedBox(height: 10),
-          AsyncView<List<Dungeon>>(
+          PermissionAsyncView<List<Dungeon>>(
+            permission: 'progression',
             value: dungeons,
             onRetry: () => ref.invalidate(dungeonsProvider),
             builder: (list) => Panel(
@@ -365,7 +369,8 @@ class _PvpTab extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        AsyncView<Json>(
+        PermissionAsyncView<Json>(
+          permission: 'pvp',
           value: stats,
           onRetry: () => ref.invalidate(pvpStatsProvider),
           builder: (data) {

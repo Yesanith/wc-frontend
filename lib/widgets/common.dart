@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../api/gw2_api.dart';
 import '../screens/goals_screen.dart';
 import '../screens/trading_screen.dart';
 import '../state/providers.dart';
@@ -131,6 +132,44 @@ class AsyncView<T> extends StatelessWidget {
         child: Center(child: CircularProgressIndicator()),
       ),
       error: (e, _) => ErrorBox(message: '$e', onRetry: onRetry),
+    );
+  }
+}
+
+/// like AsyncView, but a 401 or 403 means the api key is missing a
+/// permission rather than something being broken
+class PermissionAsyncView<T> extends ConsumerWidget {
+  const PermissionAsyncView({
+    super.key,
+    required this.value,
+    required this.builder,
+    required this.permission,
+    this.onRetry,
+  });
+
+  final AsyncValue<T> value;
+  final Widget Function(T data) builder;
+  final String permission;
+  final VoidCallback? onRetry;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return value.when(
+      data: builder,
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (e, _) {
+        if (e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
+          return Panel(
+            child: Text(s.t('needs_permission', {'p': permission}),
+                style: const TextStyle(color: AppColors.muted, height: 1.5)),
+          );
+        }
+        return ErrorBox(message: '$e', onRetry: onRetry);
+      },
     );
   }
 }

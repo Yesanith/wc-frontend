@@ -284,34 +284,6 @@ class _ItemTile extends StatelessWidget {
   }
 }
 
-/// like AsyncView but shows a hint instead of an error when the key
-/// is missing the tradingpost permission
-class _TpAsync<T> extends ConsumerWidget {
-  const _TpAsync({required this.value, required this.builder, required this.onRetry});
-
-  final AsyncValue<T> value;
-  final Widget Function(T data) builder;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
-    return value.when(
-      data: builder,
-      loading: () => const Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(child: CircularProgressIndicator()),
-      ),
-      error: (e, _) {
-        if (e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
-          return Panel(child: Text(s.t('needs_tp_perm'), style: const TextStyle(color: AppColors.muted, height: 1.5)));
-        }
-        return ErrorBox(message: '$e', onRetry: onRetry);
-      },
-    );
-  }
-}
-
 /// the trading post section of the drawer
 class TradingHubScreen extends ConsumerWidget {
   const TradingHubScreen({super.key});
@@ -503,7 +475,8 @@ class _OverviewTab extends ConsumerWidget {
               children: [
                 Kicker(s.t('delivery').toUpperCase()),
                 const SizedBox(height: 12),
-                _TpAsync<Delivery>(
+                PermissionAsyncView<Delivery>(
+                  permission: 'tradingpost',
                   value: delivery,
                   onRetry: () => ref.invalidate(deliveryProvider),
                   builder: (d) {
@@ -580,7 +553,8 @@ class _TxTab extends ConsumerWidget {
     final a = ref.watch(transactionsProvider(first));
     final b = ref.watch(transactionsProvider(second));
 
-    Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => _TpAsync<List<TxRow>>(
+    Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => PermissionAsyncView<List<TxRow>>(
+          permission: 'tradingpost',
           value: value,
           onRetry: () => ref.invalidate(transactionsProvider(kind)),
           builder: (rows) => rows.isEmpty
@@ -664,7 +638,8 @@ class _StatsTab extends ConsumerWidget {
           await ref.read(tradeStatsProvider.future);
         } catch (_) {}
       },
-      child: _TpAsync<TradeStats>(
+      child: PermissionAsyncView<TradeStats>(
+        permission: 'tradingpost',
         value: stats,
         onRetry: () => ref.invalidate(tradeStatsProvider),
         builder: (data) => ListView(
