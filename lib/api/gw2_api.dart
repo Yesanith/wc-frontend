@@ -156,6 +156,13 @@ class Gw2Api {
   static List<Json> _list(dynamic raw) =>
       (raw as List).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 
+  /// the api accepts at most 200 ids per request
+  static Iterable<List<T>> _chunks<T>(List<T> ids) sync* {
+    for (var i = 0; i < ids.length; i += 200) {
+      yield ids.sublist(i, i + 200 > ids.length ? ids.length : i + 200);
+    }
+  }
+
   Future<Json> tokenInfo() async => Map<String, dynamic>.from(await get('/tokeninfo') as Map);
 
   Future<Json> account() async => Map<String, dynamic>.from(await cachedGet('/account') as Map);
@@ -178,12 +185,10 @@ class Gw2Api {
 
   /// trading post buy/sell listings, keyed by item id. not cached, prices move
   Future<Map<int, Json>> prices(Iterable<int> ids) async {
-    final list = ids.where((id) => id > 0).toSet().toList();
     final out = <int, Json>{};
-    for (var i = 0; i < list.length; i += 200) {
-      final end = (i + 200 > list.length) ? list.length : i + 200;
+    for (final chunk in _chunks(ids.where((id) => id > 0).toSet().toList())) {
       try {
-        final raw = await get('/commerce/prices', {'ids': list.sublist(i, end).join(',')});
+        final raw = await get('/commerce/prices', {'ids': chunk.join(',')});
         for (final e in _list(raw)) {
           out[asInt(e['id'])] = e;
         }
@@ -236,9 +241,8 @@ class Gw2Api {
   /// single bad id would cost 200 names
   Future<List<Json>> details(String path, List<String> ids) async {
     final out = <Json>[];
-    for (var i = 0; i < ids.length; i += 200) {
-      final end = (i + 200 > ids.length) ? ids.length : i + 200;
-      out.addAll(await _detailChunk(path, ids.sublist(i, end)));
+    for (final chunk in _chunks(ids)) {
+      out.addAll(await _detailChunk(path, chunk));
     }
     return out;
   }
@@ -364,9 +368,8 @@ class Gw2Api {
     final ids = (await cachedGet('/account/buildstorage') as List).map((e) => '$e').toList();
     if (ids.isEmpty) return const [];
     final out = <Json>[];
-    for (var i = 0; i < ids.length; i += 200) {
-      final end = (i + 200 > ids.length) ? ids.length : i + 200;
-      out.addAll(_list(await get('/account/buildstorage', {'ids': ids.sublist(i, end).join(',')})));
+    for (final chunk in _chunks(ids)) {
+      out.addAll(_list(await get('/account/buildstorage', {'ids': chunk.join(',')})));
     }
     return out;
   }
@@ -376,9 +379,7 @@ class Gw2Api {
     await _loadCache(name);
     final wanted = ids.where((id) => id > 0).toSet();
     final missing = wanted.where((id) => !store.containsKey(id)).toList();
-    for (var i = 0; i < missing.length; i += 200) {
-      final end = (i + 200 > missing.length) ? missing.length : i + 200;
-      final chunk = missing.sublist(i, end);
+    for (final chunk in _chunks(missing)) {
       try {
         final raw = await get(path, {'ids': chunk.join(',')});
         for (final e in _list(raw)) {

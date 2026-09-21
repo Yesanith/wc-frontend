@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
-import '../state/providers.dart';
+import '../state/account.dart';
+import '../state/goals.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
-import 'trading_screen.dart';
 
 /// share of the goal that's covered by what the account already owns
 double goalProgress(Goal g, Map<int, int> totals) {

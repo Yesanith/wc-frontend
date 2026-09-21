@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../l10n/strings.dart';
-import 'cache.dart';
 import '../state/settings.dart';
+import 'cache.dart';
 
 /// everything the app keeps locally, minus the api key. plain json so it
 /// can be moved between phones or kept as a backup

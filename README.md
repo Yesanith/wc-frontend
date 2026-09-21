@@ -49,7 +49,8 @@ every build is signed with the same key.
 ## Download
 
 Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest).
-Every push to `main` also builds an APK, available under the workflow run's artifacts.
+The `Build APK` workflow can also be run by hand, which leaves an APK under the
+run's artifacts.
 
 Several API keys can be stored and switched from settings, so alt accounts work too.
 
@@ -95,10 +96,18 @@ lib/
   l10n/       UI strings for every language
   screens/    one file per screen
   services/   disk cache, backup import/export and the recipe library
-tools/        scripts run by CI, currently the recipe extractor
-  state/      Riverpod providers and persisted settings
+  state/      Riverpod providers, one file per domain, and persisted settings
   widgets/    shared widgets
+test/         unit tests for the logic that runs without a device
+tools/        scripts run by CI, currently the recipe extractor
 ```
+
+`state/` is split by domain rather than by layer: each file holds the providers
+for one area together with the small result types they return. `state/api.dart`
+holds the api key storage and the clients every other file builds on.
+
+`flutter analyze` and `flutter test` run on every push through the
+`Analyze and test` workflow.
 
 ## Recipe data
 

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../services/backup.dart';
 import '../services/update_check.dart';
-import '../state/providers.dart';
+import '../state/api.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';

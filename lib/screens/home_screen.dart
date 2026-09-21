@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/world_bosses.dart';
+import '../state/account.dart';
 import '../state/navigation.dart';
-import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';

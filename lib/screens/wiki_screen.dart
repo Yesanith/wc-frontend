@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/wiki_api.dart';
-import '../state/providers.dart';
+import '../state/api.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';

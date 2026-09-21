@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../state/account.dart';
 import '../state/navigation.dart';
-import '../state/providers.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
-import 'crafting_screen.dart';
 import 'collections_screen.dart';
+import 'crafting_screen.dart';
 import 'events_screen.dart';
 import 'goals_screen.dart';
 import 'guilds_screen.dart';

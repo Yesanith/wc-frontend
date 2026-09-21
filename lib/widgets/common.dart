@@ -3,10 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../api/gw2_api.dart';
-import '../screens/goals_screen.dart';
-import '../screens/item_detail_screen.dart';
-import '../screens/trading_screen.dart';
-import '../state/providers.dart';
+import '../state/api.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 
@@ -417,106 +414,6 @@ Future<void> openWikiPage(BuildContext context, WidgetRef ref, String title) {
   final wiki = ref.read(wikiApiProvider);
   final s = ref.read(stringsProvider);
   return openUrl(context, wiki.pageUrl(title), failMessage: s.t('open_failed'));
-}
-
-void showItemSheet(
-  BuildContext context, {
-  required int id,
-  required String name,
-  String? icon,
-  String? rarity,
-  String? type,
-  int count = 1,
-}) {
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: AppColors.surface,
-    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-    builder: (sheetContext) => Consumer(
-      // keep the outer context for navigation, the sheet one is gone after pop
-      builder: (_, ref, __) {
-        final s = ref.watch(stringsProvider);
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    ItemIcon(url: icon, rarity: rarity, size: 56),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(name, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-                          const SizedBox(height: 4),
-                          Text(
-                            [if (rarity != null) rarity, if (type != null) type, if (count > 1) 'x$count'].join(' · '),
-                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 18),
-                FilledButton.icon(
-                  onPressed: () {
-                    Navigator.of(sheetContext).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: id)),
-                    );
-                  },
-                  icon: const Icon(Icons.info_outline),
-                  label: Text(s.t('item_details')),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.of(sheetContext).pop();
-                    openWikiPage(context, ref, name);
-                  },
-                  icon: const Icon(Icons.menu_book_outlined),
-                  label: Text(s.t('open_in_wiki')),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(sheetContext).pop();
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: id)),
-                          );
-                        },
-                        icon: const Icon(Icons.storefront_outlined),
-                        label: Text(s.t('trading_post')),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(sheetContext).pop();
-                          showAddToGoalSheet(context, itemId: id, itemName: name);
-                        },
-                        icon: const Icon(Icons.flag_outlined),
-                        label: Text(s.t('add_to_goal')),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    ),
-  );
 }
 
 /// small pill used for chips and filters

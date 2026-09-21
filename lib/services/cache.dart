@@ -60,3 +60,21 @@ class DiskCache {
     return total;
   }
 }
+
+/// a cached json list stored under [field], or the result of [fetch] written
+/// back for next time. [cache] is null before the cache directory is ready,
+/// which just means every call goes to the network
+Future<List<dynamic>> cachedList(
+  DiskCache? cache,
+  String name,
+  String field,
+  Future<List<dynamic>> Function() fetch, {
+  Duration maxAge = const Duration(days: 30),
+}) async {
+  final cached = await cache?.read(name, maxAge: maxAge);
+  final rows = cached?[field];
+  if (rows is List && rows.isNotEmpty) return rows;
+  final fresh = await fetch();
+  await cache?.write(name, {field: fresh});
+  return fresh;
+}

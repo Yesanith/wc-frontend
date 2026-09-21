@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
-import '../state/providers.dart';
+import '../state/characters.dart';
+import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/build_view.dart';
 import '../widgets/common.dart';
-import 'build_detail_screen.dart';
 import 'compare_screen.dart';
 import 'hero_card_screen.dart';
 import 'item_detail_screen.dart';
+import 'item_sheet.dart';
 
 const _slotOrder = [
   'Helm', 'Shoulders', 'Coat', 'Gloves', 'Leggings', 'Boots', //

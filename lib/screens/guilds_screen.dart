@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state/providers.dart';
+import '../state/guilds.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
-import 'trading_screen.dart';
+import 'item_sheet.dart';
 
 class GuildsScreen extends ConsumerWidget {
   const GuildsScreen({super.key});

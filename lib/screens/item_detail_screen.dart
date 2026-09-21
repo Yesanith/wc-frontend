@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state/providers.dart';
+import '../state/account.dart';
+import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import 'goals_screen.dart';
 import 'trading_screen.dart';

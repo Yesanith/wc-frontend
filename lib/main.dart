@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n/strings.dart';
 import 'screens/onboarding_screen.dart';
-import 'services/cache.dart';
 import 'screens/shell.dart';
-import 'state/providers.dart';
+import 'services/cache.dart';
+import 'state/api.dart';
 import 'state/settings.dart';
 import 'theme.dart';
 import 'util.dart';

@@ -1,0 +1,25 @@
+name: Analyze and test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      # lint hints stay advisory, errors and warnings fail the run
+      - run: flutter analyze --no-fatal-infos
+
+      - run: flutter test

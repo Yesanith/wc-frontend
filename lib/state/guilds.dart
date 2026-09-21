@@ -1,0 +1,81 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../util.dart';
+import 'account.dart';
+import 'api.dart';
+
+/// guild ids the account belongs to, plus the ones it leads
+final guildIdsProvider = FutureProvider<List<String>>((ref) async {
+  final account = await ref.watch(accountProvider.future);
+  return [
+    for (final g in (account['guilds'] as List?) ?? const []) '$g',
+  ];
+});
+
+final guildProvider = FutureProvider.family<Json, String>((ref, id) => ref.watch(gw2ApiProvider).guild(id));
+
+class GuildStashSlot {
+  const GuildStashSlot(this.tabName, this.slots, this.coins, this.note);
+  final String tabName;
+  final List<ItemSlot> slots;
+  final int coins;
+  final String note;
+}
+
+final guildStashProvider = FutureProvider.family<List<GuildStashSlot>, String>((ref, id) async {
+  final api = ref.watch(gw2ApiProvider);
+  final tabs = await api.guildStash(id);
+  final ids = <int>{};
+  for (final tab in tabs) {
+    for (final slot in (tab['inventory'] as List?) ?? const []) {
+      if (slot is Map) ids.add(asInt(slot['id']));
+    }
+  }
+  final items = await api.items(ids);
+  return [
+    for (final tab in tabs)
+      GuildStashSlot(
+        '${tab['note'] ?? ''}'.trim().isEmpty ? '#${tab['upgrade_id']}' : '${tab['note']}',
+        [
+          for (final slot in (tab['inventory'] as List?) ?? const [])
+            if (slot is Map)
+              ItemSlot(asInt(slot['id']), asInt(slot['count']), items[asInt(slot['id'])]),
+        ],
+        asInt(tab['coins']),
+        '${tab['note'] ?? ''}',
+      ),
+  ];
+});
+
+class TreasuryRow {
+  const TreasuryRow(this.item, this.count, this.needed);
+  final Json? item;
+  final int count;
+  final int needed;
+
+  String get name => (item?['name'] as String?) ?? '-';
+  double get ratio => needed == 0 ? 1 : count / needed;
+}
+
+/// what the guild has stored against what its upgrades still need
+final guildTreasuryProvider = FutureProvider.family<List<TreasuryRow>, String>((ref, id) async {
+  final api = ref.watch(gw2ApiProvider);
+  final rows = await api.guildTreasury(id);
+  final items = await api.items(rows.map((r) => asInt(r['item_id'])));
+  final out = <TreasuryRow>[];
+  for (final row in rows) {
+    var needed = 0;
+    for (final upgrade in (row['needed_by'] as List?) ?? const []) {
+      if (upgrade is Map) needed += asInt(upgrade['count']);
+    }
+    out.add(TreasuryRow(items[asInt(row['item_id'])], asInt(row['count']), needed));
+  }
+  out.sort((a, b) => a.ratio.compareTo(b.ratio));
+  return out;
+});
+
+final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+  final log = await ref.watch(gw2ApiProvider).guildLog(id);
+  log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
+  return log.take(50).toList();
+});
