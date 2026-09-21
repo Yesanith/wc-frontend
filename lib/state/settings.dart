@@ -75,6 +75,44 @@ class PinnedEventsNotifier extends Notifier<Set<String>> {
 
 final pinnedEventsProvider = NotifierProvider<PinnedEventsNotifier, Set<String>>(PinnedEventsNotifier.new);
 
+class FavoriteCharactersNotifier extends Notifier<Set<String>> {
+  static const _key = 'favorite_characters';
+
+  @override
+  Set<String> build() => (ref.read(prefsProvider).getStringList(_key) ?? const []).toSet();
+
+  Future<void> toggle(String name) async {
+    final next = {...state};
+    if (!next.remove(name)) next.add(name);
+    state = next;
+    await ref.read(prefsProvider).setStringList(_key, next.toList());
+  }
+}
+
+final favoriteCharactersProvider =
+    NotifierProvider<FavoriteCharactersNotifier, Set<String>>(FavoriteCharactersNotifier.new);
+
+/// how the character list is ordered
+enum CharacterSort { lastPlayed, name, level, playtime }
+
+class CharacterSortNotifier extends Notifier<CharacterSort> {
+  static const _key = 'character_sort';
+
+  @override
+  CharacterSort build() {
+    final saved = ref.read(prefsProvider).getString(_key);
+    return CharacterSort.values.firstWhere((e) => e.name == saved, orElse: () => CharacterSort.lastPlayed);
+  }
+
+  Future<void> set(CharacterSort sort) async {
+    state = sort;
+    await ref.read(prefsProvider).setString(_key, sort.name);
+  }
+}
+
+final characterSortProvider =
+    NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);
+
 class GoalItem {
   const GoalItem(this.itemId, this.need);
   final int itemId;

@@ -51,6 +51,10 @@ final accountProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).
 
 final vaultProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).vaultDaily());
 
+/// track is daily, weekly or special
+final vaultTrackProvider =
+    FutureProvider.family<Json, String>((ref, track) => ref.watch(gw2ApiProvider).vault(track));
+
 final charactersProvider = FutureProvider<List<Json>>((ref) async {
   final api = ref.watch(gw2ApiProvider);
   final list = await api.characters();
@@ -923,4 +927,13 @@ final craftPricesProvider = FutureProvider.family<Map<int, int>, int>((ref, root
     for (final e in prices.entries)
       if (e.value['sells'] is Map) e.key: asInt((e.value['sells'] as Map)['unit_price']),
   };
+});
+
+/// gem exchange in both directions. key is "gems:100" or "coins:1000000"
+final exchangeProvider = FutureProvider.family<int, String>((ref, key) async {
+  final api = ref.watch(gw2ApiProvider);
+  final parts = key.split(':');
+  final amount = int.tryParse(parts.last) ?? 0;
+  if (amount <= 0) return 0;
+  return parts.first == 'gems' ? api.coinsForGems(amount) : api.gemsForCoins(amount);
 });

@@ -57,12 +57,47 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
               prefixIcon: const Icon(Icons.search, color: AppColors.muted),
             ),
           ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 38,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (final sort in CharacterSort.values) ...[
+                  ChoiceChip(
+                    label: Text(s.t('sort_${sort.name}')),
+                    selected: ref.watch(characterSortProvider) == sort,
+                    onSelected: (_) => ref.read(characterSortProvider.notifier).set(sort),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ],
+            ),
+          ),
           const SizedBox(height: 14),
           AsyncView<List<Json>>(
             value: chars,
             onRetry: () => ref.invalidate(charactersProvider),
             builder: (list) {
+              final favorites = ref.watch(favoriteCharactersProvider);
+              final sort = ref.watch(characterSortProvider);
               final filtered = list.where(_matches).toList();
+              filtered.sort((a, b) {
+                // favourites always float to the top
+                final favA = favorites.contains('${a['name']}');
+                final favB = favorites.contains('${b['name']}');
+                if (favA != favB) return favA ? -1 : 1;
+                switch (sort) {
+                  case CharacterSort.name:
+                    return '${a['name']}'.compareTo('${b['name']}');
+                  case CharacterSort.level:
+                    return asInt(b['level']).compareTo(asInt(a['level']));
+                  case CharacterSort.playtime:
+                    return asInt(b['age']).compareTo(asInt(a['age']));
+                  case CharacterSort.lastPlayed:
+                    return '${b['last_modified'] ?? ''}'.compareTo('${a['last_modified'] ?? ''}');
+                }
+              });
               if (filtered.isEmpty) {
                 return Padding(
                   padding: const EdgeInsets.all(24),
@@ -148,7 +183,17 @@ class _CharacterCard extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 4),
-              const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+              IconButton(
+                tooltip: s.t('favorite'),
+                onPressed: () => ref.read(favoriteCharactersProvider.notifier).toggle(name),
+                icon: Icon(
+                  ref.watch(favoriteCharactersProvider).contains(name) ? Icons.star : Icons.star_border,
+                  size: 20,
+                  color: ref.watch(favoriteCharactersProvider).contains(name)
+                      ? AppColors.gold
+                      : const Color(0xFF6E6859),
+                ),
+              ),
             ],
           ),
         ),

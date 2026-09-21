@@ -15,7 +15,10 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Daily craft and map chest progress next to the boss timers
 - Collections: mounts, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
   titles, emotes and wardrobe progress, with unlocked/missing filters
-- Account overview with wallet, Wizard's Vault dailies, bank and material storage
+- Account overview with wallet, bank and material storage
+- Wizard's Vault daily, weekly and special objectives
+- Gem calculator in both directions
+- Character list with sorting and favourites
 - Character list and details: equipment templates with runes, sigils and infusions, the full
   build, bags and crafting
 - Item pages with attributes, upgrades, what you own and the current trading post price

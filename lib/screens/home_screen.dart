@@ -16,7 +16,9 @@ class HomeScreen extends ConsumerWidget {
   Future<void> _refresh(WidgetRef ref) async {
     ref.invalidate(accountProvider);
     ref.invalidate(walletProvider);
-    ref.invalidate(vaultProvider);
+    for (final track in ['daily', 'weekly', 'special']) {
+      ref.invalidate(vaultTrackProvider(track));
+    }
     try {
       await ref.read(accountProvider.future);
     } catch (_) {}
@@ -27,8 +29,6 @@ class HomeScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final account = ref.watch(accountProvider);
     final wallet = ref.watch(walletProvider);
-    final vault = ref.watch(vaultProvider);
-    final v = vault.valueOrNull;
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -50,20 +50,60 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 14),
           const _QuickLinks(),
           const SizedBox(height: 24),
-          SectionHeader(
-            title: s.t('vault_daily'),
-            trailing: v == null
-                ? null
-                : '${asInt(v['meta_progress_current'])}/${asInt(v['meta_progress_complete'])}',
-          ),
-          const SizedBox(height: 10),
-          AsyncView<Json>(
-            value: vault,
-            onRetry: () => ref.invalidate(vaultProvider),
-            builder: (data) => _VaultList(data),
-          ),
+          const _VaultSection(),
         ],
       ),
+    );
+  }
+}
+
+/// the vault has three tracks that reset on different schedules
+class _VaultSection extends ConsumerStatefulWidget {
+  const _VaultSection();
+
+  @override
+  ConsumerState<_VaultSection> createState() => _VaultSectionState();
+}
+
+class _VaultSectionState extends ConsumerState<_VaultSection> {
+  static const _tracks = ['daily', 'weekly', 'special'];
+  String _track = 'daily';
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final data = ref.watch(vaultTrackProvider(_track));
+    final v = data.valueOrNull;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SectionHeader(
+          title: s.t('wizards_vault'),
+          trailing: v == null
+              ? null
+              : '${asInt(v['meta_progress_current'])}/${asInt(v['meta_progress_complete'])}',
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (final track in _tracks) ...[
+              ChoiceChip(
+                label: Text(s.t('vault_$track')),
+                selected: _track == track,
+                onSelected: (_) => setState(() => _track = track),
+              ),
+              if (track != _tracks.last) const SizedBox(width: 8),
+            ],
+          ],
+        ),
+        const SizedBox(height: 10),
+        AsyncView<Json>(
+          value: data,
+          onRetry: () => ref.invalidate(vaultTrackProvider(_track)),
+          builder: (json) => _VaultList(json),
+        ),
+      ],
     );
   }
 }
