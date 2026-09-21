@@ -32,6 +32,12 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'item': 'Item',
+    'item_details': 'Details',
+    'attributes': 'Attributes',
+    'upgrades': 'Runes and sigils',
+    'infusions': 'Infusions',
+    'template_n': 'Template {n}',
     'crafting_intro': 'Search an item to see its recipe tree, what you already own and what the rest would cost.',
     'no_recipe': 'This item has no crafting recipe in the api.',
     'quantity': 'Quantity',
@@ -326,6 +332,12 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'item': 'Gegenstand',
+    'item_details': 'Details',
+    'attributes': 'Attribute',
+    'upgrades': 'Runen und Sigille',
+    'infusions': 'Infusionen',
+    'template_n': 'Vorlage {n}',
     'crafting_intro': 'Suche einen Gegenstand, um seinen Rezeptbaum, deinen Bestand und die Restkosten zu sehen.',
     'no_recipe': 'Für diesen Gegenstand gibt es kein Rezept in der api.',
     'quantity': 'Menge',
@@ -620,6 +632,12 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'item': 'Objet',
+    'item_details': 'Détails',
+    'attributes': 'Attributs',
+    'upgrades': 'Runes et cachets',
+    'infusions': 'Infusions',
+    'template_n': 'Modèle {n}',
     'crafting_intro': 'Cherche un objet pour voir son arbre de recette, ce que tu possèdes déjà et le coût du reste.',
     'no_recipe': 'Cet objet n\'a pas de recette dans l\'api.',
     'quantity': 'Quantité',
@@ -914,6 +932,12 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'item': 'Item',
+    'item_details': 'Detaylar',
+    'attributes': 'Statlar',
+    'upgrades': 'Rune ve sigil',
+    'infusions': 'Infusion',
+    'template_n': 'Şablon {n}',
     'crafting_intro': 'Bir item ara: tarif ağacını, elindekileri ve kalanın maliyetini gösterir.',
     'no_recipe': 'Bu item için API’de tarif yok.',
     'quantity': 'Adet',

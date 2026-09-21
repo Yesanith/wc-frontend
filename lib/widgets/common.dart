@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../api/gw2_api.dart';
 import '../screens/goals_screen.dart';
+import '../screens/item_detail_screen.dart';
 import '../screens/trading_screen.dart';
 import '../state/providers.dart';
 import '../state/settings.dart';
@@ -311,6 +312,17 @@ void showItemSheet(
                 ),
                 const SizedBox(height: 18),
                 FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: id)),
+                    );
+                  },
+                  icon: const Icon(Icons.info_outline),
+                  label: Text(s.t('item_details')),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
                   onPressed: () {
                     Navigator.of(sheetContext).pop();
                     openWikiPage(context, ref, name);

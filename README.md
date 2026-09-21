@@ -16,7 +16,9 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Collections: mounts, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
   titles, emotes and wardrobe progress, with unlocked/missing filters
 - Account overview with wallet, Wizard's Vault dailies, bank and material storage
-- Character list and details: equipment, active build, bags and crafting
+- Character list and details: equipment templates with runes, sigils and infusions, the full
+  build, bags and crafting
+- Item pages with attributes, upgrades, what you own and the current trading post price
 - World boss timers in your local time, with pinning and a marker for the ones you already did today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Goals for legendaries or any big craft, tracked against everything your account owns

@@ -9,6 +9,7 @@ import '../util.dart';
 import '../widgets/common.dart';
 import 'build_detail_screen.dart';
 import 'hero_card_screen.dart';
+import 'item_detail_screen.dart';
 
 const _slotOrder = [
   'Helm', 'Shoulders', 'Coat', 'Gloves', 'Leggings', 'Boots', //
@@ -149,20 +150,29 @@ class _Hero extends ConsumerWidget {
   }
 }
 
-class _EquipmentTab extends ConsumerWidget {
+class _EquipmentTab extends ConsumerStatefulWidget {
   const _EquipmentTab(this.c);
 
   final Json c;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_EquipmentTab> createState() => _EquipmentTabState();
+}
+
+class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
+  int? _tab;
+
+  @override
+  Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
+    final c = widget.c;
     final name = '${c['name']}';
     final items = ref.watch(characterItemsProvider(name));
-    final eq = activeEquipment(c)
+    final tabs = equipmentTabs(c);
+    final eq = equipmentForTab(c, _tab)
       ..sort((a, b) => _slotIndex('${a['slot']}').compareTo(_slotIndex('${b['slot']}')));
 
-    if (eq.isEmpty) {
+    if (eq.isEmpty && tabs.isEmpty) {
       return Center(
         child: Text(s.t('no_equipment'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
       );
@@ -171,67 +181,145 @@ class _EquipmentTab extends ConsumerWidget {
     return AsyncView<Map<int, Json>>(
       value: items,
       onRetry: () => ref.invalidate(characterItemsProvider(name)),
-      builder: (map) => ListView.separated(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        itemCount: eq.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
-        itemBuilder: (context, i) {
-          final e = eq[i];
-          final item = map[asInt(e['id'])];
-          final slot = '${e['slot']}';
-          final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': e['id']});
-          final rarity = item?['rarity'] as String?;
-          return Material(
-            color: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-              side: const BorderSide(color: AppColors.line),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: () => showItemSheet(
-                context,
-                id: asInt(e['id']),
-                name: itemName,
-                icon: item?['icon'] as String?,
-                rarity: rarity,
-                type: item?['type'] as String?,
+      builder: (map) => ListView(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+        children: [
+          if (tabs.length > 1) ...[
+            SizedBox(
+              height: 38,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (final tab in tabs) ...[
+                    ChoiceChip(
+                      label: Text('${tab['name'] ?? ''}'.trim().isEmpty
+                          ? s.t('template_n', {'n': asInt(tab['tab'])})
+                          : '${tab['name']}'),
+                      selected: (_tab ?? asInt(c['active_equipment_tab'])) == asInt(tab['tab']),
+                      onSelected: (_) => setState(() => _tab = asInt(tab['tab'])),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
+            ),
+            const SizedBox(height: 12),
+          ],
+          for (final e in eq) ...[
+            _EquipmentRow(entry: e, items: map),
+            const SizedBox(height: 8),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _EquipmentRow extends ConsumerWidget {
+  const _EquipmentRow({required this.entry, required this.items});
+
+  final Json entry;
+  final Map<int, Json> items;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final id = asInt(entry['id']);
+    final item = items[id];
+    final slot = '${entry['slot']}';
+    final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': id});
+    final rarity = item?['rarity'] as String?;
+    final upgrades = intList(entry['upgrades']);
+    final infusions = intList(entry['infusions']);
+    final stats = entry['stats'];
+    final statName = stats is Map && stats['attributes'] is Map
+        ? (stats['attributes'] as Map).keys.take(2).join(', ')
+        : '';
+
+    return Material(
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: AppColors.line),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: id, instance: entry)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 44),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 44),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Text(s.t('slot_$slot').toUpperCase(),
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+                    const SizedBox(height: 2),
+                    Text(itemName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                    if (rarity != null || statName.isNotEmpty)
+                      Text([if (rarity != null) rarity, if (statName.isNotEmpty) statName].join(' · '),
+                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: rarityColor(rarity))),
+                    if (upgrades.isNotEmpty || infusions.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Row(
                         children: [
-                          Text(s.t('slot_$slot').toUpperCase(),
-                              style: const TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.6,
-                                  color: AppColors.muted)),
-                          const SizedBox(height: 2),
-                          Text(itemName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                          if (rarity != null)
-                            Text(rarity,
-                                style: TextStyle(
-                                    fontSize: 11, fontWeight: FontWeight.w700, color: rarityColor(rarity))),
+                          for (final u in upgrades) ...[
+                            _SmallItem(itemId: u),
+                            const SizedBox(width: 4),
+                          ],
+                          for (final i in infusions) ...[
+                            _SmallItem(itemId: i),
+                            const SizedBox(width: 4),
+                          ],
                         ],
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
+    );
+  }
+}
+
+/// rune, sigil or infusion icon with its name next to it
+class _SmallItem extends ConsumerWidget {
+  const _SmallItem({required this.itemId});
+
+  final int itemId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final item = ref.watch(itemProvider(itemId)).valueOrNull;
+    final name = (item?['name'] as String?) ?? '';
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 20),
+        if (name.isNotEmpty) ...[
+          const SizedBox(width: 4),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 110),
+            child: Text(name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10, color: AppColors.muted)),
+          ),
+        ],
+      ],
     );
   }
 }

@@ -65,6 +65,24 @@ Json? characterByName(List<Json> chars, String name) {
   return null;
 }
 
+/// stored equipment templates of a character
+List<Json> equipmentTabs(Json c) => [
+      for (final t in (c['equipment_tabs'] as List?) ?? const [])
+        if (t is Map) Map<String, dynamic>.from(t),
+    ];
+
+/// equipment of one template, or of the active one when [tab] is null
+List<Json> equipmentForTab(Json c, int? tab) {
+  final eq = (c['equipment'] as List?) ?? const [];
+  final wanted = tab ?? c['active_equipment_tab'];
+  return [
+    for (final e in eq)
+      if (e is Map &&
+          (wanted == null || e['tabs'] is! List || (e['tabs'] as List).contains(wanted)))
+        Map<String, dynamic>.from(e),
+  ];
+}
+
 List<Json> activeEquipment(Json c) {
   final eq = (c['equipment'] as List?) ?? const [];
   final active = c['active_equipment_tab'];
