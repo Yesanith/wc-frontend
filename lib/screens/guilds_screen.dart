@@ -126,6 +126,7 @@ class _TreasuryTab extends ConsumerWidget {
 
     return AsyncView<List<TreasuryRow>>(
       permission: 'guilds',
+      restricted: s.t('guild_rank_needed'),
       value: treasury,
       onRetry: () => ref.invalidate(guildTreasuryProvider(id)),
       builder: (rows) {
@@ -194,6 +195,7 @@ class _StashTab extends ConsumerWidget {
 
     return AsyncView<List<GuildStashSlot>>(
       permission: 'guilds',
+      restricted: s.t('guild_rank_needed'),
       value: stash,
       onRetry: () => ref.invalidate(guildStashProvider(id)),
       builder: (tabs) {
@@ -260,6 +262,7 @@ class _LogTab extends ConsumerWidget {
 
     return AsyncView<List<Json>>(
       permission: 'guilds',
+      restricted: s.t('guild_rank_needed'),
       value: log,
       onRetry: () => ref.invalidate(guildLogProvider(id)),
       builder: (entries) {

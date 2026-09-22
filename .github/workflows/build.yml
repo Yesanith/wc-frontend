@@ -5,6 +5,14 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      version:
+        description: Version to build, for example 0.21.0
+        required: true
+      release:
+        description: Also publish it as a GitHub release
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -24,6 +32,23 @@ jobs:
         with:
           channel: stable
           cache: true
+
+      # a tag carries the version, a manual run is asked for one. the input
+      # travels through the environment rather than being pasted into the
+      # script, so a stray character cannot run as shell
+      - name: Work out the version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          VERSION="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+          VERSION="${VERSION#v}"
+          case "$VERSION" in
+            [0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "::error::'$VERSION' is not a version like 1.2.3"; exit 1 ;;
+          esac
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "building $VERSION ($GITHUB_RUN_NUMBER)"
 
       # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
@@ -45,18 +70,12 @@ jobs:
 
       - name: Build APK
         env:
+          VERSION: ${{ steps.version.outputs.value }}
           KEYSTORE_PATH: ${{ github.workspace }}/ci/release.keystore
           KEYSTORE_PASSWORD: ***REMOVED***
           KEY_ALIAS: tyriacodex
           KEY_PASSWORD: ***REMOVED***
         run: |
-          # tags carry the version, manual runs fall back to 0.0.0
-          VERSION="${GITHUB_REF_NAME#v}"
-          case "$VERSION" in
-            [0-9]*) ;;
-            *) VERSION="0.0.0" ;;
-          esac
-          echo "building $VERSION ($GITHUB_RUN_NUMBER)"
           flutter build apk --release \
             --build-name="$VERSION" \
             --build-number="$GITHUB_RUN_NUMBER" \
@@ -70,10 +89,14 @@ jobs:
           name: tyria-codex-apk
           path: tyria-codex.apk
 
+      # a tag push always publishes, a manual run only when the box was ticked.
+      # the release creates the tag itself, and because this runs with the
+      # workflow's own token it does not trigger a second build
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.version.outputs.value }}
           files: tyria-codex.apk
           generate_release_notes: true
           make_latest: true

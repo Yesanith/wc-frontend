@@ -49,8 +49,8 @@ every build is signed with the same key.
 ## Download
 
 Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest).
-The `Build APK` workflow can also be run by hand, which leaves an APK under the
-run's artifacts.
+The `Build APK` workflow can also be run by hand for a test build, which leaves an APK under
+the run's artifacts.
 
 Several API keys can be stored and switched from settings, so alt accounts work too.
 
@@ -84,8 +84,16 @@ template signs release builds with the public android debug key, which scanners 
 
 ## Releases
 
-Push a tag starting with `v` (for example `v0.2.0`) and the workflow attaches the APK to a
-GitHub release.
+Two ways to cut a build:
+
+- Push a tag starting with `v` (for example `v0.21.0`). The workflow builds that version and
+  attaches the APK to a GitHub release.
+- Run `Build APK` by hand from the Actions tab. It asks for the version and for whether to
+  publish it. Left unticked you get an APK under the run's artifacts; ticked, the workflow
+  creates the `v` tag and the release itself.
+
+Either way the version comes from the tag or the prompt, never from `pubspec.yaml`, so the
+version there is not worth keeping in step.
 
 ## Project layout
 

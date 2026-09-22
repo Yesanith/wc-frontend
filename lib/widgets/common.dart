@@ -286,7 +286,9 @@ class ErrorBox extends ConsumerWidget {
 }
 
 /// loading, error and data in one place. when [permission] is set, a 401 or
-/// 403 is reported as a missing api key permission instead of an error
+/// 403 is reported as a missing api key permission instead of an error, but
+/// only when the key really is missing it. [restricted] is shown instead when
+/// the key has the permission and the server still refused
 class AsyncView<T> extends ConsumerWidget {
   const AsyncView({
     super.key,
@@ -294,12 +296,17 @@ class AsyncView<T> extends ConsumerWidget {
     required this.builder,
     this.onRetry,
     this.permission,
+    this.restricted,
   });
 
   final AsyncValue<T> value;
   final Widget Function(T data) builder;
   final VoidCallback? onRetry;
   final String? permission;
+
+  /// why the account itself may not read this, for endpoints the api limits
+  /// beyond the key's permissions
+  final String? restricted;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -313,10 +320,16 @@ class AsyncView<T> extends ConsumerWidget {
       error: (e, _) {
         final needed = permission;
         if (needed != null && e is Gw2ApiException && (e.status == 401 || e.status == 403)) {
-          return Panel(
-            child: Text(s.t('needs_permission', {'p': needed}),
-                style: const TextStyle(color: AppColors.muted, height: 1.5)),
-          );
+          // the api also answers 403 when the key is fine but the account is
+          // not allowed to read this, so check the key before blaming it
+          final granted = ref.watch(tokenInfoProvider).valueOrNull?['permissions'];
+          final hasPermission = granted is List && granted.map((p) => '$p').contains(needed);
+          final note = hasPermission ? restricted : s.t('needs_permission', {'p': needed});
+          if (note != null) {
+            return Panel(
+              child: Text(note, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+            );
+          }
         }
         return ErrorBox(message: '$e', onRetry: onRetry);
       },
