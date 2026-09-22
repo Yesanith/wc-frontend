@@ -963,7 +963,7 @@ const _strings = <String, Map<String, String>>{
     'world_bosses': 'Événements du monde',
     'sync_now': 'Synchroniser',
     'syncing': 'Synchronisation',
-    'sync_note': 'Ton compte est téléchargé une fois au lancement et gardé sur l'appareil, pour que les sections s'ouvrent sans attente. Resynchronise après avoir joué.',
+    'sync_note': 'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
     'local_time_note': 'Heures affichées à l\'heure locale.',
     'pinned': 'Épinglés',
     'pin': 'Épingler',
