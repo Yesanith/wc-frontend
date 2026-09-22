@@ -1,15 +1,44 @@
 /// world boss rotation in utc, minutes after midnight.
 /// taken from the wiki's event timer tables, double check there if something
 /// looks off after a patch
+/// which release a boss or meta belongs to. the names are proper nouns, so
+/// they read the same in every language the app supports
+enum Expansion {
+  core('Core Tyria'),
+  hot('Heart of Thorns'),
+  pof('Path of Fire'),
+  ibs('Icebrood Saga'),
+  eod('End of Dragons'),
+  soto('Secrets of the Obscure'),
+  jw('Janthir Wilds');
+
+  const Expansion(this.label);
+
+  final String label;
+}
+
 class WorldBoss {
-  const WorldBoss(this.id, this.name, this.map, this.times, {this.hardcore = false});
+  const WorldBoss(
+    this.id,
+    this.name,
+    this.map,
+    this.times, {
+    this.hardcore = false,
+    this.expansion = Expansion.core,
+  });
 
   final String id;
   final String name;
   final String map;
   final List<int> times;
   final bool hardcore;
+  final Expansion expansion;
 }
+
+/// the releases that actually have an entry, so the filter never shows a
+/// chip that would come back empty
+List<Expansion> get expansionsWithBosses =>
+    [for (final e in Expansion.values) if (worldBosses.any((b) => b.expansion == e)) e];
 
 List<int> _every(int start, int period) => [for (var m = start; m < 1440; m += period) m];
 
@@ -35,6 +64,13 @@ final worldBosses = <WorldBoss>[
   WorldBoss('karka_queen', 'Karka Queen', 'Southsun Cove',
       [_t(2, 0), _t(6, 0), _t(10, 30), _t(15, 0), _t(18, 0), _t(23, 0)],
       hardcore: true),
+  // the anomaly moves between three maps, every six hours on each
+  WorldBoss('ley_line_timberline', 'Ley-Line Anomaly', 'Timberline Falls', _every(_t(0, 20), 360)),
+  WorldBoss('ley_line_iron', 'Ley-Line Anomaly', 'Iron Marches', _every(_t(2, 20), 360)),
+  WorldBoss('ley_line_gendarran', 'Ley-Line Anomaly', 'Gendarran Fields', _every(_t(4, 20), 360)),
+
+  // expansion metas go here, grouped by release, for example:
+  //   WorldBoss('octovine', 'Octovine', 'Auric Basin', [...], expansion: Expansion.hot),
 ];
 
 /// roughly how long a boss is worth running to after it spawns

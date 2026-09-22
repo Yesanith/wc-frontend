@@ -38,6 +38,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
   Timer? _tick;
   bool _pinnedOnly = false;
 
+  /// null means every release
+  Expansion? _expansion;
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +64,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final now = DateTime.now().toUtc();
     var spawns = upcomingSpawns(now, ahead: const Duration(hours: 6));
     if (_pinnedOnly) spawns = spawns.where((e) => pinned.contains(e.boss.id)).toList();
+    final release = _expansion;
+    if (release != null) spawns = spawns.where((e) => e.boss.expansion == release).toList();
 
     BossSpawn? featured;
     for (final e in spawns) {
@@ -93,6 +98,31 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
               ),
             ],
           ),
+          // only shown once there is more than one release to choose between
+          if (expansionsWithBosses.length > 1) ...[
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 36,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ChoiceChip(
+                    label: Text(s.t('all')),
+                    selected: _expansion == null,
+                    onSelected: (_) => setState(() => _expansion = null),
+                  ),
+                  for (final e in expansionsWithBosses) ...[
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: Text(e.label),
+                      selected: _expansion == e,
+                      onSelected: (_) => setState(() => _expansion = e),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 14),
           if (top == null)
             Panel(child: Text(s.t('nothing_pinned'), style: const TextStyle(color: AppColors.muted)))
