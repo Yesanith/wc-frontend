@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/sync.dart';
 import '../state/account.dart';
+import '../state/api.dart';
 import '../state/navigation.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -86,9 +88,26 @@ class _AppShellState extends ConsumerState<AppShell> {
   final _opened = <AppSection>{AppSection.home};
 
   @override
+  void initState() {
+    super.initState();
+    // pull the whole account to disk once on launch, so opening a section
+    // reads from the cache instead of waiting on the api
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(syncProvider.notifier).run();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
+    final sync = ref.watch(syncProvider);
+    // a different account has its own cache, so fill it too
+    ref.listen(apiKeyProvider, (previous, next) {
+      if (previous?.valueOrNull != next.valueOrNull) {
+        ref.read(syncProvider.notifier).run();
+      }
+    });
     final accountName = ref.watch(accountProvider).valueOrNull?['name'] as String?;
     _opened.add(section);
 
@@ -98,6 +117,17 @@ class _AppShellState extends ConsumerState<AppShell> {
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(s.t(_titleKeys[section]!), style: display(20)),
+        bottom: !sync.running
+            ? null
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(2),
+                child: LinearProgressIndicator(
+                  value: sync.ratio,
+                  minHeight: 2,
+                  backgroundColor: AppColors.track,
+                  color: AppColors.gold,
+                ),
+              ),
       ),
       drawer: NavigationDrawer(
         backgroundColor: AppColors.navBg,

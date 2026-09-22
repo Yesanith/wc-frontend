@@ -91,20 +91,38 @@ class Gw2Api {
     _dirty.clear();
   }
 
-  /// account data with a short lived disk copy. the cached value is used
-  /// while it is fresh and also as a fallback when the request fails, so the
-  /// app still shows something without a connection
+  /// short stable id for the active key, so two accounts never read each
+  /// other's cached data. only the hash is written to disk, never the key
+  late final String _account = _fingerprint(apiKey ?? '');
+
+  static String _fingerprint(String value) {
+    if (value.isEmpty) return 'anon';
+    // fnv-1a, deterministic across runs unlike String.hashCode
+    var hash = 0x811c9dc5;
+    for (final unit in utf8.encode(value)) {
+      hash = ((hash ^ unit) * 0x01000193) & 0xFFFFFFFF;
+    }
+    return hash.toRadixString(16).padLeft(8, '0');
+  }
+
+  /// account data with a disk copy. the cached value is used while it is
+  /// fresh and also as a fallback when the request fails, so the app still
+  /// shows something without a connection. [force] skips the fresh read and
+  /// goes to the network, which is what a sync or a pull to refresh wants
   Future<dynamic> cachedGet(
     String path, {
     Map<String, String>? query,
-    Duration ttl = const Duration(minutes: 3),
+    Duration ttl = const Duration(minutes: 30),
+    bool force = false,
   }) async {
     final store = cache;
     if (store == null) return get(path, query);
     final suffix = query == null ? '' : '_${query.values.join('_')}';
-    final name = 'acct_${path.replaceAll('/', '_')}${suffix}_$lang';
-    final fresh = await store.read(name, maxAge: ttl);
-    if (fresh != null && fresh.containsKey('value')) return fresh['value'];
+    final name = 'acct_${_account}_${path.replaceAll('/', '_')}${suffix}_$lang';
+    if (!force) {
+      final fresh = await store.read(name, maxAge: ttl);
+      if (fresh != null && fresh.containsKey('value')) return fresh['value'];
+    }
     try {
       final value = await get(path, query);
       await store.write(name, {'value': value});

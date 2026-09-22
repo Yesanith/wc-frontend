@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../services/backup.dart';
+import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
 import '../state/settings.dart';
@@ -94,6 +95,8 @@ class SettingsScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         const _AccountsPanel(),
         const SizedBox(height: 16),
+        const _SyncPanel(),
+        const SizedBox(height: 16),
         Panel(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,6 +159,59 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
+
+/// launch sync status, with a way to pull the account down again
+class _SyncPanel extends ConsumerWidget {
+  const _SyncPanel();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final sync = ref.watch(syncProvider);
+    final at = sync.finishedAt;
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('sync_now').toUpperCase()),
+          const SizedBox(height: 8),
+          Text(s.t('sync_note'), style: const TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+          if (sync.running) ...[
+            const SizedBox(height: 12),
+            Bar(value: sync.ratio),
+            const SizedBox(height: 6),
+            Text('${s.t('syncing')} ${sync.done}/${sync.total}',
+                style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          ] else if (at != null) ...[
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Text('${_two(at.hour)}:${_two(at.minute)}',
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                if (sync.failed > 0) ...[
+                  const SizedBox(width: 8),
+                  const Icon(Icons.error_outline, size: 14, color: AppColors.red),
+                  const SizedBox(width: 4),
+                  Text('${sync.failed}',
+                      style: const TextStyle(fontSize: 12, color: AppColors.red)),
+                ],
+              ],
+            ),
+          ],
+          const SizedBox(height: 10),
+          OutlinedButton.icon(
+            onPressed: sync.running ? null : () => ref.read(syncProvider.notifier).run(),
+            icon: const Icon(Icons.sync, size: 18),
+            label: Text(s.t('sync_now')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _two(int n) => n.toString().padLeft(2, '0');
 
 /// shows the installed version and offers the apk of a newer release
 class _UpdatePanel extends ConsumerWidget {
