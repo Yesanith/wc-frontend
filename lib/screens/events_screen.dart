@@ -61,7 +61,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _visible = TickerMode.of(context);
+    _visible = TickerMode.valuesOf(context).enabled;
     final s = ref.watch(stringsProvider);
     final pinned = ref.watch(pinnedEventsProvider);
     final done = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
