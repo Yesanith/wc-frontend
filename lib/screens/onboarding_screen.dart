@@ -62,6 +62,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         accountName = '${account['name'] ?? accountName}';
       } catch (_) {}
       await ref.read(keysProvider.notifier).add(key, accountName);
+      // opened from settings as a route: go back once the key is saved
+      if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
     } catch (e) {
       if (mounted) setState(() => _error = s.t('err_key_invalid', {'e': e}));
     } finally {

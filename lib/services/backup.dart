@@ -26,7 +26,7 @@ Future<void> shareBackup(WidgetRef ref) async {
   final dir = await getTemporaryDirectory();
   final file = File('${dir.path}/tyria-codex-backup.json');
   await file.writeAsString(const JsonEncoder.withIndent('  ').convert(buildBackup(ref)));
-  await Share.shareXFiles([XFile(file.path)], text: 'Tyria Codex backup');
+  await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: 'Tyria Codex backup'));
 }
 
 /// throws when the text is not a backup we understand

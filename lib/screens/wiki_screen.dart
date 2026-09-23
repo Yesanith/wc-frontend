@@ -138,7 +138,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
                   for (final r in _results)
                     ListTile(
                       title: Text(r.title, style: const TextStyle(fontWeight: FontWeight.w700)),
-                      trailing: const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                      trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
                       onTap: () => _open(r.title),
                     ),
                 ],

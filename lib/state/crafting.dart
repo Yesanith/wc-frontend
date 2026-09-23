@@ -56,8 +56,12 @@ final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) as
   final api = ref.watch(gw2ApiProvider);
 
   Future<CraftNode> expand(int itemId, int perRun, Set<int> seen, int depth) async {
-    final items = await api.items([itemId]);
-    final item = items[itemId];
+    // item details and the recipe lookup do not depend on each other
+    final lookups = await Future.wait([
+      api.items([itemId]),
+      depth >= 6 || seen.contains(itemId) ? Future.value(const <int>[]) : api.recipesForOutput(itemId),
+    ]);
+    final item = (lookups[0] as Map<int, Json>)[itemId];
     CraftNode leaf() => CraftNode(
           itemId: itemId,
           item: item,
@@ -66,22 +70,25 @@ final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) as
           children: const [],
           disciplines: const [],
         );
-    if (depth >= 6 || seen.contains(itemId)) return leaf();
-
-    final recipeIds = await api.recipesForOutput(itemId);
+    final recipeIds = lookups[1] as List<int>;
     if (recipeIds.isEmpty) return leaf();
     final recipes = await api.recipes(recipeIds);
     final recipe = recipes[recipeIds.first];
     if (recipe == null) return leaf();
 
     final output = asInt(recipe['output_item_count']);
-    final children = <CraftNode>[];
-    for (final ingredient in (recipe['ingredients'] as List?) ?? const []) {
-      if (ingredient is! Map) continue;
-      final id = asInt(ingredient['item_id'] ?? ingredient['id']);
-      if (id <= 0) continue;
-      children.add(await expand(id, asInt(ingredient['count']), {...seen, itemId}, depth + 1));
-    }
+    // ingredients are independent branches, expand them side by side instead
+    // of one round trip after another
+    final children = await Future.wait([
+      for (final ingredient in (recipe['ingredients'] as List?) ?? const [])
+        if (ingredient is Map && asInt(ingredient['item_id'] ?? ingredient['id']) > 0)
+          expand(
+            asInt(ingredient['item_id'] ?? ingredient['id']),
+            asInt(ingredient['count']),
+            {...seen, itemId},
+            depth + 1,
+          ),
+    ]);
     return CraftNode(
       itemId: itemId,
       item: item,

@@ -6,7 +6,7 @@ import 'api.dart';
 import 'settings.dart';
 
 final goalItemsProvider = FutureProvider<Map<int, Json>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final goals = ref.watch(goalsProvider);
   final ids = {for (final g in goals) for (final i in g.items) i.itemId};
   if (ids.isEmpty) return const {};
@@ -30,20 +30,10 @@ Map<int, int> missingForGoal(List<Goal> goals, String goalId, Map<int, int> owne
 }
 
 /// what the missing part of a goal would cost at current sell listings
+/// the cost is just the shopping list added up, no second round of lookups
 final goalCostProvider = FutureProvider.family<int, String>((ref, goalId) async {
-  final api = ref.watch(gw2ApiProvider);
-  final goals = ref.watch(goalsProvider);
-  final totals = await ref.watch(accountTotalsProvider.future);
-  final missing = missingForGoal(goals, goalId, totals);
-  if (missing.isEmpty) return 0;
-
-  final prices = await api.prices(missing.keys);
-  var total = 0;
-  for (final e in missing.entries) {
-    final sells = prices[e.key]?['sells'];
-    if (sells is Map) total += asInt(sells['unit_price']) * e.value;
-  }
-  return total;
+  final rows = await ref.watch(goalShoppingProvider(goalId).future);
+  return rows.fold<int>(0, (sum, row) => sum + row.total);
 });
 
 class ShoppingRow {
@@ -60,7 +50,7 @@ class ShoppingRow {
 /// missing pieces of a goal, cheapest total first, so the next purchase is
 /// obvious. items with no listing end up at the bottom
 final goalShoppingProvider = FutureProvider.family<List<ShoppingRow>, String>((ref, goalId) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final goals = ref.watch(goalsProvider);
   final totals = await ref.watch(accountTotalsProvider.future);
   final missing = missingForGoal(goals, goalId, totals);

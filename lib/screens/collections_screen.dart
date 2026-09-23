@@ -57,7 +57,7 @@ class _CollectionTile extends ConsumerWidget {
                   if (p != null)
                     Text('${(p.ratio * 100).round()}%',
                         style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
-                  if (kind.hasDetails) const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                  if (kind.hasDetails) const Icon(Icons.chevron_right, color: AppColors.chevron),
                 ],
               ),
               const SizedBox(height: 4),

@@ -42,7 +42,7 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/hero_card_${DateTime.now().millisecondsSinceEpoch}.png');
       await file.writeAsBytes(bytes.buffer.asUint8List());
-      await Share.shareXFiles([XFile(file.path)], text: '${widget.name} · Tyria Codex');
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Tyria Codex'));
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('share_failed'))));

@@ -102,6 +102,7 @@ class _AppShellState extends ConsumerState<AppShell> {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
     final sync = ref.watch(syncProvider);
+    final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
     ref.listen(apiKeyProvider, (previous, next) {
       if (previous?.valueOrNull != next.valueOrNull) {
@@ -117,12 +118,14 @@ class _AppShellState extends ConsumerState<AppShell> {
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(s.t(_titleKeys[section]!), style: display(20)),
-        bottom: !sync.running
+        // a full sync shows real progress, a background refresh only says
+        // that something is updating
+        bottom: !sync.running && refreshing == 0
             ? null
             : PreferredSize(
                 preferredSize: const Size.fromHeight(2),
                 child: LinearProgressIndicator(
-                  value: sync.ratio,
+                  value: sync.running ? sync.ratio : null,
                   minHeight: 2,
                   backgroundColor: AppColors.track,
                   color: AppColors.gold,
@@ -166,7 +169,12 @@ class _AppShellState extends ConsumerState<AppShell> {
       body: IndexedStack(
         index: section.index,
         children: [
-          for (final sec in AppSection.values) _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
+          for (final sec in AppSection.values)
+            // hidden sections keep their state but stop their tickers and timers
+            TickerMode(
+              enabled: sec == section,
+              child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
+            ),
         ],
       ),
     );

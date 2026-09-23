@@ -12,7 +12,7 @@ final guildIdsProvider = FutureProvider<List<String>>((ref) async {
   ];
 });
 
-final guildProvider = FutureProvider.family<Json, String>((ref, id) => ref.watch(gw2ApiProvider).guild(id));
+final guildProvider = FutureProvider.family<Json, String>((ref, id) => accountApi(ref).guild(id));
 
 class GuildStashSlot {
   const GuildStashSlot(this.tabName, this.slots, this.coins, this.note);
@@ -23,7 +23,7 @@ class GuildStashSlot {
 }
 
 final guildStashProvider = FutureProvider.family<List<GuildStashSlot>, String>((ref, id) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final tabs = await api.guildStash(id);
   final ids = <int>{};
   for (final tab in tabs) {
@@ -59,7 +59,7 @@ class TreasuryRow {
 
 /// what the guild has stored against what its upgrades still need
 final guildTreasuryProvider = FutureProvider.family<List<TreasuryRow>, String>((ref, id) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final rows = await api.guildTreasury(id);
   final items = await api.items(rows.map((r) => asInt(r['item_id'])));
   final out = <TreasuryRow>[];
@@ -75,7 +75,7 @@ final guildTreasuryProvider = FutureProvider.family<List<TreasuryRow>, String>((
 });
 
 final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
-  final log = await ref.watch(gw2ApiProvider).guildLog(id);
+  final log = await accountApi(ref).guildLog(id);
   log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
   return log.take(50).toList();
 });

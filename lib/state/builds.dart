@@ -49,7 +49,7 @@ List<int> skillIdsOf(Json? set) {
 }
 
 final buildDetailProvider = FutureProvider.family<BuildDetail, String>((ref, encoded) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final build = Map<String, dynamic>.from(jsonDecode(encoded) as Map);
 
   final specIds = <int>[];
@@ -118,16 +118,16 @@ final buildDetailProvider = FutureProvider.family<BuildDetail, String>((ref, enc
 });
 
 final skillProvider = FutureProvider.family<Json?, int>((ref, id) async {
-  final skills = await ref.watch(gw2ApiProvider).skills([id]);
+  final skills = await accountApi(ref).skills([id]);
   return skills[id];
 });
 
 final buildStorageProvider = FutureProvider<List<Json>>((ref) async {
-  return ref.watch(gw2ApiProvider).buildStorage();
+  return accountApi(ref).buildStorage();
 });
 
 final armoryProvider = FutureProvider<List<ItemSlot>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final rows = await api.legendaryArmory();
   final items = await api.items(rows.map((r) => asInt(r['id'])));
   final out = [

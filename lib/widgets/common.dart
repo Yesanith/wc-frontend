@@ -31,6 +31,8 @@ class Panel extends StatelessWidget {
 /// pull to refresh helper: drop the cached values and keep the spinner
 /// visible long enough to feel deliberate
 Future<void> refreshProviders(WidgetRef ref, List<ProviderOrFamily> providers) async {
+  // without this the cached copy would come straight back
+  ref.read(gw2ApiProvider).forceNetwork();
   for (final provider in providers) {
     ref.invalidate(provider);
   }

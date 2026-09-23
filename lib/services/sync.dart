@@ -129,6 +129,7 @@ class SyncNotifier extends Notifier<SyncState> {
       failed: failed,
       finishedAt: DateTime.now(),
     );
+    ref.read(accountRevisionProvider.notifier).state++;
   }
 
   Future<List<String>> _guildIds(Gw2Api api) async {

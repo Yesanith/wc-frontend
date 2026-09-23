@@ -179,7 +179,7 @@ class _CharacterCard extends ConsumerWidget {
                   size: 20,
                   color: ref.watch(favoriteCharactersProvider).contains(name)
                       ? AppColors.gold
-                      : const Color(0xFF6E6859),
+                      : const AppColors.chevron,
                 ),
               ),
             ],

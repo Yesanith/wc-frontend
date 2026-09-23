@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,13 +28,21 @@ class _CraftingScreenState extends ConsumerState<CraftingScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _ctrl.dispose();
     super.dispose();
   }
 
+  Timer? _debounce;
+
+  // typing fast should not scan the whole index on every key
   void _search(String q) {
-    final index = ref.read(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
-    setState(() => _results = index.search(q));
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      if (!mounted) return;
+      final index = ref.read(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
+      setState(() => _results = index.search(q));
+    });
   }
 
   @override
@@ -70,7 +80,7 @@ class _CraftingScreenState extends ConsumerState<CraftingScreen> {
               clipBehavior: Clip.antiAlias,
               child: ListTile(
                 title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                trailing: const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: item.id)),
                 ),

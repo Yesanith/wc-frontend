@@ -4,7 +4,7 @@ import '../util.dart';
 import 'api.dart';
 
 final charactersProvider = FutureProvider<List<Json>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final list = await api.characters();
   list.sort((a, b) => '${b['last_modified'] ?? ''}'.compareTo('${a['last_modified'] ?? ''}'));
   return list;
@@ -58,7 +58,7 @@ Json? activeBuild(Json c) {
 }
 
 final characterItemsProvider = FutureProvider.family<Map<int, Json>, String>((ref, name) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final chars = await ref.watch(charactersProvider.future);
   final c = characterByName(chars, name);
   if (c == null) return <int, Json>{};

@@ -75,7 +75,7 @@ class _GuildCard extends ConsumerWidget {
                 Text('${asInt(guild?['level'])}',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
               const SizedBox(width: 6),
-              const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+              const Icon(Icons.chevron_right, color: AppColors.chevron),
             ],
           ),
            );

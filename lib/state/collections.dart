@@ -16,7 +16,7 @@ class CollectionProgress {
 
 /// all ids of a static collection endpoint, kept on disk for a month
 final collectionIdsProvider = FutureProvider.family<List<String>, String>((ref, key) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final kind = collectionKinds.firstWhere((k) => k.key == key);
   final rows = await cachedList(
@@ -29,7 +29,7 @@ final collectionIdsProvider = FutureProvider.family<List<String>, String>((ref, 
 });
 
 final collectionUnlockedProvider = FutureProvider.family<Set<String>, String>((ref, key) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final kind = collectionKinds.firstWhere((k) => k.key == key);
   return (await api.unlockedIds(kind.accountPath)).toSet();
 });
@@ -53,7 +53,7 @@ class CollectionEntry {
 /// every entry of a collection with its unlock state. details are cached
 /// on disk because they only change with a patch
 final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, String>((ref, key) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
   final kind = collectionKinds.firstWhere((k) => k.key == key);

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,14 +110,42 @@ final apiKeyProvider = Provider<AsyncValue<String?>>((ref) {
 /// overridden in main() once the cache directory is ready
 final diskCacheProvider = Provider<DiskCache?>((ref) => null);
 
+/// bumped whenever account data on disk changed behind the screens' back,
+/// after a background refresh or a full sync
+final accountRevisionProvider = StateProvider<int>((ref) => 0);
+
+/// background refreshes currently running, drives the thin progress bar
+final backgroundRefreshProvider = StateProvider<int>((ref) => 0);
+
 final gw2ApiProvider = Provider<Gw2Api>((ref) {
   final lang = ref.watch(langProvider);
+  // many entries refresh at once after a cold start, one re-read is enough
+  Timer? pending;
+  ref.onDispose(() => pending?.cancel());
   return Gw2Api(
     ref.watch(apiKeyProvider).valueOrNull,
     lang: lang.apiLang,
     cache: ref.watch(diskCacheProvider),
+    onRevalidated: () {
+      pending?.cancel();
+      pending = Timer(const Duration(milliseconds: 400), () {
+        ref.read(accountRevisionProvider.notifier).state++;
+      });
+    },
+    onBackground: (delta) {
+      final counter = ref.read(backgroundRefreshProvider.notifier);
+      final next = counter.state + delta;
+      counter.state = next < 0 ? 0 : next;
+    },
   );
 });
+
+/// account providers read through this, so they re-read the cache whenever
+/// fresher data arrived. static game data keeps using gw2ApiProvider
+Gw2Api accountApi(Ref ref) {
+  ref.watch(accountRevisionProvider);
+  return ref.watch(gw2ApiProvider);
+}
 
 final wikiApiProvider = Provider<WikiApi>((ref) => WikiApi(ref.watch(langProvider).wikiBase));
 

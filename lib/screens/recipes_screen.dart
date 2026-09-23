@@ -96,7 +96,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                               child: Text(lib.label(root.node, lang),
                                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                             ),
-                            const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                            const Icon(Icons.chevron_right, color: AppColors.chevron),
                           ],
                         ),
                          );

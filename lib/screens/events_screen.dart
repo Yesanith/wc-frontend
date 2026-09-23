@@ -35,6 +35,7 @@ class EventsScreen extends ConsumerStatefulWidget {
 }
 
 class _EventsScreenState extends ConsumerState<EventsScreen> {
+  bool _visible = true;
   Timer? _tick;
   bool _pinnedOnly = false;
 
@@ -46,7 +47,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     super.initState();
     // countdowns only need minute precision
     _tick = Timer.periodic(const Duration(seconds: 20), (_) {
-      if (mounted) setState(() {});
+      // _visible follows TickerMode, which is off while the section is
+      // hidden in the drawer stack
+      if (mounted && _visible) setState(() {});
     });
   }
 
@@ -58,6 +61,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _visible = TickerMode.of(context);
     final s = ref.watch(stringsProvider);
     final pinned = ref.watch(pinnedEventsProvider);
     final done = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};

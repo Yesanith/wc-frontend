@@ -307,7 +307,7 @@ class _LinkTile extends StatelessWidget {
                   ],
     ),
               ),
-              const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+              const Icon(Icons.chevron_right, color: AppColors.chevron),
             ],
           ),
            );

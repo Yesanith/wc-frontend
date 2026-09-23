@@ -35,6 +35,25 @@ class DiskCache {
     }
   }
 
+  /// the entry together with its age, so a caller can serve stale data
+  /// and still know it should refresh it
+  Future<({Map<String, dynamic> data, Duration age})?> readWithAge(String name, {required Duration maxAge}) async {
+    try {
+      final file = _file(name);
+      if (!await file.exists()) return null;
+      final raw = jsonDecode(await file.readAsString());
+      if (raw is! Map) return null;
+      final at = DateTime.tryParse('${raw['at']}');
+      if (at == null) return null;
+      final age = DateTime.now().difference(at);
+      if (age > maxAge) return null;
+      final data = raw['data'];
+      return data is Map ? (data: Map<String, dynamic>.from(data), age: age) : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> write(String name, Map<String, dynamic> data) async {
     try {
       await _file(name).writeAsString(jsonEncode({'at': DateTime.now().toIso8601String(), 'data': data}));

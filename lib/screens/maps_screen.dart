@@ -80,7 +80,7 @@ class _MapsScreenState extends ConsumerState<MapsScreen> {
                                     Text('${map.minLevel}-${map.maxLevel}',
                                         style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                                   const SizedBox(width: 8),
-                                  const Icon(Icons.chevron_right, color: Color(0xFF6E6859)),
+                                  const Icon(Icons.chevron_right, color: AppColors.chevron),
                                 ],
                               ),
                                ),

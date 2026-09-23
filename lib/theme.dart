@@ -12,6 +12,8 @@ class AppColors {
   static const textSoft = Color(0xFFD9D2C3);
   static const muted = Color(0xFFA7A092);
   static const hint = Color(0xFF8C8577);
+  /// trailing chevrons and other quiet row decorations
+  static const chevron = Color(0xFF6E6859);
   static const gold = Color(0xFFE3B55B);
   static const onGold = Color(0xFF1A1408);
   static const green = Color(0xFF7BD389);

@@ -6,7 +6,7 @@ import 'api.dart';
 /// world bosses, daily crafts and map chests already done today.
 /// needs the progression permission, empty when it is missing
 final doneTodayProvider = FutureProvider.family<Set<String>, String>((ref, path) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   try {
     return (await api.get('/account/$path') as List).map((e) => '$e').toSet();
   } catch (_) {
@@ -29,7 +29,7 @@ class AchievementRow {
 
 /// achievements the account has started but not finished, most complete first
 final achievementsProvider = FutureProvider<List<AchievementRow>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final rows = await api.accountAchievements();
   final started = [
     for (final r in rows)
@@ -55,7 +55,7 @@ final achievementsProvider = FutureProvider<List<AchievementRow>>((ref) async {
 });
 
 final achievementsDoneProvider = FutureProvider<int>((ref) async {
-  final rows = await ref.watch(gw2ApiProvider).accountAchievements();
+  final rows = await accountApi(ref).accountAchievements();
   return rows.where((r) => r['done'] == true).length;
 });
 
@@ -73,7 +73,7 @@ class MasteryRow {
 }
 
 final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final owned = await api.accountMasteries();
   final byId = {for (final m in owned) asInt(m['id']): asInt(m['level'])};
   final details = await api.masteries(byId.keys);
@@ -85,7 +85,7 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
 });
 
 final masteryPointsProvider = FutureProvider<List<Json>>((ref) async {
-  final raw = await ref.watch(gw2ApiProvider).masteryPoints();
+  final raw = await accountApi(ref).masteryPoints();
   return ((raw['totals'] as List?) ?? const [])
       .whereType<Map>()
       .map((e) => Map<String, dynamic>.from(e))
@@ -100,7 +100,7 @@ class DailyProgress {
 
 /// daily crafts and map chests: how many of today's are already collected
 final dailyProgressProvider = FutureProvider.family<DailyProgress, String>((ref, path) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final all = await api.dailyAll(path);
   try {
     final done = await api.dailyDone(path);
@@ -130,7 +130,7 @@ class RaidWing {
 
 /// raid wings with this week's clears marked
 final raidsProvider = FutureProvider<List<RaidWing>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final wings = await api.raidWings();
   Set<String> cleared;
   try {
@@ -172,7 +172,7 @@ class Dungeon {
 
 /// dungeon paths, reset daily
 final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final all = await api.dungeons();
   Set<String> cleared;
   try {
@@ -190,4 +190,4 @@ final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
   ];
 });
 
-final pvpStatsProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).pvpStats());
+final pvpStatsProvider = FutureProvider<Json>((ref) => accountApi(ref).pvpStats());

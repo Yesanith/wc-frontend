@@ -19,7 +19,37 @@ class Gw2ApiException implements Exception {
 /// static data (items, currencies, specs) is cached in memory and fetched
 /// in batches of 200 ids so we stay inside the rate limit
 class Gw2Api {
-  Gw2Api(this.apiKey, {this.lang = 'en', this.cache, http.Client? client}) : _client = client ?? http.Client();
+  Gw2Api(
+    this.apiKey, {
+    this.lang = 'en',
+    this.cache,
+    this.onRevalidated,
+    this.onBackground,
+    http.Client? client,
+  }) : _client = client ?? http.Client();
+
+  /// fresh account data landed in the cache after a background refresh
+  final void Function()? onRevalidated;
+
+  /// +1 when a background refresh starts, -1 when it ends
+  final void Function(int delta)? onBackground;
+
+  /// upper bound per static cache (items, skills, ...) kept on disk
+  static const _maxCachedPerKind = 6000;
+
+  DateTime? _forceUntil;
+  final Set<String> _revalidating = {};
+
+  /// the next few seconds of cached reads go to the network instead, which
+  /// is what pull to refresh needs
+  void forceNetwork([Duration window = const Duration(seconds: 8)]) {
+    _forceUntil = DateTime.now().add(window);
+  }
+
+  bool get _forcing {
+    final until = _forceUntil;
+    return until != null && DateTime.now().isBefore(until);
+  }
 
   final String? apiKey;
 
@@ -86,6 +116,12 @@ class Gw2Api {
     for (final name in _dirty.toList()) {
       final data = _caches[name];
       if (data == null) continue;
+      // maps keep insertion order, so the oldest lookups are dropped first
+      // once a cache outgrows what is worth keeping on disk
+      if (data.length > _maxCachedPerKind) {
+        final drop = data.keys.take(data.length - _maxCachedPerKind).toList();
+        drop.forEach(data.remove);
+      }
       await store.write('${name}_$lang', {for (final e in data.entries) '${e.key}': e.value});
     }
     _dirty.clear();
@@ -105,10 +141,10 @@ class Gw2Api {
     return hash.toRadixString(16).padLeft(8, '0');
   }
 
-  /// account data with a disk copy. the cached value is used while it is
-  /// fresh and also as a fallback when the request fails, so the app still
-  /// shows something without a connection. [force] skips the fresh read and
-  /// goes to the network, which is what a sync or a pull to refresh wants
+  /// account data, stale while revalidate. a cached copy is returned right
+  /// away, and when it is older than [ttl] a refresh runs in the background
+  /// and [onRevalidated] tells the app to re-read it. only an empty cache,
+  /// [force] or a recent [forceNetwork] makes the caller wait on the network
   Future<dynamic> cachedGet(
     String path, {
     Map<String, String>? query,
@@ -119,10 +155,15 @@ class Gw2Api {
     if (store == null) return get(path, query);
     final suffix = query == null ? '' : '_${query.values.join('_')}';
     final name = 'acct_${_account}_${path.replaceAll('/', '_')}${suffix}_$lang';
-    if (!force) {
-      final fresh = await store.read(name, maxAge: ttl);
-      if (fresh != null && fresh.containsKey('value')) return fresh['value'];
+
+    if (!force && !_forcing) {
+      final cached = await store.readWithAge(name, maxAge: const Duration(days: 7));
+      if (cached != null && cached.data.containsKey('value')) {
+        if (cached.age > ttl) _revalidate(name, path, query);
+        return cached.data['value'];
+      }
     }
+
     try {
       final value = await get(path, query);
       await store.write(name, {'value': value});
@@ -132,6 +173,26 @@ class Gw2Api {
       if (stale != null && stale.containsKey('value')) return stale['value'];
       rethrow;
     }
+  }
+
+  /// background refresh of one cached entry, deduplicated per entry
+  void _revalidate(String name, String path, Map<String, String>? query) {
+    final store = cache;
+    if (store == null || !_revalidating.add(name)) return;
+    // callbacks go through the event loop, never inside a provider build
+    Future(() => onBackground?.call(1));
+    () async {
+      try {
+        final value = await get(path, query);
+        await store.write(name, {'value': value});
+        Future(() => onRevalidated?.call());
+      } catch (_) {
+        // the stale copy stays, the next read tries again
+      } finally {
+        _revalidating.remove(name);
+        Future(() => onBackground?.call(-1));
+      }
+    }();
   }
 
   Future<dynamic> get(String path, [Map<String, String>? query]) async {
@@ -220,8 +281,23 @@ class Gw2Api {
 
   /// needs the tradingpost permission. kind is current/buys, current/sells,
   /// history/buys or history/sells. history only goes back 90 days
-  Future<List<Json>> transactions(String kind) async =>
-      _list(await get('/commerce/transactions/$kind', {'page_size': '200'}));
+  Future<List<Json>> transactions(String kind) async {
+    // the api pages at 200 rows, history can go up to 90 days of trading
+    final out = <Json>[];
+    for (var page = 0; page < 15; page++) {
+      final List<Json> rows;
+      try {
+        rows = _list(await get('/commerce/transactions/$kind', {'page_size': '200', 'page': '$page'}));
+      } on Gw2ApiException catch (e) {
+        // asking past the last page is a 400, that just means we are done
+        if (page > 0 && (e.status == 400 || e.status == 404)) break;
+        rethrow;
+      }
+      out.addAll(rows);
+      if (rows.length < 200) break;
+    }
+    return out;
+  }
 
   /// coins and items waiting to be picked up at a trading post npc
   Future<Json> delivery() async => Map<String, dynamic>.from(await get('/commerce/delivery') as Map);

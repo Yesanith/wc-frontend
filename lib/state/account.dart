@@ -4,14 +4,14 @@ import '../util.dart';
 import 'api.dart';
 import 'characters.dart';
 
-final accountProvider = FutureProvider<Json>((ref) => ref.watch(gw2ApiProvider).account());
+final accountProvider = FutureProvider<Json>((ref) => accountApi(ref).account());
 
 /// track is daily, weekly or special
 final vaultTrackProvider =
-    FutureProvider.family<Json, String>((ref, track) => ref.watch(gw2ApiProvider).vault(track));
+    FutureProvider.family<Json, String>((ref, track) => accountApi(ref).vault(track));
 
 final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final raw = await api.wallet();
   final cur = await api.currencies(raw.map((e) => asInt(e['id'])));
   final list = <WalletEntry>[];
@@ -31,7 +31,7 @@ final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
 });
 
 final bankProvider = FutureProvider<List<ItemSlot?>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final raw = await api.bank();
   final items = await api.items(<int>[
     for (final s in raw)
@@ -44,7 +44,7 @@ final bankProvider = FutureProvider<List<ItemSlot?>>((ref) async {
 });
 
 final materialsProvider = FutureProvider<List<ItemSlot>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final raw = await api.materials();
   final owned = raw.where((m) => asInt(m['count']) > 0).toList()
     ..sort((a, b) => asInt(b['count']).compareTo(asInt(a['count'])));
@@ -58,7 +58,7 @@ final materialsProvider = FutureProvider<List<ItemSlot>>((ref) async {
 /// how many of each item the account owns: bank + material storage +
 /// shared slots + every character's bags. used by goals and the tp screen
 final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final charsFuture = ref.watch(charactersProvider.future);
   final totals = <int, int>{};
   void add(Json? slot) {
@@ -72,16 +72,25 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
     api.bank(),
     api.materials(),
     api.sharedInventory().catchError((_) => <Json?>[]),
+    // legendaries in the armory count as owned too, the api needs unlocks for it
+    api.legendaryArmory().catchError((_) => <Json>[]),
   ]);
   for (final list in results) {
     for (final slot in list) {
       add(slot);
     }
   }
+  // armory legendaries show up in equipment as well, count them only once
+  final armory = {for (final row in results[3]) if (row != null) asInt(row['id'])};
   final chars = await charsFuture;
   for (final c in chars) {
     for (final slot in bagSlots(c)) {
       add(slot);
+    }
+    // gear being worn, every entry is one physical item no matter how many
+    // templates use it
+    for (final piece in (c['equipment'] as List?) ?? const []) {
+      if (piece is Map && !armory.contains(asInt(piece['id']))) add({'id': piece['id'], 'count': 1});
     }
   }
   return totals;
