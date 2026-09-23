@@ -6,6 +6,7 @@ import '../state/maps.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/map_tiles.dart';
 
 class MapsScreen extends ConsumerStatefulWidget {
   const MapsScreen({super.key});
@@ -120,18 +121,29 @@ class MapDetailScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: AsyncView<List<PointOfInterest>>(
+      body: AsyncView<MapDetail?>(
         value: pois,
         onRetry: () => ref.invalidate(mapDetailProvider(map.id)),
-        builder: (list) {
+        builder: (detail) {
+          final list = detail?.pois ?? const <PointOfInterest>[];
           final waypoints = list.where((p) => p.isWaypoint && p.name.isNotEmpty).toList();
           final others = list.where((p) => !p.isWaypoint && p.name.isNotEmpty).toList();
-          if (waypoints.isEmpty && others.isEmpty) {
+          if (detail == null || (waypoints.isEmpty && others.isEmpty && !detail.hasBounds)) {
             return Center(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)));
           }
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             children: [
+              if (detail.hasBounds) ...[
+                SizedBox(
+                  height: 280,
+                  child: MapTiles(
+                    detail: detail,
+                    onTapPoi: (poi) => _copyChatLink(context, ref, poi),
+                  ),
+                ),
+                const SizedBox(height: 14),
+              ],
               Text(s.t('waypoint_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 14),
               if (waypoints.isNotEmpty) ...[
@@ -163,6 +175,16 @@ class MapDetailScreen extends ConsumerWidget {
   }
 }
 
+/// puts the waypoint's chat link on the clipboard, ready to paste in game.
+/// the name goes in the snack bar because a pin on the map carries no label
+void _copyChatLink(BuildContext context, WidgetRef ref, PointOfInterest poi) {
+  if (poi.chatLink.isEmpty) return;
+  final s = ref.read(stringsProvider);
+  Clipboard.setData(ClipboardData(text: poi.chatLink));
+  final label = poi.name.isEmpty ? s.t('copied') : '${poi.name} · ${s.t('copied')}';
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(label)));
+}
+
 class _PoiRow extends ConsumerWidget {
   const _PoiRow({required this.poi});
 
@@ -187,10 +209,7 @@ class _PoiRow extends ConsumerWidget {
           if (poi.chatLink.isNotEmpty)
             IconButton(
               tooltip: s.t('copy'),
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: poi.chatLink));
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('copied'))));
-              },
+              onPressed: () => _copyChatLink(context, ref, poi),
               icon: const Icon(Icons.copy, size: 18, color: AppColors.muted),
             ),
         ],
