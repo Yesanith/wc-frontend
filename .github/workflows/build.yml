@@ -90,6 +90,10 @@ jobs:
       - name: Use the release signing key
         run: python3 ci/sign.py
 
+      # caches ~/.gradle between runs, so a build does not download the whole
+      # kotlin and android plugin tree from maven central every time
+      - uses: gradle/actions/setup-gradle@v4
+
       - name: Patch manifest
         run: |
           M=android/app/src/main/AndroidManifest.xml
@@ -114,10 +118,16 @@ jobs:
           KEY_ALIAS: tyriacodex
           KEY_PASSWORD: ***REMOVED***
         run: |
-          flutter build apk --release \
-            --build-name="$VERSION" \
-            --build-number="$GITHUB_RUN_NUMBER" \
-            --dart-define=APP_VERSION="$VERSION"
+          # maven central sometimes answers 429 to shared runners, wait and retry
+          for attempt in 1 2 3; do
+            flutter build apk --release \
+              --build-name="$VERSION" \
+              --build-number="$GITHUB_RUN_NUMBER" \
+              --dart-define=APP_VERSION="$VERSION" && exit 0
+            echo "build attempt $attempt failed, retrying in 60s"
+            sleep 60
+          done
+          exit 1
 
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk
