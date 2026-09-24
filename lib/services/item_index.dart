@@ -26,6 +26,11 @@ class ItemIndex {
 
   bool get isEmpty => items.isEmpty;
 
+  late final Map<int, String> _byId = {for (final item in items) item.id: item.name};
+
+  /// display name of an item without asking the api
+  String? nameOf(int id) => _byId[id];
+
   static Future<ItemIndex> load(AppLang lang) async {
     for (final code in {lang.apiLang, 'en'}) {
       try {

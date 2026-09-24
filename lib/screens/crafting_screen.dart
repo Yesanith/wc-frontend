@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/item_index.dart';
 import '../state/account.dart';
 import '../state/crafting.dart';
 import '../state/items.dart';
@@ -12,85 +9,8 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import 'goals_screen.dart';
 import 'trading_screen.dart';
-
-/// pick an item, then see what crafting it would take
-class CraftingScreen extends ConsumerStatefulWidget {
-  const CraftingScreen({super.key});
-
-  @override
-  ConsumerState<CraftingScreen> createState() => _CraftingScreenState();
-}
-
-class _CraftingScreenState extends ConsumerState<CraftingScreen> {
-  final _ctrl = TextEditingController();
-  List<IndexedItem> _results = const [];
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  Timer? _debounce;
-
-  // typing fast should not scan the whole index on every key
-  void _search(String q) {
-    _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 250), () {
-      if (!mounted) return;
-      final index = ref.read(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
-      setState(() => _results = index.search(q));
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final s = ref.watch(stringsProvider);
-    final index = ref.watch(itemIndexProvider);
-
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-      children: [
-        Text(s.t('crafting_intro'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _ctrl,
-          onChanged: _search,
-          decoration: fieldDecoration(
-            s.t('search_items'),
-            prefixIcon: const Icon(Icons.search, color: AppColors.gold),
-          ),
-        ),
-        if (index.isLoading) ...[
-          const SizedBox(height: 8),
-          const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
-        ],
-        const SizedBox(height: 12),
-        for (final item in _results.take(20))
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Material(
-              color: AppColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: const BorderSide(color: AppColors.line),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: item.id)),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
 
 class CraftingDetailScreen extends ConsumerStatefulWidget {
   const CraftingDetailScreen({super.key, required this.itemId});
@@ -103,6 +23,21 @@ class CraftingDetailScreen extends ConsumerStatefulWidget {
 
 class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
   int _quantity = 1;
+
+  /// the base materials of the current plan become a goal
+  Future<void> _createGoal(Json? item, Map<int, int> leaves) async {
+    final s = ref.read(stringsProvider);
+    final base = (item?['name'] as String?) ?? s.t('item_n', {'id': widget.itemId});
+    final name = _quantity > 1 ? '$base x$_quantity' : base;
+    final goals = ref.read(goalsProvider.notifier);
+    final goal = await goals.create(name);
+    for (final e in leaves.entries) {
+      await goals.setItem(goal.id, e.key, e.value);
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('goal_created'))));
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GoalDetailScreen(goalId: goal.id)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +108,12 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                   children: [for (final d in root.disciplines) Pill(d)],
                 ),
               ],
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: () => _createGoal(item, leaves),
+                icon: const Icon(Icons.flag_outlined),
+                label: Text(s.t('create_goal_from')),
+              ),
               const SizedBox(height: 16),
               _CostPanel(missingCost: missingCost, ownedValue: ownedValue, buyInstead: buyInstead),
               const SizedBox(height: 22),

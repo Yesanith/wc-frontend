@@ -9,7 +9,8 @@ description of every gift lists its ingredients, for example:
     * 1 Superior Sigil of Blood
 
 So we pull every item once, parse those descriptions and expand them into a
-tree. Output goes to assets/data/legendary_recipes.json and is committed by
+tree. Together with every normal recipe of /v2/recipes it becomes one recipe
+book in assets/data/recipe_book.json.gz, committed by
 the data workflow, the app only reads the generated file.
 """
 
@@ -24,7 +25,8 @@ import urllib.error
 import urllib.request
 
 API = "https://api.guildwars2.com/v2"
-OUT = os.path.join("assets", "data", "legendary_recipes.json")
+OUT = os.path.join("assets", "data", "recipe_book.json.gz")
+LEGACY_OUT = os.path.join("assets", "data", "legendary_recipes.json")
 INDEX = os.path.join("assets", "data", "item_index_%s.txt.gz")
 BATCH = 200
 MAX_DEPTH = 6
@@ -241,6 +243,59 @@ def write_item_index(items, lang):
     print("wrote %s (%d bytes)" % (path, os.path.getsize(path)), flush=True)
 
 
+def fetch_all_recipes():
+    """every normal crafting recipe of the api, about 13k of them"""
+    ids = get("/recipes")
+    print("recipes: %d" % len(ids), flush=True)
+    rows = []
+    for i in range(0, len(ids), BATCH):
+        rows.extend(get("/recipes", {"ids": ",".join(str(x) for x in ids[i:i + BATCH])}))
+    return rows
+
+
+def book_entry_from_recipe(row):
+    """one api recipe in the compact shape the app reads"""
+    ingredients = []
+    for ing in row.get("ingredients") or []:
+        # older schemas use item_id, newer ones id with a type
+        if ing.get("type", "Item") != "Item":
+            continue
+        item_id = ing.get("item_id") or ing.get("id")
+        if item_id:
+            ingredients.append([item_id, ing.get("count", 1)])
+    if not ingredients or not row.get("output_item_id"):
+        return None
+    return {
+        "o": row["output_item_id"],
+        "n": row.get("output_item_count", 1) or 1,
+        "d": row.get("disciplines") or [],
+        "r": row.get("min_rating", 0),
+        "i": ingredients,
+    }
+
+
+def flatten_forge(tree, out, legendary_roots):
+    """forge trees become one entry per node that has ingredients"""
+    children = tree.get("children") or []
+    resolved = [[c["id"], c.get("count", 1)] for c in children if c.get("id")]
+    if tree.get("id") and resolved and tree["id"] not in out:
+        entry = {"o": tree["id"], "n": 1, "d": ["MysticForge"], "r": 0, "i": resolved}
+        unnamed = [c["name"] for c in children if not c.get("id")]
+        if unnamed:
+            entry["u"] = unnamed
+        if tree["id"] in legendary_roots:
+            entry["L"] = 1
+        out[tree["id"]] = entry
+    for child in children:
+        flatten_forge(child, out, legendary_roots)
+
+
+def write_gz_json(path, data):
+    with open(path, "wb") as raw:
+        with gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0) as f:
+            f.write(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+
+
 def main():
     langs = sys.argv[1:] or ["en"]
     items = fetch_all_items("en")
@@ -295,16 +350,27 @@ def main():
         }
         print("%s: %d names" % (lang, len(names[lang])), flush=True)
 
+    # forge trees and every normal recipe end up in one book, keyed by what
+    # they produce. normal recipes win when an item has both
+    forge = {}
+    legendary_roots = {t["id"] for t in trees if t["kind"] == "legendary"}
+    for tree in trees:
+        flatten_forge(tree, forge, legendary_roots)
+    normal = [e for e in (book_entry_from_recipe(r) for r in fetch_all_recipes()) if e]
+    book = normal + [e for oid, e in sorted(forge.items())]
+    print("book: %d normal, %d mystic forge" % (len(normal), len(forge)), flush=True)
+
     result = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "roots": trees,
+        "recipes": book,
         "names": names,
         "unresolved": sorted(unresolved),
     }
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, separators=(",", ":"))
+    write_gz_json(OUT, result)
+    if os.path.exists(LEGACY_OUT):
+        os.remove(LEGACY_OUT)
     print("wrote %s (%d bytes)" % (OUT, os.path.getsize(OUT)))
 
 

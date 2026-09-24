@@ -28,10 +28,9 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Goals for legendaries or any big craft, tracked against everything your account owns
 - Goals suggest what to buy first, cheapest missing piece at the top
 - Side by side character comparison
-- Crafting calculator: recipe tree for any craftable item, what your account already covers,
-  the cost of the missing materials and whether buying the item outright is cheaper
-- Recipe browser: Mystic Forge trees for legendary gear and gifts, with base materials
-  compared against your account and one tap to turn a recipe into a goal
+- Recipes: every crafting and Mystic Forge recipe in one place, filterable by discipline,
+  with a calculator that shows the tree, what your account already covers, the cost of the
+  missing materials, whether buying is cheaper, and one tap to turn it into a goal
 - Shareable hero cards for your characters
 - Maps drawn from the official tile service, with a pin on every waypoint and
   landmark, and chat codes ready to copy
@@ -120,10 +119,14 @@ holds the api key storage and the clients every other file builds on.
 
 ## Recipe data
 
-Mystic Forge recipes are not exposed by `/v2/recipes`, but every gift describes its own
-ingredients in game. `tools/build_recipes.py` walks those descriptions, resolves the names
-to item ids and writes `assets/data/legendary_recipes.json`. The `Build recipe data`
-workflow regenerates it monthly and commits the result, so nothing is maintained by hand.
+Regular crafting recipes come from `/v2/recipes`. Mystic Forge recipes are not in that
+endpoint, but every gift describes its own ingredients in game. `tools/build_recipes.py`
+collects both, resolves the forge ingredient names to item ids and writes one recipe book to
+`assets/data/recipe_book.json.gz`, together with a gzipped per language item index used for
+search. The `Build recipe data` workflow regenerates both monthly and commits the result.
+
+The recipes section browses that book by discipline and opens the crafting calculator for any
+entry, so trees expand instantly without calling the api for every step.
 
 ## Disclaimer
 

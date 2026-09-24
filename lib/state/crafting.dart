@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
+import '../services/recipe_book.dart';
 import '../util.dart';
 import 'api.dart';
 
@@ -51,9 +53,65 @@ CraftLine planFor(CraftNode node, int count) {
   );
 }
 
-/// keyed by item id only
+/// ids a book tree touches, so their details come in one batched request
+Set<int> bookTreeIds(RecipeBook book, int rootId) {
+  final ids = <int>{};
+  void walk(int itemId, Set<int> seen, int depth) {
+    ids.add(itemId);
+    final recipe = depth >= 8 || seen.contains(itemId) ? null : book.recipeFor(itemId);
+    if (recipe == null) return;
+    for (final (id, _) in recipe.ingredients) {
+      walk(id, {...seen, itemId}, depth + 1);
+    }
+  }
+
+  walk(rootId, <int>{}, 0);
+  return ids;
+}
+
+/// the whole tree straight from the shipped recipe book, no network needed
+/// except for names and icons
+CraftNode buildFromBook(RecipeBook book, int rootId, Map<int, Json> items) {
+  CraftNode build(int itemId, int perRun, Set<int> seen, int depth) {
+    final recipe = depth >= 8 || seen.contains(itemId) ? null : book.recipeFor(itemId);
+    if (recipe == null) {
+      return CraftNode(
+        itemId: itemId,
+        item: items[itemId],
+        perRun: perRun,
+        outputCount: 1,
+        children: const [],
+        disciplines: const [],
+      );
+    }
+    return CraftNode(
+      itemId: itemId,
+      item: items[itemId],
+      perRun: perRun,
+      outputCount: recipe.outputCount,
+      children: [
+        for (final (id, count) in recipe.ingredients) build(id, count, {...seen, itemId}, depth + 1),
+      ],
+      disciplines: recipe.disciplines,
+    );
+  }
+
+  return build(rootId, 1, <int>{}, 0);
+}
+
+/// keyed by item id only. items in the recipe book expand instantly, anything
+/// else falls back to asking the api step by step
 final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) async {
   final api = ref.watch(gw2ApiProvider);
+  final book = await ref.watch(recipeBookProvider.future);
+  if (book.recipeFor(rootId) != null) {
+    final items = await api.items(bookTreeIds(book, rootId));
+    return buildFromBook(book, rootId, items);
+  }
+  return _liveTree(api, rootId);
+});
+
+Future<CraftNode> _liveTree(Gw2Api api, int rootId) async {
   // branches still expand in parallel, but never more than a handful of
   // requests are in the air at once
   final pool = TaskPool(5);
@@ -105,7 +163,7 @@ final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) as
   }
 
   return expand(rootId, 1, <int>{}, 0);
-});
+}
 
 /// everything at the bottom of a plan, with quantities summed
 Map<int, int> craftLeaves(CraftLine line) {

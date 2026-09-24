@@ -1,16 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
-import '../services/recipes.dart';
-import '../state/account.dart';
-import '../state/items.dart';
+import '../services/item_index.dart';
+import '../services/recipe_book.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
-import 'goals_screen.dart';
+import 'crafting_screen.dart';
 
+/// every recipe in one place: regular crafting from the api and mystic
+/// forge recipes pulled from item descriptions. opening one shows the
+/// crafting calculator for it
 class RecipesScreen extends ConsumerStatefulWidget {
   const RecipesScreen({super.key});
 
@@ -18,249 +22,168 @@ class RecipesScreen extends ConsumerStatefulWidget {
   ConsumerState<RecipesScreen> createState() => _RecipesScreenState();
 }
 
+/// filter chips: everything, legendaries, then one per discipline
+const _all = '';
+const _legendary = 'legendary';
+
+/// how many rows the list shows before asking for a narrower search
+const _limit = 150;
+
 class _RecipesScreenState extends ConsumerState<RecipesScreen> {
+  final _ctrl = TextEditingController();
+  Timer? _debounce;
   String _query = '';
-  bool _legendaryOnly = true;
+  String _filter = _all;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _onChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) setState(() => _query = value.trim().toLowerCase());
+    });
+  }
+
+  bool _matchesFilter(List<BookRecipe> recipes) {
+    switch (_filter) {
+      case _all:
+        return true;
+      case _legendary:
+        return recipes.any((r) => r.legendary);
+      default:
+        return recipes.any((r) => r.disciplines.contains(_filter));
+    }
+  }
+
+  String _label(S s, String discipline) {
+    if (discipline == _all) return s.t('all');
+    if (discipline == _legendary) return s.t('legendaries');
+    if (discipline == mysticForge) return s.t('mystic_forge');
+    return discipline;
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final lang = ref.watch(langProvider);
-    final library = ref.watch(recipeLibraryProvider);
+    final book = ref.watch(recipeBookProvider);
+    final index = ref.watch(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
 
-    return AsyncView<RecipeLibrary>(
-      value: library,
-      onRetry: () => ref.invalidate(recipeLibraryProvider),
-      builder: (lib) {
-        if (lib.roots.isEmpty) {
+    return AsyncView<RecipeBook>(
+      value: book,
+      onRetry: () => ref.invalidate(recipeBookProvider),
+      builder: (b) {
+        if (b.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(24),
             child: Text(s.t('no_recipe_data'), style: const TextStyle(color: AppColors.muted, height: 1.5)),
           );
         }
-        final list = lib.roots.where((r) {
-          if (_legendaryOnly && !r.isLegendary) return false;
-          if (_query.isEmpty) return true;
-          return lib.label(r.node, lang).toLowerCase().contains(_query);
-        }).toList();
+
+        final rows = <(int, String, List<BookRecipe>)>[];
+        var total = 0;
+        for (final entry in b.byOutput.entries) {
+          if (!_matchesFilter(entry.value)) continue;
+          final name = index.nameOf(entry.key) ?? '#${entry.key}';
+          if (_query.isNotEmpty && !name.toLowerCase().contains(_query)) continue;
+          total++;
+          rows.add((entry.key, name, entry.value));
+        }
+        rows.sort((a, b) => a.$2.compareTo(b.$2));
+        final shown = rows.length > _limit ? rows.sublist(0, _limit) : rows;
 
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
-              child: Column(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: TextField(
+                controller: _ctrl,
+                onChanged: _onChanged,
+                decoration: fieldDecoration(
+                  s.t('search_recipes'),
+                  prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  TextField(
-                    onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
-                    decoration: fieldDecoration(
-                      s.t('search_recipes'),
-                      prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                  for (final d in [_all, _legendary, ...b.disciplines]) ...[
+                    ChoiceChip(
+                      label: Text(_label(s, d)),
+                      selected: _filter == d,
+                      onSelected: (_) => setState(() => _filter = d),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      ChoiceChip(
-                        label: Text(s.t('legendaries')),
-                        selected: _legendaryOnly,
-                        onSelected: (_) => setState(() => _legendaryOnly = true),
-                      ),
-                      const SizedBox(width: 8),
-                      ChoiceChip(
-                        label: Text(s.t('all')),
-                        selected: !_legendaryOnly,
-                        onSelected: (_) => setState(() => _legendaryOnly = false),
-                      ),
-                    ],
-                  ),
+                    const SizedBox(width: 8),
+                  ],
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  total > _limit
+                      ? s.t('recipes_more', {'n': fmtInt(total), 'shown': _limit})
+                      : s.t('recipes_count', {'n': fmtInt(total)}),
+                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                ),
               ),
             ),
             Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                itemCount: list.length,
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                itemCount: shown.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, i) {
-                  final root = list[i];
+                  final (id, name, recipes) = shown[i];
+                  final disciplines = {for (final r in recipes) ...r.disciplines};
+                  final legendary = recipes.any((r) => r.legendary);
                   return AppCard(
                     onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(builder: (_) => RecipeDetailScreen(root: root)),
-                  ),
-                           padding: const EdgeInsets.all(10),
-                           child: Row(
-                          children: [
-                            ItemIcon(url: root.node.icon, rarity: root.node.rarity, size: 42),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(lib.label(root.node, lang),
-                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                            ),
-                            const Icon(Icons.chevron_right, color: AppColors.chevron),
-                          ],
+                      MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: id)),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: legendary ? rarityColor('Legendary') : AppColors.text,
+                                  )),
+                              const SizedBox(height: 4),
+                              Wrap(
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: [for (final d in disciplines) Pill(_label(s, d))],
+                              ),
+                            ],
+                          ),
                         ),
-                         );
+                        const Icon(Icons.chevron_right, color: AppColors.chevron),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
           ],
         );
       },
-    );
-  }
-}
-
-class RecipeDetailScreen extends ConsumerWidget {
-  const RecipeDetailScreen({super.key, required this.root});
-
-  final RecipeRoot root;
-
-  Future<void> _createGoal(BuildContext context, WidgetRef ref, RecipeLibrary lib, AppLang lang) async {
-    final s = ref.read(stringsProvider);
-    final name = lib.label(root.node, lang);
-    final goal = await ref.read(goalsProvider.notifier).create(name);
-    final materials = baseMaterials(root.node);
-    for (final e in materials.entries) {
-      await ref.read(goalsProvider.notifier).setItem(goal.id, e.key, e.value);
-    }
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('goal_created'))));
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GoalDetailScreen(goalId: goal.id)));
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
-    final lang = ref.watch(langProvider);
-    final lib = ref.watch(recipeLibraryProvider).valueOrNull ?? RecipeLibrary.empty;
-    final totals = ref.watch(accountTotalsProvider).valueOrNull ?? const <int, int>{};
-    final materials = baseMaterials(root.node);
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(lib.label(root.node, lang), style: display(20)),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-        children: [
-          FilledButton.icon(
-            onPressed: () => _createGoal(context, ref, lib, lang),
-            icon: const Icon(Icons.flag_outlined),
-            label: Text(s.t('create_goal_from')),
-          ),
-          const SizedBox(height: 18),
-          SectionHeader(title: s.t('base_materials'), trailing: '${materials.length}'),
-          const SizedBox(height: 10),
-          Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Column(
-              children: [
-                for (final e in materials.entries)
-                  _MaterialRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
-              ],
-            ),
-          ),
-          const SizedBox(height: 22),
-          SectionHeader(title: s.t('recipe_tree')),
-          const SizedBox(height: 10),
-          Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Column(
-              children: [
-                for (final child in root.node.children) _TreeNode(node: child, lib: lib, lang: lang),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(s.t('recipe_source_note'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
-        ],
-      ),
-    );
-  }
-}
-
-class _MaterialRow extends ConsumerWidget {
-  const _MaterialRow({required this.itemId, required this.need, required this.have});
-
-  final int itemId;
-  final int need;
-  final int have;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
-    final item = ref.watch(itemProvider(itemId)).valueOrNull;
-    final name = (item?['name'] as String?) ?? s.t('item_n', {'id': itemId});
-    final done = have >= need;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 34),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: done ? AppColors.muted : AppColors.text)),
-                const SizedBox(height: 6),
-                Bar(value: need == 0 ? 0 : have / need, color: done ? AppColors.green : AppColors.gold),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text('${fmtInt(have)} / ${fmtInt(need)}',
-              style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, color: done ? AppColors.green : AppColors.gold)),
-        ],
-      ),
-    );
-  }
-}
-
-class _TreeNode extends StatelessWidget {
-  const _TreeNode({required this.node, required this.lib, required this.lang});
-
-  final RecipeNode node;
-  final RecipeLibrary lib;
-  final AppLang lang;
-
-  @override
-  Widget build(BuildContext context) {
-    final title = Row(
-      children: [
-        ItemIcon(url: node.icon, rarity: node.rarity, size: 30),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text('${fmtInt(node.count)} x ${lib.label(node, lang)}',
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-        ),
-      ],
-    );
-
-    if (node.isLeaf) {
-      return Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7), child: title);
-    }
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 8),
-        childrenPadding: const EdgeInsets.only(left: 16),
-        iconColor: AppColors.gold,
-        collapsedIconColor: AppColors.muted,
-        title: title,
-        children: [
-          for (final child in node.children) _TreeNode(node: child, lib: lib, lang: lang),
-        ],
-      ),
     );
   }
 }

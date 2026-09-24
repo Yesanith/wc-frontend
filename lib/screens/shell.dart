@@ -11,7 +11,6 @@ import '../theme.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
-import 'crafting_screen.dart';
 import 'events_screen.dart';
 import 'goals_screen.dart';
 import 'guilds_screen.dart';
@@ -31,7 +30,6 @@ const _titleKeys = {
   AppSection.account: 'nav_account',
   AppSection.guilds: 'guilds',
   AppSection.trading: 'trading_post',
-  AppSection.crafting: 'crafting',
   AppSection.bosses: 'world_bosses',
   AppSection.maps: 'maps',
   AppSection.goals: 'goals',
@@ -48,7 +46,6 @@ const _icons = {
   AppSection.account: (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
   AppSection.guilds: (Icons.groups_outlined, Icons.groups),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
-  AppSection.crafting: (Icons.handyman_outlined, Icons.handyman),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
   AppSection.maps: (Icons.map_outlined, Icons.map),
   AppSection.goals: (Icons.flag_outlined, Icons.flag),
@@ -65,7 +62,6 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.account => const AccountScreen(),
       AppSection.guilds => const GuildsScreen(),
       AppSection.trading => const TradingHubScreen(),
-      AppSection.crafting => const CraftingScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),
       AppSection.maps => const MapsScreen(),
       AppSection.goals => const GoalsScreen(embedded: true),
