@@ -38,13 +38,17 @@ class Gw2Api {
   static const _maxCachedPerKind = 6000;
 
   DateTime? _forceUntil;
-  final Set<String> _revalidating = {};
+  final Map<String, Future<dynamic>> _inFlight = {};
 
   /// the next few seconds of cached reads go to the network instead, which
   /// is what pull to refresh needs
   void forceNetwork([Duration window = const Duration(seconds: 8)]) {
     _forceUntil = DateTime.now().add(window);
   }
+
+  /// releases the sockets of this instance, called when the provider that
+  /// owns it is rebuilt for another key or language
+  void close() => _client.close();
 
   bool get _forcing {
     final until = _forceUntil;
@@ -82,16 +86,23 @@ class Gw2Api {
     'pets': _petCache,
     'recipes': _recipeCache,
   };
-  final Set<String> _loaded = {};
+  final Map<String, Future<void>> _loading = {};
   final Set<String> _dirty = {};
   Timer? _saveTimer;
 
   /// static data lives on disk for a month, names only change with patches
   static const _cacheMaxAge = Duration(days: 30);
 
-  Future<void> _loadCache(String name) async {
+  /// every caller of the same kind waits on one disk read, otherwise a
+  /// second request during start up would see an empty cache and refetch
+  Future<void> _loadCache(String name) {
+    if (cache == null) return Future.value();
+    return _loading.putIfAbsent(name, () => _readCache(name));
+  }
+
+  Future<void> _readCache(String name) async {
     final store = cache;
-    if (store == null || !_loaded.add(name)) return;
+    if (store == null) return;
     final raw = await store.read('${name}_$lang', maxAge: _cacheMaxAge);
     if (raw == null) return;
     final target = _caches[name];
@@ -113,7 +124,9 @@ class Gw2Api {
   Future<void> _flush() async {
     final store = cache;
     if (store == null) return;
-    for (final name in _dirty.toList()) {
+    final names = _dirty.toList();
+    _dirty.removeAll(names);
+    for (final name in names) {
       final data = _caches[name];
       if (data == null) continue;
       // maps keep insertion order, so the oldest lookups are dropped first
@@ -124,7 +137,6 @@ class Gw2Api {
       }
       await store.write('${name}_$lang', {for (final e in data.entries) '${e.key}': e.value});
     }
-    _dirty.clear();
   }
 
   /// short stable id for the active key, so two accounts never read each
@@ -165,9 +177,7 @@ class Gw2Api {
     }
 
     try {
-      final value = await get(path, query);
-      await store.write(name, {'value': value});
-      return value;
+      return await _fetchAndStore(name, path, query);
     } catch (_) {
       final stale = await store.read(name, maxAge: const Duration(days: 7));
       if (stale != null && stale.containsKey('value')) return stale['value'];
@@ -175,21 +185,33 @@ class Gw2Api {
     }
   }
 
-  /// background refresh of one cached entry, deduplicated per entry
+  /// one network request per cache entry at a time. the launch sync, a pull
+  /// to refresh and a background revalidation asking for the same entry all
+  /// share the request that is already running
+  Future<dynamic> _fetchAndStore(String name, String path, Map<String, String>? query) {
+    return _inFlight.putIfAbsent(name, () async {
+      try {
+        final value = await get(path, query);
+        await cache?.write(name, {'value': value});
+        return value;
+      } finally {
+        _inFlight.remove(name);
+      }
+    });
+  }
+
+  /// background refresh of one cached entry
   void _revalidate(String name, String path, Map<String, String>? query) {
-    final store = cache;
-    if (store == null || !_revalidating.add(name)) return;
+    if (cache == null || _inFlight.containsKey(name)) return;
     // callbacks go through the event loop, never inside a provider build
     Future(() => onBackground?.call(1));
     () async {
       try {
-        final value = await get(path, query);
-        await store.write(name, {'value': value});
+        await _fetchAndStore(name, path, query);
         Future(() => onRevalidated?.call());
       } catch (_) {
         // the stale copy stays, the next read tries again
       } finally {
-        _revalidating.remove(name);
         Future(() => onBackground?.call(-1));
       }
     }();

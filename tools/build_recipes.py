@@ -13,6 +13,7 @@ tree. Output goes to assets/data/legendary_recipes.json and is committed by
 the data workflow, the app only reads the generated file.
 """
 
+import gzip
 import json
 import os
 import re
@@ -24,7 +25,7 @@ import urllib.request
 
 API = "https://api.guildwars2.com/v2"
 OUT = os.path.join("assets", "data", "legendary_recipes.json")
-INDEX = os.path.join("assets", "data", "item_index_%s.txt")
+INDEX = os.path.join("assets", "data", "item_index_%s.txt.gz")
 BATCH = 200
 MAX_DEPTH = 6
 
@@ -222,12 +223,21 @@ def write_item_index(items, lang):
     the api has no item search, so the app ships this instead"""
     path = INDEX % lang
     rows = sorted(items.values(), key=lambda r: r["id"])
-    with open(path, "w", encoding="utf-8") as f:
-        for row in rows:
-            name = row.get("name") or ""
-            if not name or "\t" in name:
-                continue
-            f.write("%d\t%s\n" % (row["id"], name))
+    lines = []
+    for row in rows:
+        name = row.get("name") or ""
+        if not name or "\t" in name:
+            continue
+        lines.append("%d\t%s\n" % (row["id"], name))
+    # gzipped, the plain text of three languages was 7.5 MB of the apk.
+    # mtime=0 keeps the output identical when nothing changed
+    with open(path, "wb") as raw:
+        with gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0) as f:
+            f.write("".join(lines).encode("utf-8"))
+    # the uncompressed file of older builds is not needed any more
+    legacy = path[:-3]
+    if os.path.exists(legacy):
+        os.remove(legacy)
     print("wrote %s (%d bytes)" % (path, os.path.getsize(path)), flush=True)
 
 

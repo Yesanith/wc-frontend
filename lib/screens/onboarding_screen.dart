@@ -33,7 +33,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Future<void> _paste() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
     final text = data?.text;
-    if (text != null) setState(() => _ctrl.text = text.trim());
+    if (text != null && mounted) setState(() => _ctrl.text = text.trim());
   }
 
   Future<void> _connect() async {
@@ -52,7 +52,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final perms = ((info['permissions'] as List?) ?? const []).map((e) => '$e').toList();
       final missing = _required.where((p) => !perms.contains(p)).toList();
       if (missing.isNotEmpty) {
-        setState(() => _error = s.t('err_missing_perms', {'p': missing.join(', ')}));
+        if (mounted) setState(() => _error = s.t('err_missing_perms', {'p': missing.join(', ')}));
         return;
       }
       // label the key with the account it belongs to

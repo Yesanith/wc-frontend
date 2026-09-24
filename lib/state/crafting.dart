@@ -54,12 +54,17 @@ CraftLine planFor(CraftNode node, int count) {
 /// keyed by item id only
 final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) async {
   final api = ref.watch(gw2ApiProvider);
+  // branches still expand in parallel, but never more than a handful of
+  // requests are in the air at once
+  final pool = TaskPool(5);
 
   Future<CraftNode> expand(int itemId, int perRun, Set<int> seen, int depth) async {
     // item details and the recipe lookup do not depend on each other
     final lookups = await Future.wait([
-      api.items([itemId]),
-      depth >= 6 || seen.contains(itemId) ? Future.value(const <int>[]) : api.recipesForOutput(itemId),
+      pool.run(() => api.items([itemId])),
+      depth >= 6 || seen.contains(itemId)
+          ? Future.value(const <int>[])
+          : pool.run(() => api.recipesForOutput(itemId)),
     ]);
     final item = (lookups[0] as Map<int, Json>)[itemId];
     CraftNode leaf() => CraftNode(
@@ -72,7 +77,7 @@ final craftTreeProvider = FutureProvider.family<CraftNode, int>((ref, rootId) as
         );
     final recipeIds = lookups[1] as List<int>;
     if (recipeIds.isEmpty) return leaf();
-    final recipes = await api.recipes(recipeIds);
+    final recipes = await pool.run(() => api.recipes(recipeIds));
     final recipe = recipes[recipeIds.first];
     if (recipe == null) return leaf();
 

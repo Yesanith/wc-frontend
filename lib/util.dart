@@ -1,3 +1,5 @@
+import 'dart:async';
+
 typedef Json = Map<String, dynamic>;
 
 int asInt(dynamic v) {
@@ -94,4 +96,28 @@ String attributeName(String raw) {
   if (mapped != null) return mapped;
   // split the remaining camel case keys: MagicFind -> Magic Find
   return raw.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}');
+}
+
+/// runs at most [size] async tasks at the same time, the rest wait their turn
+class TaskPool {
+  TaskPool(this.size);
+
+  final int size;
+  int _running = 0;
+  final List<Completer<void>> _waiting = [];
+
+  Future<T> run<T>(Future<T> Function() task) async {
+    if (_running >= size) {
+      final turn = Completer<void>();
+      _waiting.add(turn);
+      await turn.future;
+    }
+    _running++;
+    try {
+      return await task();
+    } finally {
+      _running--;
+      if (_waiting.isNotEmpty) _waiting.removeAt(0).complete();
+    }
+  }
 }

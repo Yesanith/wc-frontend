@@ -121,8 +121,13 @@ final gw2ApiProvider = Provider<Gw2Api>((ref) {
   final lang = ref.watch(langProvider);
   // many entries refresh at once after a cold start, one re-read is enough
   Timer? pending;
-  ref.onDispose(() => pending?.cancel());
-  return Gw2Api(
+  late final Gw2Api api;
+  ref.onDispose(() {
+    pending?.cancel();
+    // a new key or language builds a new client, the old sockets go away
+    api.close();
+  });
+  return api = Gw2Api(
     ref.watch(apiKeyProvider).valueOrNull,
     lang: lang.apiLang,
     cache: ref.watch(diskCacheProvider),

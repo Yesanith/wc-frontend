@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,7 +29,7 @@ class ItemIndex {
   static Future<ItemIndex> load(AppLang lang) async {
     for (final code in {lang.apiLang, 'en'}) {
       try {
-        final raw = await rootBundle.loadString('assets/data/item_index_$code.txt');
+        final raw = await _read(code);
         final rows = <IndexedItem>[];
         for (final line in raw.split('\n')) {
           final tab = line.indexOf('\t');
@@ -41,6 +44,16 @@ class ItemIndex {
       }
     }
     return empty;
+  }
+
+  /// the index ships gzipped, a plain file is still read if a build has one
+  static Future<String> _read(String code) async {
+    try {
+      final bytes = await rootBundle.load('assets/data/item_index_$code.txt.gz');
+      return utf8.decode(gzip.decode(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)));
+    } catch (_) {
+      return rootBundle.loadString('assets/data/item_index_$code.txt');
+    }
   }
 
   /// exact matches first, then names that start with the query
