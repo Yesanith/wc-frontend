@@ -52,7 +52,10 @@ jobs:
 
       # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
-        run: flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+        run: |
+          flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+          # the template adds a counter app test for a MyApp we do not have
+          rm -f test/widget_test.dart
 
       # sign with a real release key, the flutter template would use the
       # public debug key which scanners flag as a test build

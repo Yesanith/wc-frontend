@@ -113,10 +113,12 @@ class _MapTilesState extends State<MapTiles> {
     final scale = math.min(viewport.width / width, viewport.height / height);
     // the matrix maps child pixels to viewport pixels as scale * (p + offset)
     final fitted = Matrix4.identity()
-      ..scale(scale)
-      ..translate(
+      ..scaleByDouble(scale, scale, scale, 1)
+      ..translateByDouble(
         (viewport.width / scale - width) / 2 - left,
         (viewport.height / scale - height) / 2 - top,
+        0,
+        1,
       );
 
     // the viewer listens to the controller, so writing to it inside build
