@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/cache.dart';
 import '../util.dart';
 import 'api.dart';
 
@@ -54,9 +55,38 @@ final achievementsProvider = FutureProvider<List<AchievementRow>>((ref) async {
   ];
 });
 
-final achievementsDoneProvider = FutureProvider<int>((ref) async {
+class AchievementSummary {
+  const AchievementSummary(this.done, this.inProgress);
+
+  final int done;
+
+  /// started but not finished. the in progress list is capped for display,
+  /// this is the real count
+  final int inProgress;
+}
+
+/// both counts off the one account call the tab already makes
+final achievementSummaryProvider = FutureProvider<AchievementSummary>((ref) async {
   final rows = await accountApi(ref).accountAchievements();
-  return rows.where((r) => r['done'] == true).length;
+  var done = 0;
+  var started = 0;
+  for (final r in rows) {
+    if (r['done'] == true) {
+      done++;
+    } else if (asInt(r['current']) > 0) {
+      started++;
+    }
+  }
+  return AchievementSummary(done, started);
+});
+
+/// how many achievements the game has, so the completed count has something
+/// to sit against. the id list only changes with a patch
+final achievementTotalProvider = FutureProvider<int>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final ids = await cachedList(cache, 'achievement_ids', 'ids', () => api.idList('/achievements'));
+  return ids.length;
 });
 
 class MasteryRow {
@@ -83,6 +113,14 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
   rows.sort((a, b) => '${a.region}${a.name}'.compareTo('${b.region}${b.name}'));
   return rows;
 });
+
+/// mastery levels finished against the levels in the tracks you own
+extension MasteryProgress on List<MasteryRow> {
+  ({int done, int total}) get tally => (
+        done: fold<int>(0, (n, m) => n + m.level),
+        total: fold<int>(0, (n, m) => n + m.total),
+      );
+}
 
 final masteryPointsProvider = FutureProvider<List<Json>>((ref) async {
   final raw = await accountApi(ref).masteryPoints();
@@ -154,6 +192,14 @@ final raidsProvider = FutureProvider<List<RaidWing>>((ref) async {
   return out;
 });
 
+/// encounters cleared this week against every encounter there is
+extension RaidProgress on List<RaidWing> {
+  ({int done, int total}) get tally => (
+        done: fold<int>(0, (n, w) => n + w.done),
+        total: fold<int>(0, (n, w) => n + w.encounters.length),
+      );
+}
+
 class DungeonPath {
   const DungeonPath(this.id, this.type, this.done);
   final String id;
@@ -189,5 +235,13 @@ final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
       ]),
   ];
 });
+
+/// paths run today against every path there is
+extension DungeonProgress on List<Dungeon> {
+  ({int done, int total}) get tally => (
+        done: fold<int>(0, (n, d) => n + d.done),
+        total: fold<int>(0, (n, d) => n + d.paths.length),
+      );
+}
 
 final pvpStatsProvider = FutureProvider<Json>((ref) => accountApi(ref).pvpStats());

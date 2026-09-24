@@ -340,13 +340,17 @@ class _BuildTab extends ConsumerWidget {
     // the character endpoint leaves the profession out of the build object
     final withProfession = {'profession': c['profession'], ...build};
     final items = ref.watch(characterItemsProvider('${c['name']}')).valueOrNull ?? const <int, Json>{};
-    // weapon types the character carries, so the skill bars match the gear
-    final weapons = <String>{
-      for (final e in activeEquipment(c))
-        if ('${e['slot']}'.startsWith('Weapon'))
-          if (items[asInt(e['id'])]?['type'] == 'Weapon')
-            '${(items[asInt(e['id'])]?['details'] as Map?)?['type'] ?? ''}',
-    }..removeWhere((w) => w.isEmpty);
+    // weapon types the character carries, so the skill bars match the gear.
+    // the names go through professionWeaponKey because the item table and the
+    // profession endpoint disagree on a few of them
+    final weapons = <String>{};
+    for (final e in activeEquipment(c)) {
+      if (!'${e['slot']}'.startsWith('Weapon')) continue;
+      final item = items[asInt(e['id'])];
+      if (item?['type'] != 'Weapon') continue;
+      final type = '${(item?['details'] as Map?)?['type'] ?? ''}';
+      if (type.isNotEmpty) weapons.add(professionWeaponKey(type));
+    }
     return BuildView(
       buildData: withProfession,
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),

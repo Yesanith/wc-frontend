@@ -9,7 +9,6 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
-import 'goals_screen.dart';
 import 'trading_screen.dart';
 
 class CraftingDetailScreen extends ConsumerStatefulWidget {
@@ -23,21 +22,6 @@ class CraftingDetailScreen extends ConsumerStatefulWidget {
 
 class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
   int _quantity = 1;
-
-  /// the base materials of the current plan become a goal
-  Future<void> _createGoal(Json? item, Map<int, int> leaves) async {
-    final s = ref.read(stringsProvider);
-    final base = (item?['name'] as String?) ?? s.t('item_n', {'id': widget.itemId});
-    final name = _quantity > 1 ? '$base x$_quantity' : base;
-    final goals = ref.read(goalsProvider.notifier);
-    final goal = await goals.create(name);
-    for (final e in leaves.entries) {
-      await goals.setItem(goal.id, e.key, e.value);
-    }
-    if (!mounted) return;
-    showToast(context, s.t('goal_created'));
-    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GoalDetailScreen(goalId: goal.id)));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,12 +92,6 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                   children: [for (final d in root.disciplines) Pill(d)],
                 ),
               ],
-              const SizedBox(height: 12),
-              FilledButton.icon(
-                onPressed: () => _createGoal(item, leaves),
-                icon: const Icon(Icons.flag_outlined),
-                label: Text(s.t('create_goal_from')),
-              ),
               const SizedBox(height: 16),
               _CostPanel(missingCost: missingCost, ownedValue: ownedValue, buyInstead: buyInstead),
               const SizedBox(height: 22),

@@ -40,28 +40,44 @@ class _AchievementsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final rows = ref.watch(achievementsProvider);
-    final done = ref.watch(achievementsDoneProvider).valueOrNull;
+    final summary = ref.watch(achievementSummaryProvider).valueOrNull;
+    final total = ref.watch(achievementTotalProvider).valueOrNull;
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, [achievementsProvider, achievementsDoneProvider]),
+      onRefresh: () => refreshProviders(ref, [achievementsProvider, achievementSummaryProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
-          if (done != null)
+          if (summary != null)
             Panel(
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(s.t('completed'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatTile(
+                          label: s.t('completed'),
+                          value: total == null
+                              ? fmtInt(summary.done)
+                              : '${fmtInt(summary.done)} / ${fmtInt(total)}',
+                        ),
+                      ),
+                      Expanded(
+                        child: StatTile(label: s.t('in_progress'), value: fmtInt(summary.inProgress)),
+                      ),
+                    ],
                   ),
-                  Text(fmtInt(done),
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  if (total != null && total > 0) ...[
+                    const SizedBox(height: 12),
+                    Bar(value: summary.done / total),
+                  ],
                 ],
               ),
             ),
           const SizedBox(height: 16),
-          SectionHeader(title: s.t('in_progress')),
+          SectionHeader(title: s.t('in_progress'), trailing: fmtInt(summary?.inProgress ?? 0)),
           const SizedBox(height: 10),
           AsyncView<List<AchievementRow>>(
             permission: 'progression',
@@ -152,7 +168,7 @@ class _MasteriesTab extends ConsumerWidget {
             ),
             const SizedBox(height: 22),
           ],
-          SectionHeader(title: s.t('mastery_tracks')),
+          SectionHeader(title: s.t('mastery_tracks'), trailing: _tally(rows.valueOrNull?.tally)),
           const SizedBox(height: 10),
           AsyncView<List<MasteryRow>>(
             permission: 'progression',
@@ -211,6 +227,13 @@ class _MasteriesTab extends ConsumerWidget {
 
 
 /// raid wings reset weekly, dungeon paths daily
+/// "6 / 27 · weekly", dropping to just the period until the numbers arrive
+String? _tally(({int done, int total})? counts, [String? period]) {
+  if (counts == null || counts.total == 0) return period;
+  final ratio = '${fmtInt(counts.done)} / ${fmtInt(counts.total)}';
+  return period == null ? ratio : '$ratio · $period';
+}
+
 class _InstancesTab extends ConsumerWidget {
   const _InstancesTab();
 
@@ -226,7 +249,7 @@ class _InstancesTab extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
-          SectionHeader(title: s.t('raids'), trailing: s.t('weekly')),
+          SectionHeader(title: s.t('raids'), trailing: _tally(raids.valueOrNull?.tally, s.t('weekly'))),
           const SizedBox(height: 10),
           AsyncView<List<RaidWing>>(
             permission: 'progression',
@@ -280,7 +303,7 @@ class _InstancesTab extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 22),
-          SectionHeader(title: s.t('dungeons'), trailing: s.t('daily')),
+          SectionHeader(title: s.t('dungeons'), trailing: _tally(dungeons.valueOrNull?.tally, s.t('daily'))),
           const SizedBox(height: 10),
           AsyncView<List<Dungeon>>(
             permission: 'progression',

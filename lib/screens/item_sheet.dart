@@ -4,11 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
-import 'goals_screen.dart';
 import 'item_detail_screen.dart';
 import 'trading_screen.dart';
 
-/// the quick actions for one item: details, wiki, trading post and goals.
+/// the quick actions for one item: details, wiki and the trading post.
 /// lives with the screens because every action navigates to one
 void showItemSheet(
   BuildContext context, {
@@ -74,32 +73,15 @@ void showItemSheet(
                   label: Text(s.t('open_in_wiki')),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(sheetContext).pop();
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: id)),
-                          );
-                        },
-                        icon: const Icon(Icons.storefront_outlined),
-                        label: Text(s.t('trading_post')),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.of(sheetContext).pop();
-                          showAddToGoalSheet(context, itemId: id, itemName: name);
-                        },
-                        icon: const Icon(Icons.flag_outlined),
-                        label: Text(s.t('add_to_goal')),
-                      ),
-                    ),
-                  ],
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: id)),
+                    );
+                  },
+                  icon: const Icon(Icons.storefront_outlined),
+                  label: Text(s.t('trading_post')),
                 ),
               ],
             ),

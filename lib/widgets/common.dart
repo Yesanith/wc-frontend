@@ -416,12 +416,11 @@ void showToast(BuildContext context, String message, {Duration duration = const 
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(
-      content: Text(message),
+      content: Text(message, style: const TextStyle(color: AppColors.text)),
       duration: duration,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + inset),
       backgroundColor: AppColors.surface2,
-      contentTextStyle: const TextStyle(color: AppColors.text),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ));
 }

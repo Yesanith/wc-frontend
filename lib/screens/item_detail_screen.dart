@@ -8,7 +8,6 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
-import 'goals_screen.dart';
 import 'trading_screen.dart';
 
 /// everything about one item. [instance] is the equipment entry it came from,
@@ -172,12 +171,6 @@ class ItemDetailScreen extends ConsumerWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: () => showAddToGoalSheet(context, itemId: itemId, itemName: name),
-            icon: const Icon(Icons.flag_outlined, size: 18),
-            label: Text(s.t('add_to_goal')),
           ),
         ],
       ),

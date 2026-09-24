@@ -231,7 +231,6 @@ class _QuickLinks extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final goals = ref.watch(goalsProvider);
     final watch = ref.watch(watchlistProvider);
     final now = DateTime.now().toUtc();
     final spawns = upcomingSpawns(now, ahead: const Duration(hours: 3));
@@ -254,15 +253,6 @@ class _QuickLinks extends ConsumerWidget {
         const SizedBox(height: 8),
         Row(
           children: [
-            Expanded(
-              child: _LinkTile(
-                icon: Icons.flag_outlined,
-                title: s.t('goals'),
-                subtitle: s.t('n_goals', {'n': goals.length}),
-                onTap: () => open(AppSection.goals),
-              ),
-            ),
-            const SizedBox(width: 8),
             Expanded(
               child: _LinkTile(
                 icon: Icons.storefront_outlined,

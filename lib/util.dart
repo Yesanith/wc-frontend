@@ -91,6 +91,18 @@ List<int> intList(dynamic raw) => [
         if (v != null) asInt(v),
     ];
 
+// the item table and /v2/professions spell three weapons differently, so an
+// equipped longbow never lines up with the profession's skill list unless the
+// name is translated first
+const _weaponKeys = {
+  'LongBow': 'Longbow',
+  'ShortBow': 'Shortbow',
+  'Harpoon': 'Spear',
+};
+
+/// an item's details.type as the profession endpoint keys its weapon skills
+String professionWeaponKey(String itemType) => _weaponKeys[itemType] ?? itemType;
+
 String attributeName(String raw) {
   final mapped = _attributeNames[raw];
   if (mapped != null) return mapped;

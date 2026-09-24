@@ -91,6 +91,28 @@ void main() {
     });
   });
 
+  group('professionWeaponKey', () {
+    test('translates the three the two endpoints spell differently', () {
+      // /v2/items says LongBow, /v2/professions keys its skills under Longbow
+      expect(professionWeaponKey('LongBow'), 'Longbow');
+      expect(professionWeaponKey('ShortBow'), 'Shortbow');
+      expect(professionWeaponKey('Harpoon'), 'Spear');
+    });
+
+    test('leaves the names that already agree alone', () {
+      for (final w in ['Axe', 'Dagger', 'Focus', 'Greatsword', 'Hammer', 'Mace', 'Pistol',
+                       'Rifle', 'Scepter', 'Shield', 'Speargun', 'Staff', 'Sword', 'Torch',
+                       'Trident', 'Warhorn']) {
+        expect(professionWeaponKey(w), w);
+      }
+    });
+
+    test('passes anything unknown straight through', () {
+      expect(professionWeaponKey('LargeBundle'), 'LargeBundle');
+      expect(professionWeaponKey(''), '');
+    });
+  });
+
   group('intList', () {
     test('drops nulls and coerces the rest', () {
       expect(intList([1, null, '3', 4.7]), [1, 3, 4]);
