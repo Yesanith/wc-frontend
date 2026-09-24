@@ -8,6 +8,7 @@ import '../state/api.dart';
 import '../state/navigation.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../widgets/common.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
@@ -143,10 +144,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   void _armExit() {
     _exitArmedUntil = DateTime.now().add(const Duration(seconds: 2));
-    final s = ref.read(stringsProvider);
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(s.t('back_again_to_exit')), duration: const Duration(seconds: 2)));
+    showToast(context, ref.read(stringsProvider).t('back_again_to_exit'),
+        duration: const Duration(seconds: 2));
   }
 
   /// back on the first page of any section, never switching sections:

@@ -182,7 +182,7 @@ void _copyChatLink(BuildContext context, WidgetRef ref, PointOfInterest poi) {
   final s = ref.read(stringsProvider);
   Clipboard.setData(ClipboardData(text: poi.chatLink));
   final label = poi.name.isEmpty ? s.t('copied') : '${poi.name} · ${s.t('copied')}';
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(label)));
+  showToast(context, label);
 }
 
 class _PoiRow extends ConsumerWidget {

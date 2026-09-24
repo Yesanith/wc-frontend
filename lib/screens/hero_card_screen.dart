@@ -45,7 +45,7 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
       await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Tyria Codex'));
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('share_failed'))));
+        showToast(context, s.t('share_failed'));
       }
     } finally {
       if (mounted) setState(() => _busy = false);

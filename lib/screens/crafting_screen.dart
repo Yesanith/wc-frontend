@@ -35,7 +35,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
       await goals.setItem(goal.id, e.key, e.value);
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('goal_created'))));
+    showToast(context, s.t('goal_created'));
     Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GoalDetailScreen(goalId: goal.id)));
   }
 

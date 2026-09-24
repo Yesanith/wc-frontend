@@ -19,22 +19,27 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> _import(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
     final ctrl = TextEditingController();
-    final text = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: Text(s.t('import_backup')),
-        content: TextField(
-          controller: ctrl,
-          maxLines: 6,
-          decoration: fieldDecoration(s.t('import_hint')),
+    String? text;
+    try {
+      text = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: AppColors.surface,
+          title: Text(s.t('import_backup')),
+          content: TextField(
+            controller: ctrl,
+            maxLines: 6,
+            decoration: fieldDecoration(s.t('import_hint')),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
+            FilledButton(onPressed: () => Navigator.of(ctx).pop(ctrl.text), child: Text(s.t('import_backup'))),
+          ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
-          FilledButton(onPressed: () => Navigator.of(ctx).pop(ctrl.text), child: Text(s.t('import_backup'))),
-        ],
-      ),
-    );
+      );
+    } finally {
+      ctrl.dispose();
+    }
     if (text == null || text.trim().isEmpty) return;
     var message = s.t('imported');
     try {
@@ -43,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
       message = s.t('import_failed');
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      showToast(context, message);
     }
   }
 
@@ -52,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
     await clearCache(ref.read(diskCacheProvider));
     await ref.read(iconCacheProvider)?.clear();
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('cache_cleared'))));
+      showToast(context, s.t('cache_cleared'));
     }
   }
 

@@ -408,6 +408,24 @@ class ItemIcon extends StatelessWidget {
   }
 }
 
+/// every short message the app shows. a default snack bar sits flush with the
+/// bottom of the window, which puts it behind the android navigation bar, so
+/// float it and lift it past whatever the system reserves down there
+void showToast(BuildContext context, String message, {Duration duration = const Duration(seconds: 3)}) {
+  final inset = MediaQuery.viewPaddingOf(context).bottom;
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(
+      content: Text(message),
+      duration: duration,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + inset),
+      backgroundColor: AppColors.surface2,
+      contentTextStyle: const TextStyle(color: AppColors.text),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ));
+}
+
 Future<void> openUrl(BuildContext context, String url, {String failMessage = 'Could not open the page'}) async {
   var ok = false;
   try {
@@ -416,7 +434,7 @@ Future<void> openUrl(BuildContext context, String url, {String failMessage = 'Co
     ok = false;
   }
   if (!ok && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(failMessage)));
+    showToast(context, failMessage);
   }
 }
 

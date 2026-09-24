@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../services/icon_cache.dart';
 import '../services/chat_code.dart';
+import '../services/icon_cache.dart';
 import '../state/builds.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -163,7 +163,7 @@ class _ChatCodeRow extends ConsumerWidget {
             icon: const Icon(Icons.copy, color: AppColors.gold),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: code));
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('copied'))));
+              showToast(context, s.t('copied'));
             },
           ),
         ],
