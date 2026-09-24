@@ -227,8 +227,9 @@ def write_item_index(items, lang):
     rows = sorted(items.values(), key=lambda r: r["id"])
     lines = []
     for row in rows:
-        name = row.get("name") or ""
-        if not name or "\t" in name:
+        # a few names carry line breaks, which would split the line format
+        name = " ".join((row.get("name") or "").split())
+        if not name:
             continue
         lines.append("%d\t%s\n" % (row["id"], name))
     # gzipped, the plain text of three languages was 7.5 MB of the apk.
@@ -356,7 +357,9 @@ def main():
     legendary_roots = {t["id"] for t in trees if t["kind"] == "legendary"}
     for tree in trees:
         flatten_forge(tree, forge, legendary_roots)
-    normal = [e for e in (book_entry_from_recipe(r) for r in fetch_all_recipes()) if e]
+    # guild decorations and similar outputs are not items, they would only
+    # show up as bare ids in the app
+    normal = [e for e in (book_entry_from_recipe(r) for r in fetch_all_recipes()) if e and e["o"] in items]
     book = normal + [e for oid, e in sorted(forge.items())]
     print("book: %d normal, %d mystic forge" % (len(normal), len(forge)), flush=True)
 

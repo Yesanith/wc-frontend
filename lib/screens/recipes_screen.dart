@@ -23,18 +23,17 @@ class RecipesScreen extends ConsumerStatefulWidget {
   ConsumerState<RecipesScreen> createState() => _RecipesScreenState();
 }
 
-/// filter chips: everything, legendaries, then one per discipline
-const _all = '';
+/// the first tab, then one per discipline
 const _legendary = 'legendary';
 
-/// how many rows the list shows before asking for a narrower search
-const _limit = 150;
+/// icons are fetched for this many rows at a time, as they scroll in
+const _chunk = 50;
 
 class _RecipesScreenState extends ConsumerState<RecipesScreen> {
   final _ctrl = TextEditingController();
   Timer? _debounce;
   String _query = '';
-  String _filter = _all;
+  String _filter = _legendary;
 
   @override
   void dispose() {
@@ -52,8 +51,6 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
 
   bool _matchesFilter(List<BookRecipe> recipes) {
     switch (_filter) {
-      case _all:
-        return true;
       case _legendary:
         return recipes.any((r) => r.legendary);
       default:
@@ -62,7 +59,6 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
   }
 
   String _label(S s, String discipline) {
-    if (discipline == _all) return s.t('all');
     if (discipline == _legendary) return s.t('legendaries');
     if (discipline == mysticForge) return s.t('mystic_forge');
     return discipline;
@@ -89,16 +85,13 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         var total = 0;
         for (final entry in b.byOutput.entries) {
           if (!_matchesFilter(entry.value)) continue;
-          final name = index.nameOf(entry.key) ?? '#${entry.key}';
+          final name = index.nameOf(entry.key);
+          if (name == null) continue;
           if (_query.isNotEmpty && !name.toLowerCase().contains(_query)) continue;
           total++;
           rows.add((entry.key, name, entry.value));
         }
         rows.sort((a, b) => a.$2.compareTo(b.$2));
-        final shown = rows.length > _limit ? rows.sublist(0, _limit) : rows;
-        // icons and rarity of the visible rows in one request, cached on disk
-        final details = ref.watch(itemBatchProvider(shown.map((r) => r.$1).join(','))).valueOrNull ??
-            const <int, Json>{};
 
         return Column(
           children: [
@@ -119,7 +112,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
-                  for (final d in [_all, _legendary, ...b.disciplines]) ...[
+                  for (final d in [_legendary, ...b.disciplines]) ...[
                     ChoiceChip(
                       label: Text(_label(s, d)),
                       selected: _filter == d,
@@ -135,9 +128,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  total > _limit
-                      ? s.t('recipes_more', {'n': fmtInt(total), 'shown': _limit})
-                      : s.t('recipes_count', {'n': fmtInt(total)}),
+                  s.t('recipes_count', {'n': fmtInt(total)}),
                   style: const TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
               ),
@@ -145,46 +136,19 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-                itemCount: shown.length,
+                itemCount: rows.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, i) {
-                  final (id, name, recipes) = shown[i];
-                  final disciplines = {for (final r in recipes) ...r.disciplines};
-                  final legendary = recipes.any((r) => r.legendary);
-                  final item = details[id];
-                  return AppCard(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: id)),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 40),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(name,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: legendary ? rarityColor('Legendary') : AppColors.text,
-                                  )),
-                              const SizedBox(height: 4),
-                              Wrap(
-                                spacing: 4,
-                                runSpacing: 4,
-                                children: [for (final d in disciplines) Pill(_label(s, d))],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Icon(Icons.chevron_right, color: AppColors.chevron),
-                      ],
-                    ),
+                  final (id, name, recipes) = rows[i];
+                  final from = i - i % _chunk;
+                  final to = from + _chunk > rows.length ? rows.length : from + _chunk;
+                  return _RecipeRow(
+                    id: id,
+                    name: name,
+                    recipes: recipes,
+                    // rows of the same chunk share one request for icons
+                    chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
+                    label: (d) => _label(s, d),
                   );
                 },
               ),
@@ -192,6 +156,64 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
           ],
         );
       },
+    );
+  }
+}
+
+
+class _RecipeRow extends ConsumerWidget {
+  const _RecipeRow({
+    required this.id,
+    required this.name,
+    required this.recipes,
+    required this.chunkKey,
+    required this.label,
+  });
+
+  final int id;
+  final String name;
+  final List<BookRecipe> recipes;
+  final String chunkKey;
+  final String Function(String discipline) label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final item = ref.watch(itemBatchProvider(chunkKey)).valueOrNull?[id];
+    final disciplines = {for (final r in recipes) ...r.disciplines};
+    final legendary = recipes.any((r) => r.legendary);
+    return AppCard(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: id)),
+      ),
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 40),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: legendary ? rarityColor('Legendary') : AppColors.text,
+                    )),
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: [for (final d in disciplines) Pill(label(d))],
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right, color: AppColors.chevron),
+        ],
+      ),
     );
   }
 }

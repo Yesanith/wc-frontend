@@ -112,31 +112,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     return _rootBack();
   }
 
-  /// sections visited before the current one, so back can walk them
-  final _history = <AppSection>[];
-
   /// set while a section is picked from the menu, so that closing the menu
   /// for navigation is not mistaken for a back press
   bool _selecting = false;
 
   /// after the menu was dismissed, a back press within this window exits
   DateTime? _exitArmedUntil;
-
-  /// set while back walks the history, so that step is not recorded again
-  bool _goingBack = false;
-
-  /// every section change is recorded here, whether it came from the menu or
-  /// from a shortcut on the home screen
-  void _recordSection(AppSection? previous, AppSection next) {
-    if (_goingBack) {
-      _goingBack = false;
-      return;
-    }
-    if (previous == null || previous == next) return;
-    _history.remove(previous);
-    _history.add(previous);
-    if (_history.length > 20) _history.removeAt(0);
-  }
 
   void _select(AppSection next) {
     _selecting = true;
@@ -160,9 +141,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       ..showSnackBar(SnackBar(content: Text(s.t('back_again_to_exit')), duration: const Duration(seconds: 2)));
   }
 
-  /// back on the root screen, in this order: close the menu, leave the app if
-  /// the menu was just dismissed, step back to the previous section, and
-  /// finally open the menu instead of quitting
+  /// back on the first page of any section. it never jumps to another
+  /// section: it opens the menu, a second back closes it and shows the exit
+  /// hint, and a third back within two seconds of that hint leaves the app
   bool _rootBack() {
     final scaffold = _scaffoldKey.currentState;
     if (scaffold == null) return false;
@@ -176,11 +157,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       SystemNavigator.pop();
       return true;
     }
-    if (_history.isNotEmpty) {
-      _goingBack = true;
-      ref.read(sectionProvider.notifier).state = _history.removeLast();
-      return true;
-    }
     scaffold.openDrawer();
     return true;
   }
@@ -189,7 +165,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
-    ref.listen<AppSection>(sectionProvider, _recordSection);
     final sync = ref.watch(syncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
