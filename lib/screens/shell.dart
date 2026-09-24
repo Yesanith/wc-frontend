@@ -125,15 +125,23 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     _scaffoldKey.currentState?.closeDrawer();
   }
 
+  /// when the menu was last dismissed by something other than picking a
+  /// section. on some flutter versions the navigator closes the menu on back
+  /// before we hear about it, this lets us still treat that as our back press
+  DateTime? _dismissedAt;
+
   void _drawerChanged(bool open) {
     if (open) return;
     if (_selecting) {
       _selecting = false;
       return;
     }
-    // dismissed by back, a swipe or the scrim: the next back may leave
-    final armed = _exitArmedUntil;
-    if (armed != null && DateTime.now().isBefore(armed)) return;
+    _dismissedAt = DateTime.now();
+  }
+
+  bool _within(DateTime? at, Duration window) => at != null && DateTime.now().difference(at) < window;
+
+  void _armExit() {
     _exitArmedUntil = DateTime.now().add(const Duration(seconds: 2));
     final s = ref.read(stringsProvider);
     ScaffoldMessenger.of(context)
@@ -141,20 +149,28 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       ..showSnackBar(SnackBar(content: Text(s.t('back_again_to_exit')), duration: const Duration(seconds: 2)));
   }
 
-  /// back on the first page of any section. it never jumps to another
-  /// section: it opens the menu, a second back closes it and shows the exit
-  /// hint, and a third back within two seconds of that hint leaves the app
+  /// back on the first page of any section, never switching sections:
+  /// the first press opens the menu, the second press with the menu open
+  /// shows the exit hint and keeps the menu, and a third press within two
+  /// seconds of that hint leaves the app
   bool _rootBack() {
     final scaffold = _scaffoldKey.currentState;
     if (scaffold == null) return false;
-    if (scaffold.isDrawerOpen) {
-      // _drawerChanged arms the exit and shows the hint
-      scaffold.closeDrawer();
-      return true;
-    }
     final armed = _exitArmedUntil;
     if (armed != null && DateTime.now().isBefore(armed)) {
       SystemNavigator.pop();
+      return true;
+    }
+    if (scaffold.isDrawerOpen) {
+      _armExit();
+      return true;
+    }
+    // the navigator already closed the menu for this press: reopen it and
+    // treat the press as the second one
+    if (_within(_dismissedAt, const Duration(milliseconds: 1500))) {
+      _dismissedAt = null;
+      scaffold.openDrawer();
+      _armExit();
       return true;
     }
     scaffold.openDrawer();
