@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/sync.dart';
@@ -80,7 +81,7 @@ class AppShell extends ConsumerStatefulWidget {
   ConsumerState<AppShell> createState() => _AppShellState();
 }
 
-class _AppShellState extends ConsumerState<AppShell> {
+class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // sections are only built once they're opened, so the app doesn't hit
@@ -90,11 +91,48 @@ class _AppShellState extends ConsumerState<AppShell> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // pull the whole account to disk once on launch, so opening a section
     // reads from the cache instead of waiting on the api
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(syncProvider.notifier).run();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// the system back button on the root screen. this observer is registered
+  /// after the app's own, so it is asked first. returning false hands the
+  /// event on to the navigator as usual
+  @override
+  Future<bool> didPopRoute() async {
+    // a pushed page, dialog or sheet is on top: let it close normally
+    final route = ModalRoute.of(context);
+    if (route == null || !route.isCurrent) return false;
+    return _rootBack();
+  }
+
+  DateTime? _drawerClosedAt;
+
+  /// back on the root screen: open the menu, and leave the app when the menu
+  /// is already open. depending on the flutter version the drawer may be
+  /// closed by the navigator before we hear about it, so a press right
+  /// after it closed counts as the second press too
+  bool _rootBack() {
+    final scaffold = _scaffoldKey.currentState;
+    if (scaffold == null) return false;
+    final closed = _drawerClosedAt;
+    final justClosed = closed != null && DateTime.now().difference(closed) < const Duration(seconds: 1);
+    if (scaffold.isDrawerOpen || justClosed) {
+      SystemNavigator.pop();
+      return true;
+    }
+    scaffold.openDrawer();
+    return true;
   }
 
   @override
@@ -112,8 +150,18 @@ class _AppShellState extends ConsumerState<AppShell> {
     final accountName = ref.watch(accountProvider).valueOrNull?['name'] as String?;
     _opened.add(section);
 
-    return Scaffold(
+    // canPop false makes the framework claim the back gesture, otherwise
+    // android's predictive back would quit before _rootBack gets a say
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _rootBack();
+      },
+      child: Scaffold(
       key: _scaffoldKey,
+      onDrawerChanged: (open) {
+        if (!open) _drawerClosedAt = DateTime.now();
+      },
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
@@ -177,6 +225,7 @@ class _AppShellState extends ConsumerState<AppShell> {
             ),
         ],
       ),
+    ),
     );
   }
 }
