@@ -84,7 +84,8 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         final rows = <(int, String, List<BookRecipe>)>[];
         var total = 0;
         for (final entry in b.byOutput.entries) {
-          if (!_matchesFilter(entry.value)) continue;
+          // a search looks through every recipe, the tabs only filter the browse view
+          if (_query.isEmpty && !_matchesFilter(entry.value)) continue;
           final name = index.nameOf(entry.key);
           if (name == null) continue;
           if (_query.isNotEmpty && !name.toLowerCase().contains(_query)) continue;
@@ -115,7 +116,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                   for (final d in [_legendary, ...b.disciplines]) ...[
                     ChoiceChip(
                       label: Text(_label(s, d)),
-                      selected: _filter == d,
+                      selected: _query.isEmpty && _filter == d,
                       onSelected: (_) => setState(() => _filter = d),
                     ),
                     const SizedBox(width: 8),
