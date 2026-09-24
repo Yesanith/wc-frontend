@@ -112,19 +112,73 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     return _rootBack();
   }
 
-  DateTime? _drawerClosedAt;
+  /// sections visited before the current one, so back can walk them
+  final _history = <AppSection>[];
 
-  /// back on the root screen: open the menu, and leave the app when the menu
-  /// is already open. depending on the flutter version the drawer may be
-  /// closed by the navigator before we hear about it, so a press right
-  /// after it closed counts as the second press too
+  /// set while a section is picked from the menu, so that closing the menu
+  /// for navigation is not mistaken for a back press
+  bool _selecting = false;
+
+  /// after the menu was dismissed, a back press within this window exits
+  DateTime? _exitArmedUntil;
+
+  /// set while back walks the history, so that step is not recorded again
+  bool _goingBack = false;
+
+  /// every section change is recorded here, whether it came from the menu or
+  /// from a shortcut on the home screen
+  void _recordSection(AppSection? previous, AppSection next) {
+    if (_goingBack) {
+      _goingBack = false;
+      return;
+    }
+    if (previous == null || previous == next) return;
+    _history.remove(previous);
+    _history.add(previous);
+    if (_history.length > 20) _history.removeAt(0);
+  }
+
+  void _select(AppSection next) {
+    _selecting = true;
+    ref.read(sectionProvider.notifier).state = next;
+    _scaffoldKey.currentState?.closeDrawer();
+  }
+
+  void _drawerChanged(bool open) {
+    if (open) return;
+    if (_selecting) {
+      _selecting = false;
+      return;
+    }
+    // dismissed by back, a swipe or the scrim: the next back may leave
+    final armed = _exitArmedUntil;
+    if (armed != null && DateTime.now().isBefore(armed)) return;
+    _exitArmedUntil = DateTime.now().add(const Duration(seconds: 2));
+    final s = ref.read(stringsProvider);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(s.t('back_again_to_exit')), duration: const Duration(seconds: 2)));
+  }
+
+  /// back on the root screen, in this order: close the menu, leave the app if
+  /// the menu was just dismissed, step back to the previous section, and
+  /// finally open the menu instead of quitting
   bool _rootBack() {
     final scaffold = _scaffoldKey.currentState;
     if (scaffold == null) return false;
-    final closed = _drawerClosedAt;
-    final justClosed = closed != null && DateTime.now().difference(closed) < const Duration(seconds: 1);
-    if (scaffold.isDrawerOpen || justClosed) {
+    if (scaffold.isDrawerOpen) {
+      // _drawerChanged arms the exit and shows the hint
+      scaffold.closeDrawer();
+      return true;
+    }
+    final armed = _exitArmedUntil;
+    if (armed != null && DateTime.now().isBefore(armed)) {
       SystemNavigator.pop();
+      return true;
+    }
+    if (_history.isNotEmpty) {
+      _goingBack = true;
+      ref.read(sectionProvider.notifier).state = _history.removeLast();
       return true;
     }
     scaffold.openDrawer();
@@ -135,6 +189,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
+    ref.listen<AppSection>(sectionProvider, _recordSection);
     final sync = ref.watch(syncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
@@ -155,9 +210,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       },
       child: Scaffold(
       key: _scaffoldKey,
-      onDrawerChanged: (open) {
-        if (!open) _drawerClosedAt = DateTime.now();
-      },
+      onDrawerChanged: _drawerChanged,
       appBar: AppBar(
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
@@ -180,10 +233,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         backgroundColor: AppColors.navBg,
         indicatorColor: const Color(0x2EE3B55B),
         selectedIndex: section.index,
-        onDestinationSelected: (i) {
-          ref.read(sectionProvider.notifier).state = AppSection.values[i];
-          _scaffoldKey.currentState?.closeDrawer();
-        },
+        onDestinationSelected: (i) => _select(AppSection.values[i]),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(28, 24, 16, 16),

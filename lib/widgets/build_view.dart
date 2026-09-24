@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/icon_cache.dart';
 import '../services/chat_code.dart';
 import '../state/builds.dart';
 import '../state/settings.dart';
@@ -199,9 +200,7 @@ class _SpecCard extends StatelessWidget {
                   width: 36,
                   height: 36,
                   child: info?['icon'] is String
-                      ? Image.network(info!['icon'] as String,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stack) => const ColoredBox(color: AppColors.surface2))
+                      ? CachedIcon(url: info!['icon'] as String)
                       : const ColoredBox(color: AppColors.surface2),
                 ),
               ),

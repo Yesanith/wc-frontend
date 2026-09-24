@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../services/item_index.dart';
 import '../services/recipe_book.dart';
+import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -95,6 +96,9 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         }
         rows.sort((a, b) => a.$2.compareTo(b.$2));
         final shown = rows.length > _limit ? rows.sublist(0, _limit) : rows;
+        // icons and rarity of the visible rows in one request, cached on disk
+        final details = ref.watch(itemBatchProvider(shown.map((r) => r.$1).join(','))).valueOrNull ??
+            const <int, Json>{};
 
         return Column(
           children: [
@@ -147,12 +151,16 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                   final (id, name, recipes) = shown[i];
                   final disciplines = {for (final r in recipes) ...r.disciplines};
                   final legendary = recipes.any((r) => r.legendary);
+                  final item = details[id];
                   return AppCard(
                     onTap: () => Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: id)),
                     ),
+                    padding: const EdgeInsets.all(10),
                     child: Row(
                       children: [
+                        ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 40),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

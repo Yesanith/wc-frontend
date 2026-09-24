@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../api/gw2_api.dart';
+import '../services/icon_cache.dart';
 import '../state/api.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -386,12 +387,7 @@ class ItemIcon extends StatelessWidget {
           : Stack(
               fit: StackFit.expand,
               children: [
-                if (u != null)
-                  Image.network(
-                    u,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stack) => const SizedBox.shrink(),
-                  ),
+                if (u != null) CachedIcon(url: u),
                 if (n != null && n > 1)
                   Positioned(
                     right: 3,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/icon_cache.dart';
 import '../state/account.dart';
 import '../state/builds.dart';
 import '../state/settings.dart';
@@ -123,11 +124,7 @@ class _WalletTab extends ConsumerWidget {
                             height: 28,
                             child: others[i].icon == null
                                 ? const Icon(Icons.circle_outlined, size: 20, color: AppColors.muted)
-                                : Image.network(
-                                    others[i].icon!,
-                                    errorBuilder: (context, error, stack) =>
-                                        const Icon(Icons.circle_outlined, size: 20, color: AppColors.muted),
-                                  ),
+                                : CachedIcon(url: others[i].icon!, fit: BoxFit.contain),
                           ),
                           const SizedBox(width: 12),
                           Expanded(

@@ -16,12 +16,40 @@ on:
 
 permissions:
   contents: write
+  # to see whether the recipe data job is still running
+  actions: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # the recipe job can run for half an hour after a push. a release built
+      # meanwhile would ship the old data, so wait for it first
+      - name: Wait for the recipe data job
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 100); do
+            running=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow data.yml --limit 20 \
+              --json status --jq '[.[] | select(.status != "completed")] | length')
+            if [ "$running" = "0" ]; then
+              echo "no recipe job running"
+              exit 0
+            fi
+            echo "recipe job still running, waiting ($i)"
+            sleep 30
+          done
+          echo "::warning::gave up waiting for the recipe job, building with the data in the tag"
+
       - uses: actions/checkout@v4
+
+      # the tag fixes the code, but the recipe job commits its data to main
+      # afterwards. take the newest data from main so the release includes it
+      - name: Use the newest recipe data
+        run: |
+          git fetch --depth=1 origin main
+          git checkout FETCH_HEAD -- assets/data
+          git status --short assets/data
 
       - uses: actions/setup-java@v4
         with:

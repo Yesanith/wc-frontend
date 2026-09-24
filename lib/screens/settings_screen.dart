@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../services/backup.dart';
+import '../services/icon_cache.dart';
 import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
@@ -49,6 +50,7 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> _clearCache(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
     await clearCache(ref.read(diskCacheProvider));
+    await ref.read(iconCacheProvider)?.clear();
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s.t('cache_cleared'))));
     }

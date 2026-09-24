@@ -32,6 +32,7 @@ class S {
 
 const _strings = <String, Map<String, String>>{
   'en': {
+    'back_again_to_exit': 'Press back again to exit',
     'mystic_forge': 'Mystic Forge',
     'recipes_count': '{n} recipes',
     'recipes_more': '{n} recipes, showing the first {shown}. Search to narrow it down.',
@@ -366,6 +367,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Mining pick',
   },
   'de': {
+    'back_again_to_exit': 'Zum Beenden erneut zurück drücken',
     'mystic_forge': 'Mystische Schmiede',
     'recipes_count': '{n} Rezepte',
     'recipes_more': '{n} Rezepte, die ersten {shown} werden gezeigt. Suche zum Eingrenzen.',
@@ -700,6 +702,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Spitzhacke',
   },
   'fr': {
+    'back_again_to_exit': 'Appuie encore sur retour pour quitter',
     'mystic_forge': 'Forge mystique',
     'recipes_count': '{n} recettes',
     'recipes_more': '{n} recettes, les {shown} premières sont affichées. Cherche pour affiner.',
@@ -1034,6 +1037,7 @@ const _strings = <String, Map<String, String>>{
     'slot_Pick': 'Pioche',
   },
   'tr': {
+    'back_again_to_exit': 'Çıkmak için tekrar geri bas',
     'mystic_forge': 'Mystic Forge',
     'recipes_count': '{n} tarif',
     'recipes_more': '{n} tarif, ilk {shown} tanesi gösteriliyor. Daraltmak için ara.',
