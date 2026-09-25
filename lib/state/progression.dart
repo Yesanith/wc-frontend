@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/cache.dart';
 import '../util.dart';
 import 'api.dart';
+import 'settings.dart';
 
 /// world bosses, daily crafts and map chests already done today.
 /// needs the progression permission, empty when it is missing
@@ -24,7 +25,19 @@ class AchievementRow {
   final bool done;
 
   String get name => (detail?['name'] as String?) ?? 'Achievement #$id';
-  int get points => asInt(detail?['point_cap']);
+
+  /// only repeatable achievements carry a point_cap, everything else adds up
+  /// the points of its tiers
+  int get points {
+    final cap = asInt(detail?['point_cap']);
+    if (cap > 0) return cap;
+    var sum = 0;
+    for (final t in (detail?['tiers'] as List?) ?? const []) {
+      if (t is Map) sum += asInt(t['points']);
+    }
+    return sum;
+  }
+
   double get ratio => max == 0 ? 0 : current / max;
 }
 
@@ -80,6 +93,118 @@ final achievementSummaryProvider = FutureProvider<AchievementSummary>((ref) asyn
   return AchievementSummary(done, started);
 });
 
+class AchievementCategory {
+  const AchievementCategory(this.id, this.name, this.icon, this.achievementIds);
+  final int id;
+  final String name;
+  final String? icon;
+  final List<int> achievementIds;
+}
+
+class AchievementGroup {
+  const AchievementGroup(this.id, this.name, this.categories);
+  final String id;
+  final String name;
+  final List<AchievementCategory> categories;
+
+  int get achievementCount =>
+      categories.fold<int>(0, (n, c) => n + c.achievementIds.length);
+}
+
+/// the whole achievement catalogue, groups in game order with their
+/// categories. static data, so it lives on disk for a month
+final achievementCatalogueProvider = FutureProvider<List<AchievementGroup>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final lang = ref.watch(langProvider);
+
+  final groupRows = await cachedList(
+    cache,
+    'ach_groups_${lang.apiLang}',
+    'rows',
+    () async => api.details('/achievements/groups', await api.idList('/achievements/groups')),
+  );
+  final categoryRows = await cachedList(
+    cache,
+    'ach_categories_${lang.apiLang}',
+    'rows',
+    () async => api.details('/achievements/categories', await api.idList('/achievements/categories')),
+  );
+
+  final byId = <int, AchievementCategory>{};
+  for (final raw in categoryRows.whereType<Map>()) {
+    final c = Map<String, dynamic>.from(raw);
+    final id = asInt(c['id']);
+    byId[id] = AchievementCategory(
+      id,
+      '${c['name'] ?? ''}',
+      c['icon'] as String?,
+      // entries are {"id": n} objects, not bare ids
+      [
+        for (final a in (c['achievements'] as List?) ?? const [])
+          asInt(a is Map ? a['id'] : a),
+      ],
+    );
+  }
+
+  final groups = <AchievementGroup>[];
+  for (final raw in groupRows.whereType<Map>()) {
+    final g = Map<String, dynamic>.from(raw);
+    final categories = [
+      for (final cid in (g['categories'] as List?) ?? const [])
+        if (byId[asInt(cid)] != null) byId[asInt(cid)]!,
+    ];
+    if (categories.isEmpty) continue;
+    groups.add(AchievementGroup('${g['id']}', '${g['name'] ?? ''}', categories));
+  }
+  groups.sort((a, b) => a.name.compareTo(b.name));
+  return groups;
+});
+
+/// one category's achievements with this account's progress on each
+final categoryAchievementsProvider =
+    FutureProvider.family<List<AchievementRow>, int>((ref, categoryId) async {
+  final api = accountApi(ref);
+  final groups = await ref.watch(achievementCatalogueProvider.future);
+
+  var ids = const <int>[];
+  for (final g in groups) {
+    for (final c in g.categories) {
+      if (c.id == categoryId) ids = c.achievementIds;
+    }
+  }
+  if (ids.isEmpty) return const [];
+
+  final details = await api.achievements(ids);
+  var progress = const <int, Json>{};
+  try {
+    progress = {for (final r in await api.accountAchievements()) asInt(r['id']): r};
+  } catch (_) {
+    // no progression permission: the catalogue still reads fine without it
+  }
+
+  return [
+    for (final id in ids)
+      AchievementRow(
+        id,
+        details[id],
+        asInt(progress[id]?['current']),
+        // without account progress the target is the last tier's count
+        progress[id]?['max'] != null ? asInt(progress[id]?['max']) : _topTier(details[id]),
+        progress[id]?['done'] == true,
+      ),
+  ];
+});
+
+/// the count the final tier asks for, which is what finishing it takes
+int _topTier(Json? detail) {
+  var top = 0;
+  for (final t in (detail?['tiers'] as List?) ?? const []) {
+    if (t is Map && asInt(t['count']) > top) top = asInt(t['count']);
+  }
+  return top;
+}
+
 /// how many achievements the game has, so the completed count has something
 /// to sit against. the id list only changes with a patch
 final achievementTotalProvider = FutureProvider<int>((ref) async {
@@ -99,18 +224,39 @@ class MasteryRow {
 
   String get name => (detail?['name'] as String?) ?? 'Mastery #$id';
   String get region => (detail?['region'] as String?) ?? '';
-  int get total => ((detail?['levels'] as List?) ?? const []).length;
+  String get requirement => (detail?['requirement'] as String?) ?? '';
+  List<Json> get levels => [
+        for (final l in (detail?['levels'] as List?) ?? const [])
+          if (l is Map) Map<String, dynamic>.from(l),
+      ];
+  int get total => levels.length;
+  bool get started => level > 0;
 }
 
+/// every mastery track in the game, with how far this account took each one.
+/// the account endpoint only names tracks you already started, so the
+/// catalogue comes from the static list and the owned level is laid over it
 final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
   final api = accountApi(ref);
-  final owned = await api.accountMasteries();
-  final byId = {for (final m in owned) asInt(m['id']): asInt(m['level'])};
-  final details = await api.masteries(byId.keys);
+  final ids = await api.idList('/masteries');
+  final details = await api.masteries([for (final id in ids) asInt(id)]);
+
+  var owned = const <int, int>{};
+  try {
+    // the level the api reports is the last one finished, counting from zero
+    owned = {for (final m in await api.accountMasteries()) asInt(m['id']): asInt(m['level']) + 1};
+  } catch (_) {
+    // no progression permission: the catalogue is still worth showing
+  }
+
   final rows = [
-    for (final e in byId.entries) MasteryRow(e.key, details[e.key], e.value + 1),
+    for (final id in ids)
+      MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0),
   ];
-  rows.sort((a, b) => '${a.region}${a.name}'.compareTo('${b.region}${b.name}'));
+  rows.sort((a, b) {
+    if (a.region != b.region) return a.region.compareTo(b.region);
+    return asInt(a.detail?['order']).compareTo(asInt(b.detail?['order']));
+  });
   return rows;
 });
 
