@@ -239,7 +239,9 @@ class _EquipmentRow extends ConsumerWidget {
     final stats = entry['stats'];
     // "Berserker's" reads better than a list of attributes, fall back to the
     // attributes when the combination has no name
-    final comboName = stats is Map ? ref.watch(itemStatsProvider).valueOrNull?[asInt(stats['id'])] : null;
+    // no ?[ inside the ternary, the parser reads that as a second condition
+    final statNames = ref.watch(itemStatsProvider).valueOrNull ?? const <int, String>{};
+    final comboName = stats is Map ? statNames[asInt(stats['id'])] : null;
     final statName = comboName ??
         (stats is Map && stats['attributes'] is Map
             ? (stats['attributes'] as Map).keys.take(2).map((k) => attributeName('$k')).join(', ')
