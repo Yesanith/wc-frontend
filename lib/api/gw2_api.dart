@@ -454,6 +454,30 @@ class Gw2Api {
 
   Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
 
+  /// the nine rank tiers, Rabbit through Dragon. static
+  Future<List<Json>> pvpRanks() async => details('/pvp/ranks', await idList('/pvp/ranks'));
+
+  /// pvp amulets with their attribute spreads. static
+  Future<List<Json>> pvpAmulets() async => details('/pvp/amulets', await idList('/pvp/amulets'));
+
+  /// the last matches the api remembers, newest last. the list endpoint gives
+  /// ids and the details come from the same path. needs the pvp permission
+  Future<List<Json>> pvpGames() async {
+    final ids = await idList('/pvp/games');
+    if (ids.isEmpty) return const [];
+    return details('/pvp/games', ids);
+  }
+
+  /// league standing per season. needs the pvp permission
+  Future<List<Json>> pvpStandings() async => _list(await cachedGet('/pvp/standings'));
+
+  /// one season, which names the divisions a standing points at
+  Future<Json?> pvpSeason(String id) async {
+    if (id.isEmpty) return null;
+    final rows = await details('/pvp/seasons', [id]);
+    return rows.isEmpty ? null : rows.first;
+  }
+
   /// revenant legends, ids look like "Legend1"
   Future<List<Json>> legends(List<String> ids) async {
     if (ids.isEmpty) return const [];
