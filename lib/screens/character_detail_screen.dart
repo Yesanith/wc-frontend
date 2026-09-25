@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../state/characters.dart';
 import '../state/items.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/build_view.dart';
 import '../widgets/common.dart';
+import 'character_progress.dart';
 import 'compare_screen.dart';
 import 'hero_card_screen.dart';
 import 'item_detail_screen.dart';
@@ -43,7 +45,10 @@ class CharacterDetailScreen extends ConsumerWidget {
       body = Column(
         children: [
           _Hero(c),
-          AppTabBar(labels: [s.t('equipment'), s.t('build'), s.t('inventory'), s.t('crafting')]),
+          AppTabBar(
+            scrollable: true,
+            labels: [s.t('equipment'), s.t('build'), s.t('inventory'), s.t('crafting'), s.t('progress')],
+          ),
           Expanded(
             child: TabBarView(
               children: [
@@ -51,6 +56,7 @@ class CharacterDetailScreen extends ConsumerWidget {
                 _BuildTab(c),
                 _InventoryTab(c),
                 _CraftingTab(c),
+                CharacterProgressTab(name: '${c['name']}', profession: '${c['profession'] ?? ''}'),
               ],
             ),
           ),
@@ -68,7 +74,7 @@ class CharacterDetailScreen extends ConsumerWidget {
     }
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.bg,
@@ -231,9 +237,13 @@ class _EquipmentRow extends ConsumerWidget {
     final upgrades = intList(entry['upgrades']);
     final infusions = intList(entry['infusions']);
     final stats = entry['stats'];
-    final statName = stats is Map && stats['attributes'] is Map
-        ? (stats['attributes'] as Map).keys.take(2).map((k) => attributeName('$k')).join(', ')
-        : '';
+    // "Berserker's" reads better than a list of attributes, fall back to the
+    // attributes when the combination has no name
+    final comboName = stats is Map ? ref.watch(itemStatsProvider).valueOrNull?[asInt(stats['id'])] : null;
+    final statName = comboName ??
+        (stats is Map && stats['attributes'] is Map
+            ? (stats['attributes'] as Map).keys.take(2).map((k) => attributeName('$k')).join(', ')
+            : '');
 
     return Material(
       color: AppColors.surface,

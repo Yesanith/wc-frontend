@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
+import '../services/recipe_book.dart';
 import '../state/account.dart';
 import '../state/crafting.dart';
 import '../state/items.dart';
@@ -89,7 +91,10 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
-                  children: [for (final d in root.disciplines) Pill(d)],
+                  children: [
+                    for (final d in root.disciplines) Pill(d),
+                    ..._learnedPill(ref, s, widget.itemId),
+                  ],
                 ),
               ],
               const SizedBox(height: 16),
@@ -283,4 +288,15 @@ class _CraftNodeTile extends StatelessWidget {
       ),
     );
   }
+}
+
+
+/// "learned" or "not learned" for a regular recipe, nothing for forge ones or
+/// when the key cannot read unlocks
+List<Widget> _learnedPill(WidgetRef ref, S s, int itemId) {
+  final recipe = ref.watch(recipeBookProvider).valueOrNull?.recipeFor(itemId);
+  final learned = ref.watch(learnedRecipesProvider).valueOrNull;
+  if (recipe == null || recipe.id <= 0 || learned == null) return const [];
+  final known = learned.contains(recipe.id);
+  return [Pill(s.t(known ? 'recipe_learned' : 'recipe_not_learned'), color: known ? AppColors.green : AppColors.red)];
 }

@@ -18,6 +18,7 @@ class CollectionKind {
 
 const collectionKinds = <CollectionKind>[
   CollectionKind('mounts', '/account/mounts/types', '/mounts/types'),
+  CollectionKind('mount_skins', '/account/mounts/skins', '/mounts/skins'),
   CollectionKind('gliders', '/account/gliders', '/gliders'),
   CollectionKind('minis', '/account/minis', '/minis'),
   CollectionKind('dyes', '/account/dyes', '/colors'),
@@ -30,4 +31,10 @@ const collectionKinds = <CollectionKind>[
   CollectionKind('wardrobe', '/account/skins', '/skins', hasDetails: false),
   CollectionKind('home_cats', '/account/home/cats', '/home/cats'),
   CollectionKind('home_nodes', '/account/home/nodes', '/home/nodes', hasDetails: false),
+  CollectionKind('homestead_decorations', '/account/homestead/decorations', '/homestead/decorations'),
+  CollectionKind('homestead_glyphs', '/account/homestead/glyphs', '/homestead/glyphs'),
+  CollectionKind('jadebots', '/account/jadebots', '/jadebots'),
+  CollectionKind('skiffs', '/account/skiffs', '/skiffs'),
+  // the account endpoint lists hero skins, so the entries are skins, not heroes
+  CollectionKind('pvp_heroes', '/account/pvp/heroes', '/pvp/heroes'),
 ];

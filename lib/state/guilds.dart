@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';
+import 'reference.dart';
 
 /// guild ids the account belongs to, plus the ones it leads
 final guildIdsProvider = FutureProvider<List<String>>((ref) async {
@@ -78,4 +79,53 @@ final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) asy
   final log = await accountApi(ref).guildLog(id);
   log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
   return log.take(50).toList();
+});
+
+
+// -------------------------------------------------------------------------
+// leader only parts: members, ranks, teams, storage and built upgrades
+
+final guildMembersProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+  final rows = await accountApi(ref).guildPart(id, 'members');
+  rows.sort((a, b) => '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
+  return rows;
+});
+
+final guildRanksProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+  final rows = await accountApi(ref).guildPart(id, 'ranks');
+  rows.sort((a, b) => asInt(a['order']).compareTo(asInt(b['order'])));
+  return rows;
+});
+
+final guildTeamsProvider = FutureProvider.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
+
+class GuildUpgradeRow {
+  const GuildUpgradeRow(this.id, this.count, this.detail);
+  final int id;
+  final int count;
+  final Json? detail;
+
+  String get name => (detail?['name'] as String?) ?? '#$id';
+  String? get icon => detail?['icon'] as String?;
+  String get type => (detail?['type'] as String?) ?? '';
+}
+
+/// decorations and consumables in the guild hall storage
+final guildStorageProvider = FutureProvider.family<List<GuildUpgradeRow>, String>((ref, id) async {
+  final rows = await accountApi(ref).guildPart(id, 'storage');
+  final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
+  final out = [
+    for (final r in rows)
+      if (asInt(r['count']) > 0) GuildUpgradeRow(asInt(r['id']), asInt(r['count']), catalog['${asInt(r['id'])}']),
+  ]..sort((a, b) => a.name.compareTo(b.name));
+  return out;
+});
+
+/// upgrades the guild already built, grouped later by type
+final guildBuiltUpgradesProvider = FutureProvider.family<List<GuildUpgradeRow>, String>((ref, id) async {
+  final ids = await accountApi(ref).guildUpgradeIds(id);
+  final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
+  final out = [for (final u in ids) GuildUpgradeRow(u, 1, catalog['$u'])]
+    ..sort((a, b) => a.type == b.type ? a.name.compareTo(b.name) : a.type.compareTo(b.type));
+  return out;
 });

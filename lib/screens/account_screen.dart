@@ -31,7 +31,7 @@ class AccountScreen extends ConsumerWidget {
                   onPressed: () {
                     ref.invalidate(walletProvider);
                     ref.invalidate(bankProvider);
-                    ref.invalidate(materialsProvider);
+                    ref.invalidate(materialGroupsProvider);
                   },
                   icon: const Icon(Icons.refresh, color: AppColors.gold),
                 ),
@@ -104,6 +104,8 @@ class _WalletTab extends ConsumerWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+            const _AccountCounters(),
             const SizedBox(height: 14),
             Panel(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
@@ -220,46 +222,52 @@ class _MaterialsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final mats = ref.watch(materialsProvider);
-    return AsyncView<List<ItemSlot>>(
-      value: mats,
-      onRetry: () => ref.invalidate(materialsProvider),
+    final groups = ref.watch(materialGroupsProvider);
+    return AsyncView<List<MaterialGroup>>(
+      value: groups,
+      onRetry: () => ref.invalidate(materialGroupsProvider),
       builder: (list) {
         if (list.isEmpty) {
           return Center(child: Text(s.t('materials_empty'), style: const TextStyle(color: AppColors.muted)));
         }
-        return ListView.separated(
+        // one grid per storage category, like the game shows it
+        return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          itemCount: list.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
-          itemBuilder: (context, i) {
-            final m = list[i];
-            return ItemRow(
-              icon: m.icon,
-              rarity: m.rarity,
-              title: m.name,
-              titleLines: 1,
-              trailing: Text(fmtInt(m.count),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
-              onTap: () => showItemSheet(
-                context,
-                id: m.id,
-                name: m.name,
-                icon: m.icon,
-                rarity: m.rarity,
-                type: m.type,
-                count: m.count,
+          children: [
+            for (final g in list) ...[
+              SectionHeader(title: g.name == '?' ? s.t('other') : g.name, trailing: '${g.slots.length}'),
+              const SizedBox(height: 10),
+              GridView.count(
+                crossAxisCount: 6,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 6,
+                crossAxisSpacing: 6,
+                children: [
+                  for (final m in g.slots)
+                    GestureDetector(
+                      onTap: () => showItemSheet(
+                        context,
+                        id: m.id,
+                        name: m.name,
+                        icon: m.icon,
+                        rarity: m.rarity,
+                        type: m.type,
+                        count: m.count,
+                      ),
+                      child: ItemIcon(url: m.icon, rarity: m.rarity, count: m.count),
+                    ),
+                ],
               ),
-            );
-          },
+              const SizedBox(height: 20),
+            ],
+          ],
         );
       },
     );
   }
 }
 
-
-/// legendary items in the armory, shared by every character
 class _ArmoryTab extends ConsumerWidget {
   const _ArmoryTab();
 
@@ -379,6 +387,44 @@ class _BuildsTab extends ConsumerWidget {
           },
         );
       },
+    );
+  }
+}
+
+
+/// luck and the fractal account augmentations, when the key may read them
+class _AccountCounters extends ConsumerWidget {
+  const _AccountCounters();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final luck = ref.watch(accountLuckProvider).valueOrNull?['luck'] ?? 0;
+    final progression = ref.watch(accountProgressionProvider).valueOrNull ?? const <String, int>{};
+    final rows = <(String, int)>[
+      if (luck > 0) (s.t('luck'), luck),
+      for (final e in progression.entries)
+        if (e.key != 'luck' && e.value > 0) (titleCase(e.key.replaceAll('_', ' ')), e.value),
+    ];
+    if (rows.isEmpty) return const SizedBox.shrink();
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('account_progress').toUpperCase()),
+          const SizedBox(height: 8),
+          for (final (label, value) in rows)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                  Text(fmtInt(value), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

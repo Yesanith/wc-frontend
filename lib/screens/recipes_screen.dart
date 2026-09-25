@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../services/item_index.dart';
 import '../services/recipe_book.dart';
+import '../state/account.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -69,6 +70,8 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
     final s = ref.watch(stringsProvider);
     final book = ref.watch(recipeBookProvider);
     final index = ref.watch(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
+    // recipe ids the account knows, empty without the unlocks permission
+    final learned = ref.watch(learnedRecipesProvider).valueOrNull ?? const <int>{};
 
     return AsyncView<RecipeBook>(
       value: book,
@@ -150,6 +153,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                     // rows of the same chunk share one request for icons
                     chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
                     label: (d) => _label(s, d),
+                    learned: recipes.any((r) => r.id > 0 && learned.contains(r.id)),
                   );
                 },
               ),
@@ -169,6 +173,7 @@ class _RecipeRow extends ConsumerWidget {
     required this.recipes,
     required this.chunkKey,
     required this.label,
+    this.learned = false,
   });
 
   final int id;
@@ -176,6 +181,7 @@ class _RecipeRow extends ConsumerWidget {
   final List<BookRecipe> recipes;
   final String chunkKey;
   final String Function(String discipline) label;
+  final bool learned;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -212,6 +218,10 @@ class _RecipeRow extends ConsumerWidget {
               ],
             ),
           ),
+          if (learned) ...[
+            const Icon(Icons.check_circle, size: 18, color: AppColors.green),
+            const SizedBox(width: 4),
+          ],
           const Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),

@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import 'events_screen.dart';
+import 'vault_shop_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -89,6 +90,16 @@ class _VaultSectionState extends ConsumerState<_VaultSection> {
               ),
               if (track != _tracks.last) const SizedBox(width: 8),
             ],
+            const Spacer(),
+            // the astral reward shop of the running season
+            IconButton(
+              tooltip: s.t('vault_shop'),
+              visualDensity: VisualDensity.compact,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()),
+              ),
+              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold),
+            ),
           ],
         ),
         const SizedBox(height: 10),

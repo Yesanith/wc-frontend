@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'api.dart';
 import 'characters.dart';
+import 'reference.dart';
 
 final accountProvider = FutureProvider<Json>((ref) => accountApi(ref).account());
 
@@ -40,18 +41,6 @@ final bankProvider = FutureProvider<List<ItemSlot?>>((ref) async {
   return <ItemSlot?>[
     for (final s in raw)
       s == null ? null : ItemSlot(asInt(s['id']), asInt(s['count']), items[asInt(s['id'])]),
-  ];
-});
-
-final materialsProvider = FutureProvider<List<ItemSlot>>((ref) async {
-  final api = accountApi(ref);
-  final raw = await api.materials();
-  final owned = raw.where((m) => asInt(m['count']) > 0).toList()
-    ..sort((a, b) => asInt(b['count']).compareTo(asInt(a['count'])));
-  final top = owned.take(80).toList();
-  final items = await api.items(top.map((m) => asInt(m['id'])));
-  return [
-    for (final m in top) ItemSlot(asInt(m['id']), asInt(m['count']), items[asInt(m['id'])]),
   ];
 });
 
@@ -95,4 +84,56 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
     }
   }
   return totals;
+});
+
+
+// -------------------------------------------------------------------------
+// extras
+
+/// recipe ids this account has learned
+final learnedRecipesProvider = FutureProvider<Set<int>>((ref) async => (await accountApi(ref).learnedRecipes()).toSet());
+
+/// {'luck': n}
+final accountLuckProvider = FutureProvider<Map<String, int>>((ref) => accountApi(ref).accountCounters('/account/luck'));
+
+/// fractal augmentations and similar account wide counters
+final accountProgressionProvider =
+    FutureProvider<Map<String, int>>((ref) => accountApi(ref).accountCounters('/account/progression'));
+
+final accountWvwProvider = FutureProvider<Json>((ref) => accountApi(ref).accountWvw());
+
+class MaterialGroup {
+  const MaterialGroup(this.name, this.slots);
+  final String name;
+  final List<ItemSlot> slots;
+}
+
+/// material storage grouped by the game's categories, every owned stack
+final materialGroupsProvider = FutureProvider<List<MaterialGroup>>((ref) async {
+  final api = accountApi(ref);
+  final categoriesFuture = ref.watch(materialCategoriesProvider.future);
+  final raw = await api.materials();
+  final owned = raw.where((m) => asInt(m['count']) > 0).toList();
+  final items = await api.items(owned.map((m) => asInt(m['id'])));
+  final categories = await categoriesFuture;
+
+  final byCategory = <int, List<ItemSlot>>{};
+  for (final m in owned) {
+    byCategory
+        .putIfAbsent(asInt(m['category']), () => [])
+        .add(ItemSlot(asInt(m['id']), asInt(m['count']), items[asInt(m['id'])]));
+  }
+  final groups = <MaterialGroup>[];
+  for (final c in categories) {
+    final slots = byCategory.remove(asInt(c['id']));
+    if (slots == null || slots.isEmpty) continue;
+    slots.sort((a, b) => b.count.compareTo(a.count));
+    groups.add(MaterialGroup('${c['name'] ?? ''}', slots));
+  }
+  // anything in a category the reference data does not know yet
+  for (final slots in byCategory.values) {
+    slots.sort((a, b) => b.count.compareTo(a.count));
+    groups.add(MaterialGroup('?', slots));
+  }
+  return groups;
 });

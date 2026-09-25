@@ -267,6 +267,8 @@ def book_entry_from_recipe(row):
     if not ingredients or not row.get("output_item_id"):
         return None
     return {
+        # the recipe id, the app matches it against the account's learned recipes
+        "id": row.get("id", 0),
         "o": row["output_item_id"],
         "n": row.get("output_item_count", 1) or 1,
         "d": row.get("disciplines") or [],

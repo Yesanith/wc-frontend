@@ -38,6 +38,13 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - English, German, Spanish, French and Turkish UI. Item names and the wiki follow the
   selected language where the API and wiki support it (Turkish falls back to English data)
 
+- World vs World: live matchup scores, objectives per map with owner and upgrade tier, rank and abilities
+- Wizard's Vault reward shop with the season, your Astral Acclaim and what you already bought
+- Character progress: hero challenges, training trees, story journal per season, Super Adventure Box and biography
+- Guild members, ranks, teams, built upgrades, hall storage and rendered guild emblems
+- More collections: mount skins, homestead decorations and glyphs, jade bots, skiffs and PvP heroes
+- Stat combination names on gear, material storage by category, trading post order book,
+  learned recipe markers, luck and fractal augmentations, and the PvP season leaderboard
 ## Updating
 
 Settings shows the installed version and checks the GitHub releases for a newer one. When

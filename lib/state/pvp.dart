@@ -205,3 +205,13 @@ final pvpStandingProvider = FutureProvider<PvpStanding?>((ref) async {
     totalPoints: asInt(current['total_points']),
   );
 });
+
+
+/// the top of a season's ladder. key is "seasonId|region", region na or eu
+final pvpLadderProvider = FutureProvider.family<List<Json>, String>((ref, key) async {
+  final parts = key.split('|');
+  if (parts.length != 2 || parts[0].isEmpty) return const [];
+  final rows = await ref.watch(gw2ApiProvider).pvpLadder(parts[0], parts[1]);
+  rows.sort((a, b) => asInt(a['rank']).compareTo(asInt(b['rank'])));
+  return rows;
+});

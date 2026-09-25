@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
 import '../data/collections.dart';
 import '../services/cache.dart';
 import '../util.dart';
@@ -23,10 +24,22 @@ final collectionIdsProvider = FutureProvider.family<List<String>, String>((ref, 
     cache,
     'collection_ids_${kind.key}',
     'ids',
-    () => api.idList(kind.staticPath),
+    () async => kind.key == 'pvp_heroes'
+        ? [for (final skin in await _heroSkins(api)) '${skin['id']}']
+        : await api.idList(kind.staticPath),
   );
   return rows.map((e) => '$e').toList();
 });
+
+/// pvp heroes carry their skins inline, the account unlocks skins
+Future<List<Json>> _heroSkins(Gw2Api api) async {
+  final heroes = await api.details('/pvp/heroes', await api.idList('/pvp/heroes'));
+  return [
+    for (final hero in heroes)
+      for (final skin in (hero['skins'] as List?) ?? const [])
+        if (skin is Map) Map<String, dynamic>.from(skin),
+  ];
+}
 
 final collectionUnlockedProvider = FutureProvider.family<Set<String>, String>((ref, key) async {
   final api = accountApi(ref);
@@ -66,7 +79,7 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
     cache,
     'collection_${kind.key}_${lang.apiLang}',
     'rows',
-    () => api.details(kind.staticPath, ids),
+    () async => kind.key == 'pvp_heroes' ? await _heroSkins(api) : await api.details(kind.staticPath, ids),
   );
   final rows = raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 

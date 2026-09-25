@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/item_index.dart';
 import '../state/account.dart';
+import '../state/api.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
 import '../state/trading.dart';
@@ -69,6 +70,8 @@ class TradingItemScreen extends ConsumerWidget {
                   ? Panel(child: Text(s.t('not_tradeable'), style: const TextStyle(color: AppColors.muted)))
                   : _PricePanel(p),
             ),
+            const SizedBox(height: 12),
+            _OrderBook(itemId: itemId),
             const SizedBox(height: 12),
             Panel(
               child: Row(
@@ -751,6 +754,71 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
           ),
           const SizedBox(height: 8),
           Text(s.t('exchange_note'), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// the first price levels on both sides of the market, with the quantity
+/// waiting at each price
+final _listingsProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) => ref.watch(gw2ApiProvider).listings(id));
+
+class _OrderBook extends ConsumerWidget {
+  const _OrderBook({required this.itemId});
+
+  final int itemId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final book = ref.watch(_listingsProvider(itemId)).valueOrNull;
+    if (book == null) return const SizedBox.shrink();
+    List<Json> side(String key) => [
+          for (final row in (book[key] as List?) ?? const [])
+            if (row is Map) Map<String, dynamic>.from(row),
+        ].take(5).toList();
+    final sells = side('sells');
+    final buys = side('buys');
+    if (sells.isEmpty && buys.isEmpty) return const SizedBox.shrink();
+
+    Widget column(String title, List<Json> rows, Color color) => Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title.toUpperCase(),
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+              const SizedBox(height: 6),
+              for (final r in rows)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3),
+                  child: Row(
+                    children: [
+                      Expanded(child: CoinText(asInt(r['unit_price']), size: 12)),
+                      Text(fmtInt(asInt(r['quantity'])),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('order_book').toUpperCase()),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              column(s.t('sell_orders'), sells, AppColors.red),
+              const SizedBox(width: 16),
+              column(s.t('buy_orders'), buys, AppColors.green),
+            ],
+          ),
         ],
       ),
     );

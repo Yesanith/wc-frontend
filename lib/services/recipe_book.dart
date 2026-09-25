@@ -12,6 +12,7 @@ const mysticForge = 'MysticForge';
 /// one way to make an item. normal crafting and mystic forge share this shape
 class BookRecipe {
   const BookRecipe({
+    this.id = 0,
     required this.output,
     required this.outputCount,
     required this.disciplines,
@@ -21,6 +22,8 @@ class BookRecipe {
     this.legendary = false,
   });
 
+  /// the api recipe id, 0 for forge recipes which have none
+  final int id;
   final int output;
   final int outputCount;
   final List<String> disciplines;
@@ -39,6 +42,7 @@ class BookRecipe {
     final output = asInt(j['o']);
     if (output <= 0) return null;
     return BookRecipe(
+      id: asInt(j['id']),
       output: output,
       outputCount: asInt(j['n']) <= 0 ? 1 : asInt(j['n']),
       disciplines: [for (final d in (j['d'] as List?) ?? const []) '$d'],

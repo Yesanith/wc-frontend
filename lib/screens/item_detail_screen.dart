@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/account.dart';
 import '../state/items.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -75,7 +76,10 @@ class ItemDetailScreen extends ConsumerWidget {
           ],
           if (attributes.isNotEmpty) ...[
             const SizedBox(height: 18),
-            SectionHeader(title: s.t('attributes')),
+            SectionHeader(
+              title: s.t('attributes'),
+              trailing: _comboName(ref, instance, details),
+            ),
             const SizedBox(height: 10),
             Panel(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -247,4 +251,14 @@ class _UpgradeRow extends ConsumerWidget {
              ),
     );
   }
+}
+
+
+/// the name of the stat combination, from the equipped piece or the item
+String? _comboName(WidgetRef ref, Json? instance, Json? details) {
+  final chosen = instance?['stats'];
+  final infix = details?['infix_upgrade'];
+  final id = chosen is Map ? asInt(chosen['id']) : (infix is Map ? asInt(infix['id']) : 0);
+  if (id <= 0) return null;
+  return ref.watch(itemStatsProvider).valueOrNull?[id];
 }

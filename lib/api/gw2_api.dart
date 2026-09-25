@@ -452,6 +452,94 @@ class Gw2Api {
       Map<String, dynamic>.from(
           await get('/continents/$continent/floors/$floor/regions/$region/maps/$map') as Map);
 
+  // ---------------------------------------------------------------------
+  // static reference data, requested whole with ids=all
+
+  /// every entry of a static endpoint that accepts ids=all
+  Future<List<Json>> allOf(String path) async => _list(await get(path, {'ids': 'all'}));
+
+  /// the current game build, changes with every patch
+  Future<int> gameBuild() async {
+    final raw = await get('/build');
+    return raw is Map ? asInt(raw['id']) : 0;
+  }
+
+  // ---------------------------------------------------------------------
+  // account extras
+
+  /// recipe ids the account has learned. needs the unlocks permission
+  Future<List<int>> learnedRecipes() async =>
+      [for (final v in (await cachedGet('/account/recipes') as List)) asInt(v)];
+
+  /// luck, fractal augmentations and similar counters, as {id: value}
+  Future<Map<String, int>> accountCounters(String path) async {
+    final raw = await cachedGet(path);
+    return {
+      for (final row in (raw as List? ?? const []))
+        if (row is Map) '${row['id']}': asInt(row['value']),
+    };
+  }
+
+  /// the team and guild the account plays world vs world with
+  Future<Json> accountWvw() async => Map<String, dynamic>.from(await cachedGet('/account/wvw') as Map);
+
+  /// one part of a character, such as heropoints, sab, quests or training
+  Future<dynamic> characterPart(String name, String part) =>
+      cachedGet('/characters/${Uri.encodeComponent(name)}/$part');
+
+  // ---------------------------------------------------------------------
+  // wizard's vault
+
+  Future<Json> vaultSeason() async => Map<String, dynamic>.from(await get('/wizardsvault') as Map);
+
+  /// the astral reward shop with what this account already bought
+  Future<List<Json>> vaultListings() async => _list(await cachedGet('/account/wizardsvault/listings'));
+
+  // ---------------------------------------------------------------------
+  // trading post
+
+  /// full order book of one item, every price level with its quantity
+  Future<Json?> listings(int itemId) async {
+    try {
+      return Map<String, dynamic>.from(await get('/commerce/listings/$itemId') as Map);
+    } on Gw2ApiException catch (e) {
+      // untradeable items answer 404
+      if (e.status == 404) return null;
+      rethrow;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // guilds. members, ranks, storage and teams need a guild leader's key
+
+  Future<List<Json>> guildPart(String id, String part) async => _list(await cachedGet('/guild/$id/$part'));
+
+  /// upgrade ids the guild has built
+  Future<List<int>> guildUpgradeIds(String id) async =>
+      [for (final v in (await cachedGet('/guild/$id/upgrades') as List)) asInt(v)];
+
+  // ---------------------------------------------------------------------
+  // world vs world, live data is never cached
+
+  Future<Json?> wvwMatch(int team) async {
+    try {
+      return Map<String, dynamic>.from(await get('/wvw/matches', {'world': '$team'}) as Map);
+    } on Gw2ApiException catch (e) {
+      if (e.status == 404) return null;
+      rethrow;
+    }
+  }
+
+  /// next lockout or team assignment per region, kind is lockout or teamAssignment
+  Future<Json> wvwTimer(String kind) async => Map<String, dynamic>.from(await get('/wvw/timers/$kind') as Map);
+
+  // ---------------------------------------------------------------------
+  // pvp leaderboards
+
+  /// the ladder of one season and region (na or eu)
+  Future<List<Json>> pvpLadder(String seasonId, String region) async =>
+      _list(await get('/pvp/seasons/$seasonId/leaderboards/ladder/$region'));
+
   Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
 
   /// the nine rank tiers, Rabbit through Dragon. static

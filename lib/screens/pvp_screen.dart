@@ -160,3 +160,96 @@ class PvpAmuletsScreen extends ConsumerWidget {
     );
   }
 }
+
+
+/// the top of the current league season's ladder, per region
+class PvpLadderScreen extends ConsumerStatefulWidget {
+  const PvpLadderScreen({super.key});
+
+  @override
+  ConsumerState<PvpLadderScreen> createState() => _PvpLadderScreenState();
+}
+
+class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
+  String _region = 'eu';
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final standing = ref.watch(pvpStandingProvider).valueOrNull;
+    final seasonId = standing?.seasonId ?? '';
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: Colors.transparent,
+        title: Text(s.t('leaderboard'), style: display(20)),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            child: Row(
+              children: [
+                for (final r in const ['eu', 'na']) ...[
+                  ChoiceChip(
+                    label: Text(r.toUpperCase()),
+                    selected: _region == r,
+                    onSelected: (_) => setState(() => _region = r),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                const Spacer(),
+                if (standing != null)
+                  Flexible(
+                    child: Text(standing.seasonName,
+                        overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: seasonId.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(s.t('no_season'), style: const TextStyle(color: AppColors.muted)),
+                  )
+                : AsyncView<List<Json>>(
+                    value: ref.watch(pvpLadderProvider('$seasonId|$_region')),
+                    onRetry: () => ref.invalidate(pvpLadderProvider('$seasonId|$_region')),
+                    builder: (rows) => ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                      itemCount: rows.length,
+                      separatorBuilder: (_, __) => const Divider(color: AppColors.track, height: 1),
+                      itemBuilder: (context, i) {
+                        final r = rows[i];
+                        final scores = (r['scores'] as List?) ?? const [];
+                        final rating = scores.isEmpty || scores.first is! Map ? 0 : asInt((scores.first as Map)['value']);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 40,
+                                child: Text('${asInt(r['rank'])}',
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                              ),
+                              Expanded(
+                                child: Text('${r['name'] ?? ''}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                              ),
+                              Text(fmtInt(rating), style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}

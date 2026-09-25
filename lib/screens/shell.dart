@@ -6,6 +6,7 @@ import '../services/sync.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/navigation.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -21,12 +22,14 @@ import 'recipes_screen.dart';
 import 'settings_screen.dart';
 import 'trading_screen.dart';
 import 'wiki_screen.dart';
+import 'wvw_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
   AppSection.characters: 'nav_characters',
   AppSection.collections: 'collections',
   AppSection.progression: 'progression',
+  AppSection.wvw: 'wvw',
   AppSection.account: 'nav_account',
   AppSection.guilds: 'guilds',
   AppSection.trading: 'trading_post',
@@ -42,6 +45,7 @@ const _icons = {
   AppSection.characters: (Icons.shield_outlined, Icons.shield),
   AppSection.collections: (Icons.auto_awesome_outlined, Icons.auto_awesome),
   AppSection.progression: (Icons.emoji_events_outlined, Icons.emoji_events),
+  AppSection.wvw: (Icons.fort_outlined, Icons.fort),
   AppSection.account: (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
   AppSection.guilds: (Icons.groups_outlined, Icons.groups),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
@@ -57,6 +61,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.characters => const CharactersScreen(),
       AppSection.collections => const CollectionsScreen(),
       AppSection.progression => const ProgressionScreen(),
+      AppSection.wvw => const WvwScreen(),
       AppSection.account => const AccountScreen(),
       AppSection.guilds => const GuildsScreen(),
       AppSection.trading => const TradingHubScreen(),
@@ -85,6 +90,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // after a game patch the static data cache is cleared once
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(patchCheckProvider.future).catchError((_) => false);
+    });
     // pull the whole account to disk once on launch, so opening a section
     // reads from the cache instead of waiting on the api
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -610,6 +610,12 @@ class _PvpTab extends ConsumerWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                _PvpLink(
+                  icon: Icons.leaderboard_outlined,
+                  label: s.t('leaderboard'),
+                  page: () => const PvpLadderScreen(),
+                ),
                 const SizedBox(height: 22),
                 SectionHeader(title: s.t('per_profession')),
                 const SizedBox(height: 10),
