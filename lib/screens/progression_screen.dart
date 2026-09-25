@@ -173,7 +173,7 @@ class _MasteriesTab extends ConsumerWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text('${p['region'] ?? ''}',
+                            child: Text(masteryRegionName('${p['region'] ?? ''}'),
                                 style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                           ),
                           Text(s.t('points_spent', {'a': asInt(p['spent']), 'b': asInt(p['earned'])}),

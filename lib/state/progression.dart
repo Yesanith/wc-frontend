@@ -214,6 +214,30 @@ final achievementTotalProvider = FutureProvider<int>((ref) async {
   return ids.length;
 });
 
+/// the api names a mastery region after the part of the world it belongs to,
+/// the game groups the same tracks by the release that introduced them. the
+/// order here is release order, which is how the hero panel lists them
+const _masteryRegions = <String, String>{
+  'Tyria': 'Central Tyria',
+  'Maguuma': 'Heart of Thorns',
+  'Desert': 'Path of Fire',
+  'Tundra': 'Icebrood Saga',
+  'Jade': 'End of Dragons',
+  'Sky': 'Secrets of the Obscure',
+  'Wild': 'Janthir Wilds',
+  'Magic': 'Visions of Eternity',
+};
+
+/// the release name for an api mastery region, unchanged when a new one ships
+/// before this table knows about it
+String masteryRegionName(String apiRegion) => _masteryRegions[apiRegion] ?? apiRegion;
+
+/// where a region sits in release order, unknown ones last
+int masteryRegionRank(String apiRegion) {
+  final index = _masteryRegions.keys.toList().indexOf(apiRegion);
+  return index < 0 ? _masteryRegions.length : index;
+}
+
 class MasteryRow {
   const MasteryRow(this.id, this.detail, this.level);
   final int id;
@@ -223,7 +247,12 @@ class MasteryRow {
   final int level;
 
   String get name => (detail?['name'] as String?) ?? 'Mastery #$id';
-  String get region => (detail?['region'] as String?) ?? '';
+
+  /// the api's own region name, used for ordering
+  String get regionKey => (detail?['region'] as String?) ?? '';
+
+  /// the release the game files this track under
+  String get region => masteryRegionName(regionKey);
   String get requirement => (detail?['requirement'] as String?) ?? '';
   List<Json> get levels => [
         for (final l in (detail?['levels'] as List?) ?? const [])
@@ -254,7 +283,8 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
       MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0),
   ];
   rows.sort((a, b) {
-    if (a.region != b.region) return a.region.compareTo(b.region);
+    final byRelease = masteryRegionRank(a.regionKey).compareTo(masteryRegionRank(b.regionKey));
+    if (byRelease != 0) return byRelease;
     return asInt(a.detail?['order']).compareTo(asInt(b.detail?['order']));
   });
   return rows;
@@ -268,12 +298,16 @@ extension MasteryProgress on List<MasteryRow> {
       );
 }
 
+/// spent and earned points per release, in the same order as the tracks
 final masteryPointsProvider = FutureProvider<List<Json>>((ref) async {
   final raw = await accountApi(ref).masteryPoints();
-  return ((raw['totals'] as List?) ?? const [])
+  final totals = ((raw['totals'] as List?) ?? const [])
       .whereType<Map>()
       .map((e) => Map<String, dynamic>.from(e))
       .toList();
+  totals.sort((a, b) =>
+      masteryRegionRank('${a['region']}').compareTo(masteryRegionRank('${b['region']}')));
+  return totals;
 });
 
 class DailyProgress {

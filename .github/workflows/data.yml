@@ -22,8 +22,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      # one search index per language the api translates. turkish is absent on
+      # purpose: AppLang.tr asks the api in english and reuses that index
       - name: Build legendary recipe trees
-        run: python tools/build_recipes.py en de fr
+        run: python tools/build_recipes.py en de es fr
 
       - name: Commit if changed
         # tags check out a detached head, only branch runs can push back
