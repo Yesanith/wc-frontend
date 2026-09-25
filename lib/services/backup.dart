@@ -18,7 +18,6 @@ Map<String, dynamic> buildBackup(WidgetRef ref) {
     'lang': ref.read(langProvider).code,
     'watchlist': ref.read(watchlistProvider),
     'pinned_events': ref.read(pinnedEventsProvider).toList(),
-    'goals': ref.read(goalsProvider).map((g) => g.toJson()).toList(),
   };
 }
 
@@ -49,12 +48,6 @@ Future<void> restoreBackup(WidgetRef ref, String text) async {
     await ref.read(pinnedEventsProvider.notifier).replaceAll(pinned.map((e) => '$e').toSet());
   }
 
-  final goals = raw['goals'];
-  if (goals is List) {
-    await ref.read(goalsProvider.notifier).replaceAll(
-          goals.whereType<Map>().map((e) => Goal.fromJson(Map<String, dynamic>.from(e))).toList(),
-        );
-  }
 }
 
 Future<void> clearCache(DiskCache? cache) async => cache?.clear();

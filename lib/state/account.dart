@@ -56,7 +56,8 @@ final materialsProvider = FutureProvider<List<ItemSlot>>((ref) async {
 });
 
 /// how many of each item the account owns: bank + material storage +
-/// shared slots + every character's bags. used by goals and the tp screen
+/// shared slots + every character's bags. shown as "you own" on item,
+/// trading post and crafting screens
 final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
   final api = accountApi(ref);
   final charsFuture = ref.watch(charactersProvider.future);

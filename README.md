@@ -25,17 +25,15 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Item pages with attributes, upgrades, what you own and the current trading post price
 - World boss timers in your local time, with pinning and a marker for the ones you already did today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
-- Goals for legendaries or any big craft, tracked against everything your account owns
-- Goals suggest what to buy first, cheapest missing piece at the top
 - Side by side character comparison
 - Recipes: every crafting and Mystic Forge recipe in one place, filterable by discipline,
   with a calculator that shows the tree, what your account already covers, the cost of the
-  missing materials, whether buying is cheaper, and one tap to turn it into a goal
+  missing materials and whether buying is cheaper
 - Shareable hero cards for your characters
 - Maps drawn from the official tile service, with a pin on every waypoint and
   landmark, and chat codes ready to copy
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
-- Backup: export and import goals, watchlist, pinned bosses and language as json
+- Backup: export and import the watchlist, pinned bosses and language as json
 - Game data (items, colors, collection entries) is cached on disk for a month
 - English, German, Spanish, French and Turkish UI. Item names and the wiki follow the
   selected language where the API and wiki support it (Turkish falls back to English data)
