@@ -1,18 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tyria_codex/l10n/strings.dart';
 
 /// keys are plain strings, so a typo only shows up at runtime as the raw key.
-/// this reads the sources and the table and fails the build instead
+/// this reads the sources and the tables and fails the build instead
 void main() {
-  final table = File('lib/l10n/strings.dart').readAsStringSync();
-
+  /// one file per language, each holding a single top level map
   Map<String, Set<String>> keysPerLanguage() {
+    final key = RegExp(r"^  '([A-Za-z_0-9]+)':", multiLine: true);
     final out = <String, Set<String>>{};
-    final block = RegExp(r"^  '(\w+)': \{\n(.*?)\n  \},", multiLine: true, dotAll: true);
-    final key = RegExp(r"^    '([A-Za-z_0-9]+)':", multiLine: true);
-    for (final m in block.allMatches(table)) {
-      out[m.group(1)!] = {for (final k in key.allMatches(m.group(2)!)) k.group(1)!};
+    for (final lang in AppLang.values) {
+      final file = File('lib/l10n/${lang.code}.dart');
+      expect(file.existsSync(), isTrue, reason: 'no table for ${lang.code}');
+      out[lang.code] = {
+        for (final m in key.allMatches(file.readAsStringSync())) m.group(1)!,
+      };
     }
     return out;
   }
@@ -29,10 +32,14 @@ void main() {
     return used;
   }
 
+  test('every language the app offers has a table', () {
+    expect(keysPerLanguage().keys, containsAll(['en', 'de', 'es', 'fr', 'tr']));
+  });
+
   test('every language has the same keys', () {
     final langs = keysPerLanguage();
-    expect(langs.keys, containsAll(['en', 'de', 'fr', 'tr']));
     final english = langs['en']!;
+    expect(english, isNotEmpty);
     for (final entry in langs.entries) {
       expect(entry.value.difference(english), isEmpty, reason: '${entry.key} has keys english lacks');
       expect(english.difference(entry.value), isEmpty, reason: '${entry.key} is missing keys');
@@ -43,5 +50,19 @@ void main() {
     final english = keysPerLanguage()['en']!;
     final missing = usedKeys().difference(english);
     expect(missing, isEmpty, reason: 'unknown string keys: $missing');
+  });
+
+  test('every language actually resolves a string', () {
+    for (final lang in AppLang.values) {
+      expect(S(lang).t('nav_settings'), isNotEmpty);
+      // an unknown key falls back to the key itself rather than throwing
+      expect(S(lang).t('definitely_not_a_key'), 'definitely_not_a_key');
+    }
+  });
+
+  test('placeholders are filled in every language', () {
+    for (final lang in AppLang.values) {
+      expect(S(lang).t('n_items', {'n': 7}), contains('7'));
+    }
   });
 }

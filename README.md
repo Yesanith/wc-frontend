@@ -37,8 +37,8 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
 - Backup: export and import goals, watchlist, pinned bosses and language as json
 - Game data (items, colors, collection entries) is cached on disk for a month
-- English, German, French and Turkish UI. Item names and the wiki follow the selected
-  language where the API and wiki support it (Turkish falls back to English data)
+- English, German, Spanish, French and Turkish UI. Item names and the wiki follow the
+  selected language where the API and wiki support it (Turkish falls back to English data)
 
 ## Updating
 
@@ -101,7 +101,7 @@ version there is not worth keeping in step.
 lib/
   api/        GW2 API and wiki clients
   data/       static data such as the world boss schedule
-  l10n/       UI strings for every language
+  l10n/       one table per language, plus the AppLang enum that ties them together
   screens/    one file per screen
   services/   disk cache, backup import/export and the recipe library
   state/      Riverpod providers, one file per domain, and persisted settings
