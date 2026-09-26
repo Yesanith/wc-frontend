@@ -21,6 +21,7 @@ class WeeklyScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final weekly = ref.watch(vaultTrackProvider('weekly'));
     final special = ref.watch(vaultTrackProvider('special'));
+    final raids = ref.watch(raidsProvider).valueOrNull;
     String? meta(Json? v) =>
         v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
     void openShop() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()));
@@ -32,34 +33,46 @@ class WeeklyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('weekly_reset_in'), at: nextWeeklyReset()),
-          const SizedBox(height: 20),
-          PeriodicHeader(title: s.t('vault_weekly'), trailing: meta(weekly.valueOrNull), onShop: openShop),
-          const SizedBox(height: 10),
-          AsyncView(
-            value: weekly,
-            permission: 'progression',
-            onRetry: () => ref.invalidate(vaultTrackProvider('weekly')),
-            builder: (json) => VaultObjectives(json),
+          const SizedBox(height: 12),
+          FoldSection(
+            title: s.t('vault_weekly'),
+            summary: meta(weekly.valueOrNull),
+            initiallyExpanded: true,
+            trailing: IconButton(
+              tooltip: s.t('vault_shop'),
+              visualDensity: VisualDensity.compact,
+              onPressed: openShop,
+              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+            ),
+            child: AsyncView(
+              value: weekly,
+              permission: 'progression',
+              onRetry: () => ref.invalidate(vaultTrackProvider('weekly')),
+              builder: (json) => VaultObjectives(json, framed: false),
+            ),
           ),
-          const SizedBox(height: 22),
-          PeriodicHeader(title: s.t('vault_special'), trailing: meta(special.valueOrNull)),
-          const SizedBox(height: 10),
-          AsyncView(
-            value: special,
-            permission: 'progression',
-            onRetry: () => ref.invalidate(vaultTrackProvider('special')),
-            builder: (json) => VaultObjectives(json),
+          const SizedBox(height: 12),
+          FoldSection(
+            title: s.t('vault_special'),
+            summary: meta(special.valueOrNull),
+            child: AsyncView(
+              value: special,
+              permission: 'progression',
+              onRetry: () => ref.invalidate(vaultTrackProvider('special')),
+              builder: (json) => VaultObjectives(json, framed: false),
+            ),
           ),
-          const SizedBox(height: 22),
-          SectionHeader(title: s.t('raids')),
-          const SizedBox(height: 10),
-          AsyncView<List<RaidWing>>(
-            value: ref.watch(raidsProvider),
-            permission: 'progression',
-            onRetry: () => ref.invalidate(raidsProvider),
-            builder: (wings) => Panel(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              child: Column(
+          const SizedBox(height: 12),
+          FoldSection(
+            title: s.t('raids'),
+            summary: raids == null
+                ? null
+                : '${raids.fold<int>(0, (n, w) => n + w.done)}/${raids.fold<int>(0, (n, w) => n + w.encounters.length)}',
+            child: AsyncView<List<RaidWing>>(
+              value: ref.watch(raidsProvider),
+              permission: 'progression',
+              onRetry: () => ref.invalidate(raidsProvider),
+              builder: (wings) => Column(
                 children: [
                   for (final w in wings)
                     ChecklistRow(

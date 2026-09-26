@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/account.dart';
 import '../state/periodic.dart';
 import '../state/progression.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/vault_objectives.dart';
 import 'vault_shop_screen.dart';
@@ -37,67 +39,204 @@ class DailyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('daily_reset_in'), at: nextDailyReset()),
-          const SizedBox(height: 20),
-          PeriodicHeader(
+          const SizedBox(height: 12),
+          // the quick counters first, they fit on one screen
+          _ChecklistGrid(
+            tiles: [
+              _Tile(Icons.schedule, s.t('world_bosses'), bosses == null ? null : '${bosses.length}', false),
+              _Tile(Icons.construction, s.t('daily_crafts'), crafts == null ? null : '${crafts.done}/${crafts.total}',
+                  crafts != null && crafts.total > 0 && crafts.done >= crafts.total),
+              _Tile(Icons.inventory_2_outlined, s.t('map_chests'), chests == null ? null : '${chests.done}/${chests.total}',
+                  chests != null && chests.total > 0 && chests.done >= chests.total),
+              _Tile(Icons.castle_outlined, s.t('dungeon_paths'),
+                  dungeons == null ? null : '${dungeons.fold<int>(0, (n, d) => n + d.done)}', false),
+            ],
+          ),
+          const SizedBox(height: 12),
+          FoldSection(
             title: s.t('wizards_vault'),
-            trailing: v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}',
-            onShop: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
+            summary: _vaultSummary(s, v),
+            initiallyExpanded: !_vaultDone(v),
+            trailing: IconButton(
+              tooltip: s.t('vault_shop'),
+              visualDensity: VisualDensity.compact,
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
+              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+            ),
+            child: AsyncView(
+              value: vault,
+              permission: 'progression',
+              onRetry: () => ref.invalidate(vaultTrackProvider('daily')),
+              builder: (json) => VaultObjectives(json, framed: false),
+            ),
           ),
-          const SizedBox(height: 10),
-          AsyncView(
-            value: vault,
-            permission: 'progression',
-            onRetry: () => ref.invalidate(vaultTrackProvider('daily')),
-            builder: (json) => VaultObjectives(json),
-          ),
-          const SizedBox(height: 22),
-          SectionHeader(title: s.t('daily_achievements')),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           AsyncView<List<PeriodicCategory>>(
             value: ref.watch(dailyAchievementsProvider),
             onRetry: () => ref.invalidate(dailyAchievementsProvider),
-            builder: (cats) => cats.isEmpty
-                ? Panel(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)))
-                : Column(children: [for (final c in cats) PeriodicCategoryCard(category: c)]),
-          ),
-          const SizedBox(height: 22),
-          SectionHeader(title: s.t('daily_checklist')),
-          const SizedBox(height: 10),
-          Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: Column(
+            builder: (cats) => Column(
               children: [
-                ChecklistRow(
-                  icon: Icons.schedule,
-                  label: s.t('world_bosses'),
-                  value: bosses == null ? null : '${bosses.length}',
-                ),
-                ChecklistRow(
-                  icon: Icons.construction,
-                  label: s.t('daily_crafts'),
-                  value: crafts == null ? null : '${crafts.done}/${crafts.total}',
-                  complete: crafts != null && crafts.total > 0 && crafts.done >= crafts.total,
-                ),
-                ChecklistRow(
-                  icon: Icons.inventory_2_outlined,
-                  label: s.t('map_chests'),
-                  value: chests == null ? null : '${chests.done}/${chests.total}',
-                  complete: chests != null && chests.total > 0 && chests.done >= chests.total,
-                ),
-                if (dungeons != null)
-                  for (final d in dungeons)
-                    if (d.done > 0)
-                      ChecklistRow(
-                        icon: Icons.castle_outlined,
-                        label: d.label,
-                        value: '${d.done}/${d.paths.length}',
-                        complete: d.done >= d.paths.length,
-                      ),
+                for (final c in cats)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: FoldSection(
+                      title: c.name,
+                      summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
+                      child: PeriodicCategoryList(category: c),
+                    ),
+                  ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+String? _vaultSummary(S s, Json? v) {
+  if (v == null) return null;
+  return _vaultDone(v) ? s.t('all_done') : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
+}
+
+bool _vaultDone(Json? v) {
+  if (v == null) return false;
+  final total = asInt(v['meta_progress_complete']);
+  return total > 0 && asInt(v['meta_progress_current']) >= total;
+}
+
+class _Tile {
+  const _Tile(this.icon, this.label, this.value, this.complete);
+  final IconData icon;
+  final String label;
+  final String? value;
+  final bool complete;
+}
+
+/// small counters two to a row instead of a long list
+class _ChecklistGrid extends StatelessWidget {
+  const _ChecklistGrid({required this.tiles});
+
+  final List<_Tile> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      childAspectRatio: 2.6,
+      children: [
+        for (final t in tiles)
+          AppCard(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                Icon(t.complete ? Icons.check_circle : t.icon,
+                    size: 18, color: t.complete ? AppColors.green : AppColors.gold),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(t.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                      Text(t.value ?? '…', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// a titled panel that folds away, with a short summary kept in the header
+class FoldSection extends StatelessWidget {
+  const FoldSection({
+    super.key,
+    required this.title,
+    required this.child,
+    this.summary,
+    this.trailing,
+    this.initiallyExpanded = false,
+  });
+
+  final String title;
+  final String? summary;
+  final Widget? trailing;
+  final Widget child;
+  final bool initiallyExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final extra = trailing;
+    final note = summary;
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          initiallyExpanded: initiallyExpanded,
+          tilePadding: const EdgeInsets.only(left: 16, right: 8),
+          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          iconColor: AppColors.gold,
+          collapsedIconColor: AppColors.muted,
+          title: Row(
+            children: [
+              Expanded(child: Text(title, style: display(16), maxLines: 1, overflow: TextOverflow.ellipsis)),
+              if (note != null)
+                Text(note, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
+              if (extra != null) extra,
+            ],
+          ),
+          children: [child],
+        ),
+      ),
+    );
+  }
+}
+
+/// the entries of one rotating category, unfinished ones first
+class PeriodicCategoryList extends StatelessWidget {
+  const PeriodicCategoryList({super.key, required this.category});
+
+  final PeriodicCategory category;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = [...category.rows]..sort((a, b) => (a.done ? 1 : 0).compareTo(b.done ? 1 : 0));
+    return Column(
+      children: [
+        for (final r in rows)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(
+              children: [
+                Icon(r.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                    size: 18, color: r.done ? AppColors.green : AppColors.muted),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(r.name,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: r.done ? AppColors.muted : AppColors.text,
+                      )),
+                ),
+                if (!r.done && r.max > 0 && r.current > 0)
+                  Text('${r.current}/${r.max}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
@@ -119,84 +258,6 @@ class ResetBanner extends StatelessWidget {
           Expanded(child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
           Text(timeUntil(at), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
         ],
-      ),
-    );
-  }
-}
-
-/// a section title with the vault's meta progress and a way into the shop
-class PeriodicHeader extends ConsumerWidget {
-  const PeriodicHeader({super.key, required this.title, this.trailing, this.onShop});
-
-  final String title;
-  final String? trailing;
-  final VoidCallback? onShop;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
-    final shop = onShop;
-    return Row(
-      children: [
-        Expanded(child: SectionHeader(title: title, trailing: trailing)),
-        if (shop != null)
-          IconButton(
-            tooltip: s.t('vault_shop'),
-            visualDensity: VisualDensity.compact,
-            onPressed: shop,
-            icon: const Icon(Icons.storefront_outlined, color: AppColors.gold),
-          ),
-      ],
-    );
-  }
-}
-
-/// one rotating achievement category, each entry ticked when done
-class PeriodicCategoryCard extends StatelessWidget {
-  const PeriodicCategoryCard({super.key, required this.category});
-
-  final PeriodicCategory category;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Panel(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(child: Text(category.name, style: display(16))),
-                Text('${category.done}/${category.rows.length}',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
-              ],
-            ),
-            const SizedBox(height: 4),
-            for (final r in category.rows)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Icon(r.done ? Icons.check_circle : Icons.radio_button_unchecked,
-                        size: 18, color: r.done ? AppColors.green : AppColors.muted),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(r.name,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: r.done ? AppColors.muted : AppColors.text,
-                          )),
-                    ),
-                    if (!r.done && r.max > 0 && r.current > 0)
-                      Text('${r.current}/${r.max}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ],
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

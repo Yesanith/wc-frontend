@@ -1,9 +1,11 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'nav_daily': 'Diario',
+  'nav_weekly': 'Semanal',
+  'dungeon_paths': 'Rutas de mazmorra',
+  'all_done': 'Todo hecho',
   'daily_reset_in': 'Reinicio diario en',
   'weekly_reset_in': 'Reinicio semanal en',
-  'daily_achievements': 'Logros diarios',
-  'daily_checklist': 'Lista de hoy',
   'price_alert': 'Alerta de precio',
   'alert_sell_below': 'Venta más baja igual o menor a',
   'alert_buy_above': 'Compra más alta igual o mayor a',

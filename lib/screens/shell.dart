@@ -30,8 +30,8 @@ import 'weekly_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
-  AppSection.daily: 'daily',
-  AppSection.weekly: 'weekly',
+  AppSection.daily: 'nav_daily',
+  AppSection.weekly: 'nav_weekly',
   AppSection.characters: 'nav_characters',
   AppSection.collections: 'collections',
   AppSection.progression: 'progression',

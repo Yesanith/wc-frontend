@@ -1,9 +1,11 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'nav_daily': 'Günlük',
+  'nav_weekly': 'Haftalık',
+  'dungeon_paths': 'Dungeon yolları',
+  'all_done': 'Hepsi tamam',
   'daily_reset_in': 'Günlük sıfırlanmaya',
   'weekly_reset_in': 'Haftalık sıfırlanmaya',
-  'daily_achievements': 'Günlük başarımlar',
-  'daily_checklist': 'Bugünün listesi',
   'price_alert': 'Fiyat alarmı',
   'alert_sell_below': 'En düşük satış bu fiyata inince',
   'alert_buy_above': 'En yüksek alış bu fiyata çıkınca',

@@ -1,9 +1,11 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'nav_daily': 'Täglich',
+  'nav_weekly': 'Wöchentlich',
+  'dungeon_paths': 'Verlieswege',
+  'all_done': 'Alles erledigt',
   'daily_reset_in': 'Tagesreset in',
   'weekly_reset_in': 'Wochenreset in',
-  'daily_achievements': 'Tägliche Erfolge',
-  'daily_checklist': 'Heutige Checkliste',
   'price_alert': 'Preisalarm',
   'alert_sell_below': 'Günstigster Verkauf bis',
   'alert_buy_above': 'Höchstes Gebot ab',

@@ -90,9 +90,9 @@ class _PeriodicLinks extends ConsumerWidget {
 
     return Row(
       children: [
-        card(s.t('daily'), meta('daily'), timeUntil(nextDailyReset()), AppSection.daily, Icons.today),
+        card(s.t('nav_daily'), meta('daily'), timeUntil(nextDailyReset()), AppSection.daily, Icons.today),
         const SizedBox(width: 10),
-        card(s.t('weekly'), meta('weekly'), timeUntil(nextWeeklyReset()), AppSection.weekly, Icons.date_range),
+        card(s.t('nav_weekly'), meta('weekly'), timeUntil(nextWeeklyReset()), AppSection.weekly, Icons.date_range),
       ],
     );
   }

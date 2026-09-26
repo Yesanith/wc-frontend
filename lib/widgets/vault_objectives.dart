@@ -8,9 +8,12 @@ import 'common.dart';
 
 /// the objectives of one wizard's vault track, as returned by the api
 class VaultObjectives extends ConsumerWidget {
-  const VaultObjectives(this.data, {super.key});
+  const VaultObjectives(this.data, {super.key, this.framed = true});
 
   final Json data;
+
+  /// false inside a card that already draws its own frame
+  final bool framed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,15 +22,14 @@ class VaultObjectives extends ConsumerWidget {
     if (objectives.isEmpty) {
       return Panel(child: Text(s.t('vault_empty'), style: const TextStyle(color: AppColors.muted)));
     }
-    return Panel(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Column(
-        children: [
-          for (var i = 0; i < objectives.length; i++)
-            _ObjectiveRow(Map<String, dynamic>.from(objectives[i]), last: i == objectives.length - 1),
-        ],
-      ),
+    final list = Column(
+      children: [
+        for (var i = 0; i < objectives.length; i++)
+          _ObjectiveRow(Map<String, dynamic>.from(objectives[i]), last: i == objectives.length - 1),
+      ],
     );
+    if (!framed) return list;
+    return Panel(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), child: list);
   }
 }
 

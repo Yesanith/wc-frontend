@@ -1,9 +1,11 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'nav_daily': 'Daily',
+  'nav_weekly': 'Weekly',
+  'dungeon_paths': 'Dungeon paths',
+  'all_done': 'All done',
   'daily_reset_in': 'Daily reset in',
   'weekly_reset_in': 'Weekly reset in',
-  'daily_achievements': 'Daily achievements',
-  'daily_checklist': 'Today\'s checklist',
   'price_alert': 'Price alert',
   'alert_sell_below': 'Lowest sell at or below',
   'alert_buy_above': 'Highest buy at or above',

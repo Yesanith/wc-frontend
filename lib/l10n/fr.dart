@@ -1,9 +1,11 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'nav_daily': 'Quotidien',
+  'nav_weekly': 'Hebdomadaire',
+  'dungeon_paths': 'Chemins de donjon',
+  'all_done': 'Tout est fait',
   'daily_reset_in': 'Réinitialisation quotidienne dans',
   'weekly_reset_in': 'Réinitialisation hebdomadaire dans',
-  'daily_achievements': 'Succès quotidiens',
-  'daily_checklist': 'Liste du jour',
   'price_alert': 'Alerte de prix',
   'alert_sell_below': 'Vente la plus basse à ou sous',
   'alert_buy_above': 'Achat le plus haut à ou au-dessus',
