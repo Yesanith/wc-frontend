@@ -1,8 +1,6 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
   'guild_teams': 'Equipos de tus clanes',
-  'guild_search': 'Buscar un clan por su nombre completo',
-  'guild_not_found': 'No hay ningún clan con ese nombre.',
   'nav_daily': 'Diario',
   'nav_weekly': 'Semanal',
   'dungeon_paths': 'Rutas de mazmorra',

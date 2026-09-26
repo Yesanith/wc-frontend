@@ -1,8 +1,6 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
   'guild_teams': 'Équipes de tes guildes',
-  'guild_search': 'Trouver une guilde par son nom complet',
-  'guild_not_found': 'Aucune guilde de ce nom.',
   'nav_daily': 'Quotidien',
   'nav_weekly': 'Hebdomadaire',
   'dungeon_paths': 'Chemins de donjon',
