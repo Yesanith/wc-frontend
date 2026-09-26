@@ -11,9 +11,10 @@ import 'settings.dart';
 /// tyria. the mists continent has its own coordinates and is left out
 const worldContinent = 1;
 
-/// floors offered in the picker, 1 is the surface of the open world
+/// floors offered in the picker. the map opens on floor 0, which is the one
+/// that carries the whole surface of tyria, the same default gw2 toolkit uses
 const worldFloors = [2, 1, 0, -1, -2];
-const defaultFloor = 1;
+const defaultFloor = 0;
 
 /// marker kinds, in the order the layer sheet lists them
 const markerKinds = ['waypoint', 'landmark', 'vista', 'heart', 'hero', 'mastery', 'unlock'];
