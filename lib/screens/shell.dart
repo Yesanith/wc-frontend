@@ -18,7 +18,6 @@ import 'collections_screen.dart';
 import 'events_screen.dart';
 import 'guilds_screen.dart';
 import 'home_screen.dart';
-import 'maps_screen.dart';
 import 'progression_screen.dart';
 import 'recipes_screen.dart';
 import 'settings_screen.dart';
@@ -27,6 +26,7 @@ import 'wiki_screen.dart';
 import 'wvw_screen.dart';
 import 'daily_screen.dart';
 import 'weekly_screen.dart';
+import 'world_map_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
@@ -76,7 +76,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.guilds => const GuildsScreen(),
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),
-      AppSection.maps => const MapsScreen(),
+      AppSection.maps => const WorldMapScreen(),
       AppSection.recipes => const RecipesScreen(),
       AppSection.wiki => const WikiScreen(),
       AppSection.settings => const SettingsScreen(),

@@ -32,7 +32,11 @@ class IconCache {
   }
 
   String _nameFor(String url) {
-    final segments = Uri.tryParse(url)?.pathSegments ?? const [];
+    final uri = Uri.tryParse(url);
+    final segments = uri?.pathSegments ?? const [];
+    // map tiles are continent/floor/zoom/x/y, every part is needed to tell
+    // them apart
+    if ((uri?.host ?? '').startsWith('tiles')) return 'tile_${segments.join('_')}';
     return segments.length >= 2
         ? '${segments[segments.length - 2]}_${segments.last}'
         : url.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');

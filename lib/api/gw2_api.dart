@@ -232,6 +232,16 @@ class Gw2Api {
     }();
   }
 
+  /// the raw body of a request, for responses big enough that decoding them
+  /// belongs in a background isolate rather than on the ui thread
+  Future<String> getText(String path, [Map<String, String>? query]) async {
+    final params = <String, String>{...?query, 'v': 'latest', 'lang': lang};
+    final uri = Uri.parse('$_base$path').replace(queryParameters: params);
+    final res = await _send(uri);
+    if (res.statusCode >= 200 && res.statusCode < 300) return utf8.decode(res.bodyBytes);
+    throw Gw2ApiException('API error (${res.statusCode})', res.statusCode);
+  }
+
   Future<dynamic> get(String path, [Map<String, String>? query]) async {
     final params = <String, String>{
       ...?query,
