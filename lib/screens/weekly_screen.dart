@@ -28,7 +28,7 @@ class WeeklyScreen extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, [vaultTrackProvider, raidsProvider]),
+      onRefresh: () => refreshProviders(ref, [vaultTrackProvider, raidsProvider, periodicAchievementsProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
@@ -63,6 +63,18 @@ class WeeklyScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
+          // weekly achievements that rotate alongside the dailies
+          ...[
+            for (final c in ref.watch(periodicAchievementsProvider).valueOrNull?.weekly ?? const <PeriodicCategory>[])
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: FoldSection(
+                  title: c.name,
+                  summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
+                  child: PeriodicCategoryList(category: c),
+                ),
+              ),
+          ],
           FoldSection(
             title: s.t('raids'),
             summary: raids == null

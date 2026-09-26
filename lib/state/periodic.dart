@@ -56,10 +56,20 @@ bool entryApplies(Json entry, Set<String> access) {
 
 String _utcDay(DateTime d) => '${d.year}-${d.month}-${d.day}';
 
+/// rotating achievements split by their own flag: the weekly ones go to the
+/// weekly page even when they share a category with daily ones
+class PeriodicAchievements {
+  const PeriodicAchievements(this.daily, this.weekly);
+  final List<PeriodicCategory> daily;
+  final List<PeriodicCategory> weekly;
+}
+
+bool _isWeekly(Json? detail) => ((detail?['flags'] as List?) ?? const []).contains('Weekly');
+
 /// today's rotating achievements, such as the daily fractals. the category
 /// list is fetched fresh after every daily reset, the monthly catalogue cache
 /// would show yesterday's picks
-final dailyAchievementsProvider = FutureProvider<List<PeriodicCategory>>((ref) async {
+final periodicAchievementsProvider = FutureProvider<PeriodicAchievements>((ref) async {
   final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
@@ -75,7 +85,7 @@ final dailyAchievementsProvider = FutureProvider<List<PeriodicCategory>>((ref) a
     categories = (await api.allOf('/achievements/categories')).where((c) => c.containsKey('tomorrow')).toList();
     await cache?.write(name, {'day': today, 'rows': categories});
   }
-  if (categories.isEmpty) return const [];
+  if (categories.isEmpty) return const PeriodicAchievements([], []);
 
   final account = await ref.watch(accountProvider.future);
   final access = {for (final a in (account['access'] as List?) ?? const []) '$a'};
@@ -103,24 +113,25 @@ final dailyAchievementsProvider = FutureProvider<List<PeriodicCategory>>((ref) a
     return top;
   }
 
-  final out = <PeriodicCategory>[];
+  AchievementRow row(int id) => AchievementRow(
+        id,
+        details[id],
+        asInt(progress[id]?['current']),
+        progress[id]?['max'] != null ? asInt(progress[id]?['max']) : topTier(details[id]),
+        progress[id]?['done'] == true,
+      );
+
+  final daily = <PeriodicCategory>[];
+  final weekly = <PeriodicCategory>[];
   for (final entry in idsByCategory.entries) {
-    if (entry.value.isEmpty) continue;
-    out.add(PeriodicCategory(
-      '${entry.key['name'] ?? ''}',
-      entry.key['icon'] as String?,
-      [
-        for (final id in entry.value)
-          AchievementRow(
-            id,
-            details[id],
-            asInt(progress[id]?['current']),
-            progress[id]?['max'] != null ? asInt(progress[id]?['max']) : topTier(details[id]),
-            progress[id]?['done'] == true,
-          ),
-      ],
-    ));
+    final name = '${entry.key['name'] ?? ''}';
+    final icon = entry.key['icon'] as String?;
+    final d = [for (final id in entry.value) if (!_isWeekly(details[id])) row(id)];
+    final w = [for (final id in entry.value) if (_isWeekly(details[id])) row(id)];
+    if (d.isNotEmpty) daily.add(PeriodicCategory(name, icon, d));
+    if (w.isNotEmpty) weekly.add(PeriodicCategory(name, icon, w));
   }
-  out.sort((a, b) => a.name.compareTo(b.name));
-  return out;
+  daily.sort((a, b) => a.name.compareTo(b.name));
+  weekly.sort((a, b) => a.name.compareTo(b.name));
+  return PeriodicAchievements(daily, weekly);
 });

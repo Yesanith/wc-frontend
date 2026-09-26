@@ -30,7 +30,7 @@ class DailyScreen extends ConsumerWidget {
       color: AppColors.gold,
       onRefresh: () => refreshProviders(ref, [
         vaultTrackProvider,
-        dailyAchievementsProvider,
+        periodicAchievementsProvider,
         doneTodayProvider,
         dailyProgressProvider,
         dungeonsProvider,
@@ -71,12 +71,12 @@ class DailyScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          AsyncView<List<PeriodicCategory>>(
-            value: ref.watch(dailyAchievementsProvider),
-            onRetry: () => ref.invalidate(dailyAchievementsProvider),
-            builder: (cats) => Column(
+          AsyncView<PeriodicAchievements>(
+            value: ref.watch(periodicAchievementsProvider),
+            onRetry: () => ref.invalidate(periodicAchievementsProvider),
+            builder: (split) => Column(
               children: [
-                for (final c in cats)
+                for (final c in split.daily)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: FoldSection(
