@@ -15,7 +15,7 @@ const _tile = 256.0;
 
 /// where the map opens, roughly lion's arch
 const _startCenter = Offset(49000, 31500);
-const _startZoom = 3.0;
+const _startZoom = 2.6;
 
 /// markers drawn at once, the rest wait until you zoom in further
 const _markerBudget = 350;

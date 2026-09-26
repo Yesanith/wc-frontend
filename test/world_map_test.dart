@@ -64,6 +64,14 @@ void main() {
     expect(MapMarker.fromRow('junk'), isNull);
   });
 
+  test('tile grid uses zoom 7 as the scale, not the api\'s max_zoom of 8', () {
+    // the tile service serves 20 by 28 tiles at zoom 3 for tyria
+    const width = 81920.0, height = 114688.0;
+    final span = 256.0 * (1 << (tyriaTileZoom - 3));
+    expect((width / span).ceil(), 20);
+    expect((height / span).ceil(), 28);
+  });
+
   test('every marker kind has a zoom threshold', () {
     for (final k in markerKinds) {
       expect(markerMinZoom[k], isNotNull, reason: k);

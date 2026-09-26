@@ -9,7 +9,7 @@ map instantly.
     mastery points and the region, map and area labels of the embedded
     floors, one gzipped file per floor and language, in the same compact
     row format the app caches: [kind, x, y, name, chat_link, map_name]
-  * tiles: floor 0 from zoom 0 to 3, which is everything the map shows
+  * tiles: floor 0 from zoom 0 to 2, which is everything the map shows
     before you zoom in on a region
 
 Usage: python tools/build_worldmap.py en de es fr
@@ -28,7 +28,10 @@ TILES = "https://tiles.guildwars2.com"
 CONTINENT = 1
 FLOORS = [0, 1]
 TILE_FLOOR = 0
-TILE_MAX_LEVEL = 3
+TILE_MAX_LEVEL = 2
+# the api says max_zoom 8 for tyria, but continent_dims are pixels at zoom 7
+# and zoom 8 answers 404. the app uses the same constant
+TILE_SCALE_ZOOM = 7
 TILE = 256
 DATA_DIR = os.path.join("assets", "data")
 TILE_DIR = os.path.join("assets", "tiles")
@@ -113,7 +116,7 @@ def build_markers(langs):
 def build_tiles():
     continent = get("/continents/%d" % CONTINENT) or {}
     width, height = (continent.get("continent_dims") or [81920, 114688])[:2]
-    max_zoom = continent.get("max_zoom") or 8
+    max_zoom = TILE_SCALE_ZOOM
     total = 0
     for level in range(0, TILE_MAX_LEVEL + 1):
         span = TILE * 2 ** (max_zoom - level)

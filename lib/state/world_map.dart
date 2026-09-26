@@ -40,9 +40,16 @@ class ContinentInfo {
   final int maxZoom;
 }
 
+/// the zoom level that carries the continent's coordinate scale. the api
+/// reports max_zoom 8 for tyria, but continent_dims match zoom 7 and the
+/// tile service answers 404 at 8: at zoom 3 it serves 81920/16/256 by
+/// 114688/16/256 = 20 by 28 tiles. trusting 8 drew the map twice too large
+/// and only its top left quarter ever showed
+const tyriaTileZoom = 7;
+
 /// dimensions and zoom range of tyria, falls back to the known values
 final continentProvider = FutureProvider<ContinentInfo>((ref) async {
-  const fallback = ContinentInfo(81920, 114688, 0, 7);
+  const fallback = ContinentInfo(81920, 114688, 0, tyriaTileZoom);
   try {
     final raw = await ref.watch(gw2ApiProvider).get('/continents/$worldContinent');
     if (raw is! Map) return fallback;
@@ -52,7 +59,7 @@ final continentProvider = FutureProvider<ContinentInfo>((ref) async {
       (dims[0] as num).toDouble(),
       (dims[1] as num).toDouble(),
       asInt(raw['min_zoom']),
-      asInt(raw['max_zoom']) <= 0 ? 7 : asInt(raw['max_zoom']),
+      tyriaTileZoom,
     );
   } catch (_) {
     return fallback;
@@ -222,4 +229,4 @@ List<dynamic> _decodeBundled(Uint8List gz) {
 
 /// the overview tiles shipped with the app: floor 0 up to this zoom level
 const bundledTileFloor = 0;
-const bundledTileMaxLevel = 3;
+const bundledTileMaxLevel = 2;
