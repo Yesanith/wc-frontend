@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_recipes.py', '.github/workflows/data.yml']
+    paths: ['tools/build_recipes.py', 'tools/build_worldmap.py', '.github/workflows/data.yml']
   schedule:
     # first of the month, game data only changes with patches
     - cron: '0 4 1 * *'
@@ -27,18 +27,21 @@ jobs:
       - name: Build legendary recipe trees
         run: python tools/build_recipes.py en de es fr
 
+      - name: Build world map markers and overview tiles
+        run: python tools/build_worldmap.py en de es fr
+
       - name: Commit if changed
         # tags check out a detached head, only branch runs can push back
         if: github.ref == 'refs/heads/main'
         run: |
-          if git diff --quiet -- assets/data; then
+          if git diff --quiet -- assets/data && [ -z "$(git status --porcelain assets/tiles)" ]; then
             echo "nothing changed"
             exit 0
           fi
           git config user.name "Yesanith"
           git config user.email "56350783+Yesanith@users.noreply.github.com"
-          git add assets/data
-          git commit -m "Regenerate legendary recipe data"
+          git add assets/data assets/tiles
+          git commit -m "Regenerate recipe and world map data"
           # the job runs for half an hour, main usually moved on meanwhile.
           # it only touches assets/data, so replaying it on top is safe
           for attempt in 1 2 3; do

@@ -27,3 +27,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/
+    - assets/tiles/0/0/
+    - assets/tiles/0/1/
+    - assets/tiles/0/2/
+    - assets/tiles/0/3/

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/cache.dart';
@@ -157,6 +159,10 @@ final worldMarkersProvider = FutureProvider.family<List<MapMarker>, int>((ref, f
   final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
+  // the monthly data job ships the common floors with the app, so the map
+  // shows its markers the moment it opens
+  final bundled = await _bundledMarkers(floor, lang.apiLang);
+  if (bundled != null) return bundled;
   final rows = await cachedList(
     cache,
     'worldmap_${worldContinent}_${floor}_${lang.apiLang}',
@@ -191,3 +197,29 @@ final markerIconsProvider = FutureProvider<Map<String, String>>((ref) async {
       if (byId[e.value] != null) e.key: byId[e.value]!,
   };
 });
+
+
+/// markers shipped in assets/data, null when this floor or language is not
+/// bundled and has to come from the api
+Future<List<MapMarker>?> _bundledMarkers(int floor, String lang) async {
+  try {
+    final bytes = await rootBundle.load('assets/data/worldmap_${worldContinent}_${floor}_$lang.json.gz');
+    final rows = await compute(_decodeBundled, bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+    if (rows.isEmpty) return null;
+    return [
+      for (final r in rows)
+        if (MapMarker.fromRow(r) case final m?) m,
+    ];
+  } catch (_) {
+    return null;
+  }
+}
+
+List<dynamic> _decodeBundled(Uint8List gz) {
+  final raw = jsonDecode(utf8.decode(gzip.decode(gz)));
+  return raw is Map && raw['rows'] is List ? raw['rows'] as List : const [];
+}
+
+/// the overview tiles shipped with the app: floor 0 up to this zoom level
+const bundledTileFloor = 0;
+const bundledTileMaxLevel = 3;

@@ -228,7 +228,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
             // a pixel of overlap hides the seams between tiles
             width: size + 1,
             height: size + 1,
-            child: CachedIcon(url: '$_tileHost/$worldContinent/$_floor/$level/$x/$y.jpg', fit: BoxFit.fill),
+            child: _Tile(floor: _floor, level: level, x: x, y: y),
           ),
     ];
   }
@@ -521,6 +521,31 @@ class _SearchBox extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+
+/// one map tile: from the app's assets for the overview levels of floor 0,
+/// otherwise downloaded once and kept on disk
+class _Tile extends StatelessWidget {
+  const _Tile({required this.floor, required this.level, required this.x, required this.y});
+
+  final int floor;
+  final int level;
+  final int x;
+  final int y;
+
+  @override
+  Widget build(BuildContext context) {
+    final remote = CachedIcon(url: '$_tileHost/$worldContinent/$floor/$level/$x/$y.jpg', fit: BoxFit.fill);
+    if (floor != bundledTileFloor || level > bundledTileMaxLevel) return remote;
+    return Image.asset(
+      'assets/tiles/$floor/$level/${x}_$y.jpg',
+      fit: BoxFit.fill,
+      gaplessPlayback: true,
+      // not bundled yet, or ocean the job skipped: fall back to the network
+      errorBuilder: (context, error, stack) => remote,
     );
   }
 }

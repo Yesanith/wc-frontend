@@ -48,8 +48,8 @@ jobs:
       - name: Use the newest recipe data
         run: |
           git fetch --depth=1 origin main
-          git checkout FETCH_HEAD -- assets/data
-          git status --short assets/data
+          git checkout FETCH_HEAD -- assets/data assets/tiles
+          git status --short assets/data assets/tiles
 
       - uses: actions/setup-java@v4
         with:
