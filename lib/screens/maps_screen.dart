@@ -68,23 +68,23 @@ class _MapsScreenState extends ConsumerState<MapsScreen> {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: AppCard(
                           onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(builder: (_) => MapDetailScreen(map: map)),
-                        ),
-                                 padding: const EdgeInsets.all(14),
-                                 child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(map.name,
-                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                                  ),
-                                  if (map.maxLevel > 0)
-                                    Text('${map.minLevel}-${map.maxLevel}',
-                                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                                  const SizedBox(width: 8),
-                                  const Icon(Icons.chevron_right, color: AppColors.chevron),
-                                ],
+                            MaterialPageRoute<void>(builder: (_) => MapDetailScreen(map: map)),
+                          ),
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child:
+                                    Text(map.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
-                               ),
+                              if (map.maxLevel > 0)
+                                Text('${map.minLevel}-${map.maxLevel}',
+                                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.chevron_right, color: AppColors.chevron),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   );

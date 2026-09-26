@@ -128,62 +128,60 @@ class _CharacterCard extends ConsumerWidget {
 
     return AppCard(
       onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
-    ),
-             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-             radius: 16,
-             child: Row(
+        MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      radius: 16,
+      child: Row(
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.bg,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: color, width: 2),
+            ),
+            child: Text(initial, style: display(22, color: color)),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 2),
+                Text(prof, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
+                const SizedBox(height: 2),
+                Text('${c['race'] ?? ''} · ${fmtHours(c['age'], s.t('hours_short'))}',
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
+          ),
+          Column(
             children: [
-              Container(
-                width: 50,
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: AppColors.bg,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: color, width: 2),
-                ),
-                child: Text(initial, style: display(22, color: color)),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                    const SizedBox(height: 2),
-                    Text(prof, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
-                    const SizedBox(height: 2),
-                    Text('${c['race'] ?? ''} · ${fmtHours(c['age'], s.t('hours_short'))}',
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  Text(s.t('level_short'),
-                      style: const TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
-                  Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                ],
-              ),
-              const SizedBox(width: 4),
-              IconButton(
-                tooltip: s.t('favorite'),
-                onPressed: () => ref.read(favoriteCharactersProvider.notifier).toggle(name),
-                icon: Icon(
-                  ref.watch(favoriteCharactersProvider).contains(name) ? Icons.star : Icons.star_border,
-                  size: 20,
-                  color: ref.watch(favoriteCharactersProvider).contains(name)
-                      ? AppColors.gold
-                      : AppColors.chevron,
-                ),
-              ),
+              Text(s.t('level_short'),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
+              Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             ],
           ),
-           );
+          const SizedBox(width: 4),
+          IconButton(
+            tooltip: s.t('favorite'),
+            onPressed: () => ref.read(favoriteCharactersProvider.notifier).toggle(name),
+            icon: Icon(
+              ref.watch(favoriteCharactersProvider).contains(name) ? Icons.star : Icons.star_border,
+              size: 20,
+              color: ref.watch(favoriteCharactersProvider).contains(name) ? AppColors.gold : AppColors.chevron,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

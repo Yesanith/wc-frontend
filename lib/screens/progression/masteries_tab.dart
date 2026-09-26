@@ -119,9 +119,7 @@ class _MasteryTile extends StatelessWidget {
             const SizedBox(width: 10),
             Text('${row.level} / ${row.total}',
                 style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: complete ? AppColors.green : AppColors.muted)),
+                    fontSize: 12, fontWeight: FontWeight.w800, color: complete ? AppColors.green : AppColors.muted)),
           ],
         ),
         subtitle: Padding(
@@ -135,8 +133,7 @@ class _MasteryTile extends StatelessWidget {
           for (var i = 0; i < row.levels.length; i++) _MasteryLevelRow(row.levels[i], done: i < row.level),
           if (!row.started && row.requirement.isNotEmpty) ...[
             const SizedBox(height: 6),
-            Text(row.requirement,
-                style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+            Text(row.requirement, style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
           ],
         ],
       ),
@@ -164,9 +161,7 @@ class _MasteryLevelRow extends StatelessWidget {
           Expanded(
             child: Text('${level['name'] ?? ''}',
                 style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: done ? AppColors.text : AppColors.muted)),
+                    fontSize: 13, fontWeight: FontWeight.w600, color: done ? AppColors.text : AppColors.muted)),
           ),
           if (points > 0) ...[
             const SizedBox(width: 8),

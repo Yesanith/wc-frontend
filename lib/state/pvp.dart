@@ -67,8 +67,7 @@ final pvpAmuletsProvider = FutureProvider<List<PvpAmulet>>((ref) async {
         '${raw['name'] ?? ''}',
         raw['icon'] as String?,
         {
-          for (final e in ((raw['attributes'] as Map?) ?? const {}).entries)
-            attributeName('${e.key}'): asInt(e.value),
+          for (final e in ((raw['attributes'] as Map?) ?? const {}).entries) attributeName('${e.key}'): asInt(e.value),
         },
       ),
   ];
@@ -205,7 +204,6 @@ final pvpStandingProvider = FutureProvider<PvpStanding?>((ref) async {
     totalPoints: asInt(current['total_points']),
   );
 });
-
 
 /// the top of a season's ladder. key is "seasonId|region", region na or eu
 final pvpLadderProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, key) async {

@@ -33,8 +33,7 @@ class GuildsScreen extends ConsumerWidget {
             }
             return Column(
               children: [
-                for (final id in list)
-                  Padding(padding: const EdgeInsets.only(bottom: 10), child: _GuildCard(id: id)),
+                for (final id in list) Padding(padding: const EdgeInsets.only(bottom: 10), child: _GuildCard(id: id)),
               ],
             );
           },
@@ -57,32 +56,31 @@ class _GuildCard extends ConsumerWidget {
 
     return AppCard(
       onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id)),
-    ),
-             padding: const EdgeInsets.all(16),
-             radius: 16,
-             child: Row(
-            children: [
-              GuildEmblem(emblem: _emblemOf(guild), size: 44),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name, style: display(18)),
-                    if (tag.isNotEmpty)
-                      Text('[$tag]', style: const TextStyle(fontSize: 13, color: AppColors.gold)),
-                  ],
-                ),
-              ),
-              if (asInt(guild?['level']) > 0)
-                Text('${asInt(guild?['level'])}',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
-              const SizedBox(width: 6),
-              const Icon(Icons.chevron_right, color: AppColors.chevron),
-            ],
+        MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id)),
+      ),
+      padding: const EdgeInsets.all(16),
+      radius: 16,
+      child: Row(
+        children: [
+          GuildEmblem(emblem: _emblemOf(guild), size: 44),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: display(18)),
+                if (tag.isNotEmpty) Text('[$tag]', style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+              ],
+            ),
           ),
-           );
+          if (asInt(guild?['level']) > 0)
+            Text('${asInt(guild?['level'])}',
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+          const SizedBox(width: 6),
+          const Icon(Icons.chevron_right, color: AppColors.chevron),
+        ],
+      ),
+    );
   }
 }
 
@@ -185,9 +183,7 @@ class _TreasuryTab extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Text(row.needed > 0 ? '${fmtInt(row.count)} / ${fmtInt(row.needed)}' : fmtInt(row.count),
                       style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: done ? AppColors.green : AppColors.gold)),
+                          fontSize: 12, fontWeight: FontWeight.w800, color: done ? AppColors.green : AppColors.gold)),
                 ],
               ),
             );
@@ -297,8 +293,7 @@ class _LogTab extends ConsumerWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_logLine(entry),
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
+                Text(_logLine(entry), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
                 const SizedBox(height: 2),
                 Text(date.length >= 10 ? date.substring(0, 10) : date,
                     style: const TextStyle(fontSize: 11, color: AppColors.hint)),
@@ -324,7 +319,6 @@ String _logLine(Json entry) {
   ];
   return parts.join(' · ');
 }
-
 
 Json? _emblemOf(Json? guild) => guild?['emblem'] is Map ? Map<String, dynamic>.from(guild!['emblem'] as Map) : null;
 
@@ -373,7 +367,8 @@ class _MembersTab extends ConsumerWidget {
                   child: AppCard(
                     child: Row(
                       children: [
-                        Expanded(child: Text('${t['name'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w700))),
+                        Expanded(
+                            child: Text('${t['name'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w700))),
                         Text(
                           s.t('wins_losses', {
                             'w': asInt((t['aggregate'] as Map?)?['wins']),
@@ -403,7 +398,8 @@ class _MembersTab extends ConsumerWidget {
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: Text('${m['name'] ?? ''}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      child:
+                          Text('${m['name'] ?? ''}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
                     Text('${m['rank'] ?? ''}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],

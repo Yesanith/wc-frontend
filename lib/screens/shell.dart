@@ -159,8 +159,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   void _armExit() {
     _exitArmedUntil = DateTime.now().add(const Duration(seconds: 2));
-    showToast(context, ref.read(stringsProvider).t('back_again_to_exit'),
-        duration: const Duration(seconds: 2));
+    showToast(context, ref.read(stringsProvider).t('back_again_to_exit'), duration: const Duration(seconds: 2));
   }
 
   /// back on the first page of any section, never switching sections:
@@ -220,69 +219,69 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         if (!didPop) _rootBack();
       },
       child: Scaffold(
-      key: _scaffoldKey,
-      onDrawerChanged: _drawerChanged,
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t(_titleKeys[section]!), style: display(20)),
-        // a full sync shows real progress, a background refresh only says
-        // that something is updating
-        bottom: !sync.running && refreshing == 0
-            ? null
-            : PreferredSize(
-                preferredSize: const Size.fromHeight(2),
-                child: LinearProgressIndicator(
-                  value: sync.running ? sync.ratio : null,
-                  minHeight: 2,
-                  backgroundColor: AppColors.track,
-                  color: AppColors.gold,
+        key: _scaffoldKey,
+        onDrawerChanged: _drawerChanged,
+        appBar: AppBar(
+          backgroundColor: AppColors.bg,
+          surfaceTintColor: Colors.transparent,
+          title: Text(s.t(_titleKeys[section]!), style: display(20)),
+          // a full sync shows real progress, a background refresh only says
+          // that something is updating
+          bottom: !sync.running && refreshing == 0
+              ? null
+              : PreferredSize(
+                  preferredSize: const Size.fromHeight(2),
+                  child: LinearProgressIndicator(
+                    value: sync.running ? sync.ratio : null,
+                    minHeight: 2,
+                    backgroundColor: AppColors.track,
+                    color: AppColors.gold,
+                  ),
                 ),
+        ),
+        drawer: NavigationDrawer(
+          backgroundColor: AppColors.navBg,
+          indicatorColor: const Color(0x2EE3B55B),
+          selectedIndex: section.index,
+          onDestinationSelected: (i) => _select(AppSection.values[i]),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 24, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Tyria Codex', style: display(24, color: AppColors.gold)),
+                  if (accountName != null)
+                    Text(accountName, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                ],
               ),
-      ),
-      drawer: NavigationDrawer(
-        backgroundColor: AppColors.navBg,
-        indicatorColor: const Color(0x2EE3B55B),
-        selectedIndex: section.index,
-        onDestinationSelected: (i) => _select(AppSection.values[i]),
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 24, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Tyria Codex', style: display(24, color: AppColors.gold)),
-                if (accountName != null)
-                  Text(accountName, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-              ],
             ),
-          ),
-          for (final sec in AppSection.values) ...[
-            if (sec == AppSection.wiki || sec == AppSection.settings)
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
-                child: Divider(color: AppColors.track, height: 1),
+            for (final sec in AppSection.values) ...[
+              if (sec == AppSection.wiki || sec == AppSection.settings)
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
+                  child: Divider(color: AppColors.track, height: 1),
+                ),
+              NavigationDrawerDestination(
+                icon: Icon(_icons[sec]!.$1),
+                selectedIcon: Icon(_icons[sec]!.$2, color: AppColors.gold),
+                label: Text(s.t(_titleKeys[sec]!)),
               ),
-            NavigationDrawerDestination(
-              icon: Icon(_icons[sec]!.$1),
-              selectedIcon: Icon(_icons[sec]!.$2, color: AppColors.gold),
-              label: Text(s.t(_titleKeys[sec]!)),
-            ),
+            ],
           ],
-        ],
+        ),
+        body: IndexedStack(
+          index: section.index,
+          children: [
+            for (final sec in AppSection.values)
+              // hidden sections keep their state but stop their tickers and timers
+              TickerMode(
+                enabled: sec == section,
+                child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
+              ),
+          ],
+        ),
       ),
-      body: IndexedStack(
-        index: section.index,
-        children: [
-          for (final sec in AppSection.values)
-            // hidden sections keep their state but stop their tickers and timers
-            TickerMode(
-              enabled: sec == section,
-              child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
-            ),
-        ],
-      ),
-    ),
     );
   }
 }

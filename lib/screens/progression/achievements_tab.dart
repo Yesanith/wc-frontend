@@ -26,9 +26,7 @@ class _AchievementsTab extends ConsumerWidget {
                       Expanded(
                         child: StatTile(
                           label: s.t('completed'),
-                          value: total == null
-                              ? fmtInt(summary.done)
-                              : '${fmtInt(summary.done)} / ${fmtInt(total)}',
+                          value: total == null ? fmtInt(summary.done) : '${fmtInt(summary.done)} / ${fmtInt(total)}',
                         ),
                       ),
                       Expanded(
@@ -53,8 +51,7 @@ class _AchievementsTab extends ConsumerWidget {
                 const Icon(Icons.list_alt_outlined, size: 20, color: AppColors.gold),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(s.t('browse_all'),
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                  child: Text(s.t('browse_all'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                 ),
                 const Icon(Icons.chevron_right, color: AppColors.muted),
               ],

@@ -125,7 +125,8 @@ class _CachedIconState extends ConsumerState<CachedIcon> {
     }
     // no disk cache available (tests) or still downloading
     if (ref.read(iconCacheProvider) == null) {
-      return Image.network(widget.url, fit: widget.fit, errorBuilder: (context, error, stack) => const SizedBox.shrink());
+      return Image.network(widget.url,
+          fit: widget.fit, errorBuilder: (context, error, stack) => const SizedBox.shrink());
     }
     return const SizedBox.shrink();
   }

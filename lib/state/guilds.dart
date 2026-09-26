@@ -39,8 +39,7 @@ final guildStashProvider = FutureProvider.autoDispose.family<List<GuildStashSlot
         '${tab['note'] ?? ''}'.trim().isEmpty ? '#${tab['upgrade_id']}' : '${tab['note']}',
         [
           for (final slot in (tab['inventory'] as List?) ?? const [])
-            if (slot is Map)
-              ItemSlot(asInt(slot['id']), asInt(slot['count']), items[asInt(slot['id'])]),
+            if (slot is Map) ItemSlot(asInt(slot['id']), asInt(slot['count']), items[asInt(slot['id'])]),
         ],
         asInt(tab['coins']),
         '${tab['note'] ?? ''}',
@@ -81,7 +80,6 @@ final guildLogProvider = FutureProvider.autoDispose.family<List<Json>, String>((
   return log.take(50).toList();
 });
 
-
 // -------------------------------------------------------------------------
 // leader only parts: members, ranks, teams, storage and built upgrades
 
@@ -97,7 +95,8 @@ final guildRanksProvider = FutureProvider.autoDispose.family<List<Json>, String>
   return rows;
 });
 
-final guildTeamsProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
+final guildTeamsProvider =
+    FutureProvider.autoDispose.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
 
 class GuildUpgradeRow {
   const GuildUpgradeRow(this.id, this.count, this.detail);

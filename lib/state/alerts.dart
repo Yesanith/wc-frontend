@@ -57,7 +57,9 @@ class PriceAlertsNotifier extends Notifier<Map<int, PriceAlert>> {
       next[itemId] = alert;
     }
     state = next;
-    await ref.read(prefsProvider).setString(_key, jsonEncode({for (final e in next.entries) '${e.key}': e.value.toJson()}));
+    await ref
+        .read(prefsProvider)
+        .setString(_key, jsonEncode({for (final e in next.entries) '${e.key}': e.value.toJson()}));
   }
 }
 

@@ -42,39 +42,39 @@ class _CollectionTile extends ConsumerWidget {
 
     return AppCard(
       onTap: kind.hasDetails
-            ? () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)),
-    )
-            : null,
-             padding: const EdgeInsets.all(16),
-             radius: 16,
-             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          ? () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)),
+              )
+          : null,
+      padding: const EdgeInsets.all(16),
+      radius: 16,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Expanded(child: Text(s.t('col_${kind.key}'), style: display(18))),
-                  if (p != null)
-                    Text('${(p.ratio * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
-                  if (kind.hasDetails) const Icon(Icons.chevron_right, color: AppColors.chevron),
-                ],
-              ),
-              const SizedBox(height: 4),
-              if (progress.hasError)
-                Text(s.t('needs_permission', {'p': 'unlocks'}),
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted))
-              else if (p == null)
-                const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
-              else ...[
-                Text('${fmtInt(p.unlocked)} / ${fmtInt(p.total)}',
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                const SizedBox(height: 10),
-                Bar(value: p.ratio, color: p.ratio >= 1 ? AppColors.green : AppColors.gold),
-              ],
+              Expanded(child: Text(s.t('col_${kind.key}'), style: display(18))),
+              if (p != null)
+                Text('${(p.ratio * 100).round()}%',
+                    style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
+              if (kind.hasDetails) const Icon(Icons.chevron_right, color: AppColors.chevron),
             ],
           ),
-           );
+          const SizedBox(height: 4),
+          if (progress.hasError)
+            Text(s.t('needs_permission', {'p': 'unlocks'}),
+                style: const TextStyle(fontSize: 12, color: AppColors.muted))
+          else if (p == null)
+            const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+          else ...[
+            Text('${fmtInt(p.unlocked)} / ${fmtInt(p.total)}',
+                style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            const SizedBox(height: 10),
+            Bar(value: p.ratio, color: p.ratio >= 1 ? AppColors.green : AppColors.gold),
+          ],
+        ],
+      ),
+    );
   }
 }
 

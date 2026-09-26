@@ -21,7 +21,8 @@ class WeeklyScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final weekly = ref.watch(vaultTrackProvider('weekly'));
     final special = ref.watch(vaultTrackProvider('special'));
-    String? meta(Json? v) => v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
+    String? meta(Json? v) =>
+        v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
     void openShop() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()));
 
     return RefreshIndicator(

@@ -67,8 +67,8 @@ class BuildView extends ConsumerWidget {
                     children: [
                       Text(name.isEmpty ? s.t('unnamed_build') : name, style: display(20)),
                       Text(profession,
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w700, color: professionColor(profession))),
+                          style:
+                              TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: professionColor(profession))),
                     ],
                   ),
                 ),
@@ -295,9 +295,7 @@ class _MajorTrait extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      color: selected ? AppColors.text : AppColors.muted)),
+                      fontSize: 10, fontWeight: FontWeight.w700, color: selected ? AppColors.text : AppColors.muted)),
             ],
           ),
         ),
@@ -499,10 +497,7 @@ class SkillRow extends ConsumerWidget {
                       if (slot.isNotEmpty)
                         Text(slot.toUpperCase(),
                             style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.6,
-                                color: AppColors.muted)),
+                                fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                       Text((data['name'] as String?) ?? '-',
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                       if (description.isNotEmpty)

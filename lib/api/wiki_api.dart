@@ -27,9 +27,8 @@ class WikiApi {
       'namespace': '0',
       'format': 'json',
     });
-    final res = await http
-        .get(uri, headers: {'User-Agent': 'TyriaCodex/0.1 (Flutter GW2 companion app)'})
-        .timeout(const Duration(seconds: 15));
+    final res = await http.get(uri,
+        headers: {'User-Agent': 'TyriaCodex/0.1 (Flutter GW2 companion app)'}).timeout(const Duration(seconds: 15));
     if (res.statusCode != 200) {
       throw Exception('Wiki error (${res.statusCode})');
     }
@@ -38,8 +37,7 @@ class WikiApi {
     final titles = (data[1] as List).map((e) => '$e').toList();
     final urls = (data[3] as List).map((e) => '$e').toList();
     return [
-      for (var i = 0; i < titles.length; i++)
-        WikiResult(titles[i], i < urls.length ? urls[i] : pageUrl(titles[i])),
+      for (var i = 0; i < titles.length; i++) WikiResult(titles[i], i < urls.length ? urls[i] : pageUrl(titles[i])),
     ];
   }
 }

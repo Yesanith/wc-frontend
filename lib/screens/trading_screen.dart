@@ -62,7 +62,8 @@ class WatchRow extends ConsumerWidget {
 
 /// item row that opens the trading post page for the item
 class _ItemTile extends StatelessWidget {
-  const _ItemTile({required this.itemId, required this.item, required this.title, this.subtitle, required this.trailing});
+  const _ItemTile(
+      {required this.itemId, required this.item, required this.title, this.subtitle, required this.trailing});
 
   final int itemId;
   final Json? item;

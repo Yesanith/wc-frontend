@@ -166,7 +166,6 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-
 /// launch sync status, with a way to pull the account down again
 class _SyncPanel extends ConsumerWidget {
   const _SyncPanel();
@@ -200,8 +199,7 @@ class _SyncPanel extends ConsumerWidget {
                   const SizedBox(width: 8),
                   const Icon(Icons.error_outline, size: 14, color: AppColors.red),
                   const SizedBox(width: 4),
-                  Text('${sync.failed}',
-                      style: const TextStyle(fontSize: 12, color: AppColors.red)),
+                  Text('${sync.failed}', style: const TextStyle(fontSize: 12, color: AppColors.red)),
                 ],
               ],
             ),
@@ -287,12 +285,12 @@ class _UpdatePanel extends ConsumerWidget {
   }
 }
 
-
 /// switch between saved api keys, add or remove them
 class _AccountsPanel extends ConsumerWidget {
   const _AccountsPanel();
 
-  String _mask(String key) => key.length <= 12 ? '********' : '${key.substring(0, 8)}...${key.substring(key.length - 4)}';
+  String _mask(String key) =>
+      key.length <= 12 ? '********' : '${key.substring(0, 8)}...${key.substring(key.length - 4)}';
 
   Future<void> _remove(BuildContext context, WidgetRef ref, int index, String label) async {
     final s = ref.read(stringsProvider);

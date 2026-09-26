@@ -11,7 +11,8 @@ const esStrings = <String, String>{
   'save_alert': 'Guardar',
   'alerts_fired': '{n} alertas de precio alcanzadas',
   'wealth_history': 'Historial de oro',
-  'wealth_collecting': 'Tu historial de oro empieza hoy. La app guarda un registro diario y el gráfico aparece desde el segundo día.',
+  'wealth_collecting':
+      'Tu historial de oro empieza hoy. La app guarda un registro diario y el gráfico aparece desde el segundo día.',
   'last_7_days': 'Últimos 7 días',
   'last_30_days': 'Últimos 30 días',
   'wins_losses': '{w}V · {l}D',
@@ -103,7 +104,8 @@ const esStrings = <String, String>{
   'add_account': 'Añadir otra cuenta',
   'guilds': 'Clanes',
   'guild': 'Clan',
-  'guilds_note': 'Los datos del clan necesitan el permiso guilds, y el arcón y el registro solo los ven los miembros con el rango adecuado.',
+  'guilds_note':
+      'Los datos del clan necesitan el permiso guilds, y el arcón y el registro solo los ven los miembros con el rango adecuado.',
   'no_guilds': 'Esta cuenta no pertenece a ningún clan.',
   'treasury': 'Tesorería',
   'stash': 'Arcón',
@@ -140,11 +142,14 @@ const esStrings = <String, String>{
   'update_available': 'La versión {v} está disponible.',
   'download_update': 'Descargar',
   'release_notes': 'Notas',
-  'install_note': 'El apk se descarga con el navegador, ábrelo desde la notificación para instalarlo sobre la versión actual.',
+  'install_note':
+      'El apk se descarga con el navegador, ábrelo desde la notificación para instalarlo sobre la versión actual.',
   'unnamed_entry': 'Sin publicar (#{id})',
   'version': 'Versión',
-  'needs_permission': 'A tu clave API le falta el permiso {p}. Crea una clave nueva con ese permiso y cámbiala en los ajustes.',
-  'guild_rank_needed': 'Tu clave API está bien. El juego solo abre la tesorería, el arcón y el registro a los líderes del clan, así que un miembro normal no puede verlos.',
+  'needs_permission':
+      'A tu clave API le falta el permiso {p}. Crea una clave nueva con ese permiso y cámbiala en los ajustes.',
+  'guild_rank_needed':
+      'Tu clave API está bien. El juego solo abre la tesorería, el arcón y el registro a los líderes del clan, así que un miembro normal no puede verlos.',
   'browse_all': 'Ver todos los logros',
   'instances': 'Instancias',
   'raids': 'Incursiones',
@@ -334,14 +339,16 @@ const esStrings = <String, String>{
   'lowest_sell': 'Venta más barata',
   'n_listed': '{n} en venta',
   'flip_profit': 'Beneficio tras el 15% de comisión',
-  'tp_note': 'Los precios vienen en vivo de la api oficial. El historial de precios no forma parte de la api oficial, así que todavía no hay gráfica.',
+  'tp_note':
+      'Los precios vienen en vivo de la api oficial. El historial de precios no forma parte de la api oficial, así que todavía no hay gráfica.',
   'watchlist': 'Lista de seguimiento',
   'watchlist_empty': 'Aquí no hay nada todavía. Abre cualquier objeto, toca Bazar y luego Seguir.',
   'buy_short': 'compra',
   'world_bosses': 'Eventos del mundo',
   'sync_now': 'Sincronizar ahora',
   'syncing': 'Sincronizando',
-  'sync_note': 'Tu cuenta se descarga una vez al abrir la app y se guarda en el dispositivo, así las secciones abren sin esperar. Vuelve a sincronizar después de jugar.',
+  'sync_note':
+      'Tu cuenta se descarga una vez al abrir la app y se guarda en el dispositivo, así las secciones abren sin esperar. Vuelve a sincronizar después de jugar.',
   'local_time_note': 'Las horas están en tu hora local.',
   'pinned': 'Fijados',
   'pin': 'Fijar',
@@ -383,7 +390,8 @@ const esStrings = <String, String>{
   'wiki_source': 'Fuente de la wiki',
   'remove_key': 'Quitar la clave',
   'remove_key_body': 'La clave API se borrará de este dispositivo y volverás a la pantalla de inicio.',
-  'disclaimer': 'Tyria Codex es una app no oficial hecha por fans. Guild Wars 2, ArenaNet y NCSOFT son marcas de sus respectivos propietarios. Los datos vienen de la api oficial de GW2 y de la Guild Wars 2 Wiki.',
+  'disclaimer':
+      'Tyria Codex es una app no oficial hecha por fans. Guild Wars 2, ArenaNet y NCSOFT son marcas de sus respectivos propietarios. Los datos vienen de la api oficial de GW2 y de la Guild Wars 2 Wiki.',
   'slot_Helm': 'Casco',
   'slot_Shoulders': 'Hombreras',
   'slot_Coat': 'Torso',

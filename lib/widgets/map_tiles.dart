@@ -46,8 +46,7 @@ class TileLayout {
   int get count => columns * rows;
 
   /// continent coordinates to a position inside the block
-  Offset offsetOf(double x, double y) =>
-      Offset(x / scale - column * _tile, y / scale - row * _tile);
+  Offset offsetOf(double x, double y) => Offset(x / scale - column * _tile, y / scale - row * _tile);
 }
 
 /// the highest zoom whose tile block still fits in [budget], falling back to

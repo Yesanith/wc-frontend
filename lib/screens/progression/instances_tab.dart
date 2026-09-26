@@ -42,8 +42,8 @@ class _InstancesTab extends ConsumerWidget {
                         title: Row(
                           children: [
                             Expanded(
-                              child: Text(wing.label,
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                              child:
+                                  Text(wing.label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
                             ),
                             Text('${wing.done} / ${wing.encounters.length}',
                                 style: TextStyle(
@@ -64,9 +64,7 @@ class _InstancesTab extends ConsumerWidget {
                                 color: e.done ? AppColors.green : AppColors.hint,
                               ),
                               title: Text(e.label,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: e.done ? AppColors.muted : AppColors.text)),
+                                  style: TextStyle(fontSize: 13, color: e.done ? AppColors.muted : AppColors.text)),
                             ),
                         ],
                       ),
@@ -92,8 +90,7 @@ class _InstancesTab extends ConsumerWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(d.label,
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                            child: Text(d.label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                           ),
                           Text('${d.done} / ${d.paths.length}',
                               style: TextStyle(

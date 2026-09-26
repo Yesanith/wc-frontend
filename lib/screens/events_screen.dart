@@ -83,66 +83,66 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final rest = spawns.where((e) => e != top).toList();
 
     final body = ListView(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-        children: [
-          Text(s.t('local_time_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              ChoiceChip(
-                label: Text(s.t('all')),
-                selected: !_pinnedOnly,
-                onSelected: (_) => setState(() => _pinnedOnly = false),
-              ),
-              const SizedBox(width: 8),
-              ChoiceChip(
-                label: Text(s.t('pinned')),
-                selected: _pinnedOnly,
-                onSelected: (_) => setState(() => _pinnedOnly = true),
-              ),
-            ],
-          ),
-          // only shown once there is more than one release to choose between
-          if (expansionsWithBosses.length > 1) ...[
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ChoiceChip(
-                    label: Text(s.t('all')),
-                    selected: _expansion == null,
-                    onSelected: (_) => setState(() => _expansion = null),
-                  ),
-                  for (final e in expansionsWithBosses) ...[
-                    const SizedBox(width: 8),
-                    ChoiceChip(
-                      label: Text(e.label),
-                      selected: _expansion == e,
-                      onSelected: (_) => setState(() => _expansion = e),
-                    ),
-                  ],
-                ],
-              ),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+      children: [
+        Text(s.t('local_time_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            ChoiceChip(
+              label: Text(s.t('all')),
+              selected: !_pinnedOnly,
+              onSelected: (_) => setState(() => _pinnedOnly = false),
+            ),
+            const SizedBox(width: 8),
+            ChoiceChip(
+              label: Text(s.t('pinned')),
+              selected: _pinnedOnly,
+              onSelected: (_) => setState(() => _pinnedOnly = true),
             ),
           ],
-          const SizedBox(height: 14),
-          if (top == null)
-            Panel(child: Text(s.t('nothing_pinned'), style: const TextStyle(color: AppColors.muted)))
-          else
-            _FeaturedBoss(spawn: top, now: now),
-          const SizedBox(height: 16),
-          const _DailyResets(),
-          const SizedBox(height: 8),
-          for (final e in rest)
-            _BossRow(
-              spawn: e,
-              now: now,
-              pinned: pinned.contains(e.boss.id),
-              done: bossDone(e.boss, done),
+        ),
+        // only shown once there is more than one release to choose between
+        if (expansionsWithBosses.length > 1) ...[
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 36,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                ChoiceChip(
+                  label: Text(s.t('all')),
+                  selected: _expansion == null,
+                  onSelected: (_) => setState(() => _expansion = null),
+                ),
+                for (final e in expansionsWithBosses) ...[
+                  const SizedBox(width: 8),
+                  ChoiceChip(
+                    label: Text(e.label),
+                    selected: _expansion == e,
+                    onSelected: (_) => setState(() => _expansion = e),
+                  ),
+                ],
+              ],
             ),
+          ),
         ],
+        const SizedBox(height: 14),
+        if (top == null)
+          Panel(child: Text(s.t('nothing_pinned'), style: const TextStyle(color: AppColors.muted)))
+        else
+          _FeaturedBoss(spawn: top, now: now),
+        const SizedBox(height: 16),
+        const _DailyResets(),
+        const SizedBox(height: 8),
+        for (final e in rest)
+          _BossRow(
+            spawn: e,
+            now: now,
+            pinned: pinned.contains(e.boss.id),
+            done: bossDone(e.boss, done),
+          ),
+      ],
     );
     if (widget.embedded) return body;
     return Scaffold(
@@ -290,8 +290,7 @@ class _BossRow extends ConsumerWidget {
                 children: [
                   Text(localClock(spawn.start),
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                  Text(untilText(s, spawn.start, now),
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(untilText(s, spawn.start, now), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
                 ],
               ),
             ),

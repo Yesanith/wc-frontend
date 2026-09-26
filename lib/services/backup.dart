@@ -47,7 +47,6 @@ Future<void> restoreBackup(WidgetRef ref, String text) async {
   if (pinned is List) {
     await ref.read(pinnedEventsProvider.notifier).replaceAll(pinned.map((e) => '$e').toSet());
   }
-
 }
 
 Future<void> clearCache(DiskCache? cache) async => cache?.clear();

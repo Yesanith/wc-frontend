@@ -12,7 +12,8 @@ class _OverviewTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, [triggeredAlertsProvider, gemRatesProvider, deliveryProvider, watchlistPricesProvider]),
+      onRefresh: () =>
+          refreshProviders(ref, [triggeredAlertsProvider, gemRatesProvider, deliveryProvider, watchlistPricesProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [
@@ -115,11 +116,11 @@ class _OverviewTab extends ConsumerWidget {
             value: watch,
             onRetry: () => ref.invalidate(watchlistPricesProvider),
             builder: (items) => items.isEmpty
-                ? Panel(child: Text(s.t('watchlist_empty'), style: const TextStyle(color: AppColors.muted, height: 1.5)))
+                ? Panel(
+                    child: Text(s.t('watchlist_empty'), style: const TextStyle(color: AppColors.muted, height: 1.5)))
                 : Column(
                     children: [
-                      for (final w in items)
-                        Padding(padding: const EdgeInsets.only(bottom: 8), child: WatchRow(w)),
+                      for (final w in items) Padding(padding: const EdgeInsets.only(bottom: 8), child: WatchRow(w)),
                     ],
                   ),
           ),

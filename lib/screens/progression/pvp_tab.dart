@@ -29,8 +29,7 @@ class _SeasonStanding extends ConsumerWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              if (standing.rating > 0)
-                Expanded(child: StatTile(label: s.t('rating'), value: fmtInt(standing.rating))),
+              if (standing.rating > 0) Expanded(child: StatTile(label: s.t('rating'), value: fmtInt(standing.rating))),
               Expanded(child: StatTile(label: s.t('pips'), value: fmtInt(standing.points))),
             ],
           ),
@@ -94,9 +93,8 @@ class _PvpTab extends ConsumerWidget {
           value: stats,
           onRetry: () => ref.invalidate(pvpStatsProvider),
           builder: (data) {
-            final aggregate = data['aggregate'] is Map
-                ? Map<String, dynamic>.from(data['aggregate'] as Map)
-                : <String, dynamic>{};
+            final aggregate =
+                data['aggregate'] is Map ? Map<String, dynamic>.from(data['aggregate'] as Map) : <String, dynamic>{};
             final professions = data['professions'] is Map
                 ? Map<String, dynamic>.from(data['professions'] as Map)
                 : <String, dynamic>{};
@@ -201,11 +199,9 @@ class _PvpTab extends ConsumerWidget {
                                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
                               Text(
-                                ratio(entry.value is Map
-                                    ? Map<String, dynamic>.from(entry.value as Map)
-                                    : null),
-                                style: const TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+                                ratio(entry.value is Map ? Map<String, dynamic>.from(entry.value as Map) : null),
+                                style:
+                                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
                               ),
                             ],
                           ),

@@ -161,7 +161,6 @@ class PvpAmuletsScreen extends ConsumerWidget {
   }
 }
 
-
 /// the top of the current league season's ladder, per region
 class PvpLadderScreen extends ConsumerStatefulWidget {
   const PvpLadderScreen({super.key});
@@ -224,7 +223,8 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
                       itemBuilder: (context, i) {
                         final r = rows[i];
                         final scores = (r['scores'] as List?) ?? const [];
-                        final rating = scores.isEmpty || scores.first is! Map ? 0 : asInt((scores.first as Map)['value']);
+                        final rating =
+                            scores.isEmpty || scores.first is! Map ? 0 : asInt((scores.first as Map)['value']);
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Row(
@@ -232,7 +232,8 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
                               SizedBox(
                                 width: 40,
                                 child: Text('${asInt(r['rank'])}',
-                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                                    style: const TextStyle(
+                                        fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
                               ),
                               Expanded(
                                 child: Text('${r['name'] ?? ''}',

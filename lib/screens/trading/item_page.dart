@@ -25,7 +25,9 @@ class TradingItemScreen extends ConsumerWidget {
             tooltip: s.t('price_alert'),
             onPressed: () => showPriceAlertDialog(context, ref, itemId, name),
             icon: Icon(
-              ref.watch(priceAlertsProvider).containsKey(itemId) ? Icons.notifications_active : Icons.notifications_none,
+              ref.watch(priceAlertsProvider).containsKey(itemId)
+                  ? Icons.notifications_active
+                  : Icons.notifications_none,
               color: AppColors.gold,
             ),
           ),
@@ -76,7 +78,8 @@ class TradingItemScreen extends ConsumerWidget {
                   totals.when(
                     data: (t) => Text(fmtInt(t[itemId] ?? 0),
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                    loading: () => const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                    loading: () =>
+                        const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
                     error: (_, __) => const Text('-'),
                   ),
                 ],
@@ -168,7 +171,8 @@ class _PricePanel extends ConsumerWidget {
 
 /// the first price levels on both sides of the market, with the quantity
 /// waiting at each price
-final _listingsProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) => ref.watch(gw2ApiProvider).listings(id));
+final _listingsProvider =
+    FutureProvider.autoDispose.family<Json?, int>((ref, id) => ref.watch(gw2ApiProvider).listings(id));
 
 class _OrderBook extends ConsumerWidget {
   const _OrderBook({required this.itemId});
@@ -193,7 +197,8 @@ class _OrderBook extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title.toUpperCase(),
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+                  style: const TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
               const SizedBox(height: 6),
               for (final r in rows)
                 Padding(
@@ -229,7 +234,6 @@ class _OrderBook extends ConsumerWidget {
     );
   }
 }
-
 
 /// set or clear the price alert of one item, prices typed in gold
 Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemId, String name) async {

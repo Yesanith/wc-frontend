@@ -97,8 +97,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     children: [
                       const Icon(Icons.translate, size: 18, color: AppColors.gold),
                       const SizedBox(width: 6),
-                      Text(lang.nativeName,
-                          style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                      Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
                     ],
                   ),
                 ),
@@ -128,8 +127,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   _Step(3, s.t('step3')),
                   const SizedBox(height: 8),
                   TextButton.icon(
-                    onPressed: () => openUrl(context, 'https://account.arena.net/applications',
-                        failMessage: s.t('open_failed')),
+                    onPressed: () =>
+                        openUrl(context, 'https://account.arena.net/applications', failMessage: s.t('open_failed')),
                     icon: const Icon(Icons.open_in_new, size: 18),
                     label: Text(s.t('open_arena_net')),
                   ),
@@ -234,8 +233,8 @@ class _Step extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.gold),
           ),
-          child: Text('$number',
-              style: const TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800)),
+          child:
+              Text('$number', style: const TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800)),
         ),
         const SizedBox(width: 12),
         Expanded(

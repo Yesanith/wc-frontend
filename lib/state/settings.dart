@@ -108,5 +108,4 @@ class CharacterSortNotifier extends Notifier<CharacterSort> {
   }
 }
 
-final characterSortProvider =
-    NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);
+final characterSortProvider = NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);

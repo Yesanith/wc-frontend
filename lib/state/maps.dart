@@ -7,7 +7,8 @@ import 'api.dart';
 import 'settings.dart';
 
 class GameMap {
-  const GameMap(this.id, this.name, this.region, this.continent, this.floors, this.regionId, this.minLevel, this.maxLevel);
+  const GameMap(
+      this.id, this.name, this.region, this.continent, this.floors, this.regionId, this.minLevel, this.maxLevel);
   final int id;
   final String name;
   final String region;

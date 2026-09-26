@@ -40,9 +40,8 @@ int compareVersions(String a, String b) {
 }
 
 final updateProvider = FutureProvider<UpdateInfo?>((ref) async {
-  final res = await http
-      .get(Uri.parse(_releasesApi), headers: {'Accept': 'application/vnd.github+json'})
-      .timeout(const Duration(seconds: 15));
+  final res = await http.get(Uri.parse(_releasesApi),
+      headers: {'Accept': 'application/vnd.github+json'}).timeout(const Duration(seconds: 15));
   if (res.statusCode != 200) return null;
   final data = jsonDecode(utf8.decode(res.bodyBytes));
   if (data is! Map) return null;

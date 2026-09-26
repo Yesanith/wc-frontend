@@ -181,7 +181,8 @@ class _MapCard extends ConsumerWidget {
             Row(
               children: [
                 for (final c in _teamColors.keys) ...[
-                  Container(width: 8, height: 8, decoration: BoxDecoration(color: _teamColors[c], shape: BoxShape.circle)),
+                  Container(
+                      width: 8, height: 8, decoration: BoxDecoration(color: _teamColors[c], shape: BoxShape.circle)),
                   const SizedBox(width: 4),
                   Text('${held[c]}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                   const SizedBox(width: 4),
@@ -304,7 +305,8 @@ class _RankTab extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Text(fmtInt(rank), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                Text(fmtInt(rank),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ],
             ),
           ),

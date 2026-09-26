@@ -55,9 +55,7 @@ class KeysNotifier extends AsyncNotifier<List<StoredKey>> {
   }
 
   Future<void> _persist(List<StoredKey> keys) async {
-    await ref
-        .read(storageProvider)
-        .write(key: _storageKey, value: jsonEncode(keys.map((k) => k.toJson()).toList()));
+    await ref.read(storageProvider).write(key: _storageKey, value: jsonEncode(keys.map((k) => k.toJson()).toList()));
   }
 
   Future<void> add(String key, String name) async {

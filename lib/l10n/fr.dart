@@ -11,7 +11,8 @@ const frStrings = <String, String>{
   'save_alert': 'Enregistrer',
   'alerts_fired': '{n} alertes de prix atteintes',
   'wealth_history': 'Historique de l\'or',
-  'wealth_collecting': 'Ton historique d\'or commence aujourd\'hui. L\'appli enregistre un relevé par jour, le graphique apparaît dès le deuxième jour.',
+  'wealth_collecting':
+      'Ton historique d\'or commence aujourd\'hui. L\'appli enregistre un relevé par jour, le graphique apparaît dès le deuxième jour.',
   'last_7_days': '7 derniers jours',
   'last_30_days': '30 derniers jours',
   'wins_losses': '{w}V · {l}D',
@@ -103,7 +104,8 @@ const frStrings = <String, String>{
   'add_account': 'Ajouter un autre compte',
   'guilds': 'Guildes',
   'guild': 'Guilde',
-  'guilds_note': 'Les données de guilde nécessitent l\'autorisation guilds, et le coffre et le journal ne sont visibles que par les membres ayant le rang adéquat.',
+  'guilds_note':
+      'Les données de guilde nécessitent l\'autorisation guilds, et le coffre et le journal ne sont visibles que par les membres ayant le rang adéquat.',
   'no_guilds': 'Ce compte n\'est dans aucune guilde.',
   'treasury': 'Trésorerie',
   'stash': 'Coffre',
@@ -140,11 +142,14 @@ const frStrings = <String, String>{
   'update_available': 'La version {v} est disponible.',
   'download_update': 'Télécharger',
   'release_notes': 'Notes',
-  'install_note': 'L\'apk est téléchargé par le navigateur, ouvre-le depuis la notification pour l\'installer par dessus la version actuelle.',
+  'install_note':
+      'L\'apk est téléchargé par le navigateur, ouvre-le depuis la notification pour l\'installer par dessus la version actuelle.',
   'unnamed_entry': 'Non sorti (#{id})',
   'version': 'Version',
-  'needs_permission': 'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
-  'guild_rank_needed': 'Ta clé API est correcte. Le jeu réserve la trésorerie, le coffre et le journal aux chefs de guilde, un membre normal ne peut pas les consulter.',
+  'needs_permission':
+      'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
+  'guild_rank_needed':
+      'Ta clé API est correcte. Le jeu réserve la trésorerie, le coffre et le journal aux chefs de guilde, un membre normal ne peut pas les consulter.',
   'browse_all': 'Parcourir tous les succès',
   'instances': 'Instances',
   'raids': 'Raids',
@@ -334,14 +339,16 @@ const frStrings = <String, String>{
   'lowest_sell': 'Meilleure offre de vente',
   'n_listed': '{n} en vente',
   'flip_profit': 'Bénéfice après 15 % de taxes',
-  'tp_note': 'Les prix viennent en direct de l\'API officielle. L\'historique n\'y est pas disponible, donc pas encore de graphique.',
+  'tp_note':
+      'Les prix viennent en direct de l\'API officielle. L\'historique n\'y est pas disponible, donc pas encore de graphique.',
   'watchlist': 'Liste de suivi',
   'watchlist_empty': 'Rien pour le moment. Ouvre un objet, touche Comptoir puis Suivre.',
   'buy_short': 'achat',
   'world_bosses': 'Événements du monde',
   'sync_now': 'Synchroniser',
   'syncing': 'Synchronisation',
-  'sync_note': 'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
+  'sync_note':
+      'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
   'local_time_note': 'Heures affichées à l\'heure locale.',
   'pinned': 'Épinglés',
   'pin': 'Épingler',
@@ -383,7 +390,8 @@ const frStrings = <String, String>{
   'wiki_source': 'Source du wiki',
   'remove_key': 'Retirer la clé',
   'remove_key_body': 'La clé API sera supprimée de cet appareil et tu reviendras à l\'écran de départ.',
-  'disclaimer': 'Tyria Codex est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
+  'disclaimer':
+      'Tyria Codex est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
   'slot_Helm': 'Tête',
   'slot_Shoulders': 'Épaules',
   'slot_Coat': 'Torse',

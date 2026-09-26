@@ -107,8 +107,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: Column(
                   children: [
-                    for (final e in leaves.entries)
-                      _LeafRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
+                    for (final e in leaves.entries) _LeafRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
                   ],
                 ),
               ),
@@ -160,8 +159,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('already_owned_value'),
-                    style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                child: Text(s.t('already_owned_value'), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
               ),
               CoinText(ownedValue, size: 13),
             ],
@@ -225,9 +223,7 @@ class _LeafRow extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: done ? AppColors.muted : AppColors.text)),
+                          fontSize: 13, fontWeight: FontWeight.w700, color: done ? AppColors.muted : AppColors.text)),
                   const SizedBox(height: 6),
                   Bar(value: need == 0 ? 0 : have / need, color: done ? AppColors.green : AppColors.gold),
                 ],
@@ -290,7 +286,6 @@ class _CraftNodeTile extends StatelessWidget {
     );
   }
 }
-
 
 /// "learned" or "not learned" for a regular recipe, nothing for forge ones or
 /// when the key cannot read unlocks

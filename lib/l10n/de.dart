@@ -11,7 +11,8 @@ const deStrings = <String, String>{
   'save_alert': 'Speichern',
   'alerts_fired': '{n} Preisalarme erreicht',
   'wealth_history': 'Goldverlauf',
-  'wealth_collecting': 'Dein Goldverlauf beginnt heute. Die App speichert pro Tag einen Stand, das Diagramm erscheint ab dem zweiten Tag.',
+  'wealth_collecting':
+      'Dein Goldverlauf beginnt heute. Die App speichert pro Tag einen Stand, das Diagramm erscheint ab dem zweiten Tag.',
   'last_7_days': 'Letzte 7 Tage',
   'last_30_days': 'Letzte 30 Tage',
   'wins_losses': '{w}S · {l}N',
@@ -103,7 +104,8 @@ const deStrings = <String, String>{
   'add_account': 'Weiteren Account hinzufügen',
   'guilds': 'Gilden',
   'guild': 'Gilde',
-  'guilds_note': 'Gildendaten benötigen die Berechtigung guilds, Tresor und Protokoll sehen nur Mitglieder mit passendem Gildenrang.',
+  'guilds_note':
+      'Gildendaten benötigen die Berechtigung guilds, Tresor und Protokoll sehen nur Mitglieder mit passendem Gildenrang.',
   'no_guilds': 'Dieser Account ist in keiner Gilde.',
   'treasury': 'Schatzkammer',
   'stash': 'Tresor',
@@ -140,11 +142,14 @@ const deStrings = <String, String>{
   'update_available': 'Version {v} ist verfügbar.',
   'download_update': 'Herunterladen',
   'release_notes': 'Notizen',
-  'install_note': 'Die apk lädt über den Browser, öffne sie aus der Benachrichtigung, um über die aktuelle Version zu installieren.',
+  'install_note':
+      'Die apk lädt über den Browser, öffne sie aus der Benachrichtigung, um über die aktuelle Version zu installieren.',
   'unnamed_entry': 'Unveröffentlicht (#{id})',
   'version': 'Version',
-  'needs_permission': 'Deinem API-Schlüssel fehlt die Berechtigung {p}. Erstelle einen neuen Schlüssel damit und tausche ihn in den Einstellungen.',
-  'guild_rank_needed': 'Dein API-Schlüssel ist in Ordnung. Schatzkammer, Tresor und Protokoll gibt das Spiel nur der Gildenleitung frei, ein normales Mitglied kann sie nicht abrufen.',
+  'needs_permission':
+      'Deinem API-Schlüssel fehlt die Berechtigung {p}. Erstelle einen neuen Schlüssel damit und tausche ihn in den Einstellungen.',
+  'guild_rank_needed':
+      'Dein API-Schlüssel ist in Ordnung. Schatzkammer, Tresor und Protokoll gibt das Spiel nur der Gildenleitung frei, ein normales Mitglied kann sie nicht abrufen.',
   'browse_all': 'Alle Erfolge durchsehen',
   'instances': 'Instanzen',
   'raids': 'Raids',
@@ -341,7 +346,8 @@ const deStrings = <String, String>{
   'world_bosses': 'Weltevents',
   'sync_now': 'Jetzt synchronisieren',
   'syncing': 'Synchronisiere',
-  'sync_note': 'Dein Konto wird beim Start einmal geladen und auf dem Gerät behalten, damit Bereiche ohne Wartezeit öffnen. Nach dem Spielen erneut synchronisieren.',
+  'sync_note':
+      'Dein Konto wird beim Start einmal geladen und auf dem Gerät behalten, damit Bereiche ohne Wartezeit öffnen. Nach dem Spielen erneut synchronisieren.',
   'local_time_note': 'Zeiten in deiner Ortszeit.',
   'pinned': 'Angeheftet',
   'pin': 'Anheften',
@@ -383,7 +389,8 @@ const deStrings = <String, String>{
   'wiki_source': 'Wiki-Quelle',
   'remove_key': 'Schlüssel entfernen',
   'remove_key_body': 'Der API-Schlüssel wird von diesem Gerät gelöscht und du kehrst zum Startbildschirm zurück.',
-  'disclaimer': 'Tyria Codex ist eine inoffizielle Fan-App. Guild Wars 2, ArenaNet und NCSOFT sind Marken ihrer jeweiligen Eigentümer. Die Daten stammen aus der offiziellen GW2-API und dem Guild Wars 2 Wiki.',
+  'disclaimer':
+      'Tyria Codex ist eine inoffizielle Fan-App. Guild Wars 2, ArenaNet und NCSOFT sind Marken ihrer jeweiligen Eigentümer. Die Daten stammen aus der offiziellen GW2-API und dem Guild Wars 2 Wiki.',
   'slot_Helm': 'Kopf',
   'slot_Shoulders': 'Schultern',
   'slot_Coat': 'Brust',

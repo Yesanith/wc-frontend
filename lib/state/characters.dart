@@ -29,8 +29,7 @@ List<Json> equipmentForTab(Json c, int? tab) {
   final wanted = tab ?? c['active_equipment_tab'];
   return [
     for (final e in eq)
-      if (e is Map &&
-          (wanted == null || e['tabs'] is! List || (e['tabs'] as List).contains(wanted)))
+      if (e is Map && (wanted == null || e['tabs'] is! List || (e['tabs'] as List).contains(wanted)))
         Map<String, dynamic>.from(e),
   ];
 }
@@ -70,7 +69,6 @@ final characterItemsProvider = FutureProvider.autoDispose.family<Map<int, Json>,
   return api.items(ids);
 });
 
-
 /// one sub endpoint of a character. key is "name|part", part is heropoints,
 /// sab, quests, training or backstory
 final characterPartProvider = FutureProvider.autoDispose.family<dynamic, String>((ref, key) async {
@@ -80,4 +78,5 @@ final characterPartProvider = FutureProvider.autoDispose.family<dynamic, String>
 });
 
 /// the profession of a character, for skill tree names in training
-final professionProvider = FutureProvider.autoDispose.family<Json, String>((ref, name) => ref.watch(gw2ApiProvider).profession(name));
+final professionProvider =
+    FutureProvider.autoDispose.family<Json, String>((ref, name) => ref.watch(gw2ApiProvider).profession(name));

@@ -14,7 +14,10 @@ Json professionWith(Map<int, int> paletteBySkill) => {
 Json guardianBuild() => {
       'profession': 'Guardian',
       'specializations': [
-        {'id': 42, 'traits': [1, 5, 9]},
+        {
+          'id': 42,
+          'traits': [1, 5, 9]
+        },
       ],
       'skills': {
         'heal': 100,

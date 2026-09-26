@@ -397,11 +397,9 @@ class Gw2Api {
 
   Future<Map<int, Json>> currencies(Iterable<int> ids) => _batch('/currencies', ids, _currencyCache);
 
-  Future<Map<int, Json>> specializations(Iterable<int> ids) =>
-      _batch('/specializations', ids, _specCache);
+  Future<Map<int, Json>> specializations(Iterable<int> ids) => _batch('/specializations', ids, _specCache);
 
-  Future<Map<int, Json>> achievements(Iterable<int> ids) =>
-      _batch('/achievements', ids, _achievementCache);
+  Future<Map<int, Json>> achievements(Iterable<int> ids) => _batch('/achievements', ids, _achievementCache);
 
   Future<Map<int, Json>> masteries(Iterable<int> ids) => _batch('/masteries', ids, _masteryCache);
 
@@ -425,8 +423,7 @@ class Gw2Api {
   }
 
   /// weapons, palettes and skill lists of a profession
-  Future<Json> profession(String name) async =>
-      Map<String, dynamic>.from(await get('/professions/$name') as Map);
+  Future<Json> profession(String name) async => Map<String, dynamic>.from(await get('/professions/$name') as Map);
 
   /// raid encounters cleared this week and the wing layout
   Future<List<String>> accountRaids() async => (await cachedGet('/account/raids') as List).map((e) => '$e').toList();
@@ -464,8 +461,7 @@ class Gw2Api {
   /// the floor entry of one map, this is where waypoints and their chat
   /// links live
   Future<Json> mapDetail(int continent, int floor, int region, int map) async =>
-      Map<String, dynamic>.from(
-          await get('/continents/$continent/floors/$floor/regions/$region/maps/$map') as Map);
+      Map<String, dynamic>.from(await get('/continents/$continent/floors/$floor/regions/$region/maps/$map') as Map);
 
   // ---------------------------------------------------------------------
   // static reference data, requested whole with ids=all
@@ -483,8 +479,7 @@ class Gw2Api {
   // account extras
 
   /// recipe ids the account has learned. needs the unlocks permission
-  Future<List<int>> learnedRecipes() async =>
-      [for (final v in (await cachedGet('/account/recipes') as List)) asInt(v)];
+  Future<List<int>> learnedRecipes() async => [for (final v in (await cachedGet('/account/recipes') as List)) asInt(v)];
 
   /// luck, fractal augmentations and similar counters, as {id: value}
   Future<Map<String, int>> accountCounters(String path) async {
@@ -590,9 +585,7 @@ class Gw2Api {
   /// daily crafts and map chests already collected today, both need the
   /// progression permission
   Future<List<String>> dailyDone(String path) async =>
-      (await cachedGet('/account/$path', ttl: const Duration(minutes: 5)) as List)
-          .map((e) => '$e')
-          .toList();
+      (await cachedGet('/account/$path', ttl: const Duration(minutes: 5)) as List).map((e) => '$e').toList();
 
   Future<List<String>> dailyAll(String path) async => idList('/$path');
 
@@ -600,8 +593,7 @@ class Gw2Api {
 
   Future<List<Json>> accountMasteries() async => _list(await cachedGet('/account/masteries'));
 
-  Future<Json> masteryPoints() async =>
-      Map<String, dynamic>.from(await cachedGet('/account/mastery/points') as Map);
+  Future<Json> masteryPoints() async => Map<String, dynamic>.from(await cachedGet('/account/mastery/points') as Map);
 
   Future<List<Json>> legendaryArmory() async => _list(await cachedGet('/account/legendaryarmory'));
 

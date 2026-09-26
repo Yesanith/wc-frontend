@@ -95,8 +95,7 @@ class ItemDetailScreen extends ConsumerWidget {
                                 style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
                           ),
                           Text('+${asInt(a['modifier'])}',
-                              style: const TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
                         ],
                       ),
                     ),
@@ -134,8 +133,7 @@ class ItemDetailScreen extends ConsumerWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(s.t('lowest_sell'),
-                            style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                        child: Text(s.t('lowest_sell'), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
                       ),
                       CoinText(sells is Map ? asInt(sells['unit_price']) : 0, size: 14),
                     ],
@@ -144,8 +142,7 @@ class ItemDetailScreen extends ConsumerWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(s.t('highest_buy'),
-                            style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                        child: Text(s.t('highest_buy'), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
                       ),
                       CoinText(buys is Map ? asInt(buys['unit_price']) : 0, size: 14),
                     ],
@@ -224,35 +221,34 @@ class _UpgradeRow extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: AppCard(
         onTap: () => Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: itemId)),
-      ),
-               padding: const EdgeInsets.all(10),
-               child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                      if (buff.isNotEmpty)
-                        Text(buff.replaceAll(RegExp(r'<[^>]*>'), ''),
-                            style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
-                      for (var i = 0; i < bonuses.length; i++)
-                        Text('(${i + 1}) ${bonuses[i]}',
-                            style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
-                    ],
-                  ),
-                ),
-              ],
+          MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: itemId)),
+        ),
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                  if (buff.isNotEmpty)
+                    Text(buff.replaceAll(RegExp(r'<[^>]*>'), ''),
+                        style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                  for (var i = 0; i < bonuses.length; i++)
+                    Text('(${i + 1}) ${bonuses[i]}',
+                        style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                ],
+              ),
             ),
-             ),
+          ],
+        ),
+      ),
     );
   }
 }
-
 
 /// the name of the stat combination, from the equipped piece or the item
 String? _comboName(WidgetRef ref, Json? instance, Json? details) {

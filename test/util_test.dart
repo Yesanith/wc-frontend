@@ -100,9 +100,24 @@ void main() {
     });
 
     test('leaves the names that already agree alone', () {
-      for (final w in ['Axe', 'Dagger', 'Focus', 'Greatsword', 'Hammer', 'Mace', 'Pistol',
-                       'Rifle', 'Scepter', 'Shield', 'Speargun', 'Staff', 'Sword', 'Torch',
-                       'Trident', 'Warhorn']) {
+      for (final w in [
+        'Axe',
+        'Dagger',
+        'Focus',
+        'Greatsword',
+        'Hammer',
+        'Mace',
+        'Pistol',
+        'Rifle',
+        'Scepter',
+        'Shield',
+        'Speargun',
+        'Staff',
+        'Sword',
+        'Torch',
+        'Trident',
+        'Warhorn'
+      ]) {
         expect(professionWeaponKey(w), w);
       }
     });

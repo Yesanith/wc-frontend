@@ -165,7 +165,6 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
   }
 }
 
-
 class _RecipeRow extends ConsumerWidget {
   const _RecipeRow({
     required this.id,

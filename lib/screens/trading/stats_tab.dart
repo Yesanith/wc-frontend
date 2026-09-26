@@ -11,7 +11,8 @@ class _StatsTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, [transactionsProvider('history/sells'), transactionsProvider('history/buys'), tradeStatsProvider]),
+      onRefresh: () => refreshProviders(
+          ref, [transactionsProvider('history/sells'), transactionsProvider('history/buys'), tradeStatsProvider]),
       child: AsyncView<TradeStats>(
         permission: 'tradingpost',
         value: stats,

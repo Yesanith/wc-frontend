@@ -130,8 +130,7 @@ class _Head extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${c['name'] ?? ''}',
-              maxLines: 1, overflow: TextOverflow.ellipsis, style: display(16)),
+          Text('${c['name'] ?? ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: display(16)),
           Text(profession,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: professionColor(profession))),
         ],
@@ -213,13 +212,11 @@ class _GearSummary extends ConsumerWidget {
                     Expanded(
                       child: Text(rarity, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
                     ),
-                    Text('${counts[rarity]}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
+                    Text('${counts[rarity]}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                   ],
                 ),
               ),
-          if (counts.isEmpty)
-            const Text('-', style: TextStyle(color: AppColors.muted)),
+          if (counts.isEmpty) const Text('-', style: TextStyle(color: AppColors.muted)),
         ],
       ),
     );

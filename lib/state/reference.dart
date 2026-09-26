@@ -88,7 +88,8 @@ Color? dyeColor(Json? dye) {
 // -------------------------------------------------------------------------
 // story journal and biography
 
-final storiesProvider = FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'stories', '/stories')));
+final storiesProvider =
+    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'stories', '/stories')));
 
 final storySeasonsProvider = FutureProvider<List<Json>>((ref) async {
   final rows = await _static(ref, 'story_seasons', '/stories/seasons');
@@ -98,8 +99,8 @@ final storySeasonsProvider = FutureProvider<List<Json>>((ref) async {
 
 final questsProvider = FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'quests', '/quests')));
 
-final backstoryAnswersProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'backstory_answers', '/backstory/answers')));
+final backstoryAnswersProvider = FutureProvider<Map<String, Json>>(
+    (ref) async => _byId(await _static(ref, 'backstory_answers', '/backstory/answers')));
 
 final backstoryQuestionsProvider = FutureProvider<Map<String, Json>>(
     (ref) async => _byId(await _static(ref, 'backstory_questions', '/backstory/questions')));

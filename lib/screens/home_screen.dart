@@ -15,7 +15,8 @@ import 'events_screen.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [triggeredAlertsProvider, 
+  Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [
+        triggeredAlertsProvider,
         accountProvider,
         walletProvider,
         vaultTrackProvider,
@@ -113,8 +114,7 @@ class _AccountHeader extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(s.t('welcome'),
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+        Text(s.t('welcome'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
         Text('${a['name'] ?? ''}', style: display(26)),
         const SizedBox(height: 14),
         Panel(
@@ -277,29 +277,27 @@ class _LinkTile extends StatelessWidget {
       onTap: onTap,
       radius: 16,
       child: Row(
-            children: [
-              Icon(icon, color: AppColors.gold),
-              const SizedBox(width: 12),
-              Expanded(
-      child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                    Text(subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ],
-    ),
-              ),
-              const Icon(Icons.chevron_right, color: AppColors.chevron),
-            ],
+        children: [
+          Icon(icon, color: AppColors.gold),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                Text(subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
           ),
-           );
+          const Icon(Icons.chevron_right, color: AppColors.chevron),
+        ],
+      ),
+    );
   }
 }
-
-
 
 /// shows up only while at least one price alert is met
 class _AlertBanner extends ConsumerWidget {

@@ -59,15 +59,27 @@ void main() {
     test('prefers the cloth colour', () {
       final dye = {
         'base_rgb': [1, 2, 3],
-        'cloth': {'rgb': [200, 100, 50]},
+        'cloth': {
+          'rgb': [200, 100, 50]
+        },
       };
       expect(dyeColor(dye), const Color.fromARGB(255, 200, 100, 50));
     });
 
     test('falls back to the base colour and handles junk', () {
-      expect(dyeColor({'base_rgb': [10, 20, 30]}), const Color.fromARGB(255, 10, 20, 30));
+      expect(
+          dyeColor({
+            'base_rgb': [10, 20, 30]
+          }),
+          const Color.fromARGB(255, 10, 20, 30));
       expect(dyeColor(null), isNull);
-      expect(dyeColor({'cloth': {'rgb': [1]}}), isNull);
+      expect(
+          dyeColor({
+            'cloth': {
+              'rgb': [1]
+            }
+          }),
+          isNull);
     });
   });
 
@@ -82,7 +94,9 @@ void main() {
   });
 
   test('a listing is sold out only with a limit', () {
-    expect(VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut, isTrue);
-    expect(VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut, isFalse);
+    expect(
+        VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut, isTrue);
+    expect(VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut,
+        isFalse);
   });
 }

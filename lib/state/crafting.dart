@@ -120,9 +120,7 @@ Future<CraftNode> _liveTree(Gw2Api api, int rootId) async {
     // item details and the recipe lookup do not depend on each other
     final lookups = await Future.wait([
       pool.run(() => api.items([itemId])),
-      depth >= 6 || seen.contains(itemId)
-          ? Future.value(const <int>[])
-          : pool.run(() => api.recipesForOutput(itemId)),
+      depth >= 6 || seen.contains(itemId) ? Future.value(const <int>[]) : pool.run(() => api.recipesForOutput(itemId)),
     ]);
     final item = (lookups[0] as Map<int, Json>)[itemId];
     CraftNode leaf() => CraftNode(

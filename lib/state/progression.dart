@@ -107,8 +107,7 @@ class AchievementGroup {
   final String name;
   final List<AchievementCategory> categories;
 
-  int get achievementCount =>
-      categories.fold<int>(0, (n, c) => n + c.achievementIds.length);
+  int get achievementCount => categories.fold<int>(0, (n, c) => n + c.achievementIds.length);
 }
 
 /// the whole achievement catalogue, groups in game order with their
@@ -141,8 +140,7 @@ final achievementCatalogueProvider = FutureProvider<List<AchievementGroup>>((ref
       c['icon'] as String?,
       // entries are {"id": n} objects, not bare ids
       [
-        for (final a in (c['achievements'] as List?) ?? const [])
-          asInt(a is Map ? a['id'] : a),
+        for (final a in (c['achievements'] as List?) ?? const []) asInt(a is Map ? a['id'] : a),
       ],
     );
   }
@@ -162,8 +160,7 @@ final achievementCatalogueProvider = FutureProvider<List<AchievementGroup>>((ref
 });
 
 /// one category's achievements with this account's progress on each
-final categoryAchievementsProvider =
-    FutureProvider.family<List<AchievementRow>, int>((ref, categoryId) async {
+final categoryAchievementsProvider = FutureProvider.family<List<AchievementRow>, int>((ref, categoryId) async {
   final api = accountApi(ref);
   final groups = await ref.watch(achievementCatalogueProvider.future);
 
@@ -279,8 +276,7 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
   }
 
   final rows = [
-    for (final id in ids)
-      MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0),
+    for (final id in ids) MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0),
   ];
   rows.sort((a, b) {
     final byRelease = masteryRegionRank(a.regionKey).compareTo(masteryRegionRank(b.regionKey));
@@ -301,12 +297,9 @@ extension MasteryProgress on List<MasteryRow> {
 /// spent and earned points per release, in the same order as the tracks
 final masteryPointsProvider = FutureProvider<List<Json>>((ref) async {
   final raw = await accountApi(ref).masteryPoints();
-  final totals = ((raw['totals'] as List?) ?? const [])
-      .whereType<Map>()
-      .map((e) => Map<String, dynamic>.from(e))
-      .toList();
-  totals.sort((a, b) =>
-      masteryRegionRank('${a['region']}').compareTo(masteryRegionRank('${b['region']}')));
+  final totals =
+      ((raw['totals'] as List?) ?? const []).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+  totals.sort((a, b) => masteryRegionRank('${a['region']}').compareTo(masteryRegionRank('${b['region']}')));
   return totals;
 });
 
@@ -410,8 +403,7 @@ final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
     for (final d in all)
       Dungeon('${d['id']}', [
         for (final p in (d['paths'] as List?) ?? const [])
-          if (p is Map)
-            DungeonPath('${p['id']}', '${p['type'] ?? ''}', cleared.contains('${p['id']}')),
+          if (p is Map) DungeonPath('${p['id']}', '${p['type'] ?? ''}', cleared.contains('${p['id']}')),
       ]),
   ];
 });

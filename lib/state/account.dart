@@ -8,8 +8,7 @@ import 'reference.dart';
 final accountProvider = FutureProvider<Json>((ref) => accountApi(ref).account());
 
 /// track is daily, weekly or special
-final vaultTrackProvider =
-    FutureProvider.family<Json, String>((ref, track) => accountApi(ref).vault(track));
+final vaultTrackProvider = FutureProvider.family<Json, String>((ref, track) => accountApi(ref).vault(track));
 
 final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
   final api = accountApi(ref);
@@ -39,8 +38,7 @@ final bankProvider = FutureProvider<List<ItemSlot?>>((ref) async {
       if (s != null) asInt(s['id']),
   ]);
   return <ItemSlot?>[
-    for (final s in raw)
-      s == null ? null : ItemSlot(asInt(s['id']), asInt(s['count']), items[asInt(s['id'])]),
+    for (final s in raw) s == null ? null : ItemSlot(asInt(s['id']), asInt(s['count']), items[asInt(s['id'])]),
   ];
 });
 
@@ -71,7 +69,10 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
     }
   }
   // armory legendaries show up in equipment as well, count them only once
-  final armory = {for (final row in results[3]) if (row != null) asInt(row['id'])};
+  final armory = {
+    for (final row in results[3])
+      if (row != null) asInt(row['id'])
+  };
   final chars = await charsFuture;
   for (final c in chars) {
     for (final slot in bagSlots(c)) {
@@ -86,12 +87,12 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
   return totals;
 });
 
-
 // -------------------------------------------------------------------------
 // extras
 
 /// recipe ids this account has learned
-final learnedRecipesProvider = FutureProvider<Set<int>>((ref) async => (await accountApi(ref).learnedRecipes()).toSet());
+final learnedRecipesProvider =
+    FutureProvider<Set<int>>((ref) async => (await accountApi(ref).learnedRecipes()).toSet());
 
 /// {'luck': n}
 final accountLuckProvider = FutureProvider<Map<String, int>>((ref) => accountApi(ref).accountCounters('/account/luck'));

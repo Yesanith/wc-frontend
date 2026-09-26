@@ -11,7 +11,8 @@ const trStrings = <String, String>{
   'save_alert': 'Kaydet',
   'alerts_fired': '{n} fiyat alarmı tetiklendi',
   'wealth_history': 'Altın geçmişi',
-  'wealth_collecting': 'Altın geçmişin bugün başlıyor. Uygulama kullandığın her gün bir kayıt tutar, grafik ikinci günden itibaren görünür.',
+  'wealth_collecting':
+      'Altın geçmişin bugün başlıyor. Uygulama kullandığın her gün bir kayıt tutar, grafik ikinci günden itibaren görünür.',
   'last_7_days': 'Son 7 gün',
   'last_30_days': 'Son 30 gün',
   'wins_losses': '{w}G · {l}M',
@@ -103,7 +104,8 @@ const trStrings = <String, String>{
   'add_account': 'Başka hesap ekle',
   'guilds': 'Loncalar',
   'guild': 'Lonca',
-  'guilds_note': 'Lonca verisi için guilds izni gerekir, depo ve kayıt defterini ise sadece yetkili rütbedeki üyeler görebilir.',
+  'guilds_note':
+      'Lonca verisi için guilds izni gerekir, depo ve kayıt defterini ise sadece yetkili rütbedeki üyeler görebilir.',
   'no_guilds': 'Bu hesap bir loncada değil.',
   'treasury': 'Hazine',
   'stash': 'Depo',
@@ -144,7 +146,8 @@ const trStrings = <String, String>{
   'unnamed_entry': 'Yayınlanmamış (#{id})',
   'version': 'Sürüm',
   'needs_permission': 'API key\'inde {p} izni yok. Bu izinle yeni bir key oluşturup Ayarlar\'dan değiştir.',
-  'guild_rank_needed': 'API key\'inde sorun yok. Hazine, depo ve kayıt defterini oyun sadece lonca liderlerine açıyor, normal üyeler göremez.',
+  'guild_rank_needed':
+      'API key\'inde sorun yok. Hazine, depo ve kayıt defterini oyun sadece lonca liderlerine açıyor, normal üyeler göremez.',
   'browse_all': 'Tüm başarımlara göz at',
   'instances': 'Instance',
   'raids': 'Raid',
@@ -341,7 +344,8 @@ const trStrings = <String, String>{
   'world_bosses': 'Dünya etkinlikleri',
   'sync_now': 'Şimdi eşitle',
   'syncing': 'Eşitleniyor',
-  'sync_note': 'Hesabın açılışta bir kez indirilip cihazda tutulur, böylece bölümler beklemeden açılır. Oynadıktan sonra tekrar eşitle.',
+  'sync_note':
+      'Hesabın açılışta bir kez indirilip cihazda tutulur, böylece bölümler beklemeden açılır. Oynadıktan sonra tekrar eşitle.',
   'local_time_note': 'Saatler cihaz saatine göre.',
   'pinned': 'Sabitlenenler',
   'pin': 'Sabitle',
@@ -383,7 +387,8 @@ const trStrings = <String, String>{
   'wiki_source': 'Wiki kaynağı',
   'remove_key': 'Key\'i kaldır',
   'remove_key_body': 'API key bu cihazdan silinecek ve giriş ekranına döneceksin.',
-  'disclaimer': 'Tyria Codex resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
+  'disclaimer':
+      'Tyria Codex resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
   'slot_Helm': 'Kask',
   'slot_Shoulders': 'Omuz',
   'slot_Coat': 'Göğüs',

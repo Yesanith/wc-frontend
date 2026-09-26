@@ -20,8 +20,7 @@ enum AppLang {
   final String apiLang;
   final String wikiBase;
 
-  static AppLang fromCode(String code) =>
-      AppLang.values.firstWhere((l) => l.code == code, orElse: () => AppLang.en);
+  static AppLang fromCode(String code) => AppLang.values.firstWhere((l) => l.code == code, orElse: () => AppLang.en);
 }
 
 /// ui strings. `{name}` placeholders get filled from [args]

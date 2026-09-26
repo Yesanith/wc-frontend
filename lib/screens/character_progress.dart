@@ -61,7 +61,8 @@ class _HeroPoints extends ConsumerWidget {
           children: [
             const Icon(Icons.stars_outlined, color: AppColors.gold),
             const SizedBox(width: 12),
-            Expanded(child: Text(s.t('hero_challenges'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
+            Expanded(
+                child: Text(s.t('hero_challenges'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
             Text(fmtInt(raw is List ? raw.length : 0),
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
           ],
@@ -179,7 +180,9 @@ class _Story extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(height: 5),
-                          Bar(value: total == 0 ? 0 : done / total, color: done >= total ? AppColors.green : AppColors.gold),
+                          Bar(
+                              value: total == 0 ? 0 : done / total,
+                              color: done >= total ? AppColors.green : AppColors.gold),
                         ],
                       );
                     }),

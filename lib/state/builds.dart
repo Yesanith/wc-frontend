@@ -131,8 +131,7 @@ final armoryProvider = FutureProvider<List<ItemSlot>>((ref) async {
   final rows = await api.legendaryArmory();
   final items = await api.items(rows.map((r) => asInt(r['id'])));
   final out = [
-    for (final r in rows)
-      ItemSlot(asInt(r['id']), asInt(r['count']), items[asInt(r['id'])]),
+    for (final r in rows) ItemSlot(asInt(r['id']), asInt(r['count']), items[asInt(r['id'])]),
   ];
   out.sort((a, b) => a.name.compareTo(b.name));
   return out;

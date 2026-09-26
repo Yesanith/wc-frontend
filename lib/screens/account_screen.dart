@@ -134,8 +134,8 @@ class _WalletTab extends ConsumerWidget {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(others[i].name,
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                            child:
+                                Text(others[i].name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                           ),
                           Text(fmtInt(others[i].value),
                               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
@@ -297,8 +297,7 @@ class _ArmoryTab extends ConsumerWidget {
               rarity: item.rarity,
               title: item.name,
               trailing: item.count > 1
-                  ? Text('x${item.count}',
-                      style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold))
+                  ? Text('x${item.count}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold))
                   : null,
               onTap: () => showItemSheet(
                 context,
@@ -361,28 +360,28 @@ class _BuildsTab extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(14),
                   child: Row(
-                children: [
-                  Container(
-                    width: 8,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: professionColor(profession),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name.isEmpty ? s.t('unnamed_build') : name,
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                        Text('$profession · ${s.t('n_specializations', {'n': specs})}',
-                            style: TextStyle(fontSize: 12, color: professionColor(profession))),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.chevron_right, color: AppColors.chevron),
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: professionColor(profession),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name.isEmpty ? s.t('unnamed_build') : name,
+                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                            Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                                style: TextStyle(fontSize: 12, color: professionColor(profession))),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right, color: AppColors.chevron),
                     ],
                   ),
                 ),
@@ -394,7 +393,6 @@ class _BuildsTab extends ConsumerWidget {
     );
   }
 }
-
 
 /// luck and the fractal account augmentations, when the key may read them
 class _AccountCounters extends ConsumerWidget {
@@ -423,7 +421,8 @@ class _AccountCounters extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
-                  Text(fmtInt(value), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  Text(fmtInt(value),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ],
               ),
             ),
@@ -432,7 +431,6 @@ class _AccountCounters extends ConsumerWidget {
     );
   }
 }
-
 
 /// gold over the recorded days as a small line, with the change over a week
 /// and a month. the history only grows while the app is used
@@ -446,7 +444,8 @@ class _WealthPanel extends ConsumerWidget {
     final points = ref.watch(wealthProvider)[name] ?? const <WealthPoint>[];
     if (points.length < 2) {
       return Panel(
-        child: Text(s.t('wealth_collecting'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+        child:
+            Text(s.t('wealth_collecting'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
       );
     }
     final week = changeOver(points, 7, (p) => p.coins);
