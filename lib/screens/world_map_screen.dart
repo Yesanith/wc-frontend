@@ -9,7 +9,6 @@ import '../services/icon_cache.dart';
 import '../state/settings.dart';
 import '../state/world_map.dart';
 import '../theme.dart';
-import '../widgets/common.dart';
 
 const _tileHost = 'https://tiles.guildwars2.com';
 const _tile = 256.0;
