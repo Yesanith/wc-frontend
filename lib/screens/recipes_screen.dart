@@ -36,6 +36,9 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
   String _query = '';
   String _filter = _legendary;
 
+  /// null shows everything, true only learned, false only not yet learned
+  bool? _learned;
+
   @override
   void dispose() {
     _debounce?.cancel();
@@ -89,6 +92,11 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         for (final entry in b.byOutput.entries) {
           // a search looks through every recipe, the tabs only filter the browse view
           if (_query.isEmpty && !_matchesFilter(entry.value)) continue;
+          // forge recipes cannot be learned, the learned filter skips them
+          final learnable = entry.value.any((r) => r.id > 0);
+          final known = entry.value.any((r) => r.id > 0 && learned.contains(r.id));
+          if (_learned == true && !known) continue;
+          if (_learned == false && (!learnable || known)) continue;
           final name = index.nameOf(entry.key);
           if (name == null) continue;
           if (_query.isNotEmpty && !name.toLowerCase().contains(_query)) continue;
@@ -127,6 +135,23 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 ],
               ),
             ),
+            if (learned.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                child: Row(
+                  children: [
+                    for (final (value, key) in const [(null, 'all'), (true, 'recipe_learned'), (false, 'recipe_not_learned')]) ...[
+                      ChoiceChip(
+                        label: Text(s.t(key)),
+                        selected: _learned == value,
+                        visualDensity: VisualDensity.compact,
+                        onSelected: (_) => setState(() => _learned = value),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
               child: Align(

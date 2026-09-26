@@ -1,5 +1,8 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'guild_teams': 'Your guilds\' teams',
+  'guild_search': 'Find a guild by its full name',
+  'guild_not_found': 'No guild with that name.',
   'nav_daily': 'Daily',
   'nav_weekly': 'Weekly',
   'dungeon_paths': 'Dungeon paths',

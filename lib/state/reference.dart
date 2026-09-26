@@ -36,6 +36,12 @@ final materialCategoriesProvider = FutureProvider<List<Json>>((ref) async {
   return rows;
 });
 
+/// how many copies of each legendary the armory can hold, item id -> max
+final armoryMaxProvider = FutureProvider<Map<int, int>>((ref) async {
+  final rows = await _static(ref, 'legendary_armory', '/legendaryarmory');
+  return {for (final r in rows) asInt(r['id']): asInt(r['max_count'])};
+});
+
 // -------------------------------------------------------------------------
 // world vs world
 

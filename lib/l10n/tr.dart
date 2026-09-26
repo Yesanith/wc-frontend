@@ -1,5 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'guild_teams': 'Loncalarının takımları',
+  'guild_search': 'Tam adıyla lonca ara',
+  'guild_not_found': 'Bu isimde bir lonca yok.',
   'nav_daily': 'Günlük',
   'nav_weekly': 'Haftalık',
   'dungeon_paths': 'Dungeon yolları',

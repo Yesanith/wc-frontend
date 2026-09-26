@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/account.dart';
+import '../state/guilds.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../state/wvw.dart';
@@ -310,6 +311,7 @@ class _RankTab extends ConsumerWidget {
               ],
             ),
           ),
+          const _GuildTeams(),
           const SizedBox(height: 20),
           SectionHeader(title: s.t('wvw_abilities'), trailing: '${abilities.length}'),
           const SizedBox(height: 10),
@@ -325,6 +327,68 @@ class _RankTab extends ConsumerWidget {
                     style: const TextStyle(fontSize: 12, color: AppColors.muted)),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// which wvw team each of the account's guilds plays for
+class _GuildTeams extends ConsumerWidget {
+  const _GuildTeams();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final teams = ref.watch(wvwGuildTeamsProvider).valueOrNull ?? const <String, int>{};
+    final mine = ref.watch(wvwTeamProvider).valueOrNull ?? 0;
+    if (teams.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SectionHeader(title: s.t('guild_teams')),
+          const SizedBox(height: 10),
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            child: Column(
+              children: [
+                for (final e in teams.entries) _GuildTeamRow(guildId: e.key, team: e.value, same: e.value == mine),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GuildTeamRow extends ConsumerWidget {
+  const _GuildTeamRow({required this.guildId, required this.team, required this.same});
+
+  final String guildId;
+  final int team;
+  final bool same;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final guild = ref.watch(guildProvider(guildId)).valueOrNull;
+    final tag = '${guild?['tag'] ?? ''}';
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              tag.isEmpty ? '${guild?['name'] ?? '…'}' : '${guild?['name'] ?? '…'} [$tag]',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Text(same ? s.t('your_team') : '#$team',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: same ? AppColors.green : AppColors.muted)),
         ],
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/icon_cache.dart';
 import '../state/account.dart';
 import '../state/builds.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -279,6 +280,7 @@ class _ArmoryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final armory = ref.watch(armoryProvider);
+    final max = ref.watch(armoryMaxProvider).valueOrNull ?? const <int, int>{};
     return AsyncView<List<ItemSlot>>(
       value: armory,
       onRetry: () => ref.invalidate(armoryProvider),
@@ -296,8 +298,15 @@ class _ArmoryTab extends ConsumerWidget {
               icon: item.icon,
               rarity: item.rarity,
               title: item.name,
-              trailing: item.count > 1
-                  ? Text('x${item.count}', style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold))
+              // "1/2" while copies are still missing, just the count once full
+              trailing: (max[item.id] ?? 0) > 1 || item.count > 1
+                  ? Text(
+                      (max[item.id] ?? 0) > 1 ? '${item.count}/${max[item.id]}' : 'x${item.count}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: (max[item.id] ?? 0) > item.count ? AppColors.muted : AppColors.gold,
+                      ),
+                    )
                   : null,
               onTap: () => showItemSheet(
                 context,

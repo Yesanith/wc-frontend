@@ -1,5 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'guild_teams': 'Teams deiner Gilden',
+  'guild_search': 'Gilde über den vollen Namen finden',
+  'guild_not_found': 'Keine Gilde mit diesem Namen.',
   'nav_daily': 'Täglich',
   'nav_weekly': 'Wöchentlich',
   'dungeon_paths': 'Verlieswege',

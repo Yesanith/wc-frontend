@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';
+import 'guilds.dart';
 
 /// the team the account is assigned to. world vs world moved from worlds to
 /// teams, older accounts may still only report a world
@@ -70,3 +71,16 @@ String? wvwColorOf(Json match, int team) {
   }
   return null;
 }
+
+
+/// the team each of the account's guilds is assigned to, by guild id
+final wvwGuildTeamsProvider = FutureProvider<Map<String, int>>((ref) async {
+  final team = await ref.watch(wvwTeamProvider.future);
+  final ids = await ref.watch(guildIdsProvider.future);
+  if (ids.isEmpty) return const {};
+  final all = await ref.watch(gw2ApiProvider).wvwGuildTeams(wvwRegion(team));
+  return {
+    for (final id in ids)
+      if (all[id.toUpperCase()] != null) id: all[id.toUpperCase()]!,
+  };
+});

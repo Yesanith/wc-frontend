@@ -128,3 +128,10 @@ final guildBuiltUpgradesProvider = FutureProvider.autoDispose.family<List<GuildU
     ..sort((a, b) => a.type == b.type ? a.name.compareTo(b.name) : a.type.compareTo(b.type));
   return out;
 });
+
+
+/// looking a guild up by its full name
+final guildSearchProvider = FutureProvider.autoDispose.family<List<String>, String>((ref, name) async {
+  if (name.trim().isEmpty) return const [];
+  return ref.watch(gw2ApiProvider).guildSearch(name.trim());
+});

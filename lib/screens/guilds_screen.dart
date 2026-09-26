@@ -22,6 +22,8 @@ class GuildsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
+        const _GuildSearch(),
+        const SizedBox(height: 16),
         Text(s.t('guilds_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
         const SizedBox(height: 12),
         AsyncView<List<String>>(
@@ -469,6 +471,89 @@ class _UpgradesTab extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+
+/// find any guild by its exact name and see its emblem and tag
+class _GuildSearch extends ConsumerStatefulWidget {
+  const _GuildSearch();
+
+  @override
+  ConsumerState<_GuildSearch> createState() => _GuildSearchState();
+}
+
+class _GuildSearchState extends ConsumerState<_GuildSearch> {
+  final _ctrl = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final results = _query.isEmpty ? null : ref.watch(guildSearchProvider(_query));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextField(
+          controller: _ctrl,
+          textInputAction: TextInputAction.search,
+          // the api only matches the full name, so search on submit
+          onSubmitted: (v) => setState(() => _query = v.trim()),
+          decoration: fieldDecoration(
+            s.t('guild_search'),
+            prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+          ),
+        ),
+        if (results != null) ...[
+          const SizedBox(height: 10),
+          AsyncView<List<String>>(
+            value: results,
+            onRetry: () => ref.invalidate(guildSearchProvider(_query)),
+            builder: (ids) => ids.isEmpty
+                ? Text(s.t('guild_not_found'), style: const TextStyle(color: AppColors.muted))
+                : Column(children: [for (final id in ids) _GuildResult(id: id)]),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _GuildResult extends ConsumerWidget {
+  const _GuildResult({required this.id});
+
+  final String id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final guild = ref.watch(guildProvider(id)).valueOrNull;
+    final tag = '${guild?['tag'] ?? ''}';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AppCard(
+        child: Row(
+          children: [
+            GuildEmblem(emblem: _emblemOf(guild), size: 40),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${guild?['name'] ?? '…'}', style: display(17)),
+                  if (tag.isNotEmpty) Text('[$tag]', style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
