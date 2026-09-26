@@ -47,7 +47,7 @@ final collectionUnlockedProvider = FutureProvider.family<Set<String>, String>((r
   return (await api.unlockedIds(kind.accountPath)).toSet();
 });
 
-final collectionProgressProvider = FutureProvider.family<CollectionProgress, String>((ref, key) async {
+final collectionProgressProvider = FutureProvider.autoDispose.family<CollectionProgress, String>((ref, key) async {
   final ids = ref.watch(collectionIdsProvider(key).future);
   final unlocked = ref.watch(collectionUnlockedProvider(key).future);
   final all = await ids;
@@ -65,7 +65,7 @@ class CollectionEntry {
 
 /// every entry of a collection with its unlock state. details are cached
 /// on disk because they only change with a patch
-final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, String>((ref, key) async {
+final collectionEntriesProvider = FutureProvider.autoDispose.family<List<CollectionEntry>, String>((ref, key) async {
   final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);

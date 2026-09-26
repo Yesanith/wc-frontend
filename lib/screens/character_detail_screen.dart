@@ -65,7 +65,7 @@ class CharacterDetailScreen extends ConsumerWidget {
     } else if (chars.hasError) {
       body = Padding(
         padding: const EdgeInsets.all(20),
-        child: ErrorBox(message: '${chars.error}', onRetry: () => ref.invalidate(charactersProvider)),
+        child: ErrorBox(error: chars.error, onRetry: () => ref.invalidate(charactersProvider)),
       );
     } else if (list != null) {
       body = Center(child: Text(s.t('character_not_found'), style: const TextStyle(color: AppColors.muted)));

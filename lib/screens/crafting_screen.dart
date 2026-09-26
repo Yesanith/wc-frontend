@@ -92,7 +92,8 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                   spacing: 6,
                   runSpacing: 6,
                   children: [
-                    for (final d in root.disciplines) Pill(d),
+                    for (final d in root.disciplines)
+                      Pill(d == mysticForge ? s.t('mystic_forge') : disciplineLabel(s, d)),
                     ..._learnedPill(ref, s, widget.itemId),
                   ],
                 ),

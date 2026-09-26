@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../api/gw2_api.dart';
+import '../l10n/strings.dart';
 import '../services/icon_cache.dart';
 import '../state/api.dart';
 import '../state/settings.dart';
@@ -256,16 +257,52 @@ class StatTile extends StatelessWidget {
   }
 }
 
-class ErrorBox extends ConsumerWidget {
-  const ErrorBox({super.key, required this.message, this.onRetry});
+/// crafting disciplines come from the api in english, translate the known ones
+const _disciplines = {
+  'Armorsmith', 'Artificer', 'Chef', 'Huntsman', 'Jeweler',
+  'Leatherworker', 'Scribe', 'Tailor', 'Weaponsmith', 'Homesteader',
+};
 
-  final String message;
+String disciplineLabel(S s, String discipline) =>
+    _disciplines.contains(discipline) ? s.t('disc_${discipline.toLowerCase()}') : discipline;
+
+/// a failure in plain words. the api's own text stays as a small detail
+/// for anything that is not simply "no connection"
+String friendlyError(S s, Object? error) {
+  if (error is Gw2ApiException) {
+    return switch (error.kind) {
+      ApiErrorKind.offline => s.t('err_offline'),
+      ApiErrorKind.timeout => s.t('err_timeout'),
+      ApiErrorKind.unauthorized => s.t('err_unauthorized'),
+      ApiErrorKind.notFound => s.t('err_not_found'),
+      ApiErrorKind.rateLimited => s.t('err_rate_limited'),
+      ApiErrorKind.server => s.t('err_server'),
+      ApiErrorKind.other => s.t('err_generic'),
+    };
+  }
+  if (error is TimeoutException) return s.t('err_timeout');
+  return s.t('err_generic');
+}
+
+class ErrorBox extends ConsumerWidget {
+  const ErrorBox({super.key, this.message, this.error, this.onRetry});
+
+  /// a ready message, used as is
+  final String? message;
+
+  /// or the error itself, turned into a friendly message
+  final Object? error;
   final VoidCallback? onRetry;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final retry = onRetry;
     final s = ref.watch(stringsProvider);
+    final e = error;
+    final text = message ?? friendlyError(s, e);
+    // the raw text helps with reports, but not for the obvious cases
+    final quiet = e is Gw2ApiException && (e.kind == ApiErrorKind.offline || e.kind == ApiErrorKind.timeout);
+    final detail = message == null && e != null && !quiet ? '$e' : null;
     return Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,7 +313,19 @@ class ErrorBox extends ConsumerWidget {
               const Icon(Icons.error_outline, color: AppColors.red, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(message, style: const TextStyle(color: AppColors.textSoft, fontSize: 14)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(text, style: const TextStyle(color: AppColors.textSoft, fontSize: 14)),
+                    if (detail != null) ...[
+                      const SizedBox(height: 4),
+                      Text(detail,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: AppColors.hint, fontSize: 11)),
+                    ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -336,7 +385,7 @@ class AsyncView<T> extends ConsumerWidget {
             );
           }
         }
-        return ErrorBox(message: '$e', onRetry: onRetry);
+        return ErrorBox(error: e, onRetry: onRetry);
       },
     );
   }

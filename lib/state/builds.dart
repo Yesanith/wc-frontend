@@ -48,7 +48,7 @@ List<int> skillIdsOf(Json? set) {
   ].where((id) => id > 0).toList();
 }
 
-final buildDetailProvider = FutureProvider.family<BuildDetail, String>((ref, encoded) async {
+final buildDetailProvider = FutureProvider.autoDispose.family<BuildDetail, String>((ref, encoded) async {
   final api = accountApi(ref);
   final build = Map<String, dynamic>.from(jsonDecode(encoded) as Map);
 
@@ -117,7 +117,7 @@ final buildDetailProvider = FutureProvider.family<BuildDetail, String>((ref, enc
   );
 });
 
-final skillProvider = FutureProvider.family<Json?, int>((ref, id) async {
+final skillProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) async {
   final skills = await accountApi(ref).skills([id]);
   return skills[id];
 });

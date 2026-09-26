@@ -208,7 +208,7 @@ final pvpStandingProvider = FutureProvider<PvpStanding?>((ref) async {
 
 
 /// the top of a season's ladder. key is "seasonId|region", region na or eu
-final pvpLadderProvider = FutureProvider.family<List<Json>, String>((ref, key) async {
+final pvpLadderProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, key) async {
   final parts = key.split('|');
   if (parts.length != 2 || parts[0].isEmpty) return const [];
   final rows = await ref.watch(gw2ApiProvider).pvpLadder(parts[0], parts[1]);

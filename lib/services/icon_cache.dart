@@ -10,9 +10,13 @@ import 'package:path_provider/path_provider.dart';
 /// the urls are content addressed (signature and file id), so a cached
 /// file never goes stale
 class IconCache {
-  IconCache(this.dir);
+  IconCache(this.dir, [Set<String>? known]) : _known = known ?? <String>{};
 
   final Directory dir;
+
+  /// file names already on disk, read once when the cache opens. checking
+  /// this set is free, a file stat per icon while scrolling is not
+  final Set<String> _known;
   final Map<String, Future<File?>> _pending = {};
   final http.Client _client = http.Client();
 
@@ -20,22 +24,24 @@ class IconCache {
     final base = await getApplicationSupportDirectory();
     final dir = Directory('${base.path}/icons');
     if (!await dir.exists()) await dir.create(recursive: true);
-    return IconCache(dir);
+    final known = <String>{};
+    await for (final entry in dir.list()) {
+      if (entry is File) known.add(entry.uri.pathSegments.last);
+    }
+    return IconCache(dir, known);
   }
 
-  File _fileFor(String url) {
+  String _nameFor(String url) {
     final segments = Uri.tryParse(url)?.pathSegments ?? const [];
-    final name = segments.length >= 2
+    return segments.length >= 2
         ? '${segments[segments.length - 2]}_${segments.last}'
         : url.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
-    return File('${dir.path}/$name');
   }
 
-  /// the file when it is already on disk, a quick stat and nothing else
-  File? cached(String url) {
-    final file = _fileFor(url);
-    return file.existsSync() ? file : null;
-  }
+  File _fileFor(String url) => File('${dir.path}/${_nameFor(url)}');
+
+  /// the file when it is already on disk, answered from memory
+  File? cached(String url) => _known.contains(_nameFor(url)) ? _fileFor(url) : null;
 
   /// downloads the icon unless another widget is already doing it
   Future<File?> fetch(String url) {
@@ -45,6 +51,7 @@ class IconCache {
         if (res.statusCode != 200 || res.bodyBytes.isEmpty) return null;
         final file = _fileFor(url);
         await file.writeAsBytes(res.bodyBytes, flush: true);
+        _known.add(_nameFor(url));
         return file;
       } catch (_) {
         return null;
@@ -59,6 +66,7 @@ class IconCache {
     try {
       if (await dir.exists()) await dir.delete(recursive: true);
       await dir.create(recursive: true);
+      _known.clear();
     } catch (_) {}
   }
 }

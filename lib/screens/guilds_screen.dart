@@ -375,7 +375,10 @@ class _MembersTab extends ConsumerWidget {
                       children: [
                         Expanded(child: Text('${t['name'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w700))),
                         Text(
-                          '${asInt((t['aggregate'] as Map?)?['wins'])}W · ${asInt((t['aggregate'] as Map?)?['losses'])}L',
+                          s.t('wins_losses', {
+                            'w': asInt((t['aggregate'] as Map?)?['wins']),
+                            'l': asInt((t['aggregate'] as Map?)?['losses']),
+                          }),
                           style: const TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],

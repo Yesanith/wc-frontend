@@ -27,8 +27,13 @@ final wvwMatchProvider = FutureProvider<Json?>((ref) async {
   return ref.watch(gw2ApiProvider).wvwMatch(team);
 });
 
-/// team ids start with 1 in north america and 2 in europe
-String wvwRegion(int team) => '$team'.startsWith('2') ? 'eu' : 'na';
+/// old world ids are 1xxx in north america and 2xxx in europe, team ids
+/// put the region in the second digit instead: 11xxx and 12xxx
+String wvwRegion(int id) {
+  final digits = '$id';
+  final region = id >= 10000 && digits.length > 1 ? digits[1] : digits[0];
+  return region == '2' ? 'eu' : 'na';
+}
 
 class WvwTimers {
   const WvwTimers(this.lockout, this.teamAssignment);

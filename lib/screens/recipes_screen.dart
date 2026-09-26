@@ -62,7 +62,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
   String _label(S s, String discipline) {
     if (discipline == _legendary) return s.t('legendaries');
     if (discipline == mysticForge) return s.t('mystic_forge');
-    return discipline;
+    return disciplineLabel(s, discipline);
   }
 
   @override

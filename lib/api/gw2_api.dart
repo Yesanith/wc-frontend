@@ -6,10 +6,25 @@ import 'package:http/http.dart' as http;
 import '../services/cache.dart';
 import '../util.dart';
 
+/// what went wrong, so the interface can say it in the user's language
+enum ApiErrorKind { offline, timeout, unauthorized, notFound, rateLimited, server, other }
+
 class Gw2ApiException implements Exception {
-  Gw2ApiException(this.message, [this.status]);
+  Gw2ApiException(this.message, [this.status, this._kind]);
   final String message;
   final int? status;
+  final ApiErrorKind? _kind;
+
+  ApiErrorKind get kind {
+    final fixed = _kind;
+    if (fixed != null) return fixed;
+    final code = status ?? 0;
+    if (code == 401 || code == 403) return ApiErrorKind.unauthorized;
+    if (code == 404) return ApiErrorKind.notFound;
+    if (code == 429) return ApiErrorKind.rateLimited;
+    if (code >= 500) return ApiErrorKind.server;
+    return ApiErrorKind.other;
+  }
 
   @override
   String toString() => message;
@@ -248,9 +263,9 @@ class Gw2Api {
     try {
       return await _client.get(uri).timeout(const Duration(seconds: 20));
     } on TimeoutException {
-      throw Gw2ApiException('The server did not respond, try again.');
+      throw Gw2ApiException('The server did not respond, try again.', null, ApiErrorKind.timeout);
     } catch (_) {
-      throw Gw2ApiException('Could not connect. Check your internet connection.');
+      throw Gw2ApiException('Could not connect. Check your internet connection.', null, ApiErrorKind.offline);
     }
   }
 

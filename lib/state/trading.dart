@@ -102,7 +102,7 @@ final tradeStatsProvider = FutureProvider<TradeStats>((ref) async {
 });
 
 /// gem exchange in both directions. key is "gems:100" or "coins:1000000"
-final exchangeProvider = FutureProvider.family<int, String>((ref, key) async {
+final exchangeProvider = FutureProvider.autoDispose.family<int, String>((ref, key) async {
   final api = ref.watch(gw2ApiProvider);
   final parts = key.split(':');
   final amount = int.tryParse(parts.last) ?? 0;

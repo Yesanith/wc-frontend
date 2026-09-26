@@ -7,7 +7,7 @@ import 'settings.dart';
 
 /// world bosses, daily crafts and map chests already done today.
 /// needs the progression permission, empty when it is missing
-final doneTodayProvider = FutureProvider.family<Set<String>, String>((ref, path) async {
+final doneTodayProvider = FutureProvider.autoDispose.family<Set<String>, String>((ref, path) async {
   final api = accountApi(ref);
   try {
     return (await api.get('/account/$path') as List).map((e) => '$e').toSet();
@@ -317,7 +317,7 @@ class DailyProgress {
 }
 
 /// daily crafts and map chests: how many of today's are already collected
-final dailyProgressProvider = FutureProvider.family<DailyProgress, String>((ref, path) async {
+final dailyProgressProvider = FutureProvider.autoDispose.family<DailyProgress, String>((ref, path) async {
   final api = accountApi(ref);
   final all = await api.dailyAll(path);
   try {

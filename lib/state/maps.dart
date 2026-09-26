@@ -105,7 +105,7 @@ List<double>? _rect(dynamic raw) {
 
 /// waypoints, landmarks and vistas of one map. a map is not always drawn on
 /// the floor it calls default, so walk its floors until one answers
-final mapDetailProvider = FutureProvider.family<MapDetail?, int>((ref, mapId) async {
+final mapDetailProvider = FutureProvider.autoDispose.family<MapDetail?, int>((ref, mapId) async {
   final api = ref.watch(gw2ApiProvider);
   final maps = await ref.watch(mapsProvider.future);
   GameMap? map;

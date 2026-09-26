@@ -13,7 +13,7 @@ final guildIdsProvider = FutureProvider<List<String>>((ref) async {
   ];
 });
 
-final guildProvider = FutureProvider.family<Json, String>((ref, id) => accountApi(ref).guild(id));
+final guildProvider = FutureProvider.autoDispose.family<Json, String>((ref, id) => accountApi(ref).guild(id));
 
 class GuildStashSlot {
   const GuildStashSlot(this.tabName, this.slots, this.coins, this.note);
@@ -23,7 +23,7 @@ class GuildStashSlot {
   final String note;
 }
 
-final guildStashProvider = FutureProvider.family<List<GuildStashSlot>, String>((ref, id) async {
+final guildStashProvider = FutureProvider.autoDispose.family<List<GuildStashSlot>, String>((ref, id) async {
   final api = accountApi(ref);
   final tabs = await api.guildStash(id);
   final ids = <int>{};
@@ -59,7 +59,7 @@ class TreasuryRow {
 }
 
 /// what the guild has stored against what its upgrades still need
-final guildTreasuryProvider = FutureProvider.family<List<TreasuryRow>, String>((ref, id) async {
+final guildTreasuryProvider = FutureProvider.autoDispose.family<List<TreasuryRow>, String>((ref, id) async {
   final api = accountApi(ref);
   final rows = await api.guildTreasury(id);
   final items = await api.items(rows.map((r) => asInt(r['item_id'])));
@@ -75,7 +75,7 @@ final guildTreasuryProvider = FutureProvider.family<List<TreasuryRow>, String>((
   return out;
 });
 
-final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+final guildLogProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
   final log = await accountApi(ref).guildLog(id);
   log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
   return log.take(50).toList();
@@ -85,19 +85,19 @@ final guildLogProvider = FutureProvider.family<List<Json>, String>((ref, id) asy
 // -------------------------------------------------------------------------
 // leader only parts: members, ranks, teams, storage and built upgrades
 
-final guildMembersProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+final guildMembersProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
   final rows = await accountApi(ref).guildPart(id, 'members');
   rows.sort((a, b) => '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
   return rows;
 });
 
-final guildRanksProvider = FutureProvider.family<List<Json>, String>((ref, id) async {
+final guildRanksProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
   final rows = await accountApi(ref).guildPart(id, 'ranks');
   rows.sort((a, b) => asInt(a['order']).compareTo(asInt(b['order'])));
   return rows;
 });
 
-final guildTeamsProvider = FutureProvider.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
+final guildTeamsProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
 
 class GuildUpgradeRow {
   const GuildUpgradeRow(this.id, this.count, this.detail);
@@ -111,7 +111,7 @@ class GuildUpgradeRow {
 }
 
 /// decorations and consumables in the guild hall storage
-final guildStorageProvider = FutureProvider.family<List<GuildUpgradeRow>, String>((ref, id) async {
+final guildStorageProvider = FutureProvider.autoDispose.family<List<GuildUpgradeRow>, String>((ref, id) async {
   final rows = await accountApi(ref).guildPart(id, 'storage');
   final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
   final out = [
@@ -122,7 +122,7 @@ final guildStorageProvider = FutureProvider.family<List<GuildUpgradeRow>, String
 });
 
 /// upgrades the guild already built, grouped later by type
-final guildBuiltUpgradesProvider = FutureProvider.family<List<GuildUpgradeRow>, String>((ref, id) async {
+final guildBuiltUpgradesProvider = FutureProvider.autoDispose.family<List<GuildUpgradeRow>, String>((ref, id) async {
   final ids = await accountApi(ref).guildUpgradeIds(id);
   final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
   final out = [for (final u in ids) GuildUpgradeRow(u, 1, catalog['$u'])]

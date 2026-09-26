@@ -185,7 +185,7 @@ Map<int, int> craftLeaves(CraftLine line) {
 }
 
 /// sell listing price per unit for every item in the tree, fetched once
-final craftPricesProvider = FutureProvider.family<Map<int, int>, int>((ref, rootId) async {
+final craftPricesProvider = FutureProvider.autoDispose.family<Map<int, int>, int>((ref, rootId) async {
   final api = ref.watch(gw2ApiProvider);
   final root = await ref.watch(craftTreeProvider(rootId).future);
   final ids = <int>{};

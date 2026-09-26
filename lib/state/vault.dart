@@ -52,9 +52,14 @@ final vaultListingsProvider = FutureProvider<List<VaultListing>>((ref) async {
         item: items[asInt(r['item_id'])],
       ),
   ];
-  out.sort((a, b) {
-    final byType = (_typeOrder[a.type] ?? 9).compareTo(_typeOrder[b.type] ?? 9);
-    return byType != 0 ? byType : a.cost.compareTo(b.cost);
-  });
-  return out;
+  return sortVaultListings(out);
 });
+
+/// featured first, then the regular rewards, then legacy ones, each by price
+List<VaultListing> sortVaultListings(List<VaultListing> listings) {
+  return [...listings]
+    ..sort((a, b) {
+      final byType = (_typeOrder[a.type] ?? 9).compareTo(_typeOrder[b.type] ?? 9);
+      return byType != 0 ? byType : a.cost.compareTo(b.cost);
+    });
+}

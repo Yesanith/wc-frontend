@@ -1,0 +1,32 @@
+name: Format
+
+# run by hand from the actions tab. formats every dart file with the
+# official formatter and commits the result, so style stays consistent
+# without anyone formatting locally
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: dart format --line-length 120 lib test
+      - name: Commit if anything changed
+        run: |
+          if git diff --quiet; then
+            echo "already formatted"
+            exit 0
+          fi
+          git config user.name "Yesanith"
+          git config user.email "56350783+Yesanith@users.noreply.github.com"
+          git commit -am "Apply dart format"
+          git pull --rebase origin main
+          git push origin HEAD:main

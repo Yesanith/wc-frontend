@@ -57,7 +57,7 @@ Json? activeBuild(Json c) {
   return null;
 }
 
-final characterItemsProvider = FutureProvider.family<Map<int, Json>, String>((ref, name) async {
+final characterItemsProvider = FutureProvider.autoDispose.family<Map<int, Json>, String>((ref, name) async {
   final api = accountApi(ref);
   final chars = await ref.watch(charactersProvider.future);
   final c = characterByName(chars, name);
@@ -73,11 +73,11 @@ final characterItemsProvider = FutureProvider.family<Map<int, Json>, String>((re
 
 /// one sub endpoint of a character. key is "name|part", part is heropoints,
 /// sab, quests, training or backstory
-final characterPartProvider = FutureProvider.family<dynamic, String>((ref, key) async {
+final characterPartProvider = FutureProvider.autoDispose.family<dynamic, String>((ref, key) async {
   final split = key.lastIndexOf('|');
   if (split <= 0) return null;
   return accountApi(ref).characterPart(key.substring(0, split), key.substring(split + 1));
 });
 
 /// the profession of a character, for skill tree names in training
-final professionProvider = FutureProvider.family<Json, String>((ref, name) => ref.watch(gw2ApiProvider).profession(name));
+final professionProvider = FutureProvider.autoDispose.family<Json, String>((ref, name) => ref.watch(gw2ApiProvider).profession(name));
