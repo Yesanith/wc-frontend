@@ -95,8 +95,8 @@ void main() {
 
   test('a listing is sold out only with a limit', () {
     expect(
-        VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut, isTrue);
-    expect(VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut,
+        const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut, isTrue);
+    expect(const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut,
         isFalse);
   });
 }
