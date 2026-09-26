@@ -12,7 +12,7 @@ class _OverviewTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, [gemRatesProvider, deliveryProvider, watchlistPricesProvider]),
+      onRefresh: () => refreshProviders(ref, [triggeredAlertsProvider, gemRatesProvider, deliveryProvider, watchlistPricesProvider]),
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         children: [

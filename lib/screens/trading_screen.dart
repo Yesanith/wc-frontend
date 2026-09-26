@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/item_index.dart';
 import '../state/account.dart';
+import '../state/alerts.dart';
 import '../state/api.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
@@ -32,6 +33,8 @@ class WatchRow extends ConsumerWidget {
     final sells = w.price?['sells'] is Map ? w.price!['sells'] as Map : const {};
     final buys = w.price?['buys'] is Map ? w.price!['buys'] as Map : const {};
     final name = (w.item?['name'] as String?) ?? s.t('item_n', {'id': w.id});
+    final hasAlert = ref.watch(priceAlertsProvider).containsKey(w.id);
+    final fired = ref.watch(triggeredAlertsProvider).valueOrNull?.contains(w.id) ?? false;
     return _ItemTile(
       itemId: w.id,
       item: w.item,
@@ -39,6 +42,9 @@ class WatchRow extends ConsumerWidget {
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          if (hasAlert)
+            Icon(fired ? Icons.notifications_active : Icons.notifications_none,
+                size: 16, color: fired ? AppColors.green : AppColors.gold),
           CoinText(asInt(sells['unit_price']), size: 15),
           const SizedBox(height: 2),
           Row(

@@ -163,7 +163,7 @@ class _DailyResets extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final crafts = ref.watch(dailyProgressProvider('dailycrafts')).valueOrNull;
+    final crafts = ref.watch(dailyProgressProvider('dailycrafting')).valueOrNull;
     final chests = ref.watch(dailyProgressProvider('mapchests')).valueOrNull;
     if (crafts == null && chests == null) return const SizedBox.shrink();
 

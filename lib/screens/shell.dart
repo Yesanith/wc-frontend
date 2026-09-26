@@ -10,6 +10,8 @@ import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../state/wealth.dart';
+import '../util.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
@@ -23,9 +25,13 @@ import 'settings_screen.dart';
 import 'trading_screen.dart';
 import 'wiki_screen.dart';
 import 'wvw_screen.dart';
+import 'daily_screen.dart';
+import 'weekly_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
+  AppSection.daily: 'daily',
+  AppSection.weekly: 'weekly',
   AppSection.characters: 'nav_characters',
   AppSection.collections: 'collections',
   AppSection.progression: 'progression',
@@ -42,6 +48,8 @@ const _titleKeys = {
 
 const _icons = {
   AppSection.home: (Icons.home_outlined, Icons.home),
+  AppSection.daily: (Icons.today_outlined, Icons.today),
+  AppSection.weekly: (Icons.date_range_outlined, Icons.date_range),
   AppSection.characters: (Icons.shield_outlined, Icons.shield),
   AppSection.collections: (Icons.auto_awesome_outlined, Icons.auto_awesome),
   AppSection.progression: (Icons.emoji_events_outlined, Icons.emoji_events),
@@ -58,6 +66,8 @@ const _icons = {
 
 Widget _page(AppSection section) => switch (section) {
       AppSection.home => const HomeScreen(),
+      AppSection.daily => const DailyScreen(),
+      AppSection.weekly => const WeeklyScreen(),
       AppSection.characters => const CharactersScreen(),
       AppSection.collections => const CollectionsScreen(),
       AppSection.progression => const ProgressionScreen(),
@@ -185,6 +195,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
+    // one wallet snapshot per day and account feeds the wealth history
+    ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, next) {
+      final wallet = next.valueOrNull;
+      final name = ref.read(accountProvider).valueOrNull?['name'];
+      if (wallet != null && name != null) ref.read(wealthProvider.notifier).record('$name', wallet);
+    });
     final sync = ref.watch(syncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too

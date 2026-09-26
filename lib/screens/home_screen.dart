@@ -8,13 +8,14 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../state/periodic.dart';
+import '../state/alerts.dart';
 import 'events_screen.dart';
-import 'vault_shop_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [
+  Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [triggeredAlertsProvider, 
         accountProvider,
         walletProvider,
         vaultTrackProvider,
@@ -45,69 +46,52 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 14),
           const _QuickLinks(),
           const SizedBox(height: 24),
-          const _VaultSection(),
+          const _AlertBanner(),
+          const _PeriodicLinks(),
         ],
       ),
     );
   }
 }
 
-/// the vault has three tracks that reset on different schedules
-class _VaultSection extends ConsumerStatefulWidget {
-  const _VaultSection();
+/// daily and weekly at a glance, each opens its own section
+class _PeriodicLinks extends ConsumerWidget {
+  const _PeriodicLinks();
 
   @override
-  ConsumerState<_VaultSection> createState() => _VaultSectionState();
-}
-
-class _VaultSectionState extends ConsumerState<_VaultSection> {
-  static const _tracks = ['daily', 'weekly', 'special'];
-  String _track = 'daily';
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final data = ref.watch(vaultTrackProvider(_track));
-    final v = data.valueOrNull;
+    String meta(String track) {
+      final v = ref.watch(vaultTrackProvider(track)).valueOrNull;
+      return v == null ? '…' : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
+    }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SectionHeader(
-          title: s.t('wizards_vault'),
-          trailing: v == null
-              ? null
-              : '${asInt(v['meta_progress_current'])}/${asInt(v['meta_progress_complete'])}',
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            for (final track in _tracks) ...[
-              ChoiceChip(
-                label: Text(s.t('vault_$track')),
-                selected: _track == track,
-                onSelected: (_) => setState(() => _track = track),
-              ),
-              if (track != _tracks.last) const SizedBox(width: 8),
-            ],
-            const Spacer(),
-            // the astral reward shop of the running season
-            IconButton(
-              tooltip: s.t('vault_shop'),
-              visualDensity: VisualDensity.compact,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()),
-              ),
-              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold),
+    Widget card(String title, String value, String reset, AppSection target, IconData icon) => Expanded(
+          child: AppCard(
+            onTap: () => ref.read(sectionProvider.notifier).state = target,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(icon, size: 18, color: AppColors.gold),
+                    const SizedBox(width: 6),
+                    Expanded(child: Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800))),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                Text(reset, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+              ],
             ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        AsyncView<Json>(
-          value: data,
-          onRetry: () => ref.invalidate(vaultTrackProvider(_track)),
-          builder: (json) => _VaultList(json),
-        ),
+          ),
+        );
+
+    return Row(
+      children: [
+        card(s.t('daily'), meta('daily'), timeUntil(nextDailyReset()), AppSection.daily, Icons.today),
+        const SizedBox(width: 10),
+        card(s.t('weekly'), meta('weekly'), timeUntil(nextWeeklyReset()), AppSection.weekly, Icons.date_range),
       ],
     );
   }
@@ -315,69 +299,32 @@ class _LinkTile extends StatelessWidget {
   }
 }
 
-class _VaultList extends ConsumerWidget {
-  const _VaultList(this.data);
 
-  final Json data;
+
+/// shows up only while at least one price alert is met
+class _AlertBanner extends ConsumerWidget {
+  const _AlertBanner();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final objectives = ((data['objectives'] as List?) ?? const []).whereType<Map>().toList();
-    if (objectives.isEmpty) {
-      return Panel(child: Text(s.t('vault_empty'), style: const TextStyle(color: AppColors.muted)));
-    }
-    return Panel(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Column(
-        children: [
-          for (var i = 0; i < objectives.length; i++)
-            _VaultRow(Map<String, dynamic>.from(objectives[i]), last: i == objectives.length - 1),
-        ],
-      ),
-    );
-  }
-}
-
-class _VaultRow extends StatelessWidget {
-  const _VaultRow(this.o, {required this.last});
-
-  final Json o;
-  final bool last;
-
-  @override
-  Widget build(BuildContext context) {
-    final cur = asInt(o['progress_current']);
-    final total = asInt(o['progress_complete']);
-    final done = total > 0 && cur >= total;
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 11),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: last ? Colors.transparent : AppColors.track)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  '${o['title'] ?? ''}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: done ? AppColors.muted : AppColors.text,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text('$cur/$total',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Bar(value: total == 0 ? 0 : cur / total, color: done ? AppColors.green : AppColors.gold),
-        ],
+    final fired = ref.watch(triggeredAlertsProvider).valueOrNull ?? const <int>{};
+    if (fired.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AppCard(
+        onTap: () => ref.read(sectionProvider.notifier).state = AppSection.trading,
+        child: Row(
+          children: [
+            const Icon(Icons.notifications_active, color: AppColors.green),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(s.t('alerts_fired', {'n': fired.length}),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.chevron),
+          ],
+        ),
       ),
     );
   }

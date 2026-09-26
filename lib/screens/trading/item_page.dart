@@ -20,6 +20,16 @@ class TradingItemScreen extends ConsumerWidget {
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(s.t('trading_post'), style: display(20)),
+        actions: [
+          IconButton(
+            tooltip: s.t('price_alert'),
+            onPressed: () => showPriceAlertDialog(context, ref, itemId, name),
+            icon: Icon(
+              ref.watch(priceAlertsProvider).containsKey(itemId) ? Icons.notifications_active : Icons.notifications_none,
+              color: AppColors.gold,
+            ),
+          ),
+        ],
       ),
       body: RefreshIndicator(
         color: AppColors.gold,
@@ -218,4 +228,56 @@ class _OrderBook extends ConsumerWidget {
       ),
     );
   }
+}
+
+
+/// set or clear the price alert of one item, prices typed in gold
+Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemId, String name) async {
+  final s = ref.read(stringsProvider);
+  final current = ref.read(priceAlertsProvider)[itemId];
+  final sell = TextEditingController(text: current?.sellBelow == null ? '' : copperToGold(current!.sellBelow!));
+  final buy = TextEditingController(text: current?.buyAbove == null ? '' : copperToGold(current!.buyAbove!));
+  final result = await showDialog<PriceAlert?>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.surface,
+      title: Text(s.t('price_alert')),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 12),
+          TextField(
+            controller: sell,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: fieldDecoration(s.t('alert_sell_below')),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: buy,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: fieldDecoration(s.t('alert_buy_above')),
+          ),
+          const SizedBox(height: 8),
+          Text(s.t('alert_in_gold'), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+        ],
+      ),
+      actions: [
+        if (current != null)
+          TextButton(onPressed: () => Navigator.of(ctx).pop(const PriceAlert()), child: Text(s.t('remove'))),
+        TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
+        FilledButton(
+          onPressed: () => Navigator.of(ctx).pop(
+            PriceAlert(sellBelow: goldToCopper(sell.text), buyAbove: goldToCopper(buy.text)),
+          ),
+          child: Text(s.t('save_alert')),
+        ),
+      ],
+    ),
+  );
+  sell.dispose();
+  buy.dispose();
+  // null means cancelled, an empty alert means remove
+  if (result != null) await ref.read(priceAlertsProvider.notifier).set(itemId, result);
 }
