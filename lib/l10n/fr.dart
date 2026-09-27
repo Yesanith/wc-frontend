@@ -484,4 +484,6 @@ const frStrings = <String, String>{
   'slot_FishingRod': 'Canne à pêche',
   'slot_FishingBait': 'Appât',
   'slot_FishingLure': 'Leurre',
+  'material_value': 'Valeur de tous les matériaux',
+  'unpriced_materials': '{n} matériaux n\'ont pas de prix au comptoir et ne sont pas comptés.',
 };

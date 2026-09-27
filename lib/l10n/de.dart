@@ -483,4 +483,6 @@ const deStrings = <String, String>{
   'slot_FishingRod': 'Angelrute',
   'slot_FishingBait': 'Köder',
   'slot_FishingLure': 'Kunstköder',
+  'material_value': 'Wert aller Materialien',
+  'unpriced_materials': '{n} Materialien haben keinen Handelspostenpreis und werden nicht mitgezählt.',
 };

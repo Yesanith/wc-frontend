@@ -52,8 +52,9 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
               ),
             );
           }
-          // scaling is local, so the plus button never triggers a reload
-          final plan = planFor(root, _quantity);
+          // scaling is local, so the plus button never triggers a reload. the
+          // plan takes intermediates the account already has out of the tree
+          final plan = planWithStock(root, _quantity, totals);
           final leaves = craftLeaves(plan);
           var missingCost = 0;
           var ownedValue = 0;
@@ -64,6 +65,10 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
             ownedValue += unit * (have > e.value ? e.value : have);
           }
           final buyInstead = (prices[root.itemId] ?? 0) * _quantity;
+          // what every material of the plan is worth, owned or not: the fair
+          // comparison with buying, since owned materials could be sold too
+          final materialValue = missingCost + ownedValue;
+          final unpriced = leaves.keys.where((id) => (prices[id] ?? 0) == 0).length;
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
@@ -99,7 +104,13 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 ),
               ],
               const SizedBox(height: 16),
-              _CostPanel(missingCost: missingCost, ownedValue: ownedValue, buyInstead: buyInstead),
+              _CostPanel(
+                missingCost: missingCost,
+                ownedValue: ownedValue,
+                materialValue: materialValue,
+                buyInstead: buyInstead,
+                unpriced: unpriced,
+              ),
               const SizedBox(height: 22),
               SectionHeader(title: s.t('base_materials'), trailing: '${leaves.length}'),
               const SizedBox(height: 10),
@@ -131,16 +142,30 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
 }
 
 class _CostPanel extends ConsumerWidget {
-  const _CostPanel({required this.missingCost, required this.ownedValue, required this.buyInstead});
+  const _CostPanel({
+    required this.missingCost,
+    required this.ownedValue,
+    required this.materialValue,
+    required this.buyInstead,
+    required this.unpriced,
+  });
 
   final int missingCost;
   final int ownedValue;
+
+  /// missing and owned together, what crafting really uses up
+  final int materialValue;
   final int buyInstead;
+
+  /// materials without a trading post price, left out of the sums
+  final int unpriced;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final cheaperToBuy = buyInstead > 0 && buyInstead < missingCost;
+    // buying is compared with the value of all the materials, owned ones
+    // included: using them costs what they would have sold for
+    final cheaperToBuy = buyInstead > 0 && buyInstead < materialValue;
 
     return Panel(
       child: Column(
@@ -164,6 +189,20 @@ class _CostPanel extends ConsumerWidget {
               CoinText(ownedValue, size: 13),
             ],
           ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: Text(s.t('material_value'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+              ),
+              CoinText(materialValue, size: 16),
+            ],
+          ),
+          if (unpriced > 0) ...[
+            const SizedBox(height: 6),
+            Text(s.t('unpriced_materials', {'n': unpriced}),
+                style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
+          ],
           if (buyInstead > 0) ...[
             const SizedBox(height: 10),
             const Divider(color: AppColors.track, height: 1),
