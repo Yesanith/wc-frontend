@@ -450,4 +450,7 @@ const frStrings = <String, String>{
   'learned_recipes': 'Recettes apprises',
   'learned_recipes_of': 'Recettes de {name}',
   'professions': 'Professions',
+  'support': 'Soutenir',
+  'support_note': 'Tyria Codex est gratuit et sans publicité. S\'il vous est utile, vous pouvez m\'offrir un café.',
+  'buy_coffee': 'Offrez-moi un café',
 };

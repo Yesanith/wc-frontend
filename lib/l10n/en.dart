@@ -449,4 +449,7 @@ const enStrings = <String, String>{
   'learned_recipes': 'Learned recipes',
   'learned_recipes_of': 'Recipes of {name}',
   'professions': 'Professions',
+  'support': 'Support',
+  'support_note': 'Tyria Codex is free and has no ads. If it helps you, you can buy me a coffee.',
+  'buy_coffee': 'Buy me a coffee',
 };
