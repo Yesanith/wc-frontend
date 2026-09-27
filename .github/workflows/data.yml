@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_recipes.py', 'tools/build_worldmap.py', '.github/workflows/data.yml']
+    paths: ['tools/build_recipes.py', 'tools/build_worldmap.py', 'tools/test_build_worldmap.py', '.github/workflows/data.yml']
   schedule:
     # first of the month, game data only changes with patches
     - cron: '0 4 1 * *'
@@ -26,6 +26,11 @@ jobs:
       # purpose: AppLang.tr asks the api in english and reuses that index
       - name: Build legendary recipe trees
         run: python tools/build_recipes.py en de es fr
+
+      # the merge logic is checked offline first, a broken build must not
+      # replace the markers the app ships with
+      - name: Test the world map builder
+        run: python -m unittest discover -s tools -p 'test_*.py'
 
       - name: Build world map markers and overview tiles
         run: python tools/build_worldmap.py en de es fr

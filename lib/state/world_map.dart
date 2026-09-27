@@ -160,16 +160,18 @@ List<List<Object?>> extractMarkers(String body) {
   return out;
 }
 
-/// every marker and label of one floor, kept on disk for a month in the
+/// every marker and label shown on [floor], kept on disk for a month in the
 /// compact form above instead of the raw response
 final worldMarkersProvider = FutureProvider.family<List<MapMarker>, int>((ref, floor) async {
   final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
-  // the monthly data job ships the common floors with the app, so the map
-  // shows its markers the moment it opens
+  // the monthly data job ships the markers with the app, so the map shows
+  // them the moment it opens
   final bundled = await _bundledMarkers(floor, lang.apiLang);
   if (bundled != null) return bundled;
+  // without the bundle only this floor's own maps show, the ones drawn on
+  // other floors (the elona maps, for one) stay empty
   final rows = await cachedList(
     cache,
     'worldmap_${worldContinent}_${floor}_${lang.apiLang}',
@@ -205,20 +207,32 @@ final markerIconsProvider = FutureProvider<Map<String, String>>((ref) async {
   };
 });
 
-/// markers shipped in assets/data, null when this floor or language is not
-/// bundled and has to come from the api
+/// the bundled asset holding every open world map. no single floor carries
+/// them all, so the data job takes each map from its own floor and merges
+/// them, and the same set serves every floor
+String bundledMarkersAsset(String lang) => 'assets/data/worldmap_${worldContinent}_$lang.json.gz';
+
+/// markers shipped in assets/data, null when this language is not bundled
+/// and has to come from the api. older data jobs wrote one file per floor,
+/// that file is still read when the merged one is missing
 Future<List<MapMarker>?> _bundledMarkers(int floor, String lang) async {
-  try {
-    final bytes = await rootBundle.load('assets/data/worldmap_${worldContinent}_${floor}_$lang.json.gz');
-    final rows = await compute(_decodeBundled, bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-    if (rows.isEmpty) return null;
-    return [
-      for (final r in rows)
-        if (MapMarker.fromRow(r) case final m?) m,
-    ];
-  } catch (_) {
-    return null;
+  for (final asset in [
+    bundledMarkersAsset(lang),
+    'assets/data/worldmap_${worldContinent}_${floor}_$lang.json.gz',
+  ]) {
+    try {
+      final bytes = await rootBundle.load(asset);
+      final rows = await compute(_decodeBundled, bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+      if (rows.isEmpty) continue;
+      return [
+        for (final r in rows)
+          if (MapMarker.fromRow(r) case final m?) m,
+      ];
+    } catch (_) {
+      // not bundled, try the next file
+    }
   }
+  return null;
 }
 
 List<dynamic> _decodeBundled(Uint8List gz) {
