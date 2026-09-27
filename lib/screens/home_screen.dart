@@ -121,10 +121,32 @@ class _AccountHeader extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(s.t('welcome'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
-        Text('${a['name'] ?? ''}', style: display(26)),
-        if (world != null) Text(world, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
-        const SizedBox(height: 14),
+        // the plugin's live preview stage: the account name centred under a
+        // night sky, the world above it like the header over a place name
+        StageHero(
+          padding: const EdgeInsets.fromLTRB(18, 26, 18, 18),
+          child: Column(
+            children: [
+              if (world != null)
+                Text(world, textAlign: TextAlign.center, style: display(14, color: AppColors.textSoft)),
+              const SizedBox(height: 4),
+              Text(
+                '${a['name'] ?? ''}',
+                textAlign: TextAlign.center,
+                style: display(28).copyWith(
+                  letterSpacing: 0.6,
+                  shadows: const [Shadow(color: Colors.black, blurRadius: 8)],
+                ),
+              ),
+              const SizedBox(height: 14),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Kicker(s.t('welcome').toUpperCase()),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
         Panel(
           child: Column(
             children: [
@@ -166,25 +188,30 @@ class _WalletStrip extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     // wallet ids: 1 coin, 2 karma, 3 laurel
     final coins = Coins(_value(1));
-    return Row(
-      children: [
-        Expanded(
-          child: _MiniCard(
-            dot: AppColors.gold,
-            label: s.t('gold'),
-            value: '${fmtInt(coins.gold)} g',
-            sub: '${coins.silver} s ${coins.copper} c',
+    // the gold card has a second line for silver and copper, the row takes
+    // its height so all three cards come out the same size
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _MiniCard(
+              dot: AppColors.gold,
+              label: s.t('gold'),
+              value: '${fmtInt(coins.gold)} g',
+              sub: '${coins.silver} s ${coins.copper} c',
+            ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _MiniCard(dot: const Color(0xFFD58CF0), label: s.t('karma'), value: compact(_value(2))),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _MiniCard(dot: AppColors.green, label: s.t('laurels'), value: fmtInt(_value(3))),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: _MiniCard(dot: const Color(0xFFD58CF0), label: s.t('karma'), value: compact(_value(2))),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _MiniCard(dot: AppColors.green, label: s.t('laurels'), value: fmtInt(_value(3))),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -283,7 +310,7 @@ class _LinkTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       onTap: onTap,
-      radius: 16,
+      radius: AppRadius.card,
       child: Row(
         children: [
           Icon(icon, color: AppColors.gold),

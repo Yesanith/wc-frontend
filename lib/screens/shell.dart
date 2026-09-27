@@ -13,6 +13,8 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import '../state/wealth.dart';
 import '../util.dart';
+import '../services/update_check.dart';
+import 'about_screen.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
@@ -47,6 +49,7 @@ const _titleKeys = {
   AppSection.professions: 'professions',
   AppSection.wiki: 'nav_wiki',
   AppSection.settings: 'nav_settings',
+  AppSection.about: 'about',
 };
 
 const _icons = {
@@ -66,6 +69,7 @@ const _icons = {
   AppSection.professions: (Icons.school_outlined, Icons.school),
   AppSection.wiki: (Icons.menu_book_outlined, Icons.menu_book),
   AppSection.settings: (Icons.settings_outlined, Icons.settings),
+  AppSection.about: (Icons.info_outline, Icons.info),
 };
 
 Widget _page(AppSection section) => switch (section) {
@@ -85,6 +89,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.professions => const ProfessionsScreen(),
       AppSection.wiki => const WikiScreen(),
       AppSection.settings => const SettingsScreen(),
+      AppSection.about => const AboutScreen(),
     };
 
 class AppShell extends ConsumerStatefulWidget {
@@ -259,31 +264,49 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                 ),
         ),
         drawer: NavigationDrawer(
-          backgroundColor: AppColors.navBg,
-          indicatorColor: const Color(0x2EE3B55B),
           selectedIndex: section.index,
           onDestinationSelected: (i) => _select(AppSection.values[i]),
           children: [
+            // the plugin's header bar: the emblem, the name and the version
+            // in a pill, with the account underneath
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 24, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.fromLTRB(24, 22, 16, 14),
+              child: Row(
                 children: [
-                  Text('Tyria Codex', style: display(24, color: AppColors.gold)),
-                  if (accountName != null)
-                    Text(accountName, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                  const DiamondEmblem(size: 34),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(child: Text('Tyria Codex', style: display(18), overflow: TextOverflow.ellipsis)),
+                            const SizedBox(width: 8),
+                            const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                          ],
+                        ),
+                        if (accountName != null)
+                          Text(accountName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      ],
+                    ),
+                  ),
                 ],
               ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
+              child: Divider(),
             ),
             for (final sec in AppSection.values) ...[
               if (sec == AppSection.wiki || sec == AppSection.settings)
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
-                  child: Divider(color: AppColors.track, height: 1),
+                  child: Divider(),
                 ),
               NavigationDrawerDestination(
                 icon: Icon(_icons[sec]!.$1),
-                selectedIcon: Icon(_icons[sec]!.$2, color: AppColors.gold),
+                selectedIcon: Icon(_icons[sec]!.$2),
                 label: Text(s.t(_titleKeys[sec]!)),
               ),
             ],

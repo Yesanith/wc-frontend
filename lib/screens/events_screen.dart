@@ -9,6 +9,7 @@ import '../state/progression.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/expansion_badge.dart';
 
 String _two(int n) => n.toString().padLeft(2, '0');
 
@@ -118,6 +119,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 for (final e in expansionsWithBosses) ...[
                   const SizedBox(width: 8),
                   ChoiceChip(
+                    avatar: Text(e.code, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: e.color)),
                     label: Text(e.label),
                     selected: _expansion == e,
                     onSelected: (_) => setState(() => _expansion = e),
@@ -242,7 +244,13 @@ class _FeaturedBoss extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(spawn.boss.name, style: display(22)),
+          Row(
+            children: [
+              ExpansionBadge(spawn.boss.expansion, size: 34),
+              const SizedBox(width: 12),
+              Expanded(child: Text(spawn.boss.name, style: display(22))),
+            ],
+          ),
           Text(spawn.boss.map, style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
           if (active) ...[
             const SizedBox(height: 12),
@@ -295,14 +303,9 @@ class _BossRow extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 14),
-            Container(
-              width: 10,
-              height: 10,
-              transform: Matrix4.rotationZ(0.785398),
-              transformAlignment: Alignment.center,
-              color: spawn.boss.hardcore ? AppColors.gold : AppColors.line,
-            ),
-            const SizedBox(width: 14),
+            // which release the event belongs to
+            ExpansionBadge(spawn.boss.expansion),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,6 +328,11 @@ class _BossRow extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      // the harder group events, which the old gold diamond marked
+                      if (spawn.boss.hardcore) ...[
+                        const SizedBox(width: 6),
+                        Pill(s.t('hard_event'), color: AppColors.ember),
+                      ],
                     ],
                   ),
                   Text(spawn.boss.map, style: const TextStyle(fontSize: 12, color: AppColors.muted)),

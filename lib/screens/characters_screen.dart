@@ -141,7 +141,7 @@ class _CharacterCard extends ConsumerWidget {
         MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      radius: 16,
+      radius: AppRadius.card,
       child: Row(
         children: [
           ClassIcon(character: c, size: 50, fallback: Text(initial, style: display(22, color: color))),

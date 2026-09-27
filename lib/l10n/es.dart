@@ -49,7 +49,7 @@ const esStrings = <String, String>{
   'err_rate_limited': 'Demasiadas solicitudes ahora. Espera un minuto e inténtalo de nuevo.',
   'err_server': 'La API de Guild Wars 2 tiene problemas. Inténtalo más tarde.',
   'err_generic': 'Algo salió mal.',
-  'account_progress': 'Progreso de la cuenta',
+  'account_progress': 'Suerte y aumentos fractales',
   'astral_acclaim': 'Aclamación astral',
   'backstory': 'Biografía',
   'bought_of': '{n} de {m} comprados',
@@ -460,4 +460,22 @@ const esStrings = <String, String>{
   'price_history_note':
       'Registrado en este teléfono, un punto por cada día que la app vio el precio. Los objetos seguidos se actualizan en cada inicio.',
   'pinned_achievements': 'Logros fijados',
+  'about': 'Acerca de',
+  'about_by': 'por {name}',
+  'about_summary':
+      'Un compañero no oficial de Guild Wars 2: tus personajes, tu cuenta, el bazar, los logros y el mapa del mundo, directamente de la API oficial.',
+  'about_community': 'Comunidad',
+  'about_github': 'GitHub',
+  'about_github_note': 'El código, las versiones y cada apk.',
+  'about_issue': 'Informar de un problema',
+  'about_issue_note': 'Algo va mal o falta algo.',
+  'about_credits': 'Créditos',
+  'about_credit_dev': 'Desarrollado por {name}',
+  'about_credit_data': 'Datos del juego, iconos y mapas de la API oficial de Guild Wars 2',
+  'about_credit_design': 'Aspecto compartido con Regions of XIV, cuya interfaz es de XeldarAlz',
+  'account_progress_note':
+      'Bonificaciones de cuenta: la suerte aumenta el hallazgo mágico y los aumentos fractales son las mejoras compradas en el Observatorio del Cierre de la Niebla.',
+  'expand_all': 'Desplegar todo',
+  'collapse_all': 'Plegar todo',
+  'hard_event': 'Difícil',
 };

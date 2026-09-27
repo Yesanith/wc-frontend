@@ -49,7 +49,7 @@ const trStrings = <String, String>{
   'err_rate_limited': 'Şu an çok fazla istek var. Bir dakika bekleyip tekrar dene.',
   'err_server': 'Guild Wars 2 API\'si sorun yaşıyor. Sonra tekrar dene.',
   'err_generic': 'Bir şeyler ters gitti.',
-  'account_progress': 'Hesap ilerlemesi',
+  'account_progress': 'Şans ve fraktal geliştirmeleri',
   'astral_acclaim': 'Astral Acclaim',
   'backstory': 'Karakter geçmişi',
   'bought_of': '{m} hakkın {n} tanesi alındı',
@@ -457,4 +457,22 @@ const trStrings = <String, String>{
   'price_history_note':
       'Bu telefonda kaydedilir, uygulamanın fiyatı gördüğü her gün için bir nokta. İzlenen eşyalar her açılışta güncellenir.',
   'pinned_achievements': 'Sabitlenen başarımlar',
+  'about': 'Hakkında',
+  'about_by': '{name} tarafından',
+  'about_summary':
+      'Resmi olmayan bir Guild Wars 2 yardımcısı: karakterlerin, hesabın, ticaret merkezi, başarımlar ve dünya haritası, doğrudan resmi API\'den.',
+  'about_community': 'Topluluk',
+  'about_github': 'GitHub',
+  'about_github_note': 'Kaynak kodu, sürümler ve tüm apk dosyaları.',
+  'about_issue': 'Sorun bildir',
+  'about_issue_note': 'Bir şey yanlış ya da eksik.',
+  'about_credits': 'Emeği geçenler',
+  'about_credit_dev': '{name} tarafından geliştirildi',
+  'about_credit_data': 'Oyun verileri, simgeler ve harita karoları resmi Guild Wars 2 API\'sinden',
+  'about_credit_design': 'Görünüm, arayüzü XeldarAlz tarafından yapılan Regions of XIV ile ortak',
+  'account_progress_note':
+      'Hesap geneli bonuslar: şans büyü bulma oranını artırır, fraktal geliştirmeleri Mistlock Observatory\'den alınan yükseltmelerdir.',
+  'expand_all': 'Tümünü aç',
+  'collapse_all': 'Tümünü kapat',
+  'hard_event': 'Zor',
 };

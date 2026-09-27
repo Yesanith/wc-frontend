@@ -36,6 +36,7 @@ class WeeklyScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           FoldSection(
             title: s.t('vault_weekly'),
+            leading: const VaultIcon(),
             summary: meta(weekly.valueOrNull),
             initiallyExpanded: true,
             trailing: IconButton(
@@ -54,6 +55,7 @@ class WeeklyScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           FoldSection(
             title: s.t('vault_special'),
+            leading: const VaultIcon(),
             summary: meta(special.valueOrNull),
             child: AsyncView(
               value: special,
@@ -70,6 +72,7 @@ class WeeklyScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: FoldSection(
                   title: c.name,
+                  leading: GameIcon(url: c.icon),
                   summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
                   child: PeriodicCategoryList(category: c),
                 ),
@@ -77,6 +80,7 @@ class WeeklyScreen extends ConsumerWidget {
           ],
           FoldSection(
             title: s.t('raids'),
+            leading: const Icon(Icons.shield_outlined, size: 20, color: AppColors.gold),
             summary: raids == null
                 ? null
                 : '${raids.fold<int>(0, (n, w) => n + w.done)}/${raids.fold<int>(0, (n, w) => n + w.encounters.length)}',

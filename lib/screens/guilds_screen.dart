@@ -60,7 +60,7 @@ class _GuildCard extends ConsumerWidget {
         MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id)),
       ),
       padding: const EdgeInsets.all(16),
-      radius: 16,
+      radius: AppRadius.card,
       child: Row(
         children: [
           GuildEmblem(emblem: _emblemOf(guild), size: 44),
@@ -161,7 +161,7 @@ class _TreasuryTab extends ConsumerWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppRadius.card),
                 border: Border.all(color: AppColors.line),
               ),
               child: Row(

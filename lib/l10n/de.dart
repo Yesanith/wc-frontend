@@ -49,7 +49,7 @@ const deStrings = <String, String>{
   'err_rate_limited': 'Gerade zu viele Anfragen. Warte eine Minute und versuche es erneut.',
   'err_server': 'Die Guild Wars 2 API hat Probleme. Versuche es später erneut.',
   'err_generic': 'Etwas ist schiefgelaufen.',
-  'account_progress': 'Accountfortschritt',
+  'account_progress': 'Glück und Fraktal-Verbesserungen',
   'astral_acclaim': 'Astralruhm',
   'backstory': 'Biografie',
   'bought_of': '{n} von {m} gekauft',
@@ -459,4 +459,22 @@ const deStrings = <String, String>{
   'price_history_note':
       'Auf diesem Handy aufgezeichnet, ein Punkt pro Tag, an dem die App den Preis gesehen hat. Beobachtete Gegenstände werden bei jedem Start aktualisiert.',
   'pinned_achievements': 'Angeheftete Erfolge',
+  'about': 'Über',
+  'about_by': 'von {name}',
+  'about_summary':
+      'Ein inoffizieller Begleiter für Guild Wars 2: deine Charaktere, dein Account, der Handelsposten, Erfolge und die Weltkarte, direkt aus der offiziellen API.',
+  'about_community': 'Community',
+  'about_github': 'GitHub',
+  'about_github_note': 'Der Quellcode, die Releases und jede APK.',
+  'about_issue': 'Problem melden',
+  'about_issue_note': 'Etwas stimmt nicht oder fehlt.',
+  'about_credits': 'Mitwirkende',
+  'about_credit_dev': 'Entwickelt von {name}',
+  'about_credit_data': 'Spieldaten, Symbole und Kartenkacheln aus der offiziellen Guild Wars 2 API',
+  'about_credit_design': 'Aussehen geteilt mit Regions of XIV, dessen Oberfläche von XeldarAlz stammt',
+  'account_progress_note':
+      'Accountweite Boni: Glück erhöht das Magiegespür, Fraktal-Verbesserungen sind die Upgrades aus dem Nebelsperre-Observatorium.',
+  'expand_all': 'Alle aufklappen',
+  'collapse_all': 'Alle zuklappen',
+  'hard_event': 'Schwer',
 };

@@ -8,6 +8,7 @@ import '../state/progression.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../services/icon_cache.dart';
 import '../widgets/common.dart';
 import '../widgets/vault_objectives.dart';
 import 'vault_shop_screen.dart';
@@ -58,6 +59,7 @@ class DailyScreen extends ConsumerWidget {
           const SizedBox(height: 12),
           FoldSection(
             title: s.t('wizards_vault'),
+            leading: const VaultIcon(),
             summary: _vaultSummary(s, v),
             initiallyExpanded: !_vaultDone(v),
             trailing: IconButton(
@@ -85,6 +87,7 @@ class DailyScreen extends ConsumerWidget {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: FoldSection(
                       title: c.name,
+                      leading: _GameIcon(url: c.icon),
                       summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
                       child: PeriodicCategoryList(category: c),
                     ),
@@ -170,10 +173,14 @@ class FoldSection extends StatelessWidget {
     required this.child,
     this.summary,
     this.trailing,
+    this.leading,
     this.initiallyExpanded = false,
   });
 
   final String title;
+
+  /// an icon before the title, a game icon when the api has one
+  final Widget? leading;
   final String? summary;
   final Widget? trailing;
   final Widget child;
@@ -183,6 +190,7 @@ class FoldSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final extra = trailing;
     final note = summary;
+    final lead = leading;
     return AppCard(
       padding: EdgeInsets.zero,
       child: Theme(
@@ -195,6 +203,10 @@ class FoldSection extends StatelessWidget {
           collapsedIconColor: AppColors.muted,
           title: Row(
             children: [
+              if (lead != null) ...[
+                SizedBox(width: 26, height: 26, child: Center(child: lead)),
+                const SizedBox(width: 10)
+              ],
               Expanded(child: Text(title, style: display(16), maxLines: 1, overflow: TextOverflow.ellipsis)),
               if (note != null)
                 Text(note, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
@@ -224,8 +236,28 @@ class PeriodicCategoryList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
-                Icon(r.done ? Icons.check_circle : Icons.radio_button_unchecked,
-                    size: 18, color: r.done ? AppColors.green : AppColors.muted),
+                // the achievement's own icon, or its category's, with the tick over a corner
+                SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: r.done ? 0.45 : 1,
+                          child: _GameIcon(url: (r.detail?['icon'] as String?) ?? category.icon),
+                        ),
+                      ),
+                      if (r.done)
+                        const Positioned(
+                          right: -4,
+                          bottom: -4,
+                          child: Icon(Icons.check_circle, size: 14, color: AppColors.green),
+                        ),
+                    ],
+                  ),
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(r.name,
@@ -290,4 +322,41 @@ class ChecklistRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// a game icon from the api, or a quiet placeholder when there is none
+class _GameIcon extends StatelessWidget {
+  const _GameIcon({this.url});
+
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
+    final u = url;
+    if (u == null || u.isEmpty) return const Icon(Icons.emoji_events_outlined, size: 20, color: AppColors.gold);
+    return ClipRRect(borderRadius: BorderRadius.circular(4), child: CachedIcon(url: u, fit: BoxFit.contain));
+  }
+}
+
+/// the Astral Acclaim coin, the currency of the Wizard's Vault
+class VaultIcon extends ConsumerWidget {
+  const VaultIcon({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final url = ref.watch(astralAcclaimIconProvider).valueOrNull;
+    return url == null
+        ? const Icon(Icons.auto_awesome, size: 20, color: AppColors.gold)
+        : CachedIcon(url: url, fit: BoxFit.contain);
+  }
+}
+
+/// the api's own icon for a game category, used by the weekly page too
+class GameIcon extends StatelessWidget {
+  const GameIcon({super.key, this.url});
+
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) => _GameIcon(url: url);
 }

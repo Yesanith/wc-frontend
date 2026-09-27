@@ -48,7 +48,7 @@ class _CollectionTile extends ConsumerWidget {
               )
           : null,
       padding: const EdgeInsets.all(16),
-      radius: 16,
+      radius: AppRadius.card,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -207,7 +207,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(AppRadius.card),
                         border: Border.all(color: AppColors.line),
                       ),
                       child: Row(
