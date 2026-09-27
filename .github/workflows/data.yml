@@ -34,7 +34,9 @@ jobs:
         # tags check out a detached head, only branch runs can push back
         if: github.ref == 'refs/heads/main'
         run: |
-          if git diff --quiet -- assets/data && [ -z "$(git status --porcelain assets/tiles)" ]; then
+          # porcelain lists new files too, a plain diff would miss a file
+          # for a language or floor that was never committed before
+          if [ -z "$(git status --porcelain assets/data assets/tiles)" ]; then
             echo "nothing changed"
             exit 0
           fi

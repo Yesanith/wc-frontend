@@ -190,16 +190,25 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     return true;
   }
 
+  /// stores today's wallet once the wallet and the account both settled.
+  /// while either reloads after a key switch it still holds the previous
+  /// account's value, and the two would mix
+  void _recordWealth() {
+    final wallet = ref.read(walletProvider);
+    final account = ref.read(accountProvider);
+    if (wallet.isLoading || account.isLoading) return;
+    final entries = wallet.valueOrNull;
+    final name = account.valueOrNull?['name'];
+    if (entries != null && name != null) ref.read(wealthProvider.notifier).record('$name', entries);
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final section = ref.watch(sectionProvider);
     // one wallet snapshot per day and account feeds the wealth history
-    ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, next) {
-      final wallet = next.valueOrNull;
-      final name = ref.read(accountProvider).valueOrNull?['name'];
-      if (wallet != null && name != null) ref.read(wealthProvider.notifier).record('$name', wallet);
-    });
+    ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, __) => _recordWealth());
+    ref.listen<AsyncValue<Json>>(accountProvider, (_, __) => _recordWealth());
     final sync = ref.watch(syncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too

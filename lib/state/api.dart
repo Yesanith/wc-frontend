@@ -72,9 +72,12 @@ class KeysNotifier extends AsyncNotifier<List<StoredKey>> {
     current.removeAt(index);
     await _persist(current);
     state = AsyncData(current);
-    if (ref.read(activeKeyProvider) >= current.length) {
-      await ref.read(activeKeyProvider.notifier).set(current.isEmpty ? 0 : current.length - 1);
-    }
+    // keep the same account selected: a key removed before the active one
+    // shifts it down by one
+    final active = ref.read(activeKeyProvider);
+    final next = active > index ? active - 1 : active;
+    final safe = current.isEmpty ? 0 : next.clamp(0, current.length - 1);
+    if (safe != active) await ref.read(activeKeyProvider.notifier).set(safe);
   }
 }
 
@@ -112,15 +115,26 @@ final diskCacheProvider = Provider<DiskCache?>((ref) => null);
 /// after a background refresh or a full sync
 final accountRevisionProvider = StateProvider<int>((ref) => 0);
 
-/// background refreshes currently running, drives the thin progress bar
-final backgroundRefreshProvider = StateProvider<int>((ref) => 0);
+/// background refreshes currently running, drives the thin progress bar.
+/// it watches what gw2ApiProvider watches, so the count starts over with
+/// every new client instead of keeping refreshes the old one never finished
+final backgroundRefreshProvider = StateProvider<int>((ref) {
+  ref.watch(langProvider);
+  ref.watch(apiKeyProvider);
+  ref.watch(diskCacheProvider);
+  return 0;
+});
 
 final gw2ApiProvider = Provider<Gw2Api>((ref) {
   final lang = ref.watch(langProvider);
   // many entries refresh at once after a cold start, one re-read is enough
   Timer? pending;
+  // refreshes of a replaced client can still finish, they must not touch
+  // the providers any more
+  var disposed = false;
   late final Gw2Api api;
   ref.onDispose(() {
+    disposed = true;
     pending?.cancel();
     // a new key or language builds a new client, the old sockets go away
     api.close();
@@ -130,12 +144,14 @@ final gw2ApiProvider = Provider<Gw2Api>((ref) {
     lang: lang.apiLang,
     cache: ref.watch(diskCacheProvider),
     onRevalidated: () {
+      if (disposed) return;
       pending?.cancel();
       pending = Timer(const Duration(milliseconds: 400), () {
         ref.read(accountRevisionProvider.notifier).state++;
       });
     },
     onBackground: (delta) {
+      if (disposed) return;
       final counter = ref.read(backgroundRefreshProvider.notifier);
       final next = counter.state + delta;
       counter.state = next < 0 ? 0 : next;

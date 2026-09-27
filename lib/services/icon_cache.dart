@@ -10,7 +10,9 @@ import 'package:path_provider/path_provider.dart';
 /// the urls are content addressed (signature and file id), so a cached
 /// file never goes stale
 class IconCache {
-  IconCache(this.dir, [Set<String>? known]) : _known = known ?? <String>{};
+  IconCache(this.dir, [Set<String>? known, http.Client? client])
+      : _known = known ?? <String>{},
+        _client = client ?? http.Client();
 
   final Directory dir;
 
@@ -18,7 +20,11 @@ class IconCache {
   /// this set is free, a file stat per icon while scrolling is not
   final Set<String> _known;
   final Map<String, Future<File?>> _pending = {};
-  final http.Client _client = http.Client();
+
+  /// urls the server answered 404 for in this session, such as ocean map
+  /// tiles. asking again every time one scrolls back into view is wasted
+  final Set<String> _missing = {};
+  final http.Client _client;
 
   static Future<IconCache> open() async {
     final base = await getApplicationSupportDirectory();
@@ -49,9 +55,11 @@ class IconCache {
 
   /// downloads the icon unless another widget is already doing it
   Future<File?> fetch(String url) {
+    if (_missing.contains(url)) return Future.value(null);
     return _pending.putIfAbsent(url, () async {
       try {
         final res = await _client.get(Uri.parse(url)).timeout(const Duration(seconds: 20));
+        if (res.statusCode == 404) _missing.add(url);
         if (res.statusCode != 200 || res.bodyBytes.isEmpty) return null;
         final file = _fileFor(url);
         await file.writeAsBytes(res.bodyBytes, flush: true);
@@ -71,6 +79,7 @@ class IconCache {
       if (await dir.exists()) await dir.delete(recursive: true);
       await dir.create(recursive: true);
       _known.clear();
+      _missing.clear();
     } catch (_) {}
   }
 }

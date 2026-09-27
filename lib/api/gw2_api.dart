@@ -128,6 +128,18 @@ class Gw2Api {
     });
   }
 
+  /// forgets every static entry held in memory, after a patch cleared the
+  /// disk copy. otherwise the next save would write the old data straight
+  /// back and keep it for another month
+  void clearStaticCaches() {
+    _saveTimer?.cancel();
+    _dirty.clear();
+    _loading.clear();
+    for (final data in _caches.values) {
+      data.clear();
+    }
+  }
+
   /// batched so a screen that fetches 300 items only writes once
   void _scheduleSave(String name) {
     if (cache == null) return;
@@ -248,11 +260,13 @@ class Gw2Api {
       'v': 'latest',
       'lang': lang,
     };
+    // the key travels in a header rather than the url, so it never ends up
+    // in a proxy log or a crash report that records the request
     final key = apiKey;
-    if (key != null && key.isNotEmpty) params['access_token'] = key;
+    final headers = key != null && key.isNotEmpty ? {'Authorization': 'Bearer $key'} : null;
 
     final uri = Uri.parse('$_base$path').replace(queryParameters: params);
-    final res = await _send(uri);
+    final res = await _send(uri, headers);
 
     if (res.statusCode >= 200 && res.statusCode < 300) {
       return jsonDecode(utf8.decode(res.bodyBytes));
@@ -269,9 +283,9 @@ class Gw2Api {
     throw Gw2ApiException(msg, res.statusCode);
   }
 
-  Future<http.Response> _send(Uri uri) async {
+  Future<http.Response> _send(Uri uri, [Map<String, String>? headers]) async {
     try {
-      return await _client.get(uri).timeout(const Duration(seconds: 20));
+      return await _client.get(uri, headers: headers).timeout(const Duration(seconds: 20));
     } on TimeoutException {
       throw Gw2ApiException('The server did not respond, try again.', null, ApiErrorKind.timeout);
     } catch (_) {

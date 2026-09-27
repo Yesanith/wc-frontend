@@ -205,7 +205,6 @@ final markerIconsProvider = FutureProvider<Map<String, String>>((ref) async {
   };
 });
 
-
 /// markers shipped in assets/data, null when this floor or language is not
 /// bundled and has to come from the api
 Future<List<MapMarker>?> _bundledMarkers(int floor, String lang) async {
