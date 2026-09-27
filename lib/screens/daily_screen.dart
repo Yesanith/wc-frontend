@@ -46,7 +46,10 @@ class DailyScreen extends ConsumerWidget {
               _Tile(Icons.schedule, s.t('world_bosses'), bosses == null ? null : '${bosses.length}', false),
               _Tile(Icons.construction, s.t('daily_crafts'), crafts == null ? null : '${crafts.done}/${crafts.total}',
                   crafts != null && crafts.total > 0 && crafts.done >= crafts.total),
-              _Tile(Icons.inventory_2_outlined, s.t('map_chests'), chests == null ? null : '${chests.done}/${chests.total}',
+              _Tile(
+                  Icons.inventory_2_outlined,
+                  s.t('map_chests'),
+                  chests == null ? null : '${chests.done}/${chests.total}',
                   chests != null && chests.total > 0 && chests.done >= chests.total),
               _Tile(Icons.castle_outlined, s.t('dungeon_paths'),
                   dungeons == null ? null : '${dungeons.fold<int>(0, (n, d) => n + d.done)}', false),
@@ -60,7 +63,8 @@ class DailyScreen extends ConsumerWidget {
             trailing: IconButton(
               tooltip: s.t('vault_shop'),
               visualDensity: VisualDensity.compact,
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
+              onPressed: () =>
+                  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
               icon: const Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
             ),
             child: AsyncView(

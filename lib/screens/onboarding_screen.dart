@@ -47,8 +47,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       _busy = true;
       _error = null;
     });
+    // one client for both checks, closed again whatever happens
+    final api = Gw2Api(key);
     try {
-      final info = await Gw2Api(key).tokenInfo();
+      final info = await api.tokenInfo();
       final perms = ((info['permissions'] as List?) ?? const []).map((e) => '$e').toList();
       final missing = _required.where((p) => !perms.contains(p)).toList();
       if (missing.isNotEmpty) {
@@ -58,7 +60,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       // label the key with the account it belongs to
       var accountName = '${info['name'] ?? ''}';
       try {
-        final account = await Gw2Api(key).account();
+        final account = await api.account();
         accountName = '${account['name'] ?? accountName}';
       } catch (_) {}
       await ref.read(keysProvider.notifier).add(key, accountName);
@@ -67,6 +69,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     } catch (e) {
       if (mounted) setState(() => _error = s.t('err_key_invalid', {'e': e}));
     } finally {
+      api.close();
       if (mounted) setState(() => _busy = false);
     }
   }

@@ -61,24 +61,26 @@ class ItemIndex {
     }
   }
 
-  /// exact matches first, then names that start with the query
+  /// exact matches first, then names that start with the query, then names
+  /// that contain it. the whole index is scanned, an exact match late in
+  /// the list must not lose to earlier names that merely start the same
   List<IndexedItem> search(String query, {int limit = 40}) {
     final q = query.trim().toLowerCase();
     if (q.length < 2) return const [];
+    final exact = <IndexedItem>[];
     final starts = <IndexedItem>[];
     final contains = <IndexedItem>[];
     for (final item in items) {
       final name = item.lower;
       if (name == q) {
-        starts.insert(0, item);
+        exact.add(item);
       } else if (name.startsWith(q)) {
-        starts.add(item);
-      } else if (name.contains(q)) {
+        if (starts.length < limit) starts.add(item);
+      } else if (contains.length < limit && name.contains(q)) {
         contains.add(item);
       }
-      if (starts.length >= limit) break;
     }
-    final out = [...starts, ...contains];
+    final out = [...exact, ...starts, ...contains];
     return out.length > limit ? out.sublist(0, limit) : out;
   }
 }
