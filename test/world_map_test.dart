@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tyria_codex/state/world_map.dart';
@@ -109,6 +110,25 @@ void main() {
   test('every marker kind has a zoom threshold', () {
     for (final k in markerKinds) {
       expect(markerMinZoom[k], isNotNull, reason: k);
+    }
+  });
+
+  test('the picker offers only floors with tiles and opens on the default one', () {
+    // -1 and -2 hold next to no tiles on the tile service
+    expect(worldFloors.every((f) => f >= 0), isTrue);
+    expect(worldFloors, contains(defaultFloor));
+    expect(bundledTileFloor, defaultFloor);
+  });
+
+  test('the overview tiles are bundled for the floor the map opens on', () {
+    for (var level = 0; level <= bundledTileMaxLevel; level++) {
+      final dir = Directory('assets/tiles/$bundledTileFloor/$level');
+      expect(dir.existsSync(), isTrue, reason: dir.path);
+      expect(dir.listSync().where((f) => f.path.endsWith('.jpg')), isNotEmpty, reason: dir.path);
+    }
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    for (var level = 0; level <= bundledTileMaxLevel; level++) {
+      expect(pubspec, contains('assets/tiles/$bundledTileFloor/$level/'));
     }
   });
 }

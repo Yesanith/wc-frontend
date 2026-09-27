@@ -9,7 +9,7 @@ map instantly.
     mastery points and the region, map and area labels of every open world
     map, one gzipped file per language, in the same compact row format the
     app caches: [kind, x, y, name, chat_link, map_name]
-  * tiles: floor 0 from zoom 0 to 2, which is everything the map shows
+  * tiles: floor 1 from zoom 0 to 2, which is everything the map shows
     before you zoom in on a region
 
 No single floor holds every map. The Path of Fire and Elona maps, for one,
@@ -36,7 +36,8 @@ CONTINENT = 1
 # a run that finds fewer than this is broken, the old files are kept
 MIN_MAPS = 100
 MIN_WAYPOINTS = 600
-TILE_FLOOR = 0
+# the floor the app opens on, the default floor of most maps
+TILE_FLOOR = 1
 TILE_MAX_LEVEL = 2
 # the api says max_zoom 8 for tyria, but continent_dims are pixels at zoom 7
 # and zoom 8 answers 404. the app uses the same constant

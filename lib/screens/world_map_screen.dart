@@ -204,6 +204,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
               child: _FloorButton(
                 floor: _floor,
                 label: s.t('floor_n', {'n': _floor}),
+                levelLabel: (f) => s.t('floor_n', {'n': f}),
                 onPick: (f) => setState(() => _floor = f),
               ),
             ),
@@ -468,10 +469,11 @@ class _MarkerIcon extends StatelessWidget {
 }
 
 class _FloorButton extends StatelessWidget {
-  const _FloorButton({required this.floor, required this.label, required this.onPick});
+  const _FloorButton({required this.floor, required this.label, required this.levelLabel, required this.onPick});
 
   final int floor;
   final String label;
+  final String Function(int floor) levelLabel;
   final ValueChanged<int> onPick;
 
   @override
@@ -481,7 +483,7 @@ class _FloorButton extends StatelessWidget {
       color: AppColors.surface,
       onSelected: onPick,
       itemBuilder: (context) => [
-        for (final f in worldFloors) PopupMenuItem(value: f, child: Text('$f')),
+        for (final f in worldFloors) PopupMenuItem(value: f, child: Text(levelLabel(f))),
       ],
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -569,7 +571,7 @@ class _SearchBox extends StatelessWidget {
   }
 }
 
-/// one map tile: from the app's assets for the overview levels of floor 0,
+/// one map tile: from the app's assets for the overview levels of the default floor,
 /// otherwise downloaded once and kept on disk
 class _Tile extends StatelessWidget {
   const _Tile({required this.floor, required this.level, required this.x, required this.y});

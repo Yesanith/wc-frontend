@@ -1,7 +1,7 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
   'map_search': 'Search waypoints, points of interest, maps',
-  'floor_n': 'Floor {n}',
+  'floor_n': 'Level {n}',
   'map_layers': 'Map layers',
   'marker_waypoint': 'Waypoint',
   'marker_landmark': 'Point of interest',

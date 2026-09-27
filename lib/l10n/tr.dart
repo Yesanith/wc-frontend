@@ -1,7 +1,7 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
   'map_search': 'Waypoint, nokta veya harita ara',
-  'floor_n': 'Kat {n}',
+  'floor_n': 'Katman {n}',
   'map_layers': 'Harita katmanları',
   'marker_waypoint': 'Waypoint',
   'marker_landmark': 'İlgi noktası',

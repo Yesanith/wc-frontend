@@ -13,10 +13,13 @@ import 'settings.dart';
 /// tyria. the mists continent has its own coordinates and is left out
 const worldContinent = 1;
 
-/// floors offered in the picker. the map opens on floor 0, which is the one
-/// that carries the whole surface of tyria, the same default gw2 toolkit uses
-const worldFloors = [2, 1, 0, -1, -2];
-const defaultFloor = 0;
+/// floors offered in the picker, shown as levels. 0 to 3 all cover the whole
+/// continent and draw the same picture for most maps; they only differ on
+/// maps with several layers, such as Tangled Depths, Verdant Brink, Rata Sum
+/// or Divinity's Reach. -1 and -2 hold next to no tiles and are left out.
+/// the map opens on floor 1, the default floor the api gives most maps
+const worldFloors = [3, 2, 1, 0];
+const defaultFloor = 1;
 
 /// marker kinds, in the order the layer sheet lists them
 const markerKinds = ['waypoint', 'landmark', 'vista', 'heart', 'hero', 'mastery', 'unlock'];
@@ -240,6 +243,7 @@ List<dynamic> _decodeBundled(Uint8List gz) {
   return raw is Map && raw['rows'] is List ? raw['rows'] as List : const [];
 }
 
-/// the overview tiles shipped with the app: floor 0 up to this zoom level
-const bundledTileFloor = 0;
+/// the overview tiles shipped with the app: the default floor up to this
+/// zoom level
+const bundledTileFloor = defaultFloor;
 const bundledTileMaxLevel = 2;
