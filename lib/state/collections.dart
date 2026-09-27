@@ -93,8 +93,11 @@ String? skinSubtype(Json? raw) {
   final details = raw?['details'];
   if (details is! Map || details['type'] == null) return null;
   final weight = details['weight_class'];
-  final slot = titleCase('${details['type']}');
-  return weight == null || weight == 'Clothing' ? slot : '$slot · $weight';
+  // HelmAquatic -> Helm Aquatic, LongBow -> Longbow
+  final slot =
+      professionWeaponKey('${details['type']}').replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}');
+  // weapons carry a weight class of None, outfits and town clothes Clothing
+  return weight == null || weight == 'None' || weight == 'Clothing' ? slot : '$slot · $weight';
 }
 
 /// every entry of a collection with its unlock state. details are cached

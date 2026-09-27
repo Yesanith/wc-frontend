@@ -39,10 +39,10 @@ void main() {
             {'id': 'A', 'value': 1700},
           ],
         },
-        // guild boards name the team, not an account
-        {'rank': 3, 'team': 'Some Guild', 'scores': []},
+        // guild boards name the guild and the team that played
+        {'rank': 3, 'name': 'Some Guild', 'team': 'Squad', 'scores': []},
       ], season, 'ladder');
-      expect(rows.map((r) => r.name), ['First.5678', 'Second.1234', 'Some Guild']);
+      expect(rows.map((r) => r.name), ['First.5678', 'Second.1234', 'Some Guild · Squad']);
       expect(rows[1].scores, [('Rating', 1500), ('Wins', 40)]);
     });
 
@@ -151,6 +151,22 @@ void main() {
             'details': {'type': 'Coat', 'weight_class': 'Clothing'}
           }),
           'Coat');
+      // weapons report a weight class of None
+      expect(
+          skinSubtype({
+            'details': {'type': 'Shortbow', 'weight_class': 'None'}
+          }),
+          'Shortbow');
+      expect(
+          skinSubtype({
+            'details': {'type': 'HelmAquatic', 'weight_class': 'Light'}
+          }),
+          'Helm Aquatic · Light');
+      expect(
+          skinSubtype({
+            'details': {'type': 'LongBow'}
+          }),
+          'Longbow');
       expect(skinSubtype({'details': {}}), isNull);
       expect(skinSubtype(null), isNull);
     });
