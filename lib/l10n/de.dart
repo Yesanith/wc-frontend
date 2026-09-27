@@ -49,7 +49,7 @@ const deStrings = <String, String>{
   'err_rate_limited': 'Gerade zu viele Anfragen. Warte eine Minute und versuche es erneut.',
   'err_server': 'Die Guild Wars 2 API hat Probleme. Versuche es später erneut.',
   'err_generic': 'Etwas ist schiefgelaufen.',
-  'account_progress': 'Accountfortschritt',
+  'account_progress': 'Glück und Fraktal-Verbesserungen',
   'astral_acclaim': 'Astralruhm',
   'backstory': 'Biografie',
   'bought_of': '{n} von {m} gekauft',
@@ -472,4 +472,9 @@ const deStrings = <String, String>{
   'about_credit_dev': 'Entwickelt von {name}',
   'about_credit_data': 'Spieldaten, Symbole und Kartenkacheln aus der offiziellen Guild Wars 2 API',
   'about_credit_design': 'Aussehen geteilt mit Regions of XIV, dessen Oberfläche von XeldarAlz stammt',
+  'account_progress_note':
+      'Accountweite Boni: Glück erhöht das Magiegespür, Fraktal-Verbesserungen sind die Upgrades aus dem Nebelsperre-Observatorium.',
+  'expand_all': 'Alle aufklappen',
+  'collapse_all': 'Alle zuklappen',
+  'hard_event': 'Schwer',
 };

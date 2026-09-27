@@ -49,7 +49,7 @@ const frStrings = <String, String>{
   'err_rate_limited': 'Trop de requêtes pour le moment. Attends une minute et réessaie.',
   'err_server': 'L\'API de Guild Wars 2 rencontre des problèmes. Réessaie plus tard.',
   'err_generic': 'Un problème est survenu.',
-  'account_progress': 'Progression du compte',
+  'account_progress': 'Chance et augmentations fractales',
   'astral_acclaim': 'Distinction astrale',
   'backstory': 'Biographie',
   'bought_of': '{n} sur {m} achetés',
@@ -473,4 +473,9 @@ const frStrings = <String, String>{
   'about_credit_dev': 'Développé par {name}',
   'about_credit_data': 'Données du jeu, icônes et tuiles de carte issues de l\'API officielle de Guild Wars 2',
   'about_credit_design': 'Apparence partagée avec Regions of XIV, dont l\'interface est signée XeldarAlz',
+  'account_progress_note':
+      'Bonus du compte : la chance augmente la découverte magique, les augmentations fractales sont les améliorations achetées à l\'Observatoire de Brumeverrou.',
+  'expand_all': 'Tout déplier',
+  'collapse_all': 'Tout replier',
+  'hard_event': 'Difficile',
 };

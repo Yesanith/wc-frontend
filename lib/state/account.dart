@@ -104,7 +104,10 @@ final accountProgressionProvider =
 final accountWvwProvider = FutureProvider<Json>((ref) => accountApi(ref).accountWvw());
 
 class MaterialGroup {
-  const MaterialGroup(this.name, this.slots);
+  const MaterialGroup(this.name, this.slots, {this.id = 0});
+
+  /// the storage category id, 0 for items in a category the data lacks
+  final int id;
   final String name;
   final List<ItemSlot> slots;
 }
@@ -129,7 +132,7 @@ final materialGroupsProvider = FutureProvider<List<MaterialGroup>>((ref) async {
     final slots = byCategory.remove(asInt(c['id']));
     if (slots == null || slots.isEmpty) continue;
     slots.sort((a, b) => b.count.compareTo(a.count));
-    groups.add(MaterialGroup('${c['name'] ?? ''}', slots));
+    groups.add(MaterialGroup('${c['name'] ?? ''}', slots, id: asInt(c['id'])));
   }
   // anything in a category the reference data does not know yet
   for (final slots in byCategory.values) {
@@ -137,4 +140,10 @@ final materialGroupsProvider = FutureProvider<List<MaterialGroup>>((ref) async {
     groups.add(MaterialGroup('?', slots));
   }
   return groups;
+});
+
+/// the Astral Acclaim currency icon, the face of the Wizard's Vault
+final astralAcclaimIconProvider = FutureProvider<String?>((ref) async {
+  final currencies = await ref.watch(gw2ApiProvider).currencies([63]);
+  return currencies[63]?['icon'] as String?;
 });

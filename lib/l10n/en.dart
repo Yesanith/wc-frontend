@@ -49,7 +49,7 @@ const enStrings = <String, String>{
   'err_rate_limited': 'Too many requests right now. Wait a minute and try again.',
   'err_server': 'The Guild Wars 2 API is having trouble. Try again later.',
   'err_generic': 'Something went wrong.',
-  'account_progress': 'Account progress',
+  'account_progress': 'Luck and fractal augmentations',
   'astral_acclaim': 'Astral Acclaim',
   'backstory': 'Biography',
   'bought_of': 'Bought {n} of {m}',
@@ -472,4 +472,9 @@ const enStrings = <String, String>{
   'about_credit_dev': 'Developed by {name}',
   'about_credit_data': 'Game data, icons and map tiles from the official Guild Wars 2 API',
   'about_credit_design': 'Look shared with Regions of XIV, whose interface is by XeldarAlz',
+  'account_progress_note':
+      'Account wide bonuses: luck raises magic find, and fractal augmentations are the upgrades bought in the Mistlock Observatory.',
+  'expand_all': 'Expand all',
+  'collapse_all': 'Collapse all',
+  'hard_event': 'Hard',
 };

@@ -49,7 +49,7 @@ const trStrings = <String, String>{
   'err_rate_limited': 'Şu an çok fazla istek var. Bir dakika bekleyip tekrar dene.',
   'err_server': 'Guild Wars 2 API\'si sorun yaşıyor. Sonra tekrar dene.',
   'err_generic': 'Bir şeyler ters gitti.',
-  'account_progress': 'Hesap ilerlemesi',
+  'account_progress': 'Şans ve fraktal geliştirmeleri',
   'astral_acclaim': 'Astral Acclaim',
   'backstory': 'Karakter geçmişi',
   'bought_of': '{m} hakkın {n} tanesi alındı',
@@ -470,4 +470,9 @@ const trStrings = <String, String>{
   'about_credit_dev': '{name} tarafından geliştirildi',
   'about_credit_data': 'Oyun verileri, simgeler ve harita karoları resmi Guild Wars 2 API\'sinden',
   'about_credit_design': 'Görünüm, arayüzü XeldarAlz tarafından yapılan Regions of XIV ile ortak',
+  'account_progress_note':
+      'Hesap geneli bonuslar: şans büyü bulma oranını artırır, fraktal geliştirmeleri Mistlock Observatory\'den alınan yükseltmelerdir.',
+  'expand_all': 'Tümünü aç',
+  'collapse_all': 'Tümünü kapat',
+  'hard_event': 'Zor',
 };

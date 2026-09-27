@@ -63,7 +63,8 @@ class CollectionEntry {
   final bool unlocked;
   final String? rarity;
 
-  /// wardrobe skins only: Armor, Weapon, Back or Gathering
+  /// the group a filter chip picks: Armor, Weapon, Back or Gathering for
+  /// wardrobe skins, the mount for mount skins
   final String? type;
 
   /// wardrobe skins only: the slot or weapon, such as Helm or Greatsword,
@@ -147,6 +148,21 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
       }
     }
   }
+  // mount skins name their mount by key ("raptor"), the mount list has the
+  // name in the app's language
+  var mountNames = const <String, String>{};
+  if (kind.key == 'mount_skins') {
+    try {
+      final types =
+          await cachedList(cache, 'collection_mount_types_${lang.apiLang}', 'rows', () => api.allOf('/mounts/types'));
+      mountNames = {
+        for (final t in types.whereType<Map>())
+          if ('${t['name'] ?? ''}'.isNotEmpty) '${t['id']}': '${t['name']}',
+      };
+    } catch (_) {
+      // the keys still group the skins, only less nicely named
+    }
+  }
   final entries = <CollectionEntry>[];
   for (final id in ids) {
     var name = (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id);
@@ -158,7 +174,11 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
       row?['icon'] as String?,
       unlocked.contains(id),
       rarity: row?['rarity'] as String?,
-      type: kind.key == 'wardrobe' ? (row?['type'] as String?) : null,
+      type: switch (kind.key) {
+        'wardrobe' => row?['type'] as String?,
+        'mount_skins' when row?['mount'] != null => mountNames['${row!['mount']}'] ?? titleCase('${row['mount']}'),
+        _ => null,
+      },
       subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
     ));
   }
