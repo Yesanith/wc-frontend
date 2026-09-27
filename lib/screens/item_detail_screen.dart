@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/account.dart';
+import '../state/crafting.dart';
 import '../state/items.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -9,6 +10,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/recipe_outputs.dart';
 import 'trading_screen.dart';
 
 /// everything about one item. [instance] is the equipment entry it came from,
@@ -115,6 +117,7 @@ class ItemDetailScreen extends ConsumerWidget {
             const SizedBox(height: 10),
             for (final id in infusionIds) _UpgradeRow(itemId: id),
           ],
+          _UsedInSection(itemId: itemId, itemName: name),
           const SizedBox(height: 18),
           Panel(
             child: Column(
@@ -257,4 +260,46 @@ String? _comboName(WidgetRef ref, Json? instance, Json? details) {
   final id = chosen is Map ? asInt(chosen['id']) : (infix is Map ? asInt(infix['id']) : 0);
   if (id <= 0) return null;
   return ref.watch(itemStatsProvider).valueOrNull?[id];
+}
+
+/// what this item is an ingredient of. a few rows here, the rest a tap away
+class _UsedInSection extends ConsumerWidget {
+  const _UsedInSection({required this.itemId, required this.itemName});
+
+  final int itemId;
+  final String itemName;
+
+  static const _preview = 5;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final rows = ref.watch(usedInProvider(itemId)).valueOrNull;
+    if (rows == null || rows.isEmpty) return const SizedBox.shrink();
+    final preview = rows.take(_preview).toList();
+    return Padding(
+      padding: const EdgeInsets.only(top: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SectionHeader(title: s.t('used_in'), trailing: fmtInt(rows.length)),
+          const SizedBox(height: 10),
+          for (var i = 0; i < preview.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: RecipeOutputRow(entry: preview[i], chunkKey: chunkKeyFor(preview, i)),
+            ),
+          if (rows.length > _preview)
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => RecipeOutputsScreen(title: s.t('used_in_item', {'item': itemName}), entries: rows),
+                ),
+              ),
+              child: Text(s.t('show_all_n', {'n': fmtInt(rows.length)})),
+            ),
+        ],
+      ),
+    );
+  }
 }

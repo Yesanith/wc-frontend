@@ -4,6 +4,7 @@ import '../api/gw2_api.dart';
 import '../services/recipe_book.dart';
 import '../util.dart';
 import 'api.dart';
+import 'characters.dart';
 
 /// one step of a crafting tree, independent of how many you want to make.
 /// [perRun] is how many the parent recipe needs for a single run of itself
@@ -200,4 +201,87 @@ final craftPricesProvider = FutureProvider.autoDispose.family<Map<int, int>, int
     for (final e in prices.entries)
       if (e.value['sells'] is Map) e.key: asInt((e.value['sells'] as Map)['unit_price']),
   };
+});
+
+/// one recipe an item goes into: what it makes and in which discipline
+class UsedIn {
+  const UsedIn(this.output, this.disciplines, {this.recipeId = 0});
+  final int output;
+  final List<String> disciplines;
+
+  /// the api recipe id, 0 for mystic forge recipes
+  final int recipeId;
+}
+
+/// recipes that use an item, from the api's input search and the shipped
+/// book together. the book adds the mystic forge, the api anything newer
+/// than the last data job. one entry per item made
+List<UsedIn> mergeUsedIn(RecipeBook book, List<int> apiIds, Map<int, Json> apiRecipes, int itemId) {
+  final byOutput = <int, UsedIn>{};
+  void add(int output, List<String> disciplines, int recipeId) {
+    if (output <= 0) return;
+    final seen = byOutput[output];
+    if (seen == null) {
+      byOutput[output] = UsedIn(output, disciplines, recipeId: recipeId);
+    } else {
+      byOutput[output] = UsedIn(output, {...seen.disciplines, ...disciplines}.toList(),
+          recipeId: seen.recipeId > 0 ? seen.recipeId : recipeId);
+    }
+  }
+
+  for (final id in apiIds) {
+    final known = book.byId[id];
+    if (known != null) {
+      add(known.output, known.disciplines, id);
+      continue;
+    }
+    final raw = apiRecipes[id];
+    if (raw != null) {
+      add(asInt(raw['output_item_id']), [for (final d in (raw['disciplines'] as List?) ?? const []) '$d'], id);
+    }
+  }
+  for (final r in book.usedIn(itemId)) {
+    add(r.output, r.disciplines, r.id);
+  }
+  return byOutput.values.toList();
+}
+
+/// what an item is an ingredient of
+final usedInProvider = FutureProvider.autoDispose.family<List<UsedIn>, int>((ref, itemId) async {
+  final api = ref.watch(gw2ApiProvider);
+  final book = await ref.watch(recipeBookProvider.future);
+  var ids = const <int>[];
+  try {
+    ids = await api.recipesForInput(itemId);
+  } catch (_) {
+    // offline, the shipped book still answers
+  }
+  final unknown = ids.where((id) => book.byId[id] == null).toList();
+  final raw = unknown.isEmpty ? const <int, Json>{} : await api.recipes(unknown);
+  return mergeUsedIn(book, ids, raw, itemId);
+});
+
+/// the recipes a character learned, resolved to the items they make.
+/// key is the character name
+final characterRecipesProvider = FutureProvider.autoDispose.family<List<UsedIn>, String>((ref, name) async {
+  final api = ref.watch(gw2ApiProvider);
+  final book = await ref.watch(recipeBookProvider.future);
+  final chars = await ref.watch(charactersProvider.future);
+  final c = characterByName(chars, name);
+  if (c == null) return const [];
+  final ids = intList(c['recipes']);
+  final unknown = ids.where((id) => book.byId[id] == null).toList();
+  final raw = unknown.isEmpty ? const <int, Json>{} : await api.recipes(unknown);
+  final out = <UsedIn>[];
+  for (final id in ids) {
+    final known = book.byId[id];
+    if (known != null) {
+      out.add(UsedIn(known.output, known.disciplines, recipeId: id));
+    } else if (raw[id] != null) {
+      out.add(UsedIn(
+          asInt(raw[id]!['output_item_id']), [for (final d in (raw[id]!['disciplines'] as List?) ?? const []) '$d'],
+          recipeId: id));
+    }
+  }
+  return out;
 });

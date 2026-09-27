@@ -66,7 +66,7 @@ class _AchievementsTab extends ConsumerWidget {
             onRetry: () => ref.invalidate(achievementsProvider),
             builder: (list) {
               if (list.isEmpty) {
-                return Panel(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)));
+                return Panel(child: EmptyNote(s.t('nothing_here'), center: false));
               }
               return Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),

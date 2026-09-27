@@ -44,7 +44,13 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Guild members, ranks, teams, built upgrades, hall storage and rendered guild emblems
 - More collections: mount skins, homestead decorations and glyphs, jade bots, skiffs and PvP heroes
 - Stat combination names on gear, material storage by category, trading post order book,
-  learned recipe markers, luck and fractal augmentations, and the PvP season leaderboard
+  learned recipe markers, luck and fractal augmentations
+- PvP leaderboards for every season, board (ladder, legendary, guild) and region
+- Professions: every class with its specializations, traits and weapons, and class icons
+  (the elite specialization's when one is slotted) on the character pages
+- Wardrobe with every skin's name and icon, filterable by armour, weapon, back and slot
+- "Used in" on item pages, and each character's learned recipes
+- Guild rank permissions, world names in WvW and translated race names
 ## Updating
 
 Settings shows the installed version and checks the GitHub releases for a newer one. When

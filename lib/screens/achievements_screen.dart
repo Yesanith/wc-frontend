@@ -129,7 +129,7 @@ class AchievementCategoryScreen extends ConsumerWidget {
         onRetry: () => ref.invalidate(categoryAchievementsProvider(category.id)),
         builder: (list) {
           if (list.isEmpty) {
-            return Center(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)));
+            return EmptyNote(s.t('nothing_here'));
           }
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),

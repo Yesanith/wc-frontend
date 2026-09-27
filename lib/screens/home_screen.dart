@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/world_bosses.dart';
 import '../state/account.dart';
 import '../state/navigation.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -110,12 +111,15 @@ class _AccountHeader extends ConsumerWidget {
     final rank = wvw is Map ? asInt(wvw['rank']) : asInt(a['wvw_rank']);
     final created = '${a['created'] ?? ''}';
     final year = created.length >= 4 ? created.substring(0, 4) : '-';
+    // the home world, for accounts that still report one
+    final world = ref.watch(worldsProvider).valueOrNull?[asInt(a['world'])];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(s.t('welcome'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
         Text('${a['name'] ?? ''}', style: display(26)),
+        if (world != null) Text(world, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
         const SizedBox(height: 14),
         Panel(
           child: Column(

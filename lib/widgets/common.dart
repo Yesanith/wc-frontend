@@ -8,6 +8,7 @@ import '../api/gw2_api.dart';
 import '../l10n/strings.dart';
 import '../services/icon_cache.dart';
 import '../state/api.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 
@@ -566,5 +567,36 @@ class Pill extends StatelessWidget {
       decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(999)),
       child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
     );
+  }
+}
+
+/// an empty list, said with a quaggan from the api when one is at hand. the
+/// picture is picked from the message, so it stays the same on rebuilds
+class EmptyNote extends ConsumerWidget {
+  const EmptyNote(this.message, {super.key, this.center = true});
+
+  final String message;
+  final bool center;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quaggans = ref.watch(quaggansProvider).valueOrNull ?? const <String>[];
+    final url = quaggans.isEmpty ? null : quaggans[message.hashCode.abs() % quaggans.length];
+    final text = Text(
+      message,
+      textAlign: center ? TextAlign.center : TextAlign.start,
+      style: const TextStyle(color: AppColors.muted, height: 1.4),
+    );
+    if (url == null) return center ? Center(child: text) : text;
+    final column = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      children: [
+        SizedBox(width: 96, height: 96, child: CachedIcon(url: url, fit: BoxFit.contain)),
+        const SizedBox(height: 8),
+        text,
+      ],
+    );
+    return center ? Center(child: column) : column;
   }
 }

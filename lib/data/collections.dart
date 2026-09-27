@@ -28,7 +28,7 @@ const collectionKinds = <CollectionKind>[
   CollectionKind('mail_carriers', '/account/mailcarriers', '/mailcarriers'),
   CollectionKind('titles', '/account/titles', '/titles'),
   CollectionKind('emotes', '/account/emotes', '/emotes'),
-  CollectionKind('wardrobe', '/account/skins', '/skins', hasDetails: false),
+  CollectionKind('wardrobe', '/account/skins', '/skins'),
   CollectionKind('home_cats', '/account/home/cats', '/home/cats'),
   CollectionKind('home_nodes', '/account/home/nodes', '/home/nodes', hasDetails: false),
   CollectionKind('homestead_decorations', '/account/homestead/decorations', '/homestead/decorations'),

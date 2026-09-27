@@ -15,6 +15,7 @@ enum AppSection {
   bosses,
   maps,
   recipes,
+  professions,
   wiki,
   settings
 }

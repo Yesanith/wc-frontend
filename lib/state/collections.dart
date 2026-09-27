@@ -56,11 +56,45 @@ final collectionProgressProvider = FutureProvider.autoDispose.family<CollectionP
 });
 
 class CollectionEntry {
-  const CollectionEntry(this.id, this.name, this.icon, this.unlocked);
+  const CollectionEntry(this.id, this.name, this.icon, this.unlocked, {this.rarity, this.type, this.subtype});
   final String id;
   final String name;
   final String? icon;
   final bool unlocked;
+  final String? rarity;
+
+  /// wardrobe skins only: Armor, Weapon, Back or Gathering
+  final String? type;
+
+  /// wardrobe skins only: the slot or weapon, such as Helm or Greatsword,
+  /// with the weight class for armour ("Helm · Heavy")
+  final String? subtype;
+}
+
+/// the few fields a wardrobe skin needs. there are well over ten thousand,
+/// the full entries would make the cache several times larger
+Json compactSkin(Json raw) {
+  final details = raw['details'] is Map ? raw['details'] as Map : const {};
+  return {
+    'id': raw['id'],
+    'name': raw['name'],
+    'icon': raw['icon'],
+    'rarity': raw['rarity'],
+    'type': raw['type'],
+    'details': {
+      if (details['type'] != null) 'type': details['type'],
+      if (details['weight_class'] != null) 'weight_class': details['weight_class'],
+    },
+  };
+}
+
+/// "Helm · Heavy", "Greatsword", or null when a skin carries no details
+String? skinSubtype(Json? raw) {
+  final details = raw?['details'];
+  if (details is! Map || details['type'] == null) return null;
+  final weight = details['weight_class'];
+  final slot = titleCase('${details['type']}');
+  return weight == null || weight == 'Clothing' ? slot : '$slot · $weight';
 }
 
 /// every entry of a collection with its unlock state. details are cached
@@ -79,7 +113,11 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
     cache,
     'collection_${kind.key}_${lang.apiLang}',
     'rows',
-    () async => kind.key == 'pvp_heroes' ? await _heroSkins(api) : await api.details(kind.staticPath, ids),
+    () async => switch (kind.key) {
+      'pvp_heroes' => await _heroSkins(api),
+      'wardrobe' => [for (final r in await api.details(kind.staticPath, ids)) compactSkin(r)],
+      _ => await api.details(kind.staticPath, ids),
+    },
   );
   final rows = raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 
@@ -110,7 +148,16 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
   for (final id in ids) {
     var name = (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id);
     if (name.isEmpty || placeholder.hasMatch(name)) name = '';
-    entries.add(CollectionEntry(id, name, byId[id]?['icon'] as String?, unlocked.contains(id)));
+    final row = byId[id];
+    entries.add(CollectionEntry(
+      id,
+      name,
+      row?['icon'] as String?,
+      unlocked.contains(id),
+      rarity: row?['rarity'] as String?,
+      type: kind.key == 'wardrobe' ? (row?['type'] as String?) : null,
+      subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
+    ));
   }
   // unnamed entries go last instead of bunching up at the top
   entries.sort((a, b) {

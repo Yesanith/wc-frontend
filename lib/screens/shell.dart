@@ -18,6 +18,7 @@ import 'collections_screen.dart';
 import 'events_screen.dart';
 import 'guilds_screen.dart';
 import 'home_screen.dart';
+import 'professions_screen.dart';
 import 'progression_screen.dart';
 import 'recipes_screen.dart';
 import 'settings_screen.dart';
@@ -42,6 +43,7 @@ const _titleKeys = {
   AppSection.bosses: 'world_bosses',
   AppSection.maps: 'maps',
   AppSection.recipes: 'recipes',
+  AppSection.professions: 'professions',
   AppSection.wiki: 'nav_wiki',
   AppSection.settings: 'nav_settings',
 };
@@ -60,6 +62,7 @@ const _icons = {
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
   AppSection.maps: (Icons.map_outlined, Icons.map),
   AppSection.recipes: (Icons.account_tree_outlined, Icons.account_tree),
+  AppSection.professions: (Icons.school_outlined, Icons.school),
   AppSection.wiki: (Icons.menu_book_outlined, Icons.menu_book),
   AppSection.settings: (Icons.settings_outlined, Icons.settings),
 };
@@ -78,6 +81,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.bosses => const EventsScreen(embedded: true),
       AppSection.maps => const WorldMapScreen(),
       AppSection.recipes => const RecipesScreen(),
+      AppSection.professions => const ProfessionsScreen(),
       AppSection.wiki => const WikiScreen(),
       AppSection.settings => const SettingsScreen(),
     };

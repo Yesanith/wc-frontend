@@ -49,7 +49,7 @@ class _MasteriesTab extends ConsumerWidget {
             onRetry: () => ref.invalidate(masteriesProvider),
             builder: (list) {
               if (list.isEmpty) {
-                return Panel(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)));
+                return Panel(child: EmptyNote(s.t('nothing_here'), center: false));
               }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
