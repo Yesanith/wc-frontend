@@ -53,7 +53,7 @@ class _ProfessionCard extends StatelessWidget {
         MaterialPageRoute<void>(builder: (_) => ProfessionDetailScreen(id: p.id)),
       ),
       padding: const EdgeInsets.all(14),
-      radius: 16,
+      radius: AppRadius.card,
       child: Row(
         children: [
           ProfessionIcon(url: p.iconBig ?? p.icon, size: 44),

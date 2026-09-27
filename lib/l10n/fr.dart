@@ -460,4 +460,17 @@ const frStrings = <String, String>{
   'price_history_note':
       'Enregistré sur ce téléphone, un point par jour où l\'app a vu le prix. Les objets suivis sont mis à jour à chaque lancement.',
   'pinned_achievements': 'Succès épinglés',
+  'about': 'À propos',
+  'about_by': 'par {name}',
+  'about_summary':
+      'Un compagnon non officiel pour Guild Wars 2 : vos personnages, votre compte, le comptoir, les succès et la carte du monde, directement depuis l\'API officielle.',
+  'about_community': 'Communauté',
+  'about_github': 'GitHub',
+  'about_github_note': 'Le code source, les versions et chaque apk.',
+  'about_issue': 'Signaler un problème',
+  'about_issue_note': 'Quelque chose ne va pas, ou manque.',
+  'about_credits': 'Crédits',
+  'about_credit_dev': 'Développé par {name}',
+  'about_credit_data': 'Données du jeu, icônes et tuiles de carte issues de l\'API officielle de Guild Wars 2',
+  'about_credit_design': 'Apparence partagée avec Regions of XIV, dont l\'interface est signée XeldarAlz',
 };

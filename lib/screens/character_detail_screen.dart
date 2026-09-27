@@ -250,7 +250,7 @@ class _EquipmentRow extends ConsumerWidget {
     return Material(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         side: const BorderSide(color: AppColors.line),
       ),
       clipBehavior: Clip.antiAlias,
@@ -542,7 +542,7 @@ class _LearnedRecipesCard extends ConsumerWidget {
                 ),
               ),
       padding: const EdgeInsets.all(16),
-      radius: 16,
+      radius: AppRadius.card,
       child: Row(
         children: [
           const Icon(Icons.menu_book_outlined, color: AppColors.gold),

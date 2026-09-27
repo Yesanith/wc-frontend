@@ -531,7 +531,7 @@ class _SearchBox extends StatelessWidget {
       children: [
         Material(
           color: AppColors.surface.withValues(alpha: 0.95),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           child: TextField(
             controller: controller,
             focusNode: focus,
@@ -545,7 +545,7 @@ class _SearchBox extends StatelessWidget {
             constraints: const BoxConstraints(maxHeight: 320),
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(AppRadius.card),
               border: Border.all(color: AppColors.line),
             ),
             child: ListView.builder(
