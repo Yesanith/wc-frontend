@@ -54,6 +54,9 @@ class _ObjectiveRow extends StatelessWidget {
         children: [
           Row(
             children: [
+              // which part of the game the objective asks for
+              Icon(_trackIcon('${o['track'] ?? ''}'), size: 16, color: done ? AppColors.muted : AppColors.gold),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   '${o['title'] ?? ''}',
@@ -76,3 +79,9 @@ class _ObjectiveRow extends StatelessWidget {
     );
   }
 }
+
+IconData _trackIcon(String track) => switch (track) {
+      'PvP' => Icons.sports_kabaddi,
+      'WvW' => Icons.fort_outlined,
+      _ => Icons.terrain_outlined,
+    };

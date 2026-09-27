@@ -24,35 +24,22 @@ class AccountScreen extends ConsumerWidget {
       length: 5,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 12, 0),
-            child: Row(
-              children: [
-                const Spacer(),
-                IconButton(
-                  tooltip: s.t('refresh'),
-                  onPressed: () {
-                    ref.invalidate(walletProvider);
-                    ref.invalidate(bankProvider);
-                    ref.invalidate(materialGroupsProvider);
-                  },
-                  icon: const Icon(Icons.refresh, color: AppColors.gold),
-                ),
-              ],
-            ),
-          ),
+          // refreshing is a pull on each tab, a row of its own above the
+          // tabs only left an empty band
           AppTabBar(
             scrollable: true,
             labels: [s.t('wallet'), s.t('bank'), s.t('materials'), s.t('armory'), s.t('builds')],
           ),
-          const Expanded(
+          Expanded(
             child: TabBarView(
               children: [
-                _WalletTab(),
-                _BankTab(),
-                _MaterialsTab(),
-                _ArmoryTab(),
-                _BuildsTab(),
+                _Pull(
+                    providers: [walletProvider, accountLuckProvider, accountProgressionProvider],
+                    child: const _WalletTab()),
+                _Pull(providers: [bankProvider], child: const _BankTab()),
+                _Pull(providers: [materialGroupsProvider], child: const _MaterialsTab()),
+                _Pull(providers: [armoryProvider], child: const _ArmoryTab()),
+                _Pull(providers: [buildStorageProvider], child: const _BuildsTab()),
               ],
             ),
           ),
@@ -86,9 +73,9 @@ class _WalletTab extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: const Color(0xFF1C1810),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFF5A4A2A)),
+                color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
+                borderRadius: BorderRadius.circular(AppRadius.window),
+                border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,36 +222,69 @@ class _MaterialsTab extends ConsumerWidget {
         if (list.isEmpty) {
           return Center(child: Text(s.t('materials_empty'), style: const TextStyle(color: AppColors.muted)));
         }
-        // one grid per storage category, like the game shows it
+        // one grid per storage category, like the game shows it. a tap on a
+        // category's title folds it away, and the choice is remembered
+        final collapsed = ref.watch(collapsedMaterialsProvider);
+        final allFolded = list.every((g) => collapsed.contains(g.id));
         return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           children: [
-            for (final g in list) ...[
-              SectionHeader(title: g.name == '?' ? s.t('other') : g.name, trailing: '${g.slots.length}'),
-              const SizedBox(height: 10),
-              GridView.count(
-                crossAxisCount: 6,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
-                children: [
-                  for (final m in g.slots)
-                    GestureDetector(
-                      onTap: () => showItemSheet(
-                        context,
-                        id: m.id,
-                        name: m.name,
-                        icon: m.icon,
-                        rarity: m.rarity,
-                        type: m.type,
-                        count: m.count,
-                      ),
-                      child: ItemIcon(url: m.icon, rarity: m.rarity, count: m.count),
-                    ),
-                ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () => ref
+                    .read(collapsedMaterialsProvider.notifier)
+                    .setAll(allFolded ? <int>{} : {for (final g in list) g.id}),
+                icon: Icon(allFolded ? Icons.unfold_more : Icons.unfold_less, size: 18),
+                label: Text(s.t(allFolded ? 'expand_all' : 'collapse_all')),
               ),
-              const SizedBox(height: 20),
+            ),
+            for (final g in list) ...[
+              InkWell(
+                borderRadius: BorderRadius.circular(AppRadius.frame),
+                onTap: () => ref.read(collapsedMaterialsProvider.notifier).toggle(g.id),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child:
+                            SectionHeader(title: g.name == '?' ? s.t('other') : g.name, trailing: '${g.slots.length}'),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(collapsed.contains(g.id) ? Icons.expand_more : Icons.expand_less, color: AppColors.muted),
+                    ],
+                  ),
+                ),
+              ),
+              if (collapsed.contains(g.id))
+                const SizedBox(height: 6)
+              else ...[
+                const SizedBox(height: 6),
+                GridView.count(
+                  crossAxisCount: 6,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 6,
+                  children: [
+                    for (final m in g.slots)
+                      GestureDetector(
+                        onTap: () => showItemSheet(
+                          context,
+                          id: m.id,
+                          name: m.name,
+                          icon: m.icon,
+                          rarity: m.rarity,
+                          type: m.type,
+                          count: m.count,
+                        ),
+                        child: ItemIcon(url: m.icon, rarity: m.rarity, count: m.count),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+              ],
             ],
           ],
         );
@@ -423,6 +443,8 @@ class _AccountCounters extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Kicker(s.t('account_progress').toUpperCase()),
+          const SizedBox(height: 4),
+          Text(s.t('account_progress_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.muted)),
           const SizedBox(height: 8),
           for (final (label, value) in rows)
             Padding(
@@ -532,4 +554,21 @@ class _SparkPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _SparkPainter old) => old.values != values;
+}
+
+/// pull to refresh on one tab, dropping the cached values it reads
+class _Pull extends ConsumerWidget {
+  const _Pull({required this.providers, required this.child});
+
+  final List<ProviderOrFamily> providers;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return RefreshIndicator(
+      color: AppColors.gold,
+      onRefresh: () => refreshProviders(ref, providers),
+      child: child,
+    );
+  }
 }

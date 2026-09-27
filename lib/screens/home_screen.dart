@@ -188,25 +188,30 @@ class _WalletStrip extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     // wallet ids: 1 coin, 2 karma, 3 laurel
     final coins = Coins(_value(1));
-    return Row(
-      children: [
-        Expanded(
-          child: _MiniCard(
-            dot: AppColors.gold,
-            label: s.t('gold'),
-            value: '${fmtInt(coins.gold)} g',
-            sub: '${coins.silver} s ${coins.copper} c',
+    // the gold card has a second line for silver and copper, the row takes
+    // its height so all three cards come out the same size
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _MiniCard(
+              dot: AppColors.gold,
+              label: s.t('gold'),
+              value: '${fmtInt(coins.gold)} g',
+              sub: '${coins.silver} s ${coins.copper} c',
+            ),
           ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _MiniCard(dot: const Color(0xFFD58CF0), label: s.t('karma'), value: compact(_value(2))),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _MiniCard(dot: AppColors.green, label: s.t('laurels'), value: fmtInt(_value(3))),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: _MiniCard(dot: const Color(0xFFD58CF0), label: s.t('karma'), value: compact(_value(2))),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _MiniCard(dot: AppColors.green, label: s.t('laurels'), value: fmtInt(_value(3))),
+          ),
+        ],
+      ),
     );
   }
 }
