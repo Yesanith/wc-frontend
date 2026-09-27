@@ -1,7 +1,7 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
   'map_search': 'Buscar puntos de ruta, lugares, mapas',
-  'floor_n': 'Planta {n}',
+  'floor_n': 'Nivel {n}',
   'map_layers': 'Capas del mapa',
   'marker_waypoint': 'Punto de ruta',
   'marker_landmark': 'Punto de interés',

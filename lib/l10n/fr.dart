@@ -1,7 +1,7 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
   'map_search': 'Chercher points de passage, sites, cartes',
-  'floor_n': 'Étage {n}',
+  'floor_n': 'Niveau {n}',
   'map_layers': 'Couches de la carte',
   'marker_waypoint': 'Point de passage',
   'marker_landmark': 'Site remarquable',
