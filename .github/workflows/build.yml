@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # the recipe job can run for half an hour after a push. a release built
+      # the recipe job runs for a few minutes after a push. a release built
       # meanwhile would ship the old data, so wait for it first
       - name: Wait for the recipe data job
         env:
