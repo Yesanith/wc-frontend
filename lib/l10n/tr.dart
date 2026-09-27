@@ -481,4 +481,6 @@ const trStrings = <String, String>{
   'slot_FishingRod': 'Olta',
   'slot_FishingBait': 'Yem',
   'slot_FishingLure': 'Sahte yem',
+  'material_value': 'Tüm malzemelerin değeri',
+  'unpriced_materials': '{n} malzemenin ticaret merkezi fiyatı yok, hesaba katılmadı.',
 };

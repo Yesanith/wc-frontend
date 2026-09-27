@@ -44,6 +44,34 @@ class CraftLine {
   String get name => node.name;
 }
 
+/// the plan for [count] of [root] that uses what the account already owns.
+/// an intermediate the account has in stock is taken from there before the
+/// rest is crafted: fully covered, its branch is not expanded at all, so its
+/// materials are not asked for. stock is handed out top down and only once,
+/// so a gift that two branches need is not counted twice. the root itself is
+/// always crafted, that is what the page is for. raw materials keep their
+/// full count, the screen compares those against what the account owns
+CraftLine planWithStock(CraftNode root, int count, Map<int, int> owned) {
+  final stock = {...owned};
+
+  CraftLine walk(CraftNode node, int need, bool isRoot) {
+    if (node.isLeaf) return CraftLine(node, need, const []);
+    var toMake = need;
+    if (!isRoot) {
+      final have = stock[node.itemId] ?? 0;
+      final take = have < need ? have : need;
+      stock[node.itemId] = have - take;
+      toMake = need - take;
+    }
+    // everything already in the bank: the line stands as a finished piece
+    if (toMake <= 0) return CraftLine(node, need, const []);
+    final runs = node.outputCount <= 0 ? toMake : (toMake / node.outputCount).ceil();
+    return CraftLine(node, need, [for (final child in node.children) walk(child, child.perRun * runs, false)]);
+  }
+
+  return walk(root, count, true);
+}
+
 /// scaling happens on device, so changing the quantity never refetches
 CraftLine planFor(CraftNode node, int count) {
   final runs = node.outputCount <= 0 ? count : (count / node.outputCount).ceil();

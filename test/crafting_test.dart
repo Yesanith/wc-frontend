@@ -70,4 +70,54 @@ void main() {
       expect(craftLeaves(planFor(node(1), 3)), isEmpty);
     });
   });
+
+  group('planWithStock', () {
+    // item 1 is crafted from two of gift 2, each gift from 5 of ore 3
+    CraftNode tree() => node(1, children: [
+          node(2, perRun: 2, children: [node(3, perRun: 5)]),
+        ]);
+
+    test('without stock it is the plain plan', () {
+      final plan = planWithStock(tree(), 1, const {});
+      expect(craftLeaves(plan), {3: 10});
+    });
+
+    test('an owned intermediate covers its branch entirely', () {
+      final plan = planWithStock(tree(), 1, const {2: 2});
+      final gift = plan.children.single;
+      expect(gift.count, 2);
+      expect(gift.isLeaf, isTrue);
+      // the ore is no longer needed, the gifts stand in for it
+      expect(craftLeaves(plan), {2: 2});
+    });
+
+    test('a partly owned intermediate only crafts the rest', () {
+      final plan = planWithStock(tree(), 1, const {2: 1});
+      expect(craftLeaves(plan), {3: 5});
+    });
+
+    test('stock is handed out once, not to every branch that asks', () {
+      // two branches both want one of gift 2, the bank holds one
+      final root = node(1, children: [
+        node(4, children: [
+          node(2, children: [node(3, perRun: 5)])
+        ]),
+        node(5, children: [
+          node(2, children: [node(3, perRun: 5)])
+        ]),
+      ]);
+      final plan = planWithStock(root, 1, const {2: 1});
+      expect(craftLeaves(plan), {2: 1, 3: 5});
+    });
+
+    test('the root is crafted even when some are in the bank', () {
+      final plan = planWithStock(tree(), 1, const {1: 3});
+      expect(craftLeaves(plan), {3: 10});
+    });
+
+    test('raw materials keep their full count', () {
+      final plan = planWithStock(tree(), 1, const {3: 4});
+      expect(craftLeaves(plan), {3: 10});
+    });
+  });
 }

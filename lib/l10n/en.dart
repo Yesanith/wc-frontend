@@ -483,4 +483,6 @@ const enStrings = <String, String>{
   'slot_FishingRod': 'Fishing rod',
   'slot_FishingBait': 'Bait',
   'slot_FishingLure': 'Lure',
+  'material_value': 'Value of all materials',
+  'unpriced_materials': '{n} materials have no trading post price and are not counted.',
 };

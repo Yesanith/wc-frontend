@@ -484,4 +484,6 @@ const esStrings = <String, String>{
   'slot_FishingRod': 'Caña de pescar',
   'slot_FishingBait': 'Cebo',
   'slot_FishingLure': 'Señuelo',
+  'material_value': 'Valor de todos los materiales',
+  'unpriced_materials': '{n} materiales no tienen precio en el bazar y no se cuentan.',
 };
