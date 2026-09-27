@@ -231,8 +231,19 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
   int _gemAmount = 400;
   int _goldAmount = 100;
 
+  /// typing 10000 would ask the exchange five times, the last number is enough
+  Timer? _debounce;
+
+  void _later(void Function() update) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      if (mounted) setState(update);
+    });
+  }
+
   @override
   void dispose() {
+    _debounce?.cancel();
     _gems.dispose();
     _gold.dispose();
     super.dispose();
@@ -260,7 +271,7 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onSubmitted: (v) => setState(() => _gemAmount = int.tryParse(v) ?? 0),
-                  onChanged: (v) => setState(() => _gemAmount = int.tryParse(v) ?? 0),
+                  onChanged: (v) => _later(() => _gemAmount = int.tryParse(v) ?? 0),
                   decoration: fieldDecoration(s.t('gems')),
                 ),
               ),
@@ -290,7 +301,7 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onSubmitted: (v) => setState(() => _goldAmount = int.tryParse(v) ?? 0),
-                  onChanged: (v) => setState(() => _goldAmount = int.tryParse(v) ?? 0),
+                  onChanged: (v) => _later(() => _goldAmount = int.tryParse(v) ?? 0),
                   decoration: fieldDecoration(s.t('gold')),
                 ),
               ),

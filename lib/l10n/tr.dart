@@ -475,4 +475,10 @@ const trStrings = <String, String>{
   'expand_all': 'Tümünü aç',
   'collapse_all': 'Tümünü kapat',
   'hard_event': 'Zor',
+  'slot_PowerCore': 'Jade Bot çekirdeği',
+  'slot_SensoryArray': 'Algılayıcı dizisi',
+  'slot_ServiceChip': 'Hizmet çipi',
+  'slot_FishingRod': 'Olta',
+  'slot_FishingBait': 'Yem',
+  'slot_FishingLure': 'Sahte yem',
 };

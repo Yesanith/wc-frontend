@@ -119,7 +119,10 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 for (final e in expansionsWithBosses) ...[
                   const SizedBox(width: 8),
                   ChoiceChip(
-                    avatar: Text(e.code, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: e.color)),
+                    // the avatar slot is a small square, the letters scale into it
+                    avatar: FittedBox(
+                      child: Text(e.code, style: TextStyle(fontWeight: FontWeight.w800, color: e.color)),
+                    ),
                     label: Text(e.label),
                     selected: _expansion == e,
                     onSelected: (_) => setState(() => _expansion = e),

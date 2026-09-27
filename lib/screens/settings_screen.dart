@@ -18,28 +18,9 @@ class SettingsScreen extends ConsumerWidget {
 
   Future<void> _import(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
-    final ctrl = TextEditingController();
-    String? text;
-    try {
-      text = await showDialog<String>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          backgroundColor: AppColors.surface,
-          title: Text(s.t('import_backup')),
-          content: TextField(
-            controller: ctrl,
-            maxLines: 6,
-            decoration: fieldDecoration(s.t('import_hint')),
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
-            FilledButton(onPressed: () => Navigator.of(ctx).pop(ctrl.text), child: Text(s.t('import_backup'))),
-          ],
-        ),
-      );
-    } finally {
-      ctrl.dispose();
-    }
+    // the dialog owns its text field's controller: disposing it here, as soon
+    // as the dialog returned, broke the field while the dialog animated out
+    final text = await showDialog<String>(context: context, builder: (_) => _ImportDialog(s: s));
     if (text == null || text.trim().isEmpty) return;
     var message = s.t('imported');
     try {
@@ -55,6 +36,8 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> _clearCache(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
     await clearCache(ref.read(diskCacheProvider));
+    // the copy in memory too, otherwise the next save writes it straight back
+    ref.read(gw2ApiProvider).clearStaticCaches();
     await ref.read(iconCacheProvider)?.clear();
     if (context.mounted) {
       showToast(context, s.t('cache_cleared'));
@@ -357,6 +340,44 @@ class _AccountsPanel extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// the paste field for a backup, which disposes its own controller once the
+/// dialog is gone
+class _ImportDialog extends StatefulWidget {
+  const _ImportDialog({required this.s});
+
+  final S s;
+
+  @override
+  State<_ImportDialog> createState() => _ImportDialogState();
+}
+
+class _ImportDialogState extends State<_ImportDialog> {
+  final _ctrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.s;
+    return AlertDialog(
+      title: Text(s.t('import_backup')),
+      content: TextField(
+        controller: _ctrl,
+        maxLines: 6,
+        decoration: fieldDecoration(s.t('import_hint')),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('cancel'))),
+        FilledButton(onPressed: () => Navigator.of(context).pop(_ctrl.text), child: Text(s.t('import_backup'))),
+      ],
     );
   }
 }

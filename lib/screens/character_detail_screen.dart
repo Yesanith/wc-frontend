@@ -24,8 +24,17 @@ const _slotOrder = [
   'Helm', 'Shoulders', 'Coat', 'Gloves', 'Leggings', 'Boots', //
   'WeaponA1', 'WeaponA2', 'WeaponB1', 'WeaponB2', //
   'Backpack', 'Accessory1', 'Accessory2', 'Amulet', 'Ring1', 'Ring2', 'Relic', //
-  'HelmAquatic', 'WeaponAquaticA', 'WeaponAquaticB', 'Sickle', 'Axe', 'Pick',
+  'HelmAquatic', 'WeaponAquaticA', 'WeaponAquaticB', 'Sickle', 'Axe', 'Pick', //
+  'PowerCore', 'SensoryArray', 'ServiceChip', 'FishingRod', 'FishingBait', 'FishingLure',
 ];
+
+/// a slot's name in the app's language. a slot the tables do not know yet,
+/// from a newer release, reads as its api name split into words
+String slotLabel(S s, String slot) {
+  final key = 'slot_$slot';
+  final text = s.t(key);
+  return text == key ? slot.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}') : text;
+}
 
 int _slotIndex(String slot) {
   final i = _slotOrder.indexOf(slot);
@@ -269,7 +278,7 @@ class _EquipmentRow extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(s.t('slot_$slot').toUpperCase(),
+                    Text(slotLabel(s, slot).toUpperCase(),
                         style: const TextStyle(
                             fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                     const SizedBox(height: 2),
@@ -280,18 +289,16 @@ class _EquipmentRow extends ConsumerWidget {
                     if (rarity != null || statName.isNotEmpty)
                       Text([if (rarity != null) rarity, if (statName.isNotEmpty) statName].join(' · '),
                           style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: rarityColor(rarity))),
+                    // two sigils and a few infusions do not fit on one line, so
+                    // they wrap instead of running off the card
                     if (upgrades.isNotEmpty || infusions.isNotEmpty) ...[
                       const SizedBox(height: 6),
-                      Row(
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
                         children: [
-                          for (final u in upgrades) ...[
-                            _SmallItem(itemId: u),
-                            const SizedBox(width: 4),
-                          ],
-                          for (final i in infusions) ...[
-                            _SmallItem(itemId: i),
-                            const SizedBox(width: 4),
-                          ],
+                          for (final u in upgrades) _SmallItem(itemId: u),
+                          for (final i in infusions) _SmallItem(itemId: i),
                         ],
                       ),
                     ],

@@ -84,10 +84,14 @@ final wealthProvider = NotifierProvider<WealthNotifier, Map<String, List<WealthP
 int? changeOver(List<WealthPoint> points, int days, int Function(WealthPoint) pick) {
   if (points.length < 2) return null;
   final last = points.last;
-  final target = DateTime.parse(last.day).subtract(Duration(days: days));
+  // a day that does not parse, from a hand edited backup, is skipped
+  final lastDay = DateTime.tryParse(last.day);
+  if (lastDay == null) return null;
+  final target = lastDay.subtract(Duration(days: days));
   WealthPoint? base;
   for (final p in points) {
-    if (!DateTime.parse(p.day).isAfter(target)) base = p;
+    final day = DateTime.tryParse(p.day);
+    if (day != null && !day.isAfter(target)) base = p;
   }
   base ??= points.first == last ? null : points.first;
   return base == null ? null : pick(last) - pick(base);

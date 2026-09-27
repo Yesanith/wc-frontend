@@ -135,9 +135,10 @@ final materialGroupsProvider = FutureProvider<List<MaterialGroup>>((ref) async {
     groups.add(MaterialGroup('${c['name'] ?? ''}', slots, id: asInt(c['id'])));
   }
   // anything in a category the reference data does not know yet
-  for (final slots in byCategory.values) {
-    slots.sort((a, b) => b.count.compareTo(a.count));
-    groups.add(MaterialGroup('?', slots));
+  // each keeps its own category id, so folding one does not fold them all
+  for (final e in byCategory.entries) {
+    e.value.sort((a, b) => b.count.compareTo(a.count));
+    groups.add(MaterialGroup('?', e.value, id: e.key));
   }
   return groups;
 });

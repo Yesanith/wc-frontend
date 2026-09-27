@@ -69,8 +69,16 @@ class SyncNotifier extends Notifier<SyncState> {
   @override
   SyncState build() => const SyncState();
 
+  /// a run asked for while one was going, such as after a key switch. the
+  /// running one still works for the previous key, so another follows it
+  bool _again = false;
+
   Future<void> run() async {
-    if (state.running) return;
+    if (state.running) {
+      _again = true;
+      return;
+    }
+    _again = false;
     final api = ref.read(gw2ApiProvider);
     if ((api.apiKey ?? '').isEmpty) return;
 
@@ -130,6 +138,7 @@ class SyncNotifier extends Notifier<SyncState> {
       finishedAt: DateTime.now(),
     );
     ref.read(accountRevisionProvider.notifier).state++;
+    if (_again) await run();
   }
 
   Future<List<String>> _guildIds(Gw2Api api) async {

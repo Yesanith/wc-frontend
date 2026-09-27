@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tyria_codex/l10n/strings.dart';
+import 'package:tyria_codex/screens/character_detail_screen.dart';
 import 'package:tyria_codex/services/recipe_book.dart';
 import 'package:tyria_codex/state/collections.dart';
 import 'package:tyria_codex/state/crafting.dart';
@@ -236,5 +238,15 @@ void main() {
     expect(wvwWorldNames(match, 'red', worlds), ['Anvil Rock']);
     expect(wvwWorldNames(match, 'blue', worlds), ['Desolation']);
     expect(wvwWorldNames(match, 'green', worlds), isEmpty);
+  });
+
+  test('slots have a name in every language, unknown ones read as words', () {
+    for (final lang in AppLang.values) {
+      final s = S(lang);
+      for (final slot in ['PowerCore', 'SensoryArray', 'ServiceChip', 'FishingRod', 'FishingBait', 'FishingLure']) {
+        expect(slotLabel(s, slot), isNot(startsWith('slot_')), reason: '${lang.code} $slot');
+      }
+      expect(slotLabel(s, 'GatheringToolkit'), 'Gathering Toolkit');
+    }
   });
 }

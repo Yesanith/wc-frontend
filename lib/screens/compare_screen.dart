@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/characters.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -95,8 +96,8 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
               ),
               _CompareRow(
                 label: s.t('crafting'),
-                left: _crafting(left),
-                right: _crafting(right),
+                left: _crafting(s, left),
+                right: _crafting(s, right),
               ),
               const SizedBox(height: 16),
               SectionHeader(title: s.t('equipment')),
@@ -117,10 +118,10 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
   }
 }
 
-String _crafting(Json c) {
+String _crafting(S s, Json c) {
   final rows = ((c['crafting'] as List?) ?? const []).whereType<Map>().toList();
   if (rows.isEmpty) return '-';
-  return rows.map((r) => '${r['discipline']} ${asInt(r['rating'])}').join('\n');
+  return rows.map((r) => '${disciplineLabel(s, '${r['discipline']}')} ${asInt(r['rating'])}').join('\n');
 }
 
 class _Head extends StatelessWidget {

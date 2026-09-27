@@ -61,8 +61,10 @@ final characterItemsProvider = FutureProvider.autoDispose.family<Map<int, Json>,
   final chars = await ref.watch(charactersProvider.future);
   final c = characterByName(chars, name);
   if (c == null) return <int, Json>{};
+  // every template's gear, the equipment tab lets you switch between them
   final ids = <int>{
-    for (final e in activeEquipment(c)) asInt(e['id']),
+    for (final e in (c['equipment'] as List?) ?? const [])
+      if (e is Map) asInt(e['id']),
     for (final s in bagSlots(c))
       if (s != null) asInt(s['id']),
   };

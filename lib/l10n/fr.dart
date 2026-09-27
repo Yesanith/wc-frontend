@@ -478,4 +478,10 @@ const frStrings = <String, String>{
   'expand_all': 'Tout déplier',
   'collapse_all': 'Tout replier',
   'hard_event': 'Difficile',
+  'slot_PowerCore': 'Noyau de robot de jade',
+  'slot_SensoryArray': 'Réseau sensoriel',
+  'slot_ServiceChip': 'Puce de service',
+  'slot_FishingRod': 'Canne à pêche',
+  'slot_FishingBait': 'Appât',
+  'slot_FishingLure': 'Leurre',
 };
