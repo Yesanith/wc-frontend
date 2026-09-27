@@ -150,6 +150,11 @@ map (the Path of Fire and Elona maps are on neither floor 0 nor 1), so each open
 read from its own default floor and the results are merged. The `Build recipe data` workflow
 regenerates it with the recipes.
 
+## Support
+
+Tyria Codex is free and has no ads. If it helps you, you can
+[buy me a coffee](https://buymeacoffee.com/yesanith). The link is also under Settings in the app.
+
 ## Disclaimer
 
 Tyria Codex is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,

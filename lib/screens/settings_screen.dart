@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/strings.dart';
 import '../services/backup.dart';
@@ -140,6 +141,8 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
         ),
+        const SizedBox(height: 16),
+        const _SupportPanel(),
         const SizedBox(height: 22),
         const _UpdatePanel(),
         const SizedBox(height: 22),
@@ -356,6 +359,48 @@ class _AccountsPanel extends ConsumerWidget {
             ),
             icon: const Icon(Icons.add, size: 18),
             label: Text(s.t('add_account')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// where people who like the app can chip in
+const supportUrl = 'https://buymeacoffee.com/yesanith';
+
+class _SupportPanel extends ConsumerWidget {
+  const _SupportPanel();
+
+  Future<void> _open(BuildContext context, WidgetRef ref) async {
+    // the phone's own browser, where people are already signed in to pay
+    var ok = false;
+    try {
+      ok = await launchUrl(Uri.parse(supportUrl), mode: LaunchMode.externalApplication);
+    } catch (_) {
+      ok = false;
+    }
+    if (!ok && context.mounted) await openUrl(context, supportUrl);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('support').toUpperCase()),
+          const SizedBox(height: 8),
+          Text(s.t('support_note'), style: const TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => _open(context, ref),
+              icon: const Icon(Icons.coffee_outlined, size: 18),
+              label: Text(s.t('buy_coffee')),
+            ),
           ),
         ],
       ),

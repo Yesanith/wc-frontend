@@ -447,4 +447,7 @@ const trStrings = <String, String>{
   'learned_recipes': 'Öğrenilen tarifler',
   'learned_recipes_of': '{name} tarifleri',
   'professions': 'Meslekler',
+  'support': 'Destek ol',
+  'support_note': 'Tyria Codex ücretsiz ve reklamsız. İşine yarıyorsa bana bir kahve ısmarlayabilirsin.',
+  'buy_coffee': 'Bana bir kahve ısmarla',
 };

@@ -449,4 +449,7 @@ const deStrings = <String, String>{
   'learned_recipes': 'Erlernte Rezepte',
   'learned_recipes_of': 'Rezepte von {name}',
   'professions': 'Klassen',
+  'support': 'Unterstützen',
+  'support_note': 'Tyria Codex ist kostenlos und werbefrei. Wenn es dir hilft, kannst du mir einen Kaffee spendieren.',
+  'buy_coffee': 'Spendier mir einen Kaffee',
 };
