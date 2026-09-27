@@ -17,7 +17,8 @@ enum AppSection {
   recipes,
   professions,
   wiki,
-  settings
+  settings,
+  about
 }
 
 final sectionProvider = StateProvider<AppSection>((ref) => AppSection.home);

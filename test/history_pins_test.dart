@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tyria_codex/data/world_bosses.dart';
 import 'package:tyria_codex/state/price_history.dart';
 import 'package:tyria_codex/state/progression.dart';
 import 'package:tyria_codex/state/settings.dart';
+import 'package:tyria_codex/widgets/expansion_badge.dart';
 
 Future<ProviderContainer> _container([Map<String, Object> prefs = const {}]) async {
   SharedPreferences.setMockInitialValues(prefs);
@@ -110,5 +112,24 @@ void main() {
       expect((fresh.current, fresh.max, fresh.done), (0, 20, false));
       expect(achievementRowFor(1, detail, {'current': 20, 'max': 20, 'done': true}).done, isTrue);
     });
+  });
+
+  test('folded material categories are remembered', () async {
+    final c = await _container();
+    final folded = c.read(collapsedMaterialsProvider.notifier);
+    await folded.toggle(5);
+    await folded.toggle(9);
+    await folded.toggle(5);
+    expect(c.read(collapsedMaterialsProvider), {9});
+    await folded.setAll({1, 2, 3});
+    final prefs = await SharedPreferences.getInstance();
+    final again = ProviderContainer(overrides: [prefsProvider.overrideWithValue(prefs)]);
+    addTearDown(again.dispose);
+    expect(again.read(collapsedMaterialsProvider), {1, 2, 3});
+  });
+
+  test('every release has its own badge letters', () {
+    final codes = [for (final e in Expansion.values) e.code];
+    expect(codes.toSet(), hasLength(codes.length));
   });
 }

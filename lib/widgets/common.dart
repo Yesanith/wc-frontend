@@ -24,7 +24,7 @@ class Panel extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: AppColors.line),
       ),
       child: child,
@@ -50,7 +50,7 @@ class AppCard extends StatelessWidget {
     required this.child,
     this.onTap,
     this.padding = const EdgeInsets.all(14),
-    this.radius = 14,
+    this.radius = AppRadius.card,
   });
 
   final Widget child;
@@ -139,14 +139,21 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // the plugin's tab strip: bright text on the picked tab over a short
+    // gold underline, the rest dimmed, and a hairline under the whole row
     return TabBar(
       isScrollable: scrollable,
       tabAlignment: scrollable ? TabAlignment.start : null,
-      labelColor: AppColors.gold,
+      labelColor: AppColors.text,
       unselectedLabelColor: AppColors.muted,
-      indicatorColor: AppColors.gold,
-      dividerColor: AppColors.track,
-      labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
+      dividerColor: AppColors.hairline,
+      indicatorSize: TabBarIndicatorSize.label,
+      indicator: const UnderlineTabIndicator(
+        borderSide: BorderSide(color: AppColors.gold, width: 2.5),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(2)),
+      ),
+      labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
       tabs: [for (final label in labels) Tab(text: label)],
     );
   }
@@ -204,8 +211,9 @@ class _EmblemPainter extends CustomPainter {
       oldDelegate.color != color || oldDelegate.filled != filled;
 }
 
+/// the small capitals over a card, like LIVE PREVIEW in the plugin
 class Kicker extends StatelessWidget {
-  const Kicker(this.text, {super.key, this.color = AppColors.gold});
+  const Kicker(this.text, {super.key, this.color = AppColors.textSoft});
 
   final String text;
   final Color color;
@@ -214,7 +222,7 @@ class Kicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: color),
+      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: color),
     );
   }
 }
@@ -228,11 +236,12 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = trailing;
+    // a group title above its card, as the plugin's settings pages have them
     return Row(
       children: [
-        Expanded(child: Text(title, style: display(18))),
+        Expanded(child: Text(title, style: display(16))),
         if (t != null)
-          Text(t, style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w800, fontSize: 14)),
+          Text(t, style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13)),
       ],
     );
   }
@@ -251,7 +260,7 @@ class StatTile extends StatelessWidget {
       children: [
         Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
         const SizedBox(height: 2),
-        Text(value, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
+        Text(value, style: display(21)),
       ],
     );
   }
@@ -408,7 +417,7 @@ class Bar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(3),
+      borderRadius: BorderRadius.circular(999),
       child: LinearProgressIndicator(
         value: value.clamp(0.0, 1.0).toDouble(),
         minHeight: 6,
@@ -562,10 +571,16 @@ class Pill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // a coloured pill carries a faint rim of its own colour, as the plugin's do
+    final tinted = color != AppColors.textSoft;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(999)),
-      child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+        color: tinted ? color.withValues(alpha: 0.12) : background,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: tinted ? color.withValues(alpha: 0.4) : AppColors.line),
+      ),
+      child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: color)),
     );
   }
 }
@@ -599,4 +614,247 @@ class EmptyNote extends ConsumerWidget {
     );
     return center ? Center(child: column) : column;
   }
+}
+
+/// the title of a page with a line on what it is for, and a hairline under
+/// both, as each page of the plugin's settings window opens
+class PageHeader extends StatelessWidget {
+  const PageHeader({super.key, required this.title, this.subtitle});
+
+  final String title;
+  final String? subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final sub = subtitle;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: display(20)),
+          if (sub != null) ...[
+            const SizedBox(height: 5),
+            Text(sub, style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted)),
+          ],
+          const SizedBox(height: 12),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+}
+
+/// a titled card of rows split by hairlines, the plugin's settings group
+class SettingsGroup extends StatelessWidget {
+  const SettingsGroup({super.key, required this.title, this.caption, required this.children});
+
+  final String title;
+  final String? caption;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final cap = caption;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(title, style: display(16)),
+          if (cap != null) ...[
+            const SizedBox(height: 4),
+            Text(cap, style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+          ],
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(color: AppColors.line),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i < children.length; i++) ...[
+                  if (i > 0) const Divider(indent: 14, endIndent: 14),
+                  children[i],
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// one row of a [SettingsGroup]: a label, an optional note under it and a
+/// control on the right
+class SettingsRow extends StatelessWidget {
+  const SettingsRow({super.key, required this.label, this.note, this.trailing, this.onTap});
+
+  final String label;
+  final String? note;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final n = note;
+    final end = trailing;
+    final body = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                if (n != null) Text(n, style: const TextStyle(fontSize: 12, height: 1.35, color: AppColors.muted)),
+              ],
+            ),
+          ),
+          if (end != null) ...[const SizedBox(width: 12), end],
+        ],
+      ),
+    );
+    return onTap == null ? body : InkWell(onTap: onTap, child: body);
+  }
+}
+
+/// a note with an accent bar down its left edge, the plugin's notice card
+class NoticeCard extends StatelessWidget {
+  const NoticeCard({super.key, required this.text, this.icon = Icons.info_outline, this.accent = AppColors.amber});
+
+  final String text;
+  final IconData icon;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.09),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: accent.withValues(alpha: 0.35)),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(width: 3, color: accent.withValues(alpha: 0.85)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 11, 14, 11),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(icon, size: 18, color: Color.lerp(accent, Colors.white, 0.2)),
+                    const SizedBox(width: 11),
+                    Expanded(
+                      child: Text(text, style: const TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// the version in a small outlined pill, as beside the plugin's name
+class VersionPill extends StatelessWidget {
+  const VersionPill(this.version, {super.key});
+
+  final String version;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.surface2,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: AppColors.line),
+      ),
+      child:
+          Text(version, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSoft)),
+    );
+  }
+}
+
+/// the night sky the plugin paints behind its live preview: a deep blue
+/// fading to black with a scatter of four pointed stars. the stars sit in
+/// the same places every time, from a fixed seed
+class StageHero extends StatelessWidget {
+  const StageHero({super.key, required this.child, this.padding = const EdgeInsets.fromLTRB(18, 18, 18, 16)});
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppRadius.window),
+        border: Border.all(color: AppColors.line),
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [AppColors.skyTop, AppColors.skyBottom],
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: CustomPaint(
+        painter: const _StarsPainter(),
+        child: Padding(padding: padding, child: child),
+      ),
+    );
+  }
+}
+
+class _StarsPainter extends CustomPainter {
+  const _StarsPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // a small linear congruential generator, so the sky is the same on every build
+    var seed = 20260926;
+    double next() {
+      seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+      return seed / 0x7fffffff;
+    }
+
+    final count = (size.width * size.height / 2600).clamp(14, 60).round();
+    for (var i = 0; i < count; i++) {
+      final at = Offset(next() * size.width, next() * size.height);
+      final big = next() > 0.82;
+      final r = big ? 3.2 + next() * 1.6 : 0.9 + next() * 0.8;
+      final alpha = big ? 0.9 : 0.35 + next() * 0.4;
+      final paint = Paint()..color = Colors.white.withValues(alpha: alpha);
+      if (big) {
+        // a four pointed sparkle
+        final path = Path()
+          ..moveTo(at.dx, at.dy - r)
+          ..quadraticBezierTo(at.dx, at.dy, at.dx + r, at.dy)
+          ..quadraticBezierTo(at.dx, at.dy, at.dx, at.dy + r)
+          ..quadraticBezierTo(at.dx, at.dy, at.dx - r, at.dy)
+          ..quadraticBezierTo(at.dx, at.dy, at.dx, at.dy - r)
+          ..close();
+        canvas.drawPath(path, paint);
+      } else {
+        canvas.drawCircle(at, r * 0.6, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _StarsPainter oldDelegate) => false;
 }

@@ -109,3 +109,28 @@ class CharacterSortNotifier extends Notifier<CharacterSort> {
 }
 
 final characterSortProvider = NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);
+
+/// material storage categories folded away on the account screen, by id
+class CollapsedMaterialsNotifier extends Notifier<Set<int>> {
+  static const _key = 'collapsed_materials';
+
+  @override
+  Set<int> build() => {
+        for (final e in ref.read(prefsProvider).getStringList(_key) ?? const <String>[])
+          if (int.tryParse(e) != null) int.parse(e),
+      };
+
+  Future<void> toggle(int id) async {
+    final next = {...state};
+    if (!next.remove(id)) next.add(id);
+    await setAll(next);
+  }
+
+  Future<void> setAll(Set<int> ids) async {
+    state = ids;
+    await ref.read(prefsProvider).setStringList(_key, ids.map((e) => '$e').toList());
+  }
+}
+
+final collapsedMaterialsProvider =
+    NotifierProvider<CollapsedMaterialsNotifier, Set<int>>(CollapsedMaterialsNotifier.new);
