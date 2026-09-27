@@ -67,6 +67,8 @@ class TradingItemScreen extends ConsumerWidget {
                   : _PricePanel(p),
             ),
             const SizedBox(height: 12),
+            PriceHistoryPanel(itemId: itemId),
+            const SizedBox(height: 12),
             _OrderBook(itemId: itemId),
             const SizedBox(height: 12),
             Panel(

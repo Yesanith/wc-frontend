@@ -250,7 +250,8 @@ const enStrings = <String, String>{
   'search': 'Search',
   'done_today': 'Done today',
   'backup': 'Backup',
-  'backup_note': 'Goals, watchlist, pinned bosses and language. The API key is never included.',
+  'backup_note':
+      'Watchlist, price history, pinned bosses and achievements, and language. The API key is never included.',
   'export_backup': 'Export',
   'import_backup': 'Import',
   'import_hint': 'Paste the backup json here',
@@ -452,4 +453,10 @@ const enStrings = <String, String>{
   'support': 'Support',
   'support_note': 'Tyria Codex is free and has no ads. If it helps you, you can buy me a coffee.',
   'buy_coffee': 'Buy me a coffee',
+  'price_history': 'Price history',
+  'price_history_collecting':
+      'The trading post keeps no history, so the app records one price a day while it runs. Watch the item and its chart builds up from today.',
+  'price_history_note':
+      'Recorded on this phone, one point per day the app saw the price. Watched items are updated on every launch.',
+  'pinned_achievements': 'Pinned achievements',
 };

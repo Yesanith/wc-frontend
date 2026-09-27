@@ -8,6 +8,7 @@ import '../state/api.dart';
 import '../state/navigation.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
+import '../state/trading.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../state/wealth.dart';
@@ -112,6 +113,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     // reads from the cache instead of waiting on the api
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(syncProvider.notifier).run();
+    });
+    // the watchlist's prices once per launch, so the price history gains a
+    // point every day the app is opened, not only when the tp is
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(watchlistPricesProvider.future).catchError((_) => const <WatchedItem>[]);
     });
   }
 

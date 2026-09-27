@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../l10n/strings.dart';
+import '../state/price_history.dart';
+import '../state/progression.dart';
 import '../state/settings.dart';
 import 'cache.dart';
 
@@ -18,6 +20,10 @@ Map<String, dynamic> buildBackup(WidgetRef ref) {
     'lang': ref.read(langProvider).code,
     'watchlist': ref.read(watchlistProvider),
     'pinned_events': ref.read(pinnedEventsProvider).toList(),
+    'pinned_achievements': ref.read(pinnedAchievementsProvider),
+    'price_history': {
+      for (final e in ref.read(priceHistoryProvider).entries) '${e.key}': e.value.map((p) => p.toJson()).toList(),
+    },
   };
 }
 
@@ -46,6 +52,25 @@ Future<void> restoreBackup(WidgetRef ref, String text) async {
   final pinned = raw['pinned_events'];
   if (pinned is List) {
     await ref.read(pinnedEventsProvider.notifier).replaceAll(pinned.map((e) => '$e').toSet());
+  }
+
+  final achievements = raw['pinned_achievements'];
+  if (achievements is List) {
+    await ref.read(pinnedAchievementsProvider.notifier).replaceAll(
+          achievements.map((e) => int.tryParse('$e') ?? 0).where((e) => e > 0).toList(),
+        );
+  }
+
+  final history = raw['price_history'];
+  if (history is Map) {
+    await ref.read(priceHistoryProvider.notifier).replaceAll({
+      for (final e in history.entries)
+        if (int.tryParse('${e.key}') != null && e.value is List)
+          int.parse('${e.key}'): [
+            for (final p in e.value as List)
+              if (p is Map) PricePoint.fromJson(Map<String, dynamic>.from(p)),
+          ],
+    });
   }
 }
 

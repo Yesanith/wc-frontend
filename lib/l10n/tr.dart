@@ -249,7 +249,8 @@ const trStrings = <String, String>{
   'search': 'Ara',
   'done_today': 'Bugün yapıldı',
   'backup': 'Yedek',
-  'backup_note': 'Hedefler, takip listesi, sabitlenen boss’lar ve dil. API key asla dahil edilmez.',
+  'backup_note':
+      'İzleme listesi, fiyat geçmişi, sabitlenen bosslar ve başarımlar ile dil. API anahtarı asla dahil edilmez.',
   'export_backup': 'Dışa aktar',
   'import_backup': 'İçe aktar',
   'import_hint': 'Yedek json’unu buraya yapıştır',
@@ -450,4 +451,10 @@ const trStrings = <String, String>{
   'support': 'Destek ol',
   'support_note': 'Tyria Codex ücretsiz ve reklamsız. İşine yarıyorsa bana bir kahve ısmarlayabilirsin.',
   'buy_coffee': 'Bana bir kahve ısmarla',
+  'price_history': 'Fiyat geçmişi',
+  'price_history_collecting':
+      'Ticaret merkezi geçmiş tutmaz, bu yüzden uygulama çalıştığı her gün bir fiyat kaydeder. Eşyayı izlemeye al, grafiği bugünden itibaren oluşur.',
+  'price_history_note':
+      'Bu telefonda kaydedilir, uygulamanın fiyatı gördüğü her gün için bir nokta. İzlenen eşyalar her açılışta güncellenir.',
+  'pinned_achievements': 'Sabitlenen başarımlar',
 };

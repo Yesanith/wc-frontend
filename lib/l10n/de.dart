@@ -251,7 +251,8 @@ const deStrings = <String, String>{
   'search': 'Suchen',
   'done_today': 'Heute erledigt',
   'backup': 'Backup',
-  'backup_note': 'Ziele, Beobachtungsliste, angeheftete Bosse und Sprache. Der API-Schlüssel ist nie enthalten.',
+  'backup_note':
+      'Beobachtungsliste, Preisverlauf, angeheftete Bosse und Erfolge sowie die Sprache. Der API-Schlüssel wird nie mitgesichert.',
   'export_backup': 'Exportieren',
   'import_backup': 'Importieren',
   'import_hint': 'Backup-json hier einfügen',
@@ -452,4 +453,10 @@ const deStrings = <String, String>{
   'support': 'Unterstützen',
   'support_note': 'Tyria Codex ist kostenlos und werbefrei. Wenn es dir hilft, kannst du mir einen Kaffee spendieren.',
   'buy_coffee': 'Spendier mir einen Kaffee',
+  'price_history': 'Preisverlauf',
+  'price_history_collecting':
+      'Der Handelsposten speichert keinen Verlauf, darum notiert die App einen Preis pro Tag, solange sie läuft. Beobachte den Gegenstand, dann wächst sein Diagramm ab heute.',
+  'price_history_note':
+      'Auf diesem Handy aufgezeichnet, ein Punkt pro Tag, an dem die App den Preis gesehen hat. Beobachtete Gegenstände werden bei jedem Start aktualisiert.',
+  'pinned_achievements': 'Angeheftete Erfolge',
 };

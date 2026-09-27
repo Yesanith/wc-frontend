@@ -105,21 +105,7 @@ final periodicAchievementsProvider = FutureProvider<PeriodicAchievements>((ref) 
     // without the progression permission the list still shows, unticked
   }
 
-  int topTier(Json? detail) {
-    var top = 0;
-    for (final t in (detail?['tiers'] as List?) ?? const []) {
-      if (t is Map && asInt(t['count']) > top) top = asInt(t['count']);
-    }
-    return top;
-  }
-
-  AchievementRow row(int id) => AchievementRow(
-        id,
-        details[id],
-        asInt(progress[id]?['current']),
-        progress[id]?['max'] != null ? asInt(progress[id]?['max']) : topTier(details[id]),
-        progress[id]?['done'] == true,
-      );
+  AchievementRow row(int id) => achievementRowFor(id, details[id], progress[id]);
 
   final daily = <PeriodicCategory>[];
   final weekly = <PeriodicCategory>[];

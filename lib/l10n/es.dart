@@ -251,7 +251,8 @@ const esStrings = <String, String>{
   'search': 'Buscar',
   'done_today': 'Hecho hoy',
   'backup': 'Copia de seguridad',
-  'backup_note': 'Objetivos, lista de seguimiento, jefes fijados e idioma. La clave API nunca se incluye.',
+  'backup_note':
+      'Lista de seguimiento, historial de precios, jefes y logros fijados e idioma. La clave de API nunca se incluye.',
   'export_backup': 'Exportar',
   'import_backup': 'Importar',
   'import_hint': 'Pega aquí el json de la copia',
@@ -453,4 +454,10 @@ const esStrings = <String, String>{
   'support': 'Apoyar',
   'support_note': 'Tyria Codex es gratis y no tiene anuncios. Si te resulta útil, puedes invitarme a un café.',
   'buy_coffee': 'Invítame a un café',
+  'price_history': 'Historial de precios',
+  'price_history_collecting':
+      'El bazar no guarda historial, así que la app anota un precio al día mientras se usa. Sigue el objeto y su gráfico irá creciendo desde hoy.',
+  'price_history_note':
+      'Registrado en este teléfono, un punto por cada día que la app vio el precio. Los objetos seguidos se actualizan en cada inicio.',
+  'pinned_achievements': 'Logros fijados',
 };
