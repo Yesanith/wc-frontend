@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -119,11 +120,17 @@ void main() {
     test('cachedGet answers from disk and refreshes stale entries behind the scenes', () async {
       var calls = 0;
       var revalidated = 0;
+      // completes once the background refresh has fetched and written the
+      // new copy, a fixed delay is too short on a slow machine
+      final refreshed = Completer<void>();
       final cache = DiskCache(dir);
       final api = Gw2Api(
         'key',
         cache: cache,
-        onRevalidated: () => revalidated++,
+        onRevalidated: () {
+          revalidated++;
+          if (!refreshed.isCompleted) refreshed.complete();
+        },
         client: MockClient((req) async {
           calls++;
           return http.Response(jsonEncode({'n': calls}), 200);
@@ -138,7 +145,7 @@ void main() {
 
       // stale copy: served at once, refreshed in the background
       expect(await api.cachedGet('/account', ttl: Duration.zero), {'n': 1});
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await refreshed.future.timeout(const Duration(seconds: 10));
       expect(calls, 2);
       expect(revalidated, 1);
       expect(await api.cachedGet('/account'), {'n': 2});
