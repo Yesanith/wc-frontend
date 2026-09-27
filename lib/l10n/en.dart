@@ -477,4 +477,10 @@ const enStrings = <String, String>{
   'expand_all': 'Expand all',
   'collapse_all': 'Collapse all',
   'hard_event': 'Hard',
+  'slot_PowerCore': 'Jade Bot core',
+  'slot_SensoryArray': 'Sensory array',
+  'slot_ServiceChip': 'Service chip',
+  'slot_FishingRod': 'Fishing rod',
+  'slot_FishingBait': 'Bait',
+  'slot_FishingLure': 'Lure',
 };

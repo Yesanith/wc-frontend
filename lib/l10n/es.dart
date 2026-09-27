@@ -478,4 +478,10 @@ const esStrings = <String, String>{
   'expand_all': 'Desplegar todo',
   'collapse_all': 'Plegar todo',
   'hard_event': 'Difícil',
+  'slot_PowerCore': 'Núcleo del bot de jade',
+  'slot_SensoryArray': 'Matriz sensorial',
+  'slot_ServiceChip': 'Chip de servicio',
+  'slot_FishingRod': 'Caña de pescar',
+  'slot_FishingBait': 'Cebo',
+  'slot_FishingLure': 'Señuelo',
 };

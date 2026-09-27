@@ -219,9 +219,7 @@ class _MaterialsTab extends ConsumerWidget {
       value: groups,
       onRetry: () => ref.invalidate(materialGroupsProvider),
       builder: (list) {
-        if (list.isEmpty) {
-          return Center(child: Text(s.t('materials_empty'), style: const TextStyle(color: AppColors.muted)));
-        }
+        if (list.isEmpty) return _EmptyTab(s.t('materials_empty'));
         // one grid per storage category, like the game shows it. a tap on a
         // category's title folds it away, and the choice is remembered
         final collapsed = ref.watch(collapsedMaterialsProvider);
@@ -305,9 +303,7 @@ class _ArmoryTab extends ConsumerWidget {
       value: armory,
       onRetry: () => ref.invalidate(armoryProvider),
       builder: (list) {
-        if (list.isEmpty) {
-          return Center(child: Text(s.t('armory_empty'), style: const TextStyle(color: AppColors.muted)));
-        }
+        if (list.isEmpty) return _EmptyTab(s.t('armory_empty'));
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: list.length,
@@ -357,15 +353,7 @@ class _BuildsTab extends ConsumerWidget {
       value: builds,
       onRetry: () => ref.invalidate(buildStorageProvider),
       builder: (list) {
-        if (list.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: Center(
-              child: Text(s.t('builds_empty'),
-                  textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
-            ),
-          );
-        }
+        if (list.isEmpty) return _EmptyTab(s.t('builds_empty'));
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: list.length,
@@ -569,6 +557,29 @@ class _Pull extends ConsumerWidget {
       color: AppColors.gold,
       onRefresh: () => refreshProviders(ref, providers),
       child: child,
+    );
+  }
+}
+
+/// an empty tab that still scrolls, so a pull reaches the refresh after
+/// something changed in game
+class _EmptyTab extends StatelessWidget {
+  const _EmptyTab(this.message);
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: constraints.maxHeight,
+            child: Padding(padding: const EdgeInsets.all(24), child: EmptyNote(message)),
+          ),
+        ],
+      ),
     );
   }
 }

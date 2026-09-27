@@ -477,4 +477,10 @@ const deStrings = <String, String>{
   'expand_all': 'Alle aufklappen',
   'collapse_all': 'Alle zuklappen',
   'hard_event': 'Schwer',
+  'slot_PowerCore': 'Jadebot-Kern',
+  'slot_SensoryArray': 'Sensorfeld',
+  'slot_ServiceChip': 'Dienstchip',
+  'slot_FishingRod': 'Angelrute',
+  'slot_FishingBait': 'Köder',
+  'slot_FishingLure': 'Kunstköder',
 };
