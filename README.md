@@ -133,6 +133,15 @@ search. The `Build recipe data` workflow regenerates both monthly and commits th
 The recipes section browses that book by discipline and opens the crafting calculator for any
 entry, so trees expand instantly without calling the api for every step.
 
+## World map data
+
+`tools/build_worldmap.py` writes every waypoint, point of interest, vista, heart, hero
+challenge, mastery point and map label of Tyria to `assets/data/worldmap_1_<lang>.json.gz`,
+and the overview tiles to `assets/tiles/`. No single floor of `/v2/continents` holds every
+map (the Path of Fire and Elona maps are on neither floor 0 nor 1), so each open world map is
+read from its own default floor and the results are merged. The `Build recipe data` workflow
+regenerates it with the recipes.
+
 ## Disclaimer
 
 Tyria Codex is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,
