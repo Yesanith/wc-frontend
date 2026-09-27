@@ -446,6 +446,17 @@ class Gw2Api {
     }
   }
 
+  /// recipe ids that use this item as an ingredient
+  Future<List<int>> recipesForInput(int itemId) async {
+    try {
+      final raw = await get('/recipes/search', {'input': '$itemId'}) as List;
+      return raw.map(asInt).toList();
+    } on Gw2ApiException catch (e) {
+      if (e.status == 404) return const [];
+      rethrow;
+    }
+  }
+
   /// weapons, palettes and skill lists of a profession
   Future<Json> profession(String name) async => Map<String, dynamic>.from(await get('/professions/$name') as Map);
 
@@ -577,9 +588,29 @@ class Gw2Api {
   // ---------------------------------------------------------------------
   // pvp leaderboards
 
-  /// the ladder of one season and region (na or eu)
-  Future<List<Json>> pvpLadder(String seasonId, String region) async =>
-      _list(await get('/pvp/seasons/$seasonId/leaderboards/ladder/$region'));
+  /// every league season, newest and oldest alike
+  Future<List<Json>> pvpSeasons() async => details('/pvp/seasons', await idList('/pvp/seasons'));
+
+  /// the boards a season keeps, such as ladder, legendary or guild. empty
+  /// for a season that has none
+  Future<List<String>> pvpBoards(String seasonId) async {
+    try {
+      return await idList('/pvp/seasons/$seasonId/leaderboards');
+    } on Gw2ApiException catch (e) {
+      if (e.status == 404) return const [];
+      rethrow;
+    }
+  }
+
+  /// one board of a season for one region (na or eu)
+  Future<List<Json>> pvpLeaderboard(String seasonId, String board, String region) async {
+    try {
+      return _list(await get('/pvp/seasons/$seasonId/leaderboards/$board/$region'));
+    } on Gw2ApiException catch (e) {
+      if (e.status == 404) return const [];
+      rethrow;
+    }
+  }
 
   Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
 

@@ -15,6 +15,9 @@ Future<List<Json>> _static(Ref ref, String name, String path) async {
   return rows.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 }
 
+/// the same for other files, which keeps every reference list in one cache
+Future<List<Json>> referenceRows(Ref ref, String name, String path) => _static(ref, name, path);
+
 Map<String, Json> _byId(List<Json> rows) => {for (final r in rows) '${r['id']}': r};
 
 // -------------------------------------------------------------------------
@@ -68,8 +71,19 @@ String? wvwRankTitle(List<Json> ranks, int rank) {
   return title;
 }
 
+/// world names by id. world vs world moved to teams, but accounts and older
+/// matchups still carry these ids
+final worldsProvider = FutureProvider<Map<int, String>>((ref) async {
+  final rows = await _static(ref, 'worlds', '/worlds');
+  return {for (final r in rows) asInt(r['id']): '${r['name'] ?? ''}'};
+});
+
 // -------------------------------------------------------------------------
 // guilds
+
+/// what each guild rank permission is called, by permission id
+final guildPermissionsProvider = FutureProvider<Map<String, Json>>(
+    (ref) async => _byId(await _static(ref, 'guild_permissions', '/guild/permissions')));
 
 /// every guild upgrade and scribe decoration
 final guildUpgradeCatalogProvider =
@@ -110,6 +124,27 @@ final backstoryAnswersProvider = FutureProvider<Map<String, Json>>(
 
 final backstoryQuestionsProvider = FutureProvider<Map<String, Json>>(
     (ref) async => _byId(await _static(ref, 'backstory_questions', '/backstory/questions')));
+
+// -------------------------------------------------------------------------
+// characters
+
+/// race names in the app's language, by the api id ("Asura", "Charr", ...)
+final racesProvider = FutureProvider<Map<String, String>>((ref) async {
+  final rows = await _static(ref, 'races', '/races');
+  return {
+    for (final r in rows)
+      if ('${r['name'] ?? ''}'.isNotEmpty) '${r['id']}': '${r['name']}',
+  };
+});
+
+/// the quaggan pictures the api serves, for empty screens
+final quaggansProvider = FutureProvider<List<String>>((ref) async {
+  final rows = await _static(ref, 'quaggans', '/quaggans');
+  return [
+    for (final r in rows)
+      if ('${r['url'] ?? ''}'.startsWith('http')) '${r['url']}',
+  ];
+});
 
 // -------------------------------------------------------------------------
 // patch detection

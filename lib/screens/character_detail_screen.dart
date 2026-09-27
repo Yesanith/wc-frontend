@@ -3,13 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../state/characters.dart';
+import '../state/crafting.dart';
 import '../state/items.dart';
+import '../state/professions.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/build_view.dart';
+import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
+import '../widgets/recipe_outputs.dart';
 import 'character_progress.dart';
 import 'compare_screen.dart';
 import 'hero_card_screen.dart';
@@ -115,33 +119,29 @@ class _Hero extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final prof = '${c['profession'] ?? ''}';
     final color = professionColor(prof);
+    final info = ref.watch(professionsProvider).valueOrNull?[prof];
+    final elite = activeElite(c, info)?['name'] as String?;
+    final profName = info?.name ?? prof;
+    final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
       child: Row(
         children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: color.withAlpha(30),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: color, width: 2),
-            ),
-            child: Icon(Icons.shield_outlined, color: color, size: 38),
-          ),
+          ClassIcon(character: c, size: 72, fallback: Icon(Icons.shield_outlined, color: color, size: 38)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(prof, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color)),
+                Text(elite == null ? profName : '$elite · $profName',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color)),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
                   children: [
                     Pill(s.t('level_n', {'n': asInt(c['level'])})),
-                    Pill('${c['race'] ?? ''}'),
+                    Pill(race),
                     Pill(fmtHours(c['age'], s.t('hours_short'))),
                     Pill(s.t('deaths_n', {'n': fmtInt(asInt(c['deaths']))})),
                   ],
@@ -459,20 +459,26 @@ class _CraftingTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final crafting = ((c['crafting'] as List?) ?? const []).whereType<Map>().toList();
-    if (crafting.isEmpty) {
+    final learned = intList(c['recipes']);
+    if (crafting.isEmpty && learned.isEmpty) {
       return Center(child: Text(s.t('no_crafting'), style: const TextStyle(color: AppColors.muted)));
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        Panel(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: Column(
-            children: [
-              for (var i = 0; i < crafting.length; i++) _craftRow(s, crafting[i], i == crafting.length - 1),
-            ],
+        if (learned.isNotEmpty) ...[
+          _LearnedRecipesCard(name: '${c['name']}', count: learned.length),
+          const SizedBox(height: 12),
+        ],
+        if (crafting.isNotEmpty)
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Column(
+              children: [
+                for (var i = 0; i < crafting.length; i++) _craftRow(s, crafting[i], i == crafting.length - 1),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
@@ -509,6 +515,52 @@ class _CraftingTab extends ConsumerWidget {
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// the recipes this character learned, opened as a searchable list
+class _LearnedRecipesCard extends ConsumerWidget {
+  const _LearnedRecipesCard({required this.name, required this.count});
+
+  final String name;
+  final int count;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final recipes = ref.watch(characterRecipesProvider(name));
+    final list = recipes.valueOrNull;
+    return AppCard(
+      onTap: list == null
+          ? null
+          : () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => RecipeOutputsScreen(title: s.t('learned_recipes_of', {'name': name}), entries: list),
+                ),
+              ),
+      padding: const EdgeInsets.all(16),
+      radius: 16,
+      child: Row(
+        children: [
+          const Icon(Icons.menu_book_outlined, color: AppColors.gold),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(s.t('learned_recipes'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                Text(s.t('recipes_count', {'n': fmtInt(count)}),
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
+          ),
+          if (recipes.isLoading)
+            const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+          else
+            const Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

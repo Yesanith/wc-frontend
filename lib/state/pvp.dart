@@ -205,11 +205,80 @@ final pvpStandingProvider = FutureProvider<PvpStanding?>((ref) async {
   );
 });
 
-/// the top of a season's ladder. key is "seasonId|region", region na or eu
-final pvpLadderProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, key) async {
-  final parts = key.split('|');
-  if (parts.length != 2 || parts[0].isEmpty) return const [];
-  final rows = await ref.watch(gw2ApiProvider).pvpLadder(parts[0], parts[1]);
-  rows.sort((a, b) => asInt(a['rank']).compareTo(asInt(b['rank'])));
+/// every league season, newest first. a day on disk is enough, a season
+/// only changes when one starts or ends
+final pvpSeasonsProvider = FutureProvider<List<Json>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final lang = ref.watch(langProvider);
+  final raw = await cachedList(cache, 'pvp_seasons_${lang.apiLang}', 'rows', () => api.pvpSeasons(),
+      maxAge: const Duration(days: 1));
+  final rows = raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+  rows.sort((a, b) => '${b['start'] ?? ''}'.compareTo('${a['start'] ?? ''}'));
   return rows;
+});
+
+/// the boards one season keeps, ladder first
+final pvpBoardsProvider = FutureProvider.autoDispose.family<List<String>, String>((ref, seasonId) async {
+  if (seasonId.isEmpty) return const [];
+  final boards = await ref.watch(gw2ApiProvider).pvpBoards(seasonId);
+  return sortBoards(boards);
+});
+
+/// ladder first, then the rest in a fixed order
+List<String> sortBoards(List<String> boards) {
+  const order = ['ladder', 'legendary', 'guild'];
+  int rank(String b) {
+    final i = order.indexOf(b);
+    return i < 0 ? order.length : i;
+  }
+
+  return [...boards]..sort((a, b) => rank(a) == rank(b) ? a.compareTo(b) : rank(a).compareTo(rank(b)));
+}
+
+/// one row of a leaderboard: who, where and every score with its name
+class BoardRow {
+  const BoardRow(this.rank, this.name, this.scores);
+  final int rank;
+  final String name;
+
+  /// (label, value) pairs in the order the season lists its scorings
+  final List<(String, int)> scores;
+}
+
+/// turns raw board rows into [BoardRow]s, naming every score with the
+/// scoring the season defines for that board
+List<BoardRow> boardRows(List<Json> rows, Json? season, String board) {
+  final boardInfo = season?['leaderboards'] is Map ? (season!['leaderboards'] as Map)[board] : null;
+  final scorings = <String, String>{
+    for (final sc in (boardInfo is Map ? boardInfo['scorings'] as List? : null) ?? const [])
+      if (sc is Map) '${sc['id']}': '${sc['name'] ?? sc['description'] ?? ''}',
+  };
+  final out = [
+    for (final r in rows)
+      BoardRow(
+        asInt(r['rank']),
+        '${r['name'] ?? r['team'] ?? r['id'] ?? ''}',
+        [
+          for (final sc in (r['scores'] as List?) ?? const [])
+            if (sc is Map) (scorings['${sc['id']}'] ?? '', asInt(sc['value'])),
+        ],
+      ),
+  ];
+  out.sort((a, b) => a.rank.compareTo(b.rank));
+  return out;
+}
+
+/// one board of a season. key is "seasonId|board|region", region na or eu
+final pvpLeaderboardProvider = FutureProvider.autoDispose.family<List<BoardRow>, String>((ref, key) async {
+  final parts = key.split('|');
+  if (parts.length != 3 || parts[0].isEmpty) return const [];
+  final api = ref.watch(gw2ApiProvider);
+  final seasons = await ref.watch(pvpSeasonsProvider.future);
+  Json? season;
+  for (final s in seasons) {
+    if ('${s['id']}' == parts[0]) season = s;
+  }
+  final rows = await api.pvpLeaderboard(parts[0], parts[1], parts[2]);
+  return boardRows(rows, season, parts[1]);
 });

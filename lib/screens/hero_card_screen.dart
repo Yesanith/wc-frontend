@@ -9,6 +9,8 @@ import 'package:share_plus/share_plus.dart';
 
 import '../state/account.dart';
 import '../state/characters.dart';
+import '../state/professions.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -118,6 +120,8 @@ class _HeroCard extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final prof = '${c['profession'] ?? ''}';
     final pc = professionColor(prof);
+    final profName = ref.watch(professionsProvider).valueOrNull?[prof]?.name ?? prof;
+    final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
 
     final Color bg;
     final Color fg;
@@ -169,8 +173,7 @@ class _HeroCard extends ConsumerWidget {
             ),
             Text('${c['name'] ?? ''}', textAlign: TextAlign.center, style: display(28, color: fg)),
             const SizedBox(height: 4),
-            Text('$prof · ${c['race'] ?? ''}',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: accent)),
+            Text('$profName · $race', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: accent)),
             const SizedBox(height: 16),
             Divider(color: muted.withAlpha(90), height: 1),
             const SizedBox(height: 14),

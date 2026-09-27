@@ -83,3 +83,20 @@ final wvwGuildTeamsProvider = FutureProvider<Map<String, int>>((ref) async {
       if (all[id.toUpperCase()] != null) id: all[id.toUpperCase()]!,
   };
 });
+
+/// names of the worlds fighting as [color] in a match, from all_worlds (or
+/// worlds on older matches). ids the world list does not know are skipped
+List<String> wvwWorldNames(Json match, String color, Map<int, String> worlds) {
+  for (final key in ['all_worlds', 'worlds']) {
+    final side = match[key];
+    if (side is! Map) continue;
+    final ids = side[color];
+    final list = ids is List ? ids.map(asInt).toList() : [asInt(ids)];
+    final names = [
+      for (final id in list)
+        if (worlds[id]?.isNotEmpty ?? false) worlds[id]!,
+    ];
+    if (names.isNotEmpty) return names;
+  }
+  return const [];
+}

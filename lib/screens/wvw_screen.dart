@@ -79,6 +79,12 @@ class _MatchupTab extends ConsumerWidget {
           final kills = side('kills');
           final deaths = side('deaths');
           final maps = ((match['maps'] as List?) ?? const []).whereType<Map>().toList();
+          // the worlds on each side, for matchups that still list them. team
+          // ids have no name in the api and are left out
+          final worlds = ref.watch(worldsProvider).valueOrNull ?? const <int, String>{};
+          final worldNames = {
+            for (final c in _teamColors.keys) c: wvwWorldNames(match, c, worlds),
+          };
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -109,6 +115,13 @@ class _MatchupTab extends ConsumerWidget {
                                 s.t('kd_line', {'k': fmtInt(kills[c]!), 'd': fmtInt(deaths[c]!)}),
                                 style: const TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
+                              if (worldNames[c]!.isNotEmpty)
+                                Text(
+                                  worldNames[c]!.join(', '),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 11, color: AppColors.textSoft),
+                                ),
                             ],
                           ),
                         ),

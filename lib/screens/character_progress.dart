@@ -95,7 +95,7 @@ class _Training extends ConsumerWidget {
           for (final t in ((raw is Map ? raw['training'] : raw) as List?) ?? const [])
             if (t is Map) Map<String, dynamic>.from(t),
         ]..sort((a, b) => (a['done'] == true ? 1 : 0).compareTo(b['done'] == true ? 1 : 0));
-        if (rows.isEmpty) return Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted));
+        if (rows.isEmpty) return EmptyNote(s.t('nothing_here'), center: false);
         final done = rows.where((r) => r['done'] == true).length;
         return Panel(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -187,7 +187,7 @@ class _Story extends ConsumerWidget {
                       );
                     }),
                   ),
-              if (perSeason.isEmpty) Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted)),
+              if (perSeason.isEmpty) EmptyNote(s.t('nothing_here'), center: false),
             ],
           ),
         );
@@ -223,7 +223,7 @@ class _Sab extends ConsumerWidget {
           modes[mode] = (modes[mode] ?? 0) + 1;
         }
         if (zones.isEmpty && unlocks.isEmpty && songs.isEmpty) {
-          return Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted));
+          return EmptyNote(s.t('nothing_here'), center: false);
         }
         return Panel(
           child: Column(
@@ -273,7 +273,7 @@ class _Backstory extends ConsumerWidget {
       builder: (raw) {
         final ids = [for (final a in ((raw is Map ? raw['backstory'] : raw) as List?) ?? const []) '$a'];
         if (ids.isEmpty || answers == null || questions == null) {
-          return Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted));
+          return EmptyNote(s.t('nothing_here'), center: false);
         }
         return Panel(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/characters.dart';
+import '../state/professions.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
 import 'character_detail_screen.dart';
 
@@ -20,7 +23,9 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
 
   bool _matches(Json c) {
     if (_query.isEmpty) return true;
-    final hay = '${c['name']} ${c['profession']} ${c['race']}'.toLowerCase();
+    final info = ref.read(professionsProvider).valueOrNull?[c['profession']];
+    final race = ref.read(racesProvider).valueOrNull?['${c['race']}'] ?? '';
+    final hay = '${c['name']} ${c['profession']} ${c['race']} ${info?.name ?? ''} $race'.toLowerCase();
     return hay.contains(_query);
   }
 
@@ -96,7 +101,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
               if (filtered.isEmpty) {
                 return Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Center(child: Text(s.t('no_match'), style: const TextStyle(color: AppColors.muted))),
+                  child: EmptyNote(s.t('no_match')),
                 );
               }
               return Column(
@@ -125,6 +130,11 @@ class _CharacterCard extends ConsumerWidget {
     final prof = '${c['profession'] ?? ''}';
     final color = professionColor(prof);
     final initial = name.isEmpty ? '?' : name.substring(0, 1).toUpperCase();
+    final info = ref.watch(professionsProvider).valueOrNull?[prof];
+    // names in the app's language once the reference data is in
+    final profName = info?.name ?? prof;
+    final eliteName = activeElite(c, info)?['name'] as String?;
+    final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
 
     return AppCard(
       onTap: () => Navigator.of(context).push(
@@ -134,17 +144,7 @@ class _CharacterCard extends ConsumerWidget {
       radius: 16,
       child: Row(
         children: [
-          Container(
-            width: 50,
-            height: 50,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.bg,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: color, width: 2),
-            ),
-            child: Text(initial, style: display(22, color: color)),
-          ),
+          ClassIcon(character: c, size: 50, fallback: Text(initial, style: display(22, color: color))),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -155,9 +155,9 @@ class _CharacterCard extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 2),
-                Text(prof, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
+                Text(eliteName ?? profName, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
                 const SizedBox(height: 2),
-                Text('${c['race'] ?? ''} · ${fmtHours(c['age'], s.t('hours_short'))}',
+                Text('$race · ${fmtHours(c['age'], s.t('hours_short'))}',
                     style: const TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),

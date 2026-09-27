@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/characters.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -25,6 +26,7 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final chars = ref.watch(charactersProvider);
+    final races = ref.watch(racesProvider).valueOrNull ?? const <String, String>{};
 
     return Scaffold(
       appBar: AppBar(
@@ -86,7 +88,11 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
                 left: fmtInt(asInt(left['deaths'])),
                 right: fmtInt(asInt(right['deaths'])),
               ),
-              _CompareRow(label: s.t('race'), left: '${left['race'] ?? ''}', right: '${right['race'] ?? ''}'),
+              _CompareRow(
+                label: s.t('race'),
+                left: races['${left['race']}'] ?? '${left['race'] ?? ''}',
+                right: races['${right['race']}'] ?? '${right['race'] ?? ''}',
+              ),
               _CompareRow(
                 label: s.t('crafting'),
                 left: _crafting(left),

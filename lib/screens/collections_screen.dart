@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/collections.dart';
+import '../l10n/strings.dart';
 import '../state/collections.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -92,6 +93,18 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
   int _filter = 0;
   String _query = '';
 
+  // wardrobe only: Armor, Weapon, Back or Gathering, then a slot or weapon
+  String? _type;
+  String? _subtype;
+
+  String _typeLabel(S s, String type) => switch (type) {
+        'Armor' => s.t('skin_armor'),
+        'Weapon' => s.t('skin_weapon'),
+        'Back' => s.t('skin_back'),
+        'Gathering' => s.t('skin_gathering'),
+        _ => titleCase(type),
+      };
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -107,12 +120,25 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
         value: entries,
         onRetry: () => ref.invalidate(collectionEntriesProvider(widget.kind.key)),
         builder: (all) {
+          final types = {
+            for (final e in all)
+              if (e.type != null) e.type!,
+          }.toList()
+            ..sort();
+          final subtypes = <String>{
+            for (final e in all)
+              if (_type != null && e.type == _type && e.subtype != null) e.subtype!.split(' · ').first,
+          }.toList()
+            ..sort();
           final list = all.where((e) {
             if (_filter == 1 && !e.unlocked) return false;
             if (_filter == 2 && e.unlocked) return false;
+            if (_type != null && e.type != _type) return false;
+            if (_subtype != null && e.subtype?.split(' · ').first != _subtype) return false;
             if (_query.isNotEmpty && !e.name.toLowerCase().contains(_query)) return false;
             return true;
           }).toList();
+          final shown = list.where((e) => e.unlocked).length;
 
           return Column(
             children: [
@@ -140,6 +166,33 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                         ],
                       ],
                     ),
+                    if (types.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      _ChipRow(
+                        labels: [s.t('all'), for (final t in types) _typeLabel(s, t)],
+                        selected: _type == null ? 0 : types.indexOf(_type!) + 1,
+                        onSelected: (i) => setState(() {
+                          _type = i == 0 ? null : types[i - 1];
+                          _subtype = null;
+                        }),
+                      ),
+                    ],
+                    if (subtypes.length > 1) ...[
+                      const SizedBox(height: 8),
+                      _ChipRow(
+                        labels: [s.t('all'), ...subtypes],
+                        selected: _subtype == null ? 0 : subtypes.indexOf(_subtype!) + 1,
+                        onSelected: (i) => setState(() => _subtype = i == 0 ? null : subtypes[i - 1]),
+                      ),
+                    ],
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${fmtInt(shown)} / ${fmtInt(list.length)}',
+                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -161,17 +214,24 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                         children: [
                           Opacity(
                             opacity: e.unlocked ? 1 : 0.35,
-                            child: ItemIcon(url: e.icon, rarity: e.unlocked ? 'Exotic' : null, size: 40),
+                            child: ItemIcon(url: e.icon, rarity: e.unlocked ? (e.rarity ?? 'Exotic') : null, size: 40),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: e.unlocked ? AppColors.text : AppColors.muted,
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: e.unlocked ? AppColors.text : AppColors.muted,
+                                  ),
+                                ),
+                                if (e.subtype != null)
+                                  Text(e.subtype!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                              ],
                             ),
                           ),
                           Icon(
@@ -188,6 +248,33 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+/// one line of choice chips that scrolls sideways
+class _ChipRow extends StatelessWidget {
+  const _ChipRow({required this.labels, required this.selected, required this.onSelected});
+
+  final List<String> labels;
+  final int selected;
+  final ValueChanged<int> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 36,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: labels.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemBuilder: (context, i) => ChoiceChip(
+          label: Text(labels[i]),
+          selected: selected == i,
+          visualDensity: VisualDensity.compact,
+          onSelected: (_) => onSelected(i),
+        ),
       ),
     );
   }

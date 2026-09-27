@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/icon_cache.dart';
 import '../state/guilds.dart';
+import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -146,7 +147,7 @@ class _TreasuryTab extends ConsumerWidget {
         if (rows.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(24),
-            child: Center(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted))),
+            child: EmptyNote(s.t('nothing_here')),
           );
         }
         return ListView.separated(
@@ -213,7 +214,7 @@ class _StashTab extends ConsumerWidget {
         if (tabs.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(24),
-            child: Center(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted))),
+            child: EmptyNote(s.t('nothing_here')),
           );
         }
         return ListView(
@@ -280,7 +281,7 @@ class _LogTab extends ConsumerWidget {
         if (entries.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(24),
-            child: Center(child: Text(s.t('nothing_here'), style: const TextStyle(color: AppColors.muted))),
+            child: EmptyNote(s.t('nothing_here')),
           );
         }
         return ListView.separated(
@@ -351,11 +352,8 @@ class _MembersTab extends ConsumerWidget {
             if (ranks.isNotEmpty) ...[
               SectionHeader(title: s.t('ranks'), trailing: '${ranks.length}'),
               const SizedBox(height: 10),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [for (final r in ranks) Pill('${r['id']} · ${byRank['${r['id']}'] ?? 0}')],
-              ),
+              for (final r in [...ranks]..sort((a, b) => asInt(a['order']).compareTo(asInt(b['order']))))
+                _RankCard(rank: r, members: byRank['${r['id']}'] ?? 0),
               const SizedBox(height: 20),
             ],
             if (teams.isNotEmpty) ...[
@@ -469,6 +467,80 @@ class _UpgradesTab extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// one guild rank with how many hold it and what it may do
+class _RankCard extends ConsumerStatefulWidget {
+  const _RankCard({required this.rank, required this.members});
+
+  final Json rank;
+  final int members;
+
+  @override
+  ConsumerState<_RankCard> createState() => _RankCardState();
+}
+
+class _RankCardState extends ConsumerState<_RankCard> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final catalog = ref.watch(guildPermissionsProvider).valueOrNull ?? const <String, Json>{};
+    final permissions = [for (final p in (widget.rank['permissions'] as List?) ?? const []) '$p'];
+    final icon = widget.rank['icon'] as String?;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: AppCard(
+        onTap: permissions.isEmpty ? null : () => setState(() => _open = !_open),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: icon == null ? null : CachedIcon(url: icon, fit: BoxFit.contain),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text('${widget.rank['id'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w800)),
+                ),
+                Text(s.t('n_members', {'n': widget.members}),
+                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                if (permissions.isNotEmpty)
+                  Icon(_open ? Icons.expand_less : Icons.expand_more, color: AppColors.chevron),
+              ],
+            ),
+            if (!_open && permissions.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(s.t('n_permissions', {'n': permissions.length}),
+                    style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+              ),
+            if (_open)
+              for (final p in permissions)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          '${catalog[p]?['name'] ?? p.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}')}',
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                      if ('${catalog[p]?['description'] ?? ''}'.isNotEmpty)
+                        Text('${catalog[p]!['description']}',
+                            style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+          ],
+        ),
+      ),
     );
   }
 }

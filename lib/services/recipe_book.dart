@@ -67,6 +67,28 @@ class RecipeBook {
 
   bool get isEmpty => byOutput.isEmpty;
 
+  /// every regular recipe by its api id, forge recipes have none
+  late final Map<int, BookRecipe> byId = {
+    for (final list in byOutput.values)
+      for (final r in list)
+        if (r.id > 0) r.id: r,
+  };
+
+  late final Map<int, List<BookRecipe>> _byIngredient = () {
+    final out = <int, List<BookRecipe>>{};
+    for (final list in byOutput.values) {
+      for (final r in list) {
+        for (final (id, _) in r.ingredients) {
+          out.putIfAbsent(id, () => []).add(r);
+        }
+      }
+    }
+    return out;
+  }();
+
+  /// every recipe, regular or forge, that takes [itemId] as an ingredient
+  List<BookRecipe> usedIn(int itemId) => _byIngredient[itemId] ?? const [];
+
   /// the recipe used to expand a tree. regular crafting wins over the forge
   /// when an item can be made both ways
   BookRecipe? recipeFor(int itemId) {
