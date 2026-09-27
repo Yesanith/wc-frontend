@@ -258,7 +258,10 @@ List<BoardRow> boardRows(List<Json> rows, Json? season, String board) {
     for (final r in rows)
       BoardRow(
         asInt(r['rank']),
-        '${r['name'] ?? r['team'] ?? r['id'] ?? ''}',
+        // guild boards name the guild and the team that played
+        r['team'] != null && r['name'] != null && r['team'] != r['name']
+            ? '${r['name']} · ${r['team']}'
+            : '${r['name'] ?? r['team'] ?? r['id'] ?? ''}',
         [
           for (final sc in (r['scores'] as List?) ?? const [])
             if (sc is Map) (scorings['${sc['id']}'] ?? '', asInt(sc['value'])),
