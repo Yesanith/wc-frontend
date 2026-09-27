@@ -126,5 +126,7 @@ final patchCheckProvider = FutureProvider<bool>((ref) async {
   await prefs.setInt('game_build', build);
   if (seen == null || seen == build) return false;
   await ref.read(diskCacheProvider)?.clear();
+  // the screens may already hold the old data in memory, drop that too
+  api.clearStaticCaches();
   return true;
 });

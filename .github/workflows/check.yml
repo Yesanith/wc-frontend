@@ -19,6 +19,11 @@ jobs:
 
       - run: flutter pub get
 
+      # same settings as the format workflow, so a push that skipped it fails
+      # here instead of drifting until the next manual run
+      - name: Check formatting
+        run: dart format --line-length 120 --set-exit-if-changed --output=none lib test
+
       # lint hints stay advisory, errors and warnings fail the run
       - run: flutter analyze --no-fatal-infos
 

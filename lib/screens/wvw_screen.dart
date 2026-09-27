@@ -333,7 +333,6 @@ class _RankTab extends ConsumerWidget {
   }
 }
 
-
 /// which wvw team each of the account's guilds plays for
 class _GuildTeams extends ConsumerWidget {
   const _GuildTeams();
@@ -388,7 +387,8 @@ class _GuildTeamRow extends ConsumerWidget {
             ),
           ),
           Text(same ? s.t('your_team') : '#$team',
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: same ? AppColors.green : AppColors.muted)),
+              style: TextStyle(
+                  fontSize: 12, fontWeight: FontWeight.w700, color: same ? AppColors.green : AppColors.muted)),
         ],
       ),
     );
