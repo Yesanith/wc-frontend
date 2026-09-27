@@ -358,7 +358,7 @@ class _BuildsTab extends ConsumerWidget {
             return Material(
               color: AppColors.surface,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(AppRadius.card),
                 side: const BorderSide(color: AppColors.line),
               ),
               clipBehavior: Clip.antiAlias,

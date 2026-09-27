@@ -459,4 +459,17 @@ const deStrings = <String, String>{
   'price_history_note':
       'Auf diesem Handy aufgezeichnet, ein Punkt pro Tag, an dem die App den Preis gesehen hat. Beobachtete Gegenstände werden bei jedem Start aktualisiert.',
   'pinned_achievements': 'Angeheftete Erfolge',
+  'about': 'Über',
+  'about_by': 'von {name}',
+  'about_summary':
+      'Ein inoffizieller Begleiter für Guild Wars 2: deine Charaktere, dein Account, der Handelsposten, Erfolge und die Weltkarte, direkt aus der offiziellen API.',
+  'about_community': 'Community',
+  'about_github': 'GitHub',
+  'about_github_note': 'Der Quellcode, die Releases und jede APK.',
+  'about_issue': 'Problem melden',
+  'about_issue_note': 'Etwas stimmt nicht oder fehlt.',
+  'about_credits': 'Mitwirkende',
+  'about_credit_dev': 'Entwickelt von {name}',
+  'about_credit_data': 'Spieldaten, Symbole und Kartenkacheln aus der offiziellen Guild Wars 2 API',
+  'about_credit_design': 'Aussehen geteilt mit Regions of XIV, dessen Oberfläche von XeldarAlz stammt',
 };

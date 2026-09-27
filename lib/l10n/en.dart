@@ -459,4 +459,17 @@ const enStrings = <String, String>{
   'price_history_note':
       'Recorded on this phone, one point per day the app saw the price. Watched items are updated on every launch.',
   'pinned_achievements': 'Pinned achievements',
+  'about': 'About',
+  'about_by': 'by {name}',
+  'about_summary':
+      'An unofficial Guild Wars 2 companion: your characters, account, trading post, achievements and the world map, straight from the official API.',
+  'about_community': 'Community',
+  'about_github': 'GitHub',
+  'about_github_note': 'The source, the releases and every apk.',
+  'about_issue': 'Report an issue',
+  'about_issue_note': 'Something wrong, or something missing.',
+  'about_credits': 'Credits',
+  'about_credit_dev': 'Developed by {name}',
+  'about_credit_data': 'Game data, icons and map tiles from the official Guild Wars 2 API',
+  'about_credit_design': 'Look shared with Regions of XIV, whose interface is by XeldarAlz',
 };

@@ -96,7 +96,7 @@ class _MatchupTab extends ConsumerWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(AppRadius.card),
                       border: Border.all(color: c == mine ? _teamColors[c]! : AppColors.line, width: c == mine ? 2 : 1),
                     ),
                     child: Row(
