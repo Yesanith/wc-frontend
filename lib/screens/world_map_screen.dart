@@ -9,6 +9,7 @@ import '../services/icon_cache.dart';
 import '../state/settings.dart';
 import '../state/world_map.dart';
 import '../theme.dart';
+import '../widgets/common.dart';
 
 const _tileHost = 'https://tiles.guildwars2.com';
 const _tile = 256.0;
@@ -45,6 +46,23 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
   final _searchFocus = FocusNode();
   String _query = '';
 
+  // markers grouped by kind, rebuilt only when a new list arrives, so a
+  // frame of panning does not walk every marker once per kind
+  List<MapMarker>? _groupedFrom;
+  Map<String, List<MapMarker>> _grouped = const {};
+
+  Map<String, List<MapMarker>> _byKind(List<MapMarker> list) {
+    if (!identical(list, _groupedFrom)) {
+      final out = <String, List<MapMarker>>{};
+      for (final m in list) {
+        out.putIfAbsent(m.kind, () => []).add(m);
+      }
+      _groupedFrom = list;
+      _grouped = out;
+    }
+    return _grouped;
+  }
+
   @override
   void dispose() {
     _search.dispose();
@@ -78,7 +96,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       _zoom = zoom;
       _center = _clampCenter(
         info,
-        Offset(world.dx - (screenPoint.dx - _viewport.width / 2) / s, world.dy - (screenPoint.dy - _viewport.height / 2) / s),
+        Offset(world.dx - (screenPoint.dx - _viewport.width / 2) / s,
+            world.dy - (screenPoint.dy - _viewport.height / 2) / s),
       );
     });
   }
@@ -165,7 +184,19 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 left: 0,
                 right: 0,
                 top: 0,
-                child: LinearProgressIndicator(minHeight: 2, color: AppColors.gold, backgroundColor: Colors.transparent),
+                child:
+                    LinearProgressIndicator(minHeight: 2, color: AppColors.gold, backgroundColor: Colors.transparent),
+              ),
+            // without markers the map would just look empty, say why
+            if (markers.hasError && list.isEmpty)
+              Positioned(
+                left: 12,
+                right: 12,
+                bottom: 64,
+                child: ErrorBox(
+                  error: markers.error,
+                  onRetry: () => ref.invalidate(worldMarkersProvider(_floor)),
+                ),
               ),
             Positioned(
               left: 12,
@@ -253,8 +284,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       return const [];
     }
     final out = <Widget>[];
-    for (final m in list) {
-      if (m.kind != kind || m.name.isEmpty) continue;
+    for (final m in _byKind(list)[kind] ?? const <MapMarker>[]) {
+      if (m.name.isEmpty) continue;
       final p = _toScreen(info, m.x, m.y);
       if (!_onScreen(p, 100)) continue;
       out.add(Positioned(
@@ -281,25 +312,36 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
   }
 
   List<Widget> _markers(ContinentInfo info, List<MapMarker> list, Map<String, String> icons, S s) {
-    final out = <Widget>[];
-    for (final m in list) {
-      final min = markerMinZoom[m.kind];
-      if (min == null || _zoom < min || !_layers.contains(m.kind)) continue;
-      final p = _toScreen(info, m.x, m.y);
-      if (!_onScreen(p)) continue;
-      out.add(Positioned(
-        left: p.dx - 13,
-        top: p.dy - 13,
-        width: 26,
-        height: 26,
-        child: GestureDetector(
-          onTap: () => _showMarker(s, m),
-          child: _MarkerIcon(kind: m.kind, icon: icons[m.kind]),
-        ),
-      ));
-      if (out.length >= _markerBudget) break;
+    final grouped = _byKind(list);
+    final visible = <(MapMarker, Offset)>[];
+    for (final kind in markerKinds) {
+      final min = markerMinZoom[kind];
+      if (min == null || _zoom < min || !_layers.contains(kind)) continue;
+      for (final m in grouped[kind] ?? const <MapMarker>[]) {
+        final p = _toScreen(info, m.x, m.y);
+        if (_onScreen(p)) visible.add((m, p));
+      }
     }
-    return out;
+    // over budget, keep the markers closest to the middle of the screen
+    // rather than whichever the data happens to list first
+    if (visible.length > _markerBudget) {
+      final middle = _viewport.center(Offset.zero);
+      visible.sort((a, b) => (a.$2 - middle).distanceSquared.compareTo((b.$2 - middle).distanceSquared));
+      visible.removeRange(_markerBudget, visible.length);
+    }
+    return [
+      for (final (m, p) in visible)
+        Positioned(
+          left: p.dx - 13,
+          top: p.dy - 13,
+          width: 26,
+          height: 26,
+          child: GestureDetector(
+            onTap: () => _showMarker(s, m),
+            child: _MarkerIcon(kind: m.kind, icon: icons[m.kind]),
+          ),
+        ),
+    ];
   }
 
   List<MapMarker> _searchResults(List<MapMarker> list) {
@@ -311,7 +353,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       if (hits.length >= 30) break;
     }
     // maps and regions first, they are the likelier target
-    hits.sort((a, b) => (a.kind == 'map' || a.kind == 'region' ? 0 : 1).compareTo(b.kind == 'map' || b.kind == 'region' ? 0 : 1));
+    hits.sort((a, b) =>
+        (a.kind == 'map' || a.kind == 'region' ? 0 : 1).compareTo(b.kind == 'map' || b.kind == 'region' ? 0 : 1));
     return hits;
   }
 
@@ -378,7 +421,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-              Text('${_kindLabel(s, m.kind)} · ${m.mapName}', style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+              Text('${_kindLabel(s, m.kind)} · ${m.mapName}',
+                  style: const TextStyle(fontSize: 13, color: AppColors.muted)),
               if (m.chatLink.isNotEmpty) ...[
                 const SizedBox(height: 14),
                 OutlinedButton.icon(
@@ -524,7 +568,6 @@ class _SearchBox extends StatelessWidget {
     );
   }
 }
-
 
 /// one map tile: from the app's assets for the overview levels of floor 0,
 /// otherwise downloaded once and kept on disk

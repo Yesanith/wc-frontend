@@ -72,7 +72,6 @@ String? wvwColorOf(Json match, int team) {
   return null;
 }
 
-
 /// the team each of the account's guilds is assigned to, by guild id
 final wvwGuildTeamsProvider = FutureProvider<Map<String, int>>((ref) async {
   final team = await ref.watch(wvwTeamProvider.future);

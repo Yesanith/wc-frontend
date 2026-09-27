@@ -140,7 +140,11 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
                 child: Row(
                   children: [
-                    for (final (value, key) in const [(null, 'all'), (true, 'recipe_learned'), (false, 'recipe_not_learned')]) ...[
+                    for (final (value, key) in const [
+                      (null, 'all'),
+                      (true, 'recipe_learned'),
+                      (false, 'recipe_not_learned')
+                    ]) ...[
                       ChoiceChip(
                         label: Text(s.t(key)),
                         selected: _learned == value,
