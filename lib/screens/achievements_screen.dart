@@ -6,6 +6,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/pin_button.dart';
 
 /// the whole achievement catalogue, group by group. the account's own
 /// progress is only fetched once a category is opened, since the catalogue
@@ -175,6 +176,10 @@ class _AchievementCard extends StatelessWidget {
               if (points > 0) ...[
                 const SizedBox(width: 8),
                 Pill('$points'),
+              ],
+              if (!row.done) ...[
+                const SizedBox(width: 4),
+                AchievementPinButton(id: row.id),
               ],
             ],
           ),

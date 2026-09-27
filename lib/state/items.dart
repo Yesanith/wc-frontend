@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../util.dart';
 import 'api.dart';
+import 'price_history.dart';
 
 final itemProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) async {
   final items = await ref.watch(gw2ApiProvider).items([id]);
@@ -9,7 +10,10 @@ final itemProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) asy
 });
 
 final priceProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) async {
+  final history = ref.read(priceHistoryProvider.notifier);
   final prices = await ref.watch(gw2ApiProvider).prices([id]);
+  // an item page adds today's point too, the history keeps it a month
+  Future(() => history.record(prices));
   return prices[id];
 });
 

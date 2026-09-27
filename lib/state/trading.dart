@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../util.dart';
 import 'api.dart';
+import 'price_history.dart';
 import 'settings.dart';
 
 class WatchedItem {
@@ -14,9 +15,12 @@ class WatchedItem {
 final watchlistPricesProvider = FutureProvider<List<WatchedItem>>((ref) async {
   final api = ref.watch(gw2ApiProvider);
   final ids = ref.watch(watchlistProvider);
+  final history = ref.read(priceHistoryProvider.notifier);
   if (ids.isEmpty) return const [];
   final items = await api.items(ids);
   final prices = await api.prices(ids);
+  // every look at the watchlist adds today's point to the price history
+  Future(() => history.record(prices));
   return [for (final id in ids) WatchedItem(id, items[id], prices[id])];
 });
 

@@ -8,6 +8,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/pin_button.dart';
 import 'achievements_screen.dart';
 import 'pvp_screen.dart';
 

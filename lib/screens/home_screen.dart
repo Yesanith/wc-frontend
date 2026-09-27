@@ -10,6 +10,8 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import '../state/periodic.dart';
+import '../state/progression.dart';
+import '../widgets/pin_button.dart';
 import '../state/alerts.dart';
 import 'events_screen.dart';
 
@@ -21,6 +23,7 @@ class HomeScreen extends ConsumerWidget {
         accountProvider,
         walletProvider,
         vaultTrackProvider,
+        pinnedAchievementRowsProvider,
       ]);
 
   @override
@@ -47,6 +50,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 14),
           const _QuickLinks(),
+          const _PinnedAchievements(),
           const SizedBox(height: 24),
           const _AlertBanner(),
           const _PeriodicLinks(),
@@ -327,6 +331,79 @@ class _AlertBanner extends ConsumerWidget {
             const Icon(Icons.chevron_right, color: AppColors.chevron),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// the achievements the player pinned, with how far along each one is.
+/// nothing at all until something is pinned
+class _PinnedAchievements extends ConsumerWidget {
+  const _PinnedAchievements();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    if (ref.watch(pinnedAchievementsProvider).isEmpty) return const SizedBox.shrink();
+    final rows = ref.watch(pinnedAchievementRowsProvider);
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SectionHeader(title: s.t('pinned_achievements'), trailing: '${ref.watch(pinnedAchievementsProvider).length}'),
+          const SizedBox(height: 10),
+          AsyncView<List<AchievementRow>>(
+            value: rows,
+            onRetry: () => ref.invalidate(pinnedAchievementRowsProvider),
+            builder: (list) => Panel(
+              padding: const EdgeInsets.fromLTRB(16, 6, 8, 6),
+              child: Column(
+                children: [
+                  for (final a in list)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    if (a.done) ...[
+                                      const Icon(Icons.check_circle, size: 16, color: AppColors.green),
+                                      const SizedBox(width: 6),
+                                    ],
+                                    Expanded(
+                                      child: Text(a.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                    ),
+                                    if (a.max > 0)
+                                      Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                                          style: const TextStyle(
+                                              fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                  ],
+                                ),
+                                if (a.max > 0) ...[
+                                  const SizedBox(height: 7),
+                                  Bar(value: a.done ? 1 : a.ratio, color: a.done ? AppColors.green : AppColors.gold),
+                                ],
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          AchievementPinButton(id: a.id),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

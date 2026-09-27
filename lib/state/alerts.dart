@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../util.dart';
 import 'api.dart';
+import 'price_history.dart';
 import 'settings.dart';
 
 /// a price watch on one item: tell me when the cheapest listing drops to
@@ -69,7 +70,9 @@ final priceAlertsProvider = NotifierProvider<PriceAlertsNotifier, Map<int, Price
 final triggeredAlertsProvider = FutureProvider<Set<int>>((ref) async {
   final alerts = ref.watch(priceAlertsProvider);
   if (alerts.isEmpty) return const {};
+  final history = ref.read(priceHistoryProvider.notifier);
   final prices = await ref.watch(gw2ApiProvider).prices(alerts.keys);
+  Future(() => history.record(prices));
   final out = <int>{};
   for (final e in alerts.entries) {
     final p = prices[e.key];

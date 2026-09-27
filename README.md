@@ -33,7 +33,8 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Maps drawn from the official tile service, with a pin on every waypoint and
   landmark, and chat codes ready to copy
 - Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
-- Backup: export and import the watchlist, pinned bosses and language as json
+- Backup: export and import the watchlist, price history, pinned bosses and achievements and
+  language as json
 - Game data (items, colors, collection entries) is cached on disk for a month
 - English, German, Spanish, French and Turkish UI. Item names and the wiki follow the
   selected language where the API and wiki support it (Turkish falls back to English data)
@@ -51,6 +52,9 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Wardrobe with every skin's name and icon, filterable by armour, weapon, back and slot
 - "Used in" on item pages, and each character's learned recipes
 - Guild rank permissions, world names in WvW and translated race names
+- Trading post price history: the app records one buy and sell price per day for watched items
+  and every item page opened, with a chart and the change over 7, 30 and 90 days
+- Pinned achievements on the home screen, pinned from any achievement list
 ## Updating
 
 Settings shows the installed version and checks the GitHub releases for a newer one. When

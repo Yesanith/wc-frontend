@@ -9,12 +9,14 @@ import '../state/account.dart';
 import '../state/alerts.dart';
 import '../state/api.dart';
 import '../state/items.dart';
+import '../state/price_history.dart';
 import '../state/settings.dart';
 import '../state/trading.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/price_chart.dart';
 import 'item_sheet.dart';
 
 part 'trading/item_page.dart';
@@ -35,6 +37,9 @@ class WatchRow extends ConsumerWidget {
     final name = (w.item?['name'] as String?) ?? s.t('item_n', {'id': w.id});
     final hasAlert = ref.watch(priceAlertsProvider).containsKey(w.id);
     final fired = ref.watch(triggeredAlertsProvider).valueOrNull?.contains(w.id) ?? false;
+    // the sell price against a week ago, once the history reaches back that far
+    final week = lastDays(ref.watch(priceHistoryProvider)[w.id] ?? const <PricePoint>[], 7);
+    final change = percentChange(week, (p) => p.sell);
     return _ItemTile(
       itemId: w.id,
       item: w.item,
@@ -46,6 +51,12 @@ class WatchRow extends ConsumerWidget {
             Icon(fired ? Icons.notifications_active : Icons.notifications_none,
                 size: 16, color: fired ? AppColors.green : AppColors.gold),
           CoinText(asInt(sells['unit_price']), size: 15),
+          if (change != null)
+            Text(
+              '${change >= 0 ? '+' : ''}${change.toStringAsFixed(1)}% · 7d',
+              style: TextStyle(
+                  fontSize: 10, fontWeight: FontWeight.w700, color: change >= 0 ? AppColors.green : AppColors.red),
+            ),
           const SizedBox(height: 2),
           Row(
             mainAxisSize: MainAxisSize.min,
