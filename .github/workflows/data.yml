@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['tools/build_recipes.py', 'tools/build_worldmap.py', 'tools/test_build_worldmap.py', '.github/workflows/data.yml']
+    paths: ['tools/build_recipes.py', 'tools/build_worldmap.py', 'tools/test_*.py', '.github/workflows/data.yml']
   schedule:
     # first of the month, game data only changes with patches
     - cron: '0 4 1 * *'
@@ -12,45 +12,114 @@ on:
 permissions:
   contents: write
 
+# every part runs as its own job side by side, on its own runner and so
+# with its own share of the api's rate limit. each hands its files to the
+# commit job at the end, which commits them together or not at all
 jobs:
-  recipes:
+  # the builders' logic is checked offline first, a broken build must not
+  # replace the data the app ships with
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: python -m unittest discover -s tools -p 'test_*.py'
 
-      # one search index per language the api translates. turkish is absent on
-      # purpose: AppLang.tr asks the api in english and reuses that index
-      - name: Build legendary recipe trees
-        run: python tools/build_recipes.py en de es fr
+  # english items, their search index and the recipe book
+  book:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/build_recipes.py book
+      - name: Hand the files on
+        run: |
+          mkdir -p out/assets/data
+          cp assets/data/recipe_book.json.gz assets/data/item_index_en.txt.gz out/assets/data/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-book
+          path: out/
+          retention-days: 1
 
-      # the merge logic is checked offline first, a broken build must not
-      # replace the markers the app ships with
-      - name: Test the world map builder
-        run: python -m unittest discover -s tools -p 'test_*.py'
+  # one search index per language the api translates. turkish is absent on
+  # purpose: AppLang.tr asks the api in english and reuses that index
+  index:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang: [de, es, fr]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/build_recipes.py index ${{ matrix.lang }}
+      - name: Hand the files on
+        run: |
+          mkdir -p out/assets/data
+          cp assets/data/item_index_${{ matrix.lang }}.txt.gz out/assets/data/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-index-${{ matrix.lang }}
+          path: out/
+          retention-days: 1
 
+  worldmap:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Build world map markers and overview tiles
         run: python tools/build_worldmap.py en de es fr
-
-      - name: Commit if changed
-        # tags check out a detached head, only branch runs can push back
-        if: github.ref == 'refs/heads/main'
+      - name: Hand the files on
         run: |
+          mkdir -p out/assets/data
+          cp assets/data/worldmap_1_*.json.gz out/assets/data/
+          cp -r assets/tiles out/assets/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data-worldmap
+          path: out/
+          retention-days: 1
+
+  commit:
+    needs: [book, index, worldmap]
+    # tags check out a detached head, only branch runs can push back
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: data-*
+          merge-multiple: true
+          path: out
+      - name: Commit if changed
+        run: |
+          cp -r out/assets/. assets/
           # porcelain lists new files too, a plain diff would miss a file
           # for a language or floor that was never committed before
           if [ -z "$(git status --porcelain assets/data assets/tiles)" ]; then
             echo "nothing changed"
             exit 0
           fi
+          git status --short assets/data assets/tiles
           git config user.name "Yesanith"
           git config user.email "56350783+Yesanith@users.noreply.github.com"
           git add assets/data assets/tiles
           git commit -m "Regenerate recipe and world map data"
-          # the job runs for half an hour, main usually moved on meanwhile.
-          # it only touches assets/data, so replaying it on top is safe
+          # main may have moved on while the jobs ran. this only touches
+          # assets, so replaying it on top is safe
           for attempt in 1 2 3; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             echo "push attempt $attempt failed, retrying"

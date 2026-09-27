@@ -135,6 +135,8 @@ endpoint, but every gift describes its own ingredients in game. `tools/build_rec
 collects both, resolves the forge ingredient names to item ids and writes one recipe book to
 `assets/data/recipe_book.json.gz`, together with a gzipped per language item index used for
 search. The `Build recipe data` workflow regenerates both monthly and commits the result.
+It runs the recipe book, each language's index and the world map as separate jobs side by
+side, each fetching several batches at a time, so a full run takes a few minutes.
 
 The recipes section browses that book by discipline and opens the crafting calculator for any
 entry, so trees expand instantly without calling the api for every step.

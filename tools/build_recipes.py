@@ -12,6 +12,14 @@ So we pull every item once, parse those descriptions and expand them into a
 tree. Together with every normal recipe of /v2/recipes it becomes one recipe
 book in assets/data/recipe_book.json.gz, committed by
 the data workflow, the app only reads the generated file.
+
+Usage:
+  python tools/build_recipes.py book         English items, their search index
+                                             and the recipe book
+  python tools/build_recipes.py index de     the search index of one language
+  python tools/build_recipes.py en de es fr  everything, one after another
+
+The workflow runs the book and each index as separate jobs side by side.
 """
 
 import gzip
@@ -20,6 +28,7 @@ import os
 import re
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 import unicodedata
 import urllib.error
 import urllib.request
@@ -29,6 +38,9 @@ OUT = os.path.join("assets", "data", "recipe_book.json.gz")
 LEGACY_OUT = os.path.join("assets", "data", "legendary_recipes.json")
 INDEX = os.path.join("assets", "data", "item_index_%s.txt.gz")
 BATCH = 200
+# requests in flight at once. one request takes a second or two, the api
+# allows a few per second per address, and 429s back off and retry
+WORKERS = 8
 MAX_DEPTH = 6
 
 # these read like ingredients but are not items we can track
@@ -58,17 +70,30 @@ def get(path, params=None):
     raise RuntimeError("giving up on " + url)
 
 
+def fetch_batches(path, ids, extra=None, fetch=None, workers=WORKERS):
+    """every row of a bulk endpoint, BATCH ids per request and several
+    requests at a time. rows come back in the order of the ids"""
+    fetch = fetch or get
+    chunks = [ids[i:i + BATCH] for i in range(0, len(ids), BATCH)]
+
+    def one(chunk):
+        params = {"ids": ",".join(str(x) for x in chunk)}
+        params.update(extra or {})
+        return fetch(path, params)
+
+    rows = []
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for n, part in enumerate(pool.map(one, chunks), 1):
+            rows.extend(part)
+            if n % 50 == 0:
+                print("  %s %d/%d batches" % (path, n, len(chunks)), flush=True)
+    return rows
+
+
 def fetch_all_items(lang):
     ids = get("/items")
     print("%s: %d items" % (lang, len(ids)), flush=True)
-    items = {}
-    for i in range(0, len(ids), BATCH):
-        chunk = ids[i:i + BATCH]
-        for row in get("/items", {"ids": ",".join(str(x) for x in chunk), "lang": lang}):
-            items[row["id"]] = row
-        if i % (BATCH * 25) == 0:
-            print("  %d/%d" % (i, len(ids)), flush=True)
-    return items
+    return {row["id"]: row for row in fetch_batches("/items", ids, {"lang": lang})}
 
 
 def strip_accents(text):
@@ -213,13 +238,6 @@ def build_tree(item, items, index, depth, seen, unresolved):
     return node
 
 
-def collect_ids(node, out):
-    if node.get("id"):
-        out.add(node["id"])
-    for child in node.get("children", []):
-        collect_ids(child, out)
-
-
 def write_item_index(items, lang):
     """flat "id\tname" lines, small and quick to parse on device.
     the api has no item search, so the app ships this instead"""
@@ -248,10 +266,7 @@ def fetch_all_recipes():
     """every normal crafting recipe of the api, about 13k of them"""
     ids = get("/recipes")
     print("recipes: %d" % len(ids), flush=True)
-    rows = []
-    for i in range(0, len(ids), BATCH):
-        rows.extend(get("/recipes", {"ids": ",".join(str(x) for x in ids[i:i + BATCH])}))
-    return rows
+    return fetch_batches("/recipes", ids)
 
 
 def book_entry_from_recipe(row):
@@ -299,8 +314,8 @@ def write_gz_json(path, data):
             f.write(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
 
 
-def main():
-    langs = sys.argv[1:] or ["en"]
+def build_book():
+    """English items, their search index and the recipe book"""
     items = fetch_all_items("en")
     write_item_index(items, "en")
     index = index_items(items)
@@ -334,25 +349,6 @@ def main():
     for name in sorted(unresolved):
         print("  unresolved: " + name, flush=True)
 
-    # every id the trees touch, so the other languages only need these
-    used = set()
-    for tree in trees:
-        collect_ids(tree, used)
-    used_ids = sorted(used)
-    print("%d items used by the trees" % len(used_ids), flush=True)
-
-    names = {}
-    for lang in langs:
-        if lang == "en":
-            continue
-        # the whole catalogue again, this time for that language's search index
-        translated = fetch_all_items(lang)
-        write_item_index(translated, lang)
-        names[lang] = {
-            str(i): translated[i]["name"] for i in used_ids if i in translated
-        }
-        print("%s: %d names" % (lang, len(names[lang])), flush=True)
-
     # forge trees and every normal recipe end up in one book, keyed by what
     # they produce. normal recipes win when an item has both
     forge = {}
@@ -365,10 +361,10 @@ def main():
     book = normal + [e for oid, e in sorted(forge.items())]
     print("book: %d normal, %d mystic forge" % (len(normal), len(forge)), flush=True)
 
+    # names come from the item index of each language, the book keeps ids only
     result = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "recipes": book,
-        "names": names,
         "unresolved": sorted(unresolved),
     }
 
@@ -377,6 +373,28 @@ def main():
     if os.path.exists(LEGACY_OUT):
         os.remove(LEGACY_OUT)
     print("wrote %s (%d bytes)" % (OUT, os.path.getsize(OUT)))
+
+
+def build_index(lang):
+    """the item search index of one language"""
+    os.makedirs(os.path.dirname(INDEX), exist_ok=True)
+    write_item_index(fetch_all_items(lang), lang)
+
+
+def main():
+    args = sys.argv[1:] or ["en"]
+    if args[0] == "book":
+        build_book()
+    elif args[0] == "index":
+        for lang in args[1:]:
+            build_index(lang)
+    else:
+        # the old way: english builds the book, the rest their index
+        if "en" in args:
+            build_book()
+        for lang in args:
+            if lang != "en":
+                build_index(lang)
 
 
 if __name__ == "__main__":
