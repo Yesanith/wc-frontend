@@ -5,6 +5,7 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 ## Features
 
 - Side drawer navigation across every section
+- A home page for the day: reset countdowns, Wizard's Vault objectives, the metas you can still join, the daily checklist and the wallet
 - Progression: achievements in progress, mastery tracks and points, raid wings and dungeon
   paths with this week's and today's clears, PvP record per profession and WvW rank
 - Trading stats: 90 days of profit and loss with the best selling items
@@ -23,7 +24,7 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Character list and details: equipment templates with runes, sigils and infusions, the full
   build, bags and crafting
 - Item pages with attributes, upgrades, what you own and the current trading post price
-- World boss timers in your local time, with pinning and a marker for the ones you already did today
+- World boss and meta timers on a scrollable timeline with a line for now, or as a list, in your local time, with pinning, release filters and a marker for the bosses already looted today
 - Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
 - Side by side character comparison
 - Recipes: every crafting and Mystic Forge recipe in one place, filterable by discipline,

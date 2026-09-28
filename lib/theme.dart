@@ -241,13 +241,13 @@ Color professionColor(String? p) => _professionColors[p] ?? AppColors.gold;
 
 const _rarityColors = <String, Color>{
   'Junk': Color(0xFF8C8577),
-  'Basic': Color(0xFFB5B0A5),
-  'Fine': Color(0xFF5AA2E6),
-  'Masterwork': Color(0xFF5FC07F),
-  'Rare': Color(0xFFF2D14B),
-  'Exotic': Color(0xFFF5A524),
-  'Ascended': Color(0xFFF0508C),
-  'Legendary': Color(0xFFB57BF2),
+  'Basic': Color(0xFFE6E0D6),
+  'Fine': Color(0xFF5FA2E0),
+  'Masterwork': Color(0xFF32A852),
+  'Rare': Color(0xFFE6C20E),
+  'Exotic': Color(0xFFF59E0B),
+  'Ascended': Color(0xFFF0508F),
+  'Legendary': Color(0xFFA15CFF),
 };
 
 Color rarityColor(String? r) => _rarityColors[r] ?? AppColors.line;
