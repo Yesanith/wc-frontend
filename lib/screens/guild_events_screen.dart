@@ -429,6 +429,17 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   ),
                 if (!e.cancelled && !over && canManageEvent(e, me, myGuilds)) ...[
                   const SizedBox(height: 24),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final saved = await Navigator.of(context).push<bool>(
+                        MaterialPageRoute(builder: (_) => CreateGuildEventScreen(editing: d)),
+                      );
+                      if (saved == true) ref.invalidate(eventDetailProvider(widget.eventId));
+                    },
+                    icon: const Icon(Icons.edit_outlined),
+                    label: Text(s.t('event_edit')),
+                  ),
+                  const SizedBox(height: 6),
                   TextButton.icon(
                     style: TextButton.styleFrom(foregroundColor: AppColors.red),
                     onPressed: _cancel,
@@ -570,7 +581,10 @@ class _Group extends ConsumerWidget {
 // create
 
 class CreateGuildEventScreen extends ConsumerStatefulWidget {
-  const CreateGuildEventScreen({super.key});
+  const CreateGuildEventScreen({super.key, this.editing});
+
+  /// the event to change, null to create a new one
+  final EventDetail? editing;
 
   @override
   ConsumerState<CreateGuildEventScreen> createState() => _CreateGuildEventScreenState();
@@ -591,6 +605,19 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
   @override
   void initState() {
     super.initState();
+    final editing = widget.editing;
+    if (editing != null) {
+      final e = editing.event;
+      _title.text = e.title;
+      _description.text = e.description;
+      _guildId = e.guildId;
+      _activity = eventActivities.contains(e.activity) ? e.activity : 'other';
+      _start = e.startAt;
+      _duration = e.durationMinutes;
+      _max = e.maxParticipants;
+      _roles = {...editing.roles};
+      return;
+    }
     // tomorrow at the next full hour, a sensible first guess
     final now = DateTime.now().add(const Duration(days: 1));
     _start = DateTime(now.year, now.month, now.day, now.hour + 1);
@@ -635,7 +662,20 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
     setState(() => _busy = true);
     try {
       final description = _description.text.trim();
-      if (_weekly) {
+      final editing = widget.editing;
+      if (editing != null) {
+        await updateEvent(
+          eventId: editing.event.id,
+          version: editing.event.version,
+          title: title,
+          startAt: _start,
+          durationMinutes: _duration,
+          description: description,
+          activity: _activity,
+          maxParticipants: _max,
+          roles: _roles,
+        );
+      } else if (_weekly) {
         await createWeeklyEvent(
           guildId: guild,
           title: title,
@@ -669,8 +709,15 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final guilds = ref.watch(creatableGuildsProvider).valueOrNull ?? const <MyGuild>[];
+    final editing = widget.editing;
+    final creatable = ref.watch(creatableGuildsProvider).valueOrNull ?? const <MyGuild>[];
+    // the creator may edit an event in a guild where they are no officer
+    final guilds = editing == null
+        ? creatable
+        : [MyGuild(editing.event.guildId, editing.event.guildName, editing.event.guildTag, 'member')];
     final guildId = _guildId ?? (guilds.isEmpty ? null : guilds.first.id);
+    final durations = {30, 60, 90, 120, 180, 240, _duration}.toList()..sort();
+    final sizes = <int?>{5, 10, 20, 50, _max}.whereType<int>().toList()..sort();
     final roleTotal = _roles.values.fold<int>(0, (a, b) => a + b);
 
     Widget label(String text) => Padding(
@@ -679,7 +726,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
         );
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.t('event_create'))),
+      appBar: AppBar(title: Text(editing == null ? s.t('event_create') : s.t('event_edit'))),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         children: [
@@ -692,7 +739,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
               for (final g in guilds)
                 DropdownMenuItem(value: g.id, child: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]')),
             ],
-            onChanged: (v) => setState(() => _guildId = v),
+            onChanged: editing != null ? null : (v) => setState(() => _guildId = v),
           ),
           label(s.t('event_title')),
           TextField(controller: _title, maxLength: 80, decoration: fieldDecoration(s.t('event_title_hint'))),
@@ -731,19 +778,20 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
               ),
             ],
           ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            value: _weekly,
-            activeThumbColor: AppColors.gold,
-            onChanged: (v) => setState(() => _weekly = v),
-            title: Text(s.t('event_repeat_weekly')),
-            subtitle: Text(s.t('event_repeat_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-          ),
+          if (editing == null)
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: _weekly,
+              activeThumbColor: AppColors.gold,
+              onChanged: (v) => setState(() => _weekly = v),
+              title: Text(s.t('event_repeat_weekly')),
+              subtitle: Text(s.t('event_repeat_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            ),
           label(s.t('event_duration')),
           Wrap(
             spacing: 6,
             children: [
-              for (final m in [30, 60, 90, 120, 180, 240])
+              for (final m in durations)
                 ChoiceChip(
                   label: Text(m < 60 ? '$m min' : '${m ~/ 60}${m % 60 == 0 ? '' : '.5'} h'),
                   selected: _duration == m,
@@ -755,7 +803,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           Wrap(
             spacing: 6,
             children: [
-              for (final n in <int?>[5, 10, 20, 50, null])
+              for (final n in <int?>[...sizes, null])
                 ChoiceChip(
                   label: Text(n == null ? s.t('event_size_open') : '$n'),
                   selected: _max == n,
@@ -838,8 +886,13 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             icon: _busy
                 ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.check),
-            label: Text(s.t('event_create')),
+            label: Text(editing == null ? s.t('event_create') : s.t('event_save')),
           ),
+          if (editing?.event.seriesId != null) ...[
+            const SizedBox(height: 8),
+            Text(s.t('event_edit_one_week'),
+                textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          ],
         ],
       ),
     );

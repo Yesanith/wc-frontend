@@ -1,5 +1,8 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_edit': '编辑活动',
+  'event_save': '保存更改',
+  'event_edit_one_week': '这只会修改每周活动的本周这一次。',
   'guild_events': '公会活动',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

@@ -1,5 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'event_edit': 'Editar evento',
+  'event_save': 'Guardar cambios',
+  'event_edit_one_week': 'Esto cambia solo esta semana del evento semanal.',
   'guild_events': 'Eventos del clan',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

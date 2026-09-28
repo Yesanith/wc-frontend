@@ -1,5 +1,8 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_edit': 'Изменить событие',
+  'event_save': 'Сохранить',
+  'event_edit_one_week': 'Изменится только эта неделя еженедельного события.',
   'guild_events': 'События гильдии',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',
