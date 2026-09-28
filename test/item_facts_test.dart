@@ -14,8 +14,12 @@ void main() {
       'max_power': 1155,
       'defense': 0,
       'infusion_slots': [
-        {'flags': ['Infusion']},
-        {'flags': ['Infusion']},
+        {
+          'flags': ['Infusion']
+        },
+        {
+          'flags': ['Infusion']
+        },
       ],
     };
     final rows = itemFactRows(s, item, details);
