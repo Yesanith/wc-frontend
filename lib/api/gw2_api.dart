@@ -316,7 +316,6 @@ class Gw2Api {
     }
   }
 
-
   static List<Json> _list(dynamic raw) =>
       (raw as List).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 
@@ -724,7 +723,6 @@ class Gw2Api {
     };
   }
 }
-
 
 /// how long to wait before retrying: what the server asked for in
 /// Retry-After, otherwise 1, 2 and 4 seconds, never more than ten

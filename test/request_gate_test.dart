@@ -28,6 +28,11 @@ void main() {
     expect(back[19684]!.sell, 150);
     expect(back[19684]!.supply, 900);
     expect(back[12]!.buy, 0);
-    expect(decodeMarketPrices(['junk', [1, 2]]), isEmpty);
+    expect(
+        decodeMarketPrices([
+          'junk',
+          [1, 2]
+        ]),
+        isEmpty);
   });
 }
