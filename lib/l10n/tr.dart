@@ -1,12 +1,14 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
   'community_account': 'Tyria Companion hesabı',
-  'community_intro': 'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
+  'community_intro':
+      'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
   'community_sign_in_discord': 'Discord ile giriş yap',
   'community_signed_in': 'Discord ile giriş yapıldı',
   'community_sign_out': 'Çıkış yap',
   'community_delete': 'Hesabı sil',
-  'community_delete_body': 'Tyria Companion hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
+  'community_delete_body':
+      'Tyria Companion hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
   'item_details': 'Item detayları',

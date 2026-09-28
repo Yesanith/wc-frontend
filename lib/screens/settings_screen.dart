@@ -388,7 +388,6 @@ class _ImportDialogState extends State<_ImportDialog> {
   }
 }
 
-
 /// the tyria companion account: separate from the gw2 api keys above, it
 /// is what guild events, friends and the discord bot will hang on
 class _CommunityPanel extends ConsumerStatefulWidget {
