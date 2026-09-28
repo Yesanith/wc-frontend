@@ -1,5 +1,14 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'community_account': 'Tyria Companion 账号',
+  'community_intro': '登录后可参加公会活动、寻找好友并连接公会的 Discord。你的 API 密钥只保存在本设备上。',
+  'community_sign_in_discord': '使用 Discord 登录',
+  'community_signed_in': '已通过 Discord 登录',
+  'community_sign_out': '退出登录',
+  'community_delete': '删除账号',
+  'community_delete_body': '你的 Tyria Companion 账号及其所有关联数据将被永久删除。本设备上的 API 密钥和应用的其他数据不受影响。',
+  'community_delete_confirm': '永久删除',
+  'community_failed': '操作失败，请重试。',
   'item_details': '物品详情',
   'upgrade_effect': '升级效果',
   'weapon_strength': '武器强度',

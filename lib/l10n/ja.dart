@@ -1,5 +1,14 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'community_account': 'Tyria Companion アカウント',
+  'community_intro': 'ログインするとギルドイベントへの参加、フレンド探し、ギルドの Discord 連携ができます。API キーはこの端末に残ります。',
+  'community_sign_in_discord': 'Discord でログイン',
+  'community_signed_in': 'Discord でログイン中',
+  'community_sign_out': 'ログアウト',
+  'community_delete': 'アカウント削除',
+  'community_delete_body': 'Tyria Companion アカウントと関連するすべてのデータが完全に削除されます。この端末の API キーやアプリの他のデータには影響しません。',
+  'community_delete_confirm': '完全に削除',
+  'community_failed': 'うまくいきませんでした。もう一度お試しください。',
   'item_details': 'アイテム詳細',
   'upgrade_effect': 'アップグレード効果',
   'weapon_strength': '武器の強さ',

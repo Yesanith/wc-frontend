@@ -1,5 +1,14 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'community_account': 'Tyria-Companion-Konto',
+  'community_intro': 'Melde dich an, um an Gildenevents teilzunehmen, Freunde zu finden und den Discord deiner Gilde zu verbinden. Deine API-Schlüssel bleiben auf diesem Gerät.',
+  'community_sign_in_discord': 'Mit Discord anmelden',
+  'community_signed_in': 'Mit Discord angemeldet',
+  'community_sign_out': 'Abmelden',
+  'community_delete': 'Konto löschen',
+  'community_delete_body': 'Dein Tyria-Companion-Konto und alles, was daran hängt, wird endgültig gelöscht. Deine API-Schlüssel und die übrigen App-Daten auf diesem Gerät bleiben erhalten.',
+  'community_delete_confirm': 'Endgültig löschen',
+  'community_failed': 'Das hat nicht geklappt, bitte versuche es erneut.',
   'item_details': 'Gegenstandsdetails',
   'upgrade_effect': 'Aufwertungseffekt',
   'weapon_strength': 'Waffenstärke',

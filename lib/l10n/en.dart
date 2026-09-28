@@ -1,5 +1,14 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'community_account': 'Tyria Companion account',
+  'community_intro': 'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device.',
+  'community_sign_in_discord': 'Sign in with Discord',
+  'community_signed_in': 'Signed in with Discord',
+  'community_sign_out': 'Sign out',
+  'community_delete': 'Delete account',
+  'community_delete_body': 'Your Tyria Companion account and everything tied to it will be deleted for good. Your API keys and the app\'s other data on this device are not affected.',
+  'community_delete_confirm': 'Delete for good',
+  'community_failed': 'That did not work, please try again.',
   'item_details': 'Item details',
   'upgrade_effect': 'Upgrade effect',
   'weapon_strength': 'Weapon strength',

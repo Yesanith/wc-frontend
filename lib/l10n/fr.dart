@@ -1,5 +1,14 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'community_account': 'Compte Tyria Companion',
+  'community_intro': 'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil.',
+  'community_sign_in_discord': 'Se connecter avec Discord',
+  'community_signed_in': 'Connecté avec Discord',
+  'community_sign_out': 'Se déconnecter',
+  'community_delete': 'Supprimer le compte',
+  'community_delete_body': 'Ton compte Tyria Companion et tout ce qui y est lié seront supprimés définitivement. Tes clés API et les autres données de l\'appli sur cet appareil ne sont pas touchées.',
+  'community_delete_confirm': 'Supprimer définitivement',
+  'community_failed': 'Cela n\'a pas marché, réessaie.',
   'item_details': 'Détails de l\'objet',
   'upgrade_effect': 'Effet de l\'amélioration',
   'weapon_strength': 'Puissance de l\'arme',
