@@ -16,6 +16,7 @@ import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/meters.dart';
 import '../widgets/pin_button.dart';
+import '../state/news.dart';
 import 'events_screen.dart';
 
 const _tabular = [FontFeature.tabularFigures()];
@@ -48,6 +49,7 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           const _Resets(),
           const _AlertBanner(),
+          const _NewsBanner(),
           Eyebrow(s.t('wizards_vault')),
           const _Vault(),
           Eyebrow(
@@ -578,6 +580,43 @@ class _PinnedAchievements extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+/// "new articles" while the feed has something the user has not seen yet
+class _NewsBanner extends ConsumerWidget {
+  const _NewsBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    // the first time the feed loads, what is there counts as seen
+    ref.listen<AsyncValue<List<NewsItem>>>(newsProvider, (_, next) {
+      final items = next.valueOrNull;
+      final newest = items == null || items.isEmpty ? null : items.first.date;
+      if (newest != null && ref.read(newsSeenProvider) == null) {
+        ref.read(newsSeenProvider.notifier).markSeen(newest);
+      }
+    });
+    final count = ref.watch(unseenNewsProvider);
+    if (count == 0) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AppCard(
+        onTap: () => ref.read(sectionProvider.notifier).state = AppSection.news,
+        child: Row(
+          children: [
+            const Icon(Icons.newspaper, color: AppColors.gold),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(s.t('news_new', {'n': count}), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.chevron),
+          ],
+        ),
       ),
     );
   }

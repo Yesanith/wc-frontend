@@ -1,5 +1,11 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'news': 'ニュース',
+  'patch_notes': 'パッチノート',
+  'patch_notes_note': '英語版 Guild Wars 2 Wiki のアップデートノート。新しい順。',
+  'game_update_on': 'ゲームアップデート {d}',
+  'news_source': 'guildwars2.com のニュース',
+  'news_new': '新着記事 {n} 件',
   'map_search': 'ウェイポイント、名所、マップを検索',
   'floor_n': 'レベル {n}',
   'map_layers': 'マップレイヤー',

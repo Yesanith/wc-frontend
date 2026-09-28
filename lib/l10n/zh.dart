@@ -1,5 +1,11 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'news': '新闻',
+  'patch_notes': '更新说明',
+  'patch_notes_note': '来自英文 Guild Wars 2 维基的更新说明，最新的在前。',
+  'game_update_on': '游戏更新，{d}',
+  'news_source': '来自 guildwars2.com 的新闻',
+  'news_new': '{n} 篇新文章',
   'map_search': '搜索传送点、地标和地图',
   'floor_n': '第 {n} 层',
   'map_layers': '地图图层',

@@ -1,5 +1,11 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'news': 'Actualités',
+  'patch_notes': 'Notes de mise à jour',
+  'patch_notes_note': 'Notes de mise à jour du wiki anglais de Guild Wars 2, les plus récentes en premier.',
+  'game_update_on': 'Mise à jour du jeu, {d}',
+  'news_source': 'Actualités de guildwars2.com',
+  'news_new': '{n} nouveaux articles',
   'map_search': 'Chercher points de passage, sites, cartes',
   'floor_n': 'Niveau {n}',
   'map_layers': 'Couches de la carte',
