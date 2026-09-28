@@ -1,5 +1,13 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_running': '開催中',
+  'event_starts_in': '{t}後に開始',
+  'event_ended': '終了',
+  'gem_history_title': '100ジェム · 過去30日',
+  'gem_history_collecting': '履歴を収集中です。次の記録の後にグラフが表示されます。レートは数時間ごとに保存されます。',
+  'gem_buy_100': '購入',
+  'gem_sell_100': '売却',
+  'gem_range': '100ジェムの価格は {lo}〜{hi} ゴールド',
   'news': 'ニュース',
   'patch_notes': 'パッチノート',
   'patch_notes_note': '英語版 Guild Wars 2 Wiki のアップデートノート。新しい順。',

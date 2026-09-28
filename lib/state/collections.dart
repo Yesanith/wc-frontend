@@ -155,9 +155,14 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
     try {
       final types =
           await cachedList(cache, 'collection_mount_types_${lang.apiLang}', 'rows', () => api.allOf('/mounts/types'));
+      // skins used to name their mount by key ("raptor"). since the
+      // 2025-08-29 schema they carry mount_guid instead, and types a guid
       mountNames = {
         for (final t in types.whereType<Map>())
-          if ('${t['name'] ?? ''}'.isNotEmpty) '${t['id']}': '${t['name']}',
+          if ('${t['name'] ?? ''}'.isNotEmpty) ...{
+            '${t['id']}': '${t['name']}',
+            if (t['guid'] != null) '${t['guid']}'.toUpperCase(): '${t['name']}',
+          },
       };
     } catch (_) {
       // the keys still group the skins, only less nicely named
@@ -176,7 +181,7 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
       rarity: row?['rarity'] as String?,
       type: switch (kind.key) {
         'wardrobe' => row?['type'] as String?,
-        'mount_skins' when row?['mount'] != null => mountNames['${row!['mount']}'] ?? titleCase('${row['mount']}'),
+        'mount_skins' => mountOf(row, mountNames),
         _ => null,
       },
       subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
@@ -189,3 +194,14 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
   });
   return entries;
 });
+
+
+/// which mount a skin belongs to, by name. newer api schemas give the mount
+/// as mount_guid, older ones as a key such as "raptor"
+String? mountOf(Json? row, Map<String, String> names) {
+  final guid = row?['mount_guid'];
+  if (guid != null) return names['$guid'.toUpperCase()];
+  final key = row?['mount'];
+  if (key == null) return null;
+  return names['$key'] ?? titleCase('$key');
+}

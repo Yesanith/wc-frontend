@@ -1,5 +1,13 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_running': 'Şu an sürüyor',
+  'event_starts_in': '{t} sonra başlıyor',
+  'event_ended': 'Bitti',
+  'gem_history_title': '100 gem · son 30 gün',
+  'gem_history_collecting': 'Geçmiş toplanıyor, grafik sonraki kayıtlardan sonra görünecek. Kur birkaç saatte bir kaydediliyor.',
+  'gem_buy_100': 'Alış',
+  'gem_sell_100': 'Satış',
+  'gem_range': '100 gem {lo} ile {hi} altın arasında değişti',
   'news': 'Haberler',
   'patch_notes': 'Yama notları',
   'patch_notes_note': 'İngilizce Guild Wars 2 Wiki\'deki güncelleme notları, en yenisi üstte.',

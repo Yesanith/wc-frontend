@@ -1,5 +1,13 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'event_running': 'En cours',
+  'event_starts_in': 'Commence dans {t}',
+  'event_ended': 'Déjà terminé',
+  'gem_history_title': '100 gemmes · 30 derniers jours',
+  'gem_history_collecting': 'L\'historique est en cours de collecte, le graphique apparaîtra après les prochains relevés. Le taux est enregistré toutes les quelques heures.',
+  'gem_buy_100': 'Achat',
+  'gem_sell_100': 'Vente',
+  'gem_range': '100 gemmes ont coûté entre {lo} et {hi} or',
   'news': 'Actualités',
   'patch_notes': 'Notes de mise à jour',
   'patch_notes_note': 'Notes de mise à jour du wiki anglais de Guild Wars 2, les plus récentes en premier.',

@@ -1,5 +1,13 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_running': 'Идёт сейчас',
+  'event_starts_in': 'Начнётся через {t}',
+  'event_ended': 'Уже закончилось',
+  'gem_history_title': '100 самоцветов · 30 дней',
+  'gem_history_collecting': 'История собирается, график появится после следующих записей. Курс сохраняется каждые несколько часов.',
+  'gem_buy_100': 'Покупка',
+  'gem_sell_100': 'Продажа',
+  'gem_range': '100 самоцветов стоили от {lo} до {hi} золота',
   'news': 'Новости',
   'patch_notes': 'Список изменений',
   'patch_notes_note': 'Заметки об обновлениях из английской вики Guild Wars 2, сначала новые.',

@@ -4,6 +4,7 @@ import '../util.dart';
 import 'api.dart';
 import 'price_history.dart';
 import 'settings.dart';
+import 'gem_history.dart';
 
 class WatchedItem {
   const WatchedItem(this.id, this.item, this.price);
@@ -64,6 +65,7 @@ final gemRatesProvider = FutureProvider<GemRates>((ref) async {
   final coins = await api.coinsForGems(100);
   // 100 gold = 1,000,000 copper
   final gems = await api.gemsForCoins(1000000);
+  Future(() => ref.read(localGemsProvider.notifier).record(buyFor100Gems(gems), coins));
   return GemRates(coins, gems);
 });
 
