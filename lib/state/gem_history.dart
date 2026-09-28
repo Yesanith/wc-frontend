@@ -82,21 +82,30 @@ final localGemsProvider = NotifierProvider<LocalGemsNotifier, List<GemPoint>>(Lo
 
 final _client = http.Client();
 
-/// thirty days of the gem exchange, from the shared recording and the
-/// device's own readings
-final gemHistoryProvider = FutureProvider<List<GemPoint>>((ref) async {
+/// the shared recording, fetched once and kept on disk for when the network
+/// is away. apart from the device's readings, so a new reading does not
+/// download the whole history again
+final sharedGemHistoryProvider = FutureProvider<List<GemPoint>>((ref) async {
   final cache = ref.watch(diskCacheProvider);
-  final local = ref.watch(localGemsProvider);
-  var shared = const <GemPoint>[];
   try {
     final res = await _client.get(Uri.parse(gemHistoryUrl)).timeout(const Duration(seconds: 15));
     if (res.statusCode == 200) {
-      shared = parseGemHistory(utf8.decode(res.bodyBytes));
-      await cache?.write('gem_history', {'body': utf8.decode(res.bodyBytes)});
+      final body = utf8.decode(res.bodyBytes);
+      await cache?.write('gem_history', {'body': body});
+      return parseGemHistory(body);
     }
   } catch (_) {
-    final cached = await cache?.read('gem_history', maxAge: const Duration(days: 30));
-    if (cached?['body'] is String) shared = parseGemHistory(cached!['body'] as String);
+    // the disk copy below
   }
-  return mergeGemPoints(shared, local, now: DateTime.now().toUtc());
+  final cached = await cache?.read('gem_history', maxAge: const Duration(days: 30));
+  return cached?['body'] is String ? parseGemHistory(cached!['body'] as String) : const [];
+});
+
+/// thirty days of the gem exchange, from the shared recording and the
+/// device's own readings
+final gemHistoryProvider = Provider<AsyncValue<List<GemPoint>>>((ref) {
+  final local = ref.watch(localGemsProvider);
+  return ref
+      .watch(sharedGemHistoryProvider)
+      .whenData((shared) => mergeGemPoints(shared, local, now: DateTime.now().toUtc()));
 });

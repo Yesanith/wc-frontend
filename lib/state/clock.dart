@@ -8,6 +8,14 @@ final clockProvider = StreamProvider<DateTime>((ref) async* {
   yield* Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now().toUtc());
 });
 
+/// the clock at minute precision, for lists that only change once a minute.
+/// watching this instead of [clockProvider] saves fifty nine rebuilds
+final minuteProvider = Provider<DateTime>((ref) {
+  final now =
+      ref.watch(clockProvider.select((t) => t.valueOrNull?.copyWith(second: 0, millisecond: 0, microsecond: 0)));
+  return now ?? DateTime.now().toUtc().copyWith(second: 0, millisecond: 0, microsecond: 0);
+});
+
 String _two(int v) => v.toString().padLeft(2, '0');
 
 /// a countdown with its two largest units: 2d 04h, 3h 05m, 12:07

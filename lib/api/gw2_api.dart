@@ -522,11 +522,6 @@ class Gw2Api {
   /// every map of the game, static data
   Future<List<Json>> maps() async => _list(await get('/maps', {'ids': 'all'}));
 
-  /// the floor entry of one map, this is where waypoints and their chat
-  /// links live
-  Future<Json> mapDetail(int continent, int floor, int region, int map) async =>
-      Map<String, dynamic>.from(await get('/continents/$continent/floors/$floor/regions/$region/maps/$map') as Map);
-
   // ---------------------------------------------------------------------
   // static reference data, requested whole with ids=all
 

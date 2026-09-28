@@ -68,16 +68,6 @@ class DiskCache {
       await dir.create(recursive: true);
     } catch (_) {}
   }
-
-  Future<int> sizeInBytes() async {
-    var total = 0;
-    try {
-      await for (final f in dir.list()) {
-        if (f is File) total += await f.length();
-      }
-    } catch (_) {}
-    return total;
-  }
 }
 
 /// a cached json list stored under [field], or the result of [fetch] written
