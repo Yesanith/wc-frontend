@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/metas.dart';
 import '../state/clock.dart';
+import '../widgets/clock.dart';
 import '../state/periodic.dart';
 import '../state/progression.dart';
 import '../state/settings.dart';
@@ -184,29 +185,33 @@ class _AgendaList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // the list only changes once a minute, the rows tick on their own
-    final now = ref.watch(minuteProvider);
-    final list = occurrences(now, now.add(const Duration(hours: 6)), maps: maps)
-        .where((o) => _matches(o.map, o.event, kind, pins))
-        .toList();
-    return SliverList.builder(
-      itemCount: list.length,
-      itemBuilder: (context, i) {
-        final o = list[i];
-        final hourChanged = i == 0 || o.start.toLocal().hour != list[i - 1].start.toLocal().hour;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (hourChanged)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 20, 4),
-                child: Text(
-                  '${_two(o.start.toLocal().hour)}:00',
-                  style: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
-                ),
-              ),
-            MetaRow(occurrence: o, looted: lootedRun(o, looted, now), pinnable: true),
-          ],
+    return ClockBuilder(
+      step: ClockStep.minute,
+      builder: (context, now) {
+        final list = occurrences(now, now.add(const Duration(hours: 6)), maps: maps)
+            .where((o) => _matches(o.map, o.event, kind, pins))
+            .toList();
+        return SliverList.builder(
+          itemCount: list.length,
+          itemBuilder: (context, i) {
+            final o = list[i];
+            final hourChanged = i == 0 || o.start.toLocal().hour != list[i - 1].start.toLocal().hour;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (hourChanged)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 16, 20, 4),
+                    child: Text(
+                      '${_two(o.start.toLocal().hour)}:00',
+                      style: const TextStyle(
+                          fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
+                    ),
+                  ),
+                MetaRow(occurrence: o, looted: lootedRun(o, looted, now), pinnable: true),
+              ],
+            );
+          },
         );
       },
     );
@@ -224,104 +229,111 @@ class MetaRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now().toUtc();
     final o = occurrence;
-    final active = o.activeAt(now);
     final tint = o.map.release.color;
     final key = eventKey(o.map, o.event);
+    // watched outside the clock, whose ticks rebuild only the clock
     final pinned = ref.watch(pinnedEventsProvider).contains(key);
-    return InkWell(
-      onTap: () => openWikiPage(context, ref, o.event.name),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 9, 8, 9),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 76,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    localClock(o.start),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: active ? AppColors.gold : AppColors.text,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
-                  Text(
-                    active
-                        ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
-                        : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
-                    maxLines: 1,
-                    style: const TextStyle(
-                        fontSize: 11, color: AppColors.muted, fontFeatures: [FontFeature.tabularFigures()]),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 10),
-            Container(
-                width: 3, height: 34, decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(2))),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return ClockBuilder(
+      step: ClockStep.second,
+      builder: (context, now) {
+        final active = o.activeAt(now);
+        return InkWell(
+          onTap: () => openWikiPage(context, ref, o.event.name),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 9, 8, 9),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 76,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (o.event.kind == MetaKind.hardBoss) ...[
-                        const Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
-                        const SizedBox(width: 3),
-                      ],
-                      Flexible(
-                        child: Text(
-                          o.event.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: looted ? AppColors.muted : AppColors.text,
-                            decoration: looted ? TextDecoration.lineThrough : null,
-                          ),
+                      Text(
+                        localClock(o.start),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: active ? AppColors.gold : AppColors.text,
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
+                      ),
+                      Text(
+                        active
+                            ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
+                            : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
+                        maxLines: 1,
+                        style: const TextStyle(
+                            fontSize: 11, color: AppColors.muted, fontFeatures: [FontFeature.tabularFigures()]),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(o.map.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                ],
-              ),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                    width: 3,
+                    height: 34,
+                    decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(2))),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          if (o.event.kind == MetaKind.hardBoss) ...[
+                            const Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
+                            const SizedBox(width: 3),
+                          ],
+                          Flexible(
+                            child: Text(
+                              o.event.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: looted ? AppColors.muted : AppColors.text,
+                                decoration: looted ? TextDecoration.lineThrough : null,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
+                      Text(o.map.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                if (active)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                    decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(999)),
+                    child: Text(s.t('now'),
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
+                  )
+                else if (looted)
+                  const Icon(Icons.check_rounded, size: 18, color: AppColors.green)
+                else
+                  ExpansionBadge(o.map.release, size: 30),
+                if (pinnable)
+                  IconButton(
+                    tooltip: pinned ? s.t('unpin') : s.t('pin'),
+                    onPressed: () => ref.read(pinnedEventsProvider.notifier).toggle(key),
+                    icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined,
+                        size: 20, color: pinned ? AppColors.gold : AppColors.chevron),
+                  )
+                else
+                  const SizedBox(width: 12),
+              ],
             ),
-            const SizedBox(width: 8),
-            if (active)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-                decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(999)),
-                child: Text(s.t('now'),
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
-              )
-            else if (looted)
-              const Icon(Icons.check_rounded, size: 18, color: AppColors.green)
-            else
-              ExpansionBadge(o.map.release, size: 30),
-            if (pinnable)
-              IconButton(
-                tooltip: pinned ? s.t('unpin') : s.t('pin'),
-                onPressed: () => ref.read(pinnedEventsProvider.notifier).toggle(key),
-                icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined,
-                    size: 20, color: pinned ? AppColors.gold : AppColors.chevron),
-              )
-            else
-              const SizedBox(width: 12),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -360,81 +372,86 @@ class _TimelineState extends ConsumerState<Timeline> {
     final s = ref.watch(stringsProvider);
     // the lanes only change once a minute. the now line ticks every second
     // on its own, so the forty odd lanes are not rebuilt with it
-    final now = ref.watch(minuteProvider);
-    // the window moves in five minute steps
-    final origin = now.subtract(Timeline.before);
-    final start = DateTime.utc(origin.year, origin.month, origin.day, origin.hour, origin.minute - origin.minute % 5);
-    final end = start.add(Timeline.span);
-    double x(DateTime t) => t.difference(start).inSeconds / 60 * Timeline.pxPerMinute;
-    final width = x(end);
-    final all = occurrences(start, end, maps: widget.maps)
-        .where((o) => _matches(o.map, o.event, widget.kind, widget.pins))
-        .toList();
-    const g = Timeline.gutter;
+    return ClockBuilder(
+      step: ClockStep.minute,
+      builder: (context, now) {
+        // the window moves in five minute steps
+        final origin = now.subtract(Timeline.before);
+        final start =
+            DateTime.utc(origin.year, origin.month, origin.day, origin.hour, origin.minute - origin.minute % 5);
+        final end = start.add(Timeline.span);
+        double x(DateTime t) => t.difference(start).inSeconds / 60 * Timeline.pxPerMinute;
+        final width = x(end);
+        final all = occurrences(start, end, maps: widget.maps)
+            .where((o) => _matches(o.map, o.event, widget.kind, widget.pins))
+            .toList();
+        const g = Timeline.gutter;
 
-    return SizedBox(
-      height: 28 + widget.maps.length * Timeline.lane,
-      child: SingleChildScrollView(
-        controller: _scroll,
-        scrollDirection: Axis.horizontal,
-        child: SizedBox(
-          width: width + g * 2,
-          child: Stack(
-            children: [
-              // hour and half hour ticks
-              for (var t = DateTime.utc(start.year, start.month, start.day, start.hour);
-                  t.isBefore(end);
-                  t = t.add(const Duration(minutes: 30)))
-                if (!t.isBefore(start))
-                  Positioned(
-                    left: g + x(t),
-                    top: 0,
-                    bottom: 0,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          localClock(t),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: t.minute == 0 ? AppColors.muted : AppColors.hint,
-                          ),
+        return SizedBox(
+          height: 28 + widget.maps.length * Timeline.lane,
+          child: SingleChildScrollView(
+            controller: _scroll,
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: width + g * 2,
+              child: Stack(
+                children: [
+                  // hour and half hour ticks
+                  for (var t = DateTime.utc(start.year, start.month, start.day, start.hour);
+                      t.isBefore(end);
+                      t = t.add(const Duration(minutes: 30)))
+                    if (!t.isBefore(start))
+                      Positioned(
+                        left: g + x(t),
+                        top: 0,
+                        bottom: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              localClock(t),
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: t.minute == 0 ? AppColors.muted : AppColors.hint,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Expanded(
+                              child: Container(
+                                width: 1,
+                                color: AppColors.line.withValues(alpha: t.minute == 0 ? 0.9 : 0.4),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        Expanded(
-                          child: Container(
-                            width: 1,
-                            color: AppColors.line.withValues(alpha: t.minute == 0 ? 0.9 : 0.4),
-                          ),
-                        ),
-                      ],
+                      ),
+                  for (var i = 0; i < widget.maps.length; i++)
+                    Positioned(
+                      top: 28 + i * Timeline.lane,
+                      left: 0,
+                      width: width + g * 2,
+                      height: Timeline.lane,
+                      child: _Lane(
+                        map: widget.maps[i],
+                        runs: [
+                          for (final o in all)
+                            if (o.map == widget.maps[i]) o
+                        ],
+                        x: x,
+                        now: now,
+                        looted: widget.looted,
+                        scroll: _scroll,
+                      ),
                     ),
-                  ),
-              for (var i = 0; i < widget.maps.length; i++)
-                Positioned(
-                  top: 28 + i * Timeline.lane,
-                  left: 0,
-                  width: width + g * 2,
-                  height: Timeline.lane,
-                  child: _Lane(
-                    map: widget.maps[i],
-                    runs: [
-                      for (final o in all)
-                        if (o.map == widget.maps[i]) o
-                    ],
-                    x: x,
-                    now: now,
-                    looted: widget.looted,
-                    scroll: _scroll,
-                  ),
-                ),
-              // now
-              _NowLine(x: x, label: s.t('now')),
-            ],
+                  // now
+                  _NowLine(x: x, label: s.t('now')),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -449,23 +466,28 @@ class _NowLine extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now().toUtc();
-    return Positioned(
-      left: Timeline.gutter + x(now) - 1,
-      top: 16,
-      bottom: 0,
-      child: IgnorePointer(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-              decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
-              child: Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
+    return ClockBuilder(
+      step: ClockStep.second,
+      builder: (context, now) {
+        return Positioned(
+          left: Timeline.gutter + x(now) - 1,
+          top: 16,
+          bottom: 0,
+          child: IgnorePointer(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
+                  child: Text(label,
+                      style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
+                ),
+                Expanded(child: Container(width: 2, color: AppColors.red)),
+              ],
             ),
-            Expanded(child: Container(width: 2, color: AppColors.red)),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -6,6 +6,7 @@ import '../services/icon_cache.dart';
 import '../state/account.dart';
 import '../state/alerts.dart';
 import '../state/clock.dart';
+import '../widgets/clock.dart';
 import '../state/navigation.dart';
 import '../state/periodic.dart';
 import '../state/progression.dart';
@@ -103,44 +104,49 @@ class _Resets extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now().toUtc();
-    Widget half(String label, DateTime next, double progress, Color color, AppSection target) => Expanded(
-          child: InkWell(
-            borderRadius: BorderRadius.circular(AppRadius.frame),
-            onTap: () => ref.read(sectionProvider.notifier).state = target,
-            child: Row(
-              children: [
-                Ring(value: progress, size: 46, stroke: 5, colors: [color, color]),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                      const SizedBox(height: 2),
-                      Text(
-                        countdown(next.difference(now)),
-                        style: display(18).copyWith(fontFeatures: _tabular),
+    return ClockBuilder(
+      step: ClockStep.second,
+      builder: (context, now) {
+        Widget half(String label, DateTime next, double progress, Color color, AppSection target) => Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(AppRadius.frame),
+                onTap: () => ref.read(sectionProvider.notifier).state = target,
+                child: Row(
+                  children: [
+                    Ring(value: progress, size: 46, stroke: 5, colors: [color, color]),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          const SizedBox(height: 2),
+                          Text(
+                            countdown(next.difference(now)),
+                            style: display(18).copyWith(fontFeatures: _tabular),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            );
+        return GlowCard(
+          glow: AppColors.gold,
+          child: Row(
+            children: [
+              half(s.t('daily_reset'), nextDailyReset(now), dayProgress(now), AppColors.gold, AppSection.daily),
+              Container(
+                  width: 1, height: 40, color: AppColors.line, margin: const EdgeInsets.symmetric(horizontal: 12)),
+              half(s.t('weekly_reset'), nextWeeklyReset(now), weekProgress(now), AppColors.blue, AppSection.weekly),
+            ],
           ),
         );
-    return GlowCard(
-      glow: AppColors.gold,
-      child: Row(
-        children: [
-          half(s.t('daily_reset'), nextDailyReset(now), dayProgress(now), AppColors.gold, AppSection.daily),
-          Container(width: 1, height: 40, color: AppColors.line, margin: const EdgeInsets.symmetric(horizontal: 12)),
-          half(s.t('weekly_reset'), nextWeeklyReset(now), weekProgress(now), AppColors.blue, AppSection.weekly),
-        ],
-      ),
+      },
     );
   }
 }
@@ -314,16 +320,22 @@ class _UpNext extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final now = ref.watch(minuteProvider);
+    // providers are watched here, outside the clock: its ticks rebuild only
+    // the clock, where the consumer's ref may not watch anything new
     final looted = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
-    final next = upNext(
-      now,
-      count: 5,
-      where: (o) => !lootedRun(o, looted, now) && now.difference(o.start) < const Duration(minutes: 10),
-    );
-    return Panel(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(children: [for (final o in next) MetaRow(occurrence: o, looted: false)]),
+    return ClockBuilder(
+      step: ClockStep.minute,
+      builder: (context, now) {
+        final next = upNext(
+          now,
+          count: 5,
+          where: (o) => !lootedRun(o, looted, now) && now.difference(o.start) < const Duration(minutes: 10),
+        );
+        return Panel(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Column(children: [for (final o in next) MetaRow(occurrence: o, looted: false)]),
+        );
+      },
     );
   }
 }

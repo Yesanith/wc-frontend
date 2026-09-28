@@ -1,20 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'periodic.dart';
-
-/// the wall clock in utc, ticking once a second for the countdowns
-final clockProvider = StreamProvider<DateTime>((ref) async* {
-  yield DateTime.now().toUtc();
-  yield* Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now().toUtc());
-});
-
-/// the clock at minute precision, for lists that only change once a minute.
-/// watching this instead of [clockProvider] saves fifty nine rebuilds
-final minuteProvider = Provider<DateTime>((ref) {
-  final now =
-      ref.watch(clockProvider.select((t) => t.valueOrNull?.copyWith(second: 0, millisecond: 0, microsecond: 0)));
-  return now ?? DateTime.now().toUtc().copyWith(second: 0, millisecond: 0, microsecond: 0);
-});
 
 String _two(int v) => v.toString().padLeft(2, '0');
 

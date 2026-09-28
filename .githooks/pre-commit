@@ -1,0 +1,16 @@
+#!/bin/sh
+# formats the dart files of a commit before it is made, so the Format
+# workflow has nothing to fix and never pushes a commit of its own that a
+# local clone would then have to pull. enable once per clone with:
+#   git config core.hooksPath .githooks
+# without a dart sdk the commit goes through and the workflow formats it
+
+command -v dart >/dev/null 2>&1 || exit 0
+
+files=$(git diff --cached --name-only --diff-filter=ACMR -- 'lib/*.dart' 'test/*.dart')
+[ -z "$files" ] && exit 0
+
+# shellcheck disable=SC2086
+dart format --line-length 120 $files >/dev/null || exit 1
+# shellcheck disable=SC2086
+git add $files
