@@ -70,6 +70,9 @@ class TradingItemScreen extends ConsumerWidget {
             PriceHistoryPanel(itemId: itemId),
             const SizedBox(height: 12),
             _OrderBook(itemId: itemId),
+            // what the item is: description, stats, how it binds, vendor
+            // value and the recipes it goes into
+            ItemFacts(itemId: itemId),
             const SizedBox(height: 12),
             Panel(
               child: Row(
