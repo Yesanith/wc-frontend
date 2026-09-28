@@ -10,7 +10,6 @@ enum AppSection {
   progression,
   wvw,
   account,
-  inventory,
   guilds,
   trading,
   bosses,
