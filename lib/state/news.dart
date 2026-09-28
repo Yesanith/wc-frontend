@@ -41,8 +41,18 @@ String newsLang(AppLang lang) => const {'de', 'fr', 'es'}.contains(lang.code) ? 
 String newsFeedUrl(AppLang lang) => 'https://www.guildwars2.com/${newsLang(lang)}/feed/';
 
 const _months = {
-  'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
-  'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+  'jan': 1,
+  'feb': 2,
+  'mar': 3,
+  'apr': 4,
+  'may': 5,
+  'jun': 6,
+  'jul': 7,
+  'aug': 8,
+  'sep': 9,
+  'oct': 10,
+  'nov': 11,
+  'dec': 12,
 };
 
 /// "Tue, 22 Sep 2026 16:00:00 +0000", the rss date format, read as utc
@@ -65,7 +75,17 @@ DateTime? parseRssDate(String raw) {
 
 /// html entities that show up in feed titles and excerpts
 String decodeEntities(String text) {
-  const named = {'amp': '&', 'lt': '<', 'gt': '>', 'quot': '"', 'apos': "'", 'nbsp': ' ', 'hellip': '…', 'ndash': '–', 'mdash': '—'};
+  const named = {
+    'amp': '&',
+    'lt': '<',
+    'gt': '>',
+    'quot': '"',
+    'apos': "'",
+    'nbsp': ' ',
+    'hellip': '…',
+    'ndash': '–',
+    'mdash': '—'
+  };
   return text.replaceAllMapped(RegExp(r'&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);'), (m) {
     final code = m.group(1)!;
     if (code.startsWith('#x')) return String.fromCharCode(int.parse(code.substring(2), radix: 16));
@@ -138,7 +158,10 @@ final newsProvider = FutureProvider<List<NewsItem>>((ref) async {
     final cached = await cache?.read(name, maxAge: const Duration(days: 60));
     final rows = cached?['items'];
     if (rows is List && rows.isNotEmpty) {
-      return [for (final r in rows) if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r))];
+      return [
+        for (final r in rows)
+          if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r))
+      ];
     }
     rethrow;
   }
@@ -150,7 +173,8 @@ class PatchNote {
   final String title;
   final DateTime? date;
 
-  String get url => 'https://wiki.guildwars2.com/wiki/${Uri.encodeComponent(title.replaceAll(' ', '_')).replaceAll('%2F', '/')}';
+  String get url =>
+      'https://wiki.guildwars2.com/wiki/${Uri.encodeComponent(title.replaceAll(' ', '_')).replaceAll('%2F', '/')}';
 }
 
 /// "Game updates/2026-09-23" -> the date in its name
