@@ -13,6 +13,7 @@ enum AppSection {
   progression,
   collections,
   guilds,
+  guildEvents,
   trading,
   recipes,
   maps,

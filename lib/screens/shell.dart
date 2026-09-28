@@ -33,6 +33,7 @@ import 'daily_screen.dart';
 import 'weekly_screen.dart';
 import 'world_map_screen.dart';
 import 'news_screen.dart';
+import 'guild_events_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
@@ -44,6 +45,7 @@ const _titleKeys = {
   AppSection.wvw: 'wvw',
   AppSection.account: 'nav_account',
   AppSection.guilds: 'guilds',
+  AppSection.guildEvents: 'guild_events',
   AppSection.trading: 'trading_post',
   AppSection.bosses: 'world_bosses',
   AppSection.maps: 'maps',
@@ -65,6 +67,7 @@ const _icons = {
   AppSection.wvw: (Icons.fort_outlined, Icons.fort),
   AppSection.account: (Icons.account_balance_wallet_outlined, Icons.account_balance_wallet),
   AppSection.guilds: (Icons.groups_outlined, Icons.groups),
+  AppSection.guildEvents: (Icons.event_note_outlined, Icons.event_note),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
   AppSection.maps: (Icons.map_outlined, Icons.map),
@@ -96,6 +99,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.wvw => const WvwScreen(),
       AppSection.account => const AccountScreen(),
       AppSection.guilds => const GuildsScreen(),
+      AppSection.guildEvents => const GuildEventsScreen(),
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),
       AppSection.maps => const WorldMapScreen(),
