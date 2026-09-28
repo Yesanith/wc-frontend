@@ -460,7 +460,6 @@ const zhStrings = <String, String>{
   'about_credits': '致谢',
   'about_credit_dev': '开发者：{name}',
   'about_credit_data': '游戏数据、图标和地图来自官方 Guild Wars 2 API',
-  'about_credit_design': '外观与 Regions of XIV 相同，其界面由 XeldarAlz 设计',
   'account_progress_note': '账号全局加成：幸运值提高魔法寻获，碎层强化是在迷雾锁天文台购买的升级。',
   'expand_all': '全部展开',
   'collapse_all': '全部收起',

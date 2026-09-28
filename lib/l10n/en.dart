@@ -471,7 +471,6 @@ const enStrings = <String, String>{
   'about_credits': 'Credits',
   'about_credit_dev': 'Developed by {name}',
   'about_credit_data': 'Game data, icons and map tiles from the official Guild Wars 2 API',
-  'about_credit_design': 'Look shared with Regions of XIV, whose interface is by XeldarAlz',
   'account_progress_note':
       'Account wide bonuses: luck raises magic find, and fractal augmentations are the upgrades bought in the Mistlock Observatory.',
   'expand_all': 'Expand all',

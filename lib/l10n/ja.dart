@@ -461,7 +461,6 @@ const jaStrings = <String, String>{
   'about_credits': 'クレジット',
   'about_credit_dev': '開発: {name}',
   'about_credit_data': 'ゲームデータ、アイコン、マップタイルは公式 Guild Wars 2 API から',
-  'about_credit_design': 'Regions of XIV と共通のデザイン (インターフェース: XeldarAlz)',
   'account_progress_note': 'アカウント全体のボーナスです。ラックはマジックファインドを上げ、フラクタル強化は Mistlock Observatory で購入するアップグレードです。',
   'expand_all': 'すべて展開',
   'collapse_all': 'すべて折りたたむ',

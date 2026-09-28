@@ -470,7 +470,6 @@ const ruStrings = <String, String>{
   'about_credits': 'Благодарности',
   'about_credit_dev': 'Разработчик: {name}',
   'about_credit_data': 'Игровые данные, иконки и тайлы карты из официального API Guild Wars 2',
-  'about_credit_design': 'Оформление общее с Regions of XIV, интерфейс которого создал XeldarAlz',
   'account_progress_note':
       'Бонусы на весь аккаунт: удача повышает поиск добычи, а улучшения фракталов покупаются в Mistlock Observatory.',
   'expand_all': 'Развернуть все',
