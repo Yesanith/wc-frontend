@@ -21,6 +21,7 @@ import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/price_chart.dart';
 import 'item_sheet.dart';
+import 'item_detail_screen.dart';
 
 part 'trading/item_page.dart';
 part 'trading/overview_tab.dart';
