@@ -1,12 +1,14 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
   'community_account': 'Аккаунт Tyria Companion',
-  'community_intro': 'Войдите, чтобы участвовать в событиях гильдии, находить друзей и подключать Discord гильдии. Ваши API-ключи остаются на этом устройстве.',
+  'community_intro':
+      'Войдите, чтобы участвовать в событиях гильдии, находить друзей и подключать Discord гильдии. Ваши API-ключи остаются на этом устройстве.',
   'community_sign_in_discord': 'Войти через Discord',
   'community_signed_in': 'Вход выполнен через Discord',
   'community_sign_out': 'Выйти',
   'community_delete': 'Удалить аккаунт',
-  'community_delete_body': 'Ваш аккаунт Tyria Companion и всё, что с ним связано, будут удалены навсегда. API-ключи и остальные данные приложения на этом устройстве не затрагиваются.',
+  'community_delete_body':
+      'Ваш аккаунт Tyria Companion и всё, что с ним связано, будут удалены навсегда. API-ключи и остальные данные приложения на этом устройстве не затрагиваются.',
   'community_delete_confirm': 'Удалить навсегда',
   'community_failed': 'Не получилось, попробуйте ещё раз.',
   'item_details': 'Сведения о предмете',
