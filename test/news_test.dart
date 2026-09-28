@@ -64,4 +64,37 @@ void main() {
     expect(const PatchNote('Game updates/2026-09-23', null).url,
         'https://wiki.guildwars2.com/wiki/Game_updates/2026-09-23');
   });
+
+  test('images from the real feed shape: no scheme, a srcset, or only a video', () {
+    const block = '''
+<item>
+  <title>WvW map beta</title>
+  <link>https://www.guildwars2.com/en/news/wvw-map/?utm_source=rss&#038;utm_medium=news&#038;utm_campaign=rss</link>
+  <pubDate>Tue, 22 Sep 2026 16:00:21 +0000</pubDate>
+  <description><![CDATA[Learn how we'll be developing this map!</p><p class="more"><a href="https://x">Read More</a></p>]]></description>
+  <content:encoded><![CDATA[<p class="screenshot"><img src="//cdn.example.net/uploads/2026/09/map-1920x1080.jpg" srcset="https://cdn.example.net/uploads/2026/09/map-1920x1080.jpg 1920w, https://cdn.example.net/uploads/2026/09/map-1920x1080-768x432.jpg 768w" /></p>]]></content:encoded>
+</item>
+<item>
+  <title>Video only</title>
+  <link>https://www.guildwars2.com/en/news/video/</link>
+  <pubDate>Wed, 15 Jul 2026 16:00:28 +0000</pubDate>
+  <description><![CDATA[Playstyles.</p><p class="more"><a href="https://x">Read More</a></p>]]></description>
+  <content:encoded><![CDATA[<p><iframe src="//www.youtube.com/embed/Trq7RIS0Eoo?rel=0"></iframe></p>]]></content:encoded>
+</item>
+<item>
+  <title>Bare image</title>
+  <link>https://www.guildwars2.com/en/news/bare/</link>
+  <pubDate>Mon, 13 Jul 2026 16:00:00 +0000</pubDate>
+  <description><![CDATA[Text.]]></description>
+  <content:encoded><![CDATA[<img src="//cdn.example.net/a.jpg" />]]></content:encoded>
+</item>''';
+    final items = parseRss('<rss><channel>$block</channel></rss>');
+    expect(items[0].image, 'https://cdn.example.net/uploads/2026/09/map-1920x1080-768x432.jpg');
+    expect(items[0].link, 'https://www.guildwars2.com/en/news/wvw-map/');
+    expect(items[0].excerpt, "Learn how we'll be developing this map!");
+    expect(items[1].image, 'https://img.youtube.com/vi/Trq7RIS0Eoo/hqdefault.jpg');
+    expect(items[1].excerpt, 'Playstyles.');
+    expect(items[2].image, 'https://cdn.example.net/a.jpg');
+  });
 }
+
