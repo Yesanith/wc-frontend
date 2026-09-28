@@ -188,8 +188,7 @@ class OwnedRow extends ConsumerWidget {
       trailing: Text('×${fmtInt(total)}',
           style:
               const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, fontFeatures: [FontFeature.tabularFigures()])),
-      onTap: () =>
-          Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: itemId))),
+      onTap: () => showItemDetails(context, itemId),
     );
   }
 }

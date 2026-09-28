@@ -16,19 +16,39 @@ import '../l10n/strings.dart';
 import '../widgets/recipe_outputs.dart';
 import 'trading_screen.dart';
 
-/// everything about one item. [instance] is the equipment entry it came from,
-/// which carries the chosen stats, runes, sigils and infusions
-class ItemDetailScreen extends ConsumerStatefulWidget {
-  const ItemDetailScreen({super.key, required this.itemId, this.instance});
+/// everything about one item, in a sheet that slides up over the page.
+/// [instance] is the equipment entry it came from, which carries the chosen
+/// stats, runes, sigils and infusions
+void showItemDetails(BuildContext context, int itemId, {Json? instance}) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    showDragHandle: true,
+    backgroundColor: AppColors.surface,
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+    builder: (_) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.7,
+      minChildSize: 0.4,
+      maxChildSize: 0.95,
+      builder: (context, scroll) => ItemDetails(itemId: itemId, instance: instance, scroll: scroll),
+    ),
+  );
+}
+
+class ItemDetails extends ConsumerStatefulWidget {
+  const ItemDetails({super.key, required this.itemId, this.instance, this.scroll});
 
   final int itemId;
   final Json? instance;
+  final ScrollController? scroll;
 
   @override
-  ConsumerState<ItemDetailScreen> createState() => _ItemDetailScreenState();
+  ConsumerState<ItemDetails> createState() => _ItemDetailsState();
 }
 
-class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
+class _ItemDetailsState extends ConsumerState<ItemDetails> {
   /// the prices are shown for this many, the steps players buy in
   int _qty = 1;
 
@@ -55,118 +75,112 @@ class _ItemDetailScreenState extends ConsumerState<ItemDetailScreen> {
       if (asInt(item?['level']) > 0) s.t('level_n', {'n': asInt(item?['level'])}),
     ].join(' · ');
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t('item'), style: display(20)),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-        children: [
-          Row(
-            children: [
-              ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 64),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name, style: display(21, color: rarity == null ? AppColors.text : rarityColor(rarity))),
-                    const SizedBox(height: 4),
-                    Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (description.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text(description, style: const TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
-          ],
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => ref.read(watchlistProvider.notifier).toggle(itemId),
-                  icon: Icon(watching ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 18),
-                  label: Text(watching ? s.t('unwatch') : s.t('watch')),
-                ),
-              ),
-              if (chatLink.isNotEmpty) ...[
-                const SizedBox(width: 8),
-                IconButton.outlined(
-                  tooltip: s.t('copy_chat_link'),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: chatLink));
-                    showToast(context, '${s.t('copied')} $chatLink');
-                  },
-                  icon: const Icon(Icons.link_rounded),
-                ),
-              ],
-            ],
-          ),
-          if (attributes.isNotEmpty) ...[
-            Eyebrow(s.t('attributes'), trailing: _comboLabel(_comboName(ref, instance, details))),
-            Panel(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+    return ListView(
+      controller: widget.scroll,
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      children: [
+        Row(
+          children: [
+            ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 64),
+            const SizedBox(width: 16),
+            Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final a in attributes)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 7),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(attributeName('${a['attribute']}'),
-                                style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                          ),
-                          Text('+${asInt(a['modifier'])}',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                        ],
-                      ),
-                    ),
+                  Text(name, style: display(21, color: rarity == null ? AppColors.text : rarityColor(rarity))),
+                  const SizedBox(height: 4),
+                  Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ),
           ],
-          if (upgradeIds.isNotEmpty) ...[
-            Eyebrow(s.t('upgrades')),
-            for (final id in upgradeIds) _UpgradeRow(itemId: id),
-          ],
-          if (infusionIds.isNotEmpty) ...[
-            Eyebrow(s.t('infusions')),
-            for (final id in infusionIds) _UpgradeRow(itemId: id),
-          ],
-          _OwnedSection(itemId: itemId),
-          const SizedBox(height: 8),
-          _PricePanel(item: item, itemId: itemId, qty: _qty, onQty: (q) => setState(() => _qty = q)),
-          _UsedInSection(itemId: itemId, itemName: name),
-          const SizedBox(height: 18),
-          Row(
-            children: [
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: () => openWikiPage(context, ref, name),
-                  icon: const Icon(Icons.menu_book_outlined, size: 18),
-                  label: Text(s.t('wiki')),
-                ),
+        ),
+        if (description.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text(description, style: const TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
+        ],
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => ref.read(watchlistProvider.notifier).toggle(itemId),
+                icon: Icon(watching ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 18),
+                label: Text(watching ? s.t('unwatch') : s.t('watch')),
               ),
+            ),
+            if (chatLink.isNotEmpty) ...[
               const SizedBox(width: 8),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-                  ),
-                  icon: const Icon(Icons.storefront_outlined, size: 18),
-                  label: Text(s.t('trading_post')),
-                ),
+              IconButton.outlined(
+                tooltip: s.t('copy_chat_link'),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: chatLink));
+                  showToast(context, '${s.t('copied')} $chatLink');
+                },
+                icon: const Icon(Icons.link_rounded),
               ),
             ],
+          ],
+        ),
+        if (attributes.isNotEmpty) ...[
+          Eyebrow(s.t('attributes'), trailing: _comboLabel(_comboName(ref, instance, details))),
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            child: Column(
+              children: [
+                for (final a in attributes)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(attributeName('${a['attribute']}'),
+                              style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                        ),
+                        Text('+${asInt(a['modifier'])}',
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
         ],
-      ),
+        if (upgradeIds.isNotEmpty) ...[
+          Eyebrow(s.t('upgrades')),
+          for (final id in upgradeIds) _UpgradeRow(itemId: id),
+        ],
+        if (infusionIds.isNotEmpty) ...[
+          Eyebrow(s.t('infusions')),
+          for (final id in infusionIds) _UpgradeRow(itemId: id),
+        ],
+        _OwnedSection(itemId: itemId),
+        const SizedBox(height: 8),
+        _PricePanel(item: item, itemId: itemId, qty: _qty, onQty: (q) => setState(() => _qty = q)),
+        _UsedInSection(itemId: itemId, itemName: name),
+        const SizedBox(height: 18),
+        Row(
+          children: [
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: () => openWikiPage(context, ref, name),
+                icon: const Icon(Icons.menu_book_outlined, size: 18),
+                label: Text(s.t('wiki')),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
+                ),
+                icon: const Icon(Icons.storefront_outlined, size: 18),
+                label: Text(s.t('trading_post')),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -402,9 +416,7 @@ class _UpgradeRow extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: AppCard(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: itemId)),
-        ),
+        onTap: () => showItemDetails(context, itemId),
         padding: const EdgeInsets.all(10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
