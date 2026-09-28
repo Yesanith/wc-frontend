@@ -550,4 +550,8 @@ const trStrings = <String, String>{
   'itype_JadeTechModule': 'Jade bot modülleri',
   'itype_PowerCore': 'Güç çekirdekleri',
   'itype_Tool': 'Aletler',
+  'nav_group_account': 'Hesap',
+  'nav_group_economy': 'Ekonomi',
+  'nav_group_world': 'Dünya',
+  'nav_group_reference': 'Kaynaklar',
 };
