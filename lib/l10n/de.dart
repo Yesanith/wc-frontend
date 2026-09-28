@@ -1,5 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'event_edit': 'Event bearbeiten',
+  'event_save': 'Änderungen speichern',
+  'event_edit_one_week': 'Das ändert nur diese Woche des wöchentlichen Events.',
   'guild_events': 'Gildenevents',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

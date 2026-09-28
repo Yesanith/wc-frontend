@@ -1,5 +1,8 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_edit': 'イベントを編集',
+  'event_save': '変更を保存',
+  'event_edit_one_week': '毎週イベントのこの週だけが変更されます。',
   'guild_events': 'ギルドイベント',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

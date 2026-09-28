@@ -1,5 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_edit': 'Etkinliği düzenle',
+  'event_save': 'Değişiklikleri kaydet',
+  'event_edit_one_week': 'Bu, haftalık etkinliğin sadece bu haftasını değiştirir.',
   'guild_events': 'Lonca etkinlikleri',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

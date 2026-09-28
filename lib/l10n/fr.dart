@@ -1,5 +1,8 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'event_edit': 'Modifier l\'événement',
+  'event_save': 'Enregistrer',
+  'event_edit_one_week': 'Cela ne modifie que cette semaine de l\'événement hebdomadaire.',
   'guild_events': 'Événements de guilde',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',

@@ -290,6 +290,34 @@ Future<String> createWeeklyEvent({
       return '$res';
     });
 
+/// saves an edit made on [version]. somebody else's edit in between makes it
+/// fail with version_conflict instead of being overwritten
+Future<int> updateEvent({
+  required String eventId,
+  required int version,
+  required String title,
+  required DateTime startAt,
+  required int durationMinutes,
+  required String description,
+  required String activity,
+  required int? maxParticipants,
+  required Map<String, int> roles,
+}) =>
+    _call(() async {
+      final res = await Supabase.instance.client.rpc('update_event', params: {
+        'p_event': eventId,
+        'p_version': version,
+        'p_title': title,
+        'p_start_at': startAt.toUtc().toIso8601String(),
+        'p_duration_minutes': durationMinutes,
+        'p_description': description,
+        'p_activity': activity,
+        'p_max_participants': maxParticipants,
+        'p_roles': _rolesJson(roles),
+      });
+      return (res as num).toInt();
+    });
+
 Future<void> cancelEvent(String eventId) => _call(() async {
       await Supabase.instance.client.rpc('cancel_event', params: {'p_event': eventId});
     });

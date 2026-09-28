@@ -1,5 +1,8 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'event_edit': 'Edit event',
+  'event_save': 'Save changes',
+  'event_edit_one_week': 'This changes only this week of the weekly event.',
   'guild_events': 'Guild events',
   'activity_raid': 'Raid',
   'activity_strike': 'Strike',
