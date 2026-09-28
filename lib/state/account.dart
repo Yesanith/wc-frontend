@@ -87,6 +87,68 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
   return totals;
 });
 
+enum OwnedKind { bank, materials, shared, armory, bags, equipped }
+
+/// where a stack sits: a storage, or one character's bags or gear
+class OwnedPlace {
+  const OwnedPlace(this.kind, [this.character]);
+
+  final OwnedKind kind;
+  final String? character;
+
+  @override
+  bool operator ==(Object other) => other is OwnedPlace && other.kind == kind && other.character == character;
+
+  @override
+  int get hashCode => Object.hash(kind, character);
+}
+
+/// the same count as [accountTotalsProvider], split by where it is. the item
+/// page lists it so "you own 7" also says where the 7 are
+final ownedPlacesProvider = FutureProvider<Map<int, Map<OwnedPlace, int>>>((ref) async {
+  final api = accountApi(ref);
+  final charsFuture = ref.watch(charactersProvider.future);
+  final out = <int, Map<OwnedPlace, int>>{};
+  void add(Json? slot, OwnedPlace place, {bool single = false}) {
+    if (slot == null) return;
+    final id = asInt(slot['id']);
+    if (id <= 0) return;
+    final count = single || slot['count'] == null ? 1 : asInt(slot['count']);
+    if (count <= 0) return;
+    final places = out.putIfAbsent(id, () => {});
+    places[place] = (places[place] ?? 0) + count;
+  }
+
+  final results = await Future.wait([
+    api.bank(),
+    api.materials(),
+    api.sharedInventory().catchError((_) => <Json?>[]),
+    api.legendaryArmory().catchError((_) => <Json>[]),
+  ]);
+  const kinds = [OwnedKind.bank, OwnedKind.materials, OwnedKind.shared, OwnedKind.armory];
+  for (var i = 0; i < results.length; i++) {
+    for (final slot in results[i]) {
+      add(slot, OwnedPlace(kinds[i]));
+    }
+  }
+  final armory = {
+    for (final row in results[3])
+      if (row != null) asInt(row['id'])
+  };
+  for (final c in await charsFuture) {
+    final name = '${c['name'] ?? ''}';
+    for (final slot in bagSlots(c)) {
+      add(slot, OwnedPlace(OwnedKind.bags, name));
+    }
+    for (final piece in (c['equipment'] as List?) ?? const []) {
+      if (piece is Map && !armory.contains(asInt(piece['id']))) {
+        add({'id': piece['id']}, OwnedPlace(OwnedKind.equipped, name), single: true);
+      }
+    }
+  }
+  return out;
+});
+
 // -------------------------------------------------------------------------
 // extras
 

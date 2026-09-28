@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/data/world_bosses.dart';
+import 'package:tyria_codex/data/metas.dart';
 import 'package:tyria_codex/state/price_history.dart';
 import 'package:tyria_codex/state/progression.dart';
 import 'package:tyria_codex/state/settings.dart';

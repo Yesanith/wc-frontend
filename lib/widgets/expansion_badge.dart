@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../data/world_bosses.dart';
+import '../data/metas.dart';
 import '../theme.dart';
 
 /// the short name and the colour each release is known by. the api has no

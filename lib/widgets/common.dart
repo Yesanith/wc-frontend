@@ -439,39 +439,56 @@ class ItemIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fixed = size;
+    if (fixed != null) return SizedBox.square(dimension: fixed, child: _framed(fixed));
+    // in a grid the cell decides the size
+    return LayoutBuilder(builder: (context, box) {
+      final side = box.biggest.shortestSide.isFinite ? box.biggest.shortestSide : 44.0;
+      return _framed(side);
+    });
+  }
+
+  Widget _framed(double side) {
     final u = url;
     final n = count;
-    return Container(
-      width: size,
-      height: size,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: empty ? AppColors.navBg : AppColors.bg,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: empty ? AppColors.track : rarityColor(rarity), width: 1.5),
-      ),
-      child: empty
-          ? null
-          : Stack(
-              fit: StackFit.expand,
-              children: [
-                if (u != null) CachedIcon(url: u),
-                if (n != null && n > 1)
-                  Positioned(
-                    right: 3,
-                    bottom: 1,
-                    child: Text(
-                      '$n',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                        shadows: [Shadow(blurRadius: 3, color: Colors.black)],
-                      ),
-                    ),
-                  ),
-              ],
+    // rounder corners on bigger icons, a frame drawn over the art so the
+    // image never covers the rarity colour
+    final radius = BorderRadius.circular(side * 0.22);
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        DecoratedBox(
+          position: DecorationPosition.foreground,
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            border: Border.all(
+              color: empty ? AppColors.track : (rarity == null ? AppColors.line : rarityColor(rarity)),
+              width: 1.5,
             ),
+          ),
+          child: ClipRRect(
+            borderRadius: radius,
+            child: ColoredBox(
+              color: empty ? AppColors.navBg : AppColors.surface2,
+              child: empty || u == null ? const SizedBox.expand() : CachedIcon(url: u),
+            ),
+          ),
+        ),
+        if (!empty && n != null && n > 1)
+          Positioned(
+            right: 3,
+            bottom: 1,
+            child: Text(
+              n > 9999 ? '${n ~/ 1000}k' : '$n',
+              style: TextStyle(
+                fontSize: (side * 0.26).clamp(9, 14).toDouble(),
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+                shadows: const [Shadow(blurRadius: 3), Shadow(blurRadius: 1)],
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
