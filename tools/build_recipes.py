@@ -14,8 +14,9 @@ book in assets/data/recipe_book.json.gz, committed by
 the data workflow, the app only reads the generated file.
 
 Usage:
-  python tools/build_recipes.py book         English items, their search index
-                                             and the recipe book
+  python tools/build_recipes.py book         English items, their search index,
+                                             the trading post index and the
+                                             recipe book
   python tools/build_recipes.py index de     the search index of one language
   python tools/build_recipes.py en de es fr  everything, one after another
 
@@ -37,6 +38,7 @@ API = "https://api.guildwars2.com/v2"
 OUT = os.path.join("assets", "data", "recipe_book.json.gz")
 LEGACY_OUT = os.path.join("assets", "data", "legendary_recipes.json")
 INDEX = os.path.join("assets", "data", "item_index_%s.txt.gz")
+MARKET = os.path.join("assets", "data", "market_index.txt.gz")
 BATCH = 200
 # requests in flight at once. one request takes a second or two, the api
 # allows a few per second per address, and 429s back off and retry
@@ -262,6 +264,32 @@ def write_item_index(items, lang):
     print("wrote %s (%d bytes)" % (path, os.path.getsize(path)), flush=True)
 
 
+def market_lines(items, tradable_ids):
+    """"id\ttype\tsubtype\trarity\tlevel" for every item the trading post
+    lists, so the app can filter all of them without asking for 27k items"""
+    lines = []
+    for item_id in sorted(set(tradable_ids)):
+        row = items.get(item_id)
+        if not row:
+            continue
+        details = row.get("details") or {}
+        sub = details.get("type") or ""
+        # a few weapon and armor kinds carry spaces, which the app would split on
+        sub = "".join(sub.split())
+        lines.append("%d\t%s\t%s\t%s\t%d\n" % (
+            item_id, row.get("type") or "", sub, row.get("rarity") or "", row.get("level") or 0))
+    return lines
+
+
+def write_market_index(items):
+    tradable = get("/commerce/prices")
+    lines = market_lines(items, tradable)
+    with open(MARKET, "wb") as raw:
+        with gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=9, mtime=0) as f:
+            f.write("".join(lines).encode("utf-8"))
+    print("wrote %s (%d items, %d bytes)" % (MARKET, len(lines), os.path.getsize(MARKET)), flush=True)
+
+
 def fetch_all_recipes():
     """every normal crafting recipe of the api, about 13k of them"""
     ids = get("/recipes")
@@ -318,6 +346,7 @@ def build_book():
     """English items, their search index and the recipe book"""
     items = fetch_all_items("en")
     write_item_index(items, "en")
+    write_market_index(items)
     index = index_items(items)
 
     # roots are the things worth showing as a goal: legendary gear and every

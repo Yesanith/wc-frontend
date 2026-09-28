@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/build_view.dart';
 import '../widgets/class_icon.dart';
+import '../widgets/birthday.dart';
 import '../widgets/common.dart';
 import '../widgets/recipe_outputs.dart';
 import 'character_progress.dart';
@@ -153,6 +154,7 @@ class _Hero extends ConsumerWidget {
                     Pill(race),
                     Pill(fmtHours(c['age'], s.t('hours_short'))),
                     Pill(s.t('deaths_n', {'n': fmtInt(asInt(c['deaths']))})),
+                    BirthdayLine(created: c['created'] as String?, pill: true),
                   ],
                 ),
               ],

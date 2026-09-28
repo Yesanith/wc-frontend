@@ -29,3 +29,22 @@ double weekProgress(DateTime now) {
   final left = nextWeeklyReset(now.toUtc()).difference(now.toUtc()).inSeconds;
   return 1 - left / const Duration(days: 7).inSeconds;
 }
+
+/// the next time a character's creation date comes round, which is when the
+/// game hands out the birthday gift
+DateTime nextBirthday(DateTime created, DateTime now) {
+  final c = created.toUtc();
+  final u = now.toUtc();
+  var next = DateTime.utc(u.year, c.month, c.day, c.hour, c.minute);
+  if (!next.isAfter(u)) next = DateTime.utc(u.year + 1, c.month, c.day, c.hour, c.minute);
+  return next;
+}
+
+/// full years since the character was made
+int yearsSince(DateTime created, DateTime now) {
+  final c = created.toUtc();
+  final u = now.toUtc();
+  var years = u.year - c.year;
+  if (u.month < c.month || (u.month == c.month && u.day < c.day)) years--;
+  return years < 0 ? 0 : years;
+}

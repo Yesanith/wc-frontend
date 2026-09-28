@@ -52,5 +52,20 @@ class FetchBatchesTest(unittest.TestCase):
         self.assertEqual(b.fetch_batches("/items", [], fetch=lambda p, q: self.fail("fetched")), [])
 
 
+class MarketLinesTest(unittest.TestCase):
+    def test_only_listed_items_in_id_order(self):
+        items = {
+            3: {"id": 3, "type": "Weapon", "rarity": "Exotic", "level": 80, "details": {"type": "LongBow"}},
+            1: {"id": 1, "type": "CraftingMaterial", "rarity": "Basic", "level": 0},
+            2: {"id": 2, "type": "Trophy", "rarity": "Junk", "level": 0},
+        }
+        lines = b.market_lines(items, [3, 1, 3, 99])
+        self.assertEqual(lines, ["1\tCraftingMaterial\t\tBasic\t0\n", "3\tWeapon\tLongBow\tExotic\t80\n"])
+
+    def test_subtypes_lose_their_spaces(self):
+        items = {5: {"id": 5, "type": "Armor", "rarity": "Rare", "level": 1, "details": {"type": "Heavy Coat"}}}
+        self.assertEqual(b.market_lines(items, [5]), ["5\tArmor\tHeavyCoat\tRare\t1\n"])
+
+
 if __name__ == "__main__":
     unittest.main()
