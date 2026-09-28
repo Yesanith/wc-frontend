@@ -582,7 +582,6 @@ class _Block extends ConsumerWidget {
   }
 }
 
-
 /// one run of an event from the timeline: when it runs, how long until it
 /// starts, and buttons to pin it or read about it on the wiki
 void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {

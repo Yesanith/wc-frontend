@@ -70,7 +70,9 @@ class LocalGemsNotifier extends Notifier<List<GemPoint>> {
     await ref.read(prefsProvider).setString(
           _key,
           jsonEncode({
-            'points': [for (final p in next) [p.at.millisecondsSinceEpoch ~/ 1000, p.buy, p.sell]],
+            'points': [
+              for (final p in next) [p.at.millisecondsSinceEpoch ~/ 1000, p.buy, p.sell]
+            ],
           }),
         );
   }

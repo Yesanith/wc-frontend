@@ -195,7 +195,6 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
   return entries;
 });
 
-
 /// which mount a skin belongs to, by name. newer api schemas give the mount
 /// as mount_guid, older ones as a key such as "raptor"
 String? mountOf(Json? row, Map<String, String> names) {

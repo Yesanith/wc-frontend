@@ -361,7 +361,6 @@ class _SearchResults extends ConsumerWidget {
   }
 }
 
-
 /// a month of what 100 gems cost and bring, from the shared recording
 class _GemHistoryChart extends ConsumerWidget {
   const _GemHistoryChart();
@@ -390,7 +389,8 @@ class _GemHistoryChart extends ConsumerWidget {
           Kicker(s.t('gem_history_title').toUpperCase()),
           const SizedBox(height: 12),
           if (points.length < 2)
-            Text(s.t('gem_history_collecting'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
+            Text(s.t('gem_history_collecting'),
+                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
           else ...[
             SizedBox(
               height: 120,
