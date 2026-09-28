@@ -1,5 +1,19 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'gw2_accounts_title': 'Comptes GW2 et guildes',
+  'gw2_link_intro': 'Relie le compte GW2 de ta clé API active pour rejoindre tes guildes ici.',
+  'gw2_link': 'Relier le compte GW2',
+  'gw2_refresh': 'Actualiser les guildes',
+  'gw2_link_note': 'Seul un jeton de dix minutes pouvant lire ton nom de compte et tes guildes est envoyé. Ta clé API reste sur cet appareil.',
+  'gw2_linked': '{name} est relié',
+  'gw2_link_taken': 'Ce compte GW2 est déjà relié à un autre compte Tyria Companion.',
+  'gw2_link_key': 'La clé API n\'a pas pu être utilisée. Elle a besoin de l\'autorisation account.',
+  'gw2_link_down': 'L\'API GW2 ne répond pas, réessaie plus tard.',
+  'gw2_unlink': 'Délier',
+  'gw2_unlink_body': '{name} et ses appartenances de guilde seront retirés de ton compte Tyria Companion.',
+  'guild_role_leader': 'Chef',
+  'guild_role_officer': 'Officier',
+  'guild_role_member': 'Membre',
   'community_account': 'Compte Tyria Companion',
   'community_intro':
       'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil.',
