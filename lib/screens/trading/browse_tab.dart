@@ -249,10 +249,8 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
         ];
         return RefreshIndicator(
           color: AppColors.gold,
-          onRefresh: () async {
-            ref.invalidate(allPricesProvider);
-            await Future<void>.delayed(const Duration(milliseconds: 300));
-          },
+          // forceNetwork skips the ten minute disk copy
+          onRefresh: () => refreshProviders(ref, [allPricesProvider]),
           child: ListView.builder(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             itemCount: header.length + (ids.isEmpty ? 1 : ids.length),

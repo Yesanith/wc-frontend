@@ -65,6 +65,9 @@ class Gw2Api {
   /// owns it is rebuilt for another key or language
   void close() => _client.close();
 
+  /// true for a few seconds after pull to refresh asked for fresh data
+  bool get forcing => _forcing;
+
   bool get _forcing {
     final until = _forceUntil;
     return until != null && DateTime.now().isBefore(until);
@@ -283,7 +286,27 @@ class Gw2Api {
     throw Gw2ApiException(msg, res.statusCode);
   }
 
-  Future<http.Response> _send(Uri uri, [Map<String, String>? headers]) async {
+  /// every request of the app passes this gate: at most [maxParallel] at
+  /// once across all clients, so opening a busy page does not fire dozens of
+  /// requests together and trip the api's rate limit
+  static const maxParallel = 6;
+  static final TaskPool _gate = TaskPool(maxParallel);
+
+  /// a rate limit answer or a passing gateway error is tried again after a
+  /// pause instead of failing the page, up to three times
+  static const _retryable = {429, 502, 503, 504};
+
+  Future<http.Response> _send(Uri uri, [Map<String, String>? headers]) => _gate.run(() async {
+        for (var attempt = 0;; attempt++) {
+          final res = await _sendOnce(uri, headers);
+          if (!_retryable.contains(res.statusCode) || attempt >= 3) return res;
+          // the slot stays taken while waiting, which slows the whole app
+          // down a little right when the api asks for exactly that
+          await Future<void>.delayed(retryDelay(res.headers['retry-after'], attempt));
+        }
+      });
+
+  Future<http.Response> _sendOnce(Uri uri, Map<String, String>? headers) async {
     try {
       return await _client.get(uri, headers: headers).timeout(const Duration(seconds: 20));
     } on TimeoutException {
@@ -292,6 +315,7 @@ class Gw2Api {
       throw Gw2ApiException('Could not connect. Check your internet connection.', null, ApiErrorKind.offline);
     }
   }
+
 
   static List<Json> _list(dynamic raw) =>
       (raw as List).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
@@ -348,7 +372,13 @@ class Gw2Api {
     for (var page = 0; page < 15; page++) {
       final List<Json> rows;
       try {
-        rows = _list(await get('/commerce/transactions/$kind', {'page_size': '200', 'page': '$page'}));
+        // each page is kept on disk like the rest of the account, so the
+        // history and stats tabs open from it and refresh in the background
+        rows = _list(await cachedGet(
+          '/commerce/transactions/$kind',
+          query: {'page_size': '200', 'page': '$page'},
+          ttl: const Duration(minutes: 10),
+        ));
       } on Gw2ApiException catch (e) {
         // asking past the last page is a 400, that just means we are done
         if (page > 0 && (e.status == 400 || e.status == 404)) break;
@@ -693,4 +723,13 @@ class Gw2Api {
         if (store.containsKey(id)) id: store[id]!,
     };
   }
+}
+
+
+/// how long to wait before retrying: what the server asked for in
+/// Retry-After, otherwise 1, 2 and 4 seconds, never more than ten
+Duration retryDelay(String? retryAfter, int attempt) {
+  final asked = int.tryParse(retryAfter?.trim() ?? '');
+  final seconds = asked ?? (1 << attempt);
+  return Duration(seconds: seconds.clamp(1, 10));
 }
