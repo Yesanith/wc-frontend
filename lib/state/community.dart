@@ -103,12 +103,18 @@ Future<void> deleteAccount() async {
 /// device. guilds is added when the key has it, it tells who leads a guild
 Future<String> createLinkSubtoken(Gw2Api api, List<String> keyPermissions) async {
   final permissions = ['account', if (keyPermissions.contains('guilds')) 'guilds'];
-  final raw = await api.get('/createsubtoken', {
-    'permissions': permissions.join(','),
-    'expire': subtokenExpiry(DateTime.now()),
-  });
+  final dynamic raw;
+  try {
+    raw = await api.get('/createsubtoken', {
+      'permissions': permissions.join(','),
+      'expire': subtokenExpiry(DateTime.now()),
+    });
+  } catch (e) {
+    // the gw2 api refused before anything reached the backend
+    throw LinkFailure('subtoken_failed', detail: '$e');
+  }
   final subtoken = raw is Map ? raw['subtoken'] : null;
-  if (subtoken is! String || subtoken.isEmpty) throw const LinkFailure('gw2_unavailable');
+  if (subtoken is! String || subtoken.isEmpty) throw const LinkFailure('subtoken_failed', detail: 'empty answer');
   return subtoken;
 }
 
@@ -120,8 +126,15 @@ String subtokenExpiry(DateTime now) {
 
 /// why linking failed, one of the codes the gw2-link function answers with
 class LinkFailure implements Exception {
-  const LinkFailure(this.code);
+  const LinkFailure(this.code, {this.detail});
   final String code;
+
+  /// what went wrong underneath, shown next to the message so a failure can
+  /// be told apart from the others
+  final String? detail;
+
+  @override
+  String toString() => detail == null ? code : '$code: $detail';
 }
 
 /// links the account of the active api key, or refreshes it when it is
@@ -134,7 +147,8 @@ Future<String> linkGw2Account(Gw2Api api, List<String> keyPermissions) async {
     return data is Map ? '${data['account_name'] ?? ''}' : '';
   } on FunctionException catch (e) {
     final details = e.details;
-    throw LinkFailure(details is Map && details['error'] is String ? details['error'] as String : 'link_failed');
+    final code = details is Map && details['error'] is String ? details['error'] as String : 'http_${e.status}';
+    throw LinkFailure(code, detail: 'HTTP ${e.status}');
   }
 }
 

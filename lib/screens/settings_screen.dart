@@ -530,9 +530,14 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
       ref.invalidate(myGuildsProvider);
       if (!quiet && mounted) showToast(context, s.t('gw2_linked', {'name': name}));
     } on LinkFailure catch (e) {
-      if (!quiet && mounted) showToast(context, s.t(_failureKey(e.code)));
-    } catch (_) {
-      if (!quiet && mounted) showToast(context, s.t('community_failed'));
+      // the code travels with the message so a report tells which step failed
+      if (!quiet && mounted) {
+        showToast(context, '${s.t(_failureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
+      }
+    } catch (e) {
+      if (!quiet && mounted) {
+        showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -542,6 +547,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
         'account_taken' => 'gw2_link_taken',
         'invalid_token' || 'missing_permission' => 'gw2_link_key',
         'gw2_unavailable' => 'gw2_link_down',
+        'subtoken_failed' => 'gw2_link_key',
         _ => 'community_failed',
       };
 
