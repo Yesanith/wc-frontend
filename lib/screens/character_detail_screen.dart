@@ -266,9 +266,7 @@ class _EquipmentRow extends ConsumerWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => ItemDetailScreen(itemId: id, instance: entry)),
-        ),
+        onTap: () => showItemDetails(context, id, instance: entry),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Row(
