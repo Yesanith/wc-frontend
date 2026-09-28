@@ -4,7 +4,8 @@ const esStrings = <String, String>{
   'event_starts_in': 'Empieza en {t}',
   'event_ended': 'Ya terminó',
   'gem_history_title': '100 gemas · últimos 30 días',
-  'gem_history_collecting': 'Se está reuniendo el historial, el gráfico aparecerá tras los próximos registros. La tasa se guarda cada pocas horas.',
+  'gem_history_collecting':
+      'Se está reuniendo el historial, el gráfico aparecerá tras los próximos registros. La tasa se guarda cada pocas horas.',
   'gem_buy_100': 'Compra',
   'gem_sell_100': 'Venta',
   'gem_range': '100 gemas costaron entre {lo} y {hi} de oro',

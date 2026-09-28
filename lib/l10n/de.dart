@@ -4,7 +4,8 @@ const deStrings = <String, String>{
   'event_starts_in': 'Beginnt in {t}',
   'event_ended': 'Bereits vorbei',
   'gem_history_title': '100 Edelsteine · letzte 30 Tage',
-  'gem_history_collecting': 'Der Verlauf wird gesammelt, das Diagramm erscheint nach den nächsten Aufzeichnungen. Der Kurs wird alle paar Stunden gespeichert.',
+  'gem_history_collecting':
+      'Der Verlauf wird gesammelt, das Diagramm erscheint nach den nächsten Aufzeichnungen. Der Kurs wird alle paar Stunden gespeichert.',
   'gem_buy_100': 'Kauf',
   'gem_sell_100': 'Verkauf',
   'gem_range': '100 Edelsteine kosteten zwischen {lo} und {hi} Gold',

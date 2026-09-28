@@ -4,7 +4,8 @@ const trStrings = <String, String>{
   'event_starts_in': '{t} sonra başlıyor',
   'event_ended': 'Bitti',
   'gem_history_title': '100 gem · son 30 gün',
-  'gem_history_collecting': 'Geçmiş toplanıyor, grafik sonraki kayıtlardan sonra görünecek. Kur birkaç saatte bir kaydediliyor.',
+  'gem_history_collecting':
+      'Geçmiş toplanıyor, grafik sonraki kayıtlardan sonra görünecek. Kur birkaç saatte bir kaydediliyor.',
   'gem_buy_100': 'Alış',
   'gem_sell_100': 'Satış',
   'gem_range': '100 gem {lo} ile {hi} altın arasında değişti',

@@ -4,7 +4,8 @@ const ptStrings = <String, String>{
   'event_starts_in': 'Começa em {t}',
   'event_ended': 'Já terminou',
   'gem_history_title': '100 gemas · últimos 30 dias',
-  'gem_history_collecting': 'O histórico está sendo coletado, o gráfico aparece após os próximos registros. A cotação é salva a cada poucas horas.',
+  'gem_history_collecting':
+      'O histórico está sendo coletado, o gráfico aparece após os próximos registros. A cotação é salva a cada poucas horas.',
   'gem_buy_100': 'Compra',
   'gem_sell_100': 'Venda',
   'gem_range': '100 gemas custaram entre {lo} e {hi} de ouro',

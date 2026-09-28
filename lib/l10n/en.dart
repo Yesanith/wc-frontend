@@ -4,7 +4,8 @@ const enStrings = <String, String>{
   'event_starts_in': 'Starts in {t}',
   'event_ended': 'Already over',
   'gem_history_title': '100 gems · last 30 days',
-  'gem_history_collecting': 'The history is being collected, the chart appears after the next recordings. The rate is saved every few hours.',
+  'gem_history_collecting':
+      'The history is being collected, the chart appears after the next recordings. The rate is saved every few hours.',
   'gem_buy_100': 'Buy',
   'gem_sell_100': 'Sell',
   'gem_range': 'Cost of 100 gems ranged from {lo} to {hi} gold',
