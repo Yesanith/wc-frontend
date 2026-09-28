@@ -2,16 +2,25 @@ import 'de.dart';
 import 'en.dart';
 import 'es.dart';
 import 'fr.dart';
+import 'ja.dart';
+import 'pt.dart';
+import 'ru.dart';
 import 'tr.dart';
+import 'zh.dart';
 
-/// app languages. the gw2 api has no turkish data so tr falls back to
-/// english for item names etc, and uses the english wiki
+/// app languages. the gw2 api has no turkish, portuguese, russian or
+/// japanese data, those fall back to english item names and the english wiki
 enum AppLang {
   en('en', 'English', 'en', 'https://wiki.guildwars2.com'),
   de('de', 'Deutsch', 'de', 'https://wiki-de.guildwars2.com'),
   es('es', 'Español', 'es', 'https://wiki-es.guildwars2.com'),
   fr('fr', 'Français', 'fr', 'https://wiki-fr.guildwars2.com'),
-  tr('tr', 'Türkçe', 'en', 'https://wiki.guildwars2.com');
+  tr('tr', 'Türkçe', 'en', 'https://wiki.guildwars2.com'),
+  pt('pt', 'Português', 'en', 'https://wiki.guildwars2.com'),
+  ru('ru', 'Русский', 'en', 'https://wiki.guildwars2.com'),
+  ja('ja', '日本語', 'en', 'https://wiki.guildwars2.com'),
+  // the api translates game data into chinese, the wiki has no chinese edition
+  zh('zh', '中文', 'zh', 'https://wiki.guildwars2.com');
 
   const AppLang(this.code, this.nativeName, this.apiLang, this.wikiBase);
 
@@ -43,4 +52,8 @@ const _strings = <String, Map<String, String>>{
   'es': esStrings,
   'fr': frStrings,
   'tr': trStrings,
+  'pt': ptStrings,
+  'ru': ruStrings,
+  'ja': jaStrings,
+  'zh': zhStrings,
 };
