@@ -7,6 +7,7 @@ import '../services/icon_cache.dart';
 import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
+import '../state/community.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -82,6 +83,11 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
         ),
+        // shown only in builds that know the community backend
+        if (communityReady) ...[
+          const SizedBox(height: 16),
+          const _CommunityPanel(),
+        ],
         const SizedBox(height: 16),
         const _AccountsPanel(),
         const SizedBox(height: 16),
@@ -378,6 +384,120 @@ class _ImportDialogState extends State<_ImportDialog> {
         TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('cancel'))),
         FilledButton(onPressed: () => Navigator.of(context).pop(_ctrl.text), child: Text(s.t('import_backup'))),
       ],
+    );
+  }
+}
+
+
+/// the tyria companion account: separate from the gw2 api keys above, it
+/// is what guild events, friends and the discord bot will hang on
+class _CommunityPanel extends ConsumerStatefulWidget {
+  const _CommunityPanel();
+
+  @override
+  ConsumerState<_CommunityPanel> createState() => _CommunityPanelState();
+}
+
+class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
+  bool _busy = false;
+
+  Future<void> _run(Future<void> Function() action) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      await action();
+    } catch (_) {
+      if (mounted) showToast(context, s.t('community_failed'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _confirmDelete() async {
+    final s = ref.read(stringsProvider);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(s.t('community_delete')),
+        content: Text(s.t('community_delete_body')),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(s.t('cancel'))),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(s.t('community_delete_confirm')),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await _run(deleteAccount);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final session = ref.watch(sessionProvider).valueOrNull;
+    final profile = session == null ? null : ref.watch(myProfileProvider).valueOrNull;
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Kicker(s.t('community_account').toUpperCase()),
+          const SizedBox(height: 10),
+          if (session == null) ...[
+            Text(s.t('community_intro'), style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted)),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(backgroundColor: const Color(0xFF5865F2), foregroundColor: Colors.white),
+              onPressed: _busy ? null : () => _run(signInWithDiscord),
+              icon: const Icon(Icons.login),
+              label: Text(s.t('community_sign_in_discord')),
+            ),
+          ] else ...[
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: AppColors.surface2,
+                  foregroundImage: profile?.avatarUrl == null ? null : NetworkImage(profile!.avatarUrl!),
+                  child: const Icon(Icons.person_outline, color: AppColors.muted),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(profile?.displayName ?? '…', style: display(17)),
+                      Text(s.t('community_signed_in'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _busy ? null : () => _run(signOut),
+                    child: Text(s.t('community_sign_out')),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton(
+                    style: TextButton.styleFrom(foregroundColor: AppColors.red),
+                    onPressed: _busy ? null : _confirmDelete,
+                    child: Text(s.t('community_delete')),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,14 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'community_account': 'Conta Tyria Companion',
+  'community_intro': 'Entre para participar de eventos da guilda, encontrar amigos e conectar o Discord da sua guilda. Suas chaves de API ficam neste dispositivo.',
+  'community_sign_in_discord': 'Entrar com Discord',
+  'community_signed_in': 'Conectado com Discord',
+  'community_sign_out': 'Sair',
+  'community_delete': 'Excluir conta',
+  'community_delete_body': 'Sua conta Tyria Companion e tudo ligado a ela serão excluídos para sempre. Suas chaves de API e os outros dados do app neste dispositivo não são afetados.',
+  'community_delete_confirm': 'Excluir para sempre',
+  'community_failed': 'Não deu certo, tente de novo.',
   'item_details': 'Detalhes do item',
   'upgrade_effect': 'Efeito da melhoria',
   'weapon_strength': 'Força da arma',

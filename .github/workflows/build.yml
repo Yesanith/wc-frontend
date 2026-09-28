@@ -105,6 +105,10 @@ jobs:
           grep -q 'android.permission.INTERNET' "$M" || \
             sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$M"
           sed -i 's#android:label="[^"]*"#android:label="Tyria Codex"#' "$M"
+          # signing in with discord ends in the browser, which sends the player
+          # back to the app through tyriacodex://login-callback
+          grep -q 'tyriacodex' "$M" || sed -i 's#</activity>#    <intent-filter>\n                <action android:name="android.intent.action.VIEW"/>\n                <category android:name="android.intent.category.DEFAULT"/>\n                <category android:name="android.intent.category.BROWSABLE"/>\n                <data android:scheme="tyriacodex" android:host="login-callback"/>\n            </intent-filter>\n        </activity>#' "$M"
+          grep -c 'tyriacodex' "$M"
 
       - run: flutter pub get
 
@@ -122,13 +126,19 @@ jobs:
           KEYSTORE_PASSWORD: ***REMOVED***
           KEY_ALIAS: tyriacodex
           KEY_PASSWORD: ***REMOVED***
+          # the community backend: an address and a key meant to be public,
+          # access is enforced by row level security on the server
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
           # maven central sometimes answers 429 to shared runners, wait and retry
           for attempt in 1 2 3; do
             flutter build apk --release \
               --build-name="$VERSION" \
               --build-number="$GITHUB_RUN_NUMBER" \
-              --dart-define=APP_VERSION="$VERSION" && exit 0
+              --dart-define=APP_VERSION="$VERSION" \
+              --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+              --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" && exit 0
             echo "build attempt $attempt failed, retrying in 60s"
             sleep 60
           done

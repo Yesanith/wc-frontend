@@ -7,6 +7,7 @@ import 'screens/onboarding_screen.dart';
 import 'screens/shell.dart';
 import 'services/cache.dart';
 import 'services/icon_cache.dart';
+import 'state/community.dart';
 import 'state/api.dart';
 import 'state/settings.dart';
 import 'theme.dart';
@@ -17,6 +18,8 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final cache = await DiskCache.open();
   final icons = await IconCache.open();
+  // the community account is optional, a failure here never blocks the app
+  await initCommunity();
   runApp(
     ProviderScope(
       overrides: [
