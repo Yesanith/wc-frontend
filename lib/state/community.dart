@@ -159,10 +159,8 @@ class MyGuild {
 final linkedAccountsProvider = FutureProvider.autoDispose<List<LinkedAccount>>((ref) async {
   final session = await ref.watch(sessionProvider.future);
   if (session == null) return const [];
-  final rows = await Supabase.instance.client
-      .from('gw2_accounts')
-      .select('id, account_name, verified_at')
-      .order('account_name');
+  final rows =
+      await Supabase.instance.client.from('gw2_accounts').select('id, account_name, verified_at').order('account_name');
   return [
     for (final r in rows)
       LinkedAccount('${r['id']}', '${r['account_name'] ?? ''}', DateTime.tryParse('${r['verified_at'] ?? ''}')),

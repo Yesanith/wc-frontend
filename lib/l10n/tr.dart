@@ -4,7 +4,8 @@ const trStrings = <String, String>{
   'gw2_link_intro': 'Loncalarına burada katılmak için aktif API key\'inin GW2 hesabını bağla.',
   'gw2_link': 'GW2 hesabını bağla',
   'gw2_refresh': 'Loncaları yenile',
-  'gw2_link_note': 'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
+  'gw2_link_note':
+      'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
   'gw2_linked': '{name} bağlandı',
   'gw2_link_taken': 'Bu GW2 hesabı başka bir Tyria Companion hesabına bağlı.',
   'gw2_link_key': 'API key kullanılamadı. account iznine sahip olması gerekiyor.',
