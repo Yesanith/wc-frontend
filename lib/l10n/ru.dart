@@ -1,5 +1,11 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'news': 'Новости',
+  'patch_notes': 'Список изменений',
+  'patch_notes_note': 'Заметки об обновлениях из английской вики Guild Wars 2, сначала новые.',
+  'game_update_on': 'Обновление игры, {d}',
+  'news_source': 'Новости с guildwars2.com',
+  'news_new': 'Новых статей: {n}',
   'map_search': 'Поиск точек перемещения, достопримечательностей, карт',
   'floor_n': 'Уровень {n}',
   'map_layers': 'Слои карты',

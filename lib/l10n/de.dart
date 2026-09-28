@@ -1,5 +1,11 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'news': 'Neuigkeiten',
+  'patch_notes': 'Patchnotizen',
+  'patch_notes_note': 'Update-Notizen aus dem englischen Guild Wars 2 Wiki, die neuesten zuerst.',
+  'game_update_on': 'Spielupdate, {d}',
+  'news_source': 'Neuigkeiten von guildwars2.com',
+  'news_new': '{n} neue Artikel',
   'map_search': 'Wegmarken, Sehenswürdigkeiten, Karten suchen',
   'floor_n': 'Ebene {n}',
   'map_layers': 'Kartenebenen',

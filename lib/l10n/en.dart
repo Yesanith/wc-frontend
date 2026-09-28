@@ -1,5 +1,11 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'news': 'News',
+  'patch_notes': 'Patch notes',
+  'patch_notes_note': 'Update notes from the English Guild Wars 2 Wiki, newest first.',
+  'game_update_on': 'Game update, {d}',
+  'news_source': 'News from guildwars2.com',
+  'news_new': '{n} new articles',
   'map_search': 'Search waypoints, points of interest, maps',
   'floor_n': 'Level {n}',
   'map_layers': 'Map layers',

@@ -32,6 +32,7 @@ import 'wvw_screen.dart';
 import 'daily_screen.dart';
 import 'weekly_screen.dart';
 import 'world_map_screen.dart';
+import 'news_screen.dart';
 
 const _titleKeys = {
   AppSection.home: 'nav_home',
@@ -49,6 +50,7 @@ const _titleKeys = {
   AppSection.recipes: 'recipes',
   AppSection.professions: 'professions',
   AppSection.wiki: 'nav_wiki',
+  AppSection.news: 'news',
   AppSection.settings: 'nav_settings',
   AppSection.about: 'about',
 };
@@ -69,6 +71,7 @@ const _icons = {
   AppSection.recipes: (Icons.account_tree_outlined, Icons.account_tree),
   AppSection.professions: (Icons.school_outlined, Icons.school),
   AppSection.wiki: (Icons.menu_book_outlined, Icons.menu_book),
+  AppSection.news: (Icons.newspaper_outlined, Icons.newspaper),
   AppSection.settings: (Icons.settings_outlined, Icons.settings),
   AppSection.about: (Icons.info_outline, Icons.info),
 };
@@ -99,6 +102,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.recipes => const RecipesScreen(),
       AppSection.professions => const ProfessionsScreen(),
       AppSection.wiki => const WikiScreen(),
+      AppSection.news => const NewsScreen(),
       AppSection.settings => const SettingsScreen(),
       AppSection.about => const AboutScreen(),
     };

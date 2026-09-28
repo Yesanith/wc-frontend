@@ -1,5 +1,11 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'news': 'Haberler',
+  'patch_notes': 'Yama notları',
+  'patch_notes_note': 'İngilizce Guild Wars 2 Wiki\'deki güncelleme notları, en yenisi üstte.',
+  'game_update_on': 'Oyun güncellemesi, {d}',
+  'news_source': 'Haberler guildwars2.com\'dan',
+  'news_new': '{n} yeni haber',
   'map_search': 'Waypoint, nokta veya harita ara',
   'floor_n': 'Katman {n}',
   'map_layers': 'Harita katmanları',

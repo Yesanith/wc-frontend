@@ -19,6 +19,7 @@ enum AppSection {
   wvw,
   professions,
   wiki,
+  news,
   settings,
   about
 }
