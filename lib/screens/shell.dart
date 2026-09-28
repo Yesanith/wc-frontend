@@ -11,6 +11,7 @@ import '../state/settings.dart';
 import '../state/trading.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../util.dart';
 import '../services/update_check.dart';
@@ -312,16 +313,19 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
             ],
           ],
         ),
-        body: IndexedStack(
-          index: section.index,
-          children: [
-            for (final sec in AppSection.values)
-              // hidden sections keep their state but stop their tickers and timers
-              TickerMode(
-                enabled: sec == section,
-                child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
-              ),
-          ],
+        body: SwipeToOpen(
+          onOpen: () => _scaffoldKey.currentState?.openDrawer(),
+          child: IndexedStack(
+            index: section.index,
+            children: [
+              for (final sec in AppSection.values)
+                // hidden sections keep their state but stop their tickers and timers
+                TickerMode(
+                  enabled: sec == section,
+                  child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
+                ),
+            ],
+          ),
         ),
       ),
     );
