@@ -117,24 +117,62 @@ List<NewsItem> parseRss(String xml) {
   for (final m in RegExp(r'<item\b[^>]*>(.*?)</item>', dotAll: true).allMatches(xml)) {
     final block = m.group(1)!;
     final title = decodeEntities(_tag(block, 'title') ?? '').trim();
-    final link = (_tag(block, 'link') ?? '').trim();
+    final link = cleanLink(decodeEntities(_tag(block, 'link') ?? ''));
     if (title.isEmpty || link.isEmpty) continue;
     final content = _tag(block, 'content:encoded') ?? '';
-    final description = _tag(block, 'description') ?? '';
-    final image = RegExp(r'''<media:(?:content|thumbnail)[^>]+url=["']([^"']+)''').firstMatch(block)?.group(1) ??
-        RegExp(r'''<enclosure[^>]+url=["']([^"']+)''').firstMatch(block)?.group(1) ??
-        RegExp(r'''<img[^>]+src=["']([^"']+)''').firstMatch(content)?.group(1) ??
-        RegExp(r'''<img[^>]+src=["']([^"']+)''').firstMatch(description)?.group(1);
+    // the description ends with a "Read More" paragraph, it is not part of the text
+    final description = (_tag(block, 'description') ?? '').replaceAll(
+      RegExp(r'<p class="more">.*?</p>', dotAll: true),
+      '',
+    );
     out.add(NewsItem(
       title: title,
       link: link,
       date: parseRssDate(_tag(block, 'pubDate') ?? ''),
-      excerpt: plainExcerpt(description.isNotEmpty ? description : content),
-      image: image == null ? null : decodeEntities(image),
+      excerpt: plainExcerpt(description.trim().isNotEmpty ? description : content),
+      image: articleImage(block, content, description),
     ));
   }
   out.sort((a, b) => (b.date ?? DateTime(0)).compareTo(a.date ?? DateTime(0)));
   return out;
+}
+
+/// the article link without the tracking parameters the feed adds
+String cleanLink(String raw) {
+  final uri = Uri.tryParse(raw.trim());
+  if (uri == null) return raw.trim();
+  final kept = {
+    for (final e in uri.queryParameters.entries)
+      if (!e.key.startsWith('utm_')) e.key: e.value,
+  };
+  // replace(queryParameters: null) would keep the old query, clear it explicitly
+  final cleaned = kept.isEmpty ? uri.replace(query: '') : uri.replace(queryParameters: kept);
+  return cleaned.toString().replaceFirst(RegExp(r'\?$'), '');
+}
+
+/// a picture for the card. the site writes image urls without a scheme
+/// (//cdn/...), and some posts only embed a video, whose youtube thumbnail
+/// stands in. prefers the 768 pixel variant the site generates for each
+/// screenshot, the full size is 1920 wide
+String? articleImage(String block, String content, String description) {
+  String? found = RegExp(r'<media:(?:content|thumbnail)[^>]+url="([^"]+)"').firstMatch(block)?.group(1) ??
+      RegExp(r'<enclosure[^>]+url="([^"]+)"').firstMatch(block)?.group(1);
+  if (found == null) {
+    final img = RegExp(r'<img\b[^>]*>').firstMatch(content) ?? RegExp(r'<img\b[^>]*>').firstMatch(description);
+    if (img != null) {
+      final tag = img.group(0)!;
+      final srcset = RegExp(r'srcset="([^"]+)"').firstMatch(tag)?.group(1) ?? '';
+      found = RegExp(r'(\S+)\s+768w').firstMatch(srcset)?.group(1) ?? RegExp(r'src="([^"]+)"').firstMatch(tag)?.group(1);
+    }
+  }
+  if (found == null) {
+    final video = RegExp(r'youtube\.com/embed/([A-Za-z0-9_-]{6,})').firstMatch(content);
+    if (video != null) found = 'https://img.youtube.com/vi/${video.group(1)}/hqdefault.jpg';
+  }
+  if (found == null) return null;
+  found = decodeEntities(found.trim());
+  if (found.startsWith('//')) found = 'https:$found';
+  return found.startsWith('http') ? found : null;
 }
 
 /// one client for the feed and the wiki, both are plain https reads
@@ -192,7 +230,10 @@ final patchNotesProvider = FutureProvider<List<PatchNote>>((ref) async {
     'apprefix': 'Game updates/',
     'apnamespace': '0',
     'apdir': 'descending',
-    'aplimit': '30',
+    // titles with words after the slash sort above the dates and used to
+    // fill the whole page, start just above the last possible date instead
+    'apfrom': 'Game updates/9999',
+    'aplimit': '40',
     'format': 'json',
   });
   try {
