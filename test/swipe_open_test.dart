@@ -70,4 +70,39 @@ void main() {
     expect(opened, isEmpty);
     expect(panned, greaterThan(100));
   });
+
+  testWidgets('switching it off and on keeps the page underneath', (tester) async {
+    var enabled = true;
+    late StateSetter flip;
+    await tester.pumpWidget(MaterialApp(
+      home: StatefulBuilder(builder: (context, setState) {
+        flip = setState;
+        return SwipeToOpen(enabled: enabled, onOpen: () {}, child: const _Counter());
+      }),
+    ));
+    await tester.tap(find.byType(_Counter));
+    await tester.pump();
+    expect(find.text('1'), findsOneWidget);
+    flip(() => enabled = false);
+    await tester.pump();
+    flip(() => enabled = true);
+    await tester.pump();
+    // a rebuilt page would have started again at 0
+    expect(find.text('1'), findsOneWidget);
+  });
+}
+
+class _Counter extends StatefulWidget {
+  const _Counter();
+
+  @override
+  State<_Counter> createState() => _CounterState();
+}
+
+class _CounterState extends State<_Counter> {
+  int _n = 0;
+
+  @override
+  Widget build(BuildContext context) =>
+      GestureDetector(onTap: () => setState(() => _n++), child: Center(child: Text('$_n')));
 }

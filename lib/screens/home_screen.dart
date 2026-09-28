@@ -314,9 +314,7 @@ class _UpNext extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final now =
-        ref.watch(clockProvider.select((t) => t.valueOrNull?.copyWith(second: 0, millisecond: 0, microsecond: 0))) ??
-            DateTime.now().toUtc();
+    final now = ref.watch(minuteProvider);
     final looted = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
     final next = upNext(
       now,

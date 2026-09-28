@@ -74,14 +74,14 @@ class TpPrice {
 /// how far the price download is, 0 to 1
 final marketPricesProgressProvider = StateProvider<double>((ref) => 0);
 
-/// the price of every tradable item. about 140 requests, a few at a time.
-/// refreshed by pull to refresh only: an automatic timer kept downloading
-/// several megabytes every few minutes while the tab sat behind another
-/// section. released when the browse tab closes
 /// how long the full price list is reused before the browse tab fetches it
 /// again. about 140 requests each time, too many to repeat on every visit
 const marketPricesTtl = Duration(minutes: 10);
 
+/// the price of every tradable item, a few requests at a time. refreshed by
+/// pull to refresh only: an automatic timer kept downloading several
+/// megabytes every few minutes while the tab sat behind another section.
+/// released when the browse tab closes
 final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) async {
   final entries = await ref.watch(marketIndexProvider.future);
   final api = ref.watch(gw2ApiProvider);

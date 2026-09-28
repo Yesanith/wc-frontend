@@ -33,27 +33,30 @@ class _SwipeToOpenState extends State<SwipeToOpen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.enabled) return widget.child;
+    // the detector stays in the tree when switched off and only drops its
+    // recognizer. returning the bare child instead would change the tree
+    // above it, and every section of the menu would be rebuilt from scratch
     return RawGestureDetector(
       behavior: HitTestBehavior.translucent,
       gestures: {
-        HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<HorizontalDragGestureRecognizer>(
-          HorizontalDragGestureRecognizer.new,
-          (r) => r
-            ..onStart = (_) {
-              _dx = 0;
-              _dy = 0;
-            }
-            ..onUpdate = (d) {
-              _dx += d.delta.dx;
-              _dy += d.delta.dy.abs();
-            }
-            ..onEnd = (d) {
-              final v = d.primaryVelocity ?? 0;
-              // mostly sideways and to the right, a slanted scroll is not a swipe
-              if (_dx > 0 && _dy < _dx && (_dx > SwipeToOpen.distance || v > SwipeToOpen.speed)) widget.onOpen();
-            },
-        ),
+        if (widget.enabled)
+          HorizontalDragGestureRecognizer: GestureRecognizerFactoryWithHandlers<HorizontalDragGestureRecognizer>(
+            HorizontalDragGestureRecognizer.new,
+            (r) => r
+              ..onStart = (_) {
+                _dx = 0;
+                _dy = 0;
+              }
+              ..onUpdate = (d) {
+                _dx += d.delta.dx;
+                _dy += d.delta.dy.abs();
+              }
+              ..onEnd = (d) {
+                final v = d.primaryVelocity ?? 0;
+                // mostly sideways and to the right, a slanted scroll is not a swipe
+                if (_dx > 0 && _dy < _dx && (_dx > SwipeToOpen.distance || v > SwipeToOpen.speed)) widget.onOpen();
+              },
+          ),
       },
       child: widget.child,
     );

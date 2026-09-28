@@ -184,9 +184,7 @@ class _AgendaList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // the list only changes once a minute, the rows tick on their own
-    final now =
-        ref.watch(clockProvider.select((t) => t.valueOrNull?.copyWith(second: 0, millisecond: 0, microsecond: 0))) ??
-            DateTime.now().toUtc();
+    final now = ref.watch(minuteProvider);
     final list = occurrences(now, now.add(const Duration(hours: 6)), maps: maps)
         .where((o) => _matches(o.map, o.event, kind, pins))
         .toList();
@@ -360,8 +358,10 @@ class _TimelineState extends ConsumerState<Timeline> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now().toUtc();
-    // the window moves in five minute steps, the now line every second
+    // the lanes only change once a minute. the now line ticks every second
+    // on its own, so the forty odd lanes are not rebuilt with it
+    final now = ref.watch(minuteProvider);
+    // the window moves in five minute steps
     final origin = now.subtract(Timeline.before);
     final start = DateTime.utc(origin.year, origin.month, origin.day, origin.hour, origin.minute - origin.minute % 5);
     final end = start.add(Timeline.span);
@@ -430,26 +430,40 @@ class _TimelineState extends ConsumerState<Timeline> {
                   ),
                 ),
               // now
-              Positioned(
-                left: g + x(now) - 1,
-                top: 16,
-                bottom: 0,
-                child: IgnorePointer(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
-                        child: Text(s.t('now'),
-                            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
-                      ),
-                      Expanded(child: Container(width: 2, color: AppColors.red)),
-                    ],
-                  ),
-                ),
-              ),
+              _NowLine(x: x, label: s.t('now')),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// the red line for the current moment, the only part of the timeline that
+/// moves every second
+class _NowLine extends ConsumerWidget {
+  const _NowLine({required this.x, required this.label});
+
+  final double Function(DateTime) x;
+  final String label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now().toUtc();
+    return Positioned(
+      left: Timeline.gutter + x(now) - 1,
+      top: 16,
+      bottom: 0,
+      child: IgnorePointer(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
+              child: Text(label, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
+            ),
+            Expanded(child: Container(width: 2, color: AppColors.red)),
+          ],
         ),
       ),
     );

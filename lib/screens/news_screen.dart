@@ -23,11 +23,17 @@ class NewsScreen extends ConsumerStatefulWidget {
 
 class _NewsScreenState extends ConsumerState<NewsScreen> {
   @override
+  void initState() {
+    super.initState();
+    // opening the section counts as having seen what it lists: what is
+    // already loaded now, and what arrives while it is open
+    WidgetsBinding.instance.addPostFrameCallback((_) => _markSeen(ref.read(newsProvider).valueOrNull));
+  }
+
+  @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    // opening the section counts as having seen what it lists
     ref.listen<AsyncValue<List<NewsItem>>>(newsProvider, (_, next) => _markSeen(next.valueOrNull));
-    WidgetsBinding.instance.addPostFrameCallback((_) => _markSeen(ref.read(newsProvider).valueOrNull));
 
     return DefaultTabController(
       length: 2,

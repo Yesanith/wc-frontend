@@ -19,13 +19,16 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
   titles, emotes and wardrobe progress, with unlocked/missing filters
 - Account overview with wallet, bank and material storage
 - Wizard's Vault daily, weekly and special objectives
-- Gem calculator in both directions
+- Gem calculator in both directions, and a month of the gem exchange rate as a chart
 - Character list with sorting and favourites
 - Character list and details: equipment templates with runes, sigils and infusions, the full
   build, bags and crafting
 - Item pages with attributes, upgrades, what you own and the current trading post price
 - World boss and meta timers on a scrollable timeline with a line for now, or as a list, in your local time, with pinning, release filters and a marker for the bosses already looted today
-- Trading Post section: gem rate, delivery box, watchlist, open orders and 90 days of history
+- Trading Post section: gem rate, delivery box, watchlist, open orders, 90 days of history and a
+  list of every tradable item with filters
+- News: the official guildwars2.com news and the wiki's game update notes, with a note on the home
+  page when something new is out
 - Side by side character comparison
 - Recipes: every crafting and Mystic Forge recipe in one place, filterable by discipline,
   with a calculator that shows the tree, what your account already covers, the cost of the
