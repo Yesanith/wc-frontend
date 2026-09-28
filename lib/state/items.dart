@@ -27,3 +27,22 @@ final itemBatchProvider = FutureProvider.autoDispose.family<Map<int, Json>, Stri
   if (ids.isEmpty) return const {};
   return ref.watch(gw2ApiProvider).items(ids);
 });
+
+/// prices for a group of items, keyed like [itemBatchProvider]. not cached,
+/// prices move
+final priceBatchProvider = FutureProvider.autoDispose.family<Map<int, Json>, String>((ref, key) async {
+  final ids = [
+    for (final part in key.split(','))
+      if (int.tryParse(part) != null) int.parse(part),
+  ];
+  if (ids.isEmpty) return const {};
+  return ref.watch(gw2ApiProvider).prices(ids);
+});
+
+/// the ids around [index] in pages of [size], joined into a batch key. a long
+/// list asks for its items a page at a time instead of one by one
+String pageKey(List<int> ids, int index, [int size = 40]) {
+  final start = index ~/ size * size;
+  final end = start + size > ids.length ? ids.length : start + size;
+  return ids.sublist(start, end).join(',');
+}

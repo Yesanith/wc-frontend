@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../services/item_index.dart';
 import '../state/account.dart';
 import '../state/alerts.dart';
 import '../state/api.dart';
 import '../state/items.dart';
+import '../state/market.dart';
 import '../state/price_history.dart';
 import '../state/settings.dart';
 import '../state/trading.dart';
@@ -23,6 +25,7 @@ part 'trading/item_page.dart';
 part 'trading/overview_tab.dart';
 part 'trading/history_tab.dart';
 part 'trading/stats_tab.dart';
+part 'trading/browse_tab.dart';
 
 class WatchRow extends ConsumerWidget {
   const WatchRow(this.w, {super.key});
@@ -107,14 +110,17 @@ class TradingHubScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Column(
         children: [
-          AppTabBar(scrollable: true, labels: [s.t('overview'), s.t('orders'), s.t('history'), s.t('stats')]),
+          AppTabBar(
+              scrollable: true,
+              labels: [s.t('overview'), s.t('tp_all_items'), s.t('orders'), s.t('history'), s.t('stats')]),
           const Expanded(
             child: TabBarView(
               children: [
                 _OverviewTab(),
+                _BrowseTab(),
                 _TxTab(first: 'current/buys', second: 'current/sells', firstKey: 'buying', secondKey: 'selling'),
                 _TxTab(first: 'history/sells', second: 'history/buys', firstKey: 'sold', secondKey: 'bought'),
                 _StatsTab(),

@@ -27,7 +27,7 @@ jobs:
           python-version: '3.12'
       - run: python -m unittest discover -s tools -p 'test_*.py'
 
-  # english items, their search index and the recipe book
+  # english items, their search index, the trading post index and the recipe book
   book:
     needs: test
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
       - name: Hand the files on
         run: |
           mkdir -p out/assets/data
-          cp assets/data/recipe_book.json.gz assets/data/item_index_en.txt.gz out/assets/data/
+          cp assets/data/recipe_book.json.gz assets/data/item_index_en.txt.gz assets/data/market_index.txt.gz out/assets/data/
       - uses: actions/upload-artifact@v4
         with:
           name: data-book

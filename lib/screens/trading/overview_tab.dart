@@ -157,7 +157,7 @@ class _ItemSearchFieldState extends ConsumerState<ItemSearchField> {
     _debounce = Timer(const Duration(milliseconds: 250), () {
       if (!mounted) return;
       final index = ref.read(itemIndexProvider).valueOrNull ?? ItemIndex.empty;
-      setState(() => _results = index.search(q));
+      setState(() => _results = index.search(q, limit: 20));
     });
   }
 
@@ -195,22 +195,7 @@ class _ItemSearchFieldState extends ConsumerState<ItemSearchField> {
         ],
         if (_results.isNotEmpty) ...[
           const SizedBox(height: 8),
-          Panel(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            child: Column(
-              children: [
-                for (final item in _results.take(12))
-                  ListTile(
-                    dense: true,
-                    title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: item.id)),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          _SearchResults(ids: [for (final item in _results.take(20)) item.id]),
         ],
       ],
     );
@@ -326,6 +311,50 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
           Text(s.t('exchange_note'), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
         ],
       ),
+    );
+  }
+}
+
+/// search hits with their icon and current price, fetched together
+class _SearchResults extends ConsumerWidget {
+  const _SearchResults({required this.ids});
+
+  final List<int> ids;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final key = ids.join(',');
+    final items = ref.watch(itemBatchProvider(key)).valueOrNull ?? const <int, Json>{};
+    final prices = ref.watch(priceBatchProvider(key)).valueOrNull ?? const <int, Json>{};
+    final index = ref.watch(itemIndexProvider).valueOrNull;
+    return Column(
+      children: [
+        for (final id in ids)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _ItemTile(
+              itemId: id,
+              item: items[id],
+              title: (items[id]?['name'] as String?) ?? index?.nameOf(id) ?? s.t('item_n', {'id': id}),
+              trailing: prices[id] == null
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        CoinText(TpPrice.fromJson(prices[id]!).sell, size: 14),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('${s.t('buy_short')} ', style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                            CoinText(TpPrice.fromJson(prices[id]!).buy, size: 11),
+                          ],
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+      ],
     );
   }
 }

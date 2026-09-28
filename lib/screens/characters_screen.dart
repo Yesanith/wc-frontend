@@ -8,6 +8,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/class_icon.dart';
+import '../widgets/birthday.dart';
 import '../widgets/common.dart';
 import 'character_detail_screen.dart';
 
@@ -159,6 +160,8 @@ class _CharacterCard extends ConsumerWidget {
                 const SizedBox(height: 2),
                 Text('$race · ${fmtHours(c['age'], s.t('hours_short'))}',
                     style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                const SizedBox(height: 2),
+                BirthdayLine(created: c['created'] as String?),
               ],
             ),
           ),
