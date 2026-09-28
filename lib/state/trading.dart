@@ -32,7 +32,7 @@ class TxRow {
 }
 
 final transactionsProvider = FutureProvider.family<List<TxRow>, String>((ref, kind) async {
-  final api = ref.watch(gw2ApiProvider);
+  final api = accountApi(ref);
   final txs = await api.transactions(kind);
   final items = await api.items(txs.map((t) => asInt(t['item_id'])));
   return [for (final t in txs) TxRow(t, items[asInt(t['item_id'])])];

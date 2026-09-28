@@ -78,9 +78,20 @@ final marketPricesProgressProvider = StateProvider<double>((ref) => 0);
 /// refreshed by pull to refresh only: an automatic timer kept downloading
 /// several megabytes every few minutes while the tab sat behind another
 /// section. released when the browse tab closes
+/// how long the full price list is reused before the browse tab fetches it
+/// again. about 140 requests each time, too many to repeat on every visit
+const marketPricesTtl = Duration(minutes: 10);
+
 final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) async {
   final entries = await ref.watch(marketIndexProvider.future);
   final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  // a recent copy opens the tab instantly, pull to refresh skips it
+  if (!api.forcing) {
+    final cached = await cache?.read('market_prices', maxAge: marketPricesTtl);
+    final rows = cached?['rows'];
+    if (rows is List && rows.isNotEmpty) return decodeMarketPrices(rows);
+  }
   final ids = [for (final e in entries) e.id];
   final chunks = [
     for (var i = 0; i < ids.length; i += 200) ids.sublist(i, i + 200 > ids.length ? ids.length : i + 200)
@@ -101,8 +112,19 @@ final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) as
       out[e.key] = TpPrice.fromJson(e.value);
     }
   }
+  await cache?.write('market_prices', {'rows': encodeMarketPrices(out)});
   return out;
 });
+
+/// compact rows for the disk copy: [id, buy, sell, demand, supply]
+List<List<int>> encodeMarketPrices(Map<int, TpPrice> prices) => [
+      for (final e in prices.entries) [e.key, e.value.buy, e.value.sell, e.value.demand, e.value.supply],
+    ];
+
+Map<int, TpPrice> decodeMarketPrices(List<dynamic> rows) => {
+      for (final r in rows)
+        if (r is List && r.length >= 5) asInt(r[0]): TpPrice(asInt(r[1]), asInt(r[2]), asInt(r[3]), asInt(r[4])),
+    };
 
 enum MarketSort { sellHigh, sellLow, supply, demand, flip, name }
 
