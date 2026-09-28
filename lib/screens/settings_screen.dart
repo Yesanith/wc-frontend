@@ -503,7 +503,6 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
   }
 }
 
-
 /// the gw2 accounts linked to the community account and the guilds they are
 /// in. linking uses a short lived subtoken, the api key stays on the device
 class _Gw2LinkSection extends ConsumerStatefulWidget {

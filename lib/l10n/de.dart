@@ -4,7 +4,8 @@ const deStrings = <String, String>{
   'gw2_link_intro': 'Verknüpfe das GW2-Konto deines aktiven API-Schlüssels, um hier deinen Gilden beizutreten.',
   'gw2_link': 'GW2-Konto verknüpfen',
   'gw2_refresh': 'Gilden aktualisieren',
-  'gw2_link_note': 'Gesendet wird nur ein zehn Minuten gültiges Token, das Kontoname und Gilden lesen kann. Dein API-Schlüssel bleibt auf diesem Gerät.',
+  'gw2_link_note':
+      'Gesendet wird nur ein zehn Minuten gültiges Token, das Kontoname und Gilden lesen kann. Dein API-Schlüssel bleibt auf diesem Gerät.',
   'gw2_linked': '{name} ist verknüpft',
   'gw2_link_taken': 'Dieses GW2-Konto ist bereits mit einem anderen Tyria-Companion-Konto verknüpft.',
   'gw2_link_key': 'Der API-Schlüssel konnte nicht verwendet werden. Er braucht die Berechtigung account.',

@@ -4,7 +4,8 @@ const ptStrings = <String, String>{
   'gw2_link_intro': 'Vincule a conta de GW2 da sua chave de API ativa para entrar aqui nas suas guildas.',
   'gw2_link': 'Vincular conta de GW2',
   'gw2_refresh': 'Atualizar guildas',
-  'gw2_link_note': 'Só é enviado um token de dez minutos que lê o nome da conta e as guildas. Sua chave de API fica neste dispositivo.',
+  'gw2_link_note':
+      'Só é enviado um token de dez minutos que lê o nome da conta e as guildas. Sua chave de API fica neste dispositivo.',
   'gw2_linked': '{name} foi vinculada',
   'gw2_link_taken': 'Esta conta de GW2 já está vinculada a outra conta Tyria Companion.',
   'gw2_link_key': 'Não foi possível usar a chave de API. Ela precisa da permissão account.',

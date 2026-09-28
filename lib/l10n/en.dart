@@ -4,7 +4,8 @@ const enStrings = <String, String>{
   'gw2_link_intro': 'Link the GW2 account of your active API key to join your guilds here.',
   'gw2_link': 'Link GW2 account',
   'gw2_refresh': 'Refresh guilds',
-  'gw2_link_note': 'Only a ten minute token that can read your account name and guilds is sent. Your API key stays on this device.',
+  'gw2_link_note':
+      'Only a ten minute token that can read your account name and guilds is sent. Your API key stays on this device.',
   'gw2_linked': '{name} is linked',
   'gw2_link_taken': 'This GW2 account is already linked to another Tyria Companion account.',
   'gw2_link_key': 'The API key could not be used. It needs the account permission.',

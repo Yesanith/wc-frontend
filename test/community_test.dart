@@ -28,4 +28,3 @@ void main() {
     expect(linkIsStale(now.subtract(const Duration(days: 2)), now), isTrue);
   });
 }
-
