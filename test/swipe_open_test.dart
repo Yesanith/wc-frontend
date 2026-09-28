@@ -50,4 +50,24 @@ void main() {
     await tester.pumpAndSettle();
     expect(opened, isEmpty);
   });
+
+  testWidgets('switched off, a page that pans in every direction keeps sideways drags', (tester) async {
+    final opened = <int>[];
+    var panned = 0.0;
+    await tester.pumpWidget(MaterialApp(
+      home: SwipeToOpen(
+        enabled: false,
+        onOpen: () => opened.add(1),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onScaleUpdate: (d) => panned += d.focalPointDelta.dx,
+          child: const SizedBox.expand(),
+        ),
+      ),
+    ));
+    await tester.dragFrom(const Offset(100, 300), const Offset(200, 0));
+    await tester.pumpAndSettle();
+    expect(opened, isEmpty);
+    expect(panned, greaterThan(100));
+  });
 }

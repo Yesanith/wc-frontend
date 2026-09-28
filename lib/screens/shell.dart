@@ -330,6 +330,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           ],
         ),
         body: SwipeToOpen(
+          // the map pans sideways, the menu stays on the button and back there
+          enabled: section != AppSection.maps,
           onOpen: () => _scaffoldKey.currentState?.openDrawer(),
           child: IndexedStack(
             index: section.index,

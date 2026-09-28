@@ -9,10 +9,15 @@ import 'package:flutter/material.dart';
 /// sideways still get their drags first, it only acts where nothing else
 /// wanted one
 class SwipeToOpen extends StatefulWidget {
-  const SwipeToOpen({super.key, required this.onOpen, required this.child});
+  const SwipeToOpen({super.key, required this.onOpen, required this.child, this.enabled = true});
 
   final VoidCallback onOpen;
   final Widget child;
+
+  /// off on pages that pan freely in every direction. a pan or pinch only
+  /// claims the gesture after twice the distance a horizontal drag needs, so
+  /// this listener would win every sideways pan on the world map
+  final bool enabled;
 
   /// how far or how fast a swipe has to go before it counts
   static const distance = 60.0;
@@ -28,6 +33,7 @@ class _SwipeToOpenState extends State<SwipeToOpen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.enabled) return widget.child;
     return RawGestureDetector(
       behavior: HitTestBehavior.translucent,
       gestures: {
