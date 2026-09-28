@@ -156,7 +156,6 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
       ],
     );
   }
-
 }
 
 /// what an item is, independent of where it is shown: description, type
@@ -241,7 +240,8 @@ class ItemFacts extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: Column(
               children: [
-                for (final a in attributes) row(attributeName('${a['attribute']}'), valueText('+${asInt(a['modifier'])}')),
+                for (final a in attributes)
+                  row(attributeName('${a['attribute']}'), valueText('+${asInt(a['modifier'])}')),
               ],
             ),
           ),
@@ -298,7 +298,8 @@ List<(String, String)> itemFactRows(S s, Json item, Json? details) {
 String _duration(int ms) {
   final d = Duration(milliseconds: ms);
   if (d.inHours >= 1) return d.inMinutes % 60 == 0 ? '${d.inHours} h' : '${d.inHours} h ${d.inMinutes % 60} min';
-  if (d.inMinutes >= 1) return d.inSeconds % 60 == 0 ? '${d.inMinutes} min' : '${d.inMinutes} min ${d.inSeconds % 60} s';
+  if (d.inMinutes >= 1)
+    return d.inSeconds % 60 == 0 ? '${d.inMinutes} min' : '${d.inMinutes} min ${d.inSeconds % 60} s';
   return '${d.inSeconds} s';
 }
 
