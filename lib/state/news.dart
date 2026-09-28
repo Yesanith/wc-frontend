@@ -162,7 +162,8 @@ String? articleImage(String block, String content, String description) {
     if (img != null) {
       final tag = img.group(0)!;
       final srcset = RegExp(r'srcset="([^"]+)"').firstMatch(tag)?.group(1) ?? '';
-      found = RegExp(r'(\S+)\s+768w').firstMatch(srcset)?.group(1) ?? RegExp(r'src="([^"]+)"').firstMatch(tag)?.group(1);
+      found =
+          RegExp(r'(\S+)\s+768w').firstMatch(srcset)?.group(1) ?? RegExp(r'src="([^"]+)"').firstMatch(tag)?.group(1);
     }
   }
   if (found == null) {

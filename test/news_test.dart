@@ -97,4 +97,3 @@ void main() {
     expect(items[2].image, 'https://cdn.example.net/a.jpg');
   });
 }
-
