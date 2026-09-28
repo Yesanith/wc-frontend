@@ -15,4 +15,17 @@ void main() {
     expect(RegExp(r'^[a-z][a-z0-9+.-]*$').hasMatch(uri.scheme), isTrue);
     expect(uri.host, 'login-callback');
   });
+
+  test('subtokens expire ten minutes later, in whole utc seconds', () {
+    expect(subtokenExpiry(DateTime.utc(2026, 9, 28, 20, 5, 30, 123)), '2026-09-28T20:15:30Z');
+    expect(subtokenExpiry(DateTime.utc(2026, 12, 31, 23, 55)), '2027-01-01T00:05:00Z');
+  });
+
+  test('a link is refreshed quietly once it is a day old', () {
+    final now = DateTime.utc(2026, 9, 28, 12);
+    expect(linkIsStale(null, now), isTrue);
+    expect(linkIsStale(now.subtract(const Duration(hours: 3)), now), isFalse);
+    expect(linkIsStale(now.subtract(const Duration(days: 2)), now), isTrue);
+  });
 }
+

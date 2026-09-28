@@ -1,5 +1,19 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'gw2_accounts_title': 'GW2 hesapları ve loncalar',
+  'gw2_link_intro': 'Loncalarına burada katılmak için aktif API key\'inin GW2 hesabını bağla.',
+  'gw2_link': 'GW2 hesabını bağla',
+  'gw2_refresh': 'Loncaları yenile',
+  'gw2_link_note': 'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
+  'gw2_linked': '{name} bağlandı',
+  'gw2_link_taken': 'Bu GW2 hesabı başka bir Tyria Companion hesabına bağlı.',
+  'gw2_link_key': 'API key kullanılamadı. account iznine sahip olması gerekiyor.',
+  'gw2_link_down': 'GW2 API\'si cevap vermiyor, sonra tekrar dene.',
+  'gw2_unlink': 'Bağlantıyı kaldır',
+  'gw2_unlink_body': '{name} ve lonca üyelikleri Tyria Companion hesabından kaldırılacak.',
+  'guild_role_leader': 'Lider',
+  'guild_role_officer': 'Subay',
+  'guild_role_member': 'Üye',
   'community_account': 'Tyria Companion hesabı',
   'community_intro':
       'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',

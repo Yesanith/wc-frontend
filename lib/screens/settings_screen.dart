@@ -475,6 +475,8 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            const _Gw2LinkSection(),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -497,6 +499,143 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
           ],
         ],
       ),
+    );
+  }
+}
+
+
+/// the gw2 accounts linked to the community account and the guilds they are
+/// in. linking uses a short lived subtoken, the api key stays on the device
+class _Gw2LinkSection extends ConsumerStatefulWidget {
+  const _Gw2LinkSection();
+
+  @override
+  ConsumerState<_Gw2LinkSection> createState() => _Gw2LinkSectionState();
+}
+
+class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
+  bool _busy = false;
+
+  /// one quiet refresh per session, when the link is a day old
+  static bool _refreshedThisSession = false;
+
+  Future<void> _link({bool quiet = false}) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      final permissions = [
+        for (final p in ((await ref.read(tokenInfoProvider.future))['permissions'] as List?) ?? const []) '$p',
+      ];
+      final name = await linkGw2Account(ref.read(gw2ApiProvider), permissions);
+      ref.invalidate(linkedAccountsProvider);
+      ref.invalidate(myGuildsProvider);
+      if (!quiet && mounted) showToast(context, s.t('gw2_linked', {'name': name}));
+    } on LinkFailure catch (e) {
+      if (!quiet && mounted) showToast(context, s.t(_failureKey(e.code)));
+    } catch (_) {
+      if (!quiet && mounted) showToast(context, s.t('community_failed'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  String _failureKey(String code) => switch (code) {
+        'account_taken' => 'gw2_link_taken',
+        'invalid_token' || 'missing_permission' => 'gw2_link_key',
+        'gw2_unavailable' => 'gw2_link_down',
+        _ => 'community_failed',
+      };
+
+  Future<void> _unlink(LinkedAccount account) async {
+    final s = ref.read(stringsProvider);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(s.t('gw2_unlink')),
+        content: Text(s.t('gw2_unlink_body', {'name': account.name})),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(s.t('cancel'))),
+          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(s.t('gw2_unlink'))),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await unlinkGw2Account(account.id);
+      ref.invalidate(linkedAccountsProvider);
+      ref.invalidate(myGuildsProvider);
+    } catch (_) {
+      if (mounted) showToast(context, s.t('community_failed'));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final accounts = ref.watch(linkedAccountsProvider).valueOrNull;
+    final guilds = ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[];
+
+    // keep membership fresh without anyone having to think about it
+    if (accounts != null &&
+        accounts.isNotEmpty &&
+        !_refreshedThisSession &&
+        accounts.any((a) => linkIsStale(a.verifiedAt, DateTime.now()))) {
+      _refreshedThisSession = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _link(quiet: true));
+    }
+
+    String role(String r) => s.t('guild_role_$r');
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(s.t('gw2_accounts_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 6),
+        if (accounts == null)
+          const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+        else if (accounts.isEmpty)
+          Text(s.t('gw2_link_intro'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted))
+        else
+          for (final a in accounts)
+            Row(
+              children: [
+                const Icon(Icons.verified_user_outlined, size: 18, color: AppColors.gold),
+                const SizedBox(width: 8),
+                Expanded(child: Text(a.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+                IconButton(
+                  tooltip: s.t('gw2_unlink'),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: _busy ? null : () => _unlink(a),
+                  icon: const Icon(Icons.link_off, size: 18, color: AppColors.muted),
+                ),
+              ],
+            ),
+        if (guilds.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final g in guilds)
+                Pill(
+                  g.tag.isEmpty ? '${g.name} · ${role(g.role)}' : '${g.name} [${g.tag}] · ${role(g.role)}',
+                  color: g.role == 'leader' ? AppColors.gold : AppColors.textSoft,
+                ),
+            ],
+          ),
+        ],
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          onPressed: _busy ? null : _link,
+          icon: _busy
+              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+              : Icon(accounts?.isEmpty ?? true ? Icons.link : Icons.refresh, size: 18),
+          label: Text(accounts?.isEmpty ?? true ? s.t('gw2_link') : s.t('gw2_refresh')),
+        ),
+        const SizedBox(height: 4),
+        Text(s.t('gw2_link_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+      ],
     );
   }
 }

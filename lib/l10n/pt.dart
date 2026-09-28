@@ -1,5 +1,19 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'gw2_accounts_title': 'Contas de GW2 e guildas',
+  'gw2_link_intro': 'Vincule a conta de GW2 da sua chave de API ativa para entrar aqui nas suas guildas.',
+  'gw2_link': 'Vincular conta de GW2',
+  'gw2_refresh': 'Atualizar guildas',
+  'gw2_link_note': 'Só é enviado um token de dez minutos que lê o nome da conta e as guildas. Sua chave de API fica neste dispositivo.',
+  'gw2_linked': '{name} foi vinculada',
+  'gw2_link_taken': 'Esta conta de GW2 já está vinculada a outra conta Tyria Companion.',
+  'gw2_link_key': 'Não foi possível usar a chave de API. Ela precisa da permissão account.',
+  'gw2_link_down': 'A API de GW2 não está respondendo, tente mais tarde.',
+  'gw2_unlink': 'Desvincular',
+  'gw2_unlink_body': '{name} e suas participações em guildas serão removidas da sua conta Tyria Companion.',
+  'guild_role_leader': 'Líder',
+  'guild_role_officer': 'Oficial',
+  'guild_role_member': 'Membro',
   'community_account': 'Conta Tyria Companion',
   'community_intro':
       'Entre para participar de eventos da guilda, encontrar amigos e conectar o Discord da sua guilda. Suas chaves de API ficam neste dispositivo.',

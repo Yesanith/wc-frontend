@@ -1,5 +1,19 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'gw2_accounts_title': 'GW2 accounts and guilds',
+  'gw2_link_intro': 'Link the GW2 account of your active API key to join your guilds here.',
+  'gw2_link': 'Link GW2 account',
+  'gw2_refresh': 'Refresh guilds',
+  'gw2_link_note': 'Only a ten minute token that can read your account name and guilds is sent. Your API key stays on this device.',
+  'gw2_linked': '{name} is linked',
+  'gw2_link_taken': 'This GW2 account is already linked to another Tyria Companion account.',
+  'gw2_link_key': 'The API key could not be used. It needs the account permission.',
+  'gw2_link_down': 'The GW2 API is not answering, try again later.',
+  'gw2_unlink': 'Unlink',
+  'gw2_unlink_body': '{name} and its guild memberships will be removed from your Tyria Companion account.',
+  'guild_role_leader': 'Leader',
+  'guild_role_officer': 'Officer',
+  'guild_role_member': 'Member',
   'community_account': 'Tyria Companion account',
   'community_intro':
       'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device.',

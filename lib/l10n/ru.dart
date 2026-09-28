@@ -1,5 +1,19 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'gw2_accounts_title': 'Аккаунты GW2 и гильдии',
+  'gw2_link_intro': 'Привяжите аккаунт GW2 активного API-ключа, чтобы вступить здесь в свои гильдии.',
+  'gw2_link': 'Привязать аккаунт GW2',
+  'gw2_refresh': 'Обновить гильдии',
+  'gw2_link_note': 'Отправляется только токен на десять минут, который может читать имя аккаунта и гильдии. API-ключ остаётся на устройстве.',
+  'gw2_linked': '{name} привязан',
+  'gw2_link_taken': 'Этот аккаунт GW2 уже привязан к другому аккаунту Tyria Companion.',
+  'gw2_link_key': 'Не удалось использовать API-ключ. Нужно разрешение account.',
+  'gw2_link_down': 'API GW2 не отвечает, попробуйте позже.',
+  'gw2_unlink': 'Отвязать',
+  'gw2_unlink_body': '{name} и его членство в гильдиях будут удалены из аккаунта Tyria Companion.',
+  'guild_role_leader': 'Лидер',
+  'guild_role_officer': 'Офицер',
+  'guild_role_member': 'Участник',
   'community_account': 'Аккаунт Tyria Companion',
   'community_intro':
       'Войдите, чтобы участвовать в событиях гильдии, находить друзей и подключать Discord гильдии. Ваши API-ключи остаются на этом устройстве.',
