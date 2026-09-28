@@ -85,13 +85,13 @@ jobs:
           # the template adds a counter app test for a MyApp we do not have
           rm -f test/widget_test.dart
 
-      # sign with a real release key, the flutter template would use the
-      # public debug key which scanners flag as a test build
       # the app icon is the emblem of the menu header, rendered by
       # tools/make_launcher_icon.py. it replaces the default flutter icon
       - name: Use the app icon
         run: cp -r ci/launcher/res/. android/app/src/main/res/
 
+      # sign with a real release key, the flutter template would use the
+      # public debug key which scanners flag as a test build
       - name: Use the release signing key
         run: python3 ci/sign.py
 
