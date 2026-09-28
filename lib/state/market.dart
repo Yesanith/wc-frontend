@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -75,9 +74,11 @@ class TpPrice {
 /// how far the price download is, 0 to 1
 final marketPricesProgressProvider = StateProvider<double>((ref) => 0);
 
-/// the price of every tradable item. about 140 requests, a few at a time,
-/// kept for five minutes
-final allPricesProvider = FutureProvider<Map<int, TpPrice>>((ref) async {
+/// the price of every tradable item. about 140 requests, a few at a time.
+/// refreshed by pull to refresh only: an automatic timer kept downloading
+/// several megabytes every few minutes while the tab sat behind another
+/// section. released when the browse tab closes
+final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) async {
   final entries = await ref.watch(marketIndexProvider.future);
   final api = ref.watch(gw2ApiProvider);
   final ids = [for (final e in entries) e.id];
@@ -100,8 +101,6 @@ final allPricesProvider = FutureProvider<Map<int, TpPrice>>((ref) async {
       out[e.key] = TpPrice.fromJson(e.value);
     }
   }
-  final timer = Timer(const Duration(minutes: 5), ref.invalidateSelf);
-  ref.onDispose(timer.cancel);
   return out;
 });
 
