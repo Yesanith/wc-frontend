@@ -1,10 +1,14 @@
 name: Format
 
-# run by hand from the actions tab. formats every dart file with the
-# official formatter and commits the result, so style stays consistent
-# without anyone formatting locally
+# formats every dart file with the official formatter and commits the
+# result. runs on its own after code lands on main, since some commits come
+# from places without a dart sdk, and can still be started by hand. its own
+# commit is pushed with the workflow token, which never starts another run
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['lib/**', 'test/**']
 
 permissions:
   contents: write
