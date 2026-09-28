@@ -118,6 +118,7 @@ List<NewsItem> parseRss(String xml) {
   return out;
 }
 
+/// one client for the feed and the wiki, both are plain https reads
 final _client = http.Client();
 
 /// the official news of the app's language, the last copy stays readable
