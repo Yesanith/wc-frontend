@@ -47,14 +47,15 @@ jobs:
           path: out/
           retention-days: 1
 
-  # one search index per language the api translates. turkish is absent on
-  # purpose: AppLang.tr asks the api in english and reuses that index
+  # one search index per language the api translates. turkish, portuguese,
+  # russian and japanese are absent on purpose: the api has none of them, so
+  # those ask in english and reuse that index
   index:
     needs: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lang: [de, es, fr]
+        lang: [de, es, fr, zh]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -80,7 +81,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Build world map markers and overview tiles
-        run: python tools/build_worldmap.py en de es fr
+        run: python tools/build_worldmap.py en de es fr zh
       - name: Hand the files on
         run: |
           mkdir -p out/assets/data

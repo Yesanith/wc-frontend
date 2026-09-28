@@ -37,8 +37,9 @@ An unofficial Guild Wars 2 companion app for Android, built with Flutter.
 - Backup: export and import the watchlist, price history, pinned bosses and achievements and
   language as json
 - Game data (items, colors, collection entries) is cached on disk for a month
-- English, German, Spanish, French and Turkish UI. Item names and the wiki follow the
-  selected language where the API and wiki support it (Turkish falls back to English data)
+- English, German, Spanish, French, Turkish, Portuguese, Russian, Japanese and Chinese UI. Item names and the wiki follow the
+  selected language where the API and wiki support it. Chinese item names come from the API, Turkish,
+  Portuguese, Russian and Japanese fall back to English data
 
 - World vs World: live matchup scores, objectives per map with owner and upgrade tier, rank and abilities
 - Wizard's Vault reward shop with the season, your Astral Acclaim and what you already bought

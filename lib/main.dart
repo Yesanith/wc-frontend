@@ -36,8 +36,9 @@ class TyriaCodexApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final lang = ref.watch(langProvider);
     groupSeparator = switch (lang) {
-      AppLang.en => ',',
+      AppLang.en || AppLang.ja || AppLang.zh => ',',
       AppLang.fr => '\u202F',
+      AppLang.ru => '\u00A0',
       _ => '.',
     };
     final key = ref.watch(apiKeyProvider);

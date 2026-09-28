@@ -33,7 +33,7 @@ void main() {
   }
 
   test('every language the app offers has a table', () {
-    expect(keysPerLanguage().keys, containsAll(['en', 'de', 'es', 'fr', 'tr']));
+    expect(keysPerLanguage().keys, containsAll(['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru', 'ja', 'zh']));
   });
 
   test('every language has the same keys', () {
@@ -63,6 +63,18 @@ void main() {
   test('placeholders are filled in every language', () {
     for (final lang in AppLang.values) {
       expect(S(lang).t('n_items', {'n': 7}), contains('7'));
+    }
+  });
+
+  test('every translation keeps the placeholders of the english text', () {
+    final holder = RegExp(r'\{[a-z]+\}');
+    Set<String> of(String? text) => {for (final m in holder.allMatches(text ?? '')) m.group(0)!};
+    const english = S(AppLang.en);
+    for (final key in keysPerLanguage()['en']!) {
+      final expected = of(english.t(key));
+      for (final lang in AppLang.values) {
+        expect(of(S(lang).t(key)), expected, reason: '${lang.code}: $key');
+      }
     }
   });
 }
