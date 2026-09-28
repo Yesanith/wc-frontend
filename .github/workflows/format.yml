@@ -32,5 +32,11 @@ jobs:
           git config user.name "Yesanith"
           git config user.email "56350783+Yesanith@users.noreply.github.com"
           git commit -am "Apply dart format"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          # someone may push while this runs. replaying a formatting commit
+          # on top of theirs is safe, try a few times
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            echo "push attempt $attempt failed, retrying"
+            sleep 10
+          done
+          exit 1

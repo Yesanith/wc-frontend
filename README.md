@@ -92,6 +92,15 @@ flutter build apk --release
 The app needs the `INTERNET` permission in `android/app/src/main/AndroidManifest.xml` for
 release builds. The CI workflow adds it automatically.
 
+Once per clone, so commits are formatted before they leave and pulls replay local work on top
+of what the workflows committed (formatting, regenerated data, the gem history):
+
+```sh
+git config core.hooksPath .githooks
+git config pull.rebase true
+git config rebase.autoStash true
+```
+
 ## Signing
 
 Release builds are signed with `ci/release.keystore`, checked into the repo together with its

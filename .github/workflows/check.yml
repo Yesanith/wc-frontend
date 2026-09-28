@@ -21,7 +21,10 @@ jobs:
 
       # same settings as the format workflow, so a push that skipped it fails
       # here instead of drifting until the next manual run
+      # on main the Format workflow fixes it and commits, a red run there
+      # would only report what is already being repaired
       - name: Check formatting
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: dart format --line-length 120 --set-exit-if-changed --output=none lib test
 
       # lint hints stay advisory, errors and warnings fail the run
