@@ -471,7 +471,6 @@ const deStrings = <String, String>{
   'about_credits': 'Mitwirkende',
   'about_credit_dev': 'Entwickelt von {name}',
   'about_credit_data': 'Spieldaten, Symbole und Kartenkacheln aus der offiziellen Guild Wars 2 API',
-  'about_credit_design': 'Aussehen geteilt mit Regions of XIV, dessen Oberfläche von XeldarAlz stammt',
   'account_progress_note':
       'Accountweite Boni: Glück erhöht das Magiegespür, Fraktal-Verbesserungen sind die Upgrades aus dem Nebelsperre-Observatorium.',
   'expand_all': 'Alle aufklappen',

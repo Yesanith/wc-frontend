@@ -471,7 +471,6 @@ const ptStrings = <String, String>{
   'about_credits': 'Créditos',
   'about_credit_dev': 'Desenvolvido por {name}',
   'about_credit_data': 'Dados do jogo, ícones e mapas da API oficial do Guild Wars 2',
-  'about_credit_design': 'Visual compartilhado com o Regions of XIV, cuja interface é de XeldarAlz',
   'account_progress_note':
       'Bônus da conta toda: a sorte aumenta o magic find, e os aprimoramentos de fractal são as melhorias compradas no Mistlock Observatory.',
   'expand_all': 'Expandir tudo',

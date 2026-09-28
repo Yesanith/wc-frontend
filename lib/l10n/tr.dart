@@ -469,7 +469,6 @@ const trStrings = <String, String>{
   'about_credits': 'Emeği geçenler',
   'about_credit_dev': '{name} tarafından geliştirildi',
   'about_credit_data': 'Oyun verileri, simgeler ve harita karoları resmi Guild Wars 2 API\'sinden',
-  'about_credit_design': 'Görünüm, arayüzü XeldarAlz tarafından yapılan Regions of XIV ile ortak',
   'account_progress_note':
       'Hesap geneli bonuslar: şans büyü bulma oranını artırır, fraktal geliştirmeleri Mistlock Observatory\'den alınan yükseltmelerdir.',
   'expand_all': 'Tümünü aç',

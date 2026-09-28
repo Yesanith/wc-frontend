@@ -15,7 +15,7 @@ const issuesUrl = '$repositoryUrl/issues';
 const supportUrl = 'https://buymeacoffee.com/yesanith';
 
 /// who made the app, where it lives and how to help, laid out like the
-/// About page of Regions of XIV: a hero, community tiles and the credits
+/// the about page: a hero, community tiles and the credits
 class AboutScreen extends ConsumerWidget {
   const AboutScreen({super.key});
 
@@ -59,7 +59,6 @@ class AboutScreen extends ConsumerWidget {
           children: [
             SettingsRow(label: s.t('about_credit_dev', {'name': _author})),
             SettingsRow(label: s.t('about_credit_data')),
-            SettingsRow(label: s.t('about_credit_design')),
           ],
         ),
         Text(s.t('disclaimer'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),

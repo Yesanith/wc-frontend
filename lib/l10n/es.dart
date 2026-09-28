@@ -472,7 +472,6 @@ const esStrings = <String, String>{
   'about_credits': 'Créditos',
   'about_credit_dev': 'Desarrollado por {name}',
   'about_credit_data': 'Datos del juego, iconos y mapas de la API oficial de Guild Wars 2',
-  'about_credit_design': 'Aspecto compartido con Regions of XIV, cuya interfaz es de XeldarAlz',
   'account_progress_note':
       'Bonificaciones de cuenta: la suerte aumenta el hallazgo mágico y los aumentos fractales son las mejoras compradas en el Observatorio del Cierre de la Niebla.',
   'expand_all': 'Desplegar todo',
