@@ -585,7 +585,6 @@ class _PinnedAchievements extends ConsumerWidget {
   }
 }
 
-
 /// "new articles" while the feed has something the user has not seen yet
 class _NewsBanner extends ConsumerWidget {
   const _NewsBanner();
@@ -612,7 +611,8 @@ class _NewsBanner extends ConsumerWidget {
             const Icon(Icons.newspaper, color: AppColors.gold),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(s.t('news_new', {'n': count}), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+              child: Text(s.t('news_new', {'n': count}),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             ),
             const Icon(Icons.chevron_right, color: AppColors.chevron),
           ],
