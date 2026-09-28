@@ -73,6 +73,16 @@ const _icons = {
   AppSection.about: (Icons.info_outline, Icons.info),
 };
 
+/// where a group of the menu begins, and its heading. settings and about
+/// get a divider without a heading
+const _groupStarts = <AppSection, String?>{
+  AppSection.characters: 'nav_group_account',
+  AppSection.trading: 'nav_group_economy',
+  AppSection.maps: 'nav_group_world',
+  AppSection.professions: 'nav_group_reference',
+  AppSection.settings: null,
+};
+
 Widget _page(AppSection section) => switch (section) {
       AppSection.home => const HomeScreen(),
       AppSection.daily => const DailyScreen(),
@@ -300,11 +310,17 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               child: Divider(),
             ),
             for (final sec in AppSection.values) ...[
-              if (sec == AppSection.wiki || sec == AppSection.settings)
+              if (_groupStarts.containsKey(sec)) ...[
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
                   child: Divider(),
                 ),
+                if (_groupStarts[sec] case final key?)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(28, 4, 28, 8),
+                    child: Kicker(s.t(key).toUpperCase(), color: AppColors.hint),
+                  ),
+              ],
               NavigationDrawerDestination(
                 icon: Icon(_icons[sec]!.$1),
                 selectedIcon: Icon(_icons[sec]!.$2),

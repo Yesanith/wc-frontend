@@ -553,4 +553,8 @@ const ptStrings = <String, String>{
   'itype_JadeTechModule': 'Módulos do Jade Bot',
   'itype_PowerCore': 'Núcleos de energia',
   'itype_Tool': 'Ferramentas',
+  'nav_group_account': 'Conta',
+  'nav_group_economy': 'Economia',
+  'nav_group_world': 'Mundo',
+  'nav_group_reference': 'Referência',
 };

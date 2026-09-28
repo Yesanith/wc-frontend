@@ -552,4 +552,8 @@ const deStrings = <String, String>{
   'itype_JadeTechModule': 'Jadebot-Module',
   'itype_PowerCore': 'Energiekerne',
   'itype_Tool': 'Werkzeuge',
+  'nav_group_account': 'Konto',
+  'nav_group_economy': 'Wirtschaft',
+  'nav_group_world': 'Welt',
+  'nav_group_reference': 'Nachschlagen',
 };

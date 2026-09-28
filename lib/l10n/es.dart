@@ -554,4 +554,8 @@ const esStrings = <String, String>{
   'itype_JadeTechModule': 'Módulos de dron de jade',
   'itype_PowerCore': 'Núcleos de energía',
   'itype_Tool': 'Herramientas',
+  'nav_group_account': 'Cuenta',
+  'nav_group_economy': 'Economía',
+  'nav_group_world': 'Mundo',
+  'nav_group_reference': 'Referencia',
 };

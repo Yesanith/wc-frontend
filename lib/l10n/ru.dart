@@ -551,4 +551,8 @@ const ruStrings = <String, String>{
   'itype_JadeTechModule': 'Модули нефритового бота',
   'itype_PowerCore': 'Энергоядра',
   'itype_Tool': 'Инструменты',
+  'nav_group_account': 'Аккаунт',
+  'nav_group_economy': 'Экономика',
+  'nav_group_world': 'Мир',
+  'nav_group_reference': 'Справка',
 };
