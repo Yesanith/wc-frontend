@@ -717,7 +717,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 child: OutlinedButton.icon(
                   onPressed: _pickDate,
                   icon: const Icon(Icons.calendar_today_outlined, size: 18),
-                  label: Text('${s.t('wd_${_start.weekday}')} ${_two(_start.day)}.${_two(_start.month)}.${_start.year}'),
+                  label:
+                      Text('${s.t('wd_${_start.weekday}')} ${_two(_start.day)}.${_two(_start.month)}.${_start.year}'),
                 ),
               ),
               const SizedBox(width: 8),

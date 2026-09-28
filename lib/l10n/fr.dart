@@ -63,7 +63,8 @@ const frStrings = <String, String>{
   'event_err_event_over': 'Cet événement est déjà terminé.',
   'event_err_not_allowed': 'Tu n\'as pas le droit de faire ça dans cette guilde.',
   'events_unavailable': 'Les événements de guilde ne sont pas disponibles dans cette version.',
-  'events_sign_in': 'Connecte-toi avec Discord dans les réglages pour voir les événements de tes guildes et t\'inscrire.',
+  'events_sign_in':
+      'Connecte-toi avec Discord dans les réglages pour voir les événements de tes guildes et t\'inscrire.',
   'events_link_first': 'Relie ton compte GW2 dans les réglages, tes guildes en sont lues.',
   'events_open_settings': 'Ouvrir les réglages',
   'events_none': 'Aucun événement à venir dans tes guildes pour l\'instant.',

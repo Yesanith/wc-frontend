@@ -63,7 +63,8 @@ const deStrings = <String, String>{
   'event_err_event_over': 'Dieses Event ist schon vorbei.',
   'event_err_not_allowed': 'Das darfst du in dieser Gilde nicht.',
   'events_unavailable': 'Gildenevents sind in dieser Version nicht verfügbar.',
-  'events_sign_in': 'Melde dich in den Einstellungen mit Discord an, um die Events deiner Gilden zu sehen und dich anzumelden.',
+  'events_sign_in':
+      'Melde dich in den Einstellungen mit Discord an, um die Events deiner Gilden zu sehen und dich anzumelden.',
   'events_link_first': 'Verknüpfe dein GW2-Konto in den Einstellungen, deine Gilden werden daraus gelesen.',
   'events_open_settings': 'Einstellungen öffnen',
   'events_none': 'Noch keine anstehenden Events in deinen Gilden.',
