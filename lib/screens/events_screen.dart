@@ -511,7 +511,7 @@ class _Lane extends StatelessWidget {
   }
 }
 
-class _Block extends StatelessWidget {
+class _Block extends ConsumerWidget {
   const _Block({
     required this.occurrence,
     required this.tint,
@@ -527,12 +527,14 @@ class _Block extends StatelessWidget {
   final bool looted;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final o = occurrence;
     final dim = past || looted;
-    return Tooltip(
-      message: '${o.event.name} · ${localClock(o.start)}–${localClock(o.end)}',
-      triggerMode: TooltipTriggerMode.tap,
+    final pinned = ref.watch(pinnedEventsProvider).contains(eventKey(o.map, o.event));
+    // a tap opens the event, where it can be pinned. the old tooltip only
+    // showed the name, so nothing on the timeline could be pinned
+    return GestureDetector(
+      onTap: () => showEventSheet(context, ref, o),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 6),
         alignment: Alignment.centerLeft,
@@ -549,6 +551,10 @@ class _Block extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (pinned) ...[
+                  const Icon(Icons.push_pin, size: 11, color: AppColors.gold),
+                  const SizedBox(width: 3),
+                ],
                 if (looted) ...[
                   const Icon(Icons.check_rounded, size: 12, color: AppColors.green),
                   const SizedBox(width: 3),
@@ -574,4 +580,68 @@ class _Block extends StatelessWidget {
       ),
     );
   }
+}
+
+
+/// one run of an event from the timeline: when it runs, how long until it
+/// starts, and buttons to pin it or read about it on the wiki
+void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: AppColors.surface,
+    builder: (ctx) => Consumer(
+      builder: (ctx, ref, _) {
+        final s = ref.watch(stringsProvider);
+        final key = eventKey(o.map, o.event);
+        final pinned = ref.watch(pinnedEventsProvider).contains(key);
+        final now = DateTime.now();
+        final when = o.activeAt(now)
+            ? s.t('event_running')
+            : o.start.isAfter(now)
+                ? s.t('event_starts_in', {'t': countdown(o.start.difference(now))})
+                : s.t('event_ended');
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(o.event.name, style: display(19)),
+                const SizedBox(height: 4),
+                Text('${o.map.name} · ${localClock(o.start)}–${localClock(o.end)}',
+                    style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                const SizedBox(height: 2),
+                Text(when, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () => ref.read(pinnedEventsProvider.notifier).toggle(key),
+                        icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined, size: 18),
+                        label: Text(pinned ? s.t('unpin') : s.t('pin')),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          // read what the page needs before the sheet goes away
+                          openWikiPage(context, ref, o.event.name);
+                          Navigator.of(ctx).pop();
+                        },
+                        icon: const Icon(Icons.menu_book_outlined, size: 18),
+                        label: Text(s.t('wiki')),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }

@@ -9,6 +9,7 @@ import '../services/item_index.dart';
 import '../state/account.dart';
 import '../state/alerts.dart';
 import '../state/api.dart';
+import '../state/gem_history.dart';
 import '../state/items.dart';
 import '../state/market.dart';
 import '../state/price_history.dart';

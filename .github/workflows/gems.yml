@@ -1,0 +1,45 @@
+name: Gem history
+
+# the api has no gem exchange history. this records the rate every three
+# hours on its own branch, which the app reads to draw the monthly chart.
+# pushes made with the workflow token start no other workflow, so the
+# branch never runs the code checks
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['tools/record_gems.py', '.github/workflows/gems.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gem-history
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Record the current rate
+        run: |
+          cp tools/record_gems.py /tmp/record_gems.py
+          git config user.name "Yesanith"
+          git config user.email "56350783+Yesanith@users.noreply.github.com"
+          if git fetch --depth=1 origin gem-history 2>/dev/null; then
+            git checkout -B gem-history FETCH_HEAD
+          else
+            # first run: a branch with nothing but the history file
+            git checkout --orphan gem-history
+            git rm -rf --quiet .
+          fi
+          python /tmp/record_gems.py gems.json
+          git add gems.json
+          git commit -q -m "Record gem exchange rate"
+          git push origin HEAD:gem-history

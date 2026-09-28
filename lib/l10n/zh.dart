@@ -1,5 +1,13 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_running': '正在进行',
+  'event_starts_in': '{t}后开始',
+  'event_ended': '已结束',
+  'gem_history_title': '100 宝石 · 最近 30 天',
+  'gem_history_collecting': '正在收集历史记录，下次记录后将显示图表。汇率每隔几小时保存一次。',
+  'gem_buy_100': '买入',
+  'gem_sell_100': '卖出',
+  'gem_range': '100 宝石的价格在 {lo} 到 {hi} 金之间',
   'news': '新闻',
   'patch_notes': '更新说明',
   'patch_notes_note': '来自英文 Guild Wars 2 维基的更新说明，最新的在前。',
