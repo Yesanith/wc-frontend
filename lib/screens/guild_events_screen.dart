@@ -1008,7 +1008,6 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
   }
 }
 
-
 /// the player's guilds, each opening its members and officers
 class _GuildLinks extends ConsumerWidget {
   const _GuildLinks();

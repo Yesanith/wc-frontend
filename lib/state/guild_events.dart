@@ -350,7 +350,6 @@ bool canManageEvent(GuildEvent event, String? myId, List<MyGuild> myGuilds) {
   return myGuilds.any((g) => g.id == event.guildId && (g.role == 'leader' || g.role == 'officer'));
 }
 
-
 // ---------------------------------------------------------------------------
 // officers
 

@@ -1,8 +1,10 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
   'roster_of': 'Membros de {guild}',
-  'roster_note': 'Membros desta guilda no Tyria Companion. Oficiais podem criar e gerenciar eventos; o líder os nomeia.',
-  'roster_note_leader': 'Nomeie membros de confiança como oficiais para que também criem e gerenciem eventos. A liderança vem do jogo.',
+  'roster_note':
+      'Membros desta guilda no Tyria Companion. Oficiais podem criar e gerenciar eventos; o líder os nomeia.',
+  'roster_note_leader':
+      'Nomeie membros de confiança como oficiais para que também criem e gerenciem eventos. A liderança vem do jogo.',
   'roster_make_officer': 'Tornar oficial',
   'roster_make_member': 'Tornar membro',
   'roster_made_officer': '{name} agora é oficial',
