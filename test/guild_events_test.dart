@@ -64,4 +64,14 @@ void main() {
     expect(eventProfessions.toSet().length, 9);
     expect(eventProfessions, containsAll(['Guardian', 'Necromancer', 'Revenant']));
   });
+
+  test('only iana zone names are sent for weekly events', () {
+    for (final ok in ['Europe/Istanbul', 'America/Argentina/Buenos_Aires', 'UTC', 'Etc/GMT-3', 'America/Port-au-Prince']) {
+      expect(isIanaZone(ok), isTrue, reason: ok);
+    }
+    for (final bad in ['EET', 'GMT+3', '+03:00', '', 'europe/istanbul', 'Europe/']) {
+      expect(isIanaZone(bad), isFalse, reason: bad);
+    }
+  });
 }
+

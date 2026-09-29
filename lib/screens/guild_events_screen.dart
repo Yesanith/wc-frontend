@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show PostgresChangeEvent, PostgresChangeFilter, PostgresChangeFilterType, RealtimeChannel, Supabase;
 
 import '../l10n/strings.dart';
 import '../state/community.dart';
@@ -243,6 +247,56 @@ class GuildEventScreen extends ConsumerStatefulWidget {
 
 class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
   bool _busy = false;
+  RealtimeChannel? _live;
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _follow();
+  }
+
+  /// sign ups and edits by others arrive while the page is open. realtime
+  /// sends only what row level security lets this player read
+  void _follow() {
+    if (!communityReady) return;
+    final id = widget.eventId;
+    final byEvent = PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'event_id', value: id);
+    final byId = PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'id', value: id);
+    _live = Supabase.instance.client
+        .channel('event-$id')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'event_participants',
+          filter: byEvent,
+          callback: (_) => _changed(),
+        )
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'events',
+          filter: byId,
+          callback: (_) => _changed(),
+        )
+        .subscribe();
+  }
+
+  /// a burst of changes, say a promotion from the waitlist, reloads once
+  void _changed() {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      if (mounted) ref.invalidate(eventDetailProvider(widget.eventId));
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    final live = _live;
+    if (live != null) Supabase.instance.client.removeChannel(live);
+    super.dispose();
+  }
 
   Future<void> _answer(EventDetail d, String status) async {
     final s = ref.read(stringsProvider);
