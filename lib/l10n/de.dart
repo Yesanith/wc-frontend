@@ -1,5 +1,16 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'roster_of': '{guild}-Mitglieder',
+  'roster_note': 'Mitglieder dieser Gilde auf Tyria Companion. Offiziere können Events erstellen und verwalten, der Anführer ernennt sie.',
+  'roster_note_leader': 'Ernenne vertraute Mitglieder zu Offizieren, damit sie auch Events erstellen und verwalten können. Die Anführerschaft kommt aus dem Spiel.',
+  'roster_make_officer': 'Zum Offizier',
+  'roster_make_member': 'Zum Mitglied',
+  'roster_made_officer': '{name} ist jetzt Offizier',
+  'roster_made_member': '{name} ist wieder Mitglied',
+  'roster_missing': 'Aufgeführt sind nur Spieler, die sich angemeldet und ihr GW2-Konto verknüpft haben.',
+  'event_err_is_leader': 'Die Anführerschaft kommt aus dem Spiel und lässt sich hier nicht ändern.',
+  'event_err_own_role': 'Du kannst deine eigene Rolle nicht ändern.',
+  'event_err_not_member': 'Dieser Spieler ist nicht mehr in der Gilde.',
   'event_delete': 'Event löschen',
   'event_delete_body':
       'Für ein versehentlich erstelltes Event: Es verschwindet für alle, mit allen Anmeldungen und seiner Discord-Nachricht. Um es als abgesagt sichtbar zu lassen, sag es stattdessen ab.',

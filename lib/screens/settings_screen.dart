@@ -8,6 +8,7 @@ import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
 import '../state/community.dart';
+import 'guild_roster_screen.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -623,9 +624,15 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
             runSpacing: 6,
             children: [
               for (final g in guilds)
-                Pill(
-                  g.tag.isEmpty ? '${g.name} · ${role(g.role)}' : '${g.name} [${g.tag}] · ${role(g.role)}',
-                  color: g.role == 'leader' ? AppColors.gold : AppColors.textSoft,
+                // tapping a guild shows its members, where leaders appoint officers
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
+                  ),
+                  child: Pill(
+                    g.tag.isEmpty ? '${g.name} · ${role(g.role)} ›' : '${g.name} [${g.tag}] · ${role(g.role)} ›',
+                    color: g.role == 'leader' ? AppColors.gold : AppColors.textSoft,
+                  ),
                 ),
             ],
           ),
