@@ -768,7 +768,6 @@ Duration copyMaxAge(DateTime? notBefore, DateTime now) {
   return since < week ? since : week;
 }
 
-
 /// whether the api answers this path only to a key: the account, its
 /// characters, the trading post's own orders and deliveries, the player's own
 /// pvp record and what a guild keeps for its members. everything else is

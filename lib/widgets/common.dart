@@ -890,7 +890,6 @@ class _StarsPainter extends CustomPainter {
   bool shouldRepaint(covariant _StarsPainter oldDelegate) => false;
 }
 
-
 /// shown where a whole section is about the player's account and there is no
 /// api key: what it needs, and the way to give one
 class NeedsKeyView extends ConsumerWidget {
