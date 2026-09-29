@@ -7,7 +7,7 @@ import '../services/cache.dart';
 import '../util.dart';
 
 /// what went wrong, so the interface can say it in the user's language
-enum ApiErrorKind { offline, timeout, unauthorized, notFound, rateLimited, server, other }
+enum ApiErrorKind { offline, timeout, unauthorized, notFound, rateLimited, server, noKey, other }
 
 class Gw2ApiException implements Exception {
   Gw2ApiException(this.message, [this.status, this._kind]);
@@ -302,15 +302,25 @@ class Gw2Api {
   /// pause instead of failing the page, up to three times
   static const _retryable = {429, 502, 503, 504};
 
-  Future<http.Response> _send(Uri uri, [Map<String, String>? headers]) => _gate.run(() async {
-        for (var attempt = 0;; attempt++) {
-          final res = await _sendOnce(uri, headers);
-          if (!_retryable.contains(res.statusCode) || attempt >= 3) return res;
-          // the slot stays taken while waiting, which slows the whole app
-          // down a little right when the api asks for exactly that
-          await Future<void>.delayed(retryDelay(res.headers['retry-after'], attempt));
-        }
-      });
+  /// whether there is an api key. without one the app runs as a guest
+  bool get hasKey => (apiKey ?? '').isNotEmpty;
+
+  Future<http.Response> _send(Uri uri, [Map<String, String>? headers]) {
+    // a guest asking for account data gets its answer here, without a request
+    // that could only come back as 401
+    if (!hasKey && pathNeedsKey(uri.path)) {
+      return Future.error(Gw2ApiException('An API key is needed for this.', null, ApiErrorKind.noKey));
+    }
+    return _gate.run(() async {
+      for (var attempt = 0;; attempt++) {
+        final res = await _sendOnce(uri, headers);
+        if (!_retryable.contains(res.statusCode) || attempt >= 3) return res;
+        // the slot stays taken while waiting, which slows the whole app
+        // down a little right when the api asks for exactly that
+        await Future<void>.delayed(retryDelay(res.headers['retry-after'], attempt));
+      }
+    });
+  }
 
   Future<http.Response> _sendOnce(Uri uri, Map<String, String>? headers) async {
     try {
@@ -756,4 +766,21 @@ Duration copyMaxAge(DateTime? notBefore, DateTime now) {
   final since = now.toUtc().difference(notBefore.toUtc());
   if (since.isNegative) return Duration.zero;
   return since < week ? since : week;
+}
+
+
+/// whether the api answers this path only to a key: the account, its
+/// characters, the trading post's own orders and deliveries, the player's own
+/// pvp record and what a guild keeps for its members. everything else is
+/// public: items, prices, maps, the wiki, the wvw and the guild's name
+bool pathNeedsKey(String path) {
+  final p = path.startsWith('/v2') ? path.substring(3) : path;
+  if (p == '/account' || p.startsWith('/account/')) return true;
+  if (p == '/characters' || p.startsWith('/characters/')) return true;
+  if (p == '/tokeninfo' || p.startsWith('/createsubtoken')) return true;
+  if (p.startsWith('/commerce/transactions') || p.startsWith('/commerce/delivery')) return true;
+  if (p.startsWith('/pvp/stats') || p.startsWith('/pvp/games') || p.startsWith('/pvp/standings')) return true;
+  return RegExp(
+    r'^/guild/[0-9A-Fa-f-]{36}/(log|members|ranks|stash|storage|teams|treasury|upgrades)',
+  ).hasMatch(p);
 }

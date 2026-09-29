@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/metas.dart';
 import '../services/icon_cache.dart';
 import '../state/account.dart';
+import '../state/api.dart';
 import '../state/alerts.dart';
 import '../state/clock.dart';
 import '../widgets/clock.dart';
@@ -40,6 +41,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
+    final hasKey = ref.watch(hasKeyProvider);
     return RefreshIndicator(
       color: AppColors.gold,
       onRefresh: () => _refresh(ref),
@@ -51,8 +53,12 @@ class HomeScreen extends ConsumerWidget {
           const _Resets(),
           const _AlertBanner(),
           const _NewsBanner(),
-          Eyebrow(s.t('wizards_vault')),
-          const _Vault(),
+          // a guest has no vault, checklist or wallet to show
+          if (!hasKey) const _GuestCard(),
+          if (hasKey) ...[
+            Eyebrow(s.t('wizards_vault')),
+            const _Vault(),
+          ],
           Eyebrow(
             s.t('up_next'),
             trailing: TextButton(
@@ -61,11 +67,13 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           const _UpNext(),
-          Eyebrow(s.t('daily_checklist')),
-          const _Checklist(),
-          Eyebrow(s.t('wallet')),
-          const _Wallet(),
-          const _PinnedAchievements(),
+          if (hasKey) ...[
+            Eyebrow(s.t('daily_checklist')),
+            const _Checklist(),
+            Eyebrow(s.t('wallet')),
+            const _Wallet(),
+            const _PinnedAchievements(),
+          ],
         ],
       ),
     );
@@ -625,6 +633,42 @@ class _NewsBanner extends ConsumerWidget {
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             ),
             const Icon(Icons.chevron_right, color: AppColors.chevron),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+/// the home of a guest: what the app can do without a key, and how to get the rest
+class _GuestCard extends ConsumerWidget {
+  const _GuestCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Panel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.vpn_key_outlined, color: AppColors.gold),
+                const SizedBox(width: 10),
+                Expanded(child: Text(s.t('guest_home_title'), style: display(17))),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(s.t('guest_home_body'), style: const TextStyle(fontSize: 13, height: 1.5, color: AppColors.muted)),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: () => openAddKey(context),
+              icon: const Icon(Icons.add),
+              label: Text(s.t('add_api_key')),
+            ),
           ],
         ),
       ),

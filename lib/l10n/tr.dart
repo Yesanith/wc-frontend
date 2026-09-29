@@ -1,5 +1,14 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'err_no_key': 'Bunun için bir GW2 API key\'i gerekli.',
+  'add_api_key': 'API key ekle',
+  'guest_continue': 'API key olmadan devam et',
+  'guest_note': 'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
+  'guest': 'Misafir',
+  'guest_home_title': 'Misafir olarak göz atıyorsun',
+  'guest_home_body': 'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler key olmadan çalışır. Karakterlerini, cüzdanını, Wizard\'s Vault\'unu ve ilerlemeni görmek için bir API key ekle.',
+  'needs_key_title': 'Bunun için API key gerekli',
+  'needs_key_body': 'Bu bölüm kendi hesabını gösterir: karakterler, ilerleme, koleksiyonlar ve loncalar. Görmek için ArenaNet\'ten salt okunur bir API key ekle. Geri kalan her şey key olmadan çalışır.',
   'boss_alert_limit':
       '{n} sabitli etkinliğin bildirimi yok: telefon en fazla {max} zamanlanmış bildirim tutabiliyor. Bazılarını kaldır, saatlik etkinlikler en çok yer kaplıyor.',
   'boss_alerts_title': 'Dünya etkinliği bildirimleri',

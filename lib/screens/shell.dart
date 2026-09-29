@@ -308,7 +308,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         ref.read(syncProvider.notifier).run();
       }
     });
-    final accountName = ref.watch(accountProvider).valueOrNull?['name'] as String?;
+    final hasKey = ref.watch(hasKeyProvider);
+    final accountName = hasKey ? ref.watch(accountProvider).valueOrNull?['name'] as String? : s.t('guest');
     _opened.add(section);
 
     // canPop false makes the framework claim the back gesture, otherwise
@@ -405,7 +406,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                 // hidden sections keep their state but stop their tickers and timers
                 TickerMode(
                   enabled: sec == section,
-                  child: _opened.contains(sec) ? _page(sec) : const SizedBox.shrink(),
+                  child: !_opened.contains(sec)
+                      ? const SizedBox.shrink()
+                      : (!hasKey && sectionNeedsKey(sec))
+                          ? const NeedsKeyView()
+                          : _page(sec),
                 ),
             ],
           ),

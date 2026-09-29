@@ -1,5 +1,14 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'err_no_key': 'Dafür wird ein GW2-API-Schlüssel benötigt.',
+  'add_api_key': 'API-Schlüssel hinzufügen',
+  'guest_continue': 'Ohne API-Schlüssel fortfahren',
+  'guest_note': 'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',
+  'guest': 'Gast',
+  'guest_home_title': 'Du schaust dich als Gast um',
+  'guest_home_body': 'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne Schlüssel. Füge einen API-Schlüssel hinzu, um Charaktere, Geldbeutel, Zauberertresor und Fortschritt zu sehen.',
+  'needs_key_title': 'Dafür brauchst du einen API-Schlüssel',
+  'needs_key_body': 'Dieser Bereich zeigt dein eigenes Konto: Charaktere, Fortschritt, Sammlungen und Gilden. Füge einen schreibgeschützten API-Schlüssel von ArenaNet hinzu. Alles andere funktioniert ohne.',
   'boss_alert_limit':
       '{n} angeheftete Events haben keine Erinnerung: Das Telefon hält höchstens {max} geplante Erinnerungen. Löse einige, stündliche Events brauchen am meisten.',
   'boss_alerts_title': 'Weltevent-Erinnerungen',

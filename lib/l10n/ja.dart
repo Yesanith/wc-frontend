@@ -1,5 +1,14 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'err_no_key': 'これには GW2 の API キーが必要です。',
+  'add_api_key': 'API キーを追加',
+  'guest_continue': 'API キーなしで続ける',
+  'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',
+  'guest': 'ゲスト',
+  'guest_home_title': 'ゲストとして見ています',
+  'guest_home_body': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。API キーを追加すると、キャラクター、ウォレット、ウィザーズボルト、進行状況が見られます。',
+  'needs_key_title': 'API キーが必要です',
+  'needs_key_body': 'このセクションはあなた自身のアカウント（キャラクター、進行状況、コレクション、ギルド）を表示します。ArenaNet の読み取り専用 API キーを追加してください。それ以外はキーなしで使えます。',
   'boss_alert_limit': '{n}件のピン留めイベントに通知がありません。端末が保持できる予約通知は最大{max}件です。1時間ごとのイベントが最も多く使います。',
   'boss_alerts_title': 'ワールドイベント通知',
   'boss_alerts_note': 'ピン留めしたイベントの開始直前に毎日通知します。アプリを閉じていても届きます。',

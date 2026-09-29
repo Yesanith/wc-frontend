@@ -1,5 +1,14 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'err_no_key': 'Cela nécessite une clé API GW2.',
+  'add_api_key': 'Ajouter une clé API',
+  'guest_continue': 'Continuer sans clé API',
+  'guest_note': 'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',
+  'guest': 'Invité',
+  'guest_home_title': 'Tu explores en invité',
+  'guest_home_body': 'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans clé. Ajoute une clé API pour voir tes personnages, ta bourse, la Chambre forte du sorcier et ta progression.',
+  'needs_key_title': 'Cela nécessite une clé API',
+  'needs_key_body': 'Cette section montre ton propre compte : personnages, progression, collections et guildes. Ajoute une clé API en lecture seule d\'ArenaNet pour la voir. Tout le reste fonctionne sans.',
   'boss_alert_limit':
       '{n} événements épinglés n\'ont pas d\'alerte : le téléphone garde au plus {max} alertes programmées. Retires-en, les événements horaires en consomment le plus.',
   'boss_alerts_title': 'Alertes d\'événements du monde',

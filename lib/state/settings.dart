@@ -53,6 +53,23 @@ class WatchlistNotifier extends Notifier<List<int>> {
 
 final watchlistProvider = NotifierProvider<WatchlistNotifier, List<int>>(WatchlistNotifier.new);
 
+/// the player chose to look around without an api key. it holds only while
+/// there is no key: saving one clears it, so removing every key later leads
+/// back to the welcome screen
+class GuestModeNotifier extends Notifier<bool> {
+  static const _key = 'guest_mode';
+
+  @override
+  bool build() => ref.read(prefsProvider).getBool(_key) ?? false;
+
+  Future<void> set(bool on) async {
+    state = on;
+    await ref.read(prefsProvider).setBool(_key, on);
+  }
+}
+
+final guestModeProvider = NotifierProvider<GuestModeNotifier, bool>(GuestModeNotifier.new);
+
 class PinnedEventsNotifier extends Notifier<Set<String>> {
   static const _key = 'pinned_events';
 

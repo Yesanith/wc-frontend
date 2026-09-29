@@ -82,6 +82,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _save() async {
     await ref.read(keysProvider.notifier).add(_ctrl.text.trim(), _account ?? '');
+    // a key ends the guest choice, after the key is in so the app never
+    // passes through the welcome screen on its way
+    await ref.read(guestModeProvider.notifier).set(false);
     // opened from settings as a route: go back once the key is saved
     if (mounted && Navigator.of(context).canPop()) Navigator.of(context).pop();
   }
@@ -212,6 +215,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   ),
                 ),
+                // the first screen only: opened from settings there is a key or a way back
+                if (!Navigator.of(context).canPop()) ...[
+                  const SizedBox(height: 6),
+                  Center(
+                    child: TextButton(
+                      onPressed: _busy ? null : () => ref.read(guestModeProvider.notifier).set(true),
+                      child: Text(s.t('guest_continue'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                  Text(
+                    s.t('guest_note'),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
+                  ),
+                ],
                 const SizedBox(height: 14),
                 Row(
                   children: [

@@ -98,6 +98,9 @@ class ActiveKeyNotifier extends Notifier<int> {
 final activeKeyProvider = NotifierProvider<ActiveKeyNotifier, int>(ActiveKeyNotifier.new);
 
 /// the key every request uses, derived from the list and the active index
+/// false while the app runs as a guest, without an api key
+final hasKeyProvider = Provider<bool>((ref) => (ref.watch(apiKeyProvider).valueOrNull ?? '').isNotEmpty);
+
 final apiKeyProvider = Provider<AsyncValue<String?>>((ref) {
   final keys = ref.watch(keysProvider);
   final index = ref.watch(activeKeyProvider);

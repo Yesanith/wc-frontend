@@ -1,5 +1,14 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'err_no_key': 'This needs a GW2 API key.',
+  'add_api_key': 'Add an API key',
+  'guest_continue': 'Continue without an API key',
+  'guest_note': 'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',
+  'guest': 'Guest',
+  'guest_home_title': 'You are looking around as a guest',
+  'guest_home_body': 'World bosses, the map, recipes, trading post prices, the wiki and the news work without a key. Add an API key to see your characters, wallet, Wizard\'s Vault and progress.',
+  'needs_key_title': 'This needs an API key',
+  'needs_key_body': 'This section shows your own account: characters, progress, collections and guilds. Add a read-only API key from ArenaNet to see it. Everything else works without one.',
   'boss_alert_limit':
       '{n} pinned events have no alerts: the phone holds at most {max} scheduled alerts. Unpin some, hourly events use the most.',
   'boss_alerts_title': 'World event alerts',
