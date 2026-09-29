@@ -1,8 +1,10 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
   'event_delete': 'Eliminar evento',
-  'event_delete_body': 'Para un evento creado por error: desaparece para todos, con todas las inscripciones y su mensaje de Discord. Para que siga visible como cancelado, cancélalo en su lugar.',
-  'event_delete_weekly_body': 'Es una semana de un evento semanal. Elimina solo esta semana o toda la serie con todas sus próximas semanas.',
+  'event_delete_body':
+      'Para un evento creado por error: desaparece para todos, con todas las inscripciones y su mensaje de Discord. Para que siga visible como cancelado, cancélalo en su lugar.',
+  'event_delete_weekly_body':
+      'Es una semana de un evento semanal. Elimina solo esta semana o toda la serie con todas sus próximas semanas.',
   'event_delete_week': 'Solo esta semana',
   'event_delete_series': 'Toda la serie',
   'event_deleted': 'Evento eliminado',

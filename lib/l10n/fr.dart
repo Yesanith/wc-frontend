@@ -1,8 +1,10 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
   'event_delete': 'Supprimer l\'événement',
-  'event_delete_body': 'Pour un événement créé par erreur : il disparaît pour tout le monde, avec toutes les inscriptions et son message Discord. Pour qu\'il reste visible comme annulé, annule-le plutôt.',
-  'event_delete_weekly_body': 'C\'est une semaine d\'un événement hebdomadaire. Supprime seulement cette semaine, ou toute la série avec ses semaines à venir.',
+  'event_delete_body':
+      'Pour un événement créé par erreur : il disparaît pour tout le monde, avec toutes les inscriptions et son message Discord. Pour qu\'il reste visible comme annulé, annule-le plutôt.',
+  'event_delete_weekly_body':
+      'C\'est une semaine d\'un événement hebdomadaire. Supprime seulement cette semaine, ou toute la série avec ses semaines à venir.',
   'event_delete_week': 'Cette semaine seulement',
   'event_delete_series': 'Toute la série',
   'event_deleted': 'Événement supprimé',
