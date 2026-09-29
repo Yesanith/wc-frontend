@@ -1,5 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'push_title': 'Event-Benachrichtigungen',
+  'push_note': 'Eine Erinnerung 30 Minuten vor deinen Events und eine Nachricht, wenn du von der Warteliste nachrückst.',
+  'push_denied': 'Benachrichtigungen sind für Tyria Codex blockiert, erlaube sie in den Telefoneinstellungen.',
   'roster_of': '{guild}-Mitglieder',
   'roster_note':
       'Mitglieder dieser Gilde auf Tyria Companion. Offiziere können Events erstellen und verwalten, der Anführer ernennt sie.',

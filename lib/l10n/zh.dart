@@ -1,5 +1,8 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'push_title': '活动通知',
+  'push_note': '所参加活动开始前 30 分钟提醒，以及从候补转为参加时的通知。',
+  'push_denied': 'Tyria Codex 的通知已被阻止，请在手机设置中允许。',
   'roster_of': '{guild} 成员',
   'roster_note': '该公会在 Tyria Companion 上的成员。官员可以创建和管理活动，由会长任命。',
   'roster_note_leader': '把可信任的成员设为官员，他们也能创建和管理活动。会长身份来自游戏。',

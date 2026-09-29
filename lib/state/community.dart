@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart' show LaunchMode;
 
 import '../api/gw2_api.dart';
+import '../services/push.dart';
 
 /// set by the release build from the repository secrets. a build without them
 /// (a local run, a fork) has no community account and hides it entirely
@@ -81,7 +82,15 @@ Future<void> signInWithDiscord() async {
   );
 }
 
-Future<void> signOut() => Supabase.instance.client.auth.signOut();
+/// the device stops getting this player's notifications first, a shared
+/// phone should not keep reminding of someone else's events
+Future<void> signOut() async {
+  await disablePush();
+  await Supabase.instance.client.auth.signOut();
+}
+
+/// the setting that decides whether this device gets event notifications
+const pushPref = 'push_enabled';
 
 /// removes the account and everything tied to it on the server, then the
 /// local session. the stores require this to be possible inside the app

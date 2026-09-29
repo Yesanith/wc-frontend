@@ -1,5 +1,8 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'push_title': 'イベント通知',
+  'push_note': '参加するイベントの30分前のリマインダーと、キャンセル待ちから参加確定した時のお知らせ。',
+  'push_denied': 'Tyria Codex の通知がブロックされています。端末の設定で許可してください。',
   'roster_of': '{guild} メンバー',
   'roster_note': 'Tyria Companion 上のこのギルドのメンバーです。オフィサーはイベントを作成・管理でき、リーダーが任命します。',
   'roster_note_leader': '信頼できるメンバーをオフィサーにすると、イベントの作成・管理ができます。リーダーはゲーム内の設定に従います。',

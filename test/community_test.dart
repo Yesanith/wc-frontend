@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tyria_codex/services/push.dart';
 import 'package:tyria_codex/state/community.dart';
 
 void main() {
@@ -27,4 +28,13 @@ void main() {
     expect(linkIsStale(now.subtract(const Duration(hours: 3)), now), isFalse);
     expect(linkIsStale(now.subtract(const Duration(days: 2)), now), isTrue);
   });
+
+  test('a build without firebase values keeps notifications off', () async {
+    expect(pushConfigured, isFalse);
+    await initPush();
+    expect(pushReady, isFalse);
+    // turning them on quietly does nothing rather than failing
+    expect(await enablePush('en'), isFalse);
+  });
 }
+

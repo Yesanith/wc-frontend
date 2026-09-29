@@ -1,5 +1,8 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'push_title': 'Уведомления о событиях',
+  'push_note': 'Напоминание за 30 минут до событий и сообщение, когда вы проходите из резерва.',
+  'push_denied': 'Уведомления для Tyria Codex заблокированы, разрешите их в настройках телефона.',
   'roster_of': 'Участники {guild}',
   'roster_note':
       'Участники гильдии в Tyria Companion. Офицеры могут создавать события и управлять ими, их назначает лидер.',

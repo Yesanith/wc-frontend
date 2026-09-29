@@ -1,5 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'push_title': 'Etkinlik bildirimleri',
+  'push_note': 'Katıldığın etkinliklerden 30 dakika önce hatırlatma, yedek listeden katılımcı olunca haber.',
+  'push_denied': 'Tyria Codex için bildirimler engelli, telefonun ayarlarından izin ver.',
   'roster_of': '{guild} üyeleri',
   'roster_note':
       'Bu loncanın Tyria Companion\'daki üyeleri. Subaylar etkinlik oluşturup yönetebilir, onları lider atar.',
