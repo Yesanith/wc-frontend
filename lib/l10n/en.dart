@@ -1,5 +1,16 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'roster_of': '{guild} members',
+  'roster_note': 'Members of this guild on Tyria Companion. Officers can create and manage events, the leader appoints them.',
+  'roster_note_leader': 'Make trusted members officers so they can create and manage events too. Leadership comes from the game.',
+  'roster_make_officer': 'Make officer',
+  'roster_make_member': 'Make member',
+  'roster_made_officer': '{name} is now an officer',
+  'roster_made_member': '{name} is a member again',
+  'roster_missing': 'Only players who signed in and linked their GW2 account are listed.',
+  'event_err_is_leader': 'Leadership comes from the game and cannot be changed here.',
+  'event_err_own_role': 'You cannot change your own role.',
+  'event_err_not_member': 'This player is no longer in the guild.',
   'event_delete': 'Delete event',
   'event_delete_body':
       'For an event opened by mistake: it disappears for everybody, with all sign ups and its Discord message. To keep it visible as cancelled, cancel it instead.',

@@ -349,3 +349,40 @@ bool canManageEvent(GuildEvent event, String? myId, List<MyGuild> myGuilds) {
   if (myId != null && event.creatorId == myId) return true;
   return myGuilds.any((g) => g.id == event.guildId && (g.role == 'leader' || g.role == 'officer'));
 }
+
+
+// ---------------------------------------------------------------------------
+// officers
+
+class RosterMember {
+  const RosterMember(this.userId, this.accountName, this.role);
+  final String userId;
+  final String accountName;
+
+  /// member, officer or leader
+  final String role;
+}
+
+/// a guild's tyria companion members, leader first, then officers
+final guildRosterProvider = FutureProvider.autoDispose.family<List<RosterMember>, String>((ref, guildId) async {
+  final session = await ref.watch(sessionProvider.future);
+  if (session == null) return const [];
+  final rows = await Supabase.instance.client.rpc('guild_roster', params: {'p_guild': guildId}) as List<dynamic>;
+  const rank = {'leader': 0, 'officer': 1, 'member': 2};
+  return [
+    for (final r in rows.whereType<Map<String, dynamic>>())
+      RosterMember('${r['user_id']}', '${r['account_name'] ?? '?'}', '${r['role'] ?? 'member'}'),
+  ]..sort((a, b) {
+      final byRole = (rank[a.role] ?? 3).compareTo(rank[b.role] ?? 3);
+      return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
+    });
+});
+
+/// the leader makes a member an officer, or an officer a member again
+Future<void> setGuildRole(String guildId, String userId, String role) => _call(() async {
+      await Supabase.instance.client.rpc('set_guild_role', params: {
+        'p_guild': guildId,
+        'p_user': userId,
+        'p_role': role,
+      });
+    });

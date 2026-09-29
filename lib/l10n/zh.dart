@@ -1,5 +1,16 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'roster_of': '{guild} 成员',
+  'roster_note': '该公会在 Tyria Companion 上的成员。官员可以创建和管理活动，由会长任命。',
+  'roster_note_leader': '把可信任的成员设为官员，他们也能创建和管理活动。会长身份来自游戏。',
+  'roster_make_officer': '设为官员',
+  'roster_make_member': '改为成员',
+  'roster_made_officer': '{name} 现在是官员',
+  'roster_made_member': '{name} 已改回成员',
+  'roster_missing': '仅列出已登录并关联 GW2 账号的玩家。',
+  'event_err_is_leader': '会长身份来自游戏，无法在此更改。',
+  'event_err_own_role': '不能更改自己的角色。',
+  'event_err_not_member': '该玩家已不在公会中。',
   'event_delete': '删除活动',
   'event_delete_body': '适用于误建的活动：它会连同所有报名和 Discord 消息一起对所有人消失。若想保留为已取消状态，请改为取消活动。',
   'event_delete_weekly_body': '这是每周活动中的一次。可以只删除本周，或删除整个系列及之后的所有周次。',

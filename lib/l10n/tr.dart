@@ -1,5 +1,16 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'roster_of': '{guild} üyeleri',
+  'roster_note': 'Bu loncanın Tyria Companion\'daki üyeleri. Subaylar etkinlik oluşturup yönetebilir, onları lider atar.',
+  'roster_note_leader': 'Güvendiğin üyeleri subay yap, onlar da etkinlik oluşturup yönetebilsin. Liderlik oyundan gelir.',
+  'roster_make_officer': 'Subay yap',
+  'roster_make_member': 'Üye yap',
+  'roster_made_officer': '{name} artık subay',
+  'roster_made_member': '{name} tekrar üye',
+  'roster_missing': 'Sadece giriş yapıp GW2 hesabını bağlamış oyuncular listelenir.',
+  'event_err_is_leader': 'Liderlik oyundan gelir, burada değiştirilemez.',
+  'event_err_own_role': 'Kendi rolünü değiştiremezsin.',
+  'event_err_not_member': 'Bu oyuncu artık lonca üyesi değil.',
   'event_delete': 'Etkinliği sil',
   'event_delete_body':
       'Yanlışlıkla açılmış etkinlikler için: herkes için tüm katılımlarla ve Discord mesajıyla birlikte kaybolur. İptal edildi olarak görünmeye devam etmesini istiyorsan iptal et.',

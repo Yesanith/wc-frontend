@@ -1,5 +1,16 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'roster_of': '{guild} メンバー',
+  'roster_note': 'Tyria Companion 上のこのギルドのメンバーです。オフィサーはイベントを作成・管理でき、リーダーが任命します。',
+  'roster_note_leader': '信頼できるメンバーをオフィサーにすると、イベントの作成・管理ができます。リーダーはゲーム内の設定に従います。',
+  'roster_make_officer': 'オフィサーにする',
+  'roster_make_member': 'メンバーに戻す',
+  'roster_made_officer': '{name} をオフィサーにしました',
+  'roster_made_member': '{name} をメンバーに戻しました',
+  'roster_missing': 'ログインして GW2 アカウントを連携したプレイヤーのみ表示されます。',
+  'event_err_is_leader': 'リーダーはゲーム内の設定に従い、ここでは変更できません。',
+  'event_err_own_role': '自分のロールは変更できません。',
+  'event_err_not_member': 'このプレイヤーはもうギルドにいません。',
   'event_delete': 'イベントを削除',
   'event_delete_body': '誤って作成したイベント向け：参加登録と Discord メッセージごと全員から消えます。中止として残したい場合は代わりに中止してください。',
   'event_delete_weekly_body': '毎週イベントの1回分です。この週だけ削除するか、今後の週を含むシリーズ全体を削除できます。',

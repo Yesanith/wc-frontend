@@ -11,6 +11,7 @@ import '../theme.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
 import '../widgets/meters.dart';
+import 'guild_roster_screen.dart';
 
 String _two(int n) => n.toString().padLeft(2, '0');
 
@@ -46,6 +47,9 @@ String eventFailureText(S s, Object e) {
     'version_conflict',
     'role_required',
     'profession_required',
+    'is_leader',
+    'own_role',
+    'not_member',
     'event_cancelled',
     'event_over',
     'not_allowed',
@@ -103,7 +107,8 @@ class GuildEventsScreen extends ConsumerWidget {
               return ListView(
                 padding: const EdgeInsets.all(24),
                 children: [
-                  const SizedBox(height: 60),
+                  const _GuildLinks(),
+                  const SizedBox(height: 48),
                   const Icon(Icons.event_available_outlined, size: 48, color: AppColors.muted),
                   const SizedBox(height: 12),
                   Text(
@@ -116,9 +121,9 @@ class GuildEventsScreen extends ConsumerWidget {
             }
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 96),
-              itemCount: events.length,
+              itemCount: events.length + 1,
               separatorBuilder: (_, __) => const SizedBox(height: 10),
-              itemBuilder: (context, i) => _EventCard(summary: events[i]),
+              itemBuilder: (context, i) => i == 0 ? const _GuildLinks() : _EventCard(summary: events[i - 1]),
             );
           },
         ),
@@ -999,6 +1004,33 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           ],
         ],
       ),
+    );
+  }
+}
+
+
+/// the player's guilds, each opening its members and officers
+class _GuildLinks extends ConsumerWidget {
+  const _GuildLinks();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final guilds = ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[];
+    if (guilds.isEmpty) return const SizedBox.shrink();
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      children: [
+        for (final g in guilds)
+          ActionChip(
+            avatar: const Icon(Icons.groups_outlined, size: 16),
+            label: Text(s.t('roster_of', {'guild': g.tag.isEmpty ? g.name : g.tag})),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
+            ),
+          ),
+      ],
     );
   }
 }
