@@ -1,6 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
-  'event_discord_only': 'Für dieses Event meldest du dich in Discord an, über die Nachricht dort. Hier kannst du nur absagen.',
+  'event_discord_only':
+      'Für dieses Event meldest du dich in Discord an, über die Nachricht dort. Hier kannst du nur absagen.',
   'event_flex': 'Könnte auch spielen',
   'event_err_discord_only': 'Melde dich für dieses Event in Discord an.',
   'event_err_role_restricted': 'Dieses Event ist nur für bestimmte Discord-Rollen offen.',

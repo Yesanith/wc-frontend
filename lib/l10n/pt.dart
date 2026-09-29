@@ -1,6 +1,7 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
-  'event_discord_only': 'Neste evento a inscrição é feita no Discord, pela mensagem de lá. Aqui você só pode dizer que não vai.',
+  'event_discord_only':
+      'Neste evento a inscrição é feita no Discord, pela mensagem de lá. Aqui você só pode dizer que não vai.',
   'event_flex': 'Também poderia jogar',
   'event_err_discord_only': 'Inscreva-se neste evento pelo Discord.',
   'event_err_role_restricted': 'Este evento é aberto apenas a certos cargos do Discord.',
