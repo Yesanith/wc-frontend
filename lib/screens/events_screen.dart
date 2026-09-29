@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/metas.dart';
+import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
 import '../widgets/clock.dart';
@@ -690,12 +691,21 @@ Future<void> togglePin(BuildContext context, WidgetRef ref, String key) async {
   await ref.read(pinnedEventsProvider.notifier).toggle(key);
   if (wasPinned) return;
   final settings = ref.read(bossAlertSettingsProvider);
-  final feedback = await pinFeedback(settings: settings, prefs: ref.read(prefsProvider));
-  if (!context.mounted || feedback == PinFeedback.none) return;
   final s = ref.read(stringsProvider);
+  final plan = alertsFor(ref.read(pinnedEventsProvider), settings.lead, s);
+  final feedback = await pinFeedback(
+    settings: settings,
+    prefs: ref.read(prefsProvider),
+    pinFitted: !plan.skipped.contains(key),
+  );
+  if (!context.mounted || feedback == PinFeedback.none) return;
   showToast(
     context,
-    feedback == PinFeedback.alertsOn ? s.t('boss_alert_on', {'n': settings.lead}) : s.t('push_denied'),
+    switch (feedback) {
+      PinFeedback.alertsOn => s.t('boss_alert_on', {'n': settings.lead}),
+      PinFeedback.noRoom => s.t('boss_alert_limit', {'n': plan.skipped.length, 'max': maxBossAlerts}),
+      _ => s.t('push_denied'),
+    },
     duration: const Duration(seconds: 5),
   );
 }

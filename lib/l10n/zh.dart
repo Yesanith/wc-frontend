@@ -1,5 +1,6 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'boss_alert_limit': '{n} 个固定的活动没有提醒：手机最多保留 {max} 个预定提醒。请取消部分固定，每小时的活动占用最多。',
   'boss_alerts_title': '世界活动提醒',
   'boss_alerts_note': '在你固定的活动每次开始前提醒，每天生效，应用关闭时也会提醒。',
   'boss_alerts_lead': '开始前提醒',

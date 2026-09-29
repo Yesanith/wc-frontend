@@ -751,7 +751,8 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
     final settings = ref.watch(bossAlertSettingsProvider);
     final pins = ref.watch(pinnedEventsProvider);
     final status = ref.watch(bossAlertStatusProvider).valueOrNull;
-    final count = settings.enabled ? alertsFor(pins, settings.lead, s).length : 0;
+    final plan = settings.enabled ? alertsFor(pins, settings.lead, s) : const BossAlertPlan([], []);
+    final count = plan.alerts.length;
 
     return Panel(
       child: Column(
@@ -785,6 +786,13 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
               pins.isEmpty ? s.t('boss_alert_none') : s.t('boss_alert_scheduled', {'pins': pins.length, 'n': count}),
               style: const TextStyle(fontSize: 12, color: AppColors.textSoft),
             ),
+            if (plan.skipped.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                s.t('boss_alert_limit', {'n': plan.skipped.length, 'max': maxBossAlerts}),
+                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.gold),
+              ),
+            ],
             if (status != null && !status.notifications) ...[
               const SizedBox(height: 10),
               FilledButton(onPressed: _busy ? null : () => _turnOn(true), child: Text(s.t('boss_alert_allow'))),

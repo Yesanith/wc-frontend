@@ -1,5 +1,6 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'boss_alert_limit': '{n} eventos fijados no tienen aviso: el teléfono admite como máximo {max} avisos programados. Quita algunos, los eventos de cada hora gastan más.',
   'boss_alerts_title': 'Avisos de eventos del mundo',
   'boss_alerts_note':
       'Un aviso poco antes de cada inicio de los eventos que fijaste, cada día, también con la app cerrada.',

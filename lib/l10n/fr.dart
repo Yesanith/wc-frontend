@@ -1,5 +1,6 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'boss_alert_limit': '{n} événements épinglés n\'ont pas d\'alerte : le téléphone garde au plus {max} alertes programmées. Retires-en, les événements horaires en consomment le plus.',
   'boss_alerts_title': 'Alertes d\'événements du monde',
   'boss_alerts_note':
       'Une notification peu avant chaque début des événements épinglés, tous les jours, même app fermée.',
