@@ -99,6 +99,7 @@ class EventParticipant {
     required this.role,
     required this.joinedAt,
     this.profession,
+    this.accountId,
   });
 
   final String userId;
@@ -114,6 +115,10 @@ class EventParticipant {
 
   /// the profession they come as, asked on events with roles
   final String? profession;
+
+  /// the id of the account signed up with. the server hands it out only in
+  /// the player's own row, it is null in everybody else's
+  final String? accountId;
 }
 
 class EventDetail {
@@ -207,6 +212,7 @@ final eventDetailProvider = FutureProvider.autoDispose.family<EventDetail?, Stri
         status: '${r['status']}',
         role: r['role'] as String?,
         profession: r['profession'] as String?,
+        accountId: r['account_id'] as String?,
         joinedAt: DateTime.tryParse('${r['joined_at']}') ?? DateTime.now(),
       ),
   ]);
@@ -242,12 +248,14 @@ Future<T> _call<T>(Future<T> Function() action) async {
 
 /// answers an event, returns the status the player ended up with: a going on
 /// a full event comes back as waitlist
-Future<String> rsvp(String eventId, String status, {String? role, String? profession}) => _call(() async {
+Future<String> rsvp(String eventId, String status, {String? role, String? profession, String? accountId}) =>
+    _call(() async {
       final res = await Supabase.instance.client.rpc('rsvp', params: {
         'p_event': eventId,
         'p_status': status,
         'p_role': role,
         'p_profession': profession,
+        'p_account': accountId,
       });
       return '$res';
     });
@@ -446,15 +454,25 @@ final myGuildAccountsProvider = FutureProvider.autoDispose<List<GuildAccount>>((
   ];
 });
 
-/// the accounts that may create an event in [guildId], the one that leads
-/// first, then the officers, each by name
-List<GuildAccount> organizersFor(List<GuildAccount> all, String guildId) {
+/// all of the player's accounts in [guildId], the one with the highest role
+/// first, then by name
+List<GuildAccount> accountsIn(List<GuildAccount> all, String guildId) {
   const rank = {'leader': 0, 'officer': 1};
   return [
     for (final a in all)
-      if (a.guildId == guildId && a.mayCreate) a,
+      if (a.guildId == guildId) a,
   ]..sort((a, b) {
       final byRole = (rank[a.role] ?? 2).compareTo(rank[b.role] ?? 2);
       return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
     });
 }
+
+/// the accounts that may create an event in [guildId], the one that leads
+/// first, then the officers, each by name
+List<GuildAccount> organizersFor(List<GuildAccount> all, String guildId) =>
+    accountsIn(all, guildId).where((a) => a.mayCreate).toList();
+
+/// the account already chosen for an event, while it is still one of the
+/// player's in the guild, null when a choice is due
+String? accountToKeep(String? chosen, List<GuildAccount> accounts) =>
+    chosen != null && accounts.any((a) => a.accountId == chosen) ? chosen : null;

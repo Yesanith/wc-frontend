@@ -1,5 +1,9 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_pick_account': 'Hangi hesabınla katılıyorsun?',
+  'event_signed_up_as': '{name} olarak katıldın',
+  'event_change_account': 'Hesabı değiştir',
+  'event_account_changed': 'Hesap değiştirildi',
   'event_guild_hint': 'Lütfen lonca seçiniz',
   'event_account': 'ORGANİZATÖR HESABI',
   'event_account_hint': 'Hesap seçiniz',

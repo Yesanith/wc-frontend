@@ -1,5 +1,9 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'event_pick_account': '¿Con qué cuenta te apuntas?',
+  'event_signed_up_as': 'Inscrito como {name}',
+  'event_change_account': 'Cambiar cuenta',
+  'event_account_changed': 'Cuenta cambiada',
   'event_guild_hint': 'Elige un clan',
   'event_account': 'CUENTA ORGANIZADORA',
   'event_account_hint': 'Elige una cuenta',

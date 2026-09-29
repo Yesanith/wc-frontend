@@ -1,5 +1,9 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_pick_account': '用哪个账号报名？',
+  'event_signed_up_as': '以 {name} 报名',
+  'event_change_account': '更换账号',
+  'event_account_changed': '账号已更换',
   'event_guild_hint': '请选择公会',
   'event_account': '主办账号',
   'event_account_hint': '请选择账号',

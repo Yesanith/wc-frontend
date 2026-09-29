@@ -1,5 +1,9 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'event_pick_account': 'Which account do you sign up with?',
+  'event_signed_up_as': 'Signed up as {name}',
+  'event_change_account': 'Change account',
+  'event_account_changed': 'Account changed',
   'event_guild_hint': 'Please select a guild',
   'event_account': 'ORGANIZER ACCOUNT',
   'event_account_hint': 'Select an account',
