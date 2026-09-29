@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'community.dart';
@@ -275,8 +276,9 @@ Future<String> createEvent({
       return '$res';
     });
 
-/// a weekly event. the time is sent in utc, so a weekly event keeps its utc
-/// time across daylight saving changes
+/// a weekly event at the local time of the device's time zone, so it keeps
+/// its local time across daylight saving changes. without a zone name the
+/// time is sent in utc, which then stays fixed in utc
 Future<String> createWeeklyEvent({
   required String guildId,
   required String title,
@@ -288,13 +290,14 @@ Future<String> createWeeklyEvent({
   required Map<String, int> roles,
 }) =>
     _call(() async {
-      final utc = firstStart.toUtc();
+      final zone = await deviceTimeZone();
+      final at = zone == null ? firstStart.toUtc() : firstStart.toLocal();
       final res = await Supabase.instance.client.rpc('create_event_series', params: {
         'p_guild': guildId,
         'p_title': title,
-        'p_weekday': utc.weekday,
-        'p_time_of_day': '${utc.hour.toString().padLeft(2, '0')}:${utc.minute.toString().padLeft(2, '0')}',
-        'p_timezone': 'UTC',
+        'p_weekday': at.weekday,
+        'p_time_of_day': '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}',
+        'p_timezone': zone ?? 'UTC',
         'p_duration_minutes': durationMinutes,
         'p_description': description,
         'p_activity': activity,
@@ -303,6 +306,19 @@ Future<String> createWeeklyEvent({
       });
       return '$res';
     });
+
+/// the device's iana time zone, e.g. Europe/Istanbul, null when unknown
+Future<String?> deviceTimeZone() async {
+  try {
+    final id = (await FlutterTimezone.getLocalTimezone()).identifier;
+    return isIanaZone(id) ? id : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// looks like an iana zone name the database knows, not an abbreviation
+bool isIanaZone(String id) => id == 'UTC' || RegExp(r'^[A-Z][A-Za-z_+-]*(/[A-Za-z0-9_+-]+){1,2}$').hasMatch(id);
 
 /// saves an edit made on [version]. somebody else's edit in between makes it
 /// fail with version_conflict instead of being overwritten
