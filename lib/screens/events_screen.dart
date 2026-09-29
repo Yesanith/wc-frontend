@@ -682,7 +682,6 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
   );
 }
 
-
 /// pins or unpins an event. a pin also asks for the notification permission
 /// the first time and says what the player can expect, alerts come before
 /// every start of a pinned event

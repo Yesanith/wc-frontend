@@ -706,7 +706,6 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
   }
 }
 
-
 /// alerts before the world events the player pinned. they come from the
 /// phone's own alarms, so they need no account and no server
 class _BossAlertsPanel extends ConsumerStatefulWidget {
@@ -792,7 +791,8 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
             ],
             if (status != null && status.notifications && !status.exact) ...[
               const SizedBox(height: 10),
-              Text(s.t('boss_alert_exact_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+              Text(s.t('boss_alert_exact_note'),
+                  style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 6),
               OutlinedButton(
                 onPressed: () async {
