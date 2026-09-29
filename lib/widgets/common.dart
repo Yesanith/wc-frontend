@@ -8,8 +8,10 @@ import '../api/gw2_api.dart';
 import '../l10n/strings.dart';
 import '../services/icon_cache.dart';
 import '../state/api.dart';
+import '../state/navigation.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
+import '../screens/onboarding_screen.dart';
 import '../theme.dart';
 
 class Panel extends StatelessWidget {
@@ -294,11 +296,18 @@ String friendlyError(S s, Object? error) {
       ApiErrorKind.notFound => s.t('err_not_found'),
       ApiErrorKind.rateLimited => s.t('err_rate_limited'),
       ApiErrorKind.server => s.t('err_server'),
+      ApiErrorKind.noKey => s.t('err_no_key'),
       ApiErrorKind.other => s.t('err_generic'),
     };
   }
   if (error is TimeoutException) return s.t('err_timeout');
   return s.t('err_generic');
+}
+
+/// the welcome screen as a page of its own, where a key is entered. it closes
+/// itself once the key is saved
+void openAddKey(BuildContext context) {
+  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const OnboardingScreen()));
 }
 
 class ErrorBox extends ConsumerWidget {
@@ -318,7 +327,9 @@ class ErrorBox extends ConsumerWidget {
     final e = error;
     final text = message ?? friendlyError(s, e);
     // the raw text helps with reports, but not for the obvious cases
-    final quiet = e is Gw2ApiException && (e.kind == ApiErrorKind.offline || e.kind == ApiErrorKind.timeout);
+    final needsKey = e is Gw2ApiException && e.kind == ApiErrorKind.noKey;
+    final quiet =
+        needsKey || (e is Gw2ApiException && (e.kind == ApiErrorKind.offline || e.kind == ApiErrorKind.timeout));
     final detail = message == null && e != null && !quiet ? '$e' : null;
     return Panel(
       child: Column(
@@ -346,7 +357,10 @@ class ErrorBox extends ConsumerWidget {
               ),
             ],
           ),
-          if (retry != null) ...[
+          if (needsKey) ...[
+            const SizedBox(height: 8),
+            TextButton(onPressed: () => openAddKey(context), child: Text(s.t('add_api_key'))),
+          ] else if (retry != null) ...[
             const SizedBox(height: 8),
             TextButton(onPressed: retry, child: Text(s.t('retry'))),
           ],
@@ -875,3 +889,51 @@ class _StarsPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _StarsPainter oldDelegate) => false;
 }
+
+
+/// shown where a whole section is about the player's account and there is no
+/// api key: what it needs, and the way to give one
+class NeedsKeyView extends ConsumerWidget {
+  const NeedsKeyView({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return ListView(
+      padding: const EdgeInsets.all(28),
+      children: [
+        const SizedBox(height: 56),
+        const Icon(Icons.vpn_key_outlined, size: 48, color: AppColors.gold),
+        const SizedBox(height: 16),
+        Text(s.t('needs_key_title'), textAlign: TextAlign.center, style: display(22)),
+        const SizedBox(height: 10),
+        Text(
+          s.t('needs_key_body'),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.muted),
+        ),
+        const SizedBox(height: 22),
+        Center(
+          child: FilledButton.icon(
+            onPressed: () => openAddKey(context),
+            icon: const Icon(Icons.add),
+            label: Text(s.t('add_api_key')),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// the sections that are about the player's own account. the others, from
+/// the world map to recipes, work without a key
+bool sectionNeedsKey(AppSection section) => const {
+      AppSection.daily,
+      AppSection.weekly,
+      AppSection.characters,
+      AppSection.collections,
+      AppSection.progression,
+      AppSection.wvw,
+      AppSection.account,
+      AppSection.guilds,
+    }.contains(section);

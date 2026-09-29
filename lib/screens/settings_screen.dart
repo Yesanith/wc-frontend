@@ -49,6 +49,44 @@ class SettingsScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _pickLanguage(BuildContext context, WidgetRef ref) {
+    return showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      isScrollControlled: true,
+      builder: (ctx) => Consumer(
+        builder: (ctx, ref, _) {
+          final current = ref.watch(langProvider);
+          return SafeArea(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.75),
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                children: [
+                  for (final l in AppLang.values)
+                    ListTile(
+                      onTap: () {
+                        ref.read(langProvider.notifier).set(l);
+                        Navigator.of(ctx).pop();
+                      },
+                      leading: Icon(
+                        l == current ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                        color: l == current ? AppColors.gold : AppColors.muted,
+                      ),
+                      title: Text(l.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                      trailing: Text(l.code.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
@@ -64,18 +102,22 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               Kicker(s.t('language').toUpperCase()),
               const SizedBox(height: 4),
-              for (final l in AppLang.values)
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  onTap: () => ref.read(langProvider.notifier).set(l),
-                  leading: Icon(
-                    l == lang ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                    color: l == lang ? AppColors.gold : AppColors.muted,
-                  ),
-                  title: Text(l.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                  trailing: Text(l.code.toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+              // one line instead of nine, the list opens from the bottom
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                onTap: () => _pickLanguage(context, ref),
+                leading: const Icon(Icons.translate, color: AppColors.gold),
+                title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(lang.code.toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.expand_more, color: AppColors.muted),
+                  ],
                 ),
+              ),
               const Divider(color: AppColors.track),
               const SizedBox(height: 4),
               _InfoRow(
@@ -336,21 +378,24 @@ class _AccountsPanel extends ConsumerWidget {
               ),
             ),
           const SizedBox(height: 4),
-          AsyncView<Json>(
-            value: info,
-            onRetry: () => ref.invalidate(tokenInfoProvider),
-            builder: (i) {
-              final perms = ((i['permissions'] as List?) ?? const []).map((e) => '$e').toList();
-              return Wrap(spacing: 6, runSpacing: 6, children: [for (final p in perms) Pill(p)]);
-            },
-          ),
+          if (keys.isEmpty)
+            Text(s.t('guest_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
+          else
+            AsyncView<Json>(
+              value: info,
+              onRetry: () => ref.invalidate(tokenInfoProvider),
+              builder: (i) {
+                final perms = ((i['permissions'] as List?) ?? const []).map((e) => '$e').toList();
+                return Wrap(spacing: 6, runSpacing: 6, children: [for (final p in perms) Pill(p)]);
+              },
+            ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => const OnboardingScreen()),
             ),
             icon: const Icon(Icons.add, size: 18),
-            label: Text(s.t('add_account')),
+            label: Text(keys.isEmpty ? s.t('add_api_key') : s.t('add_account')),
           ),
         ],
       ),

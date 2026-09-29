@@ -1,5 +1,14 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'err_no_key': '这需要 GW2 API 密钥。',
+  'add_api_key': '添加 API 密钥',
+  'guest_continue': '不使用 API 密钥继续',
+  'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',
+  'guest': '访客',
+  'guest_home_title': '你正以访客身份浏览',
+  'guest_home_body': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。添加 API 密钥即可查看角色、钱包、巫师宝库和进度。',
+  'needs_key_title': '需要 API 密钥',
+  'needs_key_body': '此部分显示你自己的账号：角色、进度、收藏和公会。请添加 ArenaNet 的只读 API 密钥来查看。其余功能无需密钥即可使用。',
   'boss_alert_limit': '{n} 个固定的活动没有提醒：手机最多保留 {max} 个预定提醒。请取消部分固定，每小时的活动占用最多。',
   'boss_alerts_title': '世界活动提醒',
   'boss_alerts_note': '在你固定的活动每次开始前提醒，每天生效，应用关闭时也会提醒。',

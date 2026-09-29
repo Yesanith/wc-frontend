@@ -51,6 +51,7 @@ class TyriaCodexApp extends ConsumerWidget {
       _ => '.',
     };
     final key = ref.watch(apiKeyProvider);
+    final guest = ref.watch(guestModeProvider);
     return MaterialApp(
       title: 'Tyria Codex',
       debugShowCheckedModeBanner: false,
@@ -58,7 +59,7 @@ class TyriaCodexApp extends ConsumerWidget {
       home: key.when(
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (error, stack) => const OnboardingScreen(),
-        data: (k) => (k == null || k.isEmpty) ? const OnboardingScreen() : const AppShell(),
+        data: (k) => (k == null || k.isEmpty) && !guest ? const OnboardingScreen() : const AppShell(),
       ),
     );
   }
