@@ -1,5 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'event_pick_profession': 'Welche Klasse als {role}?',
+  'event_err_profession_required': 'Wähle die Klasse, mit der du kommst.',
   'event_edit': 'Event bearbeiten',
   'event_save': 'Änderungen speichern',
   'event_edit_one_week': 'Das ändert nur diese Woche des wöchentlichen Events.',

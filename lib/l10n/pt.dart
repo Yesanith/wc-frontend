@@ -1,5 +1,7 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'event_pick_profession': 'Qual profissão como {role}?',
+  'event_err_profession_required': 'Escolha a profissão com que você vem.',
   'event_edit': 'Editar evento',
   'event_save': 'Salvar alterações',
   'event_edit_one_week': 'Isso muda só esta semana do evento semanal.',

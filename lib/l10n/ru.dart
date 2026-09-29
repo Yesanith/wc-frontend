@@ -1,5 +1,7 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_pick_profession': 'Какая профессия для роли {role}?',
+  'event_err_profession_required': 'Выберите профессию, которой придёте.',
   'event_edit': 'Изменить событие',
   'event_save': 'Сохранить',
   'event_edit_one_week': 'Изменится только эта неделя еженедельного события.',
