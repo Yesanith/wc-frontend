@@ -1,5 +1,18 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'boss_alerts_title': '世界活动提醒',
+  'boss_alerts_note': '在你固定的活动每次开始前提醒，每天生效，应用关闭时也会提醒。',
+  'boss_alerts_lead': '开始前提醒',
+  'minutes_short': '{n} 分钟',
+  'boss_alert_body': '{n} 分钟后开始 · {map}',
+  'boss_alert_on': '提醒已开启：在每个固定活动开始前 {n} 分钟。',
+  'boss_alert_none': '尚未固定任何活动，请在世界首领中固定活动。',
+  'boss_alert_scheduled': '已固定 {pins} 个，每天 {n} 次提醒',
+  'boss_alert_allow': '允许通知',
+  'boss_alert_exact_note': 'Android 可能会将提醒推迟几分钟。如需准时，请允许此应用使用闹钟和提醒。',
+  'boss_alert_exact_button': '允许准时提醒',
+  'boss_alert_test': '发送测试提醒',
+  'boss_alert_test_body': '提醒正常。在世界首领中固定活动，即可在开始前收到提醒。',
   'push_title': '活动通知',
   'push_note': '所参加活动开始前 30 分钟提醒，以及从候补转为参加时的通知。',
   'push_denied': 'Tyria Codex 的通知已被阻止，请在手机设置中允许。',

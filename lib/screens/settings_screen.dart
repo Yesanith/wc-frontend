@@ -7,7 +7,9 @@ import '../services/icon_cache.dart';
 import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
+import '../services/boss_alerts.dart';
 import '../services/push.dart';
+import '../state/boss_alerts.dart';
 import '../state/community.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
@@ -94,6 +96,10 @@ class SettingsScreen extends ConsumerWidget {
         const _AccountsPanel(),
         const SizedBox(height: 16),
         const _SyncPanel(),
+        if (bossAlertsReady) ...[
+          const SizedBox(height: 16),
+          const _BossAlertsPanel(),
+        ],
         const SizedBox(height: 16),
         Panel(
           child: Column(
@@ -696,6 +702,111 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
       onChanged: _busy ? null : _set,
       title: Text(s.t('push_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
       subtitle: Text(s.t('push_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+    );
+  }
+}
+
+
+/// alerts before the world events the player pinned. they come from the
+/// phone's own alarms, so they need no account and no server
+class _BossAlertsPanel extends ConsumerStatefulWidget {
+  const _BossAlertsPanel();
+
+  @override
+  ConsumerState<_BossAlertsPanel> createState() => _BossAlertsPanelState();
+}
+
+class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
+  bool _busy = false;
+
+  Future<void> _turnOn(bool on) async {
+    final s = ref.read(stringsProvider);
+    await ref.read(bossAlertSettingsProvider.notifier).setEnabled(on);
+    if (!on) return;
+    setState(() => _busy = true);
+    final allowed = await requestBossAlertPermission();
+    ref.read(bossAlertsRecheckProvider.notifier).bump();
+    if (mounted) {
+      setState(() => _busy = false);
+      if (!allowed) showToast(context, s.t('push_denied'));
+    }
+  }
+
+  Future<void> _test() async {
+    final s = ref.read(stringsProvider);
+    if (!await requestBossAlertPermission()) {
+      if (mounted) showToast(context, s.t('push_denied'));
+      return;
+    }
+    await showBossAlertTest(
+      title: 'Tyria Codex',
+      body: s.t('boss_alert_test_body'),
+      channelName: s.t('boss_alerts_title'),
+      channelDescription: s.t('boss_alerts_note'),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final settings = ref.watch(bossAlertSettingsProvider);
+    final pins = ref.watch(pinnedEventsProvider);
+    final status = ref.watch(bossAlertStatusProvider).valueOrNull;
+    final count = settings.enabled ? alertsFor(pins, settings.lead, s).length : 0;
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: settings.enabled,
+            activeThumbColor: AppColors.gold,
+            onChanged: _busy ? null : _turnOn,
+            title: Text(s.t('boss_alerts_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+            subtitle: Text(s.t('boss_alerts_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          ),
+          if (settings.enabled) ...[
+            const SizedBox(height: 8),
+            Text(s.t('boss_alerts_lead'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              children: [
+                for (final m in bossAlertLeads)
+                  ChoiceChip(
+                    label: Text(s.t('minutes_short', {'n': m})),
+                    selected: settings.lead == m,
+                    onSelected: (_) => ref.read(bossAlertSettingsProvider.notifier).setLead(m),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              pins.isEmpty ? s.t('boss_alert_none') : s.t('boss_alert_scheduled', {'pins': pins.length, 'n': count}),
+              style: const TextStyle(fontSize: 12, color: AppColors.textSoft),
+            ),
+            if (status != null && !status.notifications) ...[
+              const SizedBox(height: 10),
+              FilledButton(onPressed: _busy ? null : () => _turnOn(true), child: Text(s.t('boss_alert_allow'))),
+            ],
+            if (status != null && status.notifications && !status.exact) ...[
+              const SizedBox(height: 10),
+              Text(s.t('boss_alert_exact_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+              const SizedBox(height: 6),
+              OutlinedButton(
+                onPressed: () async {
+                  await openExactAlarmSettings();
+                  ref.read(bossAlertsRecheckProvider.notifier).bump();
+                },
+                child: Text(s.t('boss_alert_exact_button')),
+              ),
+            ],
+            const SizedBox(height: 6),
+            TextButton(onPressed: _test, child: Text(s.t('boss_alert_test'))),
+          ],
+        ],
+      ),
     );
   }
 }

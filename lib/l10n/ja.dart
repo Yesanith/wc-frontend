@@ -1,5 +1,18 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'boss_alerts_title': 'ワールドイベント通知',
+  'boss_alerts_note': 'ピン留めしたイベントの開始直前に毎日通知します。アプリを閉じていても届きます。',
+  'boss_alerts_lead': '開始の何分前に通知',
+  'minutes_short': '{n}分',
+  'boss_alert_body': 'あと{n}分で開始 · {map}',
+  'boss_alert_on': '通知オン：ピン留めしたイベントの{n}分前にお知らせします。',
+  'boss_alert_none': 'ピン留めはまだありません。ワールドボスでイベントをピン留めしてください。',
+  'boss_alert_scheduled': 'ピン留め{pins}件、1日{n}回の通知',
+  'boss_alert_allow': '通知を許可',
+  'boss_alert_exact_note': 'Android は通知を数分遅らせることがあります。正確な時刻にするには、このアプリのアラームとリマインダーを許可してください。',
+  'boss_alert_exact_button': '正確な時刻を許可',
+  'boss_alert_test': 'テスト通知を送る',
+  'boss_alert_test_body': '通知は正常です。ワールドボスでイベントをピン留めすると、開始前に届きます。',
   'push_title': 'イベント通知',
   'push_note': '参加するイベントの30分前のリマインダーと、キャンセル待ちから参加確定した時のお知らせ。',
   'push_denied': 'Tyria Codex の通知がブロックされています。端末の設定で許可してください。',

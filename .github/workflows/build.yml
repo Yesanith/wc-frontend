@@ -114,6 +114,12 @@ jobs:
           grep -q 'default_notification_icon' "$M" || sed -i 's#<application#<application#; 0,/<activity/s#<activity#<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_launcher_monochrome"/>\n        <activity#' "$M"
           grep -c 'default_notification_icon' "$M"
 
+      # the alerts before pinned world events are scheduled with the phone's
+      # alarm system, which needs receivers, permissions and desugaring that
+      # flutter create does not write
+      - name: Set up scheduled notifications
+        run: python3 ci/notifications.py
+
       - run: flutter pub get
 
       # a release never ships code that fails the checks

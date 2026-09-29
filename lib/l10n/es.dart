@@ -1,5 +1,18 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'boss_alerts_title': 'Avisos de eventos del mundo',
+  'boss_alerts_note': 'Un aviso poco antes de cada inicio de los eventos que fijaste, cada día, también con la app cerrada.',
+  'boss_alerts_lead': 'Aviso antes del inicio',
+  'minutes_short': '{n} min',
+  'boss_alert_body': 'Empieza en {n} min · {map}',
+  'boss_alert_on': 'Avisos activados: {n} minutos antes de cada evento fijado.',
+  'boss_alert_none': 'Nada fijado aún. Fija eventos en Jefes del mundo.',
+  'boss_alert_scheduled': '{pins} fijados, {n} avisos al día',
+  'boss_alert_allow': 'Permitir notificaciones',
+  'boss_alert_exact_note': 'Android puede retrasar los avisos unos minutos. Para la hora exacta permite alarmas y recordatorios para esta app.',
+  'boss_alert_exact_button': 'Permitir hora exacta',
+  'boss_alert_test': 'Enviar un aviso de prueba',
+  'boss_alert_test_body': 'Los avisos funcionan. Fija eventos en Jefes del mundo para recibir uno antes de que empiecen.',
   'push_title': 'Notificaciones de eventos',
   'push_note': 'Un aviso 30 minutos antes de tus eventos y cuando entras desde la lista de espera.',
   'push_denied': 'Las notificaciones están bloqueadas para Tyria Codex, permítelas en los ajustes del teléfono.',
