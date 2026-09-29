@@ -1,5 +1,13 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_guild_hint': 'Lütfen lonca seçiniz',
+  'event_account': 'ORGANİZATÖR HESABI',
+  'event_account_hint': 'Hesap seçiniz',
+  'event_account_none': 'Hesaplarından hiçbiri bu loncanın lideri veya subayı değil.',
+  'event_organizer': 'Organizatör',
+  'event_err_guild': 'Lütfen lonca seçiniz.',
+  'event_err_account': 'Etkinliği hangi hesabınla oluşturacağını seç.',
+  'event_err_account_not_allowed': 'Bu hesap bu loncada etkinlik oluşturamaz.',
   'err_no_key': 'Bunun için bir GW2 API key\'i gerekli.',
   'add_api_key': 'API key ekle',
   'guest_continue': 'API key olmadan devam et',
@@ -114,7 +122,7 @@ const trStrings = <String, String>{
   'event_roles_over': '{max} oyuncuya {n} rol yeri var, sadece ilk {max} kişi katılabilir',
   'event_description': 'AÇIKLAMA',
   'event_description_hint': 'Ne getirmeli, nerede buluşulacak, ne bekleniyor',
-  'event_err_title': 'Bir lonca seç ve etkinliğe başlık ver.',
+  'event_err_title': 'Etkinliğe bir başlık ver.',
   'event_err_start_in_past': 'Etkinlik geçmişte başlayamaz.',
   'event_err_version_conflict': 'Bu arada biri etkinliği değiştirdi, yenileyip tekrar dene.',
   'event_err_role_required': 'Etkinliğin rollerinden birini seç.',

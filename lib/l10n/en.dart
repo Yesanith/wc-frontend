@@ -1,5 +1,13 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'event_guild_hint': 'Please select a guild',
+  'event_account': 'ORGANIZER ACCOUNT',
+  'event_account_hint': 'Select an account',
+  'event_account_none': 'None of your accounts leads or is an officer of this guild.',
+  'event_organizer': 'Organizer',
+  'event_err_guild': 'Please select a guild.',
+  'event_err_account': 'Select which of your accounts creates the event.',
+  'event_err_account_not_allowed': 'That account may not create events in this guild.',
   'err_no_key': 'This needs a GW2 API key.',
   'add_api_key': 'Add an API key',
   'guest_continue': 'Continue without an API key',
@@ -113,7 +121,7 @@ const enStrings = <String, String>{
   'event_roles_over': '{n} role slots for {max} players, only the first {max} get in',
   'event_description': 'DESCRIPTION',
   'event_description_hint': 'What to bring, where to meet, what to expect',
-  'event_err_title': 'Pick a guild and give the event a title.',
+  'event_err_title': 'Give the event a title.',
   'event_err_start_in_past': 'The event cannot start in the past.',
   'event_err_version_conflict': 'Somebody changed the event meanwhile, pull to refresh and try again.',
   'event_err_role_required': 'Pick one of the event\'s roles.',

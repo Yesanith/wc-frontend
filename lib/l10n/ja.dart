@@ -1,5 +1,13 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_guild_hint': 'ギルドを選んでください',
+  'event_account': '主催アカウント',
+  'event_account_hint': 'アカウントを選んでください',
+  'event_account_none': 'このギルドのリーダーまたはオフィサーのアカウントがありません。',
+  'event_organizer': '主催',
+  'event_err_guild': 'ギルドを選んでください。',
+  'event_err_account': 'イベントを作成するアカウントを選んでください。',
+  'event_err_account_not_allowed': 'このアカウントはこのギルドでイベントを作成できません。',
   'err_no_key': 'これには GW2 の API キーが必要です。',
   'add_api_key': 'API キーを追加',
   'guest_continue': 'API キーなしで続ける',
@@ -104,7 +112,7 @@ const jaStrings = <String, String>{
   'event_roles_over': '{max}人に対してロール枠が{n}、先着{max}人のみ参加できます',
   'event_description': '説明',
   'event_description_hint': '持ち物、集合場所、内容など',
-  'event_err_title': 'ギルドを選び、タイトルを入力してください。',
+  'event_err_title': 'タイトルを入力してください。',
   'event_err_start_in_past': '過去の日時には開始できません。',
   'event_err_version_conflict': 'その間に誰かがイベントを変更しました。更新して再度お試しください。',
   'event_err_role_required': 'イベントのロールを1つ選んでください。',

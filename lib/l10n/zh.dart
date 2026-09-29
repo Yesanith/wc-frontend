@@ -1,5 +1,13 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_guild_hint': '请选择公会',
+  'event_account': '主办账号',
+  'event_account_hint': '请选择账号',
+  'event_account_none': '你的账号中没有该公会的会长或官员。',
+  'event_organizer': '主办',
+  'event_err_guild': '请选择公会。',
+  'event_err_account': '请选择用哪个账号创建活动。',
+  'event_err_account_not_allowed': '该账号无权在此公会创建活动。',
   'err_no_key': '这需要 GW2 API 密钥。',
   'add_api_key': '添加 API 密钥',
   'guest_continue': '不使用 API 密钥继续',
@@ -103,7 +111,7 @@ const zhStrings = <String, String>{
   'event_roles_over': '{max} 人的活动有 {n} 个职责名额，仅前 {max} 人可参加',
   'event_description': '说明',
   'event_description_hint': '需要准备什么、在哪集合、活动内容',
-  'event_err_title': '请选择公会并填写活动标题。',
+  'event_err_title': '请填写活动标题。',
   'event_err_start_in_past': '活动不能在过去开始。',
   'event_err_version_conflict': '有人刚刚修改了活动，请刷新后重试。',
   'event_err_role_required': '请选择活动的一个职责。',

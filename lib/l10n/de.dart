@@ -1,5 +1,13 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'event_guild_hint': 'Bitte wähle eine Gilde',
+  'event_account': 'ORGANISATOR-KONTO',
+  'event_account_hint': 'Wähle ein Konto',
+  'event_account_none': 'Keines deiner Konten führt diese Gilde oder ist dort Offizier.',
+  'event_organizer': 'Organisator',
+  'event_err_guild': 'Bitte wähle eine Gilde.',
+  'event_err_account': 'Wähle, mit welchem deiner Konten das Event erstellt wird.',
+  'event_err_account_not_allowed': 'Dieses Konto darf in dieser Gilde keine Events erstellen.',
   'err_no_key': 'Dafür wird ein GW2-API-Schlüssel benötigt.',
   'add_api_key': 'API-Schlüssel hinzufügen',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
@@ -115,7 +123,7 @@ const deStrings = <String, String>{
   'event_roles_over': '{n} Rollenplätze für {max} Spieler, nur die ersten {max} kommen rein',
   'event_description': 'BESCHREIBUNG',
   'event_description_hint': 'Was mitbringen, wo treffen, was erwartet euch',
-  'event_err_title': 'Wähle eine Gilde und gib dem Event einen Titel.',
+  'event_err_title': 'Gib dem Event einen Titel.',
   'event_err_start_in_past': 'Das Event kann nicht in der Vergangenheit beginnen.',
   'event_err_version_conflict': 'Jemand hat das Event inzwischen geändert, aktualisiere und versuche es erneut.',
   'event_err_role_required': 'Wähle eine der Rollen des Events.',

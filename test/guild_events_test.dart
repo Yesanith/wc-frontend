@@ -79,4 +79,44 @@ void main() {
       expect(isIanaZone(bad), isFalse, reason: bad);
     }
   });
+
+  test('the event knows the account it was created with', () {
+    expect(_event().organizer, isNull, reason: 'older events have none');
+    final row = {
+      'id': 'e1',
+      'guild_id': 'g1',
+      'creator_id': 'someone',
+      'organizer_name': 'Zed.1234',
+      'title': 'Raid',
+      'start_at': '2026-10-01T18:00:00+00:00',
+      'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
+    };
+    expect(GuildEvent.fromRow(row).organizer, 'Zed.1234');
+  });
+
+  group('the accounts that may organize', () {
+    const accounts = [
+      GuildAccount('g1', 'a-mia', 'Mia.3', 'officer'),
+      GuildAccount('g1', 'a-zed', 'Zed.1', 'leader'),
+      GuildAccount('g1', 'a-abe', 'Abe.2', 'member'),
+      GuildAccount('g2', 'a-abe', 'Abe.2', 'officer'),
+      GuildAccount('g3', 'a-abe', 'Abe.2', 'member'),
+    ];
+
+    test('the leader comes first, then officers by name, members never', () {
+      expect(organizersFor(accounts, 'g1').map((a) => a.accountName), ['Zed.1', 'Mia.3']);
+    });
+
+    test('roles are per account and guild', () {
+      // abe is an officer of g2 and only a member of g1 and g3
+      expect(organizersFor(accounts, 'g2').map((a) => a.accountName), ['Abe.2']);
+      expect(organizersFor(accounts, 'g3'), isEmpty);
+      expect(organizersFor(accounts, 'unknown'), isEmpty);
+    });
+
+    test('nothing to choose from when there are no accounts', () {
+      expect(organizersFor(const [], 'g1'), isEmpty);
+    });
+  });
 }
+

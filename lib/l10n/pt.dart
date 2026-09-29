@@ -1,5 +1,13 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'event_guild_hint': 'Selecione uma guilda',
+  'event_account': 'CONTA ORGANIZADORA',
+  'event_account_hint': 'Selecione uma conta',
+  'event_account_none': 'Nenhuma das suas contas lidera esta guilda nem é oficial nela.',
+  'event_organizer': 'Organizador',
+  'event_err_guild': 'Selecione uma guilda.',
+  'event_err_account': 'Escolha com qual conta o evento é criado.',
+  'event_err_account_not_allowed': 'Essa conta não pode criar eventos nesta guilda.',
   'err_no_key': 'Isso precisa de uma chave de API do GW2.',
   'add_api_key': 'Adicionar uma chave de API',
   'guest_continue': 'Continuar sem chave de API',
@@ -113,7 +121,7 @@ const ptStrings = <String, String>{
   'event_roles_over': '{n} vagas de função para {max} jogadores, só os {max} primeiros entram',
   'event_description': 'DESCRIÇÃO',
   'event_description_hint': 'O que levar, onde se encontrar, o que esperar',
-  'event_err_title': 'Escolha uma guilda e dê um título ao evento.',
+  'event_err_title': 'Dê um título ao evento.',
   'event_err_start_in_past': 'O evento não pode começar no passado.',
   'event_err_version_conflict': 'Alguém mudou o evento nesse meio tempo, atualize e tente de novo.',
   'event_err_role_required': 'Escolha uma das funções do evento.',
