@@ -1,5 +1,18 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'boss_alerts_title': 'World event alerts',
+  'boss_alerts_note': 'A notification shortly before each start of the events you pinned, every day, also when the app is closed.',
+  'boss_alerts_lead': 'Alert before the start',
+  'minutes_short': '{n} min',
+  'boss_alert_body': 'Starts in {n} min · {map}',
+  'boss_alert_on': 'Alerts are on: {n} minutes before each pinned event starts.',
+  'boss_alert_none': 'Nothing pinned yet. Pin events in World bosses.',
+  'boss_alert_scheduled': '{pins} pinned, {n} alerts a day',
+  'boss_alert_allow': 'Allow notifications',
+  'boss_alert_exact_note': 'Android may hold alerts back by a few minutes. For exact timing allow alarms and reminders for this app.',
+  'boss_alert_exact_button': 'Allow exact timing',
+  'boss_alert_test': 'Send a test alert',
+  'boss_alert_test_body': 'Alerts work. Pin events in World bosses to get one before they start.',
   'push_title': 'Event notifications',
   'push_note': 'A reminder 30 minutes before events you go to, and news when the waitlist lets you in.',
   'push_denied': 'Notifications are blocked for Tyria Codex, allow them in the phone\'s settings.',

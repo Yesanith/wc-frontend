@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/metas.dart';
+import '../state/boss_alerts.dart';
 import '../state/clock.dart';
 import '../widgets/clock.dart';
 import '../state/periodic.dart';
@@ -323,7 +324,7 @@ class MetaRow extends ConsumerWidget {
                 if (pinnable)
                   IconButton(
                     tooltip: pinned ? s.t('unpin') : s.t('pin'),
-                    onPressed: () => ref.read(pinnedEventsProvider.notifier).toggle(key),
+                    onPressed: () => togglePin(context, ref, key),
                     icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined,
                         size: 20, color: pinned ? AppColors.gold : AppColors.chevron),
                   )
@@ -653,7 +654,7 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
                   children: [
                     Expanded(
                       child: FilledButton.icon(
-                        onPressed: () => ref.read(pinnedEventsProvider.notifier).toggle(key),
+                        onPressed: () => togglePin(context, ref, key),
                         icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined, size: 18),
                         label: Text(pinned ? s.t('unpin') : s.t('pin')),
                       ),
@@ -678,5 +679,24 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
         );
       },
     ),
+  );
+}
+
+
+/// pins or unpins an event. a pin also asks for the notification permission
+/// the first time and says what the player can expect, alerts come before
+/// every start of a pinned event
+Future<void> togglePin(BuildContext context, WidgetRef ref, String key) async {
+  final wasPinned = ref.read(pinnedEventsProvider).contains(key);
+  await ref.read(pinnedEventsProvider.notifier).toggle(key);
+  if (wasPinned) return;
+  final settings = ref.read(bossAlertSettingsProvider);
+  final feedback = await pinFeedback(settings: settings, prefs: ref.read(prefsProvider));
+  if (!context.mounted || feedback == PinFeedback.none) return;
+  final s = ref.read(stringsProvider);
+  showToast(
+    context,
+    feedback == PinFeedback.alertsOn ? s.t('boss_alert_on', {'n': settings.lead}) : s.t('push_denied'),
+    duration: const Duration(seconds: 5),
   );
 }

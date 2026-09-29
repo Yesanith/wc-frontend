@@ -6,6 +6,7 @@ import 'l10n/strings.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/shell.dart';
 import 'services/cache.dart';
+import 'services/boss_alerts.dart';
 import 'services/icon_cache.dart';
 import 'services/push.dart';
 import 'state/community.dart';
@@ -23,6 +24,8 @@ Future<void> main() async {
   await initCommunity();
   // push notifications need the community account, and are off without firebase values
   await initPush();
+  // alerts before pinned world events, from the phone's own alarms
+  await initBossAlerts();
   runApp(
     ProviderScope(
       overrides: [

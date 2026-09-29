@@ -20,6 +20,8 @@ import '../util.dart';
 import '../services/update_check.dart';
 import '../services/push.dart';
 import '../state/community.dart';
+import '../services/boss_alerts.dart';
+import '../state/boss_alerts.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
@@ -138,6 +140,13 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     ref.listenManual(sessionProvider, (previous, next) {
       if (previous?.valueOrNull == null && next.valueOrNull != null) _startPush();
     }, fireImmediately: true);
+    // a tap on a world event alert opens the events, also when it started the app
+    _alertTaps = bossAlertTaps.stream.listen(_openFromAlert);
+    if (bossAlertLaunchPayload != null) {
+      final payload = bossAlertLaunchPayload;
+      bossAlertLaunchPayload = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _openFromAlert(payload));
+    }
     _pushWhileOpen = pushWhileOpen.stream.listen((message) {
       final n = message.notification;
       if (n == null || !mounted) return;
@@ -164,12 +173,19 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   @override
   void dispose() {
     _pushWhileOpen?.cancel();
+    _alertTaps?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   DateTime? _backgroundSince;
   StreamSubscription<Object?>? _pushWhileOpen;
+  StreamSubscription<String?>? _alertTaps;
+
+  void _openFromAlert(String? payload) {
+    if (!isBossAlertPayload(payload) || !mounted) return;
+    ref.read(sectionProvider.notifier).state = AppSection.bosses;
+  }
 
   void _startPush() {
     if (!pushReady || ref.read(prefsProvider).getBool(pushPref) == false) return;
@@ -181,6 +197,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     if (state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
       _backgroundSince ??= DateTime.now();
     } else if (state == AppLifecycleState.resumed) {
+      // a permission may have been given in the phone's settings meanwhile
+      ref.read(bossAlertsRecheckProvider.notifier).bump();
       final away = _backgroundSince == null ? Duration.zero : DateTime.now().difference(_backgroundSince!);
       _backgroundSince = null;
       // a short switch away is not worth a refresh, a few minutes is
@@ -281,6 +299,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, __) => _recordWealth());
     ref.listen<AsyncValue<Json>>(accountProvider, (_, __) => _recordWealth());
     final sync = ref.watch(syncProvider);
+    // keeps the phone's alarms for pinned world events in line, see boss_alerts
+    ref.watch(bossAlertsSyncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
     ref.listen(apiKeyProvider, (previous, next) {
