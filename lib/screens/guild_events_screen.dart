@@ -908,7 +908,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
     // no guild is preselected: choosing it is part of creating the event
     final guildId = _guildId;
     final accounts = ref.watch(myGuildAccountsProvider);
-    final organizers = guildId == null ? const <GuildAccount>[] : organizersFor(accounts.valueOrNull ?? const [], guildId);
+    final organizers =
+        guildId == null ? const <GuildAccount>[] : organizersFor(accounts.valueOrNull ?? const [], guildId);
     final accountId = _effectiveAccount(accounts.valueOrNull ?? const []);
     final durations = {30, 60, 90, 120, 180, 240, _duration}.toList()..sort();
     final sizes = <int?>{5, 10, 20, 50, _max}.whereType<int>().toList()..sort();
@@ -957,7 +958,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 hint: Text(s.t('event_account_hint'), style: const TextStyle(color: AppColors.muted)),
                 items: [
                   for (final a in organizers)
-                    DropdownMenuItem(value: a.accountId, child: Text('${a.accountName} · ${s.t('guild_role_${a.role}')}')),
+                    DropdownMenuItem(
+                        value: a.accountId, child: Text('${a.accountName} · ${s.t('guild_role_${a.role}')}')),
                 ],
                 onChanged: (v) => setState(() => _accountId = v),
               ),
