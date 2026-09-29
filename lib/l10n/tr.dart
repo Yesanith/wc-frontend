@@ -1,7 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
   'boss_alerts_title': 'Dünya etkinliği bildirimleri',
-  'boss_alerts_note': 'Sabitlediğin etkinliklerin her başlangıcından kısa süre önce, her gün, uygulama kapalıyken de bildirim.',
+  'boss_alerts_note':
+      'Sabitlediğin etkinliklerin her başlangıcından kısa süre önce, her gün, uygulama kapalıyken de bildirim.',
   'boss_alerts_lead': 'Başlangıçtan önce bildir',
   'minutes_short': '{n} dk',
   'boss_alert_body': '{n} dk sonra başlıyor · {map}',
@@ -9,10 +10,12 @@ const trStrings = <String, String>{
   'boss_alert_none': 'Henüz sabitlenen yok. Dünya boss\'larından etkinlik sabitle.',
   'boss_alert_scheduled': '{pins} sabitli, günde {n} bildirim',
   'boss_alert_allow': 'Bildirimlere izin ver',
-  'boss_alert_exact_note': 'Android bildirimleri birkaç dakika geciktirebilir. Tam zamanında gelmesi için bu uygulamaya alarm ve hatırlatıcı izni ver.',
+  'boss_alert_exact_note':
+      'Android bildirimleri birkaç dakika geciktirebilir. Tam zamanında gelmesi için bu uygulamaya alarm ve hatırlatıcı izni ver.',
   'boss_alert_exact_button': 'Tam zamana izin ver',
   'boss_alert_test': 'Test bildirimi gönder',
-  'boss_alert_test_body': 'Bildirimler çalışıyor. Başlamadan önce haber almak için Dünya boss\'larından etkinlik sabitle.',
+  'boss_alert_test_body':
+      'Bildirimler çalışıyor. Başlamadan önce haber almak için Dünya boss\'larından etkinlik sabitle.',
   'push_title': 'Etkinlik bildirimleri',
   'push_note': 'Katıldığın etkinliklerden 30 dakika önce hatırlatma, yedek listeden katılımcı olunca haber.',
   'push_denied': 'Tyria Codex için bildirimler engelli, telefonun ayarlarından izin ver.',

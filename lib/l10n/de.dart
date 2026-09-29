@@ -1,7 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
   'boss_alerts_title': 'Weltevent-Erinnerungen',
-  'boss_alerts_note': 'Eine Benachrichtigung kurz vor jedem Start der angehefteten Events, täglich, auch bei geschlossener App.',
+  'boss_alerts_note':
+      'Eine Benachrichtigung kurz vor jedem Start der angehefteten Events, täglich, auch bei geschlossener App.',
   'boss_alerts_lead': 'Erinnerung vor dem Start',
   'minutes_short': '{n} Min.',
   'boss_alert_body': 'Beginnt in {n} Min. · {map}',
@@ -9,10 +10,12 @@ const deStrings = <String, String>{
   'boss_alert_none': 'Noch nichts angeheftet. Hefte Events unter Weltbosse an.',
   'boss_alert_scheduled': '{pins} angeheftet, {n} Erinnerungen pro Tag',
   'boss_alert_allow': 'Benachrichtigungen erlauben',
-  'boss_alert_exact_note': 'Android kann Erinnerungen um einige Minuten verzögern. Erlaube für genaue Zeiten Wecker und Erinnerungen für diese App.',
+  'boss_alert_exact_note':
+      'Android kann Erinnerungen um einige Minuten verzögern. Erlaube für genaue Zeiten Wecker und Erinnerungen für diese App.',
   'boss_alert_exact_button': 'Genaue Zeit erlauben',
   'boss_alert_test': 'Test-Erinnerung senden',
-  'boss_alert_test_body': 'Erinnerungen funktionieren. Hefte Events unter Weltbosse an, um vor dem Start eine zu bekommen.',
+  'boss_alert_test_body':
+      'Erinnerungen funktionieren. Hefte Events unter Weltbosse an, um vor dem Start eine zu bekommen.',
   'push_title': 'Event-Benachrichtigungen',
   'push_note':
       'Eine Erinnerung 30 Minuten vor deinen Events und eine Nachricht, wenn du von der Warteliste nachrückst.',

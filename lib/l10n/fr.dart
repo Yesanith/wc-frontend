@@ -1,7 +1,8 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
   'boss_alerts_title': 'Alertes d\'événements du monde',
-  'boss_alerts_note': 'Une notification peu avant chaque début des événements épinglés, tous les jours, même app fermée.',
+  'boss_alerts_note':
+      'Une notification peu avant chaque début des événements épinglés, tous les jours, même app fermée.',
   'boss_alerts_lead': 'Alerte avant le début',
   'minutes_short': '{n} min',
   'boss_alert_body': 'Commence dans {n} min · {map}',
@@ -9,10 +10,12 @@ const frStrings = <String, String>{
   'boss_alert_none': 'Rien d\'épinglé. Épingle des événements dans Boss mondiaux.',
   'boss_alert_scheduled': '{pins} épinglés, {n} alertes par jour',
   'boss_alert_allow': 'Autoriser les notifications',
-  'boss_alert_exact_note': 'Android peut retarder les alertes de quelques minutes. Pour une heure exacte, autorise les alarmes et rappels pour cette appli.',
+  'boss_alert_exact_note':
+      'Android peut retarder les alertes de quelques minutes. Pour une heure exacte, autorise les alarmes et rappels pour cette appli.',
   'boss_alert_exact_button': 'Autoriser l\'heure exacte',
   'boss_alert_test': 'Envoyer une alerte de test',
-  'boss_alert_test_body': 'Les alertes fonctionnent. Épingle des événements dans Boss mondiaux pour en recevoir une avant leur début.',
+  'boss_alert_test_body':
+      'Les alertes fonctionnent. Épingle des événements dans Boss mondiaux pour en recevoir une avant leur début.',
   'push_title': 'Notifications d\'événements',
   'push_note': 'Un rappel 30 minutes avant tes événements, et un message quand tu sors de la liste d\'attente.',
   'push_denied': 'Les notifications sont bloquées pour Tyria Codex, autorise-les dans les réglages du téléphone.',

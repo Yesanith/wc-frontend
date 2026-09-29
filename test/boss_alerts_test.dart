@@ -45,7 +45,10 @@ void main() {
 
   test('alerts come sorted by time of day, then name', () {
     final alerts = planBossAlerts(
-      pins: {for (final m in _maps) for (final e in m.events) eventKey(m, e)},
+      pins: {
+        for (final m in _maps)
+          for (final e in m.events) eventKey(m, e)
+      },
       lead: 10,
       body: _body,
       maps: _maps,
@@ -61,7 +64,10 @@ void main() {
     expect(bossAlertId('a/b', 60), isNot(bossAlertId('a/c', 60)));
     expect(bossAlertId('anything', 5), inInclusiveRange(0, 0x7fffffff));
 
-    final all = {for (final m in metaMaps) for (final e in m.events) eventKey(m, e)};
+    final all = {
+      for (final m in metaMaps)
+        for (final e in m.events) eventKey(m, e)
+    };
     final alerts = planBossAlerts(pins: all, lead: 10, body: (m) => m.name);
     expect(alerts.map((a) => a.id).toSet().length, alerts.length);
     var starts = 0;
