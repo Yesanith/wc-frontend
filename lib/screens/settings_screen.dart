@@ -654,7 +654,6 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
   }
 }
 
-
 /// event reminders and waitlist news on this device
 class _PushSwitch extends ConsumerStatefulWidget {
   const _PushSwitch();

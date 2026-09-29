@@ -141,7 +141,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     _pushWhileOpen = pushWhileOpen.stream.listen((message) {
       final n = message.notification;
       if (n == null || !mounted) return;
-      showToast(context, n.body == null ? '${n.title}' : '${n.title} · ${n.body}', duration: const Duration(seconds: 6));
+      showToast(context, n.body == null ? '${n.title}' : '${n.title} · ${n.body}',
+          duration: const Duration(seconds: 6));
     });
     WidgetsBinding.instance.addObserver(this);
     // after a game patch the static data cache is cleared once
