@@ -1,5 +1,11 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_discord_only': 'このイベントへの参加は Discord のメッセージから行います。ここでは不参加のみ選べます。',
+  'event_flex': '他のロールも可',
+  'event_err_discord_only': 'このイベントには Discord で参加してください。',
+  'event_err_role_restricted': 'このイベントは特定の Discord ロールのみ参加できます。',
+  'event_err_not_signed_up': '先に参加登録してください。',
+  'event_err_bad_flex': 'その役割はフレックスに選べません。',
   'event_pick_account': 'どのアカウントで参加しますか？',
   'event_signed_up_as': '{name} で参加中',
   'event_change_account': 'アカウント変更',

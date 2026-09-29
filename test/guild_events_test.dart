@@ -164,4 +164,52 @@ void main() {
       expect(other.accountId, isNull);
     });
   });
+
+  group('discord only events and flex roles', () {
+    Map<String, dynamic> row(Map<String, dynamic> extra) => {
+          'id': 'e1',
+          'guild_id': 'g1',
+          'creator_id': 'someone',
+          'title': 'Raid',
+          'start_at': '2026-10-01T18:00:00+00:00',
+          'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
+          ...extra,
+        };
+
+    test('an event is open to the app unless the server says it is for Discord', () {
+      expect(GuildEvent.fromRow(row({})).discordOnly, isFalse, reason: 'older rows have no such column');
+      expect(GuildEvent.fromRow(row({'discord_only': false})).discordOnly, isFalse);
+      expect(GuildEvent.fromRow(row({'discord_only': true})).discordOnly, isTrue);
+    });
+
+    test('flex roles are read from json, and nonsense is none', () {
+      expect(stringList(['healer', 'dps']), ['healer', 'dps']);
+      expect(stringList(null), isEmpty);
+      expect(stringList('healer'), isEmpty);
+      expect(stringList(<dynamic>[]), isEmpty);
+    });
+
+    test('a player has no flex roles until they name some', () {
+      final p = EventParticipant(
+        userId: 'me',
+        name: 'Abe.2',
+        avatarUrl: null,
+        status: 'going',
+        role: 'dps',
+        joinedAt: DateTime.utc(2026, 10, 1),
+      );
+      expect(p.flex, isEmpty);
+    });
+
+    test('the new refusals are explained, in every language', () {
+      for (final lang in AppLang.values) {
+        final s = S(lang);
+        for (final code in ['discord_only', 'role_restricted', 'not_signed_up', 'bad_flex']) {
+          final text = eventFailureText(s, EventFailure(code));
+          expect(text, isNot('event_err_$code'), reason: '${lang.code} $code');
+          expect(text, isNot(contains('(')), reason: 'a known code has its own text');
+        }
+      }
+    });
+  });
 }

@@ -1,5 +1,11 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_discord_only': '此活动需在 Discord 中通过其消息报名。在这里只能选择不参加。',
+  'event_flex': '也可担任',
+  'event_err_discord_only': '请在 Discord 中报名此活动。',
+  'event_err_role_restricted': '此活动仅对特定 Discord 身份组开放。',
+  'event_err_not_signed_up': '请先报名。',
+  'event_err_bad_flex': '该职责不能作为备用。',
   'event_pick_account': '用哪个账号报名？',
   'event_signed_up_as': '以 {name} 报名',
   'event_change_account': '更换账号',

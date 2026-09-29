@@ -1,5 +1,11 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_discord_only': 'Запись на это событие идёт в Discord, через сообщение там. Здесь можно только отказаться.',
+  'event_flex': 'Могу также играть',
+  'event_err_discord_only': 'Запишитесь на это событие в Discord.',
+  'event_err_role_restricted': 'Это событие открыто только для определённых ролей Discord.',
+  'event_err_not_signed_up': 'Сначала запишитесь.',
+  'event_err_bad_flex': 'Эту роль нельзя выбрать запасной.',
   'event_pick_account': 'Каким аккаунтом вы записываетесь?',
   'event_signed_up_as': 'Записаны как {name}',
   'event_change_account': 'Сменить аккаунт',
