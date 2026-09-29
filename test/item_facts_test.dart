@@ -3,7 +3,7 @@ import 'package:tyria_codex/l10n/strings.dart';
 import 'package:tyria_codex/screens/item_detail_screen.dart';
 
 void main() {
-  final s = S(AppLang.en);
+  const s = S(AppLang.en);
 
   test('a weapon lists strength, damage type and infusion slots', () {
     final item = {'type': 'Weapon'};
