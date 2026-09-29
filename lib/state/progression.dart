@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/cache.dart';
 import '../util.dart';
 import 'api.dart';
+import 'period_refresh.dart';
 import 'settings.dart';
 
 /// world bosses, daily crafts and map chests already done today.
 /// needs the progression permission, empty when it is missing
 final doneTodayProvider = FutureProvider.autoDispose.family<Set<String>, String>((ref, path) async {
+  ref.watch(periodRefreshProvider);
   final api = accountApi(ref);
   try {
     return (await api.get('/account/$path') as List).map((e) => '$e').toSet();
@@ -311,6 +313,7 @@ class DailyProgress {
 
 /// daily crafts and map chests: how many of today's are already collected
 final dailyProgressProvider = FutureProvider.autoDispose.family<DailyProgress, String>((ref, path) async {
+  ref.watch(periodRefreshProvider);
   final api = accountApi(ref);
   final all = await api.dailyAll(path);
   try {
@@ -341,6 +344,7 @@ class RaidWing {
 
 /// raid wings with this week's clears marked
 final raidsProvider = FutureProvider<List<RaidWing>>((ref) async {
+  ref.watch(periodRefreshProvider);
   final api = accountApi(ref);
   final wings = await api.raidWings();
   Set<String> cleared;

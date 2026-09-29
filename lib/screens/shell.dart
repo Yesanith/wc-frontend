@@ -13,6 +13,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
+import '../state/period_refresh.dart';
 import '../util.dart';
 import '../services/update_check.dart';
 import 'about_screen.dart';
@@ -149,6 +150,20 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  DateTime? _backgroundSince;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
+      _backgroundSince ??= DateTime.now();
+    } else if (state == AppLifecycleState.resumed) {
+      final away = _backgroundSince == null ? Duration.zero : DateTime.now().difference(_backgroundSince!);
+      _backgroundSince = null;
+      // a short switch away is not worth a refresh, a few minutes is
+      if (away > const Duration(minutes: 3)) ref.read(periodRefreshProvider.notifier).resumed();
+    }
   }
 
   /// the system back button on the root screen. this observer is registered

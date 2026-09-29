@@ -187,19 +187,25 @@ class Gw2Api {
   /// away, and when it is older than [ttl] a refresh runs in the background
   /// and [onRevalidated] tells the app to re-read it. only an empty cache,
   /// [force] or a recent [forceNetwork] makes the caller wait on the network
+  /// [notBefore] is for data that resets, daily or weekly: a copy saved
+  /// before it belongs to the previous period and is never shown, not even
+  /// when the api cannot be reached
   Future<dynamic> cachedGet(
     String path, {
     Map<String, String>? query,
     Duration ttl = const Duration(minutes: 30),
     bool force = false,
+    DateTime? notBefore,
   }) async {
     final store = cache;
     if (store == null) return get(path, query);
     final suffix = query == null ? '' : '_${query.values.join('_')}';
     final name = 'acct_${_account}_${path.replaceAll('/', '_')}${suffix}_$lang';
+    // how old a copy may be and still belong to the current period
+    final maxAge = copyMaxAge(notBefore, DateTime.now());
 
     if (!force && !_forcing) {
-      final cached = await store.readWithAge(name, maxAge: const Duration(days: 7));
+      final cached = await store.readWithAge(name, maxAge: maxAge);
       if (cached != null && cached.data.containsKey('value')) {
         if (cached.age > ttl) _revalidate(name, path, query);
         return cached.data['value'];
@@ -209,7 +215,7 @@ class Gw2Api {
     try {
       return await _fetchAndStore(name, path, query);
     } catch (_) {
-      final stale = await store.read(name, maxAge: const Duration(days: 7));
+      final stale = await store.read(name, maxAge: maxAge);
       if (stale != null && stale.containsKey('value')) return stale['value'];
       rethrow;
     }
@@ -405,8 +411,16 @@ class Gw2Api {
   }
 
   /// daily, weekly or special objectives of the wizard's vault
-  Future<Json> vault(String track) async =>
-      Map<String, dynamic>.from(await cachedGet('/account/wizardsvault/$track') as Map);
+  Future<Json> vault(String track) async => Map<String, dynamic>.from(await cachedGet(
+        '/account/wizardsvault/$track',
+        // the api itself refreshes about every five minutes, shorter is pointless
+        ttl: const Duration(minutes: 5),
+        notBefore: switch (track) {
+          'daily' => lastDailyReset(),
+          'weekly' => lastWeeklyReset(),
+          _ => null,
+        },
+      ) as Map);
 
   /// plain id list of a static endpoint, ids can be ints or strings
   Future<List<String>> idList(String path) async {
@@ -490,7 +504,10 @@ class Gw2Api {
   Future<Json> profession(String name) async => Map<String, dynamic>.from(await get('/professions/$name') as Map);
 
   /// raid encounters cleared this week and the wing layout
-  Future<List<String>> accountRaids() async => (await cachedGet('/account/raids') as List).map((e) => '$e').toList();
+  Future<List<String>> accountRaids() async =>
+      (await cachedGet('/account/raids', ttl: const Duration(minutes: 5), notBefore: lastWeeklyReset()) as List)
+          .map((e) => '$e')
+          .toList();
 
   Future<List<Json>> raidWings() async {
     final ids = await idList('/raids');
@@ -500,7 +517,7 @@ class Gw2Api {
 
   /// dungeon paths cleared today
   Future<List<String>> accountDungeons() async =>
-      (await cachedGet('/account/dungeons') as List).map((e) => '$e').toList();
+      (await cachedGet('/account/dungeons', ttl: const Duration(minutes: 5), notBefore: lastDailyReset()) as List).map((e) => '$e').toList();
 
   Future<List<Json>> dungeons() async {
     final ids = await idList('/dungeons');
@@ -671,7 +688,9 @@ class Gw2Api {
   /// daily crafts and map chests already collected today, both need the
   /// progression permission
   Future<List<String>> dailyDone(String path) async =>
-      (await cachedGet('/account/$path', ttl: const Duration(minutes: 5)) as List).map((e) => '$e').toList();
+      (await cachedGet('/account/$path', ttl: const Duration(minutes: 5), notBefore: lastDailyReset()) as List)
+          .map((e) => '$e')
+          .toList();
 
   Future<List<String>> dailyAll(String path) async => idList('/$path');
 
@@ -725,4 +744,15 @@ Duration retryDelay(String? retryAfter, int attempt) {
   final asked = int.tryParse(retryAfter?.trim() ?? '');
   final seconds = asked ?? (1 << attempt);
   return Duration(seconds: seconds.clamp(1, 10));
+}
+
+
+/// how old a cached copy may be: a week, or less when it has to be newer
+/// than [notBefore], the last reset of data that resets
+Duration copyMaxAge(DateTime? notBefore, DateTime now) {
+  const week = Duration(days: 7);
+  if (notBefore == null) return week;
+  final since = now.toUtc().difference(notBefore.toUtc());
+  if (since.isNegative) return Duration.zero;
+  return since < week ? since : week;
 }

@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'api.dart';
 import 'characters.dart';
+import 'period_refresh.dart';
 import 'reference.dart';
 
 final accountProvider = FutureProvider<Json>((ref) => accountApi(ref).account());
 
 /// track is daily, weekly or special
-final vaultTrackProvider = FutureProvider.family<Json, String>((ref, track) => accountApi(ref).vault(track));
+final vaultTrackProvider = FutureProvider.family<Json, String>((ref, track) {
+  // fetched again at each reset and when the app comes back
+  ref.watch(periodRefreshProvider);
+  return accountApi(ref).vault(track);
+});
 
 final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
   final api = accountApi(ref);
