@@ -603,7 +603,6 @@ class _Group extends ConsumerWidget {
                           style: TextStyle(fontWeight: people[i].userId == me ? FontWeight.w800 : FontWeight.w500),
                         ),
                       ),
-
                       if (people[i].profession != null) ...[
                         ProfessionIcon(url: professions[people[i].profession]?.icon, size: 18),
                         const SizedBox(width: 4),

@@ -65,4 +65,3 @@ void main() {
     expect(eventProfessions, containsAll(['Guardian', 'Necromancer', 'Revenant']));
   });
 }
-
