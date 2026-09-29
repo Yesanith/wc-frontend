@@ -51,6 +51,7 @@ String eventFailureText(S s, Object e) {
     'version_conflict',
     'role_required',
     'profession_required',
+    'account_not_allowed',
     'is_leader',
     'own_role',
     'not_member',
@@ -510,6 +511,9 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                 Text(e.guildTag.isEmpty ? e.guildName : '${e.guildName} [${e.guildTag}]',
                     style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                if (e.organizer != null)
+                  Text('${s.t('event_organizer')}: ${e.organizer}',
+                      style: const TextStyle(fontSize: 13, color: AppColors.muted)),
                 if (e.cancelled) ...[
                   const SizedBox(height: 10),
                   Pill(s.t('event_cancelled'), color: AppColors.red),
@@ -757,6 +761,9 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
   final _title = TextEditingController();
   final _description = TextEditingController();
   String? _guildId;
+
+  /// the gw2 account the event is created with, null until chosen
+  String? _accountId;
   String _activity = 'raid';
   late DateTime _start;
   int _duration = 120;
@@ -814,12 +821,30 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
     if (time != null) setState(() => _start = DateTime(_start.year, _start.month, _start.day, time.hour, time.minute));
   }
 
-  Future<void> _save(List<MyGuild> guilds) async {
+  /// the account chosen, or the only one that may when there is just one
+  String? _effectiveAccount(List<GuildAccount> all) {
+    final guild = _guildId;
+    if (guild == null) return null;
+    final organizers = organizersFor(all, guild);
+    if (_accountId != null && organizers.any((a) => a.accountId == _accountId)) return _accountId;
+    return organizers.length == 1 ? organizers.first.accountId : null;
+  }
+
+  Future<void> _save() async {
     final s = ref.read(stringsProvider);
-    final guild = _guildId ?? (guilds.isEmpty ? null : guilds.first.id);
+    final guild = _guildId;
     final title = _title.text.trim();
-    if (guild == null || title.isEmpty) {
+    final account = _effectiveAccount(ref.read(myGuildAccountsProvider).valueOrNull ?? const []);
+    if (guild == null) {
+      showToast(context, s.t('event_err_guild'));
+      return;
+    }
+    if (title.isEmpty) {
       showToast(context, s.t('event_err_title'));
+      return;
+    }
+    if (widget.editing == null && account == null) {
+      showToast(context, s.t('event_err_account'));
       return;
     }
     setState(() => _busy = true);
@@ -841,6 +866,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
       } else if (_weekly) {
         await createWeeklyEvent(
           guildId: guild,
+          accountId: account,
           title: title,
           firstStart: _start,
           durationMinutes: _duration,
@@ -852,6 +878,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
       } else {
         await createEvent(
           guildId: guild,
+          accountId: account,
           title: title,
           startAt: _start,
           durationMinutes: _duration,
@@ -878,7 +905,11 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
     final guilds = editing == null
         ? creatable
         : [MyGuild(editing.event.guildId, editing.event.guildName, editing.event.guildTag, 'member')];
-    final guildId = _guildId ?? (guilds.isEmpty ? null : guilds.first.id);
+    // no guild is preselected: choosing it is part of creating the event
+    final guildId = _guildId;
+    final accounts = ref.watch(myGuildAccountsProvider);
+    final organizers = guildId == null ? const <GuildAccount>[] : organizersFor(accounts.valueOrNull ?? const [], guildId);
+    final accountId = _effectiveAccount(accounts.valueOrNull ?? const []);
     final durations = {30, 60, 90, 120, 180, 240, _duration}.toList()..sort();
     final sizes = <int?>{5, 10, 20, 50, _max}.whereType<int>().toList()..sort();
     final roleTotal = _roles.values.fold<int>(0, (a, b) => a + b);
@@ -898,12 +929,39 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             initialValue: guildId,
             dropdownColor: AppColors.surface,
             decoration: fieldDecoration(''),
+            hint: Text(s.t('event_guild_hint'), style: const TextStyle(color: AppColors.muted)),
             items: [
               for (final g in guilds)
                 DropdownMenuItem(value: g.id, child: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]')),
             ],
-            onChanged: editing != null ? null : (v) => setState(() => _guildId = v),
+            // another guild has other accounts to organize with
+            onChanged: editing != null
+                ? null
+                : (v) => setState(() {
+                      _guildId = v;
+                      _accountId = null;
+                    }),
           ),
+          // which of the player's accounts creates it: roles are per account
+          if (editing == null && guildId != null) ...[
+            label(s.t('event_account')),
+            if (organizers.isEmpty && accounts.hasValue)
+              Text(s.t('event_account_none'), style: const TextStyle(fontSize: 13, color: AppColors.muted))
+            else
+              DropdownButtonFormField<String>(
+                // a new field for every guild, its start value is read once
+                key: ValueKey('organizer-$guildId'),
+                initialValue: accountId,
+                dropdownColor: AppColors.surface,
+                decoration: fieldDecoration(''),
+                hint: Text(s.t('event_account_hint'), style: const TextStyle(color: AppColors.muted)),
+                items: [
+                  for (final a in organizers)
+                    DropdownMenuItem(value: a.accountId, child: Text('${a.accountName} · ${s.t('guild_role_${a.role}')}')),
+                ],
+                onChanged: (v) => setState(() => _accountId = v),
+              ),
+          ],
           label(s.t('event_title')),
           TextField(controller: _title, maxLength: 80, decoration: fieldDecoration(s.t('event_title_hint'))),
           label(s.t('event_activity')),
@@ -1045,7 +1103,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           ),
           const SizedBox(height: 12),
           FilledButton.icon(
-            onPressed: _busy || guilds.isEmpty ? null : () => _save(guilds),
+            onPressed: _busy || guilds.isEmpty ? null : _save,
             icon: _busy
                 ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.check),

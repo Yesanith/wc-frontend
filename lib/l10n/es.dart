@@ -1,5 +1,13 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'event_guild_hint': 'Elige un clan',
+  'event_account': 'CUENTA ORGANIZADORA',
+  'event_account_hint': 'Elige una cuenta',
+  'event_account_none': 'Ninguna de tus cuentas lidera este clan ni es oficial en él.',
+  'event_organizer': 'Organizador',
+  'event_err_guild': 'Elige un clan.',
+  'event_err_account': 'Elige con qué cuenta se crea el evento.',
+  'event_err_account_not_allowed': 'Esa cuenta no puede crear eventos en este clan.',
   'err_no_key': 'Esto necesita una clave API de GW2.',
   'add_api_key': 'Añadir una clave API',
   'guest_continue': 'Continuar sin clave API',
@@ -114,7 +122,7 @@ const esStrings = <String, String>{
   'event_roles_over': '{n} plazas de rol para {max} jugadores, solo entran los primeros {max}',
   'event_description': 'DESCRIPCIÓN',
   'event_description_hint': 'Qué llevar, dónde quedar, qué esperar',
-  'event_err_title': 'Elige un clan y ponle título al evento.',
+  'event_err_title': 'Ponle un título al evento.',
   'event_err_start_in_past': 'El evento no puede empezar en el pasado.',
   'event_err_version_conflict': 'Alguien cambió el evento mientras tanto, actualiza e inténtalo de nuevo.',
   'event_err_role_required': 'Elige uno de los roles del evento.',

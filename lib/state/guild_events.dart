@@ -45,6 +45,7 @@ class GuildEvent {
     required this.cancelled,
     required this.version,
     required this.seriesId,
+    this.organizer,
   });
 
   final String id;
@@ -61,6 +62,9 @@ class GuildEvent {
   final bool cancelled;
   final int version;
   final String? seriesId;
+
+  /// the GW2 account the event was created with, unknown for older events
+  final String? organizer;
 
   DateTime get endAt => startAt.add(Duration(minutes: durationMinutes));
 
@@ -81,6 +85,7 @@ class GuildEvent {
       cancelled: r['status'] == 'cancelled',
       version: (r['version'] as num?)?.toInt() ?? 1,
       seriesId: r['series_id'] as String?,
+      organizer: r['organizer_name'] as String?,
     );
   }
 }
@@ -136,7 +141,7 @@ class EventSummary {
   final String? myStatus;
 }
 
-const _eventColumns = 'id, guild_id, creator_id, series_id, title, description, activity, start_at, '
+const _eventColumns = 'id, guild_id, creator_id, organizer_name, series_id, title, description, activity, start_at, '
     'duration_minutes, max_participants, status, version, guilds(name, tag)';
 
 /// the player's guilds' events from a few hours ago on, soonest first
@@ -254,6 +259,7 @@ List<Map<String, dynamic>> _rolesJson(Map<String, int> roles) => [
 
 Future<String> createEvent({
   required String guildId,
+  required String? accountId,
   required String title,
   required DateTime startAt,
   required int durationMinutes,
@@ -272,6 +278,7 @@ Future<String> createEvent({
         'p_activity': activity,
         'p_max_participants': maxParticipants,
         'p_roles': _rolesJson(roles),
+        'p_account': accountId,
       });
       return '$res';
     });
@@ -281,6 +288,7 @@ Future<String> createEvent({
 /// time is sent in utc, which then stays fixed in utc
 Future<String> createWeeklyEvent({
   required String guildId,
+  required String? accountId,
   required String title,
   required DateTime firstStart,
   required int durationMinutes,
@@ -303,6 +311,7 @@ Future<String> createWeeklyEvent({
         'p_activity': activity,
         'p_max_participants': maxParticipants,
         'p_roles': _rolesJson(roles),
+        'p_account': accountId,
       });
       return '$res';
     });
@@ -401,3 +410,52 @@ Future<void> setGuildRole(String guildId, String userId, String role) => _call((
         'p_role': role,
       });
     });
+
+
+// ---------------------------------------------------------------------------
+// the account an event is created with
+
+/// one of the player's GW2 accounts in one guild, with its role there. roles
+/// are per account and guild: one account may lead a guild that another only
+/// belongs to
+class GuildAccount {
+  const GuildAccount(this.guildId, this.accountId, this.accountName, this.role);
+
+  final String guildId;
+  final String accountId;
+  final String accountName;
+
+  /// member, officer or leader
+  final String role;
+
+  bool get mayCreate => role == 'leader' || role == 'officer';
+}
+
+/// every guild membership of every GW2 account the player has linked
+final myGuildAccountsProvider = FutureProvider.autoDispose<List<GuildAccount>>((ref) async {
+  final session = await ref.watch(sessionProvider.future);
+  if (session == null) return const [];
+  final rows = await Supabase.instance.client
+      .from('guild_members')
+      .select('role, guild_id, gw2_account_id, gw2_accounts(account_name)')
+      .eq('user_id', session.user.id);
+  return [
+    for (final r in rows)
+      if (r['gw2_accounts'] case final Map account)
+        GuildAccount('${r['guild_id']}', '${r['gw2_account_id']}', '${account['account_name'] ?? '?'}',
+            '${r['role'] ?? 'member'}'),
+  ];
+});
+
+/// the accounts that may create an event in [guildId], the one that leads
+/// first, then the officers, each by name
+List<GuildAccount> organizersFor(List<GuildAccount> all, String guildId) {
+  const rank = {'leader': 0, 'officer': 1};
+  return [
+    for (final a in all)
+      if (a.guildId == guildId && a.mayCreate) a,
+  ]..sort((a, b) {
+      final byRole = (rank[a.role] ?? 2).compareTo(rank[b.role] ?? 2);
+      return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
+    });
+}

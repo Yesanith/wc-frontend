@@ -1,5 +1,13 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_guild_hint': 'Выберите гильдию',
+  'event_account': 'АККАУНТ ОРГАНИЗАТОРА',
+  'event_account_hint': 'Выберите аккаунт',
+  'event_account_none': 'Ни один из ваших аккаунтов не является лидером или офицером этой гильдии.',
+  'event_organizer': 'Организатор',
+  'event_err_guild': 'Выберите гильдию.',
+  'event_err_account': 'Выберите, каким аккаунтом создать событие.',
+  'event_err_account_not_allowed': 'Этот аккаунт не может создавать события в этой гильдии.',
   'err_no_key': 'Для этого нужен API-ключ GW2.',
   'add_api_key': 'Добавить API-ключ',
   'guest_continue': 'Продолжить без API-ключа',
@@ -114,7 +122,7 @@ const ruStrings = <String, String>{
   'event_roles_over': '{n} ролевых мест на {max} игроков, пройдут только первые {max}',
   'event_description': 'ОПИСАНИЕ',
   'event_description_hint': 'Что взять, где встречаемся, чего ожидать',
-  'event_err_title': 'Выберите гильдию и укажите название события.',
+  'event_err_title': 'Укажите название события.',
   'event_err_start_in_past': 'Событие не может начаться в прошлом.',
   'event_err_version_conflict': 'Кто-то изменил событие, обновите и попробуйте снова.',
   'event_err_role_required': 'Выберите одну из ролей события.',
