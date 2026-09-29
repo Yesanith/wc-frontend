@@ -609,11 +609,10 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                     busy: _busy,
                     onAnswer: (status) => _answer(d, status),
                     // only with several accounts in the guild is there anything to change
-                    onChangeAccount: mine != null &&
-                            mine.status != 'declined' &&
-                            accountsIn(myAccounts, e.guildId).length >= 2
-                        ? () => _changeAccount(d, mine)
-                        : null,
+                    onChangeAccount:
+                        mine != null && mine.status != 'declined' && accountsIn(myAccounts, e.guildId).length >= 2
+                            ? () => _changeAccount(d, mine)
+                            : null,
                   ),
                 if (d.roles.isNotEmpty) ...[
                   Eyebrow(s.t('event_roles')),
