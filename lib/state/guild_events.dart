@@ -411,7 +411,6 @@ Future<void> setGuildRole(String guildId, String userId, String role) => _call((
       });
     });
 
-
 // ---------------------------------------------------------------------------
 // the account an event is created with
 
