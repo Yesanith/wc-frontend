@@ -1,5 +1,6 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'boss_alert_limit': '{n} pinned events have no alerts: the phone holds at most {max} scheduled alerts. Unpin some, hourly events use the most.',
   'boss_alerts_title': 'World event alerts',
   'boss_alerts_note':
       'A notification shortly before each start of the events you pinned, every day, also when the app is closed.',

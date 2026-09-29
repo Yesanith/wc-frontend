@@ -34,20 +34,51 @@ int _fnv1a(String text) {
 /// alert is always the same alert between runs. Android wants a positive int
 int bossAlertId(String key, int startMinute) => _fnv1a('$key|$startMinute') & 0x7fffffff;
 
+/// how many alerts the app schedules at most. Android allows an app 500
+/// alarms at once and throws past that, and the whole schedule has 866 start
+/// times a day, so somebody pinning every hourly event would hit the limit
+const maxBossAlerts = 400;
+
+/// the alerts to schedule, and the pinned events that did not fit
+class BossAlertPlan {
+  const BossAlertPlan(this.alerts, this.skipped);
+
+  final List<BossAlert> alerts;
+
+  /// event keys left without alerts because [maxBossAlerts] was reached
+  final List<String> skipped;
+}
+
 /// the alerts for the pinned events: one per start time, [lead] minutes
-/// before it. [body] writes the text of an alert in the app's language
-List<BossAlert> planBossAlerts({
-  required Set<String> pins,
+/// before it. [body] writes the text of an alert in the app's language.
+/// [pins] is taken in the order the events were pinned: when the limit is
+/// reached the events pinned last go without, and an event gets all of its
+/// alerts or none, never a part of them
+BossAlertPlan planBossAlerts({
+  required Iterable<String> pins,
   required int lead,
   required String Function(MetaMap map) body,
   Iterable<MetaMap>? maps,
+  int limit = maxBossAlerts,
 }) {
-  final out = <BossAlert>[];
-  final used = <int>{};
+  final byKey = <String, List<(MetaMap, MetaEvent)>>{};
   for (final map in maps ?? metaMaps) {
     for (final event in map.events) {
-      final key = eventKey(map, event);
-      if (!pins.contains(key)) continue;
+      byKey.putIfAbsent(eventKey(map, event), () => []).add((map, event));
+    }
+  }
+  final out = <BossAlert>[];
+  final skipped = <String>[];
+  final used = <int>{};
+  for (final key in pins.toSet()) {
+    final found = byKey[key];
+    if (found == null) continue;
+    final starts = found.fold<int>(0, (n, e) => n + e.$2.times.length);
+    if (out.length + starts > limit) {
+      skipped.add(key);
+      continue;
+    }
+    for (final (map, event) in found) {
       for (final start in event.times) {
         var id = bossAlertId(key, start);
         // a clash between two of a few hundred ids is unlikely, never ignored
@@ -68,7 +99,7 @@ List<BossAlert> planBossAlerts({
     final byTime = a.minuteOfDay.compareTo(b.minuteOfDay);
     return byTime != 0 ? byTime : a.title.compareTo(b.title);
   });
-  return out;
+  return BossAlertPlan(out, skipped);
 }
 
 /// the next moment, utc, this time of day comes round

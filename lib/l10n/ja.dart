@@ -1,5 +1,6 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'boss_alert_limit': '{n}件のピン留めイベントに通知がありません。端末が保持できる予約通知は最大{max}件です。1時間ごとのイベントが最も多く使います。',
   'boss_alerts_title': 'ワールドイベント通知',
   'boss_alerts_note': 'ピン留めしたイベントの開始直前に毎日通知します。アプリを閉じていても届きます。',
   'boss_alerts_lead': '開始の何分前に通知',

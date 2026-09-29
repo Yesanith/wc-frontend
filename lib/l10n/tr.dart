@@ -1,5 +1,6 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'boss_alert_limit': '{n} sabitli etkinliğin bildirimi yok: telefon en fazla {max} zamanlanmış bildirim tutabiliyor. Bazılarını kaldır, saatlik etkinlikler en çok yer kaplıyor.',
   'boss_alerts_title': 'Dünya etkinliği bildirimleri',
   'boss_alerts_note':
       'Sabitlediğin etkinliklerin her başlangıcından kısa süre önce, her gün, uygulama kapalıyken de bildirim.',

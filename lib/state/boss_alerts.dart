@@ -60,7 +60,7 @@ class BossAlertsRecheck extends Notifier<int> {
 final bossAlertsRecheckProvider = NotifierProvider<BossAlertsRecheck, int>(BossAlertsRecheck.new);
 
 /// the alerts for the pinned events, in the app's language
-List<BossAlert> alertsFor(Set<String> pins, int lead, S s) =>
+BossAlertPlan alertsFor(Set<String> pins, int lead, S s) =>
     planBossAlerts(pins: pins, lead: lead, body: (map) => s.t('boss_alert_body', {'n': lead, 'map': map.name}));
 
 const _sigKey = 'boss_alerts_sig';
@@ -76,7 +76,7 @@ Future<void> syncBossAlerts({
   required SharedPreferences prefs,
 }) async {
   if (!bossAlertsReady) return;
-  final alerts = settings.enabled ? alertsFor(pins, settings.lead, s) : const <BossAlert>[];
+  final alerts = settings.enabled ? alertsFor(pins, settings.lead, s).alerts : const <BossAlert>[];
   if (alerts.isEmpty) {
     if (prefs.getString(_sigKey) != null || await pendingBossAlerts() > 0) {
       await cancelBossAlerts();
@@ -128,13 +128,19 @@ final bossAlertStatusProvider = FutureProvider.autoDispose<BossAlertStatus>((ref
 });
 
 /// what to tell the player after they pinned an event
-enum PinFeedback { none, alertsOn, denied }
+enum PinFeedback { none, alertsOn, denied, noRoom }
 
 /// asks for the notification permission when a pin needs it, and decides
 /// whether there is anything to say. "alerts are on" is said once, the
 /// blocked notice once too, not at every pin
-Future<PinFeedback> pinFeedback({required BossAlertSettings settings, required SharedPreferences prefs}) async {
+Future<PinFeedback> pinFeedback({
+  required BossAlertSettings settings,
+  required SharedPreferences prefs,
+  required bool pinFitted,
+}) async {
   if (!settings.enabled || !bossAlertsReady) return PinFeedback.none;
+  // said every time: unlike the others it is about this very pin
+  if (!pinFitted) return PinFeedback.noRoom;
   if (await requestBossAlertPermission()) {
     if (prefs.getBool(_onToldKey) == true) return PinFeedback.none;
     await prefs.setBool(_onToldKey, true);

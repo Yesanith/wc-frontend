@@ -1,5 +1,6 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'boss_alert_limit': '{n} eventos fixados estão sem aviso: o celular guarda no máximo {max} avisos programados. Remova alguns, eventos de hora em hora usam mais.',
   'boss_alerts_title': 'Alertas de eventos do mundo',
   'boss_alerts_note':
       'Um aviso pouco antes de cada início dos eventos fixados, todos os dias, mesmo com o app fechado.',
