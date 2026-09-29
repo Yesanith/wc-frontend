@@ -1,8 +1,10 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
   'roster_of': 'Участники {guild}',
-  'roster_note': 'Участники гильдии в Tyria Companion. Офицеры могут создавать события и управлять ими, их назначает лидер.',
-  'roster_note_leader': 'Назначьте надёжных участников офицерами, чтобы они тоже могли создавать события. Лидерство берётся из игры.',
+  'roster_note':
+      'Участники гильдии в Tyria Companion. Офицеры могут создавать события и управлять ими, их назначает лидер.',
+  'roster_note_leader':
+      'Назначьте надёжных участников офицерами, чтобы они тоже могли создавать события. Лидерство берётся из игры.',
   'roster_make_officer': 'Сделать офицером',
   'roster_make_member': 'Сделать участником',
   'roster_made_officer': '{name} теперь офицер',

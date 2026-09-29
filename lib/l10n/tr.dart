@@ -1,8 +1,10 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
   'roster_of': '{guild} üyeleri',
-  'roster_note': 'Bu loncanın Tyria Companion\'daki üyeleri. Subaylar etkinlik oluşturup yönetebilir, onları lider atar.',
-  'roster_note_leader': 'Güvendiğin üyeleri subay yap, onlar da etkinlik oluşturup yönetebilsin. Liderlik oyundan gelir.',
+  'roster_note':
+      'Bu loncanın Tyria Companion\'daki üyeleri. Subaylar etkinlik oluşturup yönetebilir, onları lider atar.',
+  'roster_note_leader':
+      'Güvendiğin üyeleri subay yap, onlar da etkinlik oluşturup yönetebilsin. Liderlik oyundan gelir.',
   'roster_make_officer': 'Subay yap',
   'roster_make_member': 'Üye yap',
   'roster_made_officer': '{name} artık subay',

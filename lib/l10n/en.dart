@@ -1,8 +1,10 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
   'roster_of': '{guild} members',
-  'roster_note': 'Members of this guild on Tyria Companion. Officers can create and manage events, the leader appoints them.',
-  'roster_note_leader': 'Make trusted members officers so they can create and manage events too. Leadership comes from the game.',
+  'roster_note':
+      'Members of this guild on Tyria Companion. Officers can create and manage events, the leader appoints them.',
+  'roster_note_leader':
+      'Make trusted members officers so they can create and manage events too. Leadership comes from the game.',
   'roster_make_officer': 'Make officer',
   'roster_make_member': 'Make member',
   'roster_made_officer': '{name} is now an officer',

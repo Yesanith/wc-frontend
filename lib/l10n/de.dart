@@ -1,8 +1,10 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
   'roster_of': '{guild}-Mitglieder',
-  'roster_note': 'Mitglieder dieser Gilde auf Tyria Companion. Offiziere können Events erstellen und verwalten, der Anführer ernennt sie.',
-  'roster_note_leader': 'Ernenne vertraute Mitglieder zu Offizieren, damit sie auch Events erstellen und verwalten können. Die Anführerschaft kommt aus dem Spiel.',
+  'roster_note':
+      'Mitglieder dieser Gilde auf Tyria Companion. Offiziere können Events erstellen und verwalten, der Anführer ernennt sie.',
+  'roster_note_leader':
+      'Ernenne vertraute Mitglieder zu Offizieren, damit sie auch Events erstellen und verwalten können. Die Anführerschaft kommt aus dem Spiel.',
   'roster_make_officer': 'Zum Offizier',
   'roster_make_member': 'Zum Mitglied',
   'roster_made_officer': '{name} ist jetzt Offizier',
