@@ -1,5 +1,11 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_discord_only': 'Bu etkinliğe Discord üzerinden, oradaki mesajla katılınır. Buradan yalnızca katılmayacağını bildirebilirsin.',
+  'event_flex': 'Şunu da oynayabilirim',
+  'event_err_discord_only': 'Bu etkinliğe Discord üzerinden katıl.',
+  'event_err_role_restricted': 'Bu etkinlik sadece belirli Discord rollerine açık.',
+  'event_err_not_signed_up': 'Önce katıl.',
+  'event_err_bad_flex': 'Bu, flex olarak oynayabileceğin bir rol değil.',
   'event_pick_account': 'Hangi hesabınla katılıyorsun?',
   'event_signed_up_as': '{name} olarak katıldın',
   'event_change_account': 'Hesabı değiştir',

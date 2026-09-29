@@ -58,6 +58,10 @@ String eventFailureText(S s, Object e) {
     'event_cancelled',
     'event_over',
     'not_allowed',
+    'discord_only',
+    'role_restricted',
+    'not_signed_up',
+    'bad_flex',
   };
   return known.contains(code) ? s.t('event_err_$code') : '${s.t('community_failed')} ($code)';
 }
@@ -433,6 +437,25 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     }
   }
 
+  /// adds or drops one role the player could also play
+  Future<void> _setFlex(EventParticipant mine, String role, bool on) async {
+    final s = ref.read(stringsProvider);
+    final next = [
+      for (final r in mine.flex)
+        if (r != role) r,
+      if (on) role,
+    ];
+    setState(() => _busy = true);
+    try {
+      await setFlexRoles(widget.eventId, next);
+    } catch (e) {
+      if (mounted) showToast(context, eventFailureText(s, e));
+    } finally {
+      ref.invalidate(eventDetailProvider(widget.eventId));
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<String?> _pickProfession(String role) {
     final s = ref.read(stringsProvider);
     return showModalBottomSheet<String>(
@@ -607,12 +630,27 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   _RsvpBar(
                     mine: mine,
                     busy: _busy,
+                    discordOnly: e.discordOnly,
                     onAnswer: (status) => _answer(d, status),
-                    // only with several accounts in the guild is there anything to change
-                    onChangeAccount:
-                        mine != null && mine.status != 'declined' && accountsIn(myAccounts, e.guildId).length >= 2
-                            ? () => _changeAccount(d, mine)
-                            : null,
+                    // only with several accounts in the guild is there anything to change,
+                    // and a Discord only event is signed up for in Discord
+                    onChangeAccount: !e.discordOnly &&
+                            mine != null &&
+                            mine.status != 'declined' &&
+                            accountsIn(myAccounts, e.guildId).length >= 2
+                        ? () => _changeAccount(d, mine)
+                        : null,
+                  ),
+                if (open &&
+                    mine != null &&
+                    mine.role != null &&
+                    (mine.status == 'going' || mine.status == 'waitlist') &&
+                    d.roles.length >= 2)
+                  _FlexChips(
+                    roles: d.roles.keys,
+                    mine: mine,
+                    busy: _busy,
+                    onToggle: (role, on) => _setFlex(mine, role, on),
                   ),
                 if (d.roles.isNotEmpty) ...[
                   Eyebrow(s.t('event_roles')),
@@ -706,11 +744,20 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
 }
 
 class _RsvpBar extends ConsumerWidget {
-  const _RsvpBar({required this.mine, required this.busy, required this.onAnswer, this.onChangeAccount});
+  const _RsvpBar({
+    required this.mine,
+    required this.busy,
+    required this.onAnswer,
+    this.onChangeAccount,
+    this.discordOnly = false,
+  });
 
   final EventParticipant? mine;
   final bool busy;
   final ValueChanged<String> onAnswer;
+
+  /// signed up for in Discord, only not going can be answered here
+  final bool discordOnly;
 
   /// null unless the player has several accounts to choose from
   final VoidCallback? onChangeAccount;
@@ -722,18 +769,19 @@ class _RsvpBar extends ConsumerWidget {
     Widget button(String status, IconData icon) {
       // waiting counts as having said going
       final selected = current == status || (status == 'going' && current == 'waitlist');
+      final blocked = busy || (discordOnly && status != 'declined');
       return Expanded(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: selected
               ? FilledButton.icon(
                   style: FilledButton.styleFrom(backgroundColor: statusColor(current)),
-                  onPressed: busy ? null : () => onAnswer(status),
+                  onPressed: blocked ? null : () => onAnswer(status),
                   icon: Icon(icon, size: 18),
                   label: Text(s.t(current == 'waitlist' ? 'rsvp_waitlist' : 'rsvp_$status')),
                 )
               : OutlinedButton.icon(
-                  onPressed: busy ? null : () => onAnswer(status),
+                  onPressed: blocked ? null : () => onAnswer(status),
                   icon: Icon(icon, size: 18),
                   label: Text(s.t('rsvp_$status')),
                 ),
@@ -744,6 +792,23 @@ class _RsvpBar extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        if (discordOnly)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.lock_outline, size: 16, color: AppColors.gold),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    s.t('event_discord_only'),
+                    style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.textSoft),
+                  ),
+                ),
+              ],
+            ),
+          ),
         Row(
           children: [
             button('going', Icons.check),
@@ -779,6 +844,48 @@ class _RsvpBar extends ConsumerWidget {
             ],
           ),
       ],
+    );
+  }
+}
+
+/// the roles the player could also play, for whoever puts the group together
+class _FlexChips extends ConsumerWidget {
+  const _FlexChips({required this.roles, required this.mine, required this.busy, required this.onToggle});
+
+  final Iterable<String> roles;
+  final EventParticipant mine;
+  final bool busy;
+  final void Function(String role, bool on) onToggle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final others = [
+      for (final r in roles)
+        if (r != mine.role) r,
+    ];
+    if (others.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.t('event_flex'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final r in others)
+                FilterChip(
+                  label: Text(s.t('role_$r')),
+                  selected: mine.flex.contains(r),
+                  onSelected: busy ? null : (on) => onToggle(r, on),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -844,6 +951,14 @@ class _Group extends ConsumerWidget {
                       if (showRole && people[i].role != null)
                         Text(s.t('role_${people[i].role}'),
                             style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      if (showRole && people[i].flex.isNotEmpty)
+                        Flexible(
+                          child: Text(
+                            ' +${people[i].flex.map((r) => s.t('role_$r')).join('/')}',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 11, color: AppColors.gold),
+                          ),
+                        ),
                     ],
                   ),
                 ),

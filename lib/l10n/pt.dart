@@ -1,5 +1,11 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'event_discord_only': 'Neste evento a inscrição é feita no Discord, pela mensagem de lá. Aqui você só pode dizer que não vai.',
+  'event_flex': 'Também poderia jogar',
+  'event_err_discord_only': 'Inscreva-se neste evento pelo Discord.',
+  'event_err_role_restricted': 'Este evento é aberto apenas a certos cargos do Discord.',
+  'event_err_not_signed_up': 'Inscreva-se primeiro.',
+  'event_err_bad_flex': 'Essa não é uma função que você pode assumir como flex.',
   'event_pick_account': 'Com qual conta você se inscreve?',
   'event_signed_up_as': 'Inscrito como {name}',
   'event_change_account': 'Trocar conta',

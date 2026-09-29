@@ -1,5 +1,11 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'event_discord_only': 'A este evento te apuntas en Discord, con su mensaje allí. Aquí solo puedes decir que no vas.',
+  'event_flex': 'También podría jugar',
+  'event_err_discord_only': 'Apúntate a este evento en Discord.',
+  'event_err_role_restricted': 'Este evento solo está abierto a ciertos roles de Discord.',
+  'event_err_not_signed_up': 'Apúntate primero.',
+  'event_err_bad_flex': 'Ese no es un rol al que puedas cambiar.',
   'event_pick_account': '¿Con qué cuenta te apuntas?',
   'event_signed_up_as': 'Inscrito como {name}',
   'event_change_account': 'Cambiar cuenta',

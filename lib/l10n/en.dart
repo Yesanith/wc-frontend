@@ -1,5 +1,11 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'event_discord_only': 'This event is signed up for in Discord, with its message there. Here you can only say you\'re not going.',
+  'event_flex': 'Could also play',
+  'event_err_discord_only': 'Sign up for this event in Discord.',
+  'event_err_role_restricted': 'This event is only open to certain Discord roles.',
+  'event_err_not_signed_up': 'Sign up first.',
+  'event_err_bad_flex': 'That is not a role you can flex to.',
   'event_pick_account': 'Which account do you sign up with?',
   'event_signed_up_as': 'Signed up as {name}',
   'event_change_account': 'Change account',

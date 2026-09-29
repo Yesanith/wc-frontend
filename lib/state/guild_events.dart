@@ -46,6 +46,7 @@ class GuildEvent {
     required this.version,
     required this.seriesId,
     this.organizer,
+    this.discordOnly = false,
   });
 
   final String id;
@@ -65,6 +66,11 @@ class GuildEvent {
 
   /// the GW2 account the event was created with, unknown for older events
   final String? organizer;
+
+  /// open only to certain Discord roles, or with roles that can only join the
+  /// reserve. Discord roles are known only to Discord, so such an event is
+  /// signed up for there, the app can only answer not going
+  final bool discordOnly;
 
   DateTime get endAt => startAt.add(Duration(minutes: durationMinutes));
 
@@ -86,6 +92,7 @@ class GuildEvent {
       version: (r['version'] as num?)?.toInt() ?? 1,
       seriesId: r['series_id'] as String?,
       organizer: r['organizer_name'] as String?,
+      discordOnly: r['discord_only'] == true,
     );
   }
 }
@@ -100,6 +107,7 @@ class EventParticipant {
     required this.joinedAt,
     this.profession,
     this.accountId,
+    this.flex = const <String>[],
   });
 
   final String userId;
@@ -119,6 +127,9 @@ class EventParticipant {
   /// the id of the account signed up with. the server hands it out only in
   /// the player's own row, it is null in everybody else's
   final String? accountId;
+
+  /// roles they could also play besides their own, for whoever puts the group together
+  final List<String> flex;
 }
 
 class EventDetail {
@@ -147,7 +158,7 @@ class EventSummary {
 }
 
 const _eventColumns = 'id, guild_id, creator_id, organizer_name, series_id, title, description, activity, start_at, '
-    'duration_minutes, max_participants, status, version, guilds(name, tag)';
+    'duration_minutes, max_participants, status, version, discord_only, guilds(name, tag)';
 
 /// the player's guilds' events from a few hours ago on, soonest first
 final upcomingEventsProvider = FutureProvider.autoDispose<List<EventSummary>>((ref) async {
@@ -213,6 +224,7 @@ final eventDetailProvider = FutureProvider.autoDispose.family<EventDetail?, Stri
         role: r['role'] as String?,
         profession: r['profession'] as String?,
         accountId: r['account_id'] as String?,
+        flex: stringList(r['flex_roles']),
         joinedAt: DateTime.tryParse('${r['joined_at']}') ?? DateTime.now(),
       ),
   ]);
@@ -226,6 +238,9 @@ final creatableGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) 
       if (g.role == 'leader' || g.role == 'officer') g,
   ];
 });
+
+/// a list of texts from json, empty when it is not one
+List<String> stringList(Object? value) => value is List ? [for (final v in value) '$v'] : const <String>[];
 
 /// why an event action failed, the hint the backend sent
 class EventFailure implements Exception {
@@ -258,6 +273,12 @@ Future<String> rsvp(String eventId, String status, {String? role, String? profes
         'p_account': accountId,
       });
       return '$res';
+    });
+
+/// names the roles the player could also play, besides the one they signed up in.
+/// an empty list clears them
+Future<void> setFlexRoles(String eventId, List<String> roles) => _call(() async {
+      await Supabase.instance.client.rpc('set_flex_roles', params: {'p_event': eventId, 'p_roles': roles});
     });
 
 List<Map<String, dynamic>> _rolesJson(Map<String, int> roles) => [
