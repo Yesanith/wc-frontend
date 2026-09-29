@@ -309,7 +309,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       }
     });
     final hasKey = ref.watch(hasKeyProvider);
-    final accountName = hasKey ? ref.watch(accountProvider).valueOrNull?['name'] as String? : s.t('guest');
+    final String? accountName;
+    if (hasKey) {
+      accountName = ref.watch(accountProvider).valueOrNull?['name'] as String?;
+    } else {
+      accountName = s.t('guest');
+    }
     _opened.add(section);
 
     // canPop false makes the framework claim the back gesture, otherwise
