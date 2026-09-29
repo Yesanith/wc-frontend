@@ -640,7 +640,6 @@ class _NewsBanner extends ConsumerWidget {
   }
 }
 
-
 /// the home of a guest: what the app can do without a key, and how to get the rest
 class _GuestCard extends ConsumerWidget {
   const _GuestCard();

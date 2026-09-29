@@ -3,12 +3,15 @@ const esStrings = <String, String>{
   'err_no_key': 'Esto necesita una clave API de GW2.',
   'add_api_key': 'Añadir una clave API',
   'guest_continue': 'Continuar sin clave API',
-  'guest_note': 'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',
+  'guest_note':
+      'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',
   'guest': 'Invitado',
   'guest_home_title': 'Estás mirando como invitado',
-  'guest_home_body': 'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin clave. Añade una clave API para ver tus personajes, cartera, Cámara del Mago y progreso.',
+  'guest_home_body':
+      'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin clave. Añade una clave API para ver tus personajes, cartera, Cámara del Mago y progreso.',
   'needs_key_title': 'Esto necesita una clave API',
-  'needs_key_body': 'Esta sección muestra tu propia cuenta: personajes, progreso, colecciones y clanes. Añade una clave API de solo lectura de ArenaNet para verla. Todo lo demás funciona sin ella.',
+  'needs_key_body':
+      'Esta sección muestra tu propia cuenta: personajes, progreso, colecciones y clanes. Añade una clave API de solo lectura de ArenaNet para verla. Todo lo demás funciona sin ella.',
   'boss_alert_limit':
       '{n} eventos fijados no tienen aviso: el teléfono admite como máximo {max} avisos programados. Quita algunos, los eventos de cada hora gastan más.',
   'boss_alerts_title': 'Avisos de eventos del mundo',
