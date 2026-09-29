@@ -1,5 +1,9 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_pick_account': 'どのアカウントで参加しますか？',
+  'event_signed_up_as': '{name} で参加中',
+  'event_change_account': 'アカウント変更',
+  'event_account_changed': 'アカウントを変更しました',
   'event_guild_hint': 'ギルドを選んでください',
   'event_account': '主催アカウント',
   'event_account_hint': 'アカウントを選んでください',

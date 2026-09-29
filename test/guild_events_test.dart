@@ -118,4 +118,51 @@ void main() {
       expect(organizersFor(const [], 'g1'), isEmpty);
     });
   });
+
+  group('signing up with an account', () {
+    const accounts = [
+      GuildAccount('g1', 'a-mia', 'Mia.3', 'member'),
+      GuildAccount('g1', 'a-zed', 'Zed.1', 'leader'),
+      GuildAccount('g1', 'a-abe', 'Abe.2', 'officer'),
+      GuildAccount('g2', 'a-abe', 'Abe.2', 'member'),
+    ];
+
+    test('every account of the player in the guild is offered, the highest role first', () {
+      expect(accountsIn(accounts, 'g1').map((a) => a.accountName), ['Zed.1', 'Abe.2', 'Mia.3']);
+      expect(accountsIn(accounts, 'g2').map((a) => a.accountName), ['Abe.2']);
+      expect(accountsIn(accounts, 'g3'), isEmpty);
+    });
+
+    test('an account chosen before is kept while it is still one of the player\'s in the guild', () {
+      expect(accountToKeep('a-mia', accountsIn(accounts, 'g1')), 'a-mia');
+      // chosen in another guild, or unlinked since: a choice is due again
+      expect(accountToKeep('a-mia', accountsIn(accounts, 'g2')), isNull);
+      expect(accountToKeep('gone', accountsIn(accounts, 'g1')), isNull);
+      expect(accountToKeep(null, accountsIn(accounts, 'g1')), isNull);
+    });
+
+    test('the roster gives a player their own account id and nobody else\'s', () {
+      // what the server sends: account_id only in the caller's row
+      final own = EventParticipant(
+        userId: 'me',
+        name: 'Abe.2',
+        avatarUrl: null,
+        status: 'going',
+        role: 'dps',
+        joinedAt: DateTime.utc(2026, 10, 1),
+        accountId: 'a-abe',
+      );
+      final other = EventParticipant(
+        userId: 'other',
+        name: 'Zed.1',
+        avatarUrl: null,
+        status: 'going',
+        role: 'dps',
+        joinedAt: DateTime.utc(2026, 10, 1),
+      );
+      expect(own.accountId, 'a-abe');
+      expect(other.accountId, isNull);
+    });
+  });
 }
+

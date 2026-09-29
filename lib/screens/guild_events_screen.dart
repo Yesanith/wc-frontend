@@ -310,9 +310,22 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
       profession = await _pickProfession(role);
       if (profession == null) return;
     }
+    // then, with several accounts in the guild, which one signs up. the choice
+    // made for this event before is kept, the server picks when there is one
+    String? account;
+    if (status != 'declined') {
+      final accounts = await _accountsInGuild(d.event.guildId);
+      final me = ref.read(sessionProvider).valueOrNull?.user.id;
+      final mine = d.participants.where((p) => p.userId == me).firstOrNull;
+      account = accountToKeep(mine?.accountId, accounts);
+      if (account == null && accounts.length >= 2) {
+        account = await _pickAccount(accounts);
+        if (account == null) return;
+      }
+    }
     setState(() => _busy = true);
     try {
-      final result = await rsvp(widget.eventId, status, role: role, profession: profession);
+      final result = await rsvp(widget.eventId, status, role: role, profession: profession, accountId: account);
       if (mounted && result == 'waitlist') showToast(context, s.t('rsvp_waitlisted'));
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
@@ -353,6 +366,71 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
         ),
       ),
     );
+  }
+
+  /// the player's accounts in the event's guild, best first
+  Future<List<GuildAccount>> _accountsInGuild(String guildId) async {
+    try {
+      return accountsIn(await ref.read(myGuildAccountsProvider.future), guildId);
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  Future<String?> _pickAccount(List<GuildAccount> accounts, {String? current}) {
+    final s = ref.read(stringsProvider);
+    return showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      builder: (ctx) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+              child: Text(s.t('event_pick_account'), style: display(18)),
+            ),
+            for (final a in accounts)
+              ListTile(
+                leading: Icon(
+                  a.accountId == current ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                  color: a.accountId == current ? AppColors.gold : AppColors.muted,
+                ),
+                title: Text(a.accountName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                subtitle: Text(s.t('guild_role_${a.role}'), style: const TextStyle(color: AppColors.muted)),
+                onTap: () => Navigator.of(ctx).pop(a.accountId),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// signs up again as the same answer, role and profession, with another account
+  Future<void> _changeAccount(EventDetail d, EventParticipant mine) async {
+    final s = ref.read(stringsProvider);
+    final accounts = await _accountsInGuild(d.event.guildId);
+    if (accounts.length < 2 || !mounted) return;
+    final picked = await _pickAccount(accounts, current: accountToKeep(mine.accountId, accounts));
+    if (picked == null) return;
+    setState(() => _busy = true);
+    try {
+      // waiting means going that did not fit, going again keeps the place in line
+      await rsvp(
+        widget.eventId,
+        mine.status == 'maybe' ? 'maybe' : 'going',
+        role: mine.role,
+        profession: mine.profession,
+        accountId: picked,
+      );
+      if (mounted) showToast(context, s.t('event_account_changed'));
+    } catch (e) {
+      if (mounted) showToast(context, eventFailureText(s, e));
+    } finally {
+      ref.invalidate(eventDetailProvider(widget.eventId));
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   Future<String?> _pickProfession(String role) {
@@ -468,6 +546,8 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     final detail = ref.watch(eventDetailProvider(widget.eventId));
     final me = ref.watch(sessionProvider).valueOrNull?.user.id;
     final myGuilds = ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[];
+    // watched here, in build, so the page has the accounts by the time somebody signs up
+    final myAccounts = ref.watch(myGuildAccountsProvider).valueOrNull ?? const <GuildAccount>[];
 
     return Scaffold(
       appBar: AppBar(title: Text(s.t('guild_events'))),
@@ -523,7 +603,18 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   Text(e.description, style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
                 ],
                 const SizedBox(height: 18),
-                if (open) _RsvpBar(mine: mine, busy: _busy, onAnswer: (status) => _answer(d, status)),
+                if (open)
+                  _RsvpBar(
+                    mine: mine,
+                    busy: _busy,
+                    onAnswer: (status) => _answer(d, status),
+                    // only with several accounts in the guild is there anything to change
+                    onChangeAccount: mine != null &&
+                            mine.status != 'declined' &&
+                            accountsIn(myAccounts, e.guildId).length >= 2
+                        ? () => _changeAccount(d, mine)
+                        : null,
+                  ),
                 if (d.roles.isNotEmpty) ...[
                   Eyebrow(s.t('event_roles')),
                   Panel(
@@ -616,11 +707,14 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
 }
 
 class _RsvpBar extends ConsumerWidget {
-  const _RsvpBar({required this.mine, required this.busy, required this.onAnswer});
+  const _RsvpBar({required this.mine, required this.busy, required this.onAnswer, this.onChangeAccount});
 
   final EventParticipant? mine;
   final bool busy;
   final ValueChanged<String> onAnswer;
+
+  /// null unless the player has several accounts to choose from
+  final VoidCallback? onChangeAccount;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -666,6 +760,24 @@ class _RsvpBar extends ConsumerWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12, color: AppColors.muted),
             ),
+          ),
+        if (onChangeAccount != null && mine != null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Text(
+                  s.t('event_signed_up_as', {'name': mine!.name}),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                ),
+              ),
+              TextButton(
+                onPressed: busy ? null : onChangeAccount,
+                style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                child: Text(s.t('event_change_account'), style: const TextStyle(fontSize: 12)),
+              ),
+            ],
           ),
       ],
     );

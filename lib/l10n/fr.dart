@@ -1,5 +1,9 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'event_pick_account': 'Avec quel compte t\'inscris-tu ?',
+  'event_signed_up_as': 'Inscrit en tant que {name}',
+  'event_change_account': 'Changer de compte',
+  'event_account_changed': 'Compte changé',
   'event_guild_hint': 'Choisis une guilde',
   'event_account': 'COMPTE ORGANISATEUR',
   'event_account_hint': 'Choisis un compte',

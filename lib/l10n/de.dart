@@ -1,5 +1,9 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'event_pick_account': 'Mit welchem Konto meldest du dich an?',
+  'event_signed_up_as': 'Angemeldet als {name}',
+  'event_change_account': 'Konto wechseln',
+  'event_account_changed': 'Konto gewechselt',
   'event_guild_hint': 'Bitte wähle eine Gilde',
   'event_account': 'ORGANISATOR-KONTO',
   'event_account_hint': 'Wähle ein Konto',

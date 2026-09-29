@@ -1,5 +1,9 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_pick_account': 'Каким аккаунтом вы записываетесь?',
+  'event_signed_up_as': 'Записаны как {name}',
+  'event_change_account': 'Сменить аккаунт',
+  'event_account_changed': 'Аккаунт изменён',
   'event_guild_hint': 'Выберите гильдию',
   'event_account': 'АККАУНТ ОРГАНИЗАТОРА',
   'event_account_hint': 'Выберите аккаунт',
