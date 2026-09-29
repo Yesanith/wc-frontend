@@ -517,7 +517,9 @@ class Gw2Api {
 
   /// dungeon paths cleared today
   Future<List<String>> accountDungeons() async =>
-      (await cachedGet('/account/dungeons', ttl: const Duration(minutes: 5), notBefore: lastDailyReset()) as List).map((e) => '$e').toList();
+      (await cachedGet('/account/dungeons', ttl: const Duration(minutes: 5), notBefore: lastDailyReset()) as List)
+          .map((e) => '$e')
+          .toList();
 
   Future<List<Json>> dungeons() async {
     final ids = await idList('/dungeons');
@@ -745,7 +747,6 @@ Duration retryDelay(String? retryAfter, int attempt) {
   final seconds = asked ?? (1 << attempt);
   return Duration(seconds: seconds.clamp(1, 10));
 }
-
 
 /// how old a cached copy may be: a week, or less when it has to be newer
 /// than [notBefore], the last reset of data that resets

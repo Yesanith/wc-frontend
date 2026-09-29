@@ -40,4 +40,3 @@ int yearsSince(DateTime created, DateTime now) {
   if (u.month < c.month || (u.month == c.month && u.day < c.day)) years--;
   return years < 0 ? 0 : years;
 }
-

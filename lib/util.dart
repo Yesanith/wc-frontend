@@ -134,7 +134,6 @@ class TaskPool {
   }
 }
 
-
 /// the last daily reset, midnight utc
 DateTime lastDailyReset([DateTime? now]) {
   final n = (now ?? DateTime.now()).toUtc();
