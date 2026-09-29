@@ -5,8 +5,10 @@ import '../l10n/strings.dart';
 import '../state/community.dart';
 import '../state/guild_events.dart';
 import '../state/navigation.dart';
+import '../state/professions.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
 import '../widgets/meters.dart';
 
@@ -43,6 +45,7 @@ String eventFailureText(S s, Object e) {
     'start_in_past',
     'version_conflict',
     'role_required',
+    'profession_required',
     'event_cancelled',
     'event_over',
     'not_allowed',
@@ -239,13 +242,17 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
   Future<void> _answer(EventDetail d, String status) async {
     final s = ref.read(stringsProvider);
     String? role;
+    String? profession;
     if (status == 'going' && d.roles.isNotEmpty) {
       role = await _pickRole(d);
       if (role == null) return;
+      // the others see which profession fills the role
+      profession = await _pickProfession(role);
+      if (profession == null) return;
     }
     setState(() => _busy = true);
     try {
-      final result = await rsvp(widget.eventId, status, role: role);
+      final result = await rsvp(widget.eventId, status, role: role, profession: profession);
       if (mounted && result == 'waitlist') showToast(context, s.t('rsvp_waitlisted'));
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
@@ -284,6 +291,38 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<String?> _pickProfession(String role) {
+    final s = ref.read(stringsProvider);
+    return showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      isScrollControlled: true,
+      builder: (ctx) => Consumer(
+        builder: (ctx, ref, _) {
+          final professions = ref.watch(professionsProvider).valueOrNull ?? const <String, ProfessionInfo>{};
+          return SafeArea(
+            child: ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                  child: Text(s.t('event_pick_profession', {'role': s.t('role_$role')}), style: display(18)),
+                ),
+                for (final p in eventProfessions)
+                  ListTile(
+                    leading: ProfessionIcon(url: professions[p]?.icon, size: 28),
+                    title: Text(professions[p]?.name ?? p),
+                    onTap: () => Navigator.of(ctx).pop(p),
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -503,7 +542,7 @@ class _RsvpBar extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(top: 6),
             child: Text(
-              '${s.t('event_your_role')}: ${s.t('role_${mine!.role}')}',
+              '${s.t('event_your_role')}: ${s.t('role_${mine!.role}')}${mine!.profession == null ? '' : ' · ${mine!.profession}'}',
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 12, color: AppColors.muted),
             ),
@@ -532,6 +571,7 @@ class _Group extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     if (people.isEmpty) return const SizedBox.shrink();
+    final professions = ref.watch(professionsProvider).valueOrNull ?? const <String, ProfessionInfo>{};
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -563,6 +603,14 @@ class _Group extends ConsumerWidget {
                           style: TextStyle(fontWeight: people[i].userId == me ? FontWeight.w800 : FontWeight.w500),
                         ),
                       ),
+
+                      if (people[i].profession != null) ...[
+                        ProfessionIcon(url: professions[people[i].profession]?.icon, size: 18),
+                        const SizedBox(width: 4),
+                        Text(professions[people[i].profession]?.name ?? people[i].profession!,
+                            style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                        const SizedBox(width: 8),
+                      ],
                       if (showRole && people[i].role != null)
                         Text(s.t('role_${people[i].role}'),
                             style: const TextStyle(fontSize: 12, color: AppColors.muted)),

@@ -1,5 +1,7 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_pick_profession': '以 {role} 身份使用哪个职业？',
+  'event_err_profession_required': '请选择你参加时使用的职业。',
   'event_edit': '编辑活动',
   'event_save': '保存更改',
   'event_edit_one_week': '这只会修改每周活动的本周这一次。',

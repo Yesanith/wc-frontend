@@ -58,4 +58,11 @@ void main() {
       expect(preset.keys.every(eventRoleKeys.contains), isTrue);
     }
   });
+
+  test('the professions offered are the nine the backend accepts', () {
+    expect(eventProfessions.length, 9);
+    expect(eventProfessions.toSet().length, 9);
+    expect(eventProfessions, containsAll(['Guardian', 'Necromancer', 'Revenant']));
+  });
 }
+

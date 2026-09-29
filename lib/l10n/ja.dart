@@ -1,5 +1,7 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_pick_profession': '{role} で参加する職業は？',
+  'event_err_profession_required': '参加する職業を選んでください。',
   'event_edit': 'イベントを編集',
   'event_save': '変更を保存',
   'event_edit_one_week': '毎週イベントのこの週だけが変更されます。',

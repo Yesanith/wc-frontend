@@ -9,6 +9,19 @@ const eventActivities = ['raid', 'strike', 'fractal', 'meta', 'wvw', 'pvp', 'dun
 /// role keys the backend accepts, in the order they are listed
 const eventRoleKeys = ['tank', 'healer', 'boon_dps', 'dps', 'support'];
 
+/// the professions a player can sign up as, the api's ids
+const eventProfessions = [
+  'Guardian',
+  'Warrior',
+  'Engineer',
+  'Ranger',
+  'Thief',
+  'Elementalist',
+  'Mesmer',
+  'Necromancer',
+  'Revenant',
+];
+
 /// ready made role sets for the usual group sizes
 const eventRolePresets = <String, Map<String, int>>{
   'squad10': {'healer': 2, 'boon_dps': 2, 'dps': 6},
@@ -79,9 +92,12 @@ class EventParticipant {
     required this.status,
     required this.role,
     required this.joinedAt,
+    this.profession,
   });
 
   final String userId;
+
+  /// the gw2 account they are in the guild with
   final String name;
   final String? avatarUrl;
 
@@ -89,6 +105,9 @@ class EventParticipant {
   final String status;
   final String? role;
   final DateTime joinedAt;
+
+  /// the profession they come as, asked on events with roles
+  final String? profession;
 }
 
 class EventDetail {
@@ -161,16 +180,9 @@ final eventDetailProvider = FutureProvider.autoDispose.family<EventDetail?, Stri
   final row = await client.from('events').select(_eventColumns).eq('id', id).maybeSingle();
   if (row == null) return null;
   final roleRows = await client.from('event_roles').select('role, slots').eq('event_id', id);
-  final signups = await client
-      .from('event_participants')
-      .select('user_id, status, role, joined_at')
-      .eq('event_id', id)
-      .order('joined_at');
-  final ids = [for (final s in signups) '${s['user_id']}'];
-  final profiles = ids.isEmpty
-      ? const <Map<String, dynamic>>[]
-      : await client.from('profiles').select('id, display_name, avatar_url').inFilter('id', ids);
-  final byId = {for (final p in profiles) '${p['id']}': p};
+  // names come from the roster: the gw2 accounts of other members are
+  // readable only there, and only for the players of this event
+  final roster = await client.rpc('event_roster', params: {'p_event': id}) as List<dynamic>;
   // the usual roles in their usual order, anything else after them
   final slots = {for (final r in roleRows) '${r['role']}': (r['slots'] as num).toInt()};
   final roles = {
@@ -181,14 +193,15 @@ final eventDetailProvider = FutureProvider.autoDispose.family<EventDetail?, Stri
       key: slots[key]!,
   };
   return EventDetail(GuildEvent.fromRow(row), roles, [
-    for (final s in signups)
+    for (final r in roster.whereType<Map<String, dynamic>>())
       EventParticipant(
-        userId: '${s['user_id']}',
-        name: '${byId['${s['user_id']}']?['display_name'] ?? '…'}',
-        avatarUrl: byId['${s['user_id']}']?['avatar_url'] as String?,
-        status: '${s['status']}',
-        role: s['role'] as String?,
-        joinedAt: DateTime.tryParse('${s['joined_at']}') ?? DateTime.now(),
+        userId: '${r['user_id']}',
+        name: '${r['name'] ?? '…'}',
+        avatarUrl: r['avatar_url'] as String?,
+        status: '${r['status']}',
+        role: r['role'] as String?,
+        profession: r['profession'] as String?,
+        joinedAt: DateTime.tryParse('${r['joined_at']}') ?? DateTime.now(),
       ),
   ]);
 });
@@ -223,11 +236,12 @@ Future<T> _call<T>(Future<T> Function() action) async {
 
 /// answers an event, returns the status the player ended up with: a going on
 /// a full event comes back as waitlist
-Future<String> rsvp(String eventId, String status, {String? role}) => _call(() async {
+Future<String> rsvp(String eventId, String status, {String? role, String? profession}) => _call(() async {
       final res = await Supabase.instance.client.rpc('rsvp', params: {
         'p_event': eventId,
         'p_status': status,
         'p_role': role,
+        'p_profession': profession,
       });
       return '$res';
     });
