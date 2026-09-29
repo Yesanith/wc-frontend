@@ -1,5 +1,11 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'event_delete': '删除活动',
+  'event_delete_body': '适用于误建的活动：它会连同所有报名和 Discord 消息一起对所有人消失。若想保留为已取消状态，请改为取消活动。',
+  'event_delete_weekly_body': '这是每周活动中的一次。可以只删除本周，或删除整个系列及之后的所有周次。',
+  'event_delete_week': '仅本周',
+  'event_delete_series': '整个系列',
+  'event_deleted': '活动已删除',
   'event_pick_profession': '以 {role} 身份使用哪个职业？',
   'event_err_profession_required': '请选择你参加时使用的职业。',
   'event_edit': '编辑活动',

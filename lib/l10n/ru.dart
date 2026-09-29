@@ -1,5 +1,11 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'event_delete': 'Удалить событие',
+  'event_delete_body': 'Для события, созданного по ошибке: оно исчезнет для всех вместе с записями и сообщением в Discord. Чтобы оно оставалось видимым как отменённое, отмените его.',
+  'event_delete_weekly_body': 'Это неделя еженедельного события. Удалите только эту неделю или всю серию со всеми будущими неделями.',
+  'event_delete_week': 'Только эту неделю',
+  'event_delete_series': 'Всю серию',
+  'event_deleted': 'Событие удалено',
   'event_pick_profession': 'Какая профессия для роли {role}?',
   'event_err_profession_required': 'Выберите профессию, которой придёте.',
   'event_edit': 'Изменить событие',

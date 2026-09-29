@@ -1,5 +1,11 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'event_delete': 'Etkinliği sil',
+  'event_delete_body': 'Yanlışlıkla açılmış etkinlikler için: herkes için tüm katılımlarla ve Discord mesajıyla birlikte kaybolur. İptal edildi olarak görünmeye devam etmesini istiyorsan iptal et.',
+  'event_delete_weekly_body': 'Bu, haftalık bir etkinliğin bir haftası. Sadece bu haftayı ya da gelecek haftalarıyla birlikte tüm seriyi silebilirsin.',
+  'event_delete_week': 'Sadece bu hafta',
+  'event_delete_series': 'Tüm seri',
+  'event_deleted': 'Etkinlik silindi',
   'event_pick_profession': '{role} olarak hangi sınıfla?',
   'event_err_profession_required': 'Hangi sınıfla geleceğini seç.',
   'event_edit': 'Etkinliği düzenle',
