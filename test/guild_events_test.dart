@@ -66,7 +66,13 @@ void main() {
   });
 
   test('only iana zone names are sent for weekly events', () {
-    for (final ok in ['Europe/Istanbul', 'America/Argentina/Buenos_Aires', 'UTC', 'Etc/GMT-3', 'America/Port-au-Prince']) {
+    for (final ok in [
+      'Europe/Istanbul',
+      'America/Argentina/Buenos_Aires',
+      'UTC',
+      'Etc/GMT-3',
+      'America/Port-au-Prince'
+    ]) {
       expect(isIanaZone(ok), isTrue, reason: ok);
     }
     for (final bad in ['EET', 'GMT+3', '+03:00', '', 'europe/istanbul', 'Europe/']) {
@@ -74,4 +80,3 @@ void main() {
     }
   });
 }
-
