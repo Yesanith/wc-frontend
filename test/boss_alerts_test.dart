@@ -40,7 +40,10 @@ void main() {
 
   test('alerts come sorted by time of day, then name', () {
     final plan = planBossAlerts(
-      pins: {for (var m = 0; m < _maps.length; m++) for (var e = 0; e < _maps[m].events.length; e++) _key(m, e)},
+      pins: {
+        for (var m = 0; m < _maps.length; m++)
+          for (var e = 0; e < _maps[m].events.length; e++) _key(m, e)
+      },
       lead: 10,
       body: _body,
       maps: _maps,
@@ -64,7 +67,8 @@ void main() {
     expect(plan.alerts.length, 4);
     expect(plan.skipped, [_key(1, 0)]);
     // pinned in another order, another event is the one left out
-    final other = planBossAlerts(pins: [_key(1, 0), _key(0, 0), _key(0, 1)], lead: 10, body: _body, maps: _maps, limit: 4);
+    final other =
+        planBossAlerts(pins: [_key(1, 0), _key(0, 0), _key(0, 1)], lead: 10, body: _body, maps: _maps, limit: 4);
     expect(other.skipped, [_key(0, 0)]);
     expect(other.alerts.map((a) => a.title).toSet(), {'Night bell', 'Other'});
     // never a part of an event

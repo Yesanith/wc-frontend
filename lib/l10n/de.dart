@@ -1,6 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
-  'boss_alert_limit': '{n} angeheftete Events haben keine Erinnerung: Das Telefon hält höchstens {max} geplante Erinnerungen. Löse einige, stündliche Events brauchen am meisten.',
+  'boss_alert_limit':
+      '{n} angeheftete Events haben keine Erinnerung: Das Telefon hält höchstens {max} geplante Erinnerungen. Löse einige, stündliche Events brauchen am meisten.',
   'boss_alerts_title': 'Weltevent-Erinnerungen',
   'boss_alerts_note':
       'Eine Benachrichtigung kurz vor jedem Start der angehefteten Events, täglich, auch bei geschlossener App.',
