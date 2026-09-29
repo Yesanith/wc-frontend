@@ -7,6 +7,7 @@ import '../services/icon_cache.dart';
 import '../services/sync.dart';
 import '../services/update_check.dart';
 import '../state/api.dart';
+import '../services/push.dart';
 import '../state/community.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
@@ -478,6 +479,7 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
             ),
             const SizedBox(height: 16),
             const _Gw2LinkSection(),
+            if (pushReady) const _PushSwitch(),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -648,6 +650,53 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
         const SizedBox(height: 4),
         Text(s.t('gw2_link_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
       ],
+    );
+  }
+}
+
+
+/// event reminders and waitlist news on this device
+class _PushSwitch extends ConsumerStatefulWidget {
+  const _PushSwitch();
+
+  @override
+  ConsumerState<_PushSwitch> createState() => _PushSwitchState();
+}
+
+class _PushSwitchState extends ConsumerState<_PushSwitch> {
+  bool _busy = false;
+
+  Future<void> _set(bool on) async {
+    final s = ref.read(stringsProvider);
+    final prefs = ref.read(prefsProvider);
+    setState(() => _busy = true);
+    try {
+      if (on) {
+        final allowed = await enablePush(ref.read(langProvider).code);
+        await prefs.setBool(pushPref, allowed);
+        if (!allowed && mounted) showToast(context, s.t('push_denied'));
+      } else {
+        await disablePush();
+        await prefs.setBool(pushPref, false);
+      }
+    } catch (_) {
+      if (mounted) showToast(context, s.t('community_failed'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final on = ref.watch(prefsProvider).getBool(pushPref) != false;
+    return SwitchListTile(
+      contentPadding: EdgeInsets.zero,
+      value: on,
+      activeThumbColor: AppColors.gold,
+      onChanged: _busy ? null : _set,
+      title: Text(s.t('push_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+      subtitle: Text(s.t('push_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
     );
   }
 }

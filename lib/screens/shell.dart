@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +18,8 @@ import '../state/wealth.dart';
 import '../state/period_refresh.dart';
 import '../util.dart';
 import '../services/update_check.dart';
+import '../services/push.dart';
+import '../state/community.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
@@ -129,6 +133,16 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   @override
   void initState() {
     super.initState();
+    // this device takes the player's event notifications once they are
+    // signed in, unless switched off in settings
+    ref.listenManual(sessionProvider, (previous, next) {
+      if (previous?.valueOrNull == null && next.valueOrNull != null) _startPush();
+    }, fireImmediately: true);
+    _pushWhileOpen = pushWhileOpen.stream.listen((message) {
+      final n = message.notification;
+      if (n == null || !mounted) return;
+      showToast(context, n.body == null ? '${n.title}' : '${n.title} · ${n.body}', duration: const Duration(seconds: 6));
+    });
     WidgetsBinding.instance.addObserver(this);
     // after a game patch the static data cache is cleared once
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -148,11 +162,18 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   @override
   void dispose() {
+    _pushWhileOpen?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   DateTime? _backgroundSince;
+  StreamSubscription<Object?>? _pushWhileOpen;
+
+  void _startPush() {
+    if (!pushReady || ref.read(prefsProvider).getBool(pushPref) == false) return;
+    enablePush(ref.read(langProvider).code).catchError((_) => false);
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

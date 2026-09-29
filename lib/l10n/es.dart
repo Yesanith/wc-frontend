@@ -1,5 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'push_title': 'Notificaciones de eventos',
+  'push_note': 'Un aviso 30 minutos antes de tus eventos y cuando entras desde la lista de espera.',
+  'push_denied': 'Las notificaciones están bloqueadas para Tyria Codex, permítelas en los ajustes del teléfono.',
   'roster_of': 'Miembros de {guild}',
   'roster_note':
       'Miembros de este clan en Tyria Companion. Los oficiales pueden crear y gestionar eventos; los nombra el líder.',

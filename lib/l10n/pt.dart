@@ -1,5 +1,8 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'push_title': 'Notificações de eventos',
+  'push_note': 'Um lembrete 30 minutos antes dos seus eventos e um aviso quando você sai da espera.',
+  'push_denied': 'As notificações estão bloqueadas para o Tyria Codex, permita nas configurações do celular.',
   'roster_of': 'Membros de {guild}',
   'roster_note':
       'Membros desta guilda no Tyria Companion. Oficiais podem criar e gerenciar eventos; o líder os nomeia.',

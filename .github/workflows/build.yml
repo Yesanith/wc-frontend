@@ -109,6 +109,10 @@ jobs:
           # back to the app through tyriacodex://login-callback
           grep -q 'tyriacodex' "$M" || sed -i 's#</activity>#    <intent-filter>\n                <action android:name="android.intent.action.VIEW"/>\n                <category android:name="android.intent.category.DEFAULT"/>\n                <category android:name="android.intent.category.BROWSABLE"/>\n                <data android:scheme="tyriacodex" android:host="login-callback"/>\n            </intent-filter>\n        </activity>#' "$M"
           grep -c 'tyriacodex' "$M"
+          # notifications use the one colour emblem, a full colour icon would be
+          # a white square in the status bar
+          grep -q 'default_notification_icon' "$M" || sed -i 's#<application#<application#; 0,/<activity/s#<activity#<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_launcher_monochrome"/>\n        <activity#' "$M"
+          grep -c 'default_notification_icon' "$M"
 
       - run: flutter pub get
 
@@ -130,6 +134,12 @@ jobs:
           # access is enforced by row level security on the server
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          # push notifications: the android app's firebase values, public by
+          # design like the supabase key. without them notifications stay off
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
           # maven central sometimes answers 429 to shared runners, wait and retry
           for attempt in 1 2 3; do
@@ -138,7 +148,11 @@ jobs:
               --build-number="$GITHUB_RUN_NUMBER" \
               --dart-define=APP_VERSION="$VERSION" \
               --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-              --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" && exit 0
+              --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" \
+              --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
+              --dart-define=FIREBASE_APP_ID="$FIREBASE_APP_ID" \
+              --dart-define=FIREBASE_SENDER_ID="$FIREBASE_SENDER_ID" \
+              --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" && exit 0
             echo "build attempt $attempt failed, retrying in 60s"
             sleep 60
           done

@@ -1,5 +1,8 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'push_title': 'Event notifications',
+  'push_note': 'A reminder 30 minutes before events you go to, and news when the waitlist lets you in.',
+  'push_denied': 'Notifications are blocked for Tyria Codex, allow them in the phone\'s settings.',
   'roster_of': '{guild} members',
   'roster_note':
       'Members of this guild on Tyria Companion. Officers can create and manage events, the leader appoints them.',

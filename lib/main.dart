@@ -7,6 +7,7 @@ import 'screens/onboarding_screen.dart';
 import 'screens/shell.dart';
 import 'services/cache.dart';
 import 'services/icon_cache.dart';
+import 'services/push.dart';
 import 'state/community.dart';
 import 'state/api.dart';
 import 'state/settings.dart';
@@ -20,6 +21,8 @@ Future<void> main() async {
   final icons = await IconCache.open();
   // the community account is optional, a failure here never blocks the app
   await initCommunity();
+  // push notifications need the community account, and are off without firebase values
+  await initPush();
   runApp(
     ProviderScope(
       overrides: [
