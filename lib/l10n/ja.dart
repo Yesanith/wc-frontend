@@ -1,5 +1,11 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'event_delete': 'イベントを削除',
+  'event_delete_body': '誤って作成したイベント向け：参加登録と Discord メッセージごと全員から消えます。中止として残したい場合は代わりに中止してください。',
+  'event_delete_weekly_body': '毎週イベントの1回分です。この週だけ削除するか、今後の週を含むシリーズ全体を削除できます。',
+  'event_delete_week': 'この週だけ',
+  'event_delete_series': 'シリーズ全体',
+  'event_deleted': 'イベントを削除しました',
   'event_pick_profession': '{role} で参加する職業は？',
   'event_err_profession_required': '参加する職業を選んでください。',
   'event_edit': 'イベントを編集',

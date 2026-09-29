@@ -1,5 +1,11 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'event_delete': 'Excluir evento',
+  'event_delete_body': 'Para um evento criado por engano: ele some para todos, com todas as inscrições e a mensagem no Discord. Para mantê-lo visível como cancelado, cancele em vez disso.',
+  'event_delete_weekly_body': 'Esta é uma semana de um evento semanal. Exclua só esta semana ou a série inteira com as próximas semanas.',
+  'event_delete_week': 'Só esta semana',
+  'event_delete_series': 'Série inteira',
+  'event_deleted': 'Evento excluído',
   'event_pick_profession': 'Qual profissão como {role}?',
   'event_err_profession_required': 'Escolha a profissão com que você vem.',
   'event_edit': 'Editar evento',

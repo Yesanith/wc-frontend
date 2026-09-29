@@ -332,6 +332,13 @@ Future<int> updateEvent({
       return (res as num).toInt();
     });
 
+/// removes an event opened by mistake, with its sign ups and its discord
+/// messages. on a week of a weekly event, [wholeSeries] also stops the series
+/// and removes its coming weeks
+Future<void> deleteEvent(String eventId, {bool wholeSeries = false}) => _call(() async {
+      await Supabase.instance.client.rpc('delete_event', params: {'p_event': eventId, 'p_whole_series': wholeSeries});
+    });
+
 Future<void> cancelEvent(String eventId) => _call(() async {
       await Supabase.instance.client.rpc('cancel_event', params: {'p_event': eventId});
     });

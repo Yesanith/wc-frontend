@@ -354,6 +354,54 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     ref.invalidate(eventDetailProvider(widget.eventId));
   }
 
+  /// null when the player backed out, otherwise whether the whole weekly
+  /// series goes
+  Future<bool?> _confirmDelete(GuildEvent e) {
+    final s = ref.read(stringsProvider);
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(s.t('event_delete')),
+        content: Text(e.seriesId == null ? s.t('event_delete_body') : s.t('event_delete_weekly_body')),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
+          if (e.seriesId != null)
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: AppColors.red),
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(s.t('event_delete_series')),
+            ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(e.seriesId == null ? s.t('event_delete') : s.t('event_delete_week')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _delete(GuildEvent e) async {
+    final s = ref.read(stringsProvider);
+    final whole = await _confirmDelete(e);
+    if (whole == null) return;
+    setState(() => _busy = true);
+    try {
+      await deleteEvent(e.id, wholeSeries: whole);
+      ref.invalidate(upcomingEventsProvider);
+      if (mounted) {
+        showToast(context, s.t('event_deleted'));
+        Navigator.of(context).pop();
+      }
+    } catch (err) {
+      if (mounted) {
+        showToast(context, eventFailureText(s, err));
+        setState(() => _busy = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -484,6 +532,15 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                     onPressed: _cancel,
                     icon: const Icon(Icons.event_busy_outlined),
                     label: Text(s.t('event_cancel')),
+                  ),
+                ],
+                if (canManageEvent(e, me, myGuilds)) ...[
+                  const SizedBox(height: 6),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(foregroundColor: AppColors.muted),
+                    onPressed: _busy ? null : () => _delete(e),
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text(s.t('event_delete')),
                   ),
                 ],
               ],
