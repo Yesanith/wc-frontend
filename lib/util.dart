@@ -133,3 +133,28 @@ class TaskPool {
     }
   }
 }
+
+
+/// the last daily reset, midnight utc
+DateTime lastDailyReset([DateTime? now]) {
+  final n = (now ?? DateTime.now()).toUtc();
+  return DateTime.utc(n.year, n.month, n.day);
+}
+
+/// the last weekly reset, monday 07:30 utc
+DateTime lastWeeklyReset([DateTime? now]) {
+  final n = (now ?? DateTime.now()).toUtc();
+  var reset = DateTime.utc(n.year, n.month, n.day, 7, 30);
+  while (reset.weekday != DateTime.monday || reset.isAfter(n)) {
+    reset = reset.subtract(const Duration(days: 1));
+  }
+  return reset;
+}
+
+/// the next daily or weekly reset, whichever comes first
+DateTime nextResetAfter([DateTime? now]) {
+  final n = (now ?? DateTime.now()).toUtc();
+  final daily = lastDailyReset(n).add(const Duration(days: 1));
+  final weekly = lastWeeklyReset(n).add(const Duration(days: 7));
+  return daily.isBefore(weekly) ? daily : weekly;
+}
