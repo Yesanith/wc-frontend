@@ -1,8 +1,10 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
   'event_delete': 'Delete event',
-  'event_delete_body': 'For an event opened by mistake: it disappears for everybody, with all sign ups and its Discord message. To keep it visible as cancelled, cancel it instead.',
-  'event_delete_weekly_body': 'This is a week of a weekly event. Delete only this week, or the whole series with all its coming weeks.',
+  'event_delete_body':
+      'For an event opened by mistake: it disappears for everybody, with all sign ups and its Discord message. To keep it visible as cancelled, cancel it instead.',
+  'event_delete_weekly_body':
+      'This is a week of a weekly event. Delete only this week, or the whole series with all its coming weeks.',
   'event_delete_week': 'Only this week',
   'event_delete_series': 'Whole series',
   'event_deleted': 'Event deleted',

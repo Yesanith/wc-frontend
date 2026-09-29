@@ -1,8 +1,10 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
   'event_delete': 'Event löschen',
-  'event_delete_body': 'Für ein versehentlich erstelltes Event: Es verschwindet für alle, mit allen Anmeldungen und seiner Discord-Nachricht. Um es als abgesagt sichtbar zu lassen, sag es stattdessen ab.',
-  'event_delete_weekly_body': 'Das ist eine Woche eines wöchentlichen Events. Lösche nur diese Woche oder die ganze Serie mit allen kommenden Wochen.',
+  'event_delete_body':
+      'Für ein versehentlich erstelltes Event: Es verschwindet für alle, mit allen Anmeldungen und seiner Discord-Nachricht. Um es als abgesagt sichtbar zu lassen, sag es stattdessen ab.',
+  'event_delete_weekly_body':
+      'Das ist eine Woche eines wöchentlichen Events. Lösche nur diese Woche oder die ganze Serie mit allen kommenden Wochen.',
   'event_delete_week': 'Nur diese Woche',
   'event_delete_series': 'Ganze Serie',
   'event_deleted': 'Event gelöscht',
