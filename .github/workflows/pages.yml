@@ -1,0 +1,42 @@
+name: Site
+
+# the privacy policy and the account deletion page on github pages. the
+# supabase address and publishable key are written into the page here, from
+# the same secrets the app build uses
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fill in the backend
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          test -n "$SUPABASE_URL" && test -n "$SUPABASE_PUBLISHABLE_KEY"
+          sed -i "s#__SUPABASE_URL__#$SUPABASE_URL#; s#__SUPABASE_PUBLISHABLE_KEY__#$SUPABASE_PUBLISHABLE_KEY#" site/delete-account.html
+          ! grep -q '__SUPABASE' site/delete-account.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
