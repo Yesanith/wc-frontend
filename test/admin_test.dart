@@ -192,7 +192,8 @@ void serverTests() {
       expect(s.series('nothing'), isEmpty);
       expect(s.list('tables'), isEmpty);
       expect(s.generatedAt, isNotNull);
-      expect(AdminServer(const {'server': 5}).count('server', 'size_bytes'), 0, reason: 'a part of another kind is nothing');
+      expect(AdminServer(const {'server': 5}).count('server', 'size_bytes'), 0,
+          reason: 'a part of another kind is nothing');
     });
 
     test('says why a part could not be read', () {
@@ -209,7 +210,8 @@ void serverTests() {
   group('server health', () {
     test('a server with room, a warm cache and nothing running is fine', () {
       final lines = server().health(now);
-      expect(lines.where((l) => l.level != HealthLevel.good), isEmpty, reason: lines.map((l) => '${l.label}: ${l.detail}').join('; '));
+      expect(lines.where((l) => l.level != HealthLevel.good), isEmpty,
+          reason: lines.map((l) => '${l.label}: ${l.detail}').join('; '));
     });
 
     test('connections are told against the most there may be', () {
@@ -230,9 +232,14 @@ void serverTests() {
       ]);
       expect(line(slow, 'Queries').level, HealthLevel.bad);
       expect(line(slow, 'Queries').detail, '2 running for more than 5 s, the longest 75 s');
-      expect(line(server(running: [
-        {'seconds': 8},
-      ]), 'Queries').level, HealthLevel.warn);
+      expect(
+          line(
+                  server(running: [
+                    {'seconds': 8},
+                  ]),
+                  'Queries')
+              .level,
+          HealthLevel.warn);
     });
 
     test('the size and the monthly users are told against the limits of the free plan', () {
@@ -250,7 +257,8 @@ void serverTests() {
         {'name': 'tiny', 'rows': 0, 'dead': 10},
       ]);
       expect(s.health(now).where((l) => l.label == 'events').single.level, HealthLevel.warn);
-      expect(s.health(now).where((l) => l.label == 'profiles'), isEmpty, reason: 'few dead rows against many live ones');
+      expect(s.health(now).where((l) => l.label == 'profiles'), isEmpty,
+          reason: 'few dead rows against many live ones');
       expect(s.health(now).where((l) => l.label == 'tiny'), isEmpty, reason: 'too few to matter');
       expect(line(s, 'News feeds').detail, '1 failing: Mistwalkers news, timeout');
     });
