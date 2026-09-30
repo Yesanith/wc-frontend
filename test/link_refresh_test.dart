@@ -100,7 +100,8 @@ void main() {
           "The game would not give the guild's details (guild:403).");
       expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('failed', 'db:42501'), refused])),
           contains('db:42501'));
-      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('too_soon', null)])), contains('few minutes'));
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('too_soon', null)])),
+          contains('few minutes'));
       expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('synced', 'members:403')])),
           'Guild details updated. (members:403)');
     });

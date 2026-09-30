@@ -4,7 +4,8 @@ const frStrings = <String, String>{
   'ginfo_result_too_soon': 'Mis à jour à l\'instant, réessaie dans quelques minutes.',
   'ginfo_result_unavailable': 'Le jeu n\'a pas donné les données de la guilde ({detail}).',
   'ginfo_result_failed': 'Le serveur n\'a pas pu enregistrer les données de la guilde ({detail}).',
-  'ginfo_result_none': 'Ce compte ne dirige aucune guilde connue du serveur. Lie-le avec une clé API ayant la permission guildes.',
+  'ginfo_result_none':
+      'Ce compte ne dirige aucune guilde connue du serveur. Lie-le avec une clé API ayant la permission guildes.',
   'ginfo_result_skipped': 'Le compte de la clé API active n\'est pas lié ici, rien n\'a été mis à jour.',
   'ginfo_level': 'Niveau',
   'ginfo_members': 'Membres',
