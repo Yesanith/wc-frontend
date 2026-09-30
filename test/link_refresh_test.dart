@@ -173,7 +173,8 @@ void main() {
       expect(d.shares('storage'), isTrue);
       final none = GuildDetails.fromRow({});
       expect(none.hidden, isEmpty, reason: 'older rows have no such column');
-      expect(['members', 'ranks', 'teams', 'treasury', 'stash', 'log', 'upgrades', 'storage'].every(none.shares), isTrue);
+      expect(
+          ['members', 'ranks', 'teams', 'treasury', 'stash', 'log', 'upgrades', 'storage'].every(none.shares), isTrue);
       expect(GuildDetails.fromRow({'hidden_parts': 'no'}).hidden, isEmpty);
     });
 
