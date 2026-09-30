@@ -1,9 +1,11 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
-  'gshare_unreviewed': 'Aún no lo has confirmado. Hasta entonces, la tesorería, el alijo y el registro siguen ocultos para tus miembros.',
+  'gshare_unreviewed':
+      'Aún no lo has confirmado. Hasta entonces, la tesorería, el alijo y el registro siguen ocultos para tus miembros.',
   'gshare_confirm': 'Confirmar lo que ven los miembros',
   'gshare_review_title': '¿Qué pueden ver tus miembros?',
-  'gshare_review_intro': 'Tu gremio se ha leído desde el juego. Elige lo que los miembros de tu gremio pueden ver en la app. La tesorería, el alijo y el registro muestran quién tomó qué, así que siguen ocultos hasta que confirmes.',
+  'gshare_review_intro':
+      'Tu gremio se ha leído desde el juego. Elige lo que los miembros de tu gremio pueden ver en la app. La tesorería, el alijo y el registro muestran quién tomó qué, así que siguen ocultos hasta que confirmes.',
   'gshare_later': 'Más tarde',
   'roster_note_game':
       'Miembros de este gremio en Tyria Companion, con el rango que les da el juego. Los rangos que pueden invitar, ascender o expulsar, o editar rangos, pueden crear y gestionar eventos.',

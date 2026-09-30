@@ -1,9 +1,11 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
-  'gshare_unreviewed': 'Das hast du noch nicht bestätigt. Bis dahin bleiben Schatzkammer, Lager und Protokoll vor deinen Mitgliedern verborgen.',
+  'gshare_unreviewed':
+      'Das hast du noch nicht bestätigt. Bis dahin bleiben Schatzkammer, Lager und Protokoll vor deinen Mitgliedern verborgen.',
   'gshare_confirm': 'Bestätigen, was Mitglieder sehen',
   'gshare_review_title': 'Was dürfen deine Mitglieder sehen?',
-  'gshare_review_intro': 'Deine Gilde wurde aus dem Spiel gelesen. Wähle, was die Mitglieder deiner Gilde in der App sehen können. Schatzkammer, Lager und Protokoll zeigen, wer was genommen hat, daher bleiben sie verborgen, bis du bestätigst.',
+  'gshare_review_intro':
+      'Deine Gilde wurde aus dem Spiel gelesen. Wähle, was die Mitglieder deiner Gilde in der App sehen können. Schatzkammer, Lager und Protokoll zeigen, wer was genommen hat, daher bleiben sie verborgen, bis du bestätigst.',
   'gshare_later': 'Später',
   'roster_note_game':
       'Mitglieder dieser Gilde auf Tyria Companion, mit dem Rang aus dem Spiel. Ränge, die einladen, befördern, kicken oder Ränge bearbeiten dürfen, können Events erstellen und verwalten.',
