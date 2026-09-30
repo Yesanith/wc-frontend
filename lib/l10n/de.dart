@@ -1,6 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
-  'roster_note_game': 'Mitglieder dieser Gilde auf Tyria Companion, mit dem Rang aus dem Spiel. Ränge, die einladen, befördern, kicken oder Ränge bearbeiten dürfen, können Events erstellen und verwalten.',
+  'roster_note_game':
+      'Mitglieder dieser Gilde auf Tyria Companion, mit dem Rang aus dem Spiel. Ränge, die einladen, befördern, kicken oder Ränge bearbeiten dürfen, können Events erstellen und verwalten.',
   'roster_manual': 'von Hand gesetzt',
   'roster_follow_game': 'Wieder dem Rang im Spiel folgen',
   'roster_auto':

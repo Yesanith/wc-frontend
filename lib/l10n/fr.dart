@@ -1,6 +1,7 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
-  'roster_note_game': 'Membres de cette guilde sur Tyria Companion, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
+  'roster_note_game':
+      'Membres de cette guilde sur Tyria Companion, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
   'roster_manual': 'défini à la main',
   'roster_follow_game': 'Suivre à nouveau le rang du jeu',
   'roster_auto':
