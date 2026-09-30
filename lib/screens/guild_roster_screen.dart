@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/community.dart';
 import '../state/guild_events.dart';
+import '../state/link_refresh.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
-import 'guild_events_screen.dart' show eventFailureText;
+import 'guild_events_screen.dart' show eventFailureText, eventWhen;
 
 /// a guild's tyria companion members with their roles. the leader appoints
 /// officers here, who may then create and manage events
@@ -53,7 +54,10 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
       body: RefreshIndicator(
         color: AppColors.gold,
         onRefresh: () async {
+          // a leader's app brings what the game tells only the leader
+          if (leading) await refreshLink(ref, force: true);
           ref.invalidate(guildRosterProvider(g.id));
+          ref.invalidate(guildDetailsProvider(g.id));
           await ref.read(guildRosterProvider(g.id).future);
         },
         child: AsyncView<List<RosterMember>>(
@@ -62,6 +66,8 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
           builder: (members) => ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
             children: [
+              _GuildInfoCard(guildId: g.id, leading: leading),
+              const SizedBox(height: 12),
               Text(
                 leading ? s.t('roster_note_leader') : s.t('roster_note'),
                 style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
@@ -94,7 +100,10 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                                     m.accountName,
                                     style: TextStyle(fontWeight: m.userId == me ? FontWeight.w800 : FontWeight.w600),
                                   ),
-                                  Text(s.t('guild_role_${m.role}'),
+                                  Text(
+                                      m.gw2Rank == null
+                                          ? s.t('guild_role_${m.role}')
+                                          : '${s.t('guild_role_${m.role}')} · ${m.gw2Rank}',
                                       style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
@@ -122,6 +131,62 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// the level, message of the day and member count the game gives the guild,
+/// or why they are not here yet
+class _GuildInfoCard extends ConsumerWidget {
+  const _GuildInfoCard({required this.guildId, required this.leading});
+
+  final String guildId;
+  final bool leading;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final d = ref.watch(guildDetailsProvider(guildId)).valueOrNull;
+    if (d == null || !d.known) {
+      return Text(
+        s.t(leading ? 'ginfo_pending_leader' : 'ginfo_pending'),
+        style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.hint),
+      );
+    }
+
+    Widget fact(String label, String value) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          ],
+        );
+
+    final count = d.memberCount;
+    final capacity = d.memberCapacity;
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 24,
+            runSpacing: 8,
+            children: [
+              if (d.level != null) fact(s.t('ginfo_level'), '${d.level}'),
+              if (count != null) fact(s.t('ginfo_members'), capacity == null ? '$count' : '$count / $capacity'),
+            ],
+          ),
+          if (d.motd.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Text(d.motd, style: const TextStyle(fontSize: 13, height: 1.4, fontStyle: FontStyle.italic)),
+          ],
+          const SizedBox(height: 8),
+          Text(
+            s.t('ginfo_updated', {'when': eventWhen(s, d.syncedAt!.toLocal())}),
+            style: const TextStyle(fontSize: 11, color: AppColors.hint),
+          ),
+        ],
       ),
     );
   }

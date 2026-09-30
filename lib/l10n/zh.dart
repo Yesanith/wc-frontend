@@ -1,5 +1,10 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'ginfo_level': '等级',
+  'ginfo_members': '成员',
+  'ginfo_updated': '更新于 {when}',
+  'ginfo_pending': '公会的等级、每日消息和成员数将在会长打开应用后显示在这里。',
+  'ginfo_pending_leader': '下拉即可从游戏中获取公会的等级、每日消息和成员数。',
   'event_discord_only': '此活动需在 Discord 中通过其消息报名。在这里只能选择不参加。',
   'event_flex': '也可担任',
   'event_err_discord_only': '请在 Discord 中报名此活动。',

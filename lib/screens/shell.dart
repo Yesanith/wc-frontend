@@ -20,6 +20,7 @@ import '../util.dart';
 import '../services/update_check.dart';
 import '../services/push.dart';
 import '../state/community.dart';
+import '../state/link_refresh.dart';
 import '../services/boss_alerts.dart';
 import '../state/boss_alerts.dart';
 import 'about_screen.dart';
@@ -138,7 +139,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     // this device takes the player's event notifications once they are
     // signed in, unless switched off in settings
     ref.listenManual(sessionProvider, (previous, next) {
-      if (previous?.valueOrNull == null && next.valueOrNull != null) _startPush();
+      if (previous?.valueOrNull == null && next.valueOrNull != null) {
+        _startPush();
+        // the link with the community account is refreshed quietly, and a
+        // guild leader's app brings the guild's details each time it is opened
+        WidgetsBinding.instance.addPostFrameCallback((_) => refreshLink(ref));
+      }
     }, fireImmediately: true);
     // a tap on a world event alert opens the events, also when it started the app
     _alertTaps = bossAlertTaps.stream.listen(_openFromAlert);
@@ -202,7 +208,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       final away = _backgroundSince == null ? Duration.zero : DateTime.now().difference(_backgroundSince!);
       _backgroundSince = null;
       // a short switch away is not worth a refresh, a few minutes is
-      if (away > const Duration(minutes: 3)) ref.read(periodRefreshProvider.notifier).resumed();
+      if (away > const Duration(minutes: 3)) {
+        ref.read(periodRefreshProvider.notifier).resumed();
+        refreshLink(ref);
+      }
     }
   }
 

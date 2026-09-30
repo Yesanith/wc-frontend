@@ -1,5 +1,10 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'ginfo_level': 'Seviye',
+  'ginfo_members': 'Üyeler',
+  'ginfo_updated': 'Güncellendi: {when}',
+  'ginfo_pending': 'Loncanın seviyesi, günün mesajı ve üye sayısı, lideri uygulamayı açınca burada görünür.',
+  'ginfo_pending_leader': 'Loncanın seviyesini, günün mesajını ve üye sayısını oyundan almak için aşağı çek.',
   'event_discord_only':
       'Bu etkinliğe Discord üzerinden, oradaki mesajla katılınır. Buradan yalnızca katılmayacağını bildirebilirsin.',
   'event_flex': 'Şunu da oynayabilirim',

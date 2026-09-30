@@ -408,12 +408,27 @@ bool canManageEvent(GuildEvent event, String? myId, List<MyGuild> myGuilds) {
 // officers
 
 class RosterMember {
-  const RosterMember(this.userId, this.accountName, this.role);
+  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank});
+
+  factory RosterMember.fromRow(Map<String, dynamic> r) {
+    final rank = '${r['gw2_rank'] ?? ''}';
+    return RosterMember(
+      '${r['user_id']}',
+      '${r['account_name'] ?? '?'}',
+      '${r['role'] ?? 'member'}',
+      gw2Rank: rank.isEmpty ? null : rank,
+    );
+  }
+
   final String userId;
   final String accountName;
 
   /// member, officer or leader
   final String role;
+
+  /// the rank the game gives them in the guild, known once the leader's app has
+  /// brought the guild's member list
+  final String? gw2Rank;
 }
 
 /// a guild's tyria companion members, leader first, then officers
@@ -423,8 +438,7 @@ final guildRosterProvider = FutureProvider.autoDispose.family<List<RosterMember>
   final rows = await Supabase.instance.client.rpc('guild_roster', params: {'p_guild': guildId}) as List<dynamic>;
   const rank = {'leader': 0, 'officer': 1, 'member': 2};
   return [
-    for (final r in rows.whereType<Map<String, dynamic>>())
-      RosterMember('${r['user_id']}', '${r['account_name'] ?? '?'}', '${r['role'] ?? 'member'}'),
+    for (final r in rows.whereType<Map<String, dynamic>>()) RosterMember.fromRow(r),
   ]..sort((a, b) {
       final byRole = (rank[a.role] ?? 3).compareTo(rank[b.role] ?? 3);
       return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
