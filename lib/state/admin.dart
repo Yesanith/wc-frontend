@@ -23,7 +23,30 @@ final adminDashboardProvider = FutureProvider.autoDispose<AdminDashboard>((ref) 
   return AdminDashboard(Map<String, dynamic>.from(answer as Map));
 });
 
+/// what the database server says of itself, from a function that answers an administrator only
+final adminServerProvider = FutureProvider.autoDispose<AdminServer>((ref) async {
+  final answer = await Supabase.instance.client.rpc('admin_server');
+  return AdminServer(Map<String, dynamic>.from(answer as Map));
+});
+
+/// the limits of the free plan this backend runs on, so the usage can be told as a share of them. the plan
+/// is chosen on the Supabase dashboard, which shows the rest (traffic, storage, function calls)
+const freeDatabaseBytes = 500 * 1024 * 1024;
+const freeMonthlyUsers = 50000;
+
 enum HealthLevel { good, warn, bad }
+
+/// how full something is: a good way to go while it is under 70 percent, a warning to 90, an alarm from there
+HealthLevel levelOfUse(double fraction) =>
+    fraction >= 0.9 ? HealthLevel.bad : (fraction >= 0.7 ? HealthLevel.warn : HealthLevel.good);
+
+/// 3 d 4 h, 5 h 20 min, 12 min
+String uptime(DateTime since, DateTime now) {
+  final d = now.difference(since);
+  if (d.inDays > 0) return '${d.inDays} d ${d.inHours % 24} h';
+  if (d.inHours > 0) return '${d.inHours} h ${d.inMinutes % 60} min';
+  return '${d.inMinutes} min';
+}
 
 /// one thing to keep an eye on, and whether it is all right
 class HealthLine {
@@ -53,6 +76,9 @@ String formatBytes(int bytes) {
   }
   return unit == 0 ? '$bytes B' : '${value.toStringAsFixed(1)} ${units[unit]}';
 }
+
+List<({String day, int count})> _days(dynamic v) =>
+    [for (final r in _maps(v)) (day: '${r['day']}', count: asInt(r['count']))];
 
 List<Map<String, dynamic>> _maps(dynamic v) => v is List
     ? [
@@ -120,6 +146,110 @@ class AdminDashboard {
       } else {
         lines.add(HealthLine(name, 'Ran ${ago(at, now)}', HealthLevel.good));
       }
+    }
+    return lines;
+  }
+}
+
+/// what the database server says of itself: the connections, every table, what is slow, who signs in, what
+/// happened each day. a part it could not read says why in place of its numbers
+class AdminServer {
+  const AdminServer(this.raw);
+
+  final Map<String, dynamic> raw;
+
+  Map<String, dynamic> section(String name) {
+    final v = raw[name];
+    return v is Map ? Map<String, dynamic>.from(v) : const <String, dynamic>{};
+  }
+
+  int count(String name, String key) => asInt(section(name)[key]);
+
+  /// why a part could not be read, null when it could
+  String? problem(String name) {
+    final v = raw[name];
+    return v is Map && v['error'] != null ? '${v['error']}' : null;
+  }
+
+  List<Map<String, dynamic>> list(String name) => _maps(raw[name]);
+
+  DateTime? at(String name, String key) => DateTime.tryParse('${section(name)[key] ?? ''}')?.toLocal();
+
+  DateTime? get generatedAt => DateTime.tryParse('${raw['generated_at'] ?? ''}')?.toLocal();
+
+  /// what happened each of the last thirty days: events, signups, reminders, reports, sign_ins
+  List<({String day, int count})> series(String name) => _days(section('activity')[name]);
+
+  double? get cacheHitPercent {
+    final v = section('server')['cache_hit_percent'];
+    return v is num ? v.toDouble() : null;
+  }
+
+  Map<String, dynamic> map(String name, String key) {
+    final v = section(name)[key];
+    return v is Map ? Map<String, dynamic>.from(v) : const <String, dynamic>{};
+  }
+
+  /// what is worth a look: a server that is full or slow, queries that hang, feeds that fail, parts that cannot be read
+  List<HealthLine> health(DateTime now) {
+    final lines = <HealthLine>[];
+
+    final max = count('server', 'max_connections');
+    final total = asInt(map('server', 'connections')['total']);
+    if (max > 0) {
+      lines.add(HealthLine('Connections', '$total of $max in use', levelOfUse(total / max)));
+    }
+    final waiting = asInt(map('server', 'connections')['idle_in_transaction']);
+    if (waiting > 0) {
+      lines.add(HealthLine('Open transactions', '$waiting idle in a transaction', HealthLevel.warn));
+    }
+
+    final hit = cacheHitPercent;
+    if (hit != null) {
+      lines.add(HealthLine('Cache', '${hit.toStringAsFixed(1)} percent of reads from memory',
+          hit >= 99 ? HealthLevel.good : (hit >= 95 ? HealthLevel.warn : HealthLevel.bad)));
+    }
+    final deadlocks = count('server', 'deadlocks');
+    lines.add(deadlocks == 0
+        ? const HealthLine('Deadlocks', 'None since the statistics were reset', HealthLevel.good)
+        : HealthLine('Deadlocks', '$deadlocks since the statistics were reset', HealthLevel.warn));
+
+    final running = list('running');
+    final longest = running.fold<int>(0, (a, r) => asInt(r['seconds']) > a ? asInt(r['seconds']) : a);
+    lines.add(running.isEmpty
+        ? const HealthLine('Queries', 'None has run for more than 5 s', HealthLevel.good)
+        : HealthLine('Queries', '${running.length} running for more than 5 s, the longest $longest s',
+            longest >= 60 ? HealthLevel.bad : HealthLevel.warn));
+
+    final size = count('server', 'size_bytes');
+    if (size > 0) {
+      lines.add(HealthLine('Database size', '${formatBytes(size)} of ${formatBytes(freeDatabaseBytes)} on the free plan',
+          levelOfUse(size / freeDatabaseBytes)));
+    }
+    final monthly = count('auth', 'signed_in_30d');
+    if (section('auth').containsKey('signed_in_30d')) {
+      lines.add(HealthLine('Monthly users', '$monthly of ${fmtInt(freeMonthlyUsers)} on the free plan',
+          levelOfUse(monthly / freeMonthlyUsers)));
+    }
+
+    // tables whose dead rows outnumber the living ones are waiting for a cleanup that is behind
+    for (final t in list('tables')) {
+      final dead = asInt(t['dead']);
+      if (dead > 1000 && dead > asInt(t['rows'])) {
+        lines.add(HealthLine('${t['name']}', '${fmtInt(dead)} dead rows, more than the rows it has', HealthLevel.warn));
+      }
+    }
+
+    final failing = count('feeds', 'with_error');
+    if (failing > 0) {
+      final first = _maps(section('feeds')['errors']).firstOrNull;
+      final which = first == null ? '' : ': ${first['guild']} ${first['kind']}, ${first['error']}';
+      lines.add(HealthLine('News feeds', '$failing failing$which', HealthLevel.warn));
+    }
+
+    for (final name in const ['server', 'tables', 'running', 'slow', 'auth', 'activity', 'latest', 'feeds', 'queues', 'cron_history']) {
+      final why = problem(name);
+      if (why != null) lines.add(HealthLine('Could not read $name', why, HealthLevel.warn));
     }
     return lines;
   }
