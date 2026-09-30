@@ -1,5 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'roster_manual': 'elle atandı',
+  'roster_follow_game': 'Yine oyundaki rütbeyi izle',
+  'roster_auto': 'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
   'gshare_on': 'Üyeler görebilir',
   'gshare_off': 'Üyelerden gizli',
   'gshare_title': 'Lonca üyeleriyle paylaşılanlar',

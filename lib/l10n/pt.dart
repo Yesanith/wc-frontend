@@ -1,5 +1,8 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'roster_manual': 'definido à mão',
+  'roster_follow_game': 'Voltar a seguir o posto do jogo',
+  'roster_auto': 'Os cargos seguem o jogo: um posto que pode convidar, promover ou expulsar, ou editar postos, faz oficiais. O que você definir à mão fica até devolver ao jogo.',
   'gshare_on': 'Os membros veem isto',
   'gshare_off': 'Oculto dos membros',
   'gshare_title': 'Compartilhado com os membros da guilda',

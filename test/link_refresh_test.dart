@@ -61,6 +61,14 @@ void main() {
       expect(GuildDetails.fromRow({'level': 'many'}).level, isNull);
     });
 
+    test('a role is by hand only when the backend says so', () {
+      RosterMember member(Object? manual) => RosterMember.fromRow({'user_id': 'u1', 'account_name': 'Mira.2', 'role': 'officer', 'manual': manual});
+      expect(member(true).manual, isTrue);
+      expect(member(false).manual, isFalse);
+      expect(member(null).manual, isFalse, reason: 'an older backend');
+      expect(member('yes').manual, isFalse);
+    });
+
     test('the roster shows the game\'s rank only when there is one', () {
       RosterMember member(Object? rank) =>
           RosterMember.fromRow({'user_id': 'u1', 'account_name': 'Mira.2', 'role': 'officer', 'gw2_rank': rank});
@@ -235,6 +243,15 @@ void main() {
       }
       expect(const S(AppLang.en).t('guild_rank_needed'), contains('turned sharing off'));
     });
+  });
+
+  test('the roster texts about roles following the game exist in every language', () {
+    for (final lang in AppLang.values) {
+      final s = S(lang);
+      for (final key in ['roster_manual', 'roster_follow_game', 'roster_auto']) {
+        expect(s.t(key), isNot(key), reason: '${lang.code} $key');
+      }
+    }
   });
 
   test('what a leader shares has its texts in every language', () {
