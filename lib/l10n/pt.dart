@@ -1,7 +1,8 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
   'gshare_title': 'Compartilhado com os membros da guilda',
-  'gshare_note': 'A lista de membros, os postos, as melhorias, o armazenamento e as equipes são sempre compartilhados. Seu app traz tudo ao abrir.',
+  'gshare_note':
+      'A lista de membros, os postos, as melhorias, o armazenamento e as equipes são sempre compartilhados. Seu app traz tudo ao abrir.',
   'gshared_note':
       'O jogo mostra a lista de membros só ao líder da guilda. Estes são os membros que usam o Tyria Companion, com o posto que o jogo lhes dá.',
   'gshared_not_linked': 'Vincule sua conta GW2 nas configurações para ver o que o líder da guilda compartilha aqui.',

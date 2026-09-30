@@ -1,7 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
   'gshare_title': 'Compartido con los miembros del gremio',
-  'gshare_note': 'La lista de miembros, los rangos, las mejoras, el almacén y los equipos siempre se comparten. Tu app lo trae todo al abrirse.',
+  'gshare_note':
+      'La lista de miembros, los rangos, las mejoras, el almacén y los equipos siempre se comparten. Tu app lo trae todo al abrirse.',
   'gshared_note':
       'El juego muestra la lista de miembros solo al líder del gremio. Estos son los miembros que usan Tyria Companion, con el rango que les da el juego.',
   'gshared_not_linked': 'Vincula tu cuenta de GW2 en Ajustes para ver lo que el líder del gremio comparte aquí.',

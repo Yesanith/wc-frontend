@@ -1,7 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
   'gshare_title': 'Mit den Gildenmitgliedern geteilt',
-  'gshare_note': 'Mitgliederliste, Ränge, Upgrades, Lager und Teams werden immer geteilt. Deine App holt alles, wenn sie geöffnet wird.',
+  'gshare_note':
+      'Mitgliederliste, Ränge, Upgrades, Lager und Teams werden immer geteilt. Deine App holt alles, wenn sie geöffnet wird.',
   'gshared_note':
       'Das Spiel zeigt die Mitgliederliste nur dem Anführer der Gilde. Das sind die Mitglieder, die Tyria Companion nutzen, mit dem Rang aus dem Spiel.',
   'gshared_not_linked':
