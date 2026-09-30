@@ -204,7 +204,10 @@ void main() {
       expect(rects[1].top, rects[2].top);
       expect(rects[3].top, greaterThan(rects[0].bottom), reason: 'the fourth starts a second row');
       expect(rects[3].left, rects[0].left);
-      expect(rects.map((r) => r.width).toSet().length, 1);
+      // the same width, to the last digit a rectangle can tell
+      for (final r in rects) {
+        expect(r.width, closeTo(rects[0].width, 0.001));
+      }
       expect(rects[1].left - rects[0].right, closeTo(10, 0.001));
     });
   });
