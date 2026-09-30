@@ -1,5 +1,8 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'progress_hero_unavailable': '游戏的 API 不返回英雄挑战的任何数据（ArenaNet 方面的已知问题），因此无法在此显示。',
+  'progress_training_unavailable': '游戏的 API 不返回角色培养的任何数据（ArenaNet 方面的已知问题），因此无法在此显示。',
+  'story_note': '统计游戏为该角色记录的任务。总数包含所有分支、种族和骑士团，因此进度条很少会填满。用其他角色完成或重新开始的剧情不会计入此处。',
   'gshare_unreviewed': '你还没有确认。在确认之前，金库、仓库和日志对成员保持隐藏。',
   'gshare_confirm': '确认成员可见内容',
   'gshare_review_title': '成员可以看到什么？',

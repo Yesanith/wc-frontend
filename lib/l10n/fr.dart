@@ -1,5 +1,8 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'progress_hero_unavailable': 'L\'API du jeu ne renvoie rien pour les défis de héros (un problème connu côté ArenaNet), ils ne peuvent donc pas être affichés ici.',
+  'progress_training_unavailable': 'L\'API du jeu ne renvoie rien pour l\'entraînement des personnages (un problème connu côté ArenaNet), il ne peut donc pas être affiché ici.',
+  'story_note': 'Compte les quêtes que le jeu a enregistrées pour ce personnage. Le total inclut chaque embranchement, race et ordre, une barre se remplit donc rarement. L\'histoire faite avec un autre personnage, ou recommencée, ne compte pas ici.',
   'gshare_unreviewed':
       'Tu ne l\'as pas encore confirmé. D\'ici là, la trésorerie, la réserve et le journal restent masqués à tes membres.',
   'gshare_confirm': 'Confirmer ce que voient les membres',

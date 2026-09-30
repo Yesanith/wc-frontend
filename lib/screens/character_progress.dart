@@ -29,6 +29,8 @@ class CharacterProgressTab extends ConsumerWidget {
         _Training(name: name, profession: profession),
         const SizedBox(height: 22),
         SectionHeader(title: s.t('story_journal')),
+        const SizedBox(height: 6),
+        Text(s.t('story_note'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.hint)),
         const SizedBox(height: 10),
         _Story(name: name),
         const SizedBox(height: 22),
@@ -56,18 +58,37 @@ class _HeroPoints extends ConsumerWidget {
       value: ref.watch(characterPartProvider('$name|heropoints')),
       permission: 'progression',
       onRetry: () => ref.invalidate(characterPartProvider('$name|heropoints')),
-      builder: (raw) => Panel(
-        child: Row(
-          children: [
-            const Icon(Icons.stars_outlined, color: AppColors.gold),
-            const SizedBox(width: 12),
-            Expanded(
-                child: Text(s.t('hero_challenges'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
-            Text(fmtInt(raw is List ? raw.length : 0),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
-          ],
-        ),
-      ),
+      builder: (raw) {
+        final count = raw is List ? raw.length : 0;
+        // the game's api has returned an empty list for every character since End of Dragons:
+        // a zero would read as a character with no hero challenges done
+        if (count == 0) {
+          return Panel(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.stars_outlined, color: AppColors.muted),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(s.t('progress_hero_unavailable'),
+                      style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+                ),
+              ],
+            ),
+          );
+        }
+        return Panel(
+          child: Row(
+            children: [
+              const Icon(Icons.stars_outlined, color: AppColors.gold),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Text(s.t('hero_challenges'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
+              Text(fmtInt(count), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -95,7 +116,13 @@ class _Training extends ConsumerWidget {
           for (final t in ((raw is Map ? raw['training'] : raw) as List?) ?? const [])
             if (t is Map) Map<String, dynamic>.from(t),
         ]..sort((a, b) => (a['done'] == true ? 1 : 0).compareTo(b['done'] == true ? 1 : 0));
-        if (rows.isEmpty) return EmptyNote(s.t('nothing_here'), center: false);
+        // the game's api returns nothing for the training of characters, which is not a character without any
+        if (rows.isEmpty) {
+          return Panel(
+            child: Text(s.t('progress_training_unavailable'),
+                style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+          );
+        }
         final done = rows.where((r) => r['done'] == true).length;
         return Panel(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

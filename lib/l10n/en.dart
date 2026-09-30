@@ -1,5 +1,8 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'progress_hero_unavailable': 'The game\'s API returns nothing for hero challenges (a known problem on ArenaNet\'s side), so they cannot be shown here.',
+  'progress_training_unavailable': 'The game\'s API returns nothing for character training (a known problem on ArenaNet\'s side), so it cannot be shown here.',
+  'story_note': 'Counts the quests the game has recorded for this character. The total includes every branch, race and order, so a bar rarely fills up. Story done on another character, or restarted, does not count here.',
   'gshare_unreviewed':
       'You have not confirmed this yet. Until you do, the treasury, the stash and the log stay hidden from your members.',
   'gshare_confirm': 'Confirm what members see',
