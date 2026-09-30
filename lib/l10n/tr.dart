@@ -1,5 +1,7 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'gshare_on': 'Üyeler görebilir',
+  'gshare_off': 'Üyelerden gizli',
   'gshare_title': 'Lonca üyeleriyle paylaşılanlar',
   'gshare_note':
       'Lonca üyelerinin neleri göreceğini seç. Kapatana kadar her şey paylaşılır. Uygulaman açılınca hepsini getirir.',

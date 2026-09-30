@@ -1,5 +1,7 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'gshare_on': '成员可见',
+  'gshare_off': '对成员隐藏',
   'gshare_title': '与公会成员共享',
   'gshare_note': '选择公会成员能看到的内容。在你关闭之前，所有内容都会共享。你的应用在打开时会获取全部内容。',
   'gshared_note': '游戏只向会长显示成员列表。这里是使用 Tyria Companion 的成员及其游戏内职位。',

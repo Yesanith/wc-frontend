@@ -121,12 +121,13 @@ class GuildDetailScreen extends ConsumerWidget {
                 onPressed: () => showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
+                  useSafeArea: true,
+                  showDragHandle: true,
                   backgroundColor: AppColors.surface,
-                  builder: (_) => SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-                      child: GuildSharingPanel(guildId: tyriaId),
-                    ),
+                  // as tall as its switches, scrolling when the screen is short
+                  builder: (_) => SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                    child: GuildSharingPanel(guildId: tyriaId),
                   ),
                 ),
               ),

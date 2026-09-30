@@ -178,12 +178,22 @@ void main() {
       expect(GuildDetails.fromRow({'hidden_parts': 'no'}).hidden, isEmpty);
     });
 
+    test('a part is on for the members exactly when the leader has not hidden it', () {
+      // the switch shows this, on is gold, so a hidden part must read as off
+      final d = GuildDetails.fromRow({'hidden_parts': ['stash']});
+      expect(d.shares('stash'), isFalse);
+      expect(d.shares('log'), isTrue);
+      expect(const S(AppLang.en).t('gshare_on'), isNot(const S(AppLang.en).t('gshare_off')));
+    });
+
     test('the switches and the note that a part is not shared have texts in every language', () {
       for (final lang in AppLang.values) {
         final s = S(lang);
         for (final key in [
           'gshare_title',
           'gshare_note',
+          'gshare_on',
+          'gshare_off',
           'guild_rank_needed',
           'treasury',
           'stash',

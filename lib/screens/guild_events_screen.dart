@@ -1231,7 +1231,6 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               value: _weekly,
-              activeThumbColor: AppColors.gold,
               onChanged: (v) => setState(() => _weekly = v),
               title: Text(s.t('event_repeat_weekly')),
               subtitle: Text(s.t('event_repeat_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),

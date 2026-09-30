@@ -1,5 +1,7 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'gshare_on': 'メンバーに表示',
+  'gshare_off': 'メンバーには非表示',
   'gshare_title': 'ギルドメンバーと共有',
   'gshare_note': 'ギルドメンバーに見せる内容を選びます。オフにするまですべて共有されます。アプリを開くとすべて取得されます。',
   'gshared_note': 'ゲームはメンバー一覧をギルドリーダーにしか見せません。ここには Tyria Companion を使うメンバーが、ゲーム内のランクとともに表示されます。',

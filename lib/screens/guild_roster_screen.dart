@@ -261,13 +261,17 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           value: value,
-          activeThumbColor: AppColors.gold,
           onChanged: _busy ? null : onChanged,
           title: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          subtitle: Text(
+            s.t(value ? 'gshare_on' : 'gshare_off'),
+            style: TextStyle(fontSize: 11, color: value ? AppColors.gold : AppColors.hint),
+          ),
         );
 
     return Panel(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(s.t('gshare_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),

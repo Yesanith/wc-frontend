@@ -1,5 +1,7 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'gshare_on': 'Members can see this',
+  'gshare_off': 'Hidden from members',
   'gshare_title': 'Shared with the guild\'s members',
   'gshare_note':
       'Choose what the guild\'s members see. Everything is shared until you switch it off. Your app brings it all when it is opened.',
