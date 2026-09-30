@@ -54,8 +54,12 @@ String formatBytes(int bytes) {
   return unit == 0 ? '$bytes B' : '${value.toStringAsFixed(1)} ${units[unit]}';
 }
 
-List<Map<String, dynamic>> _maps(dynamic v) =>
-    v is List ? [for (final e in v) if (e is Map) Map<String, dynamic>.from(e)] : const [];
+List<Map<String, dynamic>> _maps(dynamic v) => v is List
+    ? [
+        for (final e in v)
+          if (e is Map) Map<String, dynamic>.from(e)
+      ]
+    : const [];
 
 /// what the database says of the backend: the counts, the queues, the scheduled jobs
 class AdminDashboard {

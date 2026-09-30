@@ -82,7 +82,13 @@ void main() {
     test('a scheduled job is fine when it ran, an alarm when it failed, a warning when it never ran or is off', () {
       final d = dash(cron: [
         {'name': 'nightly', 'active': true, 'last_status': 'succeeded', 'last_run': '2026-10-01T09:00:00+00:00'},
-        {'name': 'broken', 'active': true, 'last_status': 'failed', 'last_run': '2026-10-01T11:30:00+00:00', 'last_message': 'boom'},
+        {
+          'name': 'broken',
+          'active': true,
+          'last_status': 'failed',
+          'last_run': '2026-10-01T11:30:00+00:00',
+          'last_message': 'boom'
+        },
         {'name': 'new', 'active': true, 'last_status': null, 'last_run': null},
         {'name': 'paused', 'active': false, 'last_status': 'succeeded', 'last_run': '2026-09-01T09:00:00+00:00'},
       ]);
