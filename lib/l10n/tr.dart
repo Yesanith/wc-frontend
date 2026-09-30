@@ -1,6 +1,7 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
-  'story_unmatched': 'Oyunun bu karakter için kaydettiği {n} görev, hikâye görevleri listesinde olmadığı için yukarıda sayılmıyor.',
+  'story_unmatched':
+      'Oyunun bu karakter için kaydettiği {n} görev, hikâye görevleri listesinde olmadığı için yukarıda sayılmıyor.',
   'progress_hero_unavailable':
       'Oyunun API\'si kahraman görevleri için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
   'progress_training_unavailable':
