@@ -112,10 +112,11 @@ void main() {
           textDirection: TextDirection.ltr,
           child: GridView(
             gridDelegate: const AdaptiveGridDelegate(minColumns: 3, maxTile: 120),
-            children: [for (var i = 0; i < 30; i++) SizedBox(key: Key('t$i'))],
+            // few enough to fit the window: a grid builds only the tiles that are on the screen
+            children: [for (var i = 0; i < 12; i++) SizedBox(key: Key('t$i'))],
           ),
         ));
-        return [for (var i = 0; i < 30; i++) tester.getSize(find.byKey(Key('t$i'))).width];
+        return [for (var i = 0; i < 12; i++) tester.getSize(find.byKey(Key('t$i'))).width];
       }
 
       final narrow = await widths(300);
