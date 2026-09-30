@@ -72,6 +72,30 @@ void main() {
     });
   });
 
+  group('when a guild is read after linking', () {
+    test('only an account that leads a guild asks for it', () {
+      expect(
+          leadsAGuild({
+            'guilds': [
+              {'id': 'g1', 'leader': false},
+              {'id': 'g2', 'leader': true},
+            ],
+          }),
+          isTrue);
+      expect(
+          leadsAGuild({
+            'guilds': [
+              {'id': 'g1', 'leader': false},
+            ],
+          }),
+          isFalse);
+      expect(leadsAGuild({'guilds': []}), isFalse);
+      expect(leadsAGuild({'account_name': 'Leo.1'}), isFalse, reason: 'an answer without guilds');
+      expect(leadsAGuild(null), isFalse);
+      expect(leadsAGuild('nonsense'), isFalse);
+    });
+  });
+
   group('how the guilds were synced', () {
     test('the backend\'s answer is read, and nothing else is taken for it', () {
       final synced = parseSynced({

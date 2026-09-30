@@ -182,14 +182,42 @@ Future<String> linkGw2Account(Gw2Api api, List<String> keyPermissions) async =>
 /// the same, with how the guilds the account leads were synced
 Future<LinkOutcome> linkGw2AccountOutcome(Gw2Api api, List<String> keyPermissions) async {
   final subtoken = await createLinkSubtoken(api, keyPermissions);
+  final Object? linked;
   try {
-    final res = await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken});
-    final data = res.data;
-    return LinkOutcome(data is Map ? '${data['account_name'] ?? ''}' : '', parseSynced(data));
+    // linking alone, quick: the guilds the account leads are read in a call of their own
+    final res = await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken, 'sync': false});
+    linked = res.data;
   } on FunctionException catch (e) {
     final details = e.details;
     final code = details is Map && details['error'] is String ? details['error'] as String : 'http_${e.status}';
     throw LinkFailure(code, detail: 'HTTP ${e.status}');
+  }
+  final name = linked is Map ? '${linked['account_name'] ?? ''}' : '';
+  return LinkOutcome(name, leadsAGuild(linked) ? await _syncLedGuilds(subtoken) : const <GuildSyncResult>[]);
+}
+
+/// whether the backend's answer to linking lists a guild the account leads
+bool leadsAGuild(Object? linked) {
+  final guilds = linked is Map ? linked['guilds'] : null;
+  return guilds is List && guilds.any((g) => g is Map && g['leader'] == true);
+}
+
+/// asks the backend to read the guilds the account leads, with the same
+/// short lived subtoken. this never fails linking, and never waits for ever:
+/// it says how it went, or why it did not
+Future<List<GuildSyncResult>> _syncLedGuilds(String subtoken) async {
+  try {
+    final res = await Supabase.instance.client.functions
+        .invoke('gw2-link', body: {'subtoken': subtoken, 'action': 'guilds'}).timeout(const Duration(seconds: 45));
+    return parseSynced(res.data);
+  } on TimeoutException {
+    return const [GuildSyncResult('failed', 'call:timeout')];
+  } on FunctionException catch (e) {
+    final details = e.details;
+    final why = details is Map && details['error'] is String ? details['error'] as String : '${e.status}';
+    return [GuildSyncResult('failed', 'call:$why')];
+  } catch (e) {
+    return [GuildSyncResult('failed', 'call:${'$e'.split('\n').first}')];
   }
 }
 
