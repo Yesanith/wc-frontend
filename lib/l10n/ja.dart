@@ -1,5 +1,8 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'gw2_link_name': '{name} を連携',
+  'gw2_refreshed': 'ギルドを更新しました。',
+  'gw2_refresh_other': '有効な API キーは連携されていないアカウントのものです。上で連携するか、連携済みアカウントのキーに切り替えてギルドを更新してください。',
   'ginfo_result_synced': 'ギルド情報を更新しました。',
   'ginfo_result_too_soon': '先ほど更新済みです。数分後にもう一度お試しください。',
   'ginfo_result_unavailable': 'ゲームがギルド情報を返しませんでした（{detail}）。',

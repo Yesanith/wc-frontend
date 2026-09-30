@@ -123,6 +123,16 @@ void main() {
     });
   });
 
+  test('the link and refresh buttons have their own texts in every language', () {
+    for (final lang in AppLang.values) {
+      final s = S(lang);
+      expect(s.t('gw2_link_name', {'name': 'Leo.1'}), contains('Leo.1'), reason: lang.code);
+      expect(s.t('gw2_refreshed'), isNot('gw2_refreshed'), reason: lang.code);
+      expect(s.t('gw2_refresh_other'), isNot('gw2_refresh_other'), reason: lang.code);
+      expect(s.t('gw2_refresh'), isNot(s.t('gw2_link')), reason: 'two different things, ${lang.code}');
+    }
+  });
+
   test('the guild info texts exist in every language', () {
     for (final lang in AppLang.values) {
       final s = S(lang);

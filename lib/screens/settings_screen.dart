@@ -6,11 +6,13 @@ import '../services/backup.dart';
 import '../services/icon_cache.dart';
 import '../services/sync.dart';
 import '../services/update_check.dart';
+import '../state/account.dart';
 import '../state/api.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
 import '../state/boss_alerts.dart';
 import '../state/community.dart';
+import '../state/link_refresh.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -569,8 +571,8 @@ class _Gw2LinkSection extends ConsumerStatefulWidget {
 class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
   bool _busy = false;
 
-  /// one quiet refresh per session, when the link is a day old
-  static bool _refreshedThisSession = false;
+  /// the refresh button is the one running, not the link button
+  bool _refreshing = false;
 
   Future<void> _link({bool quiet = false}) async {
     final s = ref.read(stringsProvider);
@@ -594,6 +596,41 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
       }
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// refreshes the guilds of the account that is linked already: its
+  /// membership, and for a guild's leader what the game tells only the leader.
+  /// this is not linking, another account is linked with the other button
+  Future<void> _refresh() async {
+    final s = ref.read(stringsProvider);
+    setState(() {
+      _busy = true;
+      _refreshing = true;
+    });
+    try {
+      final leads = (ref.read(myGuildsProvider).valueOrNull ?? const <MyGuild>[]).any((g) => g.role == 'leader');
+      final outcome = await refreshLink(ref, force: true);
+      if (!mounted) return;
+      // a leader is told how the guild's sync went, anybody else that it is done
+      showToast(
+        context,
+        outcome == null || leads ? guildSyncMessage(s, outcome) : s.t('gw2_refreshed'),
+        duration: const Duration(seconds: 6),
+      );
+    } on LinkFailure catch (e) {
+      if (mounted) {
+        showToast(context, '${s.t(_failureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
+      }
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _busy = false;
+          _refreshing = false;
+        });
+      }
     }
   }
 
@@ -635,14 +672,13 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
     final accounts = ref.watch(linkedAccountsProvider).valueOrNull;
     final guilds = ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[];
 
-    // keep membership fresh without anyone having to think about it
-    if (accounts != null &&
-        accounts.isNotEmpty &&
-        !_refreshedThisSession &&
-        accounts.any((a) => linkIsStale(a.verifiedAt, DateTime.now()))) {
-      _refreshedThisSession = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) => _link(quiet: true));
-    }
+    // the account of the active API key, and whether it is one of the linked ones
+    final activeName = '${ref.watch(accountProvider).valueOrNull?['name'] ?? ''}';
+    final hasAccounts = accounts != null && accounts.isNotEmpty;
+    final activeLinked = accounts != null &&
+        activeName.isNotEmpty &&
+        accounts.any((a) => a.name.toLowerCase() == activeName.toLowerCase());
+    const spinner = SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2));
 
     String role(String r) => s.t('guild_role_$r');
 
@@ -691,13 +727,27 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
           ),
         ],
         const SizedBox(height: 10),
-        OutlinedButton.icon(
-          onPressed: _busy ? null : _link,
-          icon: _busy
-              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Icon(accounts?.isEmpty ?? true ? Icons.link : Icons.refresh, size: 18),
-          label: Text(accounts?.isEmpty ?? true ? s.t('gw2_link') : s.t('gw2_refresh')),
-        ),
+        // linking is one thing, for the account of the active API key when it is not
+        // linked yet. refreshing the guilds of a linked account is another
+        if (!activeLinked)
+          OutlinedButton.icon(
+            onPressed: _busy ? null : _link,
+            icon: _busy && !_refreshing ? spinner : const Icon(Icons.link, size: 18),
+            label: Text(activeName.isEmpty ? s.t('gw2_link') : s.t('gw2_link_name', {'name': activeName})),
+          ),
+        if (hasAccounts) ...[
+          if (!activeLinked) const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _busy || !activeLinked ? null : _refresh,
+            icon: _refreshing ? spinner : const Icon(Icons.refresh, size: 18),
+            label: Text(s.t('gw2_refresh')),
+          ),
+          if (!activeLinked)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(s.t('gw2_refresh_other'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+            ),
+        ],
         const SizedBox(height: 4),
         Text(s.t('gw2_link_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
       ],

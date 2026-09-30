@@ -1,5 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'gw2_link_name': '{name} verknüpfen',
+  'gw2_refreshed': 'Gilden aktualisiert.',
+  'gw2_refresh_other': 'Der aktive API-Schlüssel gehört zu einem nicht verknüpften Konto. Verknüpfe es oben oder wechsle zum Schlüssel eines verknüpften Kontos, um dessen Gilden zu aktualisieren.',
   'ginfo_result_synced': 'Gildendaten aktualisiert.',
   'ginfo_result_too_soon': 'Gerade erst aktualisiert, versuche es in ein paar Minuten erneut.',
   'ginfo_result_unavailable': 'Das Spiel gibt die Gildendaten nicht heraus ({detail}).',

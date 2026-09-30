@@ -1,5 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'gw2_link_name': 'Vincular {name}',
+  'gw2_refreshed': 'Gremios actualizados.',
+  'gw2_refresh_other': 'La clave API activa es de una cuenta no vinculada. Vincúlala arriba o cambia a la clave de una cuenta vinculada para actualizar sus gremios.',
   'ginfo_result_synced': 'Datos del gremio actualizados.',
   'ginfo_result_too_soon': 'Actualizado hace un momento, inténtalo de nuevo en unos minutos.',
   'ginfo_result_unavailable': 'El juego no dio los datos del gremio ({detail}).',

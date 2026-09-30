@@ -1,5 +1,8 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'gw2_link_name': '关联 {name}',
+  'gw2_refreshed': '公会已刷新。',
+  'gw2_refresh_other': '当前 API 密钥属于尚未关联的账号。请在上方关联，或切换到已关联账号的密钥来刷新其公会。',
   'ginfo_result_synced': '公会信息已更新。',
   'ginfo_result_too_soon': '刚刚更新过，请几分钟后再试。',
   'ginfo_result_unavailable': '游戏没有返回公会信息（{detail}）。',
