@@ -30,6 +30,7 @@ AdminDashboard dash({
     });
 
 void main() {
+  serverTests();
   final now = DateTime.utc(2026, 10, 1, 12);
 
   group('what the database says', () {
@@ -115,6 +116,143 @@ void main() {
       expect(formatBytes(2048), '2.0 KB');
       expect(formatBytes(5 * 1024 * 1024), '5.0 MB');
       expect(formatBytes((2.5 * 1024 * 1024 * 1024).round()), '2.5 GB');
+    });
+  });
+}
+
+AdminServer server({
+  int connections = 20,
+  int max = 60,
+  int idleInTransaction = 0,
+  double? cache = 99.6,
+  int deadlocks = 0,
+  int size = 50 * 1024 * 1024,
+  int monthly = 100,
+  List<Map<String, dynamic>> running = const [],
+  List<Map<String, dynamic>> tables = const [],
+  int failingFeeds = 0,
+  Map<String, dynamic>? broken,
+}) =>
+    AdminServer({
+      'generated_at': '2026-10-01T12:00:00+00:00',
+      'server': {
+        'max_connections': max,
+        'size_bytes': size,
+        'cache_hit_percent': cache,
+        'deadlocks': deadlocks,
+        'connections': {'total': connections, 'idle_in_transaction': idleInTransaction},
+      },
+      'tables': tables,
+      'running': running,
+      'auth': {'signed_in_30d': monthly},
+      'feeds': {
+        'with_error': failingFeeds,
+        'errors': failingFeeds == 0
+            ? []
+            : [
+                {'guild': 'Mistwalkers', 'kind': 'news', 'error': 'timeout'},
+              ],
+      },
+      'activity': {
+        'events': [
+          {'day': '2026-09-30', 'count': 2},
+          {'day': '2026-10-01', 'count': 5},
+        ],
+      },
+      ...?broken,
+    });
+
+void serverTests() {
+  final now = DateTime.utc(2026, 10, 1, 12);
+  HealthLine line(AdminServer s, String label) => s.health(now).firstWhere((l) => l.label == label);
+
+  group('how full something is', () {
+    test('is fine under 70 percent, a warning to 90, an alarm from there', () {
+      expect(levelOfUse(0.1), HealthLevel.good);
+      expect(levelOfUse(0.699), HealthLevel.good);
+      expect(levelOfUse(0.7), HealthLevel.warn);
+      expect(levelOfUse(0.89), HealthLevel.warn);
+      expect(levelOfUse(0.9), HealthLevel.bad);
+      expect(levelOfUse(1.3), HealthLevel.bad);
+    });
+
+    test('uptime', () {
+      expect(uptime(now.subtract(const Duration(minutes: 12)), now), '12 min');
+      expect(uptime(now.subtract(const Duration(hours: 5, minutes: 20)), now), '5 h 20 min');
+      expect(uptime(now.subtract(const Duration(days: 3, hours: 4)), now), '3 d 4 h');
+    });
+  });
+
+  group('the server report', () {
+    test('is read as numbers, days and lists', () {
+      final s = server();
+      expect(s.count('server', 'max_connections'), 60);
+      expect(s.cacheHitPercent, 99.6);
+      expect(s.series('events').map((d) => d.count), [2, 5]);
+      expect(s.series('nothing'), isEmpty);
+      expect(s.list('tables'), isEmpty);
+      expect(s.generatedAt, isNotNull);
+      expect(AdminServer(const {'server': 5}).count('server', 'size_bytes'), 0, reason: 'a part of another kind is nothing');
+    });
+
+    test('says why a part could not be read', () {
+      final s = server(broken: {
+        'slow': {'error': 'relation does not exist'},
+      });
+      expect(s.problem('slow'), 'relation does not exist');
+      expect(s.problem('tables'), isNull);
+      expect(line(s, 'Could not read slow').detail, 'relation does not exist');
+      expect(line(s, 'Could not read slow').level, HealthLevel.warn);
+    });
+  });
+
+  group('server health', () {
+    test('a server with room, a warm cache and nothing running is fine', () {
+      final lines = server().health(now);
+      expect(lines.where((l) => l.level != HealthLevel.good), isEmpty, reason: lines.map((l) => '${l.label}: ${l.detail}').join('; '));
+    });
+
+    test('connections are told against the most there may be', () {
+      expect(line(server(connections: 20, max: 60), 'Connections').level, HealthLevel.good);
+      expect(line(server(connections: 48, max: 60), 'Connections').level, HealthLevel.warn);
+      expect(line(server(connections: 58, max: 60), 'Connections').level, HealthLevel.bad);
+      expect(line(server(connections: 48, max: 60), 'Connections').detail, '48 of 60 in use');
+    });
+
+    test('a cold cache, deadlocks, open transactions and queries that hang are told', () {
+      expect(line(server(cache: 97), 'Cache').level, HealthLevel.warn);
+      expect(line(server(cache: 80), 'Cache').level, HealthLevel.bad);
+      expect(line(server(deadlocks: 2), 'Deadlocks').level, HealthLevel.warn);
+      expect(line(server(idleInTransaction: 3), 'Open transactions').level, HealthLevel.warn);
+      final slow = server(running: [
+        {'seconds': 8},
+        {'seconds': 75},
+      ]);
+      expect(line(slow, 'Queries').level, HealthLevel.bad);
+      expect(line(slow, 'Queries').detail, '2 running for more than 5 s, the longest 75 s');
+      expect(line(server(running: [
+        {'seconds': 8},
+      ]), 'Queries').level, HealthLevel.warn);
+    });
+
+    test('the size and the monthly users are told against the limits of the free plan', () {
+      expect(line(server(size: 100 * 1024 * 1024), 'Database size').level, HealthLevel.good);
+      expect(line(server(size: 400 * 1024 * 1024), 'Database size').level, HealthLevel.warn);
+      expect(line(server(size: 470 * 1024 * 1024), 'Database size').level, HealthLevel.bad);
+      expect(line(server(monthly: 40000), 'Monthly users').level, HealthLevel.warn);
+      expect(line(server(monthly: 46000), 'Monthly users').level, HealthLevel.bad);
+    });
+
+    test('a table with more dead rows than live ones, and a feed that fails, are told', () {
+      final s = server(failingFeeds: 1, tables: [
+        {'name': 'events', 'rows': 50, 'dead': 4000},
+        {'name': 'profiles', 'rows': 50000, 'dead': 4000},
+        {'name': 'tiny', 'rows': 0, 'dead': 10},
+      ]);
+      expect(s.health(now).where((l) => l.label == 'events').single.level, HealthLevel.warn);
+      expect(s.health(now).where((l) => l.label == 'profiles'), isEmpty, reason: 'few dead rows against many live ones');
+      expect(s.health(now).where((l) => l.label == 'tiny'), isEmpty, reason: 'too few to matter');
+      expect(line(s, 'News feeds').detail, '1 failing: Mistwalkers news, timeout');
     });
   });
 }
