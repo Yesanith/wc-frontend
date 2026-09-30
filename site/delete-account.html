@@ -5,18 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Delete your account · Tyria Codex</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="alternate" hreflang="en" href="https://yesanith.github.io/tyria-companion/delete-account.html">
+  <link rel="alternate" hreflang="de" href="https://yesanith.github.io/tyria-companion/de/delete-account.html">
+  <link rel="alternate" hreflang="es" href="https://yesanith.github.io/tyria-companion/es/delete-account.html">
+  <link rel="alternate" hreflang="fr" href="https://yesanith.github.io/tyria-companion/fr/delete-account.html">
+  <link rel="alternate" hreflang="tr" href="https://yesanith.github.io/tyria-companion/tr/delete-account.html">
+  <link rel="alternate" hreflang="pt" href="https://yesanith.github.io/tyria-companion/pt/delete-account.html">
+  <link rel="alternate" hreflang="ru" href="https://yesanith.github.io/tyria-companion/ru/delete-account.html">
+  <link rel="alternate" hreflang="ja" href="https://yesanith.github.io/tyria-companion/ja/delete-account.html">
+  <link rel="alternate" hreflang="zh" href="https://yesanith.github.io/tyria-companion/zh/delete-account.html">
+  <link rel="alternate" hreflang="x-default" href="https://yesanith.github.io/tyria-companion/delete-account.html">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"
     integrity="sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="lang"><details><summary aria-label="Language">🌐 English</summary><ul><li><a href="delete-account.html" hreflang="en" lang="en" aria-current="true">English</a></li><li><a href="de/delete-account.html" hreflang="de" lang="de">Deutsch</a></li><li><a href="es/delete-account.html" hreflang="es" lang="es">Español</a></li><li><a href="fr/delete-account.html" hreflang="fr" lang="fr">Français</a></li><li><a href="tr/delete-account.html" hreflang="tr" lang="tr">Türkçe</a></li><li><a href="pt/delete-account.html" hreflang="pt" lang="pt">Português</a></li><li><a href="ru/delete-account.html" hreflang="ru" lang="ru">Русский</a></li><li><a href="ja/delete-account.html" hreflang="ja" lang="ja">日本語</a></li><li><a href="zh/delete-account.html" hreflang="zh" lang="zh">中文</a></li></ul></details></div>
 <main>
-  <nav><a href="index.html">Tyria Codex</a><a href="faq.html">FAQ</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of service</a></nav>
+  <nav><a href="index.html">Tyria Codex</a><a href="faq.html">FAQ</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of service</a><a href="delete-account.html">Delete your account</a><a href="https://github.com/Yesanith/tyria-companion/issues">Contact</a></nav>
   <h1>Delete your account</h1>
-  <p>This deletes your Tyria Companion account for good: your profile, linked Guild Wars 2 accounts, guild memberships,
-    event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account,
-    your Discord account or anything the app keeps on your phone.</p>
-  <p class="muted">Hesabını kalıcı olarak siler: profilin, bağlı GW2 hesapların, lonca üyeliklerin, katılımların, oluşturduğun
-    etkinlikler ve bildirim cihazların. GW2 ve Discord hesaplarına dokunmaz.</p>
+  <p>This deletes your Tyria Companion account for good: your profile, linked Guild Wars 2 accounts, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.</p>
 
   <div class="card" id="signed-out" hidden>
     <p>Sign in with the Discord account you use in the app.</p>
@@ -37,11 +44,28 @@
   <p class="muted" id="status"></p>
   <p class="muted">You can also delete your account in the app: Settings, then Delete account.</p>
 </main>
+<script>document.addEventListener('click', (e) => { document.querySelectorAll('.lang details[open]').forEach((d) => { if (!d.contains(e.target)) d.open = false; }); });</script>
 <script>
+(async () => {
+  const TEXT = {"deleting": "Deleting…", "failed": "That did not work, please try again or open an issue on GitHub.", "fallback_name": "your account"};
+  const LANG = 'en';
+  const LANGS = ["en", "de", "es", "fr", "tr", "pt", "ru", "ja", "zh"];
+  // the site's root, from this page
+  const site = new URL('./', location.href);
+  // discord sends the player back to one page whichever language they were reading, the English one,
+  // and that page carries them on to the language they chose before signing in
+  let stored = null;
+  try { stored = localStorage.getItem('tc_lang'); } catch (_) {}
+  const returning = location.search.includes('code=') || location.hash.includes('access_token');
+  if (LANG === 'en' && returning && stored && stored !== 'en' && LANGS.includes(stored)) {
+    location.replace(new URL(stored + '/delete-account.html', site).href + location.search + location.hash);
+    return;
+  }
+
   // filled in from the repository secrets when the site is published. both
   // are public by design, the database only lets a player delete themselves
   const client = supabase.createClient('__SUPABASE_URL__', '__SUPABASE_PUBLISHABLE_KEY__');
-  const here = location.origin + location.pathname;
+  const back = new URL('delete-account.html', site).href;
   const show = (id) => ['signed-out', 'signed-in', 'done'].forEach((s) => document.getElementById(s).hidden = s !== id);
   const status = (text) => document.getElementById('status').textContent = text;
 
@@ -49,21 +73,23 @@
     const { data: { session } } = await client.auth.getSession();
     if (!session) return show('signed-out');
     const { data } = await client.from('profiles').select('display_name').eq('id', session.user.id).maybeSingle();
-    document.getElementById('who').textContent = data?.display_name ?? session.user.email ?? 'your account';
+    document.getElementById('who').textContent = data?.display_name ?? session.user.email ?? TEXT.fallback_name;
     show('signed-in');
   }
 
-  document.getElementById('sign-in').onclick = () =>
-    client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: here } });
+  document.getElementById('sign-in').onclick = () => {
+    try { localStorage.setItem('tc_lang', LANG); } catch (_) {}
+    client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: back } });
+  };
   document.getElementById('sign-out').onclick = async () => { await client.auth.signOut(); refresh(); };
   document.getElementById('sure').onchange = (e) => document.getElementById('delete').disabled = !e.target.checked;
   document.getElementById('delete').onclick = async () => {
     const button = document.getElementById('delete');
     button.disabled = true;
-    status('Deleting…');
+    status(TEXT.deleting);
     const { error } = await client.rpc('delete_account');
     if (error) {
-      status('That did not work, please try again or open an issue on GitHub.');
+      status(TEXT.failed);
       button.disabled = false;
       return;
     }
@@ -76,6 +102,7 @@
   // coming back from discord, the session arrives in the address
   client.auth.onAuthStateChange(() => refresh());
   refresh();
+})();
 </script>
 </body>
 </html>

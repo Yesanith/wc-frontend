@@ -1,0 +1,317 @@
+{
+ "meta": {
+  "name": "English",
+  "html_lang": "en"
+ },
+ "ui": {
+  "nav_home": "Tyria Codex",
+  "nav_faq": "FAQ",
+  "nav_privacy": "Privacy policy",
+  "nav_terms": "Terms of service",
+  "nav_delete": "Delete your account",
+  "nav_contact": "Contact",
+  "language": "Language",
+  "note": ""
+ },
+ "index": {
+  "tagline": "An unofficial Guild Wars 2 companion for Android, iPhone and the browser.",
+  "intro": "Your characters, wallet, trading post, crafting, world bosses, the Wizard's Vault and a world map, plus guild events with sign ups, roles and a Discord bot.",
+  "download": "Download the latest version",
+  "browser_h": "In your browser",
+  "browser_p": "There is no iPhone app yet. The whole app also runs in the browser, on any phone or computer.",
+  "open_button": "Open Tyria Codex",
+  "iphone": "<strong>iPhone:</strong> open it in Safari, tap the share button and choose <em>Add to Home Screen</em>. It then opens on its own, like an app.",
+  "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers.",
+  "fan": "Tyria Codex is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation."
+ },
+ "delete": {
+  "title": "Delete your account",
+  "intro": "This deletes your Tyria Companion account for good: your profile, linked Guild Wars 2 accounts, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.",
+  "signin_p": "Sign in with the Discord account you use in the app.",
+  "signin_btn": "Sign in with Discord",
+  "signed_prefix": "Signed in as ",
+  "signed_suffix": ".",
+  "sure": "I understand this cannot be undone.",
+  "delete_btn": "Delete my account permanently",
+  "signout_btn": "Sign out",
+  "done": "<strong>Your account was deleted.</strong> You can close this page.",
+  "app_note": "You can also delete your account in the app: Settings, then Delete account.",
+  "deleting": "Deleting…",
+  "failed": "That did not work, please try again or open an issue on GitHub.",
+  "fallback_name": "your account"
+ },
+ "faq": {
+  "title": "Frequently asked questions",
+  "items": [
+   [
+    "What is Tyria Codex?",
+    "An unofficial Guild Wars 2 companion: your characters, wallet, trading post, crafting, world bosses, the Wizard's Vault and a world map, plus guild events with sign ups and a Discord bot. It is a fan project, free, with no ads."
+   ],
+   [
+    "Where can I use it?",
+    "On Android as an app, and on any phone or computer in a browser at <a href='{ROOT}app/'>this site's app page</a>. There is no iPhone app yet: open the browser version in Safari, tap Share and choose Add to Home Screen, and it opens like an app. The browser version has no notifications or world event alerts."
+   ],
+   [
+    "Do I need an API key? Which permissions?",
+    "The game data comes from your own Guild Wars 2 API key, which you make on account.arena.net. Tick what you want to see: account is always needed, and characters, inventories, wallet, tradingpost and guilds unlock those parts. Without a key you can still use everything that is not about your account."
+   ],
+   [
+    "Is my API key safe?",
+    "Your key stays on your device, or in your browser for the browser version, and is sent only to the Guild Wars 2 servers. It is never sent to ours. See the <a href='privacy.html'>privacy policy</a>. A key can only read, and you can delete it any time on account.arena.net."
+   ],
+   [
+    "Do I need the Tyria Companion account?",
+    "No, it is optional. You need it for guild events, the guild information and the Discord bot. You create it by signing in with Discord, and you can delete it any time from Settings or the <a href='delete-account.html'>delete account page</a>."
+   ],
+   [
+    "What happens when I link my Guild Wars 2 account?",
+    "The app makes a token that is valid for ten minutes and sends only that, never your key. We record your account name, your guilds and your rank in them. If you lead a guild, the same token lets our servers read what the game shows only to leaders, so your guild's members can see it in the app."
+   ],
+   [
+    "Why can't I see my guild's treasury, stash or log?",
+    "The game shows them only to the guild's leader. Members see them here when their leader uses Tyria Companion and lets them. The leader opens the app once, which brings the guild's data, and chooses what members see: any part can be hidden. The treasury, the stash and the log, which show who took what, stay hidden until the leader has confirmed the choices."
+   ],
+   [
+    "It says the leader has not shared this yet.",
+    "Either the leader has not opened the app since linking, the game refused a part, or the leader hid it. Ask your leader to open the app and check the eye button on the guild's page."
+   ],
+   [
+    "Who counts as an officer?",
+    "The game decides. A rank that may invite, promote or kick, or edit ranks, makes officers, and officers can create and manage events. Nobody is appointed by hand. The app shows the rank name your guild gave, like Raid Lead."
+   ],
+   [
+    "How do I add the Discord bot?",
+    "Invite it to your server, then a guild leader who has Manage Server runs <code>/tyria connect</code> with the guild's tag or name in the channel where events should appear. The bot needs to see and write in the channel; for threads, scheduled events, roles and reminders it needs the matching permissions, and <code>/tyria status</code> says what is missing."
+   ],
+   [
+    "What can the bot do?",
+    "<code>/event create</code> and <code>/event weekly</code> make events, players sign up with buttons, with their profession and roles. <code>/event report</code> adds an Arcdps report link. <code>/tyria settings</code> sets threads, Discord events and reminders. <code>/tyria notify</code> posts daily achievements, news and game updates. <code>/tyria roles</code> and <code>/tyria rankrole</code> give Discord roles for guild ranks. The bot cannot read messages."
+   ],
+   [
+    "How do Discord roles follow guild ranks?",
+    "Run <code>/tyria roles ranks:true</code>. The bot then makes one Discord role for each rank of your guild, with no permissions, and gives it to whoever holds the rank. It starts once the leader's app has brought the ranks; until then the roles of member, officer and leader apply."
+   ],
+   [
+    "Why is something missing in the browser?",
+    "The browser version cannot use the phone's notifications, world event alerts or a cache on the device, so it loads more slowly. If something else does not work, tell us."
+   ],
+   [
+    "How do I delete my data?",
+    "Settings, then Delete account, or the <a href='delete-account.html'>delete account page</a>. Your profile, linked accounts, memberships, sign ups and the events you created are deleted at once. What the guild's leader brought is deleted when the last leader who uses the app goes."
+   ],
+   [
+    "Is it affiliated with ArenaNet?",
+    "No. It is a fan project. Guild Wars 2 and its logos and designs are trademarks of NCSOFT Corporation."
+   ],
+   [
+    "Something is wrong. Where do I report it?",
+    "<a href='https://github.com/Yesanith/tyria-companion/issues'>Open an issue on GitHub</a> and say what you did and what you saw. A screenshot helps. Never post your API key."
+   ]
+  ]
+ },
+ "privacy": {
+  "title": "Privacy policy",
+  "updated": "Last updated 30 September 2026",
+  "blocks": [
+   [
+    "p",
+    "Tyria Codex is an unofficial Guild Wars 2 companion. It has no ads and no analytics, does not track you and does not sell or share your data for advertising. This page says what it handles, where, who can see it and for how long. It covers the Android app, the version that runs in a browser on this site, and the Discord bot."
+   ],
+   [
+    "h2",
+    "What stays on your device"
+   ],
+   [
+    "p",
+    "Your Guild Wars 2 API keys, the game data the app downloads with them, your settings, favourites, watchlist and price history are stored only on your device, or in your browser for the browser version. The app talks to the official Guild Wars 2 API directly. Your API keys are never sent to our servers. On a phone the key travels to ArenaNet in a request header. A browser cannot do that with the game's API, so there it travels in the address of the request, to ArenaNet only. In a browser the key is kept in that browser's storage; clearing the site's data removes it."
+   ],
+   [
+    "h2",
+    "The optional Tyria Companion account"
+   ],
+   [
+    "p",
+    "Guild events, guild information and the Discord bot need an account, which you create by signing in with Discord. Everything below applies only if you do."
+   ],
+   [
+    "ul",
+    [
+     "<strong>From Discord:</strong> your Discord user id, name, avatar and, if Discord provides it, your email address.",
+     "<strong>Your Guild Wars 2 account:</strong> to link it, the app creates a token that is valid for ten minutes and can only read your account and your guilds, and sends only that token. We record your account name and id, your guilds' names and tags, your role in them and the rank the game gives you. The token is used for these few requests and is not stored.",
+     "<strong>If you lead a guild:</strong> with the same ten minute token our servers also read what the game shows only to a guild's leader, and keep it for the guild: its level, message of the day and member count, its member list with each member's account name, rank and join date, its ranks and what each rank may do, the treasury, the stash, the guild storage, the log of who did what, the built upgrades and the PvP teams. The member list also names people who do not use Tyria Companion, as the game lists them. This is done each time your app is opened, at most every half hour.",
+     "<strong>Guild events:</strong> events you create, including weekly ones, your answers, the role, profession and other roles you offer, the Guild Wars 2 account you choose, the Discord roles an event is open to, and the Arcdps report links (dps.report) members add with the boss, the result, the number of players and the duration that dps.report gives for them.",
+     "<strong>Notifications:</strong> if you allow them, your device's notification token and the app's language, to send event reminders.",
+     "<strong>Discord servers:</strong> if you lead a guild and connect a Discord server: the server's id and the channel events are posted to, its settings (time zone, language, threads, scheduled events, reminders), the channels and the optional role for news, daily achievements and game updates, the Discord roles matched to guild ranks, and which roles the bot gave to which Discord user so that it can take back only those. The bot cannot read messages. It receives the commands and buttons people use, and with a button press Discord sends the person's id and their roles in that server, which are used for that moment and not stored."
+    ]
+   ],
+   [
+    "h2",
+    "Who sees it"
+   ],
+   [
+    "ul",
+    [
+     "Members of your guilds who also use Tyria Companion see your Guild Wars 2 account name, your rank and your answers to the guild's events.",
+     "They also see what the leader's app brought of the guild, as the leader chooses: the leader can hide any part, and the treasury, the stash and the log, which show who took what, stay hidden until the leader has looked at the choices and confirmed them. The leader always sees everything.",
+     "If your guild has connected a Discord server, everyone in the channel sees the event messages with the names of those signed up.",
+     "Nobody outside your guilds sees any of it. People who do not use Tyria Companion are never shown to anybody who is not in the same guild."
+    ]
+   ],
+   [
+    "h2",
+    "Services we use"
+   ],
+   [
+    "ul",
+    [
+     "<strong>Supabase</strong> hosts the account database, sign in and the functions that talk to the game and to Discord, in the European Union (Frankfurt). The news feed of the browser version passes through one of these functions, because the game's site does not allow a browser to read it.",
+     "<strong>Google Firebase Cloud Messaging</strong> delivers notifications to phones.",
+     "<strong>Google Fonts</strong> provides the app's typeface, so Google sees that request.",
+     "<strong>Discord</strong> handles sign in and shows messages in servers that connected the bot.",
+     "<strong>ArenaNet's Guild Wars 2 API and site</strong> provide all game data, icons and news.",
+     "<strong>dps.report</strong> is asked for the public details of a report link a member adds.",
+     "<strong>GitHub</strong> hosts this site and the browser version, and sees the visits to them."
+    ]
+   ],
+   [
+    "h2",
+    "How long we keep it"
+   ],
+   [
+    "ul",
+    [
+     "Your account data is kept until you delete the account.",
+     "A guild is not a person's, so deleting an account does not delete it, but what the leader's app brought must not outlive the leader: when the last leader who uses the app goes, the level, message of the day, counts, member list, ranks, treasury, stash, log and the leader's choices are deleted, and when the last member goes the guild is deleted with its Discord connection.",
+     "A guild membership the app has not refreshed for 30 days stops counting, and after 90 days it is deleted. Coming back and linking again restores it.",
+     "A device's notification token is removed when you sign out, switch notifications off or the token stops working. A Discord server's data is removed when it is disconnected or its guild is deleted."
+    ]
+   ],
+   [
+    "h2",
+    "Deleting your account and your rights"
+   ],
+   [
+    "p",
+    "In the app, open Settings and choose Delete account, or use the <a href='delete-account.html'>delete account page</a> without the app. Your profile, linked Guild Wars 2 accounts, guild memberships, sign ups, the events you created and your notification tokens are deleted at once and cannot be restored. You may also ask what we hold about you, have it corrected, or object to how it is used, and if you are in the European Union you may complain to your data protection authority. Write to us as below. We use your data only to provide what you asked for by signing in and linking, which is our basis for handling it."
+   ],
+   [
+    "h2",
+    "Children"
+   ],
+   [
+    "p",
+    "Tyria Codex is not directed at children under 13."
+   ],
+   [
+    "h2",
+    "Contact"
+   ],
+   [
+    "p",
+    "Questions or requests: <a href='https://github.com/Yesanith/tyria-companion/issues'>open an issue on GitHub</a>. Changes to this policy are published on this page with a new date."
+   ]
+  ]
+ },
+ "terms": {
+  "title": "Terms of service",
+  "updated": "Last updated 30 September 2026",
+  "blocks": [
+   [
+    "p",
+    "These terms are between you and the person who runs Tyria Codex, the Android app, the version that runs in a browser on this site and the Discord bot. By using them you agree to these terms. If you do not, do not use them."
+   ],
+   [
+    "h2",
+    "What it is"
+   ],
+   [
+    "p",
+    "Tyria Codex is an unofficial, free fan project for Guild Wars 2. It is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation. Game data and images come from ArenaNet's public Guild Wars 2 API and are used as its terms allow. Using Tyria Codex does not change your rights or duties towards ArenaNet, Discord or anybody else."
+   ],
+   [
+    "h2",
+    "Who may use it"
+   ],
+   [
+    "p",
+    "You must be at least 13, and old enough to agree to these terms where you live. You must follow the terms of Guild Wars 2, Discord and any other service you use with it."
+   ],
+   [
+    "h2",
+    "Your account and your API key"
+   ],
+   [
+    "ul",
+    [
+     "The Tyria Companion account is optional and made by signing in with Discord. You are responsible for what happens through it.",
+     "Your API key is yours. Keep it to yourself, use keys that only have the permissions you want to give, and revoke it on account.arena.net if you think it leaked. We never ask for your key.",
+     "You may only link Guild Wars 2 accounts that are yours."
+    ]
+   ],
+   [
+    "h2",
+    "Guilds and what you share"
+   ],
+   [
+    "ul",
+    [
+     "A guild leader who uses the app lets our servers read and keep the guild's data that the game shows only to leaders, and shows it to the guild's members who use the app, as the leader chooses. The leader agrees to this and is responsible for what they choose to show. The privacy policy says what is kept and for how long.",
+     "Do not link an account or connect a Discord server for a guild you are not entitled to represent.",
+     "Guild events, descriptions and reports you add are visible to your guild and, if a Discord server is connected, to that channel. Do not post anything unlawful, hateful, harassing or misleading, or anybody's private information."
+    ]
+   ],
+   [
+    "h2",
+    "What you may not do"
+   ],
+   [
+    "ul",
+    [
+     "Use it to harass or impersonate people, to spam, or to break the rules of the game or of Discord.",
+     "Try to get at data that is not yours, to overload or interfere with the service, or to work around its limits.",
+     "Scrape it, resell it, or use it to build something that does the same for others without asking."
+    ]
+   ],
+   [
+    "h2",
+    "Content and removal"
+   ],
+   [
+    "p",
+    "What you create stays yours. You allow us to store and show it as the app works, to the people it is meant for. We may remove content or accounts that break these terms or harm the service or others, and may disconnect a Discord server that does. You can delete your account at any time, see the <a href='delete-account.html'>delete account page</a>."
+   ],
+   [
+    "h2",
+    "Availability and changes"
+   ],
+   [
+    "p",
+    "It is run by one person in their free time and depends on the Guild Wars 2 API, Discord and other services that we do not control. It may be slow, wrong, unavailable or change without notice, and we may end it or any of its features. Game data is only as accurate as the game's API."
+   ],
+   [
+    "h2",
+    "No warranty and limits of liability"
+   ],
+   [
+    "p",
+    "It is provided as it is, without promises that it works, is accurate or suits your purpose. To the extent the law allows, we are not liable for loss or damage from using it or not being able to, including a lost sign up, a missed event, wrong data or something that a Discord bot did or did not do. Nothing here limits rights you have under consumer protection law that cannot be limited."
+   ],
+   [
+    "h2",
+    "Changes to these terms"
+   ],
+   [
+    "p",
+    "We may change them and publish the new version on this page with a new date. Using the service after that means you accept the change."
+   ],
+   [
+    "h2",
+    "Contact"
+   ],
+   [
+    "p",
+    "Questions or problems: <a href='https://github.com/Yesanith/tyria-companion/issues'>open an issue on GitHub</a>. See also the <a href='privacy.html'>privacy policy</a> and the <a href='faq.html'>FAQ</a>."
+   ]
+  ]
+ }
+}

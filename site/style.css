@@ -1,7 +1,7 @@
 :root { --bg: #0d0b09; --surface: #1a1612; --line: #2e2822; --text: #efe8dc; --soft: #d1c9bd; --muted: #9e9586; --gold: #dfc295; --red: #ed6b7a; --discord: #5865f2; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-main { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+main { max-width: 720px; margin: 0 auto; padding: 64px 20px 80px; }
 h1 { font-size: 30px; margin: 0 0 4px; color: var(--gold); }
 h2 { font-size: 20px; margin: 32px 0 8px; }
 p, li { color: var(--soft); }
@@ -33,3 +33,16 @@ summary { cursor: pointer; font-weight: 700; padding: 12px 0; color: var(--text)
 details[open] summary { color: var(--gold); }
 details p { margin: 0 0 14px; }
 code { background: #241e18; border-radius: 6px; padding: 1px 6px; font-size: 0.92em; color: var(--gold); }
+
+/* the language picker, in the top corner of every page: a list of links, it works without a script */
+.lang { position: absolute; top: 14px; right: 14px; z-index: 5; font-size: 14px; }
+.lang details { position: relative; background: none; border: 0; border-radius: 0; padding: 0; margin: 0; }
+.lang summary { list-style: none; cursor: pointer; background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  padding: 6px 12px; color: var(--soft); font-weight: 600; user-select: none; }
+.lang summary::-webkit-details-marker { display: none; }
+.lang details[open] summary { color: var(--gold); }
+.lang ul { position: absolute; right: 0; margin: 6px 0 0; padding: 6px; list-style: none; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px; min-width: 150px; box-shadow: 0 8px 24px rgba(0, 0, 0, .5); }
+.lang li { margin: 0; }
+.lang li a { display: block; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: var(--soft); }
+.lang li a:hover, .lang li a[aria-current] { background: #241e18; color: var(--gold); }
