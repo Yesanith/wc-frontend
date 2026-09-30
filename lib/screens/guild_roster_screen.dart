@@ -184,9 +184,12 @@ const _sharedParts = <String, String>{
 /// what the guild's leader lets the members see of everything the leader's app
 /// brings, one switch for each part. [guildId] is the community guild's id
 class GuildSharingPanel extends ConsumerStatefulWidget {
-  const GuildSharingPanel({super.key, required this.guildId});
+  const GuildSharingPanel({super.key, required this.guildId, this.onConfirmed});
 
   final String guildId;
+
+  /// called once the leader has confirmed the choices
+  final VoidCallback? onConfirmed;
 
   @override
   ConsumerState<GuildSharingPanel> createState() => _GuildSharingPanelState();
@@ -202,6 +205,22 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
       await setGuildPartShared(widget.guildId, part, shared);
       ref.invalidate(guildDetailsProvider(widget.guildId));
       await ref.read(guildDetailsProvider(widget.guildId).future);
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// the choices are confirmed, from now on the members see the treasury, the stash and the log as chosen
+  Future<void> _confirm() async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      await confirmGuildSharing(widget.guildId);
+      ref.invalidate(guildDetailsProvider(widget.guildId));
+      await ref.read(guildDetailsProvider(widget.guildId).future);
+      widget.onConfirmed?.call();
     } catch (e) {
       if (mounted) showToast(context, '${s.t('community_failed')} ($e)');
     } finally {
@@ -242,6 +261,41 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
           const SizedBox(height: 4),
           Text(s.t('gshare_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           for (final part in _sharedParts.entries) row(s.t(part.value), d.shares(part.key), (v) => _set(part.key, v)),
+          if (!d.reviewed) ...[
+            const SizedBox(height: 10),
+            Text(s.t('gshare_unreviewed'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.gold)),
+            const SizedBox(height: 10),
+            FilledButton(onPressed: _busy ? null : _confirm, child: Text(s.t('gshare_confirm'))),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// shown to a guild's leader once the guild has been read from the game, to choose what
+/// the members see before they see it
+class SharingReviewScreen extends ConsumerWidget {
+  const SharingReviewScreen({super.key, required this.guildId, required this.guildName});
+
+  final String guildId;
+  final String guildName;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Scaffold(
+      appBar: AppBar(title: Text(s.t('gshare_review_title'))),
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        children: [
+          Text(guildName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 8),
+          Text(s.t('gshare_review_intro'), style: const TextStyle(fontSize: 13, height: 1.5, color: AppColors.muted)),
+          const SizedBox(height: 16),
+          GuildSharingPanel(guildId: guildId, onConfirmed: () => Navigator.of(context).pop()),
+          const SizedBox(height: 8),
+          Center(child: TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('gshare_later')))),
         ],
       ),
     );

@@ -27,3 +27,9 @@ a.button {
   text-decoration: none;
 }
 a.button:hover { filter: brightness(1.08); }
+
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 16px; margin: 10px 0; }
+summary { cursor: pointer; font-weight: 700; padding: 12px 0; color: var(--text); }
+details[open] summary { color: var(--gold); }
+details p { margin: 0 0 14px; }
+code { background: #241e18; border-radius: 6px; padding: 1px 6px; font-size: 0.92em; color: var(--gold); }

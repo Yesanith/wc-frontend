@@ -28,6 +28,7 @@ import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
 import 'events_screen.dart';
+import 'guild_roster_screen.dart' show SharingReviewScreen;
 import 'guilds_screen.dart';
 import 'home_screen.dart';
 import 'professions_screen.dart';
@@ -129,6 +130,34 @@ class AppShell extends ConsumerStatefulWidget {
 class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// the guilds whose leader was already asked in this run, so it happens once
+  static final _reviewAsked = <String>{};
+
+  /// refreshes the link, which brings a leader's guild from the game, and when
+  /// there is a guild whose leader has not yet chosen what the members see, asks
+  Future<void> _refreshAndReview() async {
+    await refreshLink(ref);
+    if (!mounted) return;
+    try {
+      final guilds = await ref.read(myGuildsProvider.future);
+      for (final g in guilds) {
+        if (g.role != 'leader' || _reviewAsked.contains(g.id)) continue;
+        final details = await ref.read(guildDetailsProvider(g.id).future);
+        // nothing to choose about before the guild has been read
+        if (details == null || !details.known || details.reviewed) continue;
+        _reviewAsked.add(g.id);
+        if (!mounted) return;
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => SharingReviewScreen(guildId: g.id, guildName: g.name)),
+        );
+        // one guild at a time
+        return;
+      }
+    } catch (_) {
+      // the question is asked again the next time the app opens
+    }
+  }
+
   // sections are only built once they're opened, so the app doesn't hit
   // every endpoint on startup. after that they stay alive in the stack
   final _opened = <AppSection>{AppSection.home};
@@ -143,7 +172,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         _startPush();
         // the link with the community account is refreshed quietly, and a
         // guild leader's app brings the guild's details each time it is opened
-        WidgetsBinding.instance.addPostFrameCallback((_) => refreshLink(ref));
+        WidgetsBinding.instance.addPostFrameCallback((_) => _refreshAndReview());
       }
     }, fireImmediately: true);
     // a tap on a world event alert opens the events, also when it started the app
@@ -210,7 +239,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       // a short switch away is not worth a refresh, a few minutes is
       if (away > const Duration(minutes: 3)) {
         ref.read(periodRefreshProvider.notifier).resumed();
-        refreshLink(ref);
+        _refreshAndReview();
       }
     }
   }

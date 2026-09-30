@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../l10n/strings.dart';
 import 'api.dart';
+import 'community.dart' show supabaseUrl;
 import 'settings.dart';
 
 /// one article of the official news feed
@@ -39,6 +40,14 @@ class NewsItem {
 String newsLang(AppLang lang) => const {'de', 'fr', 'es'}.contains(lang.code) ? lang.code : 'en';
 
 String newsFeedUrl(AppLang lang) => 'https://www.guildwars2.com/${newsLang(lang)}/feed/';
+
+/// where the feed is read from. a browser cannot read guildwars2.com, which sends
+/// no CORS headers, so it reads the backend's copy of the same feed. empty when
+/// there is no backend to ask
+String newsFeedRequest(AppLang lang, {required bool web, required String backend}) {
+  if (!web) return newsFeedUrl(lang);
+  return backend.isEmpty ? '' : '$backend/functions/v1/news-feed?lang=${newsLang(lang)}';
+}
 
 const _months = {
   'jan': 1,
@@ -187,7 +196,9 @@ final newsProvider = FutureProvider<List<NewsItem>>((ref) async {
   final cache = ref.watch(diskCacheProvider);
   final name = 'news_${newsLang(lang)}';
   try {
-    final res = await _client.get(Uri.parse(newsFeedUrl(lang))).timeout(const Duration(seconds: 20));
+    final address = newsFeedRequest(lang, web: kIsWeb, backend: supabaseUrl);
+    if (address.isEmpty) throw Exception('no news feed to ask');
+    final res = await _client.get(Uri.parse(address)).timeout(const Duration(seconds: 20));
     if (res.statusCode != 200) throw Exception('news feed answered ${res.statusCode}');
     final items = parseRss(utf8.decode(res.bodyBytes));
     if (items.isEmpty) throw Exception('news feed had no items');

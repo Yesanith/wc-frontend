@@ -3,6 +3,7 @@ import 'package:tyria_codex/l10n/strings.dart';
 import 'package:tyria_codex/state/community.dart';
 import 'package:tyria_codex/state/guild_events.dart';
 import 'package:tyria_codex/state/link_refresh.dart';
+import 'package:tyria_codex/state/news.dart';
 
 void main() {
   group('when the link is refreshed', () {
@@ -279,6 +280,46 @@ void main() {
         expect(s.t(key), isNot(key), reason: '${lang.code} $key');
       }
     }
+  });
+
+  group('the leader chooses before the members see', () {
+    test('a guild is reviewed once the leader has confirmed, not before', () {
+      expect(GuildDetails.fromRow({}).reviewed, isFalse);
+      expect(GuildDetails.fromRow({'sharing_reviewed_at': null}).reviewed, isFalse);
+      final d = GuildDetails.fromRow({'sharing_reviewed_at': '2026-10-01T10:00:00+00:00'});
+      expect(d.reviewed, isTrue);
+      expect(d.reviewedAt, DateTime.utc(2026, 10, 1, 10));
+    });
+
+    test('the texts of the choice exist in every language', () {
+      for (final lang in AppLang.values) {
+        final s = S(lang);
+        for (final key in ['gshare_unreviewed', 'gshare_confirm', 'gshare_review_title', 'gshare_review_intro', 'gshare_later']) {
+          expect(s.t(key), isNot(key), reason: '${lang.code} $key');
+        }
+      }
+    });
+  });
+
+  group('the news feed', () {
+    test('a phone reads the site\'s own feed, in the language of the app', () {
+      expect(newsFeedRequest(AppLang.de, web: false, backend: 'https://x.supabase.co'), 'https://www.guildwars2.com/de/feed/');
+      expect(newsFeedRequest(AppLang.en, web: false, backend: ''), 'https://www.guildwars2.com/en/feed/');
+    });
+
+    test('a browser reads the backend\'s copy, which it is allowed to', () {
+      expect(newsFeedRequest(AppLang.fr, web: true, backend: 'https://x.supabase.co'),
+          'https://x.supabase.co/functions/v1/news-feed?lang=fr');
+    });
+
+    test('a language the site has no feed in reads English', () {
+      final address = newsFeedRequest(AppLang.tr, web: true, backend: 'https://x.supabase.co');
+      expect(address.endsWith('lang=en'), isTrue, reason: address);
+    });
+
+    test('with no backend a browser has nothing to ask', () {
+      expect(newsFeedRequest(AppLang.en, web: true, backend: ''), isEmpty);
+    });
   });
 
   test('what a leader shares has its texts in every language', () {

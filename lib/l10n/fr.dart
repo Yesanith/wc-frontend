@@ -1,5 +1,10 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'gshare_unreviewed': 'Tu ne l\'as pas encore confirmé. D\'ici là, la trésorerie, la réserve et le journal restent masqués à tes membres.',
+  'gshare_confirm': 'Confirmer ce que voient les membres',
+  'gshare_review_title': 'Que peuvent voir tes membres ?',
+  'gshare_review_intro': 'Ta guilde a été lue depuis le jeu. Choisis ce que les membres de ta guilde peuvent voir dans l\'app. La trésorerie, la réserve et le journal montrent qui a pris quoi, ils restent donc masqués jusqu\'à ta confirmation.',
+  'gshare_later': 'Plus tard',
   'roster_note_game':
       'Membres de cette guilde sur Tyria Companion, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
   'roster_manual': 'défini à la main',

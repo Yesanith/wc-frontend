@@ -1,5 +1,10 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'gshare_unreviewed': 'You have not confirmed this yet. Until you do, the treasury, the stash and the log stay hidden from your members.',
+  'gshare_confirm': 'Confirm what members see',
+  'gshare_review_title': 'What may your members see?',
+  'gshare_review_intro': 'Your guild has been read from the game. Choose what the members of your guild can see in the app. The treasury, the stash and the log show who took what, so they stay hidden until you confirm.',
+  'gshare_later': 'Later',
   'roster_note_game':
       'Members of this guild on Tyria Companion, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
   'roster_manual': 'set by hand',
