@@ -4,8 +4,10 @@ const deStrings = <String, String>{
   'ginfo_result_too_soon': 'Gerade erst aktualisiert, versuche es in ein paar Minuten erneut.',
   'ginfo_result_unavailable': 'Das Spiel gibt die Gildendaten nicht heraus ({detail}).',
   'ginfo_result_failed': 'Der Server konnte die Gildendaten nicht speichern ({detail}).',
-  'ginfo_result_none': 'Dieses Konto führt keine dem Server bekannte Gilde. Verknüpfe es mit einem API-Schlüssel mit Gilden-Berechtigung.',
-  'ginfo_result_skipped': 'Das Konto des aktiven API-Schlüssels ist hier nicht verknüpft, es wurde nichts aktualisiert.',
+  'ginfo_result_none':
+      'Dieses Konto führt keine dem Server bekannte Gilde. Verknüpfe es mit einem API-Schlüssel mit Gilden-Berechtigung.',
+  'ginfo_result_skipped':
+      'Das Konto des aktiven API-Schlüssels ist hier nicht verknüpft, es wurde nichts aktualisiert.',
   'ginfo_level': 'Stufe',
   'ginfo_members': 'Mitglieder',
   'ginfo_updated': 'Aktualisiert {when}',

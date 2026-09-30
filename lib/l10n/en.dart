@@ -4,7 +4,8 @@ const enStrings = <String, String>{
   'ginfo_result_too_soon': 'Updated just now, try again in a few minutes.',
   'ginfo_result_unavailable': 'The game would not give the guild\'s details ({detail}).',
   'ginfo_result_failed': 'The backend could not save the guild\'s details ({detail}).',
-  'ginfo_result_none': 'This account leads no guild the backend knows. Link it with an API key that has the guilds permission.',
+  'ginfo_result_none':
+      'This account leads no guild the backend knows. Link it with an API key that has the guilds permission.',
   'ginfo_result_skipped': 'The account of the active API key is not linked here, so nothing was updated.',
   'ginfo_level': 'Level',
   'ginfo_members': 'Members',

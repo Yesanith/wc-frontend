@@ -4,7 +4,8 @@ const trStrings = <String, String>{
   'ginfo_result_too_soon': 'Az önce güncellendi, birkaç dakika sonra tekrar dene.',
   'ginfo_result_unavailable': 'Oyun lonca bilgilerini vermedi ({detail}).',
   'ginfo_result_failed': 'Sunucu lonca bilgilerini kaydedemedi ({detail}).',
-  'ginfo_result_none': 'Bu hesap, sunucunun bildiği bir loncanın lideri değil. Lonca iznine sahip bir API anahtarıyla bağla.',
+  'ginfo_result_none':
+      'Bu hesap, sunucunun bildiği bir loncanın lideri değil. Lonca iznine sahip bir API anahtarıyla bağla.',
   'ginfo_result_skipped': 'Etkin API anahtarının hesabı burada bağlı değil, bu yüzden bir şey güncellenmedi.',
   'ginfo_level': 'Seviye',
   'ginfo_members': 'Üyeler',

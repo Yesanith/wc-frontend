@@ -4,7 +4,8 @@ const ruStrings = <String, String>{
   'ginfo_result_too_soon': 'Только что обновлено, повторите через несколько минут.',
   'ginfo_result_unavailable': 'Игра не отдала данные гильдии ({detail}).',
   'ginfo_result_failed': 'Сервер не смог сохранить данные гильдии ({detail}).',
-  'ginfo_result_none': 'Этот аккаунт не возглавляет гильдий, известных серверу. Привяжите его ключом API с правом guilds.',
+  'ginfo_result_none':
+      'Этот аккаунт не возглавляет гильдий, известных серверу. Привяжите его ключом API с правом guilds.',
   'ginfo_result_skipped': 'Аккаунт активного ключа API здесь не привязан, ничего не обновлено.',
   'ginfo_level': 'Уровень',
   'ginfo_members': 'Участники',
