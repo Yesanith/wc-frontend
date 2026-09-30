@@ -1,5 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'gshared_note': 'Das Spiel zeigt die Mitgliederliste nur dem Anführer der Gilde. Das sind die Mitglieder, die Tyria Companion nutzen, mit dem Rang aus dem Spiel.',
+  'gshared_not_linked': 'Verknüpfe dein GW2-Konto in den Einstellungen, um zu sehen, was der Anführer der Gilde hier teilt.',
   'gw2_link_name': '{name} verknüpfen',
   'gw2_refreshed': 'Gilden aktualisiert.',
   'gw2_refresh_other':
