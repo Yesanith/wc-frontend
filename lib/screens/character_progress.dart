@@ -162,7 +162,8 @@ typedef StoryRow = ({String name, int done, int total});
 
 /// the stories of one season, in the order the game lists them. a story with no quest
 /// in the game's quest list has a total of nought: the game never gave one to compare with
-List<StoryRow> seasonStories(String seasonId, Map<String, Json> quests, Map<String, Json> stories, Set<String> completed) {
+List<StoryRow> seasonStories(
+    String seasonId, Map<String, Json> quests, Map<String, Json> stories, Set<String> completed) {
   final mine = [
     for (final e in stories.entries)
       if ('${e.value['season']}' == seasonId) e,
@@ -182,7 +183,8 @@ List<StoryRow> seasonStories(String seasonId, Map<String, Json> quests, Map<Stri
 
 /// the quests the game recorded for the character that are not in its list of story quests,
 /// so there is nothing to count them against
-int unmatchedQuests(Map<String, Json> quests, Set<String> completed) => completed.where((id) => !quests.containsKey(id)).length;
+int unmatchedQuests(Map<String, Json> quests, Set<String> completed) =>
+    completed.where((id) => !quests.containsKey(id)).length;
 
 /// completed story quests, counted per season of the story journal
 class _Story extends ConsumerWidget {
@@ -234,30 +236,30 @@ class _Story extends ConsumerWidget {
                       ),
                     ),
                     child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child: Builder(builder: (_) {
-                      final (done, total) = perSeason['${season['id']}']!;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text('${season['name'] ?? ''}',
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                              ),
-                              Text('$done/$total', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
-                              const Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Bar(
-                              value: total == 0 ? 0 : done / total,
-                              color: done >= total ? AppColors.green : AppColors.gold),
-                        ],
-                      );
-                    }),
-                  ),
+                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      child: Builder(builder: (_) {
+                        final (done, total) = perSeason['${season['id']}']!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text('${season['name'] ?? ''}',
+                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                                ),
+                                Text('$done/$total', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                                const Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Bar(
+                                value: total == 0 ? 0 : done / total,
+                                color: done >= total ? AppColors.green : AppColors.gold),
+                          ],
+                        );
+                      }),
+                    ),
                   ),
               if (perSeason.isEmpty) EmptyNote(s.t('nothing_here'), center: false),
             ],

@@ -1,6 +1,7 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
-  'story_unmatched': '{n} quests the game recorded for this character are not in its list of story quests, so they are not counted above.',
+  'story_unmatched':
+      '{n} quests the game recorded for this character are not in its list of story quests, so they are not counted above.',
   'progress_hero_unavailable':
       'The game\'s API returns nothing for hero challenges (a known problem on ArenaNet\'s side), so they cannot be shown here.',
   'progress_training_unavailable':
