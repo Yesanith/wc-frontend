@@ -185,7 +185,8 @@ Future<LinkOutcome> linkGw2AccountOutcome(Gw2Api api, List<String> keyPermission
   final Object? linked;
   try {
     // linking alone, quick: the guilds the account leads are read in a call of their own
-    final res = await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken, 'sync': false});
+    final res =
+        await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken, 'sync': false});
     linked = res.data;
   } on FunctionException catch (e) {
     final details = e.details;
