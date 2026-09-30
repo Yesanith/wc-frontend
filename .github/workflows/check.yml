@@ -57,8 +57,8 @@ jobs:
             echo "commit: $GITHUB_SHA"
             echo "run: $GITHUB_RUN_ID"
             echo
-            # only the failures and the count, not every test that passed
-            grep -v -E '^[0-9:]+ \+[0-9]+: .* \[E\]$' "$RUNNER_TEMP/flutter-test.log" | tail -n 250
+            # the failures, which come before the list of the tests that passed
+            sed '/Passing tests/,$d' "$RUNNER_TEMP/flutter-test.log" | head -n 400
           } > test-failure.txt
           git add test-failure.txt
           git commit -q -m "The test failure of $GITHUB_SHA"
