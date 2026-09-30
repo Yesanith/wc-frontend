@@ -292,6 +292,7 @@ class GuildDetails {
     this.memberCapacity,
     this.syncedAt,
     this.hidden = const <String>{},
+    this.reviewedAt,
   });
 
   final int? level;
@@ -304,6 +305,12 @@ class GuildDetails {
 
   /// whether the leader has shared anything yet
   bool get known => syncedAt != null;
+
+  /// when the leader went through what the members see. until then the treasury, the
+  /// stash and the log, which name who took what, stay hidden from them
+  final DateTime? reviewedAt;
+
+  bool get reviewed => reviewedAt != null;
 
   /// the parts of the guild the leader hides from the members, everything else
   /// the leader's app brings is shared
@@ -320,6 +327,7 @@ class GuildDetails {
         memberCapacity: _asInt(r['member_capacity']),
         syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
         hidden: _textSet(r['hidden_parts']),
+        reviewedAt: DateTime.tryParse('${r['sharing_reviewed_at'] ?? ''}'),
       );
 }
 
@@ -347,6 +355,12 @@ Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
   }
 }
 
+/// the leader has been through what the members see, so the treasury, the stash and
+/// the log follow the choices from now on
+Future<void> confirmGuildSharing(String guildId) async {
+  await Supabase.instance.client.rpc('confirm_guild_sharing', params: {'p_guild': guildId});
+}
+
 /// the leader shows or hides one part of the guild to the members
 Future<void> setGuildPartShared(String guildId, String part, bool shared) async {
   await Supabase.instance.client
@@ -368,7 +382,7 @@ final guildDetailsProvider = FutureProvider.autoDispose.family<GuildDetails?, St
   if (session == null) return null;
   final row = await Supabase.instance.client
       .from('guilds')
-      .select('level, motd, member_count, member_capacity, details_synced_at, hidden_parts')
+      .select('level, motd, member_count, member_capacity, details_synced_at, hidden_parts, sharing_reviewed_at')
       .eq('id', guildId)
       .maybeSingle();
   return row == null ? null : GuildDetails.fromRow(row);

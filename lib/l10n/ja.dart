@@ -1,5 +1,10 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'gshare_unreviewed': 'まだ確認していません。確認するまで、宝物庫・隠し場所・ログはメンバーに表示されません。',
+  'gshare_confirm': 'メンバーに見せる内容を確定',
+  'gshare_review_title': 'メンバーに何を見せますか？',
+  'gshare_review_intro': 'ギルドの情報をゲームから取得しました。ギルドメンバーがアプリで見られる内容を選んでください。宝物庫・隠し場所・ログは誰が何を取ったかが分かるため、確定するまで非表示です。',
+  'gshare_later': '後で',
   'roster_note_game': 'Tyria Companion を使うこのギルドのメンバーと、ゲーム内のランク。招待・昇格・追放、またはランク編集ができるランクはイベントの作成と管理ができます。',
   'roster_manual': '手動で設定',
   'roster_follow_game': 'ゲーム内のランクに戻す',

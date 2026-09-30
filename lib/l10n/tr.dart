@@ -1,5 +1,10 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'gshare_unreviewed': 'Bunu henüz onaylamadın. Onaylayana kadar hazine, depo ve günlük üyelerinden gizli kalır.',
+  'gshare_confirm': 'Üyelerin göreceklerini onayla',
+  'gshare_review_title': 'Üyelerin neleri görebilsin?',
+  'gshare_review_intro': 'Loncan oyundan okundu. Lonca üyelerinin uygulamada nelere bakabileceğini seç. Hazine, depo ve günlük kimin ne aldığını gösterir, bu yüzden sen onaylayana kadar gizli kalır.',
+  'gshare_later': 'Sonra',
   'roster_note_game':
       'Bu loncanın Tyria Companion üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
   'roster_manual': 'elle atandı',

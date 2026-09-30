@@ -1,5 +1,10 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'gshare_unreviewed': '你还没有确认。在确认之前，金库、仓库和日志对成员保持隐藏。',
+  'gshare_confirm': '确认成员可见内容',
+  'gshare_review_title': '成员可以看到什么？',
+  'gshare_review_intro': '已从游戏中读取你的公会。请选择公会成员在应用中可以看到的内容。金库、仓库和日志会显示谁拿了什么，因此在你确认之前保持隐藏。',
+  'gshare_later': '稍后',
   'roster_note_game': '此公会中使用 Tyria Companion 的成员及其游戏内职位。可以邀请、晋升、踢出成员或编辑职位的职位可以创建和管理活动。',
   'roster_manual': '手动设置',
   'roster_follow_game': '重新跟随游戏内职位',
