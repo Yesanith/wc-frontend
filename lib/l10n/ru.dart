@@ -1,5 +1,6 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'roster_note_game': 'Участники этой гильдии в Tyria Companion с рангом из игры. Ранги, которые могут приглашать, повышать, исключать или редактировать ранги, могут создавать события и управлять ими.',
   'roster_manual': 'назначено вручную',
   'roster_follow_game': 'Снова следовать рангу в игре',
   'roster_auto':

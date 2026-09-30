@@ -7,7 +7,7 @@ import '../state/link_refresh.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
-import 'guild_events_screen.dart' show eventFailureText, eventWhen;
+import 'guild_events_screen.dart' show eventWhen;
 
 /// a guild's tyria companion members with their roles. the leader appoints
 /// officers here, who may then create and manage events
@@ -21,41 +21,6 @@ class GuildRosterScreen extends ConsumerStatefulWidget {
 }
 
 class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
-  String? _busyFor;
-
-  Future<void> _setRole(RosterMember m, String role) async {
-    final s = ref.read(stringsProvider);
-    setState(() => _busyFor = m.userId);
-    try {
-      await setGuildRole(widget.guild.id, m.userId, role);
-      ref.invalidate(guildRosterProvider(widget.guild.id));
-      if (mounted) {
-        showToast(
-          context,
-          s.t(role == 'officer' ? 'roster_made_officer' : 'roster_made_member', {'name': m.accountName}),
-        );
-      }
-    } catch (e) {
-      if (mounted) showToast(context, eventFailureText(s, e));
-    } finally {
-      if (mounted) setState(() => _busyFor = null);
-    }
-  }
-
-  /// the role follows the game's rank again
-  Future<void> _followGame(RosterMember m) async {
-    final s = ref.read(stringsProvider);
-    setState(() => _busyFor = m.userId);
-    try {
-      await resetGuildRole(widget.guild.id, m.userId);
-      ref.invalidate(guildRosterProvider(widget.guild.id));
-    } catch (e) {
-      if (mounted) showToast(context, eventFailureText(s, e));
-    } finally {
-      if (mounted) setState(() => _busyFor = null);
-    }
-  }
-
   /// the leader's app brings what the game tells only the leader, and says how it went
   Future<void> _bringFromGame() async {
     final s = ref.read(stringsProvider);
@@ -95,13 +60,9 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
               const SizedBox(height: 12),
               if (leading) ...[GuildSharingPanel(guildId: g.id), const SizedBox(height: 12)],
               Text(
-                leading ? s.t('roster_note_leader') : s.t('roster_note'),
+                s.t('roster_note_game'),
                 style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
               ),
-              if (leading) ...[
-                const SizedBox(height: 6),
-                Text(s.t('roster_auto'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
-              ],
               const SizedBox(height: 12),
               Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -130,35 +91,10 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                                     m.accountName,
                                     style: TextStyle(fontWeight: m.userId == me ? FontWeight.w800 : FontWeight.w600),
                                   ),
-                                  Text(
-                                      [
-                                        s.t('guild_role_${m.role}'),
-                                        if (m.gw2Rank != null) m.gw2Rank,
-                                        if (m.manual) s.t('roster_manual'),
-                                      ].join(' · '),
-                                      style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                                  Text(rankLabel(s, m.role, m.gw2Rank), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
                             ),
-                            if (leading && m.role != 'leader' && m.manual)
-                              IconButton(
-                                tooltip: s.t('roster_follow_game'),
-                                visualDensity: VisualDensity.compact,
-                                onPressed: _busyFor != null ? null : () => _followGame(m),
-                                icon: const Icon(Icons.sync, size: 18, color: AppColors.muted),
-                              ),
-                            if (leading && m.role != 'leader' && m.userId != me)
-                              _busyFor == m.userId
-                                  ? const SizedBox(
-                                      width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                                  : TextButton(
-                                      onPressed: _busyFor != null
-                                          ? null
-                                          : () => _setRole(m, m.role == 'officer' ? 'member' : 'officer'),
-                                      child: Text(
-                                        m.role == 'officer' ? s.t('roster_make_member') : s.t('roster_make_officer'),
-                                      ),
-                                    ),
                           ],
                         ),
                       ),

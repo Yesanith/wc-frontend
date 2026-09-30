@@ -1,5 +1,6 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'roster_note_game': 'Membros desta guilda no Tyria Companion, com o posto que o jogo lhes dá. Postos que podem convidar, promover ou expulsar, ou editar postos, podem criar e gerenciar eventos.',
   'roster_manual': 'definido à mão',
   'roster_follow_game': 'Voltar a seguir o posto do jogo',
   'roster_auto':

@@ -1,5 +1,6 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'roster_note_game': 'Tyria Companion を使うこのギルドのメンバーと、ゲーム内のランク。招待・昇格・追放、またはランク編集ができるランクはイベントの作成と管理ができます。',
   'roster_manual': '手動で設定',
   'roster_follow_game': 'ゲーム内のランクに戻す',
   'roster_auto': '役割はゲームに従います。招待・昇格・追放、またはランク編集ができるランクの人がオフィサーになります。手動で設定したものは、ゲームに戻すまで維持されます。',

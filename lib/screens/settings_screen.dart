@@ -680,8 +680,6 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
         accounts.any((a) => a.name.toLowerCase() == activeName.toLowerCase());
     const spinner = SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2));
 
-    String role(String r) => s.t('guild_role_$r');
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -719,7 +717,9 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
                     MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
                   ),
                   child: Pill(
-                    g.tag.isEmpty ? '${g.name} · ${role(g.role)} ›' : '${g.name} [${g.tag}] · ${role(g.role)} ›',
+                    g.tag.isEmpty
+                        ? '${g.name} · ${rankLabel(s, g.role, g.gw2Rank)} ›'
+                        : '${g.name} [${g.tag}] · ${rankLabel(s, g.role, g.gw2Rank)} ›',
                     color: g.role == 'leader' ? AppColors.gold : AppColors.textSoft,
                   ),
                 ),

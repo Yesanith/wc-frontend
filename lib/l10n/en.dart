@@ -1,5 +1,6 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'roster_note_game': 'Members of this guild on Tyria Companion, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
   'roster_manual': 'set by hand',
   'roster_follow_game': 'Follow the game\'s rank again',
   'roster_auto':

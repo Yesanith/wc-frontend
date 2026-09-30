@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../api/gw2_api.dart';
+import '../l10n/strings.dart';
 import '../services/push.dart';
 
 /// set by the release build from the repository secrets. a build without them
@@ -230,14 +231,22 @@ class LinkedAccount {
 }
 
 class MyGuild {
-  const MyGuild(this.id, this.name, this.tag, this.role);
+  const MyGuild(this.id, this.name, this.tag, this.role, {this.gw2Rank});
   final String id;
   final String name;
   final String tag;
 
   /// member, officer or leader
   final String role;
+
+  /// the rank the game gives them in the guild, when the leader's app has brought it
+  final String? gw2Rank;
 }
+
+/// what to call somebody's place in a guild: the rank the game gives them, as
+/// the guild named it. only when it is not known yet the app's own word for it
+String rankLabel(S s, String role, String? gw2Rank) =>
+    gw2Rank != null && gw2Rank.isNotEmpty ? gw2Rank : s.t('guild_role_$role');
 
 /// the gw2 accounts linked to the signed in player
 final linkedAccountsProvider = FutureProvider.autoDispose<List<LinkedAccount>>((ref) async {
@@ -349,13 +358,15 @@ final myGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) async {
   if (session == null) return const [];
   final rows = await Supabase.instance.client
       .from('guild_members')
-      .select('role, guilds(id, name, tag)')
+      .select('role, gw2_rank, guilds(id, name, tag)')
       .eq('user_id', session.user.id);
   final out = <MyGuild>[];
   for (final r in rows) {
     final g = r['guilds'];
     if (g is! Map) continue;
-    out.add(MyGuild('${g['id']}', '${g['name'] ?? ''}', '${g['tag'] ?? ''}', '${r['role'] ?? 'member'}'));
+    final rank = '${r['gw2_rank'] ?? ''}';
+    out.add(MyGuild('${g['id']}', '${g['name'] ?? ''}', '${g['tag'] ?? ''}', '${r['role'] ?? 'member'}',
+        gw2Rank: rank.isEmpty ? null : rank));
   }
   // a player with several accounts in one guild sees it once, highest role
   const rank = {'leader': 0, 'officer': 1, 'member': 2};

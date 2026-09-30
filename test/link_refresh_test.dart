@@ -246,6 +246,32 @@ void main() {
     });
   });
 
+  group('what a place in a guild is called', () {
+    test('the game\'s own rank, as the guild named it, and the app\'s word only when it is not known', () {
+      const s = S(AppLang.en);
+      expect(rankLabel(s, 'officer', 'Raid Lead'), 'Raid Lead');
+      expect(rankLabel(s, 'member', 'Recruiter'), 'Recruiter');
+      expect(rankLabel(s, 'leader', 'Guild Master'), 'Guild Master');
+      expect(rankLabel(s, 'leader', null), 'Leader');
+      expect(rankLabel(s, 'member', ''), 'Member');
+    });
+
+    test('a guild account keeps its rank, and none is none', () {
+      expect(const GuildAccount('g', 'a', 'Leo.1', 'leader', gw2Rank: 'Boss').gw2Rank, 'Boss');
+      expect(const GuildAccount('g', 'a', 'Leo.1', 'leader').gw2Rank, isNull);
+      expect(nonEmpty('Raid Lead'), 'Raid Lead');
+      expect(nonEmpty(''), isNull);
+      expect(nonEmpty(null), isNull);
+    });
+
+    test('the note says what the ranks may do without a word for a role the game does not have', () {
+      for (final lang in AppLang.values) {
+        expect(S(lang).t('roster_note_game'), isNot('roster_note_game'), reason: lang.code);
+      }
+      expect(const S(AppLang.en).t('roster_note_game').toLowerCase(), isNot(contains('officer')));
+    });
+  });
+
   test('the roster texts about roles following the game exist in every language', () {
     for (final lang in AppLang.values) {
       final s = S(lang);

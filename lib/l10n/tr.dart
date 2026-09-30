@@ -1,5 +1,6 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'roster_note_game': 'Bu loncanın Tyria Companion üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
   'roster_manual': 'elle atandı',
   'roster_follow_game': 'Yine oyundaki rütbeyi izle',
   'roster_auto':

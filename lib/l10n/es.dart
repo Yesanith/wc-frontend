@@ -1,5 +1,6 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'roster_note_game': 'Miembros de este gremio en Tyria Companion, con el rango que les da el juego. Los rangos que pueden invitar, ascender o expulsar, o editar rangos, pueden crear y gestionar eventos.',
   'roster_manual': 'asignado a mano',
   'roster_follow_game': 'Volver a seguir el rango del juego',
   'roster_auto':
