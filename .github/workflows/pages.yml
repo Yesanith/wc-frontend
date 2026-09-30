@@ -39,6 +39,9 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # the tags too, the app in the browser names the release it is built after
+          fetch-depth: 0
 
       # the pages are made from tools/site_content in nine languages and committed: they must be what
       # the builder makes, every language must have everything, and every link must lead somewhere
@@ -94,9 +97,14 @@ jobs:
         run: |
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
           REPO="${GITHUB_REPOSITORY#*/}"
+          # the last release, so the menu tells which build a browser has loaded
+          TAG="$(git describe --tags --abbrev=0 2>/dev/null || echo dev)"
+          # no service worker: it keeps the app on the device and shows the old one until a second
+          # load, and the app is updated often. the page is fetched fresh, GitHub keeps it ten minutes
           flutter build web --release \
+            --pwa-strategy=none \
             --base-href "/$REPO/app/" \
-            --dart-define=APP_VERSION=web \
+            --dart-define=APP_VERSION="${TAG#v}-web" \
             --dart-define=WEB_BASE_URL="https://$OWNER.github.io/$REPO/app/" \
             --dart-define=SUPABASE_URL="$SUPABASE_URL" \
             --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
