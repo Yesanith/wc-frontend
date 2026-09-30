@@ -54,8 +54,15 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
       body: RefreshIndicator(
         color: AppColors.gold,
         onRefresh: () async {
-          // a leader's app brings what the game tells only the leader
-          if (leading) await refreshLink(ref, force: true);
+          // a leader's app brings what the game tells only the leader, and says how it went
+          if (leading) {
+            try {
+              final outcome = await refreshLink(ref, force: true);
+              if (mounted) showToast(context, guildSyncMessage(s, outcome), duration: const Duration(seconds: 6));
+            } catch (e) {
+              if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
+            }
+          }
           ref.invalidate(guildRosterProvider(g.id));
           ref.invalidate(guildDetailsProvider(g.id));
           await ref.read(guildRosterProvider(g.id).future);

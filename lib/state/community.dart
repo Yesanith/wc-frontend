@@ -145,14 +145,47 @@ class LinkFailure implements Exception {
   String toString() => detail == null ? code : '$code: $detail';
 }
 
+/// how one guild the account leads went when the backend read it from the
+/// game: synced, too_soon, unavailable or failed, and when something was
+/// missing what, like guild:403
+class GuildSyncResult {
+  const GuildSyncResult(this.result, this.detail);
+
+  final String result;
+  final String? detail;
+}
+
+/// what linking came to: the account, and how the guilds it leads were synced
+class LinkOutcome {
+  const LinkOutcome(this.name, this.synced);
+
+  final String name;
+  final List<GuildSyncResult> synced;
+}
+
+/// the guild results in the backend's answer, none for anything else
+List<GuildSyncResult> parseSynced(Object? data) {
+  final synced = data is Map ? data['synced'] : null;
+  if (synced is! List) return const [];
+  return [
+    for (final r in synced)
+      if (r is Map && r['result'] is String)
+        GuildSyncResult('${r['result']}', r['detail'] is String ? '${r['detail']}' : null),
+  ];
+}
+
 /// links the account of the active api key, or refreshes it when it is
 /// linked already. returns the linked account's name
-Future<String> linkGw2Account(Gw2Api api, List<String> keyPermissions) async {
+Future<String> linkGw2Account(Gw2Api api, List<String> keyPermissions) async =>
+    (await linkGw2AccountOutcome(api, keyPermissions)).name;
+
+/// the same, with how the guilds the account leads were synced
+Future<LinkOutcome> linkGw2AccountOutcome(Gw2Api api, List<String> keyPermissions) async {
   final subtoken = await createLinkSubtoken(api, keyPermissions);
   try {
     final res = await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken});
     final data = res.data;
-    return data is Map ? '${data['account_name'] ?? ''}' : '';
+    return LinkOutcome(data is Map ? '${data['account_name'] ?? ''}' : '', parseSynced(data));
   } on FunctionException catch (e) {
     final details = e.details;
     final code = details is Map && details['error'] is String ? details['error'] as String : 'http_${e.status}';

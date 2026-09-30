@@ -1,5 +1,11 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'ginfo_result_synced': 'ギルド情報を更新しました。',
+  'ginfo_result_too_soon': '先ほど更新済みです。数分後にもう一度お試しください。',
+  'ginfo_result_unavailable': 'ゲームがギルド情報を返しませんでした（{detail}）。',
+  'ginfo_result_failed': 'サーバーがギルド情報を保存できませんでした（{detail}）。',
+  'ginfo_result_none': 'このアカウントはサーバーが把握するギルドのリーダーではありません。guilds 権限のある API キーで連携してください。',
+  'ginfo_result_skipped': '有効な API キーのアカウントは連携されていないため、何も更新されませんでした。',
   'ginfo_level': 'レベル',
   'ginfo_members': 'メンバー',
   'ginfo_updated': '更新：{when}',
