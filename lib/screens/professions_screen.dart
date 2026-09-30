@@ -10,6 +10,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 
 /// every profession of the game with its specializations and weapons
 class ProfessionsScreen extends ConsumerWidget {
@@ -28,11 +29,9 @@ class ProfessionsScreen extends ConsumerWidget {
           for (final p in all.values)
             if (!professionOrder.contains(p.id)) p,
         ];
-        return ListView.separated(
+        return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          itemCount: list.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemBuilder: (context, i) => _ProfessionCard(list[i]),
+          children: [CardWrap(minWidth: 400, children: [for (final p in list) _ProfessionCard(p)])],
         );
       },
     );

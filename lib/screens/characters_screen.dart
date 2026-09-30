@@ -10,6 +10,7 @@ import '../util.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/birthday.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import 'character_detail_screen.dart';
 
 class CharactersScreen extends ConsumerStatefulWidget {
@@ -105,12 +106,8 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
                   child: EmptyNote(s.t('no_match')),
                 );
               }
-              return Column(
-                children: [
-                  for (final c in filtered)
-                    Padding(padding: const EdgeInsets.only(bottom: 10), child: _CharacterCard(c)),
-                ],
-              );
+              // one under the other on a phone, side by side where there is room
+              return CardWrap(children: [for (final c in filtered) _CharacterCard(c)]);
             },
           ),
         ],
