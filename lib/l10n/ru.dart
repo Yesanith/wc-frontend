@@ -1,5 +1,8 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'gw2_link_name': 'Привязать {name}',
+  'gw2_refreshed': 'Гильдии обновлены.',
+  'gw2_refresh_other': 'Активный ключ API принадлежит непривязанному аккаунту. Привяжите его выше или переключитесь на ключ привязанного аккаунта, чтобы обновить его гильдии.',
   'ginfo_result_synced': 'Данные гильдии обновлены.',
   'ginfo_result_too_soon': 'Только что обновлено, повторите через несколько минут.',
   'ginfo_result_unavailable': 'Игра не отдала данные гильдии ({detail}).',

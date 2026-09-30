@@ -1,5 +1,8 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'gw2_link_name': 'Vincular {name}',
+  'gw2_refreshed': 'Guildas atualizadas.',
+  'gw2_refresh_other': 'A chave de API ativa é de uma conta não vinculada. Vincule-a acima ou troque para a chave de uma conta vinculada para atualizar as guildas dela.',
   'ginfo_result_synced': 'Dados da guilda atualizados.',
   'ginfo_result_too_soon': 'Atualizado agora há pouco, tente de novo em alguns minutos.',
   'ginfo_result_unavailable': 'O jogo não forneceu os dados da guilda ({detail}).',
