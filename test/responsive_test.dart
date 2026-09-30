@@ -138,7 +138,8 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(600, 800));
       await tester.pumpWidget(page([a], [b]));
       expect(tester.getTopLeft(find.byKey(const Key('a'))).dx, tester.getTopLeft(find.byKey(const Key('b'))).dx);
-      expect(tester.getTopLeft(find.byKey(const Key('a'))).dy, lessThan(tester.getTopLeft(find.byKey(const Key('b'))).dy));
+      expect(
+          tester.getTopLeft(find.byKey(const Key('a'))).dy, lessThan(tester.getTopLeft(find.byKey(const Key('b'))).dy));
       expect(tester.getSize(find.byKey(const Key('a'))).width, 600);
     });
 
