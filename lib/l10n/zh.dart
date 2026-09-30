@@ -1,5 +1,6 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'roster_note_game': '此公会中使用 Tyria Companion 的成员及其游戏内职位。可以邀请、晋升、踢出成员或编辑职位的职位可以创建和管理活动。',
   'roster_manual': '手动设置',
   'roster_follow_game': '重新跟随游戏内职位',
   'roster_auto': '角色跟随游戏：可以邀请、晋升、踢出成员或编辑职位的职位将成为官员。你手动设置的内容会保留，直到你交还给游戏。',

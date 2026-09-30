@@ -239,6 +239,12 @@ final creatableGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) 
   ];
 });
 
+/// a text from json, null when it is missing or empty
+String? nonEmpty(Object? value) {
+  final text = '${value ?? ''}';
+  return text.isEmpty ? null : text;
+}
+
 /// a list of texts from json, empty when it is not one
 List<String> stringList(Object? value) => value is List ? [for (final v in value) '$v'] : const <String>[];
 
@@ -471,7 +477,7 @@ Future<void> setGuildRole(String guildId, String userId, String role) => _call((
 /// are per account and guild: one account may lead a guild that another only
 /// belongs to
 class GuildAccount {
-  const GuildAccount(this.guildId, this.accountId, this.accountName, this.role);
+  const GuildAccount(this.guildId, this.accountId, this.accountName, this.role, {this.gw2Rank});
 
   final String guildId;
   final String accountId;
@@ -479,6 +485,9 @@ class GuildAccount {
 
   /// member, officer or leader
   final String role;
+
+  /// the rank the game gives this account in the guild, when it is known
+  final String? gw2Rank;
 
   bool get mayCreate => role == 'leader' || role == 'officer';
 }
@@ -489,13 +498,14 @@ final myGuildAccountsProvider = FutureProvider.autoDispose<List<GuildAccount>>((
   if (session == null) return const [];
   final rows = await Supabase.instance.client
       .from('guild_members')
-      .select('role, guild_id, gw2_account_id, gw2_accounts(account_name)')
+      .select('role, gw2_rank, guild_id, gw2_account_id, gw2_accounts(account_name)')
       .eq('user_id', session.user.id);
   return [
     for (final r in rows)
       if (r['gw2_accounts'] case final Map account)
         GuildAccount('${r['guild_id']}', '${r['gw2_account_id']}', '${account['account_name'] ?? '?'}',
-            '${r['role'] ?? 'member'}'),
+            '${r['role'] ?? 'member'}',
+            gw2Rank: nonEmpty(r['gw2_rank'])),
   ];
 });
 

@@ -402,7 +402,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   color: a.accountId == current ? AppColors.gold : AppColors.muted,
                 ),
                 title: Text(a.accountName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text(s.t('guild_role_${a.role}'), style: const TextStyle(color: AppColors.muted)),
+                subtitle: Text(rankLabel(s, a.role, a.gw2Rank), style: const TextStyle(color: AppColors.muted)),
                 onTap: () => Navigator.of(ctx).pop(a.accountId),
               ),
           ],
@@ -1185,7 +1185,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 items: [
                   for (final a in organizers)
                     DropdownMenuItem(
-                        value: a.accountId, child: Text('${a.accountName} · ${s.t('guild_role_${a.role}')}')),
+                        value: a.accountId, child: Text('${a.accountName} · ${rankLabel(s, a.role, a.gw2Rank)}')),
                 ],
                 onChanged: (v) => setState(() => _accountId = v),
               ),
