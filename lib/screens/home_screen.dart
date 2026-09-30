@@ -16,6 +16,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
 import '../widgets/pin_button.dart';
 import '../state/news.dart';
@@ -55,25 +56,35 @@ class HomeScreen extends ConsumerWidget {
           const _NewsBanner(),
           // a guest has no vault, checklist or wallet to show
           if (!hasKey) const _GuestCard(),
-          if (hasKey) ...[
-            Eyebrow(s.t('wizards_vault')),
-            const _Vault(),
-          ],
-          Eyebrow(
-            s.t('up_next'),
-            trailing: TextButton(
-              onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
-              child: Text(s.t('all_timers')),
-            ),
+          // one column while narrow, in this order; two when there is room: what to do on the left,
+          // what the account holds on the right
+          SplitColumns(
+            primary: [
+              if (hasKey) ...[
+                Eyebrow(s.t('wizards_vault')),
+                const _Vault(),
+              ],
+              Eyebrow(
+                s.t('up_next'),
+                trailing: TextButton(
+                  onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
+                  child: Text(s.t('all_timers')),
+                ),
+              ),
+              const _UpNext(),
+              if (hasKey) ...[
+                Eyebrow(s.t('daily_checklist')),
+                const _Checklist(),
+              ],
+            ],
+            secondary: [
+              if (hasKey) ...[
+                Eyebrow(s.t('wallet')),
+                const _Wallet(),
+                const _PinnedAchievements(),
+              ],
+            ],
           ),
-          const _UpNext(),
-          if (hasKey) ...[
-            Eyebrow(s.t('daily_checklist')),
-            const _Checklist(),
-            Eyebrow(s.t('wallet')),
-            const _Wallet(),
-            const _PinnedAchievements(),
-          ],
         ],
       ),
     );
@@ -445,13 +456,17 @@ class _Wallet extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            GridView.count(
-              crossAxisCount: 3,
+            GridView(
+              // three across on a phone, more where there is room, never a tile wider than a phone's
+              gridDelegate: const AdaptiveGridDelegate(
+                minColumns: 3,
+                maxTile: 150,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 1.25,
+              ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1.25,
               children: [
                 for (final id in _highlights)
                   if (byId[id] != null) _CurrencyTile(byId[id]!),

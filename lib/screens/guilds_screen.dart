@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/guild_emblem.dart';
 import 'guild_roster_screen.dart' show GuildInfoCard, GuildSharingPanel;
 import 'item_sheet.dart';
@@ -255,12 +256,10 @@ class _StashTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 10),
-              GridView.count(
-                crossAxisCount: 8,
+              GridView(
+                gridDelegate: const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
                 children: [
                   for (final slot in tab.slots)
                     if (slot.id == 0)

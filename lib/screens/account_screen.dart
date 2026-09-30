@@ -9,6 +9,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import 'build_detail_screen.dart';
 import 'item_sheet.dart';
 import '../state/wealth.dart';
@@ -175,11 +176,7 @@ class _BankTab extends ConsumerWidget {
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
               sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 8,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
-                ),
+                gridDelegate: const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                 delegate: SliverChildBuilderDelegate(
                   (context, i) {
                     final slot = slots[i];
@@ -259,12 +256,10 @@ class _MaterialsTab extends ConsumerWidget {
                 const SizedBox(height: 6)
               else ...[
                 const SizedBox(height: 6),
-                GridView.count(
-                  crossAxisCount: 6,
+                GridView(
+                  gridDelegate: const AdaptiveGridDelegate(minColumns: 6, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
                   children: [
                     for (final m in g.slots)
                       GestureDetector(

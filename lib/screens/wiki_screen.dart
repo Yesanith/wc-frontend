@@ -8,6 +8,7 @@ import '../state/api.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 
 class WikiScreen extends ConsumerStatefulWidget {
   const WikiScreen({super.key});
@@ -145,13 +146,16 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
               ),
             ),
         ] else ...[
-          GridView.count(
-            crossAxisCount: 2,
+          GridView(
+            gridDelegate: const AdaptiveGridDelegate(
+              minColumns: 2,
+              maxTile: 260,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1.55,
+            ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 1.55,
             children: [
               for (final c in _categories)
                 _CategoryCard(s.t(c.$1), s.t('${c.$1}_sub'), c.$2, () => _searchFor(s.t('${c.$1}_q'))),
