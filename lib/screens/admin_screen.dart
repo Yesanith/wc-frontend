@@ -103,7 +103,8 @@ class _Overview extends StatelessWidget {
         _Stat('Devices', fmtInt(d.count('push', 'devices')), languages.isEmpty ? 'with notifications' : languages),
         _Stat('Events to come', fmtInt(d.count('events', 'upcoming')),
             '${d.count('events', 'going_upcoming')} going · ${d.count('events', 'weekly_series')} weekly'),
-        _Stat('Database', formatBytes(d.count('database', 'size_bytes')), '${d.count('events', 'reports')} reports kept'),
+        _Stat(
+            'Database', formatBytes(d.count('database', 'size_bytes')), '${d.count('events', 'reports')} reports kept'),
       ],
     );
   }
@@ -125,9 +126,13 @@ class _Stat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label.toUpperCase(),
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+              style:
+                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.gold)),
-          Text(note, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(note,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );
@@ -160,9 +165,11 @@ class _Signups extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(days.isEmpty ? '' : short(days.first.day), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.first.day),
+                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
               Text('most in a day: $peak', style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text(days.isEmpty ? '' : short(days.last.day), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.last.day),
+                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
           ),
         ],
@@ -318,7 +325,8 @@ class _Database extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
-                  Expanded(child: Text('${t['name']}', style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                  Expanded(
+                      child: Text('${t['name']}', style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
                   Text(fmtInt(asInt(t['rows'])), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
                 ],
               ),
