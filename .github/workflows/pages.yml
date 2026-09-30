@@ -47,11 +47,15 @@ jobs:
       - name: Find the release
         run: echo "APP_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" >> "$GITHUB_ENV"
 
-      # the pages are made from tools/site_content in nine languages and committed: they must be what
-      # the builder makes, every language must have everything, and every link must lead somewhere
+      # every language must have everything English has, a translation must keep every link and
+      # command, and every link must lead somewhere
       - name: Check the pages
         run: python3 -m unittest test_build_site
         working-directory: tools
+
+      # not kept in the repository: made here from tools/site_content, then the backend is filled in
+      - name: Make the pages
+        run: python3 tools/build_site.py
 
       - name: Fill in the backend
         env:

@@ -20,3 +20,16 @@ pubspec.lock
 # python
 __pycache__/
 *.pyc
+
+# the pages of the site are made from tools/site_content when it is published, and the app in the
+# browser is built there too. only the sources are kept
+/site/*.html
+/site/de/
+/site/es/
+/site/fr/
+/site/tr/
+/site/pt/
+/site/ru/
+/site/ja/
+/site/zh/
+/site/app/

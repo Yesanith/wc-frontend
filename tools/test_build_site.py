@@ -1,5 +1,6 @@
 import json
 import os
+import posixpath
 import re
 import unittest
 from collections import Counter
@@ -80,20 +81,6 @@ class SiteTest(unittest.TestCase):
         self.assertIn("de/privacy.html", self.pages)
         self.assertNotIn("en/privacy.html", self.pages)
 
-    def test_the_committed_pages_are_what_the_builder_makes(self):
-        for path, text in self.pages.items():
-            with open(os.path.join(site.SITE, path), encoding="utf-8") as f:
-                self.assertEqual(f.read(), text, "%s is out of date: run python3 tools/build_site.py" % path)
-
-    def test_no_page_of_a_language_that_is_gone_is_left(self):
-        found = set()
-        for root, dirs, files in os.walk(site.SITE):
-            dirs[:] = [d for d in dirs if d != "app"]
-            for name in files:
-                if name.endswith(".html"):
-                    found.add(os.path.relpath(os.path.join(root, name), site.SITE).replace(os.sep, "/"))
-        self.assertEqual(found, set(self.pages))
-
     def test_a_translation_keeps_the_links_the_commands_and_the_emphasis(self):
         for lang in site.LANGS[1:]:
             for where, english, other in strings(site.load(lang)):
@@ -111,14 +98,13 @@ class SiteTest(unittest.TestCase):
             parser.feed(text)
             self.assertEqual(parser.bad, [], path)
             self.assertEqual(parser.stack, [], path)
-            here = os.path.dirname(os.path.join(site.SITE, path))
             for href in parser.hrefs:
                 if re.match(r"^(https?:|mailto:|#)", href):
                     continue
-                target = os.path.normpath(os.path.join(here, href.split("#")[0]))
-                if os.path.relpath(target, site.SITE).replace(os.sep, "/").startswith("app"):
+                target = posixpath.normpath(posixpath.join(posixpath.dirname(path), href.split("#")[0]))
+                if target.startswith("app"):
                     continue  # the app is built when the site is published
-                self.assertTrue(os.path.exists(target), "%s links to %s" % (path, href))
+                self.assertIn(target, self.pages, "%s links to %s" % (path, href))
 
     def test_every_page_has_a_picker_with_all_languages_and_marks_its_own(self):
         for path, text in self.pages.items():
