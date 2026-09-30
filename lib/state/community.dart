@@ -30,8 +30,14 @@ String get authRedirect => kIsWeb ? webAuthRedirect(_webBase, Uri.base) : _appRe
 /// without a query or a fragment. it must be one of the supabase dashboard's redirect urls
 String webAuthRedirect(String configured, Uri current) {
   if (configured.isNotEmpty) return configured;
-  final clean = current.replace(query: '', fragment: '').toString();
-  return clean.replaceAll(RegExp(r'[?#]$'), '').replaceFirst(RegExp(r'/index\.html$'), '/');
+  // made again from its parts: replacing the query with nothing would leave a ? behind
+  final clean = Uri(
+    scheme: current.scheme,
+    host: current.host,
+    port: current.hasPort ? current.port : null,
+    path: current.path,
+  ).toString();
+  return clean.replaceFirst(RegExp(r'/index\.html$'), '/');
 }
 
 bool _ready = false;

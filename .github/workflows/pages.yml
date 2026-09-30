@@ -67,7 +67,9 @@ jobs:
 
       # the page's colours, its icons and what iOS needs to keep it on the home screen
       - name: Set up the web build
-        run: python3 ci/web.py
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 ci/web.py
 
       - run: flutter pub get
 
