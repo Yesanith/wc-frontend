@@ -257,7 +257,8 @@ class _StashTab extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               GridView(
-                gridDelegate: const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
+                gridDelegate:
+                    const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [

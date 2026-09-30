@@ -132,7 +132,8 @@ class SplitColumns extends StatelessWidget {
         children: [
           Expanded(flex: primaryFlex, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: primary)),
           SizedBox(width: spacing),
-          Expanded(flex: secondaryFlex, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: secondary)),
+          Expanded(
+              flex: secondaryFlex, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: secondary)),
         ],
       );
     });

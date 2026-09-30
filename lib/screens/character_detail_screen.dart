@@ -420,7 +420,8 @@ class _InventoryTab extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             sliver: SliverGrid(
-              gridDelegate: const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
+              gridDelegate:
+                  const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
               delegate: SliverChildBuilderDelegate(
                 (context, i) {
                   final slot = slots[i];
