@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,10 +42,20 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
       final image = await boundary.toImage(pixelRatio: 3);
       final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
       if (bytes == null) return;
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/hero_card_${DateTime.now().millisecondsSinceEpoch}.png');
-      await file.writeAsBytes(bytes.buffer.asUint8List());
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Tyria Codex'));
+      final png = bytes.buffer.asUint8List();
+      final name = 'hero_card_${DateTime.now().millisecondsSinceEpoch}.png';
+      if (kIsWeb) {
+        // a browser has no temporary directory, the picture is shared from its bytes
+        await SharePlus.instance.share(ShareParams(
+          files: [XFile.fromData(png, mimeType: 'image/png', name: name)],
+          text: '${widget.name} · Tyria Codex',
+        ));
+      } else {
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/$name');
+        await file.writeAsBytes(png);
+        await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Tyria Codex'));
+      }
     } catch (_) {
       if (mounted) {
         showToast(context, s.t('share_failed'));

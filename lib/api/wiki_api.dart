@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 
 class WikiResult {
@@ -26,6 +27,8 @@ class WikiApi {
       'limit': '20',
       'namespace': '0',
       'format': 'json',
+      // a browser may read the answer of the wiki only when it is asked for this
+      if (kIsWeb) 'origin': '*',
     });
     final res = await http.get(uri,
         headers: {'User-Agent': 'TyriaCodex/0.1 (Flutter GW2 companion app)'}).timeout(const Duration(seconds: 15));

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 
 import '../services/cache.dart';
@@ -33,6 +34,23 @@ class Gw2ApiException implements Exception {
 /// client for https://api.guildwars2.com/v2
 /// static data (items, currencies, specs) is cached in memory and fetched
 /// in batches of 200 ids so we stay inside the rate limit
+/// the address of a request. a browser cannot send the key in a header: the
+/// game's api answers no CORS preflight, so there it goes in the address as the
+/// api documents for browsers. everywhere else it stays out of the address, so
+/// it never ends up in a proxy log or a crash report that records the request
+Uri gw2Uri(String base, String path, {Map<String, String>? query, required String lang, String? key, bool web = false}) {
+  return Uri.parse('$base$path').replace(queryParameters: {
+    ...?query,
+    'v': 'latest',
+    'lang': lang,
+    if (web && key != null && key.isNotEmpty) 'access_token': key,
+  });
+}
+
+/// the headers of a request, the key in one unless it is in the address
+Map<String, String>? gw2Headers(String? key, {bool web = false}) =>
+    !web && key != null && key.isNotEmpty ? {'Authorization': 'Bearer $key'} : null;
+
 class Gw2Api {
   Gw2Api(
     this.apiKey, {
@@ -264,18 +282,9 @@ class Gw2Api {
   }
 
   Future<dynamic> get(String path, [Map<String, String>? query]) async {
-    final params = <String, String>{
-      ...?query,
-      'v': 'latest',
-      'lang': lang,
-    };
-    // the key travels in a header rather than the url, so it never ends up
-    // in a proxy log or a crash report that records the request
     final key = apiKey;
-    final headers = key != null && key.isNotEmpty ? {'Authorization': 'Bearer $key'} : null;
-
-    final uri = Uri.parse('$_base$path').replace(queryParameters: params);
-    final res = await _send(uri, headers);
+    final uri = gw2Uri(_base, path, query: query, lang: lang, key: key, web: kIsWeb);
+    final res = await _send(uri, gw2Headers(key, web: kIsWeb));
 
     if (res.statusCode >= 200 && res.statusCode < 300) {
       return jsonDecode(utf8.decode(res.bodyBytes));

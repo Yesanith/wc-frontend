@@ -1,12 +1,22 @@
 name: Site
 
-# the privacy policy and the account deletion page on github pages. the
-# supabase address and publishable key are written into the page here, from
-# the same secrets the app build uses
+# the privacy policy, the account deletion page and the app itself, running in a
+# browser, on github pages. the browser version is for the phones the app has no
+# store version for. the supabase address and publishable key are written into the
+# pages here, from the same secrets the app build uses
+#
+# only branches can deploy to the pages environment, so this runs on pushes to main
 on:
   push:
     branches: [main]
-    paths: ['site/**', '.github/workflows/pages.yml']
+    paths:
+      - 'site/**'
+      - 'lib/**'
+      - 'assets/**'
+      - 'pubspec.yaml'
+      - 'ci/web.py'
+      - 'ci/launcher/**'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -26,6 +36,7 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Fill in the backend
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -34,6 +45,56 @@ jobs:
           test -n "$SUPABASE_URL" && test -n "$SUPABASE_PUBLISHABLE_KEY"
           sed -i "s#__SUPABASE_URL__#$SUPABASE_URL#; s#__SUPABASE_PUBLISHABLE_KEY__#$SUPABASE_PUBLISHABLE_KEY#" site/delete-account.html
           ! grep -q '__SUPABASE' site/delete-account.html
+
+      # the recipe job commits its data to main after a push, take the newest
+      - name: Use the newest recipe data
+        run: |
+          git fetch --depth=1 origin main
+          git checkout FETCH_HEAD -- assets/data assets/tiles
+          git status --short assets/data assets/tiles
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # web/ is not committed, generate it from the flutter template
+      - name: Generate the web project
+        run: |
+          flutter create --platforms=web --org com.yesanith --project-name tyria_codex .
+          # the template adds a counter app test for a MyApp we do not have
+          rm -f test/widget_test.dart
+
+      # the page's colours, its icons and what iOS needs to keep it on the home screen
+      - name: Set up the web build
+        run: python3 ci/web.py
+
+      - run: flutter pub get
+
+      # the app lives in the app/ folder of the site
+      - name: Build the app for the browser
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          flutter build web --release \
+            --base-href "/$REPO/app/" \
+            --dart-define=APP_VERSION=web \
+            --dart-define=WEB_BASE_URL="https://$OWNER.github.io/$REPO/app/" \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+
+      - name: Put the app in the site
+        run: |
+          mkdir -p site/app
+          cp -r build/web/. site/app/
+          # the page the app is served from must not be mistaken for a missing file
+          cp site/app/index.html site/app/404.html
+          du -sh site/app
+          ls site/app | head -20
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

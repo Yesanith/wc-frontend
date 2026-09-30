@@ -1,6 +1,8 @@
+import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -28,9 +30,19 @@ Map<String, dynamic> buildBackup(WidgetRef ref) {
 }
 
 Future<void> shareBackup(WidgetRef ref) async {
+  final text = const JsonEncoder.withIndent('  ').convert(buildBackup(ref));
+  if (kIsWeb) {
+    // a browser has no temporary directory, the file is made from the bytes
+    final bytes = Uint8List.fromList(utf8.encode(text));
+    await SharePlus.instance.share(ShareParams(
+      files: [XFile.fromData(bytes, mimeType: 'application/json', name: 'tyria-codex-backup.json')],
+      text: 'Tyria Codex backup',
+    ));
+    return;
+  }
   final dir = await getTemporaryDirectory();
   final file = File('${dir.path}/tyria-codex-backup.json');
-  await file.writeAsString(const JsonEncoder.withIndent('  ').convert(buildBackup(ref)));
+  await file.writeAsString(text);
   await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: 'Tyria Codex backup'));
 }
 

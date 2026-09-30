@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -9,6 +8,7 @@ import '../services/cache.dart';
 import '../util.dart';
 import 'api.dart';
 import 'settings.dart';
+import '../services/gunzip.dart';
 
 /// tyria. the mists continent has its own coordinates and is left out
 const worldContinent = 1;
@@ -239,7 +239,7 @@ Future<List<MapMarker>?> _bundledMarkers(int floor, String lang) async {
 }
 
 List<dynamic> _decodeBundled(Uint8List gz) {
-  final raw = jsonDecode(utf8.decode(gzip.decode(gz)));
+  final raw = jsonDecode(utf8.decode(gunzip(gz)));
   return raw is Map && raw['rows'] is List ? raw['rows'] as List : const [];
 }
 

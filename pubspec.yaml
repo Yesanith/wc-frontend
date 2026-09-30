@@ -23,6 +23,8 @@ dependencies:
   url_launcher: ^6.3.1
   share_plus: '>=12.0.2 <15.0.0'
   path_provider: ^2.1.4
+  # unpacks the bundled gzip data in a browser, where dart:io has no gzip
+  archive: ^4.0.7
 
 dev_dependencies:
   flutter_test:

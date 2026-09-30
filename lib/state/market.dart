@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart' show compute;
 import 'package:flutter/services.dart' show rootBundle;
@@ -8,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/item_index.dart';
 import '../util.dart';
 import 'api.dart';
+import '../services/gunzip.dart';
 
 /// one item the trading post lists, with what the filters need. ships with
 /// the app, built by the data workflow from every tradable item
@@ -33,7 +33,7 @@ List<MarketEntry> parseMarketIndex(String raw) {
   return out;
 }
 
-List<MarketEntry> _unpack(List<int> gz) => parseMarketIndex(utf8.decode(gzip.decode(gz)));
+List<MarketEntry> _unpack(List<int> gz) => parseMarketIndex(utf8.decode(gunzip(gz)));
 
 final marketIndexProvider = FutureProvider<List<MarketEntry>>((ref) async {
   try {

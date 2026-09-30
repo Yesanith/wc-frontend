@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../state/settings.dart';
+import 'gunzip.dart';
 
 class IndexedItem {
   IndexedItem(this.id, this.name) : lower = name.toLowerCase();
@@ -55,7 +55,7 @@ class ItemIndex {
   static Future<String> _read(String code) async {
     try {
       final bytes = await rootBundle.load('assets/data/item_index_$code.txt.gz');
-      return utf8.decode(gzip.decode(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)));
+      return utf8.decode(gunzip(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)));
     } catch (_) {
       return rootBundle.loadString('assets/data/item_index_$code.txt');
     }
