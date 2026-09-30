@@ -52,6 +52,9 @@ const _readingSections = {
   AppSection.recipes,
   AppSection.progression,
   AppSection.bosses,
+  AppSection.weekly,
+  AppSection.guilds,
+  AppSection.wvw,
   AppSection.about,
   AppSection.settings,
 };
