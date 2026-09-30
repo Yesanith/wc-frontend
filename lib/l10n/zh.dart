@@ -1,7 +1,7 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
   'gshare_title': '与公会成员共享',
-  'gshare_note': '成员列表、职位、升级、仓库和队伍始终共享。你的应用在打开时会获取全部内容。',
+  'gshare_note': '选择公会成员能看到的内容。在你关闭之前，所有内容都会共享。你的应用在打开时会获取全部内容。',
   'gshared_note': '游戏只向会长显示成员列表。这里是使用 Tyria Companion 的成员及其游戏内职位。',
   'gshared_not_linked': '请在设置中关联你的 GW2 账号，以查看会长在此分享的内容。',
   'gw2_link_name': '关联 {name}',

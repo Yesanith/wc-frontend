@@ -1,7 +1,7 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
   'gshare_title': 'ギルドメンバーと共有',
-  'gshare_note': 'メンバー一覧、ランク、アップグレード、ストレージ、チームは常に共有されます。アプリを開くとすべて取得されます。',
+  'gshare_note': 'ギルドメンバーに見せる内容を選びます。オフにするまですべて共有されます。アプリを開くとすべて取得されます。',
   'gshared_note': 'ゲームはメンバー一覧をギルドリーダーにしか見せません。ここには Tyria Companion を使うメンバーが、ゲーム内のランクとともに表示されます。',
   'gshared_not_linked': '設定で GW2 アカウントを連携すると、ギルドリーダーが共有する情報がここに表示されます。',
   'gw2_link_name': '{name} を連携',

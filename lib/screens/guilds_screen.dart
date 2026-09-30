@@ -114,7 +114,7 @@ class GuildDetailScreen extends ConsumerWidget {
           surfaceTintColor: Colors.transparent,
           title: Text(name, style: display(20)),
           actions: [
-            if (leads && tyriaId != null)
+            if (leads)
               IconButton(
                 tooltip: s.t('gshare_title'),
                 icon: const Icon(Icons.visibility_outlined),

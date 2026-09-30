@@ -162,19 +162,37 @@ void main() {
       }
     });
 
-    test('everything is shared until the leader switches it off', () {
-      final d = GuildDetails.fromRow({'share_treasury': false, 'share_stash': true, 'share_log': false});
-      expect(d.shareTreasury, isFalse);
-      expect(d.shareStash, isTrue);
-      expect(d.shareLog, isFalse);
+    test('everything is shared until the leader switches a part off', () {
+      final d = GuildDetails.fromRow({
+        'hidden_parts': ['treasury', 'log', 'members'],
+      });
+      expect(d.hidden, {'treasury', 'log', 'members'});
+      expect(d.shares('treasury'), isFalse);
+      expect(d.shares('members'), isFalse);
+      expect(d.shares('stash'), isTrue);
+      expect(d.shares('storage'), isTrue);
       final none = GuildDetails.fromRow({});
-      expect([none.shareTreasury, none.shareStash, none.shareLog], everyElement(isTrue), reason: 'older rows');
+      expect(none.hidden, isEmpty, reason: 'older rows have no such column');
+      expect(['members', 'ranks', 'teams', 'treasury', 'stash', 'log', 'upgrades', 'storage'].every(none.shares), isTrue);
+      expect(GuildDetails.fromRow({'hidden_parts': 'no'}).hidden, isEmpty);
     });
 
     test('the switches and the note that a part is not shared have texts in every language', () {
       for (final lang in AppLang.values) {
         final s = S(lang);
-        for (final key in ['gshare_title', 'gshare_note', 'guild_rank_needed', 'treasury', 'stash', 'log']) {
+        for (final key in [
+          'gshare_title',
+          'gshare_note',
+          'guild_rank_needed',
+          'treasury',
+          'stash',
+          'log',
+          'members',
+          'ranks',
+          'built_upgrades',
+          'hall_storage',
+          'pvp_teams',
+        ]) {
           expect(s.t(key), isNot(key), reason: '${lang.code} $key');
         }
       }

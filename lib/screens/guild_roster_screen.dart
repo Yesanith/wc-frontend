@@ -42,6 +42,17 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
     }
   }
 
+  /// the leader's app brings what the game tells only the leader, and says how it went
+  Future<void> _bringFromGame() async {
+    final s = ref.read(stringsProvider);
+    try {
+      final outcome = await refreshLink(ref, force: true);
+      if (mounted) showToast(context, guildSyncMessage(s, outcome), duration: const Duration(seconds: 6));
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -55,14 +66,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
         color: AppColors.gold,
         onRefresh: () async {
           // a leader's app brings what the game tells only the leader, and says how it went
-          if (leading) {
-            try {
-              final outcome = await refreshLink(ref, force: true);
-              if (mounted) showToast(context, guildSyncMessage(s, outcome), duration: const Duration(seconds: 6));
-            } catch (e) {
-              if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
-            }
-          }
+          if (leading) await _bringFromGame();
           ref.invalidate(guildRosterProvider(g.id));
           ref.invalidate(guildDetailsProvider(g.id));
           await ref.read(guildRosterProvider(g.id).future);
@@ -147,7 +151,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
 /// the level, message of the day and member count the game gives the guild,
 /// or why they are not here yet. [guildId] is the community guild's id
 class GuildInfoCard extends ConsumerWidget {
-  const GuildInfoCard({required this.guildId, required this.leading});
+  const GuildInfoCard({super.key, required this.guildId, required this.leading});
 
   final String guildId;
   final bool leading;
@@ -200,11 +204,23 @@ class GuildInfoCard extends ConsumerWidget {
   }
 }
 
-/// what the guild's leader lets the members see of the treasury, the stash and
-/// the log. everything else the leader's app brings is always shared.
-/// [guildId] is the community guild's id
+/// the parts of a guild the leader may hide from the members, with the text
+/// each is called in the guild's tabs
+const _sharedParts = <String, String>{
+  'members': 'members',
+  'ranks': 'ranks',
+  'treasury': 'treasury',
+  'stash': 'stash',
+  'upgrades': 'built_upgrades',
+  'storage': 'hall_storage',
+  'teams': 'pvp_teams',
+  'log': 'log',
+};
+
+/// what the guild's leader lets the members see of everything the leader's app
+/// brings, one switch for each part. [guildId] is the community guild's id
 class GuildSharingPanel extends ConsumerStatefulWidget {
-  const GuildSharingPanel({required this.guildId});
+  const GuildSharingPanel({super.key, required this.guildId});
 
   final String guildId;
 
@@ -215,11 +231,11 @@ class GuildSharingPanel extends ConsumerStatefulWidget {
 class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
   bool _busy = false;
 
-  Future<void> _set({bool? treasury, bool? stash, bool? log}) async {
+  Future<void> _set(String part, bool shared) async {
     final s = ref.read(stringsProvider);
     setState(() => _busy = true);
     try {
-      await setGuildSharing(widget.guildId, treasury: treasury, stash: stash, log: log);
+      await setGuildPartShared(widget.guildId, part, shared);
       ref.invalidate(guildDetailsProvider(widget.guildId));
       await ref.read(guildDetailsProvider(widget.guildId).future);
     } catch (e) {
@@ -257,9 +273,7 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
           Text(s.t('gshare_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
           const SizedBox(height: 4),
           Text(s.t('gshare_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
-          row(s.t('treasury'), d.shareTreasury, (v) => _set(treasury: v)),
-          row(s.t('stash'), d.shareStash, (v) => _set(stash: v)),
-          row(s.t('log'), d.shareLog, (v) => _set(log: v)),
+          for (final part in _sharedParts.entries) row(s.t(part.value), d.shares(part.key), (v) => _set(part.key, v)),
         ],
       ),
     );

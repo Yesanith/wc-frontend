@@ -2,7 +2,7 @@
 const frStrings = <String, String>{
   'gshare_title': 'Partagé avec les membres de la guilde',
   'gshare_note':
-      'La liste des membres, les rangs, les améliorations, le stockage et les équipes sont toujours partagés. Ton app apporte tout à l\'ouverture.',
+      'Choisis ce que voient les membres de la guilde. Tout est partagé tant que tu ne le désactives pas. Ton app apporte tout à l\'ouverture.',
   'gshared_note':
       'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Tyria Companion, avec le rang que leur donne le jeu.',
   'gshared_not_linked': 'Lie ton compte GW2 dans les réglages pour voir ce que le chef de la guilde partage ici.',
