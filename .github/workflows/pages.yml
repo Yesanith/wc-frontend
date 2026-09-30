@@ -5,7 +5,9 @@ name: Site
 # store version for. the supabase address and publishable key are written into the
 # pages here, from the same secrets the app build uses
 #
-# only branches can deploy to the pages environment, so this runs on pushes to main
+# only branches can deploy to the pages environment, so this cannot run on a tag. it runs on pushes to
+# main, and again when the APK of a release has been built: the menu of the app in the browser names the
+# last release, and a release is tagged after the push that the site was made for
 on:
   push:
     branches: [main]
@@ -20,6 +22,9 @@ on:
       - 'ci/web.py'
       - 'ci/launcher/**'
       - '.github/workflows/pages.yml'
+  workflow_run:
+    workflows: ['Build APK']
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -33,6 +38,8 @@ concurrency:
 
 jobs:
   publish:
+    # after the APK build only when it worked, a release that failed to build has no news for the menu
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
