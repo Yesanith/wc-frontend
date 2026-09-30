@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ import '../state/settings.dart';
 import '../state/trading.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../state/period_refresh.dart';
@@ -129,6 +131,9 @@ class AppShell extends ConsumerStatefulWidget {
 
 class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /// the window is wide enough for a menu that stays open, set on every build
+  bool _wide = false;
 
   /// the guilds whose leader was already asked in this run, so it happens once
   static final _reviewAsked = <String>{};
@@ -263,7 +268,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   DateTime? _exitArmedUntil;
 
   void _select(AppSection next) {
-    _selecting = true;
+    // a menu that is always there has no closing to be mistaken for a back press
+    if (!_wide) _selecting = true;
     ref.read(sectionProvider.notifier).state = next;
     _scaffoldKey.currentState?.closeDrawer();
   }
@@ -294,6 +300,17 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   /// shows the exit hint and keeps the menu, and a third press within two
   /// seconds of that hint leaves the app
   bool _rootBack() {
+    if (_wide) {
+      // the menu is always there, back has none to open. a browser keeps its own history
+      if (kIsWeb) return false;
+      final until = _exitArmedUntil;
+      if (until != null && DateTime.now().isBefore(until)) {
+        SystemNavigator.pop();
+        return true;
+      }
+      _armExit();
+      return true;
+    }
     final scaffold = _scaffoldKey.currentState;
     if (scaffold == null) return false;
     final armed = _exitArmedUntil;
@@ -355,6 +372,116 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     }
     _opened.add(section);
 
+    // a computer or a tablet held sideways keeps the menu open beside the page
+    final wide = useSideMenu(MediaQuery.sizeOf(context));
+    _wide = wide;
+    final menu = NavigationDrawer(
+      selectedIndex: section.index,
+      onDestinationSelected: (i) => _select(AppSection.values[i]),
+      children: [
+        // the plugin's header bar: the emblem, the name and the version
+        // in a pill, with the account underneath
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 22, 16, 14),
+          child: Row(
+            children: [
+              const DiamondEmblem(size: 34),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(child: Text('Tyria Codex', style: display(18), overflow: TextOverflow.ellipsis)),
+                        const SizedBox(width: 8),
+                        const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                      ],
+                    ),
+                    if (accountName != null)
+                      Text(accountName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
+          child: Divider(),
+        ),
+        for (final sec in AppSection.values) ...[
+          if (_groupStarts.containsKey(sec)) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
+              child: Divider(),
+            ),
+            if (_groupStarts[sec] case final key?)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(28, 4, 28, 8),
+                child: Kicker(s.t(key).toUpperCase(), color: AppColors.hint),
+              ),
+          ],
+          NavigationDrawerDestination(
+            icon: Icon(_icons[sec]!.$1),
+            selectedIcon: Icon(_icons[sec]!.$2),
+            label: Text(s.t(_titleKeys[sec]!)),
+          ),
+        ],
+      ],
+    );
+
+    // the same scaffold either way, under its key, so a window resized past the limit
+    // does not start the sections over
+    final scaffold = Scaffold(
+      key: _scaffoldKey,
+      onDrawerChanged: _drawerChanged,
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        surfaceTintColor: Colors.transparent,
+        title: Text(s.t(_titleKeys[section]!), style: display(20)),
+        // a full sync shows real progress, a background refresh only says
+        // that something is updating
+        bottom: !sync.running && refreshing == 0
+            ? null
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(2),
+                child: LinearProgressIndicator(
+                  value: sync.running ? sync.ratio : null,
+                  minHeight: 2,
+                  backgroundColor: AppColors.track,
+                  color: AppColors.gold,
+                ),
+              ),
+      ),
+      drawer: wide ? null : menu,
+      body: SwipeToOpen(
+        // the map pans sideways, the menu stays on the button and back there
+        enabled: section != AppSection.maps && !wide,
+        onOpen: () => _scaffoldKey.currentState?.openDrawer(),
+        child: IndexedStack(
+          index: section.index,
+          children: [
+            for (final sec in AppSection.values)
+              // hidden sections keep their state but stop their tickers and timers
+              TickerMode(
+                enabled: sec == section,
+                // the map takes the whole window, every other page keeps to a width and sits in the middle
+                child: ContentFrame(
+                  maxWidth: sec == AppSection.maps ? double.infinity : contentMaxWidth,
+                  child: !_opened.contains(sec)
+                      ? const SizedBox.shrink()
+                      : (!hasKey && sectionNeedsKey(sec))
+                          ? const NeedsKeyView()
+                          : _page(sec),
+                ),
+              ),
+          ],
+        ),
+      ),
+
+    );
+
     // canPop false makes the framework claim the back gesture, otherwise
     // android's predictive back would quit before _rootBack gets a say
     return PopScope(
@@ -362,103 +489,28 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _rootBack();
       },
-      child: Scaffold(
-        key: _scaffoldKey,
-        onDrawerChanged: _drawerChanged,
-        appBar: AppBar(
-          backgroundColor: AppColors.bg,
-          surfaceTintColor: Colors.transparent,
-          title: Text(s.t(_titleKeys[section]!), style: display(20)),
-          // a full sync shows real progress, a background refresh only says
-          // that something is updating
-          bottom: !sync.running && refreshing == 0
-              ? null
-              : PreferredSize(
-                  preferredSize: const Size.fromHeight(2),
-                  child: LinearProgressIndicator(
-                    value: sync.running ? sync.ratio : null,
-                    minHeight: 2,
-                    backgroundColor: AppColors.track,
-                    color: AppColors.gold,
-                  ),
-                ),
-        ),
-        drawer: NavigationDrawer(
-          selectedIndex: section.index,
-          onDestinationSelected: (i) => _select(AppSection.values[i]),
-          children: [
-            // the plugin's header bar: the emblem, the name and the version
-            // in a pill, with the account underneath
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 22, 16, 14),
-              child: Row(
-                children: [
-                  const DiamondEmblem(size: 34),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(child: Text('Tyria Codex', style: display(18), overflow: TextOverflow.ellipsis)),
-                            const SizedBox(width: 8),
-                            const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
-                          ],
-                        ),
-                        if (accountName != null)
-                          Text(accountName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                      ],
+      child: wide
+          ? Row(
+              children: [
+                SizedBox(
+                  width: sideMenuWidth,
+                  // the menu of the drawer, as a panel: flat, square, the width of the panel
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      drawerTheme: Theme.of(context).drawerTheme.copyWith(
+                            elevation: 0,
+                            shape: const RoundedRectangleBorder(),
+                            width: sideMenuWidth,
+                          ),
                     ),
+                    child: menu,
                   ),
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
-              child: Divider(),
-            ),
-            for (final sec in AppSection.values) ...[
-              if (_groupStarts.containsKey(sec)) ...[
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
-                  child: Divider(),
                 ),
-                if (_groupStarts[sec] case final key?)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(28, 4, 28, 8),
-                    child: Kicker(s.t(key).toUpperCase(), color: AppColors.hint),
-                  ),
+                const VerticalDivider(width: 1, thickness: 1, color: AppColors.hairline),
+                Expanded(child: scaffold),
               ],
-              NavigationDrawerDestination(
-                icon: Icon(_icons[sec]!.$1),
-                selectedIcon: Icon(_icons[sec]!.$2),
-                label: Text(s.t(_titleKeys[sec]!)),
-              ),
-            ],
-          ],
-        ),
-        body: SwipeToOpen(
-          // the map pans sideways, the menu stays on the button and back there
-          enabled: section != AppSection.maps,
-          onOpen: () => _scaffoldKey.currentState?.openDrawer(),
-          child: IndexedStack(
-            index: section.index,
-            children: [
-              for (final sec in AppSection.values)
-                // hidden sections keep their state but stop their tickers and timers
-                TickerMode(
-                  enabled: sec == section,
-                  child: !_opened.contains(sec)
-                      ? const SizedBox.shrink()
-                      : (!hasKey && sectionNeedsKey(sec))
-                          ? const NeedsKeyView()
-                          : _page(sec),
-                ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : scaffold,
     );
   }
 }
