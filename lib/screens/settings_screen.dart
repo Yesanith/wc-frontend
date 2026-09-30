@@ -12,12 +12,14 @@ import '../state/api.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
 import '../state/boss_alerts.dart';
+import '../state/admin.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import 'admin_screen.dart';
 import '../widgets/common.dart';
 import 'onboarding_screen.dart';
 
@@ -98,6 +100,8 @@ class SettingsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
+        // only for whoever runs the backend
+        const _AdminTile(),
         Panel(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Column(
@@ -912,6 +916,30 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
             TextButton(onPressed: _test, child: Text(s.t('boss_alert_test'))),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// the way to the backend dashboard, there only when the database says the player runs the backend
+class _AdminTile extends ConsumerWidget {
+  const _AdminTile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(isAdminProvider).valueOrNull != true) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Panel(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AdminScreen())),
+          leading: const Icon(Icons.monitor_heart_outlined, color: AppColors.gold),
+          title: const Text('Backend dashboard', style: TextStyle(fontWeight: FontWeight.w700)),
+          subtitle: const Text('Players, guilds, servers, queues and jobs', style: TextStyle(color: AppColors.muted, fontSize: 12)),
+          trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
+        ),
       ),
     );
   }
