@@ -567,7 +567,8 @@ class _SharedGuild extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    Widget note(String key) => Panel(child: Text(s.t(key), style: const TextStyle(color: AppColors.muted, height: 1.5)));
+    Widget note(String key) =>
+        Panel(child: Text(s.t(key), style: const TextStyle(color: AppColors.muted, height: 1.5)));
 
     return ref.watch(tyriaGuildIdProvider(gw2Id)).when(
           loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),

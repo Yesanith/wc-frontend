@@ -1,6 +1,7 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
-  'gshared_note': 'Игра показывает список участников только лидеру гильдии. Это участники, использующие Tyria Companion, с рангом из игры.',
+  'gshared_note':
+      'Игра показывает список участников только лидеру гильдии. Это участники, использующие Tyria Companion, с рангом из игры.',
   'gshared_not_linked': 'Привяжите аккаунт GW2 в настройках, чтобы видеть, чем здесь делится лидер гильдии.',
   'gw2_link_name': 'Привязать {name}',
   'gw2_refreshed': 'Гильдии обновлены.',
