@@ -11,6 +11,9 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'tools/build_site.py'
+      - 'tools/test_build_site.py'
+      - 'tools/site_content/**'
       - 'lib/**'
       - 'assets/**'
       - 'pubspec.yaml'
@@ -37,14 +40,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # the pages are made from tools/site_content in nine languages and committed: they must be what
+      # the builder makes, every language must have everything, and every link must lead somewhere
+      - name: Check the pages
+        run: python3 -m unittest test_build_site
+        working-directory: tools
+
       - name: Fill in the backend
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
           test -n "$SUPABASE_URL" && test -n "$SUPABASE_PUBLISHABLE_KEY"
-          sed -i "s#__SUPABASE_URL__#$SUPABASE_URL#; s#__SUPABASE_PUBLISHABLE_KEY__#$SUPABASE_PUBLISHABLE_KEY#" site/delete-account.html
-          ! grep -q '__SUPABASE' site/delete-account.html
+          # the page to delete an account is there in every language
+          find site -name delete-account.html -not -path 'site/app/*' | while read -r page; do
+            sed -i "s#__SUPABASE_URL__#$SUPABASE_URL#; s#__SUPABASE_PUBLISHABLE_KEY__#$SUPABASE_PUBLISHABLE_KEY#" "$page"
+          done
+          test "$(find site -name delete-account.html -not -path 'site/app/*' | wc -l)" -eq 9
+          ! grep -rq '__SUPABASE' site --include=*.html
 
       # the recipe job commits its data to main after a push, take the newest
       - name: Use the newest recipe data
