@@ -1,5 +1,6 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'story_unmatched': '{n} misiones que el juego registró para este personaje no están en su lista de misiones de historia, así que no se cuentan arriba.',
   'progress_hero_unavailable':
       'La API del juego no devuelve nada sobre los desafíos de héroe (un problema conocido de ArenaNet), así que no se pueden mostrar aquí.',
   'progress_training_unavailable':

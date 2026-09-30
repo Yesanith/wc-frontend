@@ -1,5 +1,6 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'story_unmatched': '{n} Quests, die das Spiel für diesen Charakter aufgezeichnet hat, stehen nicht in seiner Liste der Story-Quests und werden oben daher nicht gezählt.',
   'progress_hero_unavailable':
       'Die API des Spiels liefert nichts zu Heldenherausforderungen (ein bekanntes Problem auf Seiten von ArenaNet), daher können sie hier nicht angezeigt werden.',
   'progress_training_unavailable':
