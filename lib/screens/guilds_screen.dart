@@ -103,7 +103,8 @@ class GuildDetailScreen extends ConsumerWidget {
     // the leader chooses here what the members see of the treasury, the stash and the log
     final tyriaId = ref.watch(tyriaGuildIdProvider(id)).valueOrNull;
     final leads = tyriaId != null &&
-        (ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[]).any((g) => g.id == tyriaId && g.role == 'leader');
+        (ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[])
+            .any((g) => g.id == tyriaId && g.role == 'leader');
 
     return DefaultTabController(
       length: 5,
