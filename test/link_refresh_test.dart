@@ -72,6 +72,56 @@ void main() {
     });
   });
 
+  group('how the guilds were synced', () {
+    test('the backend\'s answer is read, and nothing else is taken for it', () {
+      final synced = parseSynced({
+        'account_name': 'Leo.1',
+        'synced': [
+          {'id': 'g1', 'result': 'synced'},
+          {'id': 'g2', 'result': 'unavailable', 'detail': 'guild:403'},
+          {'id': 'g3'},
+          'nonsense',
+        ],
+      });
+      expect(synced.map((r) => r.result), ['synced', 'unavailable']);
+      expect(synced[0].detail, isNull);
+      expect(synced[1].detail, 'guild:403');
+      expect(parseSynced(null), isEmpty);
+      expect(parseSynced({'synced': 'no'}), isEmpty);
+      expect(parseSynced({'account_name': 'Leo.1'}), isEmpty, reason: 'an older backend says nothing');
+    });
+
+    test('the worst result is the one told, with its reason', () {
+      const s = S(AppLang.en);
+      const ok = GuildSyncResult('synced', null);
+      const refused = GuildSyncResult('unavailable', 'guild:403');
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [ok])), 'Guild details updated.');
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [ok, refused])),
+          "The game would not give the guild's details (guild:403).");
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('failed', 'db:42501'), refused])),
+          contains('db:42501'));
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('too_soon', null)])), contains('few minutes'));
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('synced', 'members:403')])),
+          'Guild details updated. (members:403)');
+    });
+
+    test('nothing to sync and nothing to refresh are told apart', () {
+      const s = S(AppLang.en);
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [])), contains('guilds permission'));
+      expect(guildSyncMessage(s, null), contains('not linked'));
+    });
+
+    test('every result has a text in every language', () {
+      for (final lang in AppLang.values) {
+        final s = S(lang);
+        for (final r in ['synced', 'too_soon', 'unavailable', 'failed', 'none', 'skipped']) {
+          expect(s.t('ginfo_result_$r', {'detail': 'X'}), isNot('ginfo_result_$r'), reason: '${lang.code} $r');
+        }
+        expect(s.t('ginfo_result_unavailable', {'detail': 'X'}), contains('X'), reason: lang.code);
+      }
+    });
+  });
+
   test('the guild info texts exist in every language', () {
     for (final lang in AppLang.values) {
       final s = S(lang);

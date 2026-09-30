@@ -1,5 +1,11 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'ginfo_result_synced': 'Dados da guilda atualizados.',
+  'ginfo_result_too_soon': 'Atualizado agora há pouco, tente de novo em alguns minutos.',
+  'ginfo_result_unavailable': 'O jogo não forneceu os dados da guilda ({detail}).',
+  'ginfo_result_failed': 'O servidor não conseguiu salvar os dados da guilda ({detail}).',
+  'ginfo_result_none': 'Esta conta não lidera nenhuma guilda conhecida pelo servidor. Vincule-a com uma chave de API com a permissão de guildas.',
+  'ginfo_result_skipped': 'A conta da chave de API ativa não está vinculada aqui, nada foi atualizado.',
   'ginfo_level': 'Nível',
   'ginfo_members': 'Membros',
   'ginfo_updated': 'Atualizado {when}',

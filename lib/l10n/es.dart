@@ -1,5 +1,11 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'ginfo_result_synced': 'Datos del gremio actualizados.',
+  'ginfo_result_too_soon': 'Actualizado hace un momento, inténtalo de nuevo en unos minutos.',
+  'ginfo_result_unavailable': 'El juego no dio los datos del gremio ({detail}).',
+  'ginfo_result_failed': 'El servidor no pudo guardar los datos del gremio ({detail}).',
+  'ginfo_result_none': 'Esta cuenta no lidera ningún gremio que conozca el servidor. Vincúlala con una clave API con el permiso de gremios.',
+  'ginfo_result_skipped': 'La cuenta de la clave API activa no está vinculada aquí, no se actualizó nada.',
   'ginfo_level': 'Nivel',
   'ginfo_members': 'Miembros',
   'ginfo_updated': 'Actualizado {when}',

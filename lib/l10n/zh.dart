@@ -1,5 +1,11 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'ginfo_result_synced': '公会信息已更新。',
+  'ginfo_result_too_soon': '刚刚更新过，请几分钟后再试。',
+  'ginfo_result_unavailable': '游戏没有返回公会信息（{detail}）。',
+  'ginfo_result_failed': '服务器无法保存公会信息（{detail}）。',
+  'ginfo_result_none': '此账号不是服务器已知公会的会长。请使用带有 guilds 权限的 API 密钥关联。',
+  'ginfo_result_skipped': '当前 API 密钥的账号尚未关联，因此未更新任何内容。',
   'ginfo_level': '等级',
   'ginfo_members': '成员',
   'ginfo_updated': '更新于 {when}',
