@@ -14,6 +14,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
 import 'guild_roster_screen.dart';
 
@@ -128,11 +129,14 @@ class GuildEventsScreen extends ConsumerWidget {
                 ],
               );
             }
-            return ListView.separated(
+            return ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 96),
-              itemCount: events.length + 1,
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
-              itemBuilder: (context, i) => i == 0 ? const _GuildLinks() : _EventCard(summary: events[i - 1]),
+              children: [
+                const _GuildLinks(),
+                const SizedBox(height: 10),
+                // one under the other on a phone, in rows where there is room
+                CardWrap(minWidth: 440, children: [for (final e in events) _EventCard(summary: e)]),
+              ],
             );
           },
         ),
