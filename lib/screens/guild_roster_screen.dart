@@ -75,7 +75,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
             children: [
               GuildInfoCard(guildId: g.id, leading: leading),
               const SizedBox(height: 12),
-              if (leading) ...[_SharingPanel(guildId: g.id), const SizedBox(height: 12)],
+              if (leading) ...[GuildSharingPanel(guildId: g.id), const SizedBox(height: 12)],
               Text(
                 leading ? s.t('roster_note_leader') : s.t('roster_note'),
                 style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
@@ -201,17 +201,18 @@ class GuildInfoCard extends ConsumerWidget {
 }
 
 /// what the guild's leader lets the members see of the treasury, the stash and
-/// the log. everything else the leader's app brings is always shared
-class _SharingPanel extends ConsumerStatefulWidget {
-  const _SharingPanel({required this.guildId});
+/// the log. everything else the leader's app brings is always shared.
+/// [guildId] is the community guild's id
+class GuildSharingPanel extends ConsumerStatefulWidget {
+  const GuildSharingPanel({required this.guildId});
 
   final String guildId;
 
   @override
-  ConsumerState<_SharingPanel> createState() => _SharingPanelState();
+  ConsumerState<GuildSharingPanel> createState() => _GuildSharingPanelState();
 }
 
-class _SharingPanelState extends ConsumerState<_SharingPanel> {
+class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
   bool _busy = false;
 
   Future<void> _set({bool? treasury, bool? stash, bool? log}) async {
@@ -231,8 +232,14 @@ class _SharingPanelState extends ConsumerState<_SharingPanel> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final d = ref.watch(guildDetailsProvider(widget.guildId)).valueOrNull;
-    if (d == null) return const SizedBox.shrink();
+    final details = ref.watch(guildDetailsProvider(widget.guildId));
+    final d = details.valueOrNull;
+    if (d == null) {
+      // never vanish quietly: the switches are the only way to choose
+      return details.isLoading
+          ? const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+          : Text(s.t('community_failed'), style: const TextStyle(fontSize: 12, color: AppColors.hint));
+    }
 
     Widget row(String label, bool value, ValueChanged<bool> onChanged) => SwitchListTile(
           dense: true,
