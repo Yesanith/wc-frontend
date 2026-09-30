@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,14 +19,18 @@ import 'util.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final cache = await DiskCache.open();
-  final icons = await IconCache.open();
+  // a browser has no disk to keep them on, everything then comes from the network
+  final cache = kIsWeb ? null : await DiskCache.open();
+  final icons = kIsWeb ? null : await IconCache.open();
   // the community account is optional, a failure here never blocks the app
   await initCommunity();
   // push notifications need the community account, and are off without firebase values
-  await initPush();
-  // alerts before pinned world events, from the phone's own alarms
-  await initBossAlerts();
+  // in a browser there are neither, the settings hide them
+  if (!kIsWeb) {
+    await initPush();
+    // alerts before pinned world events, from the phone's own alarms
+    await initBossAlerts();
+  }
   runApp(
     ProviderScope(
       overrides: [

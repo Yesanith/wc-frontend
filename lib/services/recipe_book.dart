@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../util.dart';
+import 'gunzip.dart';
 
 /// discipline name the data job uses for forge recipes
 const mysticForge = 'MysticForge';
@@ -117,7 +117,7 @@ class RecipeBook {
     try {
       final bytes = await rootBundle.load('assets/data/recipe_book.json.gz');
       final raw = jsonDecode(
-        utf8.decode(gzip.decode(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes))),
+        utf8.decode(gunzip(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes))),
       );
       if (raw is! Map) return empty;
       final byOutput = <int, List<BookRecipe>>{};

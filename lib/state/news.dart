@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -201,6 +202,8 @@ final newsProvider = FutureProvider<List<NewsItem>>((ref) async {
           if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r))
       ];
     }
+    // guildwars2.com sends no CORS headers, so a browser cannot read its feed
+    if (kIsWeb) return const <NewsItem>[];
     rethrow;
   }
 });
@@ -236,6 +239,7 @@ final patchNotesProvider = FutureProvider<List<PatchNote>>((ref) async {
     'apfrom': 'Game updates/9999',
     'aplimit': '40',
     'format': 'json',
+    if (kIsWeb) 'origin': '*',
   });
   try {
     final res = await _client.get(uri).timeout(const Duration(seconds: 20));

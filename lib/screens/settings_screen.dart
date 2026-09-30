@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -181,8 +182,11 @@ class SettingsScreen extends ConsumerWidget {
             ],
           ),
         ),
-        const SizedBox(height: 22),
-        const _UpdatePanel(),
+        // an apk cannot be installed from a browser
+        if (!kIsWeb) ...[
+          const SizedBox(height: 22),
+          const _UpdatePanel(),
+        ],
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -17,7 +18,21 @@ bool get communityConfigured => supabaseUrl.isNotEmpty && supabasePublishableKey
 /// where the browser sends the player back after signing in with discord.
 /// the same address is registered in the android manifest and in the
 /// supabase dashboard's redirect urls
-const authRedirect = 'tyriacodex://login-callback';
+const _appRedirect = 'tyriacodex://login-callback';
+
+/// where the app is served when it runs in a browser, set by the site build.
+/// without it, the address the page was opened at
+const _webBase = String.fromEnvironment('WEB_BASE_URL');
+
+String get authRedirect => kIsWeb ? webAuthRedirect(_webBase, Uri.base) : _appRedirect;
+
+/// the page discord sends the player back to in a browser: the app's own address,
+/// without a query or a fragment. it must be one of the supabase dashboard's redirect urls
+String webAuthRedirect(String configured, Uri current) {
+  if (configured.isNotEmpty) return configured;
+  final clean = current.replace(query: '', fragment: '').toString();
+  return clean.replaceAll(RegExp(r'[?#]$'), '').replaceFirst(RegExp(r'/index\.html$'), '/');
+}
 
 bool _ready = false;
 
@@ -78,7 +93,8 @@ Future<void> signInWithDiscord() async {
   await Supabase.instance.client.auth.signInWithOAuth(
     OAuthProvider.discord,
     redirectTo: authRedirect,
-    authScreenLaunchMode: LaunchMode.externalApplication,
+    // a browser signs in in the same tab, the phone's browser sends the player back to the app
+    authScreenLaunchMode: kIsWeb ? LaunchMode.platformDefault : LaunchMode.externalApplication,
   );
 }
 

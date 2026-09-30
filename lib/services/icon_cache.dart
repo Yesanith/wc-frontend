@@ -138,8 +138,12 @@ class _CachedIconState extends ConsumerState<CachedIcon> {
     }
     // no disk cache available (tests) or still downloading
     if (ref.read(iconCacheProvider) == null) {
+      // in a browser an image from another site is read through an html element when its
+      // server sends no CORS headers
       return Image.network(widget.url,
-          fit: widget.fit, errorBuilder: (context, error, stack) => const SizedBox.shrink());
+          fit: widget.fit,
+          webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
+          errorBuilder: (context, error, stack) => const SizedBox.shrink());
     }
     return const SizedBox.shrink();
   }

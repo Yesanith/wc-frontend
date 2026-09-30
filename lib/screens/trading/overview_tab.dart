@@ -456,7 +456,7 @@ class _GemChartPainter extends CustomPainter {
     }
     final span = (hi - lo) == 0 ? 1 : hi - lo;
     final first = points.first.at.millisecondsSinceEpoch;
-    final range = (points.last.at.millisecondsSinceEpoch - first).clamp(1, 1 << 62);
+    final range = (points.last.at.millisecondsSinceEpoch - first).clamp(1, 9007199254740991);
     final grid = Paint()
       ..color = AppColors.track
       ..strokeWidth = 1;
