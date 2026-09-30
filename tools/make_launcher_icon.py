@@ -12,6 +12,9 @@ Flutter icons after `flutter create`:
   * mipmap-*/ic_launcher_monochrome.png themed icon layer (android 13+)
   * mipmap-anydpi-v26/ic_launcher.xml   ties the adaptive layers together
   * values/ic_launcher_background.xml   the adaptive background colour
+  * drawable-*/ic_stat_tyria.png        the small icon of notifications, white on clear,
+                                        drawn bolder and filling its square because the
+                                        status bar shows it about 24dp across
   * ci/launcher/play_store_512.png      for a store listing later
 
 Usage: python tools/make_launcher_icon.py
@@ -36,12 +39,14 @@ def diamond(cx, cy, r):
     return [(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)]
 
 
-def draw_emblem(draw, cx, cy, size, color):
-    """same proportions as _EmblemPainter: outer and inner outline, filled core"""
-    stroke = max(1, round(size * 0.055))
+def draw_emblem(draw, cx, cy, size, color, bold=False):
+    """same proportions as _EmblemPainter: outer and inner outline, filled core.
+    bold makes the lines and the core thicker, for an icon a few pixels wide"""
+    stroke = max(1, round(size * (0.075 if bold else 0.055)))
     outer = size / 2 - stroke
-    inner = size / 2 - size * 0.22
-    core = size * 0.1
+    # a bold emblem keeps a clear gap between its three parts, they are only a few pixels apart
+    inner = size / 2 - size * (0.245 if bold else 0.22)
+    core = size * (0.11 if bold else 0.1)
     for r in (outer, inner):
         # a closed polygon joins its last side to the first cleanly, a
         # polyline back to its start leaves a notch at the top corner
@@ -49,12 +54,25 @@ def draw_emblem(draw, cx, cy, size, color):
     draw.polygon(diamond(cx, cy, core), fill=color)
 
 
-def render(px, background, color, emblem_share):
+def render(px, background, color, emblem_share, bold=False):
     """one square image, drawn large and scaled down for smooth edges"""
     big = px * SUPERSAMPLE
     img = Image.new("RGBA", (big, big), background)
-    draw_emblem(ImageDraw.Draw(img), big / 2, big / 2, big * emblem_share, color)
+    draw_emblem(ImageDraw.Draw(img), big / 2, big / 2, big * emblem_share, color, bold)
     return img.resize((px, px), Image.LANCZOS)
+
+
+# a notification's small icon is 24dp, in pixels per density. android shows only its
+# outline, colour is ignored, so it is white on clear
+NOTIFICATION_DENSITIES = {"mdpi": 24, "hdpi": 36, "xhdpi": 48, "xxhdpi": 72, "xxxhdpi": 96}
+
+
+def write_notification_icons():
+    """the emblem fills nearly all of its square: the adaptive icon's monochrome layer leaves
+    the emblem a third of its width for a safe zone, which made it tiny in the status bar"""
+    clear = (0, 0, 0, 0)
+    for density, px in NOTIFICATION_DENSITIES.items():
+        write(render(px, clear, WHITE, 0.92, bold=True), RES, "drawable-%s" % density, "ic_stat_tyria.png")
 
 
 def write(img, *parts):
@@ -73,6 +91,8 @@ def main():
         layer = round(px * 108 / 48)
         write(render(layer, clear, GOLD, 0.42), folder, "ic_launcher_foreground.png")
         write(render(layer, clear, WHITE, 0.42), folder, "ic_launcher_monochrome.png")
+
+    write_notification_icons()
 
     anydpi = os.path.join(RES, "mipmap-anydpi-v26")
     os.makedirs(anydpi, exist_ok=True)

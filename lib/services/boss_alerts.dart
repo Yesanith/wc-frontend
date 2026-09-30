@@ -145,8 +145,9 @@ bool isBossAlertPayload(String? payload) => payload == _payload;
 Future<void> initBossAlerts() async {
   try {
     await _plugin.initialize(
-      // the one colour emblem, a full colour icon is a white square there
-      settings: const InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher_monochrome')),
+      // the emblem in white, filling its square: android shows only its outline, and a
+      // full colour icon would be a white square
+      settings: const InitializationSettings(android: AndroidInitializationSettings('@drawable/ic_stat_tyria')),
       onDidReceiveNotificationResponse: (response) => bossAlertTaps.add(response.payload),
     );
     final launch = await _plugin.getNotificationAppLaunchDetails();
