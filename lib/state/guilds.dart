@@ -126,8 +126,8 @@ final guildRanksProvider = FutureProvider.autoDispose.family<List<Json>, String>
   return rows;
 });
 
-final guildTeamsProvider = FutureProvider.autoDispose
-    .family<List<Json>, String>((ref, id) => _leaderOrShared(id, 'teams', () => accountApi(ref).guildPart(id, 'teams')));
+final guildTeamsProvider = FutureProvider.autoDispose.family<List<Json>, String>(
+    (ref, id) => _leaderOrShared(id, 'teams', () => accountApi(ref).guildPart(id, 'teams')));
 
 class GuildUpgradeRow {
   const GuildUpgradeRow(this.id, this.count, this.detail);

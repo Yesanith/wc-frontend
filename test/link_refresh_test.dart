@@ -135,10 +135,19 @@ void main() {
 
   group('what a leader shares of the parts the game keeps to the leader', () {
     test('only an ok answer is a list, anything else is nothing', () {
-      expect(parseSharedPart({'status': 'ok', 'data': [{'a': 1}, 5], 'synced_at': '2026-10-01T10:00:00Z'}), [
-        {'a': 1},
-        5,
-      ]);
+      expect(
+          parseSharedPart({
+            'status': 'ok',
+            'data': [
+              {'a': 1},
+              5
+            ],
+            'synced_at': '2026-10-01T10:00:00Z'
+          }),
+          [
+            {'a': 1},
+            5,
+          ]);
       for (final none in [
         {'status': 'hidden'},
         {'status': 'empty'},

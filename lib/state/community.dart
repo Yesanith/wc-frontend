@@ -278,8 +278,8 @@ List<dynamic>? parseSharedPart(Object? answer) {
 /// what the guild's leader shared of [part], null when nothing
 Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
   try {
-    final answer = await Supabase.instance.client
-        .rpc('guild_shared_part', params: {'p_gw2_guild': gw2GuildId, 'p_part': part});
+    final answer =
+        await Supabase.instance.client.rpc('guild_shared_part', params: {'p_gw2_guild': gw2GuildId, 'p_part': part});
     return parseSharedPart(answer);
   } catch (_) {
     return null;
@@ -289,8 +289,8 @@ Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
 /// the leader chooses what the members see of the treasury, the stash and the
 /// log, a null leaves one as it is
 Future<void> setGuildSharing(String guildId, {bool? treasury, bool? stash, bool? log}) async {
-  await Supabase.instance.client.rpc('set_guild_sharing',
-      params: {'p_guild': guildId, 'p_treasury': treasury, 'p_stash': stash, 'p_log': log});
+  await Supabase.instance.client
+      .rpc('set_guild_sharing', params: {'p_guild': guildId, 'p_treasury': treasury, 'p_stash': stash, 'p_log': log});
 }
 
 /// the community guild that belongs to a game guild, null until the player has
