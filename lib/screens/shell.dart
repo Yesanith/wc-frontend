@@ -50,8 +50,6 @@ import 'guild_events_screen.dart';
 const _readingSections = {
   AppSection.news,
   AppSection.recipes,
-  AppSection.professions,
-  AppSection.collections,
   AppSection.progression,
   AppSection.bosses,
   AppSection.about,

@@ -139,3 +139,44 @@ class SplitColumns extends StatelessWidget {
     });
   }
 }
+
+/// how many cards stand side by side in [width]: as many as fit at [minWidth] each, at most [maxColumns]
+int cardColumns(double width, {required double minWidth, double gap = 0, int maxColumns = 3}) {
+  final fit = ((width + gap) / (minWidth + gap)).floor();
+  return math.max(1, math.min(maxColumns, fit));
+}
+
+/// cards one under the other while the window is narrow, as they always were, and in rows of two or
+/// three when there is room. a row is as tall as its tallest card
+class CardWrap extends StatelessWidget {
+  const CardWrap({super.key, required this.children, this.minWidth = 420, this.gap = 10, this.maxColumns = 3});
+
+  final List<Widget> children;
+  final double minWidth;
+  final double gap;
+  final int maxColumns;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final columns = cardColumns(constraints.maxWidth, minWidth: minWidth, gap: gap, maxColumns: maxColumns);
+      if (columns == 1) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < children.length; i++) ...[
+              if (i > 0) SizedBox(height: gap),
+              children[i],
+            ],
+          ],
+        );
+      }
+      final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
+      return Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: [for (final child in children) SizedBox(width: width, child: child)],
+      );
+    });
+  }
+}

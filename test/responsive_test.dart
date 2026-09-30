@@ -164,4 +164,48 @@ void main() {
       expect(tester.getSize(find.byKey(const Key('a'))).width, 1200);
     });
   });
+
+  group('cards in rows', () {
+    test('are one column on a phone and more where there is room, never more than the limit', () {
+      expect(cardColumns(360, minWidth: 420, gap: 10), 1);
+      expect(cardColumns(840, minWidth: 420, gap: 10), 1, reason: 'two would be narrower than the minimum');
+      expect(cardColumns(850, minWidth: 420, gap: 10), 2);
+      expect(cardColumns(1300, minWidth: 420, gap: 10), 3);
+      expect(cardColumns(4000, minWidth: 420, gap: 10), 3, reason: 'the limit');
+      expect(cardColumns(4000, minWidth: 420, gap: 10, maxColumns: 2), 2);
+    });
+
+    testWidgets('stand one under the other while narrow, with a gap, each as wide as the window', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.binding.setSurfaceSize(const Size(400, 800));
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: SingleChildScrollView(
+          child: CardWrap(children: [for (var i = 0; i < 3; i++) SizedBox(key: Key('c$i'), height: 60)]),
+        ),
+      ));
+      final rects = [for (var i = 0; i < 3; i++) tester.getRect(find.byKey(Key('c$i')))];
+      expect(rects.map((r) => r.width), everyElement(400));
+      expect(rects[1].top - rects[0].bottom, 10);
+      expect(rects[2].top - rects[1].bottom, 10);
+    });
+
+    testWidgets('stand in rows when there is room, the same width, a gap between them', (tester) async {
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.binding.setSurfaceSize(const Size(1300, 800));
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: SingleChildScrollView(
+          child: CardWrap(children: [for (var i = 0; i < 4; i++) SizedBox(key: Key('c$i'), height: 60)]),
+        ),
+      ));
+      final rects = [for (var i = 0; i < 4; i++) tester.getRect(find.byKey(Key('c$i')))];
+      expect(rects[0].top, rects[1].top);
+      expect(rects[1].top, rects[2].top);
+      expect(rects[3].top, greaterThan(rects[0].bottom), reason: 'the fourth starts a second row');
+      expect(rects[3].left, rects[0].left);
+      expect(rects.map((r) => r.width).toSet().length, 1);
+      expect(rects[1].left - rects[0].right, closeTo(10, 0.001));
+    });
+  });
 }

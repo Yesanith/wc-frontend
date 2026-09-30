@@ -8,6 +8,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 
 class CollectionsScreen extends ConsumerWidget {
   const CollectionsScreen({super.key});
@@ -20,11 +21,7 @@ class CollectionsScreen extends ConsumerWidget {
       children: [
         Text(s.t('collections_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
         const SizedBox(height: 12),
-        for (final kind in collectionKinds)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: _CollectionTile(kind: kind),
-          ),
+        CardWrap(minWidth: 400, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
       ],
     );
   }
