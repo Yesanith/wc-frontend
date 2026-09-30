@@ -46,6 +46,18 @@ import 'world_map_screen.dart';
 import 'news_screen.dart';
 import 'guild_events_screen.dart';
 
+/// pages that are one long list: a row across a whole screen of a computer is hard to read
+const _readingSections = {
+  AppSection.news,
+  AppSection.recipes,
+  AppSection.professions,
+  AppSection.collections,
+  AppSection.progression,
+  AppSection.bosses,
+  AppSection.about,
+  AppSection.settings,
+};
+
 const _titleKeys = {
   AppSection.home: 'nav_home',
   AppSection.daily: 'nav_daily',
@@ -466,9 +478,14 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               // hidden sections keep their state but stop their tickers and timers
               TickerMode(
                 enabled: sec == section,
-                // the map takes the whole window, every other page keeps to a width and sits in the middle
+                // the map takes the whole window, a list keeps to a width it can be read in and a page laid
+                // out in columns to a wider one, both in the middle
                 child: ContentFrame(
-                  maxWidth: sec == AppSection.maps ? double.infinity : contentMaxWidth,
+                  maxWidth: sec == AppSection.maps
+                      ? double.infinity
+                      : _readingSections.contains(sec)
+                          ? readingMaxWidth
+                          : contentMaxWidth,
                   child: !_opened.contains(sec)
                       ? const SizedBox.shrink()
                       : (!hasKey && sectionNeedsKey(sec))

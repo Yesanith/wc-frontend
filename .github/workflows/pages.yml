@@ -43,6 +43,10 @@ jobs:
           # the tags too, the app in the browser names the release it is built after
           fetch-depth: 0
 
+      # before the recipe data step below, which fetches one commit and cuts the history the tag is found in
+      - name: Find the release
+        run: echo "APP_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" >> "$GITHUB_ENV"
+
       # the pages are made from tools/site_content in nine languages and committed: they must be what
       # the builder makes, every language must have everything, and every link must lead somewhere
       - name: Check the pages
@@ -98,7 +102,7 @@ jobs:
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
           REPO="${GITHUB_REPOSITORY#*/}"
           # the last release, so the menu tells which build a browser has loaded
-          TAG="$(git describe --tags --abbrev=0 2>/dev/null || echo dev)"
+          TAG="$APP_TAG"
           # no service worker: it keeps the app on the device and shows the old one until a second
           # load, and the app is updated often. the page is fetched fresh, GitHub keeps it ten minutes
           flutter build web --release \

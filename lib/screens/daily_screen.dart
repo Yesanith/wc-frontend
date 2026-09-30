@@ -10,6 +10,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../services/icon_cache.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
 import 'vault_shop_screen.dart';
 
@@ -128,13 +129,16 @@ class _ChecklistGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
+    return GridView(
+      gridDelegate: const AdaptiveGridDelegate(
+        minColumns: 2,
+        maxTile: 330,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 2.6,
+      ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      childAspectRatio: 2.6,
       children: [
         for (final t in tiles)
           AppCard(

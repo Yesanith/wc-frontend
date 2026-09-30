@@ -14,6 +14,7 @@ import '../widgets/build_view.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/birthday.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/recipe_outputs.dart';
 import 'character_progress.dart';
 import 'compare_screen.dart';
@@ -419,11 +420,7 @@ class _InventoryTab extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 8,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
-              ),
+              gridDelegate: const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
               delegate: SliverChildBuilderDelegate(
                 (context, i) {
                   final slot = slots[i];
