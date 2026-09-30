@@ -2,7 +2,8 @@
 const frStrings = <String, String>{
   'roster_manual': 'défini à la main',
   'roster_follow_game': 'Suivre à nouveau le rang du jeu',
-  'roster_auto': 'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
+  'roster_auto':
+      'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
   'gshare_on': 'Les membres le voient',
   'gshare_off': 'Masqué aux membres',
   'gshare_title': 'Partagé avec les membres de la guilde',

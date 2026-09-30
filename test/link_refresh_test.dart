@@ -62,7 +62,8 @@ void main() {
     });
 
     test('a role is by hand only when the backend says so', () {
-      RosterMember member(Object? manual) => RosterMember.fromRow({'user_id': 'u1', 'account_name': 'Mira.2', 'role': 'officer', 'manual': manual});
+      RosterMember member(Object? manual) =>
+          RosterMember.fromRow({'user_id': 'u1', 'account_name': 'Mira.2', 'role': 'officer', 'manual': manual});
       expect(member(true).manual, isTrue);
       expect(member(false).manual, isFalse);
       expect(member(null).manual, isFalse, reason: 'an older backend');
