@@ -2,7 +2,8 @@
 const frStrings = <String, String>{
   'gw2_link_name': 'Lier {name}',
   'gw2_refreshed': 'Guildes mises à jour.',
-  'gw2_refresh_other': 'La clé API active appartient à un compte non lié. Lie-le ci-dessus ou passe à la clé d\'un compte lié pour mettre à jour ses guildes.',
+  'gw2_refresh_other':
+      'La clé API active appartient à un compte non lié. Lie-le ci-dessus ou passe à la clé d\'un compte lié pour mettre à jour ses guildes.',
   'ginfo_result_synced': 'Données de la guilde mises à jour.',
   'ginfo_result_too_soon': 'Mis à jour à l\'instant, réessaie dans quelques minutes.',
   'ginfo_result_unavailable': 'Le jeu n\'a pas donné les données de la guilde ({detail}).',

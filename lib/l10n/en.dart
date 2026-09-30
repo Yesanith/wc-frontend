@@ -2,7 +2,8 @@
 const enStrings = <String, String>{
   'gw2_link_name': 'Link {name}',
   'gw2_refreshed': 'Guilds refreshed.',
-  'gw2_refresh_other': 'The active API key belongs to an account that is not linked. Link it above, or switch to the key of a linked account to refresh its guilds.',
+  'gw2_refresh_other':
+      'The active API key belongs to an account that is not linked. Link it above, or switch to the key of a linked account to refresh its guilds.',
   'ginfo_result_synced': 'Guild details updated.',
   'ginfo_result_too_soon': 'Updated just now, try again in a few minutes.',
   'ginfo_result_unavailable': 'The game would not give the guild\'s details ({detail}).',

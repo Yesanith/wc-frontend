@@ -2,7 +2,8 @@
 const trStrings = <String, String>{
   'gw2_link_name': '{name} hesabını bağla',
   'gw2_refreshed': 'Loncalar yenilendi.',
-  'gw2_refresh_other': 'Etkin API anahtarı bağlı olmayan bir hesaba ait. Yukarıdan bağla ya da loncalarını yenilemek için bağlı bir hesabın anahtarına geç.',
+  'gw2_refresh_other':
+      'Etkin API anahtarı bağlı olmayan bir hesaba ait. Yukarıdan bağla ya da loncalarını yenilemek için bağlı bir hesabın anahtarına geç.',
   'ginfo_result_synced': 'Lonca bilgileri güncellendi.',
   'ginfo_result_too_soon': 'Az önce güncellendi, birkaç dakika sonra tekrar dene.',
   'ginfo_result_unavailable': 'Oyun lonca bilgilerini vermedi ({detail}).',
