@@ -479,7 +479,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           ],
         ),
       ),
-
     );
 
     // canPop false makes the framework claim the back gesture, otherwise
