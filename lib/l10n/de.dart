@@ -1,8 +1,11 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
-  'progress_hero_unavailable': 'Die API des Spiels liefert nichts zu Heldenherausforderungen (ein bekanntes Problem auf Seiten von ArenaNet), daher können sie hier nicht angezeigt werden.',
-  'progress_training_unavailable': 'Die API des Spiels liefert nichts zum Training von Charakteren (ein bekanntes Problem auf Seiten von ArenaNet), daher kann es hier nicht angezeigt werden.',
-  'story_note': 'Zählt die Quests, die das Spiel für diesen Charakter aufgezeichnet hat. Die Summe enthält jeden Zweig, jede Rasse und jeden Orden, daher füllt sich ein Balken selten. Story, die mit einem anderen Charakter oder neu gespielt wurde, zählt hier nicht.',
+  'progress_hero_unavailable':
+      'Die API des Spiels liefert nichts zu Heldenherausforderungen (ein bekanntes Problem auf Seiten von ArenaNet), daher können sie hier nicht angezeigt werden.',
+  'progress_training_unavailable':
+      'Die API des Spiels liefert nichts zum Training von Charakteren (ein bekanntes Problem auf Seiten von ArenaNet), daher kann es hier nicht angezeigt werden.',
+  'story_note':
+      'Zählt die Quests, die das Spiel für diesen Charakter aufgezeichnet hat. Die Summe enthält jeden Zweig, jede Rasse und jeden Orden, daher füllt sich ein Balken selten. Story, die mit einem anderen Charakter oder neu gespielt wurde, zählt hier nicht.',
   'gshare_unreviewed':
       'Das hast du noch nicht bestätigt. Bis dahin bleiben Schatzkammer, Lager und Protokoll vor deinen Mitgliedern verborgen.',
   'gshare_confirm': 'Bestätigen, was Mitglieder sehen',
