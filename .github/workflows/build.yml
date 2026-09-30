@@ -111,7 +111,7 @@ jobs:
           grep -c 'tyriacodex' "$M"
           # notifications use the one colour emblem, a full colour icon would be
           # a white square in the status bar
-          grep -q 'default_notification_icon' "$M" || sed -i 's#<application#<application#; 0,/<activity/s#<activity#<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_launcher_monochrome"/>\n        <activity#' "$M"
+          grep -q 'default_notification_icon' "$M" || sed -i 's#<application#<application#; 0,/<activity/s#<activity#<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_tyria"/>\n        <activity#' "$M"
           grep -c 'default_notification_icon' "$M"
 
       # the alerts before pinned world events are scheduled with the phone's
