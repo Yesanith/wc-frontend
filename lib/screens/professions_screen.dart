@@ -31,7 +31,9 @@ class ProfessionsScreen extends ConsumerWidget {
         ];
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          children: [CardWrap(minWidth: 400, children: [for (final p in list) _ProfessionCard(p)])],
+          children: [
+            CardWrap(minWidth: 400, children: [for (final p in list) _ProfessionCard(p)])
+          ],
         );
       },
     );
