@@ -231,9 +231,7 @@ class GuildDetails {
     this.memberCount,
     this.memberCapacity,
     this.syncedAt,
-    this.shareTreasury = true,
-    this.shareStash = true,
-    this.shareLog = true,
+    this.hidden = const <String>{},
   });
 
   final int? level;
@@ -247,10 +245,13 @@ class GuildDetails {
   /// whether the leader has shared anything yet
   bool get known => syncedAt != null;
 
-  /// what the leader lets the members see of the treasury, the stash and the log
-  final bool shareTreasury;
-  final bool shareStash;
-  final bool shareLog;
+  /// the parts of the guild the leader hides from the members, everything else
+  /// the leader's app brings is shared
+  final Set<String> hidden;
+
+  /// whether the members see [part]: members, ranks, teams, treasury, stash,
+  /// log, upgrades or storage
+  bool shares(String part) => !hidden.contains(part);
 
   factory GuildDetails.fromRow(Map<String, dynamic> r) => GuildDetails(
         level: _asInt(r['level']),
@@ -258,13 +259,13 @@ class GuildDetails {
         memberCount: _asInt(r['member_count']),
         memberCapacity: _asInt(r['member_capacity']),
         syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
-        shareTreasury: r['share_treasury'] != false,
-        shareStash: r['share_stash'] != false,
-        shareLog: r['share_log'] != false,
+        hidden: _textSet(r['hidden_parts']),
       );
 }
 
 int? _asInt(Object? v) => v is num ? v.toInt() : null;
+
+Set<String> _textSet(Object? v) => v is List ? {for (final x in v) '$x'} : const <String>{};
 
 /// the list a guild's leader shared of a part the game opens only to the
 /// leader, null when the answer is anything but ok: not shared, switched off,
@@ -286,11 +287,10 @@ Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
   }
 }
 
-/// the leader chooses what the members see of the treasury, the stash and the
-/// log, a null leaves one as it is
-Future<void> setGuildSharing(String guildId, {bool? treasury, bool? stash, bool? log}) async {
+/// the leader shows or hides one part of the guild to the members
+Future<void> setGuildPartShared(String guildId, String part, bool shared) async {
   await Supabase.instance.client
-      .rpc('set_guild_sharing', params: {'p_guild': guildId, 'p_treasury': treasury, 'p_stash': stash, 'p_log': log});
+      .rpc('set_guild_part_shared', params: {'p_guild': guildId, 'p_part': part, 'p_shared': shared});
 }
 
 /// the community guild that belongs to a game guild, null until the player has
@@ -308,7 +308,7 @@ final guildDetailsProvider = FutureProvider.autoDispose.family<GuildDetails?, St
   if (session == null) return null;
   final row = await Supabase.instance.client
       .from('guilds')
-      .select('level, motd, member_count, member_capacity, details_synced_at, share_treasury, share_stash, share_log')
+      .select('level, motd, member_count, member_capacity, details_synced_at, hidden_parts')
       .eq('id', guildId)
       .maybeSingle();
   return row == null ? null : GuildDetails.fromRow(row);

@@ -2,7 +2,7 @@
 const trStrings = <String, String>{
   'gshare_title': 'Lonca üyeleriyle paylaşılanlar',
   'gshare_note':
-      'Üye listesi, rütbeler, yükseltmeler, depolama ve takımlar her zaman paylaşılır. Uygulaman açılınca hepsini getirir.',
+      'Lonca üyelerinin neleri göreceğini seç. Kapatana kadar her şey paylaşılır. Uygulaman açılınca hepsini getirir.',
   'gshared_note':
       'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Companion kullanan üyeler, oyundaki rütbeleriyle.',
   'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
