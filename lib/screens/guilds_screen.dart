@@ -13,7 +13,7 @@ import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/guild_emblem.dart';
-import 'guild_roster_screen.dart' show GuildInfoCard;
+import 'guild_roster_screen.dart' show GuildInfoCard, GuildSharingPanel;
 import 'item_sheet.dart';
 
 class GuildsScreen extends ConsumerWidget {
@@ -100,6 +100,11 @@ class GuildDetailScreen extends ConsumerWidget {
     final guild = ref.watch(guildProvider(id)).valueOrNull;
     final name = (guild?['name'] as String?) ?? s.t('guild');
 
+    // the leader chooses here what the members see of the treasury, the stash and the log
+    final tyriaId = ref.watch(tyriaGuildIdProvider(id)).valueOrNull;
+    final leads = tyriaId != null &&
+        (ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[]).any((g) => g.id == tyriaId && g.role == 'leader');
+
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -108,6 +113,22 @@ class GuildDetailScreen extends ConsumerWidget {
           surfaceTintColor: Colors.transparent,
           title: Text(name, style: display(20)),
           actions: [
+            if (leads && tyriaId != null)
+              IconButton(
+                tooltip: s.t('gshare_title'),
+                icon: const Icon(Icons.visibility_outlined),
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: AppColors.surface,
+                  builder: (_) => SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                      child: GuildSharingPanel(guildId: tyriaId),
+                    ),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: GuildEmblem(emblem: _emblemOf(guild), size: 36),
