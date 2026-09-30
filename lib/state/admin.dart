@@ -223,7 +223,9 @@ class AdminServer {
 
     final size = count('server', 'size_bytes');
     if (size > 0) {
-      lines.add(HealthLine('Database size', '${formatBytes(size)} of ${formatBytes(freeDatabaseBytes)} on the free plan',
+      lines.add(HealthLine(
+          'Database size',
+          '${formatBytes(size)} of ${formatBytes(freeDatabaseBytes)} on the free plan',
           levelOfUse(size / freeDatabaseBytes)));
     }
     final monthly = count('auth', 'signed_in_30d');
@@ -247,7 +249,18 @@ class AdminServer {
       lines.add(HealthLine('News feeds', '$failing failing$which', HealthLevel.warn));
     }
 
-    for (final name in const ['server', 'tables', 'running', 'slow', 'auth', 'activity', 'latest', 'feeds', 'queues', 'cron_history']) {
+    for (final name in const [
+      'server',
+      'tables',
+      'running',
+      'slow',
+      'auth',
+      'activity',
+      'latest',
+      'feeds',
+      'queues',
+      'cron_history'
+    ]) {
       final why = problem(name);
       if (why != null) lines.add(HealthLine('Could not read $name', why, HealthLevel.warn));
     }

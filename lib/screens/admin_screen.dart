@@ -124,8 +124,10 @@ class _Overview extends StatelessWidget {
       _Stat('Active today', fmtInt(d.count('users', 'active_24h')), '${d.count('users', 'active_7d')} in 7 days'),
       _Stat('Game accounts', fmtInt(d.count('accounts', 'gw2_accounts')),
           '${d.count('accounts', 'users_with_account')} players linked one'),
-      _Stat('Guilds', fmtInt(d.count('accounts', 'guilds')), '${d.count('accounts', 'guilds_read_by_leader')} read by a leader'),
-      _Stat('Discord servers', fmtInt(d.count('discord', 'servers')), '${d.count('discord', 'following_ranks')} follow the ranks'),
+      _Stat('Guilds', fmtInt(d.count('accounts', 'guilds')),
+          '${d.count('accounts', 'guilds_read_by_leader')} read by a leader'),
+      _Stat('Discord servers', fmtInt(d.count('discord', 'servers')),
+          '${d.count('discord', 'following_ranks')} follow the ranks'),
       _Stat('Devices', fmtInt(d.count('push', 'devices')), languages.isEmpty ? 'with notifications' : languages),
       _Stat('Events to come', fmtInt(d.count('events', 'upcoming')),
           '${d.count('events', 'going_upcoming')} going · ${d.count('events', 'weekly_series')} weekly'),
@@ -230,12 +232,17 @@ class _ServerTab extends ConsumerWidget {
           primary: [
             const Eyebrow('Server'),
             _StatGrid(children: [
-              _Stat('Up for', started == null ? '?' : uptime(started, now), started == null ? '' : 'since ${_day(started)}'),
-              _Stat('Connections', '${asInt(conn['total'])}', 'of ${s.count('server', 'max_connections')}, ${asInt(conn['active'])} active'),
+              _Stat('Up for', started == null ? '?' : uptime(started, now),
+                  started == null ? '' : 'since ${_day(started)}'),
+              _Stat('Connections', '${asInt(conn['total'])}',
+                  'of ${s.count('server', 'max_connections')}, ${asInt(conn['active'])} active'),
               _Stat('Cache', hit == null ? '?' : '${hit.toStringAsFixed(1)}%', 'reads from memory'),
-              _Stat('Size', formatBytes(size), '${(100 * size / freeDatabaseBytes).toStringAsFixed(0)}% of the free plan'),
-              _Stat('Commits', compact(s.count('server', 'commits')), '${compact(s.count('server', 'rollbacks'))} rolled back'),
-              _Stat('Temp files', compact(s.count('server', 'temp_files')), formatBytes(s.count('server', 'temp_bytes'))),
+              _Stat('Size', formatBytes(size),
+                  '${(100 * size / freeDatabaseBytes).toStringAsFixed(0)}% of the free plan'),
+              _Stat('Commits', compact(s.count('server', 'commits')),
+                  '${compact(s.count('server', 'rollbacks'))} rolled back'),
+              _Stat(
+                  'Temp files', compact(s.count('server', 'temp_files')), formatBytes(s.count('server', 'temp_bytes'))),
             ]),
             if ('${s.section('server')['version'] ?? ''}'.isNotEmpty)
               Padding(
@@ -246,9 +253,13 @@ class _ServerTab extends ConsumerWidget {
             const Eyebrow('Health'),
             _Health(s.health(now)),
             const Eyebrow('Slowest queries'),
-            _Queries(s.list('slow'), problem: s.problem('slow'), empty: 'Nothing is counted (the extension that counts queries is not on).', slow: true),
+            _Queries(s.list('slow'),
+                problem: s.problem('slow'),
+                empty: 'Nothing is counted (the extension that counts queries is not on).',
+                slow: true),
             const Eyebrow('Running now'),
-            _Queries(s.list('running'), problem: s.problem('running'), empty: 'Nothing has run for more than 5 seconds.', slow: false),
+            _Queries(s.list('running'),
+                problem: s.problem('running'), empty: 'Nothing has run for more than 5 seconds.', slow: false),
           ],
           secondary: [
             const Eyebrow('Tables'),
@@ -284,10 +295,12 @@ class _Tables extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
-                  Expanded(child: Text('${t['name']}', style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                  Expanded(
+                      child: Text('${t['name']}', style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
                   SizedBox(
                     width: 70,
-                    child: Text(fmtInt(asInt(t['rows'])), textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                    child: Text(fmtInt(asInt(t['rows'])),
+                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
                   ),
                   SizedBox(
                     width: 76,
@@ -334,8 +347,11 @@ class _Queries extends StatelessWidget {
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
                   ),
                   const SizedBox(height: 2),
-                  Text('${q['query']}', maxLines: 3, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 11.5, color: AppColors.muted, height: 1.35, fontFamily: 'monospace')),
+                  Text('${q['query']}',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 11.5, color: AppColors.muted, height: 1.35, fontFamily: 'monospace')),
                 ],
               ),
             ),
@@ -366,7 +382,9 @@ class _Jobs extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  _Dot(r['status'] == 'succeeded' ? HealthLevel.good : (r['status'] == 'failed' ? HealthLevel.bad : HealthLevel.warn)),
+                  _Dot(r['status'] == 'succeeded'
+                      ? HealthLevel.good
+                      : (r['status'] == 'failed' ? HealthLevel.bad : HealthLevel.warn)),
                   const SizedBox(width: 10),
                   Expanded(child: Text('${r['job']}', style: const TextStyle(fontSize: 13))),
                   Text(
@@ -407,7 +425,10 @@ class _ActivityTab extends ConsumerWidget {
           'server_connected': 'Last server connected',
         };
         final feeds = s.section('feeds');
-        final errors = [for (final e in (feeds['errors'] is List ? feeds['errors'] as List : const [])) if (e is Map) Map<String, dynamic>.from(e)];
+        final errors = [
+          for (final e in (feeds['errors'] is List ? feeds['errors'] as List : const []))
+            if (e is Map) Map<String, dynamic>.from(e)
+        ];
         return _Tab(
           updated: s.generatedAt,
           onRefresh: () async {
@@ -504,7 +525,8 @@ class _UsersTab extends ConsumerWidget {
             const Eyebrow('The free plan'),
             _LimitBar('Database', size, freeDatabaseBytes, formatBytes(size), formatBytes(freeDatabaseBytes)),
             const SizedBox(height: 10),
-            _LimitBar('Users who signed in this month', monthly, freeMonthlyUsers, fmtInt(monthly), fmtInt(freeMonthlyUsers)),
+            _LimitBar(
+                'Users who signed in this month', monthly, freeMonthlyUsers, fmtInt(monthly), fmtInt(freeMonthlyUsers)),
             const Padding(
               padding: EdgeInsets.fromLTRB(4, 10, 4, 0),
               child: Text(
@@ -575,7 +597,8 @@ class _LimitBar extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text('${(fraction * 100).toStringAsFixed(fraction < 0.1 ? 1 : 0)} percent', style: TextStyle(fontSize: 12, color: color)),
+          Text('${(fraction * 100).toStringAsFixed(fraction < 0.1 ? 1 : 0)} percent',
+              style: TextStyle(fontSize: 12, color: color)),
         ],
       ),
     );
@@ -622,9 +645,13 @@ class _Stat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label.toUpperCase(),
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+              style:
+                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.gold)),
-          Text(note, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(note,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );
@@ -646,7 +673,11 @@ class _Line extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text(label, style: TextStyle(fontSize: 13, fontWeight: bold ? FontWeight.w700 : FontWeight.w400, color: bold ? AppColors.text : AppColors.textSoft)),
+            child: Text(label,
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: bold ? FontWeight.w700 : FontWeight.w400,
+                    color: bold ? AppColors.text : AppColors.textSoft)),
           ),
           Text(value, style: TextStyle(fontSize: 13, color: valueColor ?? AppColors.muted)),
         ],
@@ -735,9 +766,11 @@ class _Bars extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(days.isEmpty ? '' : short(days.first.day), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.first.day),
+                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
               Text('most in a day: $peak', style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text(days.isEmpty ? '' : short(days.last.day), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.last.day),
+                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
           ),
         ],
