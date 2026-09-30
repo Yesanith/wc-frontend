@@ -182,14 +182,14 @@ Guild Wars 2 Wiki and is used under its license.
 ## The site
 
 The pages of the site (home, FAQ, privacy policy, terms of service, delete account) are made in nine
-languages from the texts in `tools/site_content/<language>.json`. English is at the root, the others in
-a folder of their own (`de/privacy.html`), and a language picker sits in the top corner of every page.
-To change a text, change it in English and in the other files, then run
+languages from the texts in `tools/site_content/<language>.json`, one file for each language, the way the
+app's texts are. English is at the root of the site, the others in a folder of their own (`de/privacy.html`),
+and a language picker sits in the top corner of every page.
 
-    python3 tools/build_site.py
-
-and commit the pages it writes into `site/`. `python3 -m unittest test_build_site` in `tools/` checks that the
-pages are what the builder makes, that every language has everything English has, that a translation keeps
-every link, command and emphasis of the English text, and that every link leads somewhere. The translations
-say that the English version applies where they differ. The app in the browser (`site/app/`) is built when
-the site is published and is not part of this.
+The pages themselves are not kept in the repository. `tools/build_site.py` makes them when the site is
+published, and `python3 tools/build_site.py` makes them into `site/` to look at, where git ignores them. To
+change a text, change it in English and in the other files. `python3 -m unittest test_build_site` in `tools/`
+checks that every language has everything English has, that a translation keeps every link, command and
+emphasis of the English text, and that every link leads somewhere. The translations say that the English
+version applies where they differ. The app in the browser (`site/app/`) is built when the site is published and
+is not part of this.
