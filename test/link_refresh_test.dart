@@ -294,7 +294,13 @@ void main() {
     test('the texts of the choice exist in every language', () {
       for (final lang in AppLang.values) {
         final s = S(lang);
-        for (final key in ['gshare_unreviewed', 'gshare_confirm', 'gshare_review_title', 'gshare_review_intro', 'gshare_later']) {
+        for (final key in [
+          'gshare_unreviewed',
+          'gshare_confirm',
+          'gshare_review_title',
+          'gshare_review_intro',
+          'gshare_later'
+        ]) {
           expect(s.t(key), isNot(key), reason: '${lang.code} $key');
         }
       }
@@ -303,7 +309,8 @@ void main() {
 
   group('the news feed', () {
     test('a phone reads the site\'s own feed, in the language of the app', () {
-      expect(newsFeedRequest(AppLang.de, web: false, backend: 'https://x.supabase.co'), 'https://www.guildwars2.com/de/feed/');
+      expect(newsFeedRequest(AppLang.de, web: false, backend: 'https://x.supabase.co'),
+          'https://www.guildwars2.com/de/feed/');
       expect(newsFeedRequest(AppLang.en, web: false, backend: ''), 'https://www.guildwars2.com/en/feed/');
     });
 
