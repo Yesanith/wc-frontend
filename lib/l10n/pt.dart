@@ -1,5 +1,7 @@
 /// portuguese ui strings. `{name}` placeholders are filled by S.t
 const ptStrings = <String, String>{
+  'gshare_on': 'Os membros veem isto',
+  'gshare_off': 'Oculto dos membros',
   'gshare_title': 'Compartilhado com os membros da guilda',
   'gshare_note':
       'Escolha o que os membros da guilda veem. Tudo é compartilhado até você desligar. Seu app traz tudo ao abrir.',

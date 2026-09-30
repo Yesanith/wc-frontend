@@ -1,5 +1,7 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'gshare_on': 'Los miembros lo ven',
+  'gshare_off': 'Oculto a los miembros',
   'gshare_title': 'Compartido con los miembros del gremio',
   'gshare_note':
       'Elige lo que ven los miembros del gremio. Todo se comparte hasta que lo desactives. Tu app lo trae todo al abrirse.',

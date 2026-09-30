@@ -1,5 +1,7 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'gshare_on': 'Mitglieder sehen das',
+  'gshare_off': 'Vor Mitgliedern verborgen',
   'gshare_title': 'Mit den Gildenmitgliedern geteilt',
   'gshare_note':
       'Lege fest, was die Gildenmitglieder sehen. Alles wird geteilt, bis du es ausschaltest. Deine App holt alles, wenn sie geöffnet wird.',

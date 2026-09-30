@@ -1,5 +1,7 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'gshare_on': 'Участники это видят',
+  'gshare_off': 'Скрыто от участников',
   'gshare_title': 'Доступно участникам гильдии',
   'gshare_note':
       'Выберите, что видят участники гильдии. Пока вы не отключите, доступно всё. Ваше приложение приносит всё при открытии.',

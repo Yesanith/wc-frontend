@@ -794,7 +794,6 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       value: on,
-      activeThumbColor: AppColors.gold,
       onChanged: _busy ? null : _set,
       title: Text(s.t('push_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
       subtitle: Text(s.t('push_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
@@ -857,7 +856,6 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             value: settings.enabled,
-            activeThumbColor: AppColors.gold,
             onChanged: _busy ? null : _turnOn,
             title: Text(s.t('boss_alerts_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
             subtitle: Text(s.t('boss_alerts_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
