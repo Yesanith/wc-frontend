@@ -1,5 +1,10 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'ginfo_level': 'Stufe',
+  'ginfo_members': 'Mitglieder',
+  'ginfo_updated': 'Aktualisiert {when}',
+  'ginfo_pending': 'Stufe, Nachricht des Tages und Mitgliederzahl der Gilde erscheinen hier, sobald ihr Anführer die App geöffnet hat.',
+  'ginfo_pending_leader': 'Nach unten ziehen, um Stufe, Nachricht des Tages und Mitgliederzahl der Gilde aus dem Spiel zu holen.',
   'event_discord_only':
       'Für dieses Event meldest du dich in Discord an, über die Nachricht dort. Hier kannst du nur absagen.',
   'event_flex': 'Könnte auch spielen',

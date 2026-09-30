@@ -1,5 +1,10 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'ginfo_level': 'レベル',
+  'ginfo_members': 'メンバー',
+  'ginfo_updated': '更新：{when}',
+  'ginfo_pending': 'ギルドのレベル、今日のメッセージ、メンバー数は、リーダーがアプリを開くとここに表示されます。',
+  'ginfo_pending_leader': '下に引いて、ギルドのレベル、今日のメッセージ、メンバー数をゲームから取得します。',
   'event_discord_only': 'このイベントへの参加は Discord のメッセージから行います。ここでは不参加のみ選べます。',
   'event_flex': '他のロールも可',
   'event_err_discord_only': 'このイベントには Discord で参加してください。',

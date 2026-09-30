@@ -1,5 +1,10 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'ginfo_level': 'Уровень',
+  'ginfo_members': 'Участники',
+  'ginfo_updated': 'Обновлено {when}',
+  'ginfo_pending': 'Уровень, сообщение дня и число участников гильдии появятся здесь, когда её лидер откроет приложение.',
+  'ginfo_pending_leader': 'Потяните вниз, чтобы получить из игры уровень, сообщение дня и число участников гильдии.',
   'event_discord_only': 'Запись на это событие идёт в Discord, через сообщение там. Здесь можно только отказаться.',
   'event_flex': 'Могу также играть',
   'event_err_discord_only': 'Запишитесь на это событие в Discord.',

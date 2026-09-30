@@ -1,5 +1,10 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'ginfo_level': 'Niveau',
+  'ginfo_members': 'Membres',
+  'ginfo_updated': 'Mis à jour {when}',
+  'ginfo_pending': 'Le niveau, le message du jour et le nombre de membres de la guilde apparaîtront ici dès que son chef aura ouvert l\'app.',
+  'ginfo_pending_leader': 'Tire vers le bas pour récupérer du jeu le niveau, le message du jour et le nombre de membres de la guilde.',
   'event_discord_only':
       'On s\'inscrit à cet événement dans Discord, avec son message là-bas. Ici, tu peux seulement dire que tu ne viens pas.',
   'event_flex': 'Pourrait aussi jouer',

@@ -189,6 +189,45 @@ final linkedAccountsProvider = FutureProvider.autoDispose<List<LinkedAccount>>((
   ];
 });
 
+/// what the game tells about a guild that only its leader may read. the
+/// leader's app hands it to the backend, the members read it from there
+class GuildDetails {
+  const GuildDetails({this.level, this.motd = '', this.memberCount, this.memberCapacity, this.syncedAt});
+
+  final int? level;
+  final String motd;
+  final int? memberCount;
+  final int? memberCapacity;
+
+  /// when the leader's app last brought it, null while it never has
+  final DateTime? syncedAt;
+
+  /// whether the leader has shared anything yet
+  bool get known => syncedAt != null;
+
+  factory GuildDetails.fromRow(Map<String, dynamic> r) => GuildDetails(
+        level: _asInt(r['level']),
+        motd: '${r['motd'] ?? ''}',
+        memberCount: _asInt(r['member_count']),
+        memberCapacity: _asInt(r['member_capacity']),
+        syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
+      );
+}
+
+int? _asInt(Object? v) => v is num ? v.toInt() : null;
+
+/// the details of one of the player's guilds
+final guildDetailsProvider = FutureProvider.autoDispose.family<GuildDetails?, String>((ref, guildId) async {
+  final session = await ref.watch(sessionProvider.future);
+  if (session == null) return null;
+  final row = await Supabase.instance.client
+      .from('guilds')
+      .select('level, motd, member_count, member_capacity, details_synced_at')
+      .eq('id', guildId)
+      .maybeSingle();
+  return row == null ? null : GuildDetails.fromRow(row);
+});
+
 /// the guilds the signed in player belongs to, with their role in each
 final myGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) async {
   final session = await ref.watch(sessionProvider.future);
