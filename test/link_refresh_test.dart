@@ -180,7 +180,9 @@ void main() {
 
     test('a part is on for the members exactly when the leader has not hidden it', () {
       // the switch shows this, on is gold, so a hidden part must read as off
-      final d = GuildDetails.fromRow({'hidden_parts': ['stash']});
+      final d = GuildDetails.fromRow({
+        'hidden_parts': ['stash']
+      });
       expect(d.shares('stash'), isFalse);
       expect(d.shares('log'), isTrue);
       expect(const S(AppLang.en).t('gshare_on'), isNot(const S(AppLang.en).t('gshare_off')));
