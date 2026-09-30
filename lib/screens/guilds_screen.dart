@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
 import '../services/icon_cache.dart';
+import '../state/community.dart';
+import '../state/guild_events.dart' show guildRosterProvider;
 import '../state/guilds.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -10,6 +13,7 @@ import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/guild_emblem.dart';
+import 'guild_roster_screen.dart' show GuildInfoCard;
 import 'item_sheet.dart';
 
 class GuildsScreen extends ConsumerWidget {
@@ -336,6 +340,14 @@ class _MembersTab extends ConsumerWidget {
     final teams = ref.watch(guildTeamsProvider(id)).valueOrNull ?? const <Json>[];
     final rankIcons = {for (final r in ranks) '${r['id']}': r['icon'] as String?};
 
+    // the game opens the member list only to the guild's leader, everybody else
+    // reads what the leader's app shared of it
+    final listed = ref.watch(guildMembersProvider(id));
+    final refused = listed.error;
+    if (refused is Gw2ApiException && (refused.status == 401 || refused.status == 403)) {
+      return _SharedGuild(gw2Id: id);
+    }
+
     return AsyncView<List<Json>>(
       permission: 'guilds',
       restricted: s.t('guild_rank_needed'),
@@ -542,5 +554,81 @@ class _RankCardState extends ConsumerState<_RankCard> {
         ),
       ),
     );
+  }
+}
+
+/// what the guild's leader shares of it: level, message of the day, member
+/// count, and the members who use the app with the rank the game gives them
+class _SharedGuild extends ConsumerWidget {
+  const _SharedGuild({required this.gw2Id});
+
+  final String gw2Id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    Widget note(String key) => Panel(child: Text(s.t(key), style: const TextStyle(color: AppColors.muted, height: 1.5)));
+
+    return ref.watch(tyriaGuildIdProvider(gw2Id)).when(
+          loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
+          error: (_, __) => ListView(padding: const EdgeInsets.all(20), children: [note('guild_rank_needed')]),
+          data: (guildId) {
+            // no account linked in this guild yet, so nothing is shared with the player
+            if (guildId == null) {
+              return ListView(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+                children: [note('gshared_not_linked'), const SizedBox(height: 12), note('guild_rank_needed')],
+              );
+            }
+            final roster = ref.watch(guildRosterProvider(guildId));
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+              children: [
+                GuildInfoCard(guildId: guildId, leading: false),
+                const SizedBox(height: 16),
+                Text(s.t('gshared_note'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+                const SizedBox(height: 10),
+                roster.when(
+                  loading: () => const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                  error: (e, _) => ErrorBox(error: e, onRetry: () => ref.invalidate(guildRosterProvider(guildId))),
+                  data: (members) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SectionHeader(title: s.t('members'), trailing: '${members.length}'),
+                      const SizedBox(height: 6),
+                      for (final m in members)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Row(
+                            children: [
+                              Icon(
+                                m.role == 'leader'
+                                    ? Icons.workspace_premium
+                                    : m.role == 'officer'
+                                        ? Icons.military_tech_outlined
+                                        : Icons.person_outline,
+                                size: 18,
+                                color: m.role == 'member' ? AppColors.muted : AppColors.gold,
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(m.accountName,
+                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                              ),
+                              Text(m.gw2Rank ?? s.t('guild_role_${m.role}'),
+                                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        );
   }
 }

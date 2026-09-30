@@ -73,7 +73,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
           builder: (members) => ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
             children: [
-              _GuildInfoCard(guildId: g.id, leading: leading),
+              GuildInfoCard(guildId: g.id, leading: leading),
               const SizedBox(height: 12),
               Text(
                 leading ? s.t('roster_note_leader') : s.t('roster_note'),
@@ -144,9 +144,9 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
 }
 
 /// the level, message of the day and member count the game gives the guild,
-/// or why they are not here yet
-class _GuildInfoCard extends ConsumerWidget {
-  const _GuildInfoCard({required this.guildId, required this.leading});
+/// or why they are not here yet. [guildId] is the community guild's id
+class GuildInfoCard extends ConsumerWidget {
+  const GuildInfoCard({required this.guildId, required this.leading});
 
   final String guildId;
   final bool leading;

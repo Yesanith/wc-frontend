@@ -249,6 +249,15 @@ class GuildDetails {
 
 int? _asInt(Object? v) => v is num ? v.toInt() : null;
 
+/// the community guild that belongs to a game guild, null until the player has
+/// linked an account that is in it
+final tyriaGuildIdProvider = FutureProvider.autoDispose.family<String?, String>((ref, gw2GuildId) async {
+  final session = await ref.watch(sessionProvider.future);
+  if (session == null) return null;
+  final row = await Supabase.instance.client.from('guilds').select('id').eq('gw2_guild_id', gw2GuildId).maybeSingle();
+  return row == null ? null : '${row['id']}';
+});
+
 /// the details of one of the player's guilds
 final guildDetailsProvider = FutureProvider.autoDispose.family<GuildDetails?, String>((ref, guildId) async {
   final session = await ref.watch(sessionProvider.future);

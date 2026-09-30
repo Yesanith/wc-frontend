@@ -1,5 +1,7 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'gshared_note': 'ゲームはメンバー一覧をギルドリーダーにしか見せません。ここには Tyria Companion を使うメンバーが、ゲーム内のランクとともに表示されます。',
+  'gshared_not_linked': '設定で GW2 アカウントを連携すると、ギルドリーダーが共有する情報がここに表示されます。',
   'gw2_link_name': '{name} を連携',
   'gw2_refreshed': 'ギルドを更新しました。',
   'gw2_refresh_other': '有効な API キーは連携されていないアカウントのものです。上で連携するか、連携済みアカウントのキーに切り替えてギルドを更新してください。',

@@ -1,5 +1,7 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'gshared_note': 'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Tyria Companion, avec le rang que leur donne le jeu.',
+  'gshared_not_linked': 'Lie ton compte GW2 dans les réglages pour voir ce que le chef de la guilde partage ici.',
   'gw2_link_name': 'Lier {name}',
   'gw2_refreshed': 'Guildes mises à jour.',
   'gw2_refresh_other':

@@ -1,5 +1,7 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'gshared_note': 'El juego muestra la lista de miembros solo al líder del gremio. Estos son los miembros que usan Tyria Companion, con el rango que les da el juego.',
+  'gshared_not_linked': 'Vincula tu cuenta de GW2 en Ajustes para ver lo que el líder del gremio comparte aquí.',
   'gw2_link_name': 'Vincular {name}',
   'gw2_refreshed': 'Gremios actualizados.',
   'gw2_refresh_other':

@@ -1,5 +1,7 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'gshared_note': 'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Companion kullanan üyeler, oyundaki rütbeleriyle.',
+  'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
   'gw2_link_name': '{name} hesabını bağla',
   'gw2_refreshed': 'Loncalar yenilendi.',
   'gw2_refresh_other':

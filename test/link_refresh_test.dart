@@ -133,6 +133,14 @@ void main() {
     }
   });
 
+  test('what a leader shares has its texts in every language', () {
+    for (final lang in AppLang.values) {
+      final s = S(lang);
+      expect(s.t('gshared_note'), isNot('gshared_note'), reason: lang.code);
+      expect(s.t('gshared_not_linked'), isNot('gshared_not_linked'), reason: lang.code);
+    }
+  });
+
   test('the guild info texts exist in every language', () {
     for (final lang in AppLang.values) {
       final s = S(lang);
