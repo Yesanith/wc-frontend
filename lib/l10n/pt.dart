@@ -3,8 +3,10 @@ const ptStrings = <String, String>{
   'ginfo_level': 'Nível',
   'ginfo_members': 'Membros',
   'ginfo_updated': 'Atualizado {when}',
-  'ginfo_pending': 'O nível, a mensagem do dia e o número de membros da guilda aparecem aqui quando o líder abrir o app.',
-  'ginfo_pending_leader': 'Puxe para baixo para trazer do jogo o nível, a mensagem do dia e o número de membros da guilda.',
+  'ginfo_pending':
+      'O nível, a mensagem do dia e o número de membros da guilda aparecem aqui quando o líder abrir o app.',
+  'ginfo_pending_leader':
+      'Puxe para baixo para trazer do jogo o nível, a mensagem do dia e o número de membros da guilda.',
   'event_discord_only':
       'Neste evento a inscrição é feita no Discord, pela mensagem de lá. Aqui você só pode dizer que não vai.',
   'event_flex': 'Também poderia jogar',

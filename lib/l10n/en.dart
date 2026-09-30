@@ -3,7 +3,8 @@ const enStrings = <String, String>{
   'ginfo_level': 'Level',
   'ginfo_members': 'Members',
   'ginfo_updated': 'Updated {when}',
-  'ginfo_pending': 'The guild\'s level, message of the day and member count appear here once its leader has opened the app.',
+  'ginfo_pending':
+      'The guild\'s level, message of the day and member count appear here once its leader has opened the app.',
   'ginfo_pending_leader': 'Pull down to bring the guild\'s level, message of the day and member count from the game.',
   'event_discord_only':
       'This event is signed up for in Discord, with its message there. Here you can only say you\'re not going.',

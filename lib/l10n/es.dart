@@ -3,8 +3,10 @@ const esStrings = <String, String>{
   'ginfo_level': 'Nivel',
   'ginfo_members': 'Miembros',
   'ginfo_updated': 'Actualizado {when}',
-  'ginfo_pending': 'El nivel, el mensaje del día y el número de miembros del gremio aparecerán aquí cuando su líder abra la app.',
-  'ginfo_pending_leader': 'Desliza hacia abajo para traer del juego el nivel, el mensaje del día y el número de miembros del gremio.',
+  'ginfo_pending':
+      'El nivel, el mensaje del día y el número de miembros del gremio aparecerán aquí cuando su líder abra la app.',
+  'ginfo_pending_leader':
+      'Desliza hacia abajo para traer del juego el nivel, el mensaje del día y el número de miembros del gremio.',
   'event_discord_only': 'A este evento te apuntas en Discord, con su mensaje allí. Aquí solo puedes decir que no vas.',
   'event_flex': 'También podría jugar',
   'event_err_discord_only': 'Apúntate a este evento en Discord.',
