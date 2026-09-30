@@ -1,5 +1,7 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'gshare_title': 'Lonca üyeleriyle paylaşılanlar',
+  'gshare_note': 'Üye listesi, rütbeler, yükseltmeler, depolama ve takımlar her zaman paylaşılır. Uygulaman açılınca hepsini getirir.',
   'gshared_note':
       'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Companion kullanan üyeler, oyundaki rütbeleriyle.',
   'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
@@ -381,7 +383,7 @@ const trStrings = <String, String>{
   'version': 'Sürüm',
   'needs_permission': 'API key\'inde {p} izni yok. Bu izinle yeni bir key oluşturup Ayarlar\'dan değiştir.',
   'guild_rank_needed':
-      'API key\'inde sorun yok. Hazine, depo ve kayıt defterini oyun sadece lonca liderlerine açıyor, normal üyeler göremez.',
+      'API key\'in sorunsuz. Oyun bunu yalnızca lonca liderlerine açar. Liderin uygulaması paylaşınca burada görünür: henüz paylaşmadı ya da lider paylaşımı kapattı.',
   'browse_all': 'Tüm başarımlara göz at',
   'instances': 'Instance',
   'raids': 'Raid',

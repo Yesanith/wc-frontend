@@ -225,7 +225,16 @@ final linkedAccountsProvider = FutureProvider.autoDispose<List<LinkedAccount>>((
 /// what the game tells about a guild that only its leader may read. the
 /// leader's app hands it to the backend, the members read it from there
 class GuildDetails {
-  const GuildDetails({this.level, this.motd = '', this.memberCount, this.memberCapacity, this.syncedAt});
+  const GuildDetails({
+    this.level,
+    this.motd = '',
+    this.memberCount,
+    this.memberCapacity,
+    this.syncedAt,
+    this.shareTreasury = true,
+    this.shareStash = true,
+    this.shareLog = true,
+  });
 
   final int? level;
   final String motd;
@@ -238,16 +247,51 @@ class GuildDetails {
   /// whether the leader has shared anything yet
   bool get known => syncedAt != null;
 
+  /// what the leader lets the members see of the treasury, the stash and the log
+  final bool shareTreasury;
+  final bool shareStash;
+  final bool shareLog;
+
   factory GuildDetails.fromRow(Map<String, dynamic> r) => GuildDetails(
         level: _asInt(r['level']),
         motd: '${r['motd'] ?? ''}',
         memberCount: _asInt(r['member_count']),
         memberCapacity: _asInt(r['member_capacity']),
         syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
+        shareTreasury: r['share_treasury'] != false,
+        shareStash: r['share_stash'] != false,
+        shareLog: r['share_log'] != false,
       );
 }
 
 int? _asInt(Object? v) => v is num ? v.toInt() : null;
+
+/// the list a guild's leader shared of a part the game opens only to the
+/// leader, null when the answer is anything but ok: not shared, switched off,
+/// never brought, or the player is no member
+List<dynamic>? parseSharedPart(Object? answer) {
+  if (answer is! Map || answer['status'] != 'ok') return null;
+  final data = answer['data'];
+  return data is List ? data : null;
+}
+
+/// what the guild's leader shared of [part], null when nothing
+Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
+  try {
+    final answer = await Supabase.instance.client
+        .rpc('guild_shared_part', params: {'p_gw2_guild': gw2GuildId, 'p_part': part});
+    return parseSharedPart(answer);
+  } catch (_) {
+    return null;
+  }
+}
+
+/// the leader chooses what the members see of the treasury, the stash and the
+/// log, a null leaves one as it is
+Future<void> setGuildSharing(String guildId, {bool? treasury, bool? stash, bool? log}) async {
+  await Supabase.instance.client.rpc('set_guild_sharing',
+      params: {'p_guild': guildId, 'p_treasury': treasury, 'p_stash': stash, 'p_log': log});
+}
 
 /// the community guild that belongs to a game guild, null until the player has
 /// linked an account that is in it
@@ -264,7 +308,7 @@ final guildDetailsProvider = FutureProvider.autoDispose.family<GuildDetails?, St
   if (session == null) return null;
   final row = await Supabase.instance.client
       .from('guilds')
-      .select('level, motd, member_count, member_capacity, details_synced_at')
+      .select('level, motd, member_count, member_capacity, details_synced_at, share_treasury, share_stash, share_log')
       .eq('id', guildId)
       .maybeSingle();
   return row == null ? null : GuildDetails.fromRow(row);

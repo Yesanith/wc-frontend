@@ -1,5 +1,7 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'gshare_title': 'ギルドメンバーと共有',
+  'gshare_note': 'メンバー一覧、ランク、アップグレード、ストレージ、チームは常に共有されます。アプリを開くとすべて取得されます。',
   'gshared_note': 'ゲームはメンバー一覧をギルドリーダーにしか見せません。ここには Tyria Companion を使うメンバーが、ゲーム内のランクとともに表示されます。',
   'gshared_not_linked': '設定で GW2 アカウントを連携すると、ギルドリーダーが共有する情報がここに表示されます。',
   'gw2_link_name': '{name} を連携',
@@ -360,7 +362,7 @@ const jaStrings = <String, String>{
   'unnamed_entry': '未実装 (#{id})',
   'version': 'バージョン',
   'needs_permission': 'API キーに {p} 権限がありません。権限付きの新しいキーを作成し、設定で差し替えてください。',
-  'guild_rank_needed': 'API キーは問題ありません。宝物庫・倉庫・ログはゲーム側でギルドリーダーにのみ公開されるため、一般メンバーは読めません。',
+  'guild_rank_needed': 'APIキーは問題ありません。ゲームはこれをギルドリーダーにしか公開しません。リーダーのアプリが共有するとここに表示されます。まだ共有されていないか、リーダーが共有をオフにしています。',
   'browse_all': 'すべての実績を見る',
   'instances': 'インスタンス',
   'raids': 'レイド',
