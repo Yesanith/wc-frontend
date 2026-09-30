@@ -4,7 +4,6 @@ iOS needs to add it to the home screen and run it like an app. Run after
 `flutter create --platforms=web .`, from the repository root."""
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
@@ -80,6 +79,9 @@ def patch_manifest(data: dict) -> dict:
 
 
 def make_icons() -> None:
+    from PIL import Image
+
+    source = Image.open(ICON).convert("RGBA")
     icons = WEB / "icons"
     icons.mkdir(parents=True, exist_ok=True)
     for name, size, pad in [
@@ -87,12 +89,14 @@ def make_icons() -> None:
         ("Icon-maskable-192.png", 192, 0.2), ("Icon-maskable-512.png", 512, 0.2),
     ]:
         inner = round(size * (1 - pad))
-        args = ["convert", str(ICON), "-resize", f"{inner}x{inner}"]
+        picture = source.resize((inner, inner), Image.LANCZOS)
         if pad:
             # a maskable icon keeps its picture inside the safe zone, on the app's own background
-            args += ["-background", BG, "-gravity", "center", "-extent", f"{size}x{size}"]
-        subprocess.check_call(args + [str(icons / name)])
-    subprocess.check_call(["convert", str(ICON), "-resize", "48x48", str(WEB / "favicon.png")])
+            canvas = Image.new("RGBA", (size, size), BG)
+            canvas.paste(picture, ((size - inner) // 2, (size - inner) // 2), picture)
+            picture = canvas
+        picture.save(icons / name)
+    source.resize((48, 48), Image.LANCZOS).save(WEB / "favicon.png")
 
 
 def main() -> int:
