@@ -1,5 +1,7 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'gshare_title': 'Partagé avec les membres de la guilde',
+  'gshare_note': 'La liste des membres, les rangs, les améliorations, le stockage et les équipes sont toujours partagés. Ton app apporte tout à l\'ouverture.',
   'gshared_note':
       'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Tyria Companion, avec le rang que leur donne le jeu.',
   'gshared_not_linked': 'Lie ton compte GW2 dans les réglages pour voir ce que le chef de la guilde partage ici.',
@@ -386,7 +388,7 @@ const frStrings = <String, String>{
   'needs_permission':
       'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
   'guild_rank_needed':
-      'Ta clé API est correcte. Le jeu réserve la trésorerie, le coffre et le journal aux chefs de guilde, un membre normal ne peut pas les consulter.',
+      'Ta clé API est correcte. Le jeu n\'ouvre ceci qu\'aux chefs de guilde. Cela apparaît ici quand l\'app du chef l\'a partagé : pas encore, ou le chef a désactivé le partage.',
   'browse_all': 'Parcourir tous les succès',
   'instances': 'Instances',
   'raids': 'Raids',

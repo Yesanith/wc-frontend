@@ -1,5 +1,7 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
+  'gshare_title': 'Shared with the guild\'s members',
+  'gshare_note': 'The member list, ranks, upgrades, storage and teams are always shared. Your app brings all of it when it is opened.',
   'gshared_note':
       'The game shows the member list only to the guild\'s leader. These are the guild\'s members who use Tyria Companion, with the rank the game gives them.',
   'gshared_not_linked': 'Link your GW2 account in Settings to see what the guild\'s leader shares here.',
@@ -382,7 +384,7 @@ const enStrings = <String, String>{
   'version': 'Version',
   'needs_permission': 'Your API key is missing the {p} permission. Create a new key with it and swap it in settings.',
   'guild_rank_needed':
-      'Your API key is fine. The game only opens the treasury, stash and log to guild leaders, so a normal member cannot read them.',
+      'Your API key is fine. The game opens this only to guild leaders. It appears here once the leader\'s app has shared it: it has not yet, or the leader turned sharing off.',
   'browse_all': 'Browse every achievement',
   'instances': 'Instances',
   'raids': 'Raids',

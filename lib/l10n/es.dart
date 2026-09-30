@@ -1,5 +1,7 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'gshare_title': 'Compartido con los miembros del gremio',
+  'gshare_note': 'La lista de miembros, los rangos, las mejoras, el almacén y los equipos siempre se comparten. Tu app lo trae todo al abrirse.',
   'gshared_note':
       'El juego muestra la lista de miembros solo al líder del gremio. Estos son los miembros que usan Tyria Companion, con el rango que les da el juego.',
   'gshared_not_linked': 'Vincula tu cuenta de GW2 en Ajustes para ver lo que el líder del gremio comparte aquí.',
@@ -384,7 +386,7 @@ const esStrings = <String, String>{
   'needs_permission':
       'A tu clave API le falta el permiso {p}. Crea una clave nueva con ese permiso y cámbiala en los ajustes.',
   'guild_rank_needed':
-      'Tu clave API está bien. El juego solo abre la tesorería, el arcón y el registro a los líderes del clan, así que un miembro normal no puede verlos.',
+      'Tu clave API está bien. El juego solo abre esto a los líderes del gremio. Aparece aquí cuando la app del líder lo comparte: aún no lo ha hecho, o el líder desactivó el compartir.',
   'browse_all': 'Ver todos los logros',
   'instances': 'Instancias',
   'raids': 'Incursiones',

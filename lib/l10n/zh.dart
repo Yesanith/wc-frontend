@@ -1,5 +1,7 @@
 /// simplified chinese ui strings. `{name}` placeholders are filled by S.t
 const zhStrings = <String, String>{
+  'gshare_title': '与公会成员共享',
+  'gshare_note': '成员列表、职位、升级、仓库和队伍始终共享。你的应用在打开时会获取全部内容。',
   'gshared_note': '游戏只向会长显示成员列表。这里是使用 Tyria Companion 的成员及其游戏内职位。',
   'gshared_not_linked': '请在设置中关联你的 GW2 账号，以查看会长在此分享的内容。',
   'gw2_link_name': '关联 {name}',
@@ -359,7 +361,7 @@ const zhStrings = <String, String>{
   'unnamed_entry': '未发布 (#{id})',
   'version': '版本',
   'needs_permission': '你的 API 密钥缺少 {p} 权限。请创建带有该权限的新密钥，并在设置中替换。',
-  'guild_rank_needed': '你的 API 密钥没有问题。游戏只向公会会长开放金库、仓库和日志，普通成员无法读取。',
+  'guild_rank_needed': '你的 API 密钥没有问题。游戏只向会长开放此内容。会长的应用共享后会显示在这里：尚未共享，或会长关闭了共享。',
   'browse_all': '浏览全部成就',
   'instances': '副本',
   'raids': '团队副本',

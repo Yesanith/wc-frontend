@@ -133,6 +133,46 @@ void main() {
     }
   });
 
+  group('what a leader shares of the parts the game keeps to the leader', () {
+    test('only an ok answer is a list, anything else is nothing', () {
+      expect(parseSharedPart({'status': 'ok', 'data': [{'a': 1}, 5], 'synced_at': '2026-10-01T10:00:00Z'}), [
+        {'a': 1},
+        5,
+      ]);
+      for (final none in [
+        {'status': 'hidden'},
+        {'status': 'empty'},
+        {'status': 'unknown'},
+        {'status': 'ok'},
+        {'status': 'ok', 'data': 'no'},
+        'ok',
+        null,
+        <String, dynamic>{},
+      ]) {
+        expect(parseSharedPart(none), isNull, reason: '$none');
+      }
+    });
+
+    test('everything is shared until the leader switches it off', () {
+      final d = GuildDetails.fromRow({'share_treasury': false, 'share_stash': true, 'share_log': false});
+      expect(d.shareTreasury, isFalse);
+      expect(d.shareStash, isTrue);
+      expect(d.shareLog, isFalse);
+      final none = GuildDetails.fromRow({});
+      expect([none.shareTreasury, none.shareStash, none.shareLog], everyElement(isTrue), reason: 'older rows');
+    });
+
+    test('the switches and the note that a part is not shared have texts in every language', () {
+      for (final lang in AppLang.values) {
+        final s = S(lang);
+        for (final key in ['gshare_title', 'gshare_note', 'guild_rank_needed', 'treasury', 'stash', 'log']) {
+          expect(s.t(key), isNot(key), reason: '${lang.code} $key');
+        }
+      }
+      expect(const S(AppLang.en).t('guild_rank_needed'), contains('turned sharing off'));
+    });
+  });
+
   test('what a leader shares has its texts in every language', () {
     for (final lang in AppLang.values) {
       final s = S(lang);

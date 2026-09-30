@@ -1,9 +1,40 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';
+import 'community.dart' show sharedGuildPart;
 import 'reference.dart';
+
+/// what the game gives the guild's leader. when it refuses, which it does for
+/// everybody else, what the leader's app shared of it, and only when there is
+/// nothing to show is the refusal passed on
+Future<List<Json>> _leaderOrShared(String id, String part, Future<List<Json>> Function() direct) async {
+  try {
+    return await direct();
+  } on Gw2ApiException catch (e) {
+    if (e.status != 401 && e.status != 403) rethrow;
+    final shared = await sharedGuildPart(id, part);
+    if (shared == null) rethrow;
+    return [
+      for (final r in shared)
+        if (r is Map) Map<String, dynamic>.from(r),
+    ];
+  }
+}
+
+/// the same for the ids of the upgrades the guild built
+Future<List<int>> _upgradesOrShared(String id, Future<List<int>> Function() direct) async {
+  try {
+    return await direct();
+  } on Gw2ApiException catch (e) {
+    if (e.status != 401 && e.status != 403) rethrow;
+    final shared = await sharedGuildPart(id, 'upgrades');
+    if (shared == null) rethrow;
+    return [for (final v in shared) asInt(v)];
+  }
+}
 
 /// guild ids the account belongs to, plus the ones it leads
 final guildIdsProvider = FutureProvider<List<String>>((ref) async {
@@ -25,7 +56,7 @@ class GuildStashSlot {
 
 final guildStashProvider = FutureProvider.autoDispose.family<List<GuildStashSlot>, String>((ref, id) async {
   final api = accountApi(ref);
-  final tabs = await api.guildStash(id);
+  final tabs = await _leaderOrShared(id, 'stash', () => api.guildStash(id));
   final ids = <int>{};
   for (final tab in tabs) {
     for (final slot in (tab['inventory'] as List?) ?? const []) {
@@ -60,7 +91,7 @@ class TreasuryRow {
 /// what the guild has stored against what its upgrades still need
 final guildTreasuryProvider = FutureProvider.autoDispose.family<List<TreasuryRow>, String>((ref, id) async {
   final api = accountApi(ref);
-  final rows = await api.guildTreasury(id);
+  final rows = await _leaderOrShared(id, 'treasury', () => api.guildTreasury(id));
   final items = await api.items(rows.map((r) => asInt(r['item_id'])));
   final out = <TreasuryRow>[];
   for (final row in rows) {
@@ -75,7 +106,7 @@ final guildTreasuryProvider = FutureProvider.autoDispose.family<List<TreasuryRow
 });
 
 final guildLogProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
-  final log = await accountApi(ref).guildLog(id);
+  final log = await _leaderOrShared(id, 'log', () => accountApi(ref).guildLog(id));
   log.sort((a, b) => asInt(b['id']).compareTo(asInt(a['id'])));
   return log.take(50).toList();
 });
@@ -84,19 +115,19 @@ final guildLogProvider = FutureProvider.autoDispose.family<List<Json>, String>((
 // leader only parts: members, ranks, teams, storage and built upgrades
 
 final guildMembersProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
-  final rows = await accountApi(ref).guildPart(id, 'members');
+  final rows = await _leaderOrShared(id, 'members', () => accountApi(ref).guildPart(id, 'members'));
   rows.sort((a, b) => '${a['name']}'.toLowerCase().compareTo('${b['name']}'.toLowerCase()));
   return rows;
 });
 
 final guildRanksProvider = FutureProvider.autoDispose.family<List<Json>, String>((ref, id) async {
-  final rows = await accountApi(ref).guildPart(id, 'ranks');
+  final rows = await _leaderOrShared(id, 'ranks', () => accountApi(ref).guildPart(id, 'ranks'));
   rows.sort((a, b) => asInt(a['order']).compareTo(asInt(b['order'])));
   return rows;
 });
 
-final guildTeamsProvider =
-    FutureProvider.autoDispose.family<List<Json>, String>((ref, id) => accountApi(ref).guildPart(id, 'teams'));
+final guildTeamsProvider = FutureProvider.autoDispose
+    .family<List<Json>, String>((ref, id) => _leaderOrShared(id, 'teams', () => accountApi(ref).guildPart(id, 'teams')));
 
 class GuildUpgradeRow {
   const GuildUpgradeRow(this.id, this.count, this.detail);
@@ -111,7 +142,7 @@ class GuildUpgradeRow {
 
 /// decorations and consumables in the guild hall storage
 final guildStorageProvider = FutureProvider.autoDispose.family<List<GuildUpgradeRow>, String>((ref, id) async {
-  final rows = await accountApi(ref).guildPart(id, 'storage');
+  final rows = await _leaderOrShared(id, 'storage', () => accountApi(ref).guildPart(id, 'storage'));
   final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
   final out = [
     for (final r in rows)
@@ -122,7 +153,7 @@ final guildStorageProvider = FutureProvider.autoDispose.family<List<GuildUpgrade
 
 /// upgrades the guild already built, grouped later by type
 final guildBuiltUpgradesProvider = FutureProvider.autoDispose.family<List<GuildUpgradeRow>, String>((ref, id) async {
-  final ids = await accountApi(ref).guildUpgradeIds(id);
+  final ids = await _upgradesOrShared(id, () => accountApi(ref).guildUpgradeIds(id));
   final catalog = await ref.watch(guildUpgradeCatalogProvider.future);
   final out = [for (final u in ids) GuildUpgradeRow(u, 1, catalog['$u'])]
     ..sort((a, b) => a.type == b.type ? a.name.compareTo(b.name) : a.type.compareTo(b.type));

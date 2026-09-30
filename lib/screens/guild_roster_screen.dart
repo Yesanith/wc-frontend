@@ -75,6 +75,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
             children: [
               GuildInfoCard(guildId: g.id, leading: leading),
               const SizedBox(height: 12),
+              if (leading) ...[_SharingPanel(guildId: g.id), const SizedBox(height: 12)],
               Text(
                 leading ? s.t('roster_note_leader') : s.t('roster_note'),
                 style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
@@ -193,6 +194,65 @@ class GuildInfoCard extends ConsumerWidget {
             s.t('ginfo_updated', {'when': eventWhen(s, d.syncedAt!.toLocal())}),
             style: const TextStyle(fontSize: 11, color: AppColors.hint),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// what the guild's leader lets the members see of the treasury, the stash and
+/// the log. everything else the leader's app brings is always shared
+class _SharingPanel extends ConsumerStatefulWidget {
+  const _SharingPanel({required this.guildId});
+
+  final String guildId;
+
+  @override
+  ConsumerState<_SharingPanel> createState() => _SharingPanelState();
+}
+
+class _SharingPanelState extends ConsumerState<_SharingPanel> {
+  bool _busy = false;
+
+  Future<void> _set({bool? treasury, bool? stash, bool? log}) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      await setGuildSharing(widget.guildId, treasury: treasury, stash: stash, log: log);
+      ref.invalidate(guildDetailsProvider(widget.guildId));
+      await ref.read(guildDetailsProvider(widget.guildId).future);
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final d = ref.watch(guildDetailsProvider(widget.guildId)).valueOrNull;
+    if (d == null) return const SizedBox.shrink();
+
+    Widget row(String label, bool value, ValueChanged<bool> onChanged) => SwitchListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          value: value,
+          activeThumbColor: AppColors.gold,
+          onChanged: _busy ? null : onChanged,
+          title: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+        );
+
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.t('gshare_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 4),
+          Text(s.t('gshare_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+          row(s.t('treasury'), d.shareTreasury, (v) => _set(treasury: v)),
+          row(s.t('stash'), d.shareStash, (v) => _set(stash: v)),
+          row(s.t('log'), d.shareLog, (v) => _set(log: v)),
         ],
       ),
     );
