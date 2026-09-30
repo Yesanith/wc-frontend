@@ -38,7 +38,8 @@ class Gw2ApiException implements Exception {
 /// game's api answers no CORS preflight, so there it goes in the address as the
 /// api documents for browsers. everywhere else it stays out of the address, so
 /// it never ends up in a proxy log or a crash report that records the request
-Uri gw2Uri(String base, String path, {Map<String, String>? query, required String lang, String? key, bool web = false}) {
+Uri gw2Uri(String base, String path,
+    {Map<String, String>? query, required String lang, String? key, bool web = false}) {
   return Uri.parse('$base$path').replace(queryParameters: {
     ...?query,
     'v': 'latest',
