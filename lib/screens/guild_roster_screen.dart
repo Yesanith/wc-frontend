@@ -42,6 +42,20 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
     }
   }
 
+  /// the role follows the game's rank again
+  Future<void> _followGame(RosterMember m) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busyFor = m.userId);
+    try {
+      await resetGuildRole(widget.guild.id, m.userId);
+      ref.invalidate(guildRosterProvider(widget.guild.id));
+    } catch (e) {
+      if (mounted) showToast(context, eventFailureText(s, e));
+    } finally {
+      if (mounted) setState(() => _busyFor = null);
+    }
+  }
+
   /// the leader's app brings what the game tells only the leader, and says how it went
   Future<void> _bringFromGame() async {
     final s = ref.read(stringsProvider);
@@ -84,6 +98,10 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                 leading ? s.t('roster_note_leader') : s.t('roster_note'),
                 style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
               ),
+              if (leading) ...[
+                const SizedBox(height: 6),
+                Text(s.t('roster_auto'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+              ],
               const SizedBox(height: 12),
               Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -113,13 +131,22 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                                     style: TextStyle(fontWeight: m.userId == me ? FontWeight.w800 : FontWeight.w600),
                                   ),
                                   Text(
-                                      m.gw2Rank == null
-                                          ? s.t('guild_role_${m.role}')
-                                          : '${s.t('guild_role_${m.role}')} · ${m.gw2Rank}',
+                                      [
+                                        s.t('guild_role_${m.role}'),
+                                        if (m.gw2Rank != null) m.gw2Rank,
+                                        if (m.manual) s.t('roster_manual'),
+                                      ].join(' · '),
                                       style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
                             ),
+                            if (leading && m.role != 'leader' && m.manual)
+                              IconButton(
+                                tooltip: s.t('roster_follow_game'),
+                                visualDensity: VisualDensity.compact,
+                                onPressed: _busyFor != null ? null : () => _followGame(m),
+                                icon: const Icon(Icons.sync, size: 18, color: AppColors.muted),
+                              ),
                             if (leading && m.role != 'leader' && m.userId != me)
                               _busyFor == m.userId
                                   ? const SizedBox(

@@ -1,5 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'roster_manual': 'asignado a mano',
+  'roster_follow_game': 'Volver a seguir el rango del juego',
+  'roster_auto': 'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
   'gshare_on': 'Los miembros lo ven',
   'gshare_off': 'Oculto a los miembros',
   'gshare_title': 'Compartido con los miembros del gremio',

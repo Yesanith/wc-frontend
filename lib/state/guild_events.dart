@@ -408,7 +408,7 @@ bool canManageEvent(GuildEvent event, String? myId, List<MyGuild> myGuilds) {
 // officers
 
 class RosterMember {
-  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank});
+  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank, this.manual = false});
 
   factory RosterMember.fromRow(Map<String, dynamic> r) {
     final rank = '${r['gw2_rank'] ?? ''}';
@@ -417,6 +417,7 @@ class RosterMember {
       '${r['account_name'] ?? '?'}',
       '${r['role'] ?? 'member'}',
       gw2Rank: rank.isEmpty ? null : rank,
+      manual: r['manual'] == true,
     );
   }
 
@@ -429,6 +430,10 @@ class RosterMember {
   /// the rank the game gives them in the guild, known once the leader's app has
   /// brought the guild's member list
   final String? gw2Rank;
+
+  /// the leader appointed the role by hand, so it stays whatever the game's rank is.
+  /// otherwise it follows the game: a rank that may invite, promote, kick or edit ranks makes an officer
+  final bool manual;
 }
 
 /// a guild's tyria companion members, leader first, then officers
@@ -444,6 +449,11 @@ final guildRosterProvider = FutureProvider.autoDispose.family<List<RosterMember>
       return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
     });
 });
+
+/// the leader hands a role appointed by hand back to the game, it follows the rank again
+Future<void> resetGuildRole(String guildId, String userId) => _call(() async {
+      await Supabase.instance.client.rpc('reset_guild_role', params: {'p_guild': guildId, 'p_user': userId});
+    });
 
 /// the leader makes a member an officer, or an officer a member again
 Future<void> setGuildRole(String guildId, String userId, String role) => _call(() async {

@@ -1,5 +1,8 @@
 /// german ui strings. `{name}` placeholders are filled by S.t
 const deStrings = <String, String>{
+  'roster_manual': 'von Hand gesetzt',
+  'roster_follow_game': 'Wieder dem Rang im Spiel folgen',
+  'roster_auto': 'Rollen folgen dem Spiel: Ein Rang, der einladen, befördern, kicken oder Ränge bearbeiten darf, macht Offiziere. Was du von Hand vergibst, bleibt, bis du es dem Spiel zurückgibst.',
   'gshare_on': 'Mitglieder sehen das',
   'gshare_off': 'Vor Mitgliedern verborgen',
   'gshare_title': 'Mit den Gildenmitgliedern geteilt',
