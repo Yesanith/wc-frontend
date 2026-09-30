@@ -1,5 +1,8 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
+  'progress_hero_unavailable': 'La API del juego no devuelve nada sobre los desafíos de héroe (un problema conocido de ArenaNet), así que no se pueden mostrar aquí.',
+  'progress_training_unavailable': 'La API del juego no devuelve nada sobre el entrenamiento de personajes (un problema conocido de ArenaNet), así que no se puede mostrar aquí.',
+  'story_note': 'Cuenta las misiones que el juego ha registrado para este personaje. El total incluye todas las ramas, razas y órdenes, así que una barra rara vez se llena. La historia hecha con otro personaje, o reiniciada, no cuenta aquí.',
   'gshare_unreviewed':
       'Aún no lo has confirmado. Hasta entonces, la tesorería, el alijo y el registro siguen ocultos para tus miembros.',
   'gshare_confirm': 'Confirmar lo que ven los miembros',

@@ -1,5 +1,8 @@
 /// turkish ui strings. `{name}` placeholders are filled by S.t
 const trStrings = <String, String>{
+  'progress_hero_unavailable': 'Oyunun API\'si kahraman görevleri için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
+  'progress_training_unavailable': 'Oyunun API\'si karakter eğitimi için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
+  'story_note': 'Oyunun bu karakter için kaydettiği görevleri sayar. Toplam her dalı, ırkı ve tarikatı içerir, bu yüzden bir çubuk nadiren dolar. Başka bir karakterde yapılan ya da yeniden başlatılan hikâye burada sayılmaz.',
   'gshare_unreviewed': 'Bunu henüz onaylamadın. Onaylayana kadar hazine, depo ve günlük üyelerinden gizli kalır.',
   'gshare_confirm': 'Üyelerin göreceklerini onayla',
   'gshare_review_title': 'Üyelerin neleri görebilsin?',
