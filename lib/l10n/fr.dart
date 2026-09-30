@@ -1,5 +1,6 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
+  'story_unmatched': '{n} quêtes enregistrées par le jeu pour ce personnage ne figurent pas dans sa liste de quêtes d\'histoire, elles ne sont donc pas comptées ci-dessus.',
   'progress_hero_unavailable':
       'L\'API du jeu ne renvoie rien pour les défis de héros (un problème connu côté ArenaNet), ils ne peuvent donc pas être affichés ici.',
   'progress_training_unavailable':

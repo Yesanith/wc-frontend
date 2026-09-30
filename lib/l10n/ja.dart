@@ -1,5 +1,6 @@
 /// japanese ui strings. `{name}` placeholders are filled by S.t
 const jaStrings = <String, String>{
+  'story_unmatched': 'ゲームがこのキャラクターについて記録した {n} 件のクエストはストーリークエスト一覧にないため、上では数えられていません。',
   'progress_hero_unavailable': 'ゲームの API はヒーローチャレンジについて何も返しません（ArenaNet 側の既知の問題）。そのためここには表示できません。',
   'progress_training_unavailable': 'ゲームの API はキャラクターのトレーニングについて何も返しません（ArenaNet 側の既知の問題）。そのためここには表示できません。',
   'story_note':

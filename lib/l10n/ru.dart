@@ -1,5 +1,6 @@
 /// russian ui strings. `{name}` placeholders are filled by S.t
 const ruStrings = <String, String>{
+  'story_unmatched': '{n} заданий, записанных игрой для этого персонажа, нет в её списке сюжетных заданий, поэтому выше они не учитываются.',
   'progress_hero_unavailable':
       'API игры ничего не возвращает по испытаниям героя (известная проблема на стороне ArenaNet), поэтому здесь их показать нельзя.',
   'progress_training_unavailable':

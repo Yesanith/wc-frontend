@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/characters.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -156,6 +157,33 @@ class _Training extends ConsumerWidget {
   }
 }
 
+/// one story of the story journal, with how many of its quests the character has done
+typedef StoryRow = ({String name, int done, int total});
+
+/// the stories of one season, in the order the game lists them. a story with no quest
+/// in the game's quest list has a total of nought: the game never gave one to compare with
+List<StoryRow> seasonStories(String seasonId, Map<String, Json> quests, Map<String, Json> stories, Set<String> completed) {
+  final mine = [
+    for (final e in stories.entries)
+      if ('${e.value['season']}' == seasonId) e,
+  ]..sort((a, b) {
+      final byOrder = asInt(a.value['order']).compareTo(asInt(b.value['order']));
+      return byOrder != 0 ? byOrder : asInt(a.key).compareTo(asInt(b.key));
+    });
+  return [
+    for (final e in mine)
+      (
+        name: '${e.value['name'] ?? '#${e.key}'}',
+        done: quests.values.where((q) => '${q['story']}' == e.key && completed.contains('${q['id']}')).length,
+        total: quests.values.where((q) => '${q['story']}' == e.key).length,
+      ),
+  ];
+}
+
+/// the quests the game recorded for the character that are not in its list of story quests,
+/// so there is nothing to count them against
+int unmatchedQuests(Map<String, Json> quests, Set<String> completed) => completed.where((id) => !quests.containsKey(id)).length;
+
 /// completed story quests, counted per season of the story journal
 class _Story extends ConsumerWidget {
   const _Story({required this.name});
@@ -191,7 +219,21 @@ class _Story extends ConsumerWidget {
             children: [
               for (final season in seasons)
                 if (perSeason['${season['id']}'] != null)
-                  Padding(
+                  InkWell(
+                    onTap: () => showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      showDragHandle: true,
+                      backgroundColor: AppColors.surface,
+                      builder: (_) => _SeasonSheet(
+                        title: '${season['name'] ?? ''}',
+                        rows: seasonStories('${season['id']}', quests, stories, completed),
+                        unmatched: unmatchedQuests(quests, completed),
+                        s: s,
+                      ),
+                    ),
+                    child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 7),
                     child: Builder(builder: (_) {
                       final (done, total) = perSeason['${season['id']}']!;
@@ -205,6 +247,7 @@ class _Story extends ConsumerWidget {
                                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                               ),
                               Text('$done/$total', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                              const Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
                             ],
                           ),
                           const SizedBox(height: 5),
@@ -214,6 +257,7 @@ class _Story extends ConsumerWidget {
                         ],
                       );
                     }),
+                  ),
                   ),
               if (perSeason.isEmpty) EmptyNote(s.t('nothing_here'), center: false),
             ],
@@ -326,6 +370,70 @@ class _Backstory extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// the stories of one season of the journal, each with how many of its quests are done,
+/// to compare with what the game shows
+class _SeasonSheet extends StatelessWidget {
+  const _SeasonSheet({required this.title, required this.rows, required this.unmatched, required this.s});
+
+  final String title;
+  final List<StoryRow> rows;
+  final int unmatched;
+  final S s;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+          child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+        ),
+        Flexible(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+            children: [
+              for (final r in rows)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: [
+                      Icon(
+                        r.total > 0 && r.done >= r.total
+                            ? Icons.check_circle
+                            : r.done > 0
+                                ? Icons.timelapse
+                                : Icons.radio_button_unchecked,
+                        size: 16,
+                        color: r.total > 0 && r.done >= r.total
+                            ? AppColors.green
+                            : r.done > 0
+                                ? AppColors.gold
+                                : AppColors.muted,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(child: Text(r.name, style: const TextStyle(fontSize: 13))),
+                      Text(r.total == 0 ? '–' : '${r.done}/${r.total}',
+                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (unmatched > 0)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+            child: Text(s.t('story_unmatched', {'n': unmatched}),
+                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint)),
+          ),
+      ],
     );
   }
 }
