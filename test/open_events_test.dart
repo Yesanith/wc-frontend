@@ -241,7 +241,12 @@ void main() {
 
   group('a region', () {
     test('is read from an event, and an event that does not say is for all', () {
-      final e = OpenEvent.fromJson({...row(), 'region': 'na', 'tags': ['meta', 'casual'], 'map_id': 1209});
+      final e = OpenEvent.fromJson({
+        ...row(),
+        'region': 'na',
+        'tags': ['meta', 'casual'],
+        'map_id': 1209
+      });
       expect(e.region, 'na');
       expect(e.tags, ['meta', 'casual']);
       expect(e.mapId, 1209);
@@ -291,7 +296,8 @@ void main() {
       expect(both.regions, {'eu', 'na'}, reason: 'an account with no region is in none');
       expect(both.makeable, ['all', 'eu', 'na']);
       expect(both.forRegion('eu').map((a) => a.name), ['Leo.1']);
-      expect(both.forRegion('all').map((a) => a.name), ['Leo.1', 'Leo.NA', 'Leo.3'], reason: 'any takes part in one for all');
+      expect(both.forRegion('all').map((a) => a.name), ['Leo.1', 'Leo.NA', 'Leo.3'],
+          reason: 'any takes part in one for all');
       expect(both.forRegion('na').single.id, 'a2');
 
       final unplaced = MyRegions.fromJson({
@@ -304,7 +310,12 @@ void main() {
       expect(unplaced.makeable, ['all'], reason: 'with no region known, only an event for all');
       expect(unplaced.forRegion('eu'), isEmpty);
 
-      for (final nothing in [null, 'x', <String, dynamic>{}, {'accounts': 'x'}]) {
+      for (final nothing in [
+        null,
+        'x',
+        <String, dynamic>{},
+        {'accounts': 'x'}
+      ]) {
         final none = MyRegions.fromJson(nothing);
         expect(none.hasAccount, isFalse);
         expect(none.makeable, ['all']);

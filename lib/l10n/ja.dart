@@ -829,7 +829,8 @@ const jaStrings = <String, String>{
   'oe_err_tags': 'リストから最大3つのタグを選んでください。',
   'oe_join_as': '参加アカウント',
   'oe_roles_title': '公式Discord',
-  'oe_roles_body': '公式のTyria Companion Discordサーバーでは、リージョンごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールと、下で選んだ種類のイベントのロールが付与され、投稿で通知されます。',
+  'oe_roles_body':
+      '公式のTyria Companion Discordサーバーでは、リージョンごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールと、下で選んだ種類のイベントのロールが付与され、投稿で通知されます。',
   'oe_roles_kinds': '通知を受け取る種類',
   'oe_roles_join': '公式Discordに参加',
   'oe_roles_saved': '保存しました。サーバーのロールは数分以内に反映されます。',

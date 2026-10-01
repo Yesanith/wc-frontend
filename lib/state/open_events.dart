@@ -354,11 +354,17 @@ class MyRegions {
   bool get hasAccount => accounts.isNotEmpty;
 
   /// accounts that may take part in an event of [region]: any for all, else those of it
-  List<OpenAccount> forRegion(String region) =>
-      [for (final a in accounts) if (region == 'all' || a.region == region) a];
+  List<OpenAccount> forRegion(String region) => [
+        for (final a in accounts)
+          if (region == 'all' || a.region == region) a
+      ];
 
   /// the regions an event can be made for: all, and each region the player has an account in
-  List<String> get makeable => ['all', for (final r in ['eu', 'na']) if (regions.contains(r)) r];
+  List<String> get makeable => [
+        'all',
+        for (final r in ['eu', 'na'])
+          if (regions.contains(r)) r
+      ];
 }
 
 final myRegionsProvider = FutureProvider.autoDispose<MyRegions>((ref) async {

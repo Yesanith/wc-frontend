@@ -853,8 +853,10 @@ const ptStrings = <String, String>{
   'oe_region_eu': 'Europa',
   'oe_region_na': 'América do Norte',
   'oe_region_all': 'Todas as regiões',
-  'oe_region_note': 'Um evento de uma região é para jogadores com uma conta do jogo num mundo dessa região. A região da tua conta é lida do seu mundo ao vinculá-la ou atualizá-la.',
-  'oe_region_unknown': 'A região da tua conta ainda não é conhecida, por isso só podes criar e participar em eventos para todas as regiões. Abre a tua ligação ao Guild Wars 2 nas definições e atualiza-a.',
+  'oe_region_note':
+      'Um evento de uma região é para jogadores com uma conta do jogo num mundo dessa região. A região da tua conta é lida do seu mundo ao vinculá-la ou atualizá-la.',
+  'oe_region_unknown':
+      'A região da tua conta ainda não é conhecida, por isso só podes criar e participar em eventos para todas as regiões. Abre a tua ligação ao Guild Wars 2 nas definições e atualiza-a.',
   'oe_tags': 'Etiquetas (até 3)',
   'oe_tag_any': 'Qualquer etiqueta',
   'oe_tag_meta': 'Meta',
@@ -870,7 +872,8 @@ const ptStrings = <String, String>{
   'oe_err_tags': 'Escolhe até três etiquetas da lista.',
   'oe_join_as': 'Inscrever-se como',
   'oe_roles_title': 'Discord oficial',
-  'oe_roles_body': 'O servidor oficial de Discord do Tyria Companion publica eventos públicos num canal por região. Entra com a conta de Discord com que iniciaste sessão: recebes o cargo de cada região em que tens conta e os cargos dos tipos de evento que escolheres abaixo, que as publicações mencionam.',
+  'oe_roles_body':
+      'O servidor oficial de Discord do Tyria Companion publica eventos públicos num canal por região. Entra com a conta de Discord com que iniciaste sessão: recebes o cargo de cada região em que tens conta e os cargos dos tipos de evento que escolheres abaixo, que as publicações mencionam.',
   'oe_roles_kinds': 'Avisa-me sobre',
   'oe_roles_join': 'Entrar no Discord oficial',
   'oe_roles_saved': 'Guardado. Os teus cargos no servidor seguem em poucos minutos.',

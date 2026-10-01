@@ -587,9 +587,10 @@ class AdminOfficial {
             ? const HealthLine('Last problem', 'None recorded', HealthLevel.good)
             : HealthLine('Last problem', lastError!, HealthLevel.bad),
         count('posts_failing') > 0
-            ? HealthLine('Posts', '${count('posts_waiting')} waiting, ${count('posts_failing')} failing', HealthLevel.warn)
-            : HealthLine(
-                'Posts', '${count('posts_waiting')} waiting, ${count('posted_events')} events posted', HealthLevel.good),
+            ? HealthLine(
+                'Posts', '${count('posts_waiting')} waiting, ${count('posts_failing')} failing', HealthLevel.warn)
+            : HealthLine('Posts', '${count('posts_waiting')} waiting, ${count('posted_events')} events posted',
+                HealthLevel.good),
         HealthLine(
           'Roles',
           '${count('roles_waiting')} of ${count('players_tracked')} players wait to be looked at',
