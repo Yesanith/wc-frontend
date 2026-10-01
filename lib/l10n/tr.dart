@@ -783,7 +783,8 @@ const trStrings = <String, String>{
   'oe_tab_discover': 'Keşfet',
   'oe_tab_mine': 'Etkinliklerim',
   'oe_create': 'Herkese açık etkinlik',
-  'oe_sign_in': 'Herkese açık etkinlikleri görmek ve kendi etkinliğini oluşturmak için Ayarlar\'dan Discord ile giriş yap.',
+  'oe_sign_in':
+      'Herkese açık etkinlikleri görmek ve kendi etkinliğini oluşturmak için Ayarlar\'dan Discord ile giriş yap.',
   'oe_all': 'Tümü',
   'oe_any_language': 'Her dil',
   'oe_none': 'Henüz herkese açık etkinlik yok. İlkini sen oluştur.',
@@ -822,7 +823,8 @@ const trStrings = <String, String>{
   'oe_form_edit': 'Etkinliği düzenle',
   'oe_language': 'DİL',
   'oe_places_field': 'KONTENJAN (BOŞ = SINIRSIZ)',
-  'oe_form_note': 'Giriş yapan herkes bu etkinliği, düzenleyen olarak oyun hesap adınla görür. Katılanların adlarını yalnızca sen görürsün.',
+  'oe_form_note':
+      'Giriş yapan herkes bu etkinliği, düzenleyen olarak oyun hesap adınla görür. Katılanların adlarını yalnızca sen görürsün.',
   'oe_save': 'Kaydet',
   'oe_created': 'Etkinlik oluşturuldu',
   'oe_saved': 'Kaydedildi',

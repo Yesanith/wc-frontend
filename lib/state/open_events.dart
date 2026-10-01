@@ -120,14 +120,21 @@ class OpenEvent {
   bool isOver(DateTime now) => endAt.isBefore(now);
 }
 
-List<OpenEvent> parseOpenEvents(dynamic rows) =>
-    rows is List ? [for (final r in rows) if (r is Map) OpenEvent.fromJson(Map<String, dynamic>.from(r))] : const [];
+List<OpenEvent> parseOpenEvents(dynamic rows) => rows is List
+    ? [
+        for (final r in rows)
+          if (r is Map) OpenEvent.fromJson(Map<String, dynamic>.from(r))
+      ]
+    : const [];
 
 /// a name and whether they are going, from the organizer's list of who signed up
 typedef OpenRosterEntry = ({String name, String status});
 
 List<OpenRosterEntry> parseOpenRoster(dynamic rows) => rows is List
-    ? [for (final r in rows) if (r is Map) (name: '${r['name']}', status: '${r['status']}')]
+    ? [
+        for (final r in rows)
+          if (r is Map) (name: '${r['name']}', status: '${r['status']}')
+      ]
     : const [];
 
 /// what the discover list is narrowed to. an activity or a language, or neither
@@ -144,7 +151,8 @@ class OpenEventsFilter {
   OpenEventsFilter withLanguage(String? l) => OpenEventsFilter(activity: activity, language: l);
 
   @override
-  bool operator ==(Object other) => other is OpenEventsFilter && other.activity == activity && other.language == language;
+  bool operator ==(Object other) =>
+      other is OpenEventsFilter && other.activity == activity && other.language == language;
 
   @override
   int get hashCode => Object.hash(activity, language);

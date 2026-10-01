@@ -124,7 +124,8 @@ void main() {
     });
 
     test('is equal to another of the same, so a list is not asked for again for nothing', () {
-      expect(const OpenEventsFilter(activity: 'raid', language: 'de'), const OpenEventsFilter(activity: 'raid', language: 'de'));
+      expect(const OpenEventsFilter(activity: 'raid', language: 'de'),
+          const OpenEventsFilter(activity: 'raid', language: 'de'));
       expect(const OpenEventsFilter(activity: 'raid').hashCode, const OpenEventsFilter(activity: 'raid').hashCode);
       expect(const OpenEventsFilter(activity: 'raid') == const OpenEventsFilter(activity: 'pvp'), isFalse);
     });
@@ -151,7 +152,8 @@ void main() {
       };
       reasons.forEach((hint, key) {
         expect(openEventErrorKey(OpenEventFailure(hint)), key, reason: hint);
-        expect(openEventErrorKey(PostgrestException(message: 'x', hint: hint)), key, reason: 'straight from the database: $hint');
+        expect(openEventErrorKey(PostgrestException(message: 'x', hint: hint)), key,
+            reason: 'straight from the database: $hint');
       });
     });
 
@@ -163,9 +165,22 @@ void main() {
 
     test('is explained in every language', () {
       const keys = [
-        'oe_err_banned', 'oe_err_no_account', 'oe_err_title', 'oe_err_description', 'oe_err_start_past', 'oe_err_start_far',
-        'oe_err_duration', 'oe_err_capacity', 'oe_err_many_open', 'oe_err_many_today', 'oe_err_gone', 'oe_err_own',
-        'oe_err_full', 'oe_err_below', 'oe_err_reported', 'oe_err_generic',
+        'oe_err_banned',
+        'oe_err_no_account',
+        'oe_err_title',
+        'oe_err_description',
+        'oe_err_start_past',
+        'oe_err_start_far',
+        'oe_err_duration',
+        'oe_err_capacity',
+        'oe_err_many_open',
+        'oe_err_many_today',
+        'oe_err_gone',
+        'oe_err_own',
+        'oe_err_full',
+        'oe_err_below',
+        'oe_err_reported',
+        'oe_err_generic',
       ];
       for (final lang in AppLang.values) {
         final s = S(lang);
@@ -203,7 +218,8 @@ void main() {
 
     test('are in the languages an event can be run in, each with a name of its own', () {
       expect(openEventLanguages.first, 'any');
-      expect(openEventLanguages.skip(1), AppLang.values.map((l) => l.code), reason: 'one for each language of the app, in its order');
+      expect(openEventLanguages.skip(1), AppLang.values.map((l) => l.code),
+          reason: 'one for each language of the app, in its order');
     });
   });
 

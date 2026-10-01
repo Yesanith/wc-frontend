@@ -828,7 +828,8 @@ const esStrings = <String, String>{
   'oe_form_edit': 'Editar el evento',
   'oe_language': 'IDIOMA',
   'oe_places_field': 'PLAZAS (VACÍO = SIN LÍMITE)',
-  'oe_form_note': 'Todos los jugadores con sesión ven este evento, con el nombre de tu cuenta del juego como organizador. Solo tú ves los nombres de quienes se apuntan.',
+  'oe_form_note':
+      'Todos los jugadores con sesión ven este evento, con el nombre de tu cuenta del juego como organizador. Solo tú ves los nombres de quienes se apuntan.',
   'oe_save': 'Guardar',
   'oe_created': 'Evento creado',
   'oe_saved': 'Guardado',

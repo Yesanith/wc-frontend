@@ -825,7 +825,8 @@ const enStrings = <String, String>{
   'oe_form_edit': 'Edit the event',
   'oe_language': 'LANGUAGE',
   'oe_places_field': 'PLACES (EMPTY FOR NO LIMIT)',
-  'oe_form_note': 'Everybody who is signed in sees this event, with your game account name as the organizer\'s. Only you see the names of those who sign up.',
+  'oe_form_note':
+      'Everybody who is signed in sees this event, with your game account name as the organizer\'s. Only you see the names of those who sign up.',
   'oe_save': 'Save',
   'oe_created': 'Event created',
   'oe_saved': 'Saved',

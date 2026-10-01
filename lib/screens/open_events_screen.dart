@@ -48,7 +48,8 @@ class OpenEventsScreen extends ConsumerWidget {
           backgroundColor: AppColors.gold,
           foregroundColor: AppColors.bg,
           onPressed: () async {
-            final made = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const OpenEventFormScreen()));
+            final made =
+                await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const OpenEventFormScreen()));
             if (made == true) {
               ref.invalidate(openEventsFeedProvider);
               ref.invalidate(myOpenEventsProvider);
@@ -296,7 +297,8 @@ class OpenEventScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final event = ref.watch(openEventProvider(eventId));
     return Scaffold(
-      appBar: AppBar(title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis)),
+      appBar: AppBar(
+          title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis)),
       body: AsyncView<OpenEvent?>(
         value: event,
         onRetry: () => ref.invalidate(openEventProvider(eventId)),
@@ -425,7 +427,9 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             children: [
               Row(
                 children: [
-                  Expanded(child: Text(s.t('oe_by', {'name': e.organizer}), style: const TextStyle(fontWeight: FontWeight.w700))),
+                  Expanded(
+                      child: Text(s.t('oe_by', {'name': e.organizer}),
+                          style: const TextStyle(fontWeight: FontWeight.w700))),
                   IconButton(
                     tooltip: s.t('oe_copy_name'),
                     icon: const Icon(Icons.copy, size: 18, color: AppColors.gold),
@@ -436,7 +440,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                   ),
                 ],
               ),
-              if (!e.mine) Text(s.t('oe_find_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+              if (!e.mine)
+                Text(s.t('oe_find_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
             ],
           ),
         ),
@@ -450,8 +455,12 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             children: [
               Expanded(
                 child: FilledButton(
-                  onPressed: _busy || (e.isFull && e.myStatus != 'going') ? null : () => _act(() => joinOpenEvent(e.id, 'going')),
-                  child: Text(e.isFull && e.myStatus != 'going' ? s.t('oe_full') : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
+                  onPressed: _busy || (e.isFull && e.myStatus != 'going')
+                      ? null
+                      : () => _act(() => joinOpenEvent(e.id, 'going')),
+                  child: Text(e.isFull && e.myStatus != 'going'
+                      ? s.t('oe_full')
+                      : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
                 ),
               ),
               const SizedBox(width: 8),
@@ -541,9 +550,12 @@ class _Roster extends ConsumerWidget {
     return ref.watch(openRosterProvider(eventId)).when(
           loading: () => const Padding(
             padding: EdgeInsets.all(16),
-            child: Center(child: SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
+            child: Center(
+                child: SizedBox(
+                    width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
           ),
-          error: (e, _) => Panel(child: Text(s.t(openEventErrorKey(e)), style: const TextStyle(color: AppColors.amber))),
+          error: (e, _) =>
+              Panel(child: Text(s.t(openEventErrorKey(e)), style: const TextStyle(color: AppColors.amber))),
           data: (people) => Panel(
             child: people.isEmpty
                 ? Text(s.t('oe_roster_none'), style: const TextStyle(color: AppColors.muted))
@@ -621,12 +633,14 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
       firstDate: first,
       lastDate: today.add(const Duration(days: 91)),
     );
-    if (picked != null) setState(() => _start = DateTime(picked.year, picked.month, picked.day, _start.hour, _start.minute));
+    if (picked != null)
+      setState(() => _start = DateTime(picked.year, picked.month, picked.day, _start.hour, _start.minute));
   }
 
   Future<void> _pickTime() async {
     final picked = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_start));
-    if (picked != null) setState(() => _start = DateTime(_start.year, _start.month, _start.day, picked.hour, picked.minute));
+    if (picked != null)
+      setState(() => _start = DateTime(_start.year, _start.month, _start.day, picked.hour, picked.minute));
   }
 
   Future<void> _save() async {
@@ -746,7 +760,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               initialValue: openEventDurations.contains(_duration) ? _duration : null,
               dropdownColor: AppColors.surface,
               decoration: fieldDecoration(''),
-              items: [for (final d in openEventDurations) DropdownMenuItem(value: d, child: Text(openEventDuration(d)))],
+              items: [
+                for (final d in openEventDurations) DropdownMenuItem(value: d, child: Text(openEventDuration(d)))
+              ],
               onChanged: (v) => setState(() => _duration = v ?? _duration),
             ),
             const SizedBox(height: 16),

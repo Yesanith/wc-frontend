@@ -827,7 +827,8 @@ const ptStrings = <String, String>{
   'oe_form_edit': 'Editar o evento',
   'oe_language': 'IDIOMA',
   'oe_places_field': 'VAGAS (VAZIO = SEM LIMITE)',
-  'oe_form_note': 'Todos os jogadores conectados veem este evento, com o nome da sua conta do jogo como organizador. Só você vê os nomes de quem se inscreve.',
+  'oe_form_note':
+      'Todos os jogadores conectados veem este evento, com o nome da sua conta do jogo como organizador. Só você vê os nomes de quem se inscreve.',
   'oe_save': 'Salvar',
   'oe_created': 'Evento criado',
   'oe_saved': 'Salvo',

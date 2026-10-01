@@ -830,7 +830,8 @@ const frStrings = <String, String>{
   'oe_form_edit': 'Modifier l\'événement',
   'oe_language': 'LANGUE',
   'oe_places_field': 'PLACES (VIDE = SANS LIMITE)',
-  'oe_form_note': 'Tous les joueurs connectés voient cet événement, avec le nom de ton compte de jeu comme organisateur. Toi seul vois les noms des inscrits.',
+  'oe_form_note':
+      'Tous les joueurs connectés voient cet événement, avec le nom de ton compte de jeu comme organisateur. Toi seul vois les noms des inscrits.',
   'oe_save': 'Enregistrer',
   'oe_created': 'Événement créé',
   'oe_saved': 'Enregistré',
