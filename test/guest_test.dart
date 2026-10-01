@@ -120,6 +120,7 @@ void main() {
       AppSection.settings,
       AppSection.about,
       AppSection.guildEvents,
+      AppSection.publicEvents,
     ]) {
       expect(sectionNeedsKey(s), isFalse, reason: '$s');
     }
