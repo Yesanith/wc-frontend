@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show PostgrestException;
 import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/screens/open_events_screen.dart' show openEventDuration;
+import 'package:tyria_codex/screens/open_event_labels.dart' show openEventDuration;
 import 'package:tyria_codex/state/open_events.dart';
 
 Map<String, dynamic> row({

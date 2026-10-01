@@ -1,0 +1,348 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../l10n/strings.dart';
+import '../state/open_events.dart';
+import '../state/settings.dart';
+import '../theme.dart';
+import '../widgets/common.dart';
+import '../widgets/responsive.dart';
+import 'guild_events_screen.dart' show activityIcon, eventWhen, statusColor;
+import 'open_event_form_screen.dart';
+import 'open_event_labels.dart';
+
+class OpenEventScreen extends ConsumerWidget {
+  const OpenEventScreen({super.key, required this.eventId});
+
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final event = ref.watch(openEventProvider(eventId));
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis)),
+      body: AsyncView<OpenEvent?>(
+        value: event,
+        onRetry: () => ref.invalidate(openEventProvider(eventId)),
+        builder: (e) => e == null
+            ? Center(child: Text(s.t('oe_err_gone'), style: const TextStyle(color: AppColors.muted)))
+            : ContentFrame(maxWidth: readingMaxWidth, child: _EventBody(event: e)),
+      ),
+    );
+  }
+}
+
+class _EventBody extends ConsumerStatefulWidget {
+  const _EventBody({required this.event});
+
+  final OpenEvent event;
+
+  @override
+  ConsumerState<_EventBody> createState() => _EventBodyState();
+}
+
+class _EventBodyState extends ConsumerState<_EventBody> {
+  bool _busy = false;
+
+  /// the account the player picked to sign up as, when they have more than one of the region of the event
+  String? _account;
+
+  S get _s => ref.read(stringsProvider);
+
+  void _refresh() {
+    ref.invalidate(openEventProvider(widget.event.id));
+    ref.invalidate(openEventsFeedProvider);
+    ref.invalidate(myOpenEventsProvider);
+    ref.invalidate(openRosterProvider(widget.event.id));
+  }
+
+  /// the accounts of the player that may take part, and what to ask for: nothing when there is no choice to make
+  List<OpenAccount> _eligible(OpenEvent e) => ref.read(myRegionsProvider).valueOrNull?.forRegion(e.region) ?? const [];
+
+  String? _chosenAccount(OpenEvent e) {
+    final eligible = _eligible(e);
+    if (eligible.length < 2) return null;
+    return eligible.any((a) => a.id == _account) ? _account : eligible.first.id;
+  }
+
+  List<Widget> _accountChooser(S s, OpenEvent e) {
+    final mine = ref.watch(myRegionsProvider).valueOrNull;
+    if (mine == null) return const [];
+    final eligible = mine.forRegion(e.region);
+    if (mine.hasAccount && eligible.isEmpty) {
+      return [
+        Text(s.t('oe_err_wrong_region'), style: const TextStyle(color: AppColors.amber, height: 1.4)),
+        const SizedBox(height: 8),
+      ];
+    }
+    if (eligible.length < 2) return const [];
+    return [
+      Kicker(s.t('oe_join_as')),
+      const SizedBox(height: 6),
+      DropdownButtonFormField<String>(
+        initialValue: eligible.any((a) => a.id == _account) ? _account : eligible.first.id,
+        dropdownColor: AppColors.surface,
+        decoration: fieldDecoration(''),
+        items: [for (final a in eligible) DropdownMenuItem(value: a.id, child: Text(a.name))],
+        onChanged: (v) => setState(() => _account = v),
+      ),
+      const SizedBox(height: 12),
+    ];
+  }
+
+  Future<void> _act(Future<void> Function() action, {String? done, bool leave = false}) async {
+    setState(() => _busy = true);
+    try {
+      await action();
+      if (done != null && mounted) showToast(context, done);
+    } catch (e) {
+      if (mounted) showToast(context, _s.t(openEventErrorKey(e)));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+    _refresh();
+    if (leave && mounted) Navigator.of(context).pop();
+  }
+
+  Future<bool> _confirm(String text, String action) async =>
+      await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(text),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(_s.t('cancel'))),
+            TextButton(onPressed: () => Navigator.pop(ctx, true), child: Text(action)),
+          ],
+        ),
+      ) ??
+      false;
+
+  Future<void> _report() async {
+    final reason = await showDialog<String>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: Text(_s.t('oe_report_why')),
+        children: [
+          for (final r in const ['spam', 'offensive', 'not_gw2', 'other'])
+            SimpleDialogOption(onPressed: () => Navigator.pop(ctx, r), child: Text(_s.t('oe_reason_$r'))),
+        ],
+      ),
+    );
+    if (reason == null) return;
+    await _act(() => reportOpenEvent(widget.event.id, reason), done: _s.t('oe_reported'));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final e = widget.event;
+    final over = e.isOver(DateTime.now());
+    final canSignUp = !e.mine && !e.cancelled && !e.hidden && !over;
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(color: AppColors.surface2, borderRadius: BorderRadius.circular(14)),
+              child: Icon(activityIcon(e.activity), color: AppColors.gold),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(e.title, style: display(20)),
+                  const SizedBox(height: 2),
+                  Text('${eventWhen(s, e.startAt)} · ${openEventDuration(e.durationMinutes)}',
+                      style: const TextStyle(color: AppColors.muted)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: [
+            if (e.cancelled) Pill(s.t('oe_cancelled'), color: AppColors.red),
+            if (e.hidden) Pill(s.t('oe_hidden'), color: AppColors.amber),
+            if (e.isLive(DateTime.now())) Pill(s.t('event_live'), color: AppColors.green),
+            Pill(s.t('activity_${e.activity}')),
+            Pill(s.t('oe_region_${e.region}')),
+            Pill(openEventLanguageName(s, e.language)),
+            if (e.mapId != null) Pill(s.t('oe_map_pill', {'id': e.mapId})),
+            for (final t in e.tags) Pill(s.t('oe_tag_$t')),
+            Pill(s.t('oe_going', {'n': e.going})),
+            if (e.maybe > 0) Pill(s.t('oe_maybe', {'n': e.maybe})),
+            if (e.maxParticipants != null) Pill(s.t('oe_places', {'n': e.going, 'max': e.maxParticipants})),
+            if (e.myStatus != null) Pill(s.t('rsvp_${e.myStatus}'), color: statusColor(e.myStatus)),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Panel(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: Text(s.t('oe_by', {'name': e.organizer}),
+                          style: const TextStyle(fontWeight: FontWeight.w700))),
+                  IconButton(
+                    tooltip: s.t('oe_copy_name'),
+                    icon: const Icon(Icons.copy, size: 18, color: AppColors.gold),
+                    onPressed: () async {
+                      await Clipboard.setData(ClipboardData(text: e.organizer));
+                      if (context.mounted) showToast(context, s.t('oe_copied'));
+                    },
+                  ),
+                ],
+              ),
+              if (!e.mine)
+                Text(s.t('oe_find_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+            ],
+          ),
+        ),
+        if (e.description.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Panel(child: Text(e.description, style: const TextStyle(height: 1.45))),
+        ],
+        const SizedBox(height: 16),
+        if (canSignUp) ...[
+          ..._accountChooser(s, e),
+          Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: _busy || (e.isFull && e.myStatus != 'going')
+                      ? null
+                      : () => _act(() => joinOpenEvent(e.id, 'going', account: _chosenAccount(e))),
+                  child: Text(e.isFull && e.myStatus != 'going'
+                      ? s.t('oe_full')
+                      : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: _busy ? null : () => _act(() => joinOpenEvent(e.id, 'maybe', account: _chosenAccount(e))),
+                  child: Text(e.myStatus == 'maybe' ? s.t('oe_you_maybe') : s.t('oe_maybe_btn')),
+                ),
+              ),
+            ],
+          ),
+          if (e.myStatus != null)
+            TextButton(onPressed: _busy ? null : () => _act(() => leaveOpenEvent(e.id)), child: Text(s.t('oe_leave'))),
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(s.t('oe_join_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+          ),
+        ],
+        if (e.mine) ...[
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (!e.cancelled && !over)
+                OutlinedButton.icon(
+                  onPressed: _busy
+                      ? null
+                      : () async {
+                          final saved = await Navigator.of(context)
+                              .push<bool>(MaterialPageRoute(builder: (_) => OpenEventFormScreen(editing: e)));
+                          if (saved == true) _refresh();
+                        },
+                  icon: const Icon(Icons.edit_outlined, size: 18),
+                  label: Text(s.t('oe_edit')),
+                ),
+              if (!e.cancelled && !over)
+                OutlinedButton(
+                  onPressed: _busy
+                      ? null
+                      : () async {
+                          if (await _confirm(s.t('oe_confirm_cancel'), s.t('oe_cancel_event'))) {
+                            await _act(() => cancelOpenEvent(e.id));
+                          }
+                        },
+                  child: Text(s.t('oe_cancel_event')),
+                ),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(foregroundColor: AppColors.red),
+                onPressed: _busy
+                    ? null
+                    : () async {
+                        if (await _confirm(s.t('oe_confirm_delete'), s.t('oe_delete'))) {
+                          await _act(() => deleteOpenEvent(e.id), leave: true);
+                        }
+                      },
+                child: Text(s.t('oe_delete')),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Kicker(s.t('oe_roster').toUpperCase()),
+          const SizedBox(height: 8),
+          _Roster(eventId: e.id),
+        ] else
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: _busy ? null : _report,
+              icon: const Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
+              label: Text(s.t('oe_report'), style: const TextStyle(color: AppColors.muted)),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// who signed up, for the organizer
+class _Roster extends ConsumerWidget {
+  const _Roster({required this.eventId});
+
+  final String eventId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return ref.watch(openRosterProvider(eventId)).when(
+          loading: () => const Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(
+                child: SizedBox(
+                    width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
+          ),
+          error: (e, _) =>
+              Panel(child: Text(s.t(openEventErrorKey(e)), style: const TextStyle(color: AppColors.amber))),
+          data: (people) => Panel(
+            child: people.isEmpty
+                ? Text(s.t('oe_roster_none'), style: const TextStyle(color: AppColors.muted))
+                : Column(
+                    children: [
+                      for (final p in people)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(p.name)),
+                              Pill(s.t('rsvp_${p.status}'), color: statusColor(p.status)),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+          ),
+        );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// making and changing one
