@@ -175,7 +175,8 @@
      "Each Guild Wars 2 account you link has a region, Europe or North America. We read it from the world the game says the account is on when you link it, and keep it with the account until you unlink it or delete your account. It decides which public events you can make and sign up for.",
      "Public events are also posted in the official Tyria Companion Discord server, in the channel of their region: title, description, time, kind, tags, how many are going and the Guild Wars 2 account name of the organizer, visible to everyone in that channel. Who signed up is never posted, only how many. The post is removed when the event is hidden or deleted, or when you delete your account.",
      "If you are in the official server, the bot gives you the role of each region you have an account in. It finds you with your Discord user ID from your sign-in, and takes the role back if you delete your account.",
-     "When a public event you signed up for starts, the bot opens a text channel and a voice channel for it in the official server that only its organizer and those who signed up (going or maybe) can see, and mentions them by their Discord user. The channels are deleted after the event."
+     "When a public event you signed up for starts, the bot opens a text channel and a voice channel for it in the official server that only its organizer and those who signed up (going or maybe) can see, and mentions them by their Discord user. The channels are deleted after the event.",
+     "If you make a public event with the Discord bot, the time zone you give it, for example Europe/Istanbul, is kept with your Discord user ID so that you do not have to say it again, and is deleted when you delete your account."
     ]
    ],
    [
