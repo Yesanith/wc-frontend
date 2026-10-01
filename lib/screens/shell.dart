@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/sync.dart';
+import '../state/app_open.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/navigation.dart';
@@ -154,6 +155,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   /// refreshes the link, which brings a leader's guild from the game, and when
   /// there is a guild whose leader has not yet chosen what the members see, asks
   Future<void> _refreshAndReview() async {
+    // which version is in use, counted for the dashboard, not waited for
+    unawaited(recordAppOpen(ref));
     await refreshLink(ref);
     if (!mounted) return;
     try {

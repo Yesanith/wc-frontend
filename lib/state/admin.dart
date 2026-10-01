@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../services/update_check.dart' show compareVersions;
 import '../util.dart';
 import 'community.dart';
 
@@ -339,6 +340,28 @@ class AdminHistory {
     return rows.take(limit).toList();
   }
 
+  /// how often each version of the app was opened this week and this month, the newest first
+  List<({String platform, String version, int week, int month})> get appVersions {
+    final rows = [
+      for (final v in list('app_versions'))
+        (platform: '${v['platform']}', version: '${v['version']}', week: asInt(v['opens_7d']), month: asInt(v['opens_30d'])),
+    ]..sort((a, b) {
+        final byVersion = compareVersions(b.version, a.version);
+        return byVersion != 0 ? byVersion : b.week.compareTo(a.week);
+      });
+    return rows;
+  }
+
+  /// the share of this week's opens that were of the newest version there is a number for, 0 to 1. null when
+  /// there were none
+  double? get newestVersionShare {
+    final rows = appVersions.where((v) => v.version != 'other').toList();
+    final total = appVersions.fold<int>(0, (a, v) => a + v.week);
+    if (rows.isEmpty || total == 0) return null;
+    final newest = rows.first.version;
+    return rows.where((v) => v.version == newest).fold<int>(0, (a, v) => a + v.week) / total;
+  }
+
   int _sum(List<({String day, int count})> days) => days.fold<int>(0, (a, d) => a + d.count);
 
   /// each function that has run, whether its last run worked and how long it took
@@ -402,6 +425,18 @@ class AdminHistory {
           HealthLevel.good));
     }
 
+    final newsOk = _sum(tail(series('news_ok'), 7));
+    final newsFailed = _sum(tail(series('news_failed'), 7));
+    final newsAttempts = newsOk + newsFailed;
+    if (newsAttempts >= 10) {
+      final share = newsFailed / newsAttempts;
+      lines.add(HealthLine('News feed', '$newsFailed of $newsAttempts requests failed in the last 7 days',
+          share > 0.5 ? HealthLevel.bad : (share > 0.25 ? HealthLevel.warn : HealthLevel.good)));
+    } else {
+      lines.add(HealthLine('News feed', newsAttempts == 0 ? 'No request in the last 7 days' : '$newsFailed of $newsAttempts requests failed in the last 7 days',
+          HealthLevel.good));
+    }
+
     final today = series('bot_errors').isEmpty ? 0 : series('bot_errors').last.count;
     lines.add(today == 0
         ? const HealthLine('Bot calls', 'No database error today', HealthLevel.good)
@@ -414,7 +449,7 @@ class AdminHistory {
     if (broken.isNotEmpty)
       lines.add(HealthLine('Functions', '${broken.length} failed without saying why', HealthLevel.warn));
 
-    for (final name in const ['snapshots', 'functions', 'metric_keys', 'series', 'guilds', 'servers']) {
+    for (final name in const ['snapshots', 'functions', 'metric_keys', 'series', 'guilds', 'servers', 'app_versions']) {
       final why = problem(name);
       if (why != null) lines.add(HealthLine('Could not read $name', why, HealthLevel.warn));
     }
