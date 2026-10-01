@@ -563,9 +563,22 @@ void openEventTests() {
   group('the public events', () {
     AdminOpenEvents events({int waiting = 0, int hidden = 0, int banned = 0}) => AdminOpenEvents({
           'generated_at': '2026-10-01T12:00:00+00:00',
-          'summary': {'reports_waiting': waiting, 'hidden': hidden, 'banned': banned, 'upcoming': 7, 'going_upcoming': 31},
+          'summary': {
+            'reports_waiting': waiting,
+            'hidden': hidden,
+            'banned': banned,
+            'upcoming': 7,
+            'going_upcoming': 31
+          },
           'reports': [
-            {'id': 'e1', 'title': 'Raid night', 'organizer': 'Leo.1', 'reports': 3, 'reasons': ['spam', 'other'], 'notes': ['looks like an advert']},
+            {
+              'id': 'e1',
+              'title': 'Raid night',
+              'organizer': 'Leo.1',
+              'reports': 3,
+              'reasons': ['spam', 'other'],
+              'notes': ['looks like an advert']
+            },
           ],
           'hidden': [
             {'id': 'e2', 'title': 'Old', 'organizer': 'Mira.2', 'reason': 'admin'},

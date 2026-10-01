@@ -498,7 +498,8 @@ class AdminOpenEvents {
 
   final Map<String, dynamic> raw;
 
-  Map<String, dynamic> get summary => raw['summary'] is Map ? Map<String, dynamic>.from(raw['summary'] as Map) : const <String, dynamic>{};
+  Map<String, dynamic> get summary =>
+      raw['summary'] is Map ? Map<String, dynamic>.from(raw['summary'] as Map) : const <String, dynamic>{};
 
   int count(String key) => asInt(summary[key]);
 
@@ -514,9 +515,13 @@ class AdminOpenEvents {
   List<HealthLine> health() => [
         waiting == 0
             ? const HealthLine('Reports', 'Nothing waits for a look', HealthLevel.good)
-            : HealthLine('Reports',
-                waiting == 1 ? '1 event was reported and waits for a look' : '$waiting events were reported and wait for a look',
+            : HealthLine(
+                'Reports',
+                waiting == 1
+                    ? '1 event was reported and waits for a look'
+                    : '$waiting events were reported and wait for a look',
                 waiting >= 5 ? HealthLevel.bad : HealthLevel.warn),
-        HealthLine('Hidden', '${count('hidden')} hidden, ${count('banned')} organizers kept from making more', HealthLevel.good),
+        HealthLine('Hidden', '${count('hidden')} hidden, ${count('banned')} organizers kept from making more',
+            HealthLevel.good),
       ];
 }
