@@ -502,8 +502,8 @@ void versionTests() {
           opens([
             ['android', 'other', 4, 4]
           ]).newestVersionShare,
-          0.0,
-          reason: 'only what is not a number, so none of the newest');
+          isNull,
+          reason: 'only what is not a number: there is no newest to compare with');
     });
 
     test('survive an answer that is not a list', () {
