@@ -171,7 +171,11 @@
      "Any signed in player can report a public event with a reason and a note of up to 300 characters. We keep the reports with who sent them, an administrator reads them, and the organizer is not told who reported. Three reports hide an event until an administrator has looked at it.",
      "An administrator can hide or delete a public event and keep an organizer from making more, and we keep a record of that.",
      "To keep them in order, you can have five public events to come, make ten in a day and set them up to three months ahead. To apply that we keep a count of what you make for two days.",
-     "Deleting your account deletes the public events you made, your sign ups for other people's public events and the reports you sent, and the record that keeps an organizer from making more goes with it."
+     "Deleting your account deletes the public events you made, your sign ups for other people's public events and the reports you sent, and the record that keeps an organizer from making more goes with it.",
+     "Each Guild Wars 2 account you link has a region, Europe or North America. We read it from the world the game says the account is on when you link it, and keep it with the account until you unlink it or delete your account. It decides which public events you can make and sign up for.",
+     "Public events are also posted in the official Tyria Companion Discord server, in the channel of their region: title, description, time, kind, tags, how many are going and the Guild Wars 2 account name of the organizer, visible to everyone in that channel. Who signed up is never posted, only how many. The post is removed when the event is hidden or deleted, or when you delete your account.",
+     "If you are in the official server, the bot gives you the role of each region you have an account in and of each kind of event you chose to be told of. It finds you with your Discord user ID from your sign-in. We keep the kinds you chose until you change them or delete your account, and the bot takes the roles back when you do.",
+     "Half an hour before a public event you signed up for starts, the bot mentions you, by your Discord user, in the event's thread in the official server."
     ]
    ],
    [

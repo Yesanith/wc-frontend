@@ -142,7 +142,11 @@
     "Giriş yapmış her oyuncu, herkese açık bir etkinliği bir neden ve en fazla 300 karakterlik bir notla şikâyet edebilir. Şikâyetleri kimin gönderdiğiyle birlikte saklarız, bir yönetici okur ve organizatöre kimin şikâyet ettiği söylenmez. Üç şikâyet, bir yönetici bakana kadar etkinliği gizler.",
     "Bir yönetici herkese açık bir etkinliği gizleyebilir veya silebilir ve bir organizatörün daha fazla etkinlik oluşturmasını engelleyebilir; bunun kaydını tutarız.",
     "Düzeni korumak için aynı anda beş yaklaşan herkese açık etkinliğin olabilir, günde on tane oluşturabilir ve en fazla üç ay sonrasına kurabilirsin. Bunu uygulamak için oluşturduklarının sayısını iki gün saklarız.",
-    "Hesabını silmek, oluşturduğun herkese açık etkinlikleri, başkalarının herkese açık etkinliklerine yaptığın katılımları ve gönderdiğin şikâyetleri siler; bir organizatörün daha fazla etkinlik oluşturmasını engelleyen kayıt da hesapla birlikte gider."
+    "Hesabını silmek, oluşturduğun herkese açık etkinlikleri, başkalarının herkese açık etkinliklerine yaptığın katılımları ve gönderdiğin şikâyetleri siler; bir organizatörün daha fazla etkinlik oluşturmasını engelleyen kayıt da hesapla birlikte gider.",
+    "Bağladığın her Guild Wars 2 hesabının bir bölgesi vardır: Avrupa veya Kuzey Amerika. Bunu, hesabı bağlarken oyunun hesabın hangi dünyada olduğunu söylemesinden okuruz ve hesabı kaldırana ya da hesabını silene kadar hesapla birlikte saklarız. Hangi herkese açık etkinlikleri oluşturabileceğini ve hangilerine katılabileceğini bu belirler.",
+    "Herkese açık etkinlikler ayrıca resmi Tyria Companion Discord sunucusunda, bölgelerinin kanalında paylaşılır: başlık, açıklama, saat, tür, etiketler, kaç kişinin katılacağı ve organizatörün Guild Wars 2 hesap adı o kanaldaki herkese görünür. Kimin katıldığı asla paylaşılmaz, yalnızca kaç kişi olduğu paylaşılır. Etkinlik gizlenir ya da silinirse veya hesabını silersen paylaşım kaldırılır.",
+    "Resmi sunucudaysan bot, hesabın olan her bölgenin ve haberdar olmayı seçtiğin her etkinlik türünün rolünü sana verir. Seni girişteki Discord kullanıcı kimliğinle bulur. Seçtiğin türleri sen değiştirene ya da hesabını silene kadar saklarız, sildiğinde bot rolleri geri alır.",
+    "Katıldığın bir herkese açık etkinliğin başlamasına yarım saat kala bot, resmi sunucudaki etkinlik konusunda Discord kullanıcın olarak seni anar."
    ],
    "Kullanılan hizmetler",
    [

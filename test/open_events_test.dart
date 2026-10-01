@@ -238,4 +238,125 @@ void main() {
       }
     });
   });
+
+  group('a region', () {
+    test('is read from an event, and an event that does not say is for all', () {
+      final e = OpenEvent.fromJson({...row(), 'region': 'na', 'tags': ['meta', 'casual'], 'map_id': 1209});
+      expect(e.region, 'na');
+      expect(e.tags, ['meta', 'casual']);
+      expect(e.mapId, 1209);
+      final plain = OpenEvent.fromJson(row());
+      expect(plain.region, 'all');
+      expect(plain.tags, isEmpty);
+      expect(plain.mapId, isNull);
+      expect(OpenEvent.fromJson({...row(), 'tags': 'meta'}).tags, isEmpty, reason: 'a list that is not one is none');
+    });
+
+    test('and a tag narrow the list, each on its own', () {
+      final eu = const OpenEventsFilter(activity: 'raid').withRegion('eu');
+      expect(eu.region, 'eu');
+      expect(eu.activity, 'raid', reason: 'the activity stays');
+      final tagged = eu.withTag('casual');
+      expect(tagged.tag, 'casual');
+      expect(tagged.region, 'eu');
+      expect(tagged.withRegion(null).tag, 'casual');
+      expect(tagged.withTag(null).region, 'eu');
+      expect(const OpenEventsFilter(region: 'eu', tag: 'meta'), const OpenEventsFilter(region: 'eu', tag: 'meta'));
+      expect(const OpenEventsFilter(region: 'eu') == const OpenEventsFilter(region: 'na'), isFalse);
+      expect(const OpenEventsFilter(tag: 'meta') == const OpenEventsFilter(tag: 'casual'), isFalse);
+      expect(const OpenEventsFilter(region: 'eu').hashCode, const OpenEventsFilter(region: 'eu').hashCode);
+    });
+
+    test('is told in words when it is wrong, an event is about to be made for one, or a tag or a map is none', () {
+      const reasons = {
+        'wrong_region': 'oe_err_wrong_region',
+        'bad_region': 'oe_err_region',
+        'bad_tags': 'oe_err_tags',
+        'bad_map': 'oe_err_map',
+      };
+      for (final r in reasons.entries) {
+        expect(openEventErrorKey(OpenEventFailure(r.key)), r.value);
+        expect(openEventErrorKey(PostgrestException(message: 'x', hint: r.key)), r.value);
+      }
+    });
+
+    test('is a player\'s own: the regions of the accounts the game has placed, and what they may make and join', () {
+      final both = MyRegions.fromJson({
+        'accounts': [
+          {'id': 'a1', 'name': 'Leo.1', 'region': 'eu'},
+          {'id': 'a2', 'name': 'Leo.NA', 'region': 'na'},
+          {'id': 'a3', 'name': 'Leo.3', 'region': null},
+        ],
+      });
+      expect(both.regions, {'eu', 'na'}, reason: 'an account with no region is in none');
+      expect(both.makeable, ['all', 'eu', 'na']);
+      expect(both.forRegion('eu').map((a) => a.name), ['Leo.1']);
+      expect(both.forRegion('all').map((a) => a.name), ['Leo.1', 'Leo.NA', 'Leo.3'], reason: 'any takes part in one for all');
+      expect(both.forRegion('na').single.id, 'a2');
+
+      final unplaced = MyRegions.fromJson({
+        'accounts': [
+          {'id': 'a1', 'name': 'Leo.1', 'region': null},
+        ],
+      });
+      expect(unplaced.hasAccount, isTrue);
+      expect(unplaced.regions, isEmpty);
+      expect(unplaced.makeable, ['all'], reason: 'with no region known, only an event for all');
+      expect(unplaced.forRegion('eu'), isEmpty);
+
+      for (final nothing in [null, 'x', <String, dynamic>{}, {'accounts': 'x'}]) {
+        final none = MyRegions.fromJson(nothing);
+        expect(none.hasAccount, isFalse);
+        expect(none.makeable, ['all']);
+      }
+    });
+
+    test('and its kinds have words in every language, the map one with its blank', () {
+      for (final lang in AppLang.values) {
+        final s = S(lang);
+        for (final r in openEventRegions) {
+          expect(s.t('oe_region_$r'), isNot('oe_region_$r'), reason: '$r in ${lang.code}');
+        }
+        for (final t in openEventTags) {
+          expect(s.t('oe_tag_$t'), isNot('oe_tag_$t'), reason: '$t in ${lang.code}');
+        }
+        for (final k in openEventActivities) {
+          expect(s.t('activity_$k'), isNot('activity_$k'), reason: '$k in ${lang.code}');
+        }
+        for (final key in [
+          'oe_region',
+          'oe_region_note',
+          'oe_region_unknown',
+          'oe_tags',
+          'oe_tag_any',
+          'oe_map',
+          'oe_err_map',
+          'oe_err_region',
+          'oe_err_wrong_region',
+          'oe_err_tags',
+          'oe_join_as',
+          'oe_roles_title',
+          'oe_roles_body',
+          'oe_roles_kinds',
+          'oe_roles_join',
+          'oe_roles_saved',
+          'oe_roles_none',
+        ]) {
+          expect(s.t(key), isNot(key), reason: '$key in ${lang.code}');
+        }
+        final pill = s.t('oe_map_pill', {'id': 'VALUE_id'});
+        expect(pill, contains('VALUE_id'), reason: lang.code);
+        expect(pill.contains('{'), isFalse, reason: lang.code);
+      }
+    });
+
+    test('has the kinds a role can be asked for among those an event can be about', () {
+      for (final k in openEventRoleKinds) {
+        expect(openEventActivities, contains(k), reason: k);
+      }
+      expect(openEventActivities, contains('worldboss'));
+      expect(openEventRegions, ['eu', 'na', 'all']);
+      expect(openEventTags.length, 6);
+    });
+  });
 }

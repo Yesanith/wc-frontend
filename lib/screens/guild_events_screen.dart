@@ -30,6 +30,7 @@ IconData activityIcon(String activity) => switch (activity) {
       'raid' => Icons.shield_outlined,
       'strike' => Icons.flash_on_outlined,
       'fractal' => Icons.blur_on,
+      'worldboss' => Icons.whatshot_outlined,
       'meta' => Icons.public,
       'wvw' => Icons.castle_outlined,
       'pvp' => Icons.sports_kabaddi_outlined,
