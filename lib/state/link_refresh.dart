@@ -5,6 +5,7 @@ import '../l10n/strings.dart';
 import 'account.dart';
 import 'api.dart';
 import 'community.dart';
+import 'open_events.dart';
 import 'settings.dart';
 
 const _refreshedKey = 'gw2_link_refreshed_at';
@@ -18,10 +19,15 @@ Duration linkRefreshEvery({required bool leads}) => leads ? const Duration(minut
 bool linkRefreshDue(DateTime? last, DateTime now, {required bool leads}) =>
     last == null || now.difference(last) >= linkRefreshEvery(leads: leads);
 
+/// whether a linked account has no region yet: it was linked before the game's world was read, or the world was not given.
+/// refreshing it brings the region, which an event of a region and the roles of the official server wait for, so it is not
+/// left until the refresh is due
+bool regionMissing(MyRegions mine) => mine.accounts.any((a) => a.region == null);
+
 bool _running = false;
 DateTime? _lastAttempt;
 
-/// quietly refreshes the link when the app is opened, so the membership stays
+/// quietly refreshes the link when the app is opened, at once when an account has no region yet, so the membership stays
 /// counted and, for a guild's leader, the guild's details reach the backend.
 /// it uses a subtoken that lives ten minutes, the key stays on the device.
 ///
@@ -43,7 +49,13 @@ Future<LinkOutcome?> refreshLink(WidgetRef ref, {bool force = false}) async {
     final leads = guilds.any((g) => g.role == 'leader');
     final prefs = ref.read(prefsProvider);
     final last = DateTime.tryParse(prefs.getString(_refreshedKey) ?? '');
-    if (!force && !linkRefreshDue(last, now, leads: leads)) return null;
+    var unplaced = false;
+    try {
+      unplaced = regionMissing(await ref.read(myRegionsProvider.future));
+    } catch (_) {
+      // not knowing is the same as the account having a region
+    }
+    if (!force && !unplaced && !linkRefreshDue(last, now, leads: leads)) return null;
 
     final linked = await ref.read(linkedAccountsProvider.future);
     if (linked.isEmpty) return null;
@@ -57,6 +69,7 @@ Future<LinkOutcome?> refreshLink(WidgetRef ref, {bool force = false}) async {
     final outcome = await linkGw2AccountOutcome(ref.read(gw2ApiProvider), permissions);
     await prefs.setString(_refreshedKey, DateTime.now().toIso8601String());
     ref.invalidate(linkedAccountsProvider);
+    ref.invalidate(myRegionsProvider);
     ref.invalidate(myGuildsProvider);
     ref.invalidate(guildDetailsProvider);
     return outcome;
