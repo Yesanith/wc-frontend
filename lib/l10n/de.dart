@@ -792,7 +792,8 @@ const deStrings = <String, String>{
   'oe_tab_discover': 'Entdecken',
   'oe_tab_mine': 'Meine Events',
   'oe_create': 'Öffentliches Event',
-  'oe_sign_in': 'Melde dich in den Einstellungen mit Discord an, um öffentliche Events zu sehen und eigene zu erstellen.',
+  'oe_sign_in':
+      'Melde dich in den Einstellungen mit Discord an, um öffentliche Events zu sehen und eigene zu erstellen.',
   'oe_all': 'Alle',
   'oe_any_language': 'Jede Sprache',
   'oe_none': 'Noch keine öffentlichen Events. Erstelle das erste.',
@@ -831,7 +832,8 @@ const deStrings = <String, String>{
   'oe_form_edit': 'Event bearbeiten',
   'oe_language': 'SPRACHE',
   'oe_places_field': 'PLÄTZE (LEER = KEIN LIMIT)',
-  'oe_form_note': 'Alle angemeldeten Spieler sehen dieses Event, mit deinem Spielaccount-Namen als Organisator. Nur du siehst die Namen der Angemeldeten.',
+  'oe_form_note':
+      'Alle angemeldeten Spieler sehen dieses Event, mit deinem Spielaccount-Namen als Organisator. Nur du siehst die Namen der Angemeldeten.',
   'oe_save': 'Speichern',
   'oe_created': 'Event erstellt',
   'oe_saved': 'Gespeichert',
