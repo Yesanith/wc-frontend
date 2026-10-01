@@ -325,14 +325,16 @@ class AdminHistory {
 
   int? get daysToDatabaseLimit => projectDaysToLimit([
         for (final s in list('snapshots'))
-          if (DateTime.tryParse('${s['day']}') != null) (day: DateTime.parse('${s['day']}'), bytes: asInt(s['db_bytes'])),
+          if (DateTime.tryParse('${s['day']}') != null)
+            (day: DateTime.parse('${s['day']}'), bytes: asInt(s['db_bytes'])),
       ], freeDatabaseBytes);
 
   /// the most counted of a function whose key begins with [prefix], with the prefix taken off
   List<({String key, int total})> top(String name, String prefix, {int limit = 8}) {
     final rows = [
       for (final k in list('metric_keys'))
-        if (k['name'] == name && '${k['key']}'.startsWith(prefix)) (key: '${k['key']}'.substring(prefix.length), total: asInt(k['total'])),
+        if (k['name'] == name && '${k['key']}'.startsWith(prefix))
+          (key: '${k['key']}'.substring(prefix.length), total: asInt(k['total'])),
     ]..sort((a, b) => b.total.compareTo(a.total));
     return rows.take(limit).toList();
   }
@@ -350,14 +352,18 @@ class AdminHistory {
       final runs = asInt(f['runs']);
       final failures = asInt(f['failures']);
       final ms = asInt(f['last_duration_ms']);
-      final summary = '$runs runs, $failures failed${ms > 0 ? ', last one took ${(ms / 1000).toStringAsFixed(1)} s' : ''}';
+      final summary =
+          '$runs runs, $failures failed${ms > 0 ? ', last one took ${(ms / 1000).toStringAsFixed(1)} s' : ''}';
       if (errorAt != null && (okAt == null || errorAt.isAfter(okAt))) {
         final why = '${f['last_error'] ?? ''}'.trim();
-        lines.add(HealthLine(name, 'The last run failed ${ago(errorAt, now)}${why.isEmpty ? '' : ': $why'}. $summary', HealthLevel.bad));
+        lines.add(HealthLine(
+            name, 'The last run failed ${ago(errorAt, now)}${why.isEmpty ? '' : ': $why'}. $summary', HealthLevel.bad));
       } else if (ms >= 20000) {
-        lines.add(HealthLine(name, 'Slow: the last run took ${(ms / 1000).toStringAsFixed(1)} s. $summary', HealthLevel.warn));
+        lines.add(HealthLine(
+            name, 'Slow: the last run took ${(ms / 1000).toStringAsFixed(1)} s. $summary', HealthLevel.warn));
       } else {
-        lines.add(HealthLine(name, '${ranAt == null ? 'No run yet' : 'Ran ${ago(ranAt, now)}'}. $summary', HealthLevel.good));
+        lines.add(
+            HealthLine(name, '${ranAt == null ? 'No run yet' : 'Ran ${ago(ranAt, now)}'}. $summary', HealthLevel.good));
       }
     }
     return lines;
@@ -369,13 +375,16 @@ class AdminHistory {
 
     final recent = [
       for (final s in list('servers'))
-        if (s['last_error'] != null && (DateTime.tryParse('${s['last_error_at'] ?? ''}')?.isAfter(now.subtract(const Duration(days: 1))) ?? false)) s,
+        if (s['last_error'] != null &&
+            (DateTime.tryParse('${s['last_error_at'] ?? ''}')?.isAfter(now.subtract(const Duration(days: 1))) ?? false))
+          s,
     ];
     if (recent.isEmpty) {
       lines.add(const HealthLine('Discord servers', 'None had an error in the last day', HealthLevel.good));
     } else {
       for (final s in recent) {
-        lines.add(HealthLine('${s['guild']}', '${s['last_error']} ${ago(DateTime.parse('${s['last_error_at']}'), now)}', HealthLevel.warn));
+        lines.add(HealthLine('${s['guild']}', '${s['last_error']} ${ago(DateTime.parse('${s['last_error_at']}'), now)}',
+            HealthLevel.warn));
       }
     }
 
@@ -387,7 +396,9 @@ class AdminHistory {
       lines.add(HealthLine('Linking game accounts', '$linksFailed of $attempts failed in the last 7 days',
           share > 0.5 ? HealthLevel.bad : (share > 0.25 ? HealthLevel.warn : HealthLevel.good)));
     } else {
-      lines.add(HealthLine('Linking game accounts', attempts == 0 ? 'None in the last 7 days' : '$linksFailed of $attempts failed in the last 7 days',
+      lines.add(HealthLine(
+          'Linking game accounts',
+          attempts == 0 ? 'None in the last 7 days' : '$linksFailed of $attempts failed in the last 7 days',
           HealthLevel.good));
     }
 
@@ -396,8 +407,12 @@ class AdminHistory {
         ? const HealthLine('Bot calls', 'No database error today', HealthLevel.good)
         : HealthLine('Bot calls', '$today database errors today that were not a refusal', HealthLevel.warn));
 
-    final broken = [for (final f in list('functions')) if (asInt(f['failures']) > 0 && f['last_error'] == null) f];
-    if (broken.isNotEmpty) lines.add(HealthLine('Functions', '${broken.length} failed without saying why', HealthLevel.warn));
+    final broken = [
+      for (final f in list('functions'))
+        if (asInt(f['failures']) > 0 && f['last_error'] == null) f
+    ];
+    if (broken.isNotEmpty)
+      lines.add(HealthLine('Functions', '${broken.length} failed without saying why', HealthLevel.warn));
 
     for (final name in const ['snapshots', 'functions', 'metric_keys', 'series', 'guilds', 'servers']) {
       final why = problem(name);

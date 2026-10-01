@@ -41,7 +41,15 @@ class AdminScreen extends ConsumerWidget {
             ),
             Expanded(
               child: TabBarView(
-                children: [_OverviewTab(), _ServerTab(), _ActivityTab(), _HistoryTab(), _BotTab(), _GuildsTab(), _UsersTab()],
+                children: [
+                  _OverviewTab(),
+                  _ServerTab(),
+                  _ActivityTab(),
+                  _HistoryTab(),
+                  _BotTab(),
+                  _GuildsTab(),
+                  _UsersTab()
+                ],
               ),
             ),
           ],
@@ -766,7 +774,8 @@ class _Bars extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
-              Text(summary?.call(values) ?? '$total in 30 days', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text(summary?.call(values) ?? '$total in 30 days',
+                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 12),
@@ -777,7 +786,8 @@ class _Bars extends StatelessWidget {
             children: [
               Text(days.isEmpty ? '' : short(days.first.day),
                   style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text(summary == null ? 'most in a day: $peak' : 'most: $peak', style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(summary == null ? 'most in a day: $peak' : 'most: $peak',
+                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
               Text(days.isEmpty ? '' : short(days.last.day),
                   style: const TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
@@ -864,14 +874,20 @@ class _HistoryTab extends ConsumerWidget {
             ],
             const Eyebrow('Database'),
             if (problem == null) ...[
-              _Bars(title: 'Size in megabytes', days: mb, summary: (v) => v.isEmpty ? '' : 'now ${v.last} MB of ${freeDatabaseBytes ~/ 1048576}'),
+              _Bars(
+                  title: 'Size in megabytes',
+                  days: mb,
+                  summary: (v) => v.isEmpty ? '' : 'now ${v.last} MB of ${freeDatabaseBytes ~/ 1048576}'),
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
                 child: Text(
                   days == null
                       ? 'Not enough days yet, or not growing, to say when it fills.'
-                      : (days == 0 ? 'It has reached the limit of the free plan.' : 'At this rate it reaches the limit of the free plan in about ${fmtInt(days)} days.'),
-                  style: TextStyle(fontSize: 12, height: 1.4, color: days != null && days < 60 ? AppColors.amber : AppColors.hint),
+                      : (days == 0
+                          ? 'It has reached the limit of the free plan.'
+                          : 'At this rate it reaches the limit of the free plan in about ${fmtInt(days)} days.'),
+                  style: TextStyle(
+                      fontSize: 12, height: 1.4, color: days != null && days < 60 ? AppColors.amber : AppColors.hint),
                 ),
               ),
             ],
@@ -911,7 +927,8 @@ class _BotTab extends ConsumerWidget {
             _Health(h.health(now)),
             const Eyebrow('Functions'),
             h.list('functions').isEmpty
-                ? const Panel(child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
+                ? const Panel(
+                    child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
                 : _Health(h.functionLines(now)),
             const Eyebrow('Last 30 days'),
             _Bars(title: 'Commands used', days: h.series('commands')),
@@ -964,7 +981,8 @@ class _ServerStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (servers.isEmpty) return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
+    if (servers.isEmpty)
+      return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
     return Panel(
       child: Column(
         children: [
@@ -1057,7 +1075,8 @@ class _GuildList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (guilds.isEmpty) return const Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
+    if (guilds.isEmpty)
+      return const Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
     return Panel(
       child: Column(
         children: [
