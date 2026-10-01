@@ -872,6 +872,8 @@ class _HistoryTab extends ConsumerWidget {
               const SizedBox(height: 10),
               _Bars(title: 'Events to come', days: last30('events_upcoming'), summary: now),
             ],
+            const Eyebrow('App versions this week'),
+            _Versions(h),
             const Eyebrow('Database'),
             if (problem == null) ...[
               _Bars(
@@ -1115,6 +1117,61 @@ class _GuildList extends StatelessWidget {
                         style: const TextStyle(fontSize: 11, color: AppColors.hint),
                       ),
                     ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// which versions of the app were opened this week, the newest first, each with its share
+class _Versions extends StatelessWidget {
+  const _Versions(this.history);
+
+  final AdminHistory history;
+
+  @override
+  Widget build(BuildContext context) {
+    final problem = history.problem('app_versions');
+    if (problem != null) return Panel(child: Text(problem, style: const TextStyle(color: AppColors.amber)));
+    final rows = history.appVersions.where((v) => v.week > 0).toList();
+    if (rows.isEmpty) {
+      return const Panel(
+        child: Text('No version has been opened since the counting began, a version is counted when the app is opened by a signed in player.',
+            style: TextStyle(color: AppColors.muted, height: 1.4)),
+      );
+    }
+    final total = rows.fold<int>(0, (a, v) => a + v.week);
+    final share = history.newestVersionShare;
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (share != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text('${(share * 100).round()} percent of the opens were of the newest version',
+                  style: TextStyle(fontSize: 12, color: share >= 0.5 ? AppColors.green : AppColors.amber)),
+            ),
+          for (final v in rows.take(12))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  SizedBox(width: 70, child: Text(v.platform, style: const TextStyle(fontSize: 12, color: AppColors.muted))),
+                  SizedBox(width: 70, child: Text(v.version, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(3),
+                      child: LinearProgressIndicator(value: v.week / total, minHeight: 6, color: AppColors.gold, backgroundColor: AppColors.track),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 52,
+                    child: Text(fmtInt(v.week), textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ),
                 ],
               ),

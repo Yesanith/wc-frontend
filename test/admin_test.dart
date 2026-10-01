@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tyria_codex/services/update_check.dart' show compareVersions;
 import 'package:tyria_codex/state/admin.dart';
 
 AdminDashboard dash({
@@ -32,6 +33,7 @@ AdminDashboard dash({
 void main() {
   serverTests();
   historyTests();
+  versionTests();
   final now = DateTime.utc(2026, 10, 1, 12);
 
   group('what the database says', () {
@@ -438,6 +440,95 @@ void historyTests() {
       });
       expect(h.problem('guilds'), 'permission denied');
       expect(line(h, 'Could not read guilds').detail, 'permission denied');
+    });
+  });
+}
+
+void versionTests() {
+  final now = DateTime.utc(2026, 10, 1, 12);
+
+  group('versions', () {
+    test('are compared by number, not by letters', () {
+      expect(compareVersions('0.80.0', '0.79.2'), greaterThan(0));
+      expect(compareVersions('0.9.0', '0.10.0'), lessThan(0), reason: 'ten is more than nine');
+      expect(compareVersions('1.0', '1.0.0'), 0);
+      expect(compareVersions('1.2', '1.2.1'), lessThan(0));
+      expect(compareVersions('other', '0.1.0'), lessThan(0), reason: 'what is not a number is the oldest');
+      expect(compareVersions('0.1.0', 'other'), greaterThan(0));
+      expect(compareVersions('other', 'other'), 0);
+    });
+  });
+
+  group('the versions that were opened', () {
+    AdminHistory opens(List<List<Object>> rows) => AdminHistory({
+          'app_versions': [
+            for (final r in rows) {'platform': r[0], 'version': r[1], 'opens_7d': r[2], 'opens_30d': r[3]},
+          ],
+        });
+
+    test('come newest first, and the most opened of a version first', () {
+      final h = opens([
+        ['android', '0.79.0', 10, 40],
+        ['web', '0.80.0', 3, 5],
+        ['android', '0.80.0', 30, 31],
+        ['android', 'other', 2, 2],
+        ['android', '0.9.0', 1, 1],
+      ]);
+      expect(h.appVersions.map((v) => '${v.platform} ${v.version}'), [
+        'android 0.80.0',
+        'web 0.80.0',
+        'android 0.79.0',
+        'android 0.9.0',
+        'android other',
+      ]);
+    });
+
+    test('say how much of the week was of the newest, not counting what is not a number as the newest', () {
+      final h = opens([
+        ['android', '0.80.0', 30, 31],
+        ['web', '0.80.0', 10, 12],
+        ['android', '0.79.0', 40, 80],
+        ['android', 'other', 20, 20],
+      ]);
+      expect(h.newestVersionShare, closeTo(0.4, 0.0001), reason: '40 of 100 opens');
+      expect(opens([]).newestVersionShare, isNull);
+      expect(opens([['android', '0.80.0', 0, 5]]).newestVersionShare, isNull, reason: 'none this week');
+      expect(opens([['android', 'other', 4, 4]]).newestVersionShare, 0.0, reason: 'only what is not a number, so none of the newest');
+    });
+
+    test('survive an answer that is not a list', () {
+      const h = AdminHistory({'app_versions': {'error': 'permission denied'}});
+      expect(h.appVersions, isEmpty);
+      expect(h.problem('app_versions'), 'permission denied');
+      expect(h.newestVersionShare, isNull);
+    });
+  });
+
+  group('the news feed', () {
+    AdminHistory news({List<int> ok = const [], List<int> failed = const []}) {
+      List<Map<String, dynamic>> days(List<int> c) => [
+            for (var i = 0; i < c.length; i++) {'day': '2026-09-${(i + 1).toString().padLeft(2, '0')}', 'count': c[i]},
+          ];
+      return AdminHistory({
+        'series': {'news_ok': days(ok), 'news_failed': days(failed)},
+      });
+    }
+
+    HealthLine line(AdminHistory h) => h.health(now).firstWhere((l) => l.label == 'News feed');
+
+    test('is told by how much of it failed this week, once there is enough of it to say', () {
+      expect(line(news(ok: [90], failed: [5])).level, HealthLevel.good);
+      expect(line(news(ok: [60], failed: [30])).level, HealthLevel.warn);
+      expect(line(news(ok: [10], failed: [40])).level, HealthLevel.bad);
+      expect(line(news(ok: [3], failed: [4])).level, HealthLevel.good, reason: 'seven requests say nothing');
+      expect(line(news()).detail, 'No request in the last 7 days');
+      expect(line(news(ok: [90], failed: [5])).detail, '5 of 95 requests failed in the last 7 days');
+    });
+
+    test('counts the last seven days only', () {
+      final old = [for (var i = 0; i < 20; i++) 100];
+      final h = news(ok: [...old, 50, 50, 50, 50, 50, 50, 50], failed: [...old.map((_) => 900), 0, 0, 0, 0, 0, 0, 0]);
+      expect(line(h).level, HealthLevel.good, reason: 'the failures were weeks ago');
     });
   });
 }
