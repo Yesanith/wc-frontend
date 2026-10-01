@@ -680,8 +680,10 @@ void openEventTests() {
       expect(line(official(configured: false), 'Server').detail, contains('/official setup'));
       expect(line(official(requested: true), 'Server').detail, contains('Being set up'));
       expect(line(official(na: false), 'Server').detail, contains('not completely'));
-      expect(line(official(kinds: 7), 'Server').detail, contains('not completely'), reason: 'a kind without its channel');
-      expect(line(official(activeCategory: false), 'Server').detail, contains('not completely'), reason: 'no category for the events going on');
+      expect(line(official(kinds: 7), 'Server').detail, contains('not completely'),
+          reason: 'a kind without its channel');
+      expect(line(official(activeCategory: false), 'Server').detail, contains('not completely'),
+          reason: 'no category for the events going on');
       expect(line(official(), 'Events going on').detail, '2 with channels open');
       expect(line(official(), 'Server').level, HealthLevel.good);
       expect(official().complete, isTrue);
