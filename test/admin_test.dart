@@ -492,12 +492,24 @@ void versionTests() {
       ]);
       expect(h.newestVersionShare, closeTo(0.4, 0.0001), reason: '40 of 100 opens');
       expect(opens([]).newestVersionShare, isNull);
-      expect(opens([['android', '0.80.0', 0, 5]]).newestVersionShare, isNull, reason: 'none this week');
-      expect(opens([['android', 'other', 4, 4]]).newestVersionShare, 0.0, reason: 'only what is not a number, so none of the newest');
+      expect(
+          opens([
+            ['android', '0.80.0', 0, 5]
+          ]).newestVersionShare,
+          isNull,
+          reason: 'none this week');
+      expect(
+          opens([
+            ['android', 'other', 4, 4]
+          ]).newestVersionShare,
+          0.0,
+          reason: 'only what is not a number, so none of the newest');
     });
 
     test('survive an answer that is not a list', () {
-      const h = AdminHistory({'app_versions': {'error': 'permission denied'}});
+      const h = AdminHistory({
+        'app_versions': {'error': 'permission denied'}
+      });
       expect(h.appVersions, isEmpty);
       expect(h.problem('app_versions'), 'permission denied');
       expect(h.newestVersionShare, isNull);

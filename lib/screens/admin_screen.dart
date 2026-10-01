@@ -1140,7 +1140,8 @@ class _Versions extends StatelessWidget {
     final rows = history.appVersions.where((v) => v.week > 0).toList();
     if (rows.isEmpty) {
       return const Panel(
-        child: Text('No version has been opened since the counting began, a version is counted when the app is opened by a signed in player.',
+        child: Text(
+            'No version has been opened since the counting began, a version is counted when the app is opened by a signed in player.',
             style: TextStyle(color: AppColors.muted, height: 1.4)),
       );
     }
@@ -1161,17 +1162,22 @@ class _Versions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  SizedBox(width: 70, child: Text(v.platform, style: const TextStyle(fontSize: 12, color: AppColors.muted))),
-                  SizedBox(width: 70, child: Text(v.version, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
+                  SizedBox(
+                      width: 70, child: Text(v.platform, style: const TextStyle(fontSize: 12, color: AppColors.muted))),
+                  SizedBox(
+                      width: 70,
+                      child: Text(v.version, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
-                      child: LinearProgressIndicator(value: v.week / total, minHeight: 6, color: AppColors.gold, backgroundColor: AppColors.track),
+                      child: LinearProgressIndicator(
+                          value: v.week / total, minHeight: 6, color: AppColors.gold, backgroundColor: AppColors.track),
                     ),
                   ),
                   SizedBox(
                     width: 52,
-                    child: Text(fmtInt(v.week), textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    child: Text(fmtInt(v.week),
+                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ),
                 ],
               ),

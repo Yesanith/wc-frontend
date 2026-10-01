@@ -344,7 +344,12 @@ class AdminHistory {
   List<({String platform, String version, int week, int month})> get appVersions {
     final rows = [
       for (final v in list('app_versions'))
-        (platform: '${v['platform']}', version: '${v['version']}', week: asInt(v['opens_7d']), month: asInt(v['opens_30d'])),
+        (
+          platform: '${v['platform']}',
+          version: '${v['version']}',
+          week: asInt(v['opens_7d']),
+          month: asInt(v['opens_30d'])
+        ),
     ]..sort((a, b) {
         final byVersion = compareVersions(b.version, a.version);
         return byVersion != 0 ? byVersion : b.week.compareTo(a.week);
@@ -433,7 +438,11 @@ class AdminHistory {
       lines.add(HealthLine('News feed', '$newsFailed of $newsAttempts requests failed in the last 7 days',
           share > 0.5 ? HealthLevel.bad : (share > 0.25 ? HealthLevel.warn : HealthLevel.good)));
     } else {
-      lines.add(HealthLine('News feed', newsAttempts == 0 ? 'No request in the last 7 days' : '$newsFailed of $newsAttempts requests failed in the last 7 days',
+      lines.add(HealthLine(
+          'News feed',
+          newsAttempts == 0
+              ? 'No request in the last 7 days'
+              : '$newsFailed of $newsAttempts requests failed in the last 7 days',
           HealthLevel.good));
     }
 
