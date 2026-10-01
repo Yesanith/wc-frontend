@@ -1222,7 +1222,9 @@ class _PublicEventsTab extends ConsumerWidget {
           primary: [
             const Eyebrow('Waiting for a look'),
             if (o.reports.isEmpty)
-              const Panel(child: Text('No event was reported, or all that were have been looked at.', style: TextStyle(color: AppColors.muted)))
+              const Panel(
+                  child: Text('No event was reported, or all that were have been looked at.',
+                      style: TextStyle(color: AppColors.muted)))
             else
               for (final e in o.reports) ...[
                 _EventCard(e, context: context, ref: ref, reported: true),
@@ -1280,7 +1282,9 @@ class _EventCard extends StatelessWidget {
           content: Text(ask),
           actions: [
             TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
-            TextButton(onPressed: () => Navigator.pop(c, true), child: Text(yes, style: const TextStyle(color: AppColors.red))),
+            TextButton(
+                onPressed: () => Navigator.pop(c, true),
+                child: Text(yes, style: const TextStyle(color: AppColors.red))),
           ],
         ),
       );
@@ -1317,7 +1321,9 @@ class _EventCard extends StatelessWidget {
             children: [
               Expanded(child: Text('${event['title']}', style: const TextStyle(fontWeight: FontWeight.w700))),
               if (hidden) const Text('hidden', style: TextStyle(fontSize: 11, color: AppColors.amber)),
-              if (reported) Text('${asInt(event['reports'])} reports', style: const TextStyle(fontSize: 12, color: AppColors.amber)),
+              if (reported)
+                Text('${asInt(event['reports'])} reports',
+                    style: const TextStyle(fontSize: 12, color: AppColors.amber)),
             ],
           ),
           const SizedBox(height: 2),
@@ -1325,7 +1331,8 @@ class _EventCard extends StatelessWidget {
           if (event['reason'] != null)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text('hidden because: ${event['reason']}', style: const TextStyle(fontSize: 12, color: AppColors.amber)),
+              child: Text('hidden because: ${event['reason']}',
+                  style: const TextStyle(fontSize: 12, color: AppColors.amber)),
             ),
           if (reasons.isNotEmpty)
             Padding(
@@ -1335,7 +1342,9 @@ class _EventCard extends StatelessWidget {
           for (final n in notes)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text('"$n"', style: const TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
+              child: Text('"$n"',
+                  style:
+                      const TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
             ),
           const SizedBox(height: 4),
           Wrap(
@@ -1347,7 +1356,8 @@ class _EventCard extends StatelessWidget {
               _Action(
                 'Ban organizer',
                 () => _act('ban_creator',
-                    ask: 'Keep the organizer from making public events? Their events that are to come are hidden too.', yes: 'Ban'),
+                    ask: 'Keep the organizer from making public events? Their events that are to come are hidden too.',
+                    yes: 'Ban'),
                 danger: true,
               ),
             ],
