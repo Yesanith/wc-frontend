@@ -111,7 +111,7 @@
  },
  "privacy": {
   "title": "Gizlilik politikası",
-  "updated": "Son güncelleme 30 Eylül 2026",
+  "updated": "Son güncelleme 1 Ekim 2026",
   "blocks": [
    "Tyria Codex resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam ve analiz aracı içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
@@ -124,14 +124,25 @@
     "<strong>Bir loncanın lideriysen:</strong> aynı 10 dakikalık tokenla sunucularımız oyunun yalnızca lidere gösterdiği verileri de okur ve lonca için saklar: seviyesi, günün mesajı, üye sayısı, her üyenin hesap adı, rütbesi ve katılma tarihiyle üye listesi, rütbeler ve her rütbenin yapabilecekleri, hazine, depo, lonca deposu, kimin ne yaptığını gösteren günlük, yapılmış yükseltmeler ve PvP takımları. Üye listesi, oyunun listelediği gibi Tyria Companion kullanmayan kişileri de içerir. Bu, uygulaman her açıldığında, en fazla yarım saatte bir yapılır.",
     "<strong>Lonca etkinlikleri:</strong> oluşturduğun (haftalık olanlar dahil) etkinlikler, katılımların, rolün, sınıfın ve sunduğun diğer roller, seçtiğin GW2 hesabı, etkinliğin açık olduğu Discord rolleri ve üyelerin eklediği Arcdps rapor bağlantıları (dps.report) ile dps.report'un onlar için verdiği boss, sonuç, oyuncu sayısı ve süre.",
     "<strong>Bildirimler:</strong> izin verirsen cihazının bildirim token'ı ve uygulama dili.",
-    "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber, günlük başarım ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz."
+    "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber, günlük başarım ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
+    "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır."
    ],
    "Kimler görür",
    [
     "Loncalarındaki Tyria Companion kullanıcıları GW2 hesap adını, rütbeni ve loncanın etkinliklerine katılımını görür.",
     "Liderin uygulamasının getirdiği lonca verilerini de lider seçtiği kadarıyla görür: lider her bölümü gizleyebilir, kimin ne aldığını gösteren hazine, depo ve günlük, lider seçimlere bakıp onaylayana kadar gizli kalır. Lider her zaman her şeyi görür.",
     "Loncan bir Discord sunucusu bağladıysa o kanaldaki herkes etkinlik mesajlarını katılımcı adlarıyla görür.",
-    "Loncaların dışındaki kimse bunları göremez. Tyria Companion kullanmayan kişiler, aynı loncada olmayan kimseye gösterilmez."
+    "Loncaların dışındaki kimse bunları göremez. Tyria Companion kullanmayan kişiler, aynı loncada olmayan kimseye gösterilmez.",
+    "Giriş yapmış her oyuncu herkese açık etkinlikleri, organizatörlerinin Guild Wars 2 hesap adıyla birlikte görür. Bir etkinliğe kimlerin katıldığını yalnızca o etkinliğin organizatörü görür. Aşağıdaki “Herkese açık etkinlikler” bölümüne bak."
+   ],
+   "Herkese açık etkinlikler",
+   [
+    "Giriş yapmış her oyuncu herkese açık bir etkinlik oluşturabilir. Hiçbir loncaya ait değildir: başlığı, açıklaması, zamanı, türü ve dili, organizatör olarak Guild Wars 2 hesap adınla birlikte giriş yapmış her oyuncuya gösterilir. Oluşturmak için bağlı bir Guild Wars 2 hesabın olmalı.",
+    "Herkese açık bir etkinliğe katıldığında Guild Wars 2 hesap adını ve cevabını yalnızca organizatörü görür. Diğer herkes yalnızca kaç kişinin katılacağını görür.",
+    "Giriş yapmış her oyuncu, herkese açık bir etkinliği bir neden ve en fazla 300 karakterlik bir notla şikâyet edebilir. Şikâyetleri kimin gönderdiğiyle birlikte saklarız, bir yönetici okur ve organizatöre kimin şikâyet ettiği söylenmez. Üç şikâyet, bir yönetici bakana kadar etkinliği gizler.",
+    "Bir yönetici herkese açık bir etkinliği gizleyebilir veya silebilir ve bir organizatörün daha fazla etkinlik oluşturmasını engelleyebilir; bunun kaydını tutarız.",
+    "Düzeni korumak için aynı anda beş yaklaşan herkese açık etkinliğin olabilir, günde on tane oluşturabilir ve en fazla üç ay sonrasına kurabilirsin. Bunu uygulamak için oluşturduklarının sayısını iki gün saklarız.",
+    "Hesabını silmek, oluşturduğun herkese açık etkinlikleri, başkalarının herkese açık etkinliklerine yaptığın katılımları ve gönderdiğin şikâyetleri siler; bir organizatörün daha fazla etkinlik oluşturmasını engelleyen kayıt da hesapla birlikte gider."
    ],
    "Kullanılan hizmetler",
    [
@@ -148,7 +159,8 @@
     "Hesap verilerin hesabını silene kadar tutulur.",
     "Lonca bir kişiye ait değildir, o yüzden hesap silmek loncayı silmez, ama liderin uygulamasının getirdiği veriler liderden uzun yaşamamalı: uygulamayı kullanan son lider ayrılınca seviye, günün mesajı, sayılar, üye listesi, rütbeler, hazine, depo, günlük ve liderin seçimleri silinir; son üye ayrılınca lonca Discord bağlantısıyla birlikte silinir.",
     "Uygulamanın 30 gün yenilemediği lonca üyeliği geçersiz olur, 90 gün sonra silinir. Geri gelip yeniden bağlamak onu geri getirir.",
-    "Bildirim token'ı çıkış yapınca, bildirimleri kapatınca veya geçersiz olunca silinir. Bir Discord sunucusunun verileri bağlantı kesilince veya loncası silinince silinir."
+    "Bildirim token'ı çıkış yapınca, bildirimleri kapatınca veya geçersiz olunca silinir. Bir Discord sunucusunun verileri bağlantı kesilince veya loncası silinince silinir.",
+    "Herkese açık bir etkinlik, bittikten 30 gün sonra katılımları ve şikâyetleriyle birlikte silinir. Bir günde oluşturduklarının sayısı iki gün sonra silinir."
    ],
    "Hesabı silme ve haklarını kullanma",
    "Hesabını uygulamada Ayarlar → Hesabı sil ile veya uygulama olmadan <a href='delete-account.html'>hesap silme sayfasından</a> silebilirsin; profilin, GW2 bağlantıların, lonca üyeliklerin, katılımların, oluşturduğun etkinlikler ve bildirim token'ların hemen ve geri alınamaz şekilde silinir. Hakkında ne tuttuğumuzu sorabilir, düzeltilmesini isteyebilir ve kullanımına itiraz edebilirsin; Avrupa Birliği'ndeysen veri koruma kurumuna şikâyet edebilirsin. Aşağıdan yaz. Verilerini yalnızca giriş yaparak ve bağlayarak istediğin şeyi sunmak için kullanırız, işlememizin dayanağı budur.",
@@ -160,7 +172,7 @@
  },
  "terms": {
   "title": "Kullanım şartları",
-  "updated": "Son güncelleme 30 Eylül 2026",
+  "updated": "Son güncelleme 1 Ekim 2026",
   "blocks": [
    "Bu şartlar, seninle Tyria Codex'i (Android uygulaması, bu sitede tarayıcıda çalışan sürüm ve Discord botu) işleten kişi arasındadır. Kullanarak bu şartları kabul edersin. Kabul etmiyorsan kullanma.",
    "Nedir",
@@ -183,7 +195,8 @@
    [
     "İnsanları taciz etmek veya taklit etmek, spam yapmak ya da oyunun veya Discord'un kurallarını çiğnemek için kullanmak.",
     "Sana ait olmayan verilere ulaşmaya, hizmeti aşırı yüklemeye veya bozmaya ya da sınırlarını aşmaya çalışmak.",
-    "Onu kazımak, satmak veya sormadan başkaları için aynısını yapan bir şey kurmak."
+    "Onu kazımak, satmak veya sormadan başkaları için aynısını yapan bir şey kurmak.",
+    "Spam ya da reklam olan, Guild Wars 2 ile ilgisi olmayan veya insanları rahatsız eden herkese açık etkinlikler oluşturmak. Bunları gizleyebilir veya silebilir ve daha fazla oluşturmanı engelleyebiliriz."
    ],
    "İçerik ve kaldırma",
    "Oluşturduğun içerik senin kalır. Uygulama çalışırken, ulaşması gereken kişilere saklamamıza ve göstermemize izin verirsin. Bu şartları çiğneyen ya da hizmete veya başkalarına zarar veren içeriği ya da hesapları kaldırabilir, bunu yapan bir Discord sunucusunun bağlantısını kesebiliriz. Hesabını istediğin zaman silebilirsin, <a href='delete-account.html'>hesap silme sayfasına</a> bak.",
