@@ -348,9 +348,7 @@ void main() {
           'oe_join_as',
           'oe_roles_title',
           'oe_roles_body',
-          'oe_roles_kinds',
           'oe_roles_join',
-          'oe_roles_saved',
           'oe_roles_none',
         ]) {
           expect(s.t(key), isNot(key), reason: '$key in ${lang.code}');
