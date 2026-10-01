@@ -14,6 +14,7 @@ enum AppSection {
   collections,
   guilds,
   guildEvents,
+  publicEvents,
   trading,
   recipes,
   maps,
