@@ -4,6 +4,7 @@ import 'package:tyria_codex/state/community.dart';
 import 'package:tyria_codex/state/guild_events.dart';
 import 'package:tyria_codex/state/link_refresh.dart';
 import 'package:tyria_codex/state/news.dart';
+import 'package:tyria_codex/state/open_events.dart' show MyRegions;
 
 void main() {
   group('when the link is refreshed', () {
@@ -23,6 +24,17 @@ void main() {
       expect(linkRefreshDue(now.subtract(const Duration(hours: 11, minutes: 59)), now, leads: false), isFalse);
       expect(linkRefreshDue(now.subtract(const Duration(hours: 12)), now, leads: false), isTrue);
       expect(linkRefreshEvery(leads: false) < const Duration(days: 30), isTrue);
+    });
+  });
+
+  group('an account the game has not placed in a region', () {
+    test('is refreshed at once, not when the refresh is due', () {
+      const placed = (id: 'a', name: 'Leo.1', region: 'eu');
+      const unplaced = (id: 'b', name: 'Leo.2', region: null);
+      expect(regionMissing(const MyRegions(accounts: [placed])), isFalse);
+      expect(regionMissing(const MyRegions(accounts: [placed, unplaced])), isTrue);
+      expect(regionMissing(const MyRegions(accounts: [unplaced])), isTrue);
+      expect(regionMissing(const MyRegions()), isFalse, reason: 'nobody linked, nothing to refresh');
     });
   });
 
