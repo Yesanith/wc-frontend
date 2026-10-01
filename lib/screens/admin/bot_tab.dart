@@ -9,7 +9,7 @@ import '../../widgets/meters.dart';
 import 'widgets.dart';
 
 class AdminBotTab extends ConsumerWidget {
-  const AdminBotTab();
+  const AdminBotTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

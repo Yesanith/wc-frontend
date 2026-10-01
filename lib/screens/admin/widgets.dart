@@ -9,7 +9,7 @@ import '../../widgets/common.dart';
 import '../../widgets/responsive.dart';
 
 class AdminLimitBar extends StatelessWidget {
-  const AdminLimitBar(this.label, this.used, this.limit, this.usedText, this.limitText);
+  const AdminLimitBar(this.label, this.used, this.limit, this.usedText, this.limitText, {super.key});
 
   final String label;
   final int used;
@@ -57,7 +57,7 @@ class AdminLimitBar extends StatelessWidget {
 // ------------------------------------------------------------------ parts they share
 
 class AdminStatGrid extends StatelessWidget {
-  const AdminStatGrid({required this.children});
+  const AdminStatGrid({super.key, required this.children});
 
   final List<Widget> children;
 
@@ -79,7 +79,7 @@ class AdminStatGrid extends StatelessWidget {
 }
 
 class AdminStat extends StatelessWidget {
-  const AdminStat(this.label, this.value, this.note);
+  const AdminStat(this.label, this.value, this.note, {super.key});
 
   final String label;
   final String value;
@@ -108,7 +108,7 @@ class AdminStat extends StatelessWidget {
 }
 
 class AdminLine extends StatelessWidget {
-  const AdminLine(this.label, this.value, {this.valueColor, this.bold = false});
+  const AdminLine(this.label, this.value, {super.key, this.valueColor, this.bold = false});
 
   final String label;
   final String value;
@@ -136,7 +136,7 @@ class AdminLine extends StatelessWidget {
 }
 
 class AdminDot extends StatelessWidget {
-  const AdminDot(this.level);
+  const AdminDot(this.level, {super.key});
 
   final HealthLevel level;
 
@@ -152,7 +152,7 @@ class AdminDot extends StatelessWidget {
 }
 
 class AdminHealth extends StatelessWidget {
-  const AdminHealth(this.lines);
+  const AdminHealth(this.lines, {super.key});
 
   final List<HealthLine> lines;
 
@@ -188,7 +188,7 @@ class AdminHealth extends StatelessWidget {
 }
 
 class AdminBars extends StatelessWidget {
-  const AdminBars({required this.title, required this.days, this.summary});
+  const AdminBars({super.key, required this.title, required this.days, this.summary});
 
   final String title;
   final List<({String day, int count})> days;
@@ -261,7 +261,7 @@ class AdminBarsPainter extends CustomPainter {
 
 /// which versions of the app were opened this week, the newest first, each with its share
 class AdminVersions extends StatelessWidget {
-  const AdminVersions(this.history);
+  const AdminVersions(this.history, {super.key});
 
   final AdminHistory history;
 
@@ -324,7 +324,7 @@ class AdminVersions extends StatelessWidget {
 
 /// a tab of numbers: pull to refresh, a width it can be read in, and the parts in two columns where there is room
 class AdminTab extends StatelessWidget {
-  const AdminTab({required this.updated, required this.onRefresh, required this.primary, this.secondary = const []});
+  const AdminTab({super.key, required this.updated, required this.onRefresh, required this.primary, this.secondary = const []});
 
   final DateTime? updated;
   final Future<void> Function() onRefresh;
