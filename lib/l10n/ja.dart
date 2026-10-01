@@ -830,10 +830,8 @@ const jaStrings = <String, String>{
   'oe_join_as': '参加アカウント',
   'oe_roles_title': '公式Discord',
   'oe_roles_body':
-      '公式のTyria Companion Discordサーバーでは、リージョンごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールと、下で選んだ種類のイベントのロールが付与され、投稿で通知されます。',
-  'oe_roles_kinds': '通知を受け取る種類',
+      '公式のTyria Companion Discordサーバーでは、リージョンとイベントの種類ごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールが付与されます。参加登録したイベントが始まると、ボットが参加登録した人だけに見えるテキストチャンネルとボイスチャンネルを作ります。',
   'oe_roles_join': '公式Discordに参加',
-  'oe_roles_saved': '保存しました。サーバーのロールは数分以内に反映されます。',
   'oe_roles_none': '公式Discordサーバーはまだありません。',
   'oe_map_pill': 'マップ {id}',
 };

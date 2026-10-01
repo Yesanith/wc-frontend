@@ -563,7 +563,7 @@ class AdminOfficial {
 
   DateTime? get generatedAt => DateTime.tryParse('${raw['generated_at'] ?? ''}')?.toLocal();
 
-  /// a channel and a role for each region, and a role for each of the seven kinds
+  /// a role for each region, a channel for each of the eight kinds in each region, and the category of the events going on
   bool get complete {
     final channels = _part('channels');
     final roles = _part('roles');
@@ -571,7 +571,8 @@ class AdminOfficial {
         channels['na'] == true &&
         roles['eu'] == true &&
         roles['na'] == true &&
-        asInt(roles['kinds']) >= 7;
+        asInt(roles['kinds']) >= 8 &&
+        raw['active_category'] == true;
   }
 
   List<HealthLine> health() => [
@@ -591,6 +592,7 @@ class AdminOfficial {
                 'Posts', '${count('posts_waiting')} waiting, ${count('posts_failing')} failing', HealthLevel.warn)
             : HealthLine('Posts', '${count('posts_waiting')} waiting, ${count('posted_events')} events posted',
                 HealthLevel.good),
+        HealthLine('Events going on', '${count('active_events')} with channels open', HealthLevel.good),
         HealthLine(
           'Roles',
           '${count('roles_waiting')} of ${count('players_tracked')} players wait to be looked at',

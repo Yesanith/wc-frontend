@@ -869,10 +869,8 @@ const trStrings = <String, String>{
   'oe_join_as': 'Şu hesapla katıl',
   'oe_roles_title': 'Resmi Discord',
   'oe_roles_body':
-      'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü ve aşağıda seçtiğin etkinlik türlerinin rollerini alırsın, paylaşımlar bu rolleri anar.',
-  'oe_roles_kinds': 'Beni şunlardan haberdar et',
+      'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
   'oe_roles_join': 'Resmi Discord\'a katıl',
-  'oe_roles_saved': 'Kaydedildi. Sunucudaki rollerin birkaç dakika içinde güncellenir.',
   'oe_roles_none': 'Henüz resmi bir Discord sunucusu yok.',
   'oe_map_pill': 'Harita {id}',
 };

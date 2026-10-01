@@ -145,8 +145,8 @@
     "Hesabını silmek, oluşturduğun herkese açık etkinlikleri, başkalarının herkese açık etkinliklerine yaptığın katılımları ve gönderdiğin şikâyetleri siler; bir organizatörün daha fazla etkinlik oluşturmasını engelleyen kayıt da hesapla birlikte gider.",
     "Bağladığın her Guild Wars 2 hesabının bir bölgesi vardır: Avrupa veya Kuzey Amerika. Bunu, hesabı bağlarken oyunun hesabın hangi dünyada olduğunu söylemesinden okuruz ve hesabı kaldırana ya da hesabını silene kadar hesapla birlikte saklarız. Hangi herkese açık etkinlikleri oluşturabileceğini ve hangilerine katılabileceğini bu belirler.",
     "Herkese açık etkinlikler ayrıca resmi Tyria Companion Discord sunucusunda, bölgelerinin kanalında paylaşılır: başlık, açıklama, saat, tür, etiketler, kaç kişinin katılacağı ve organizatörün Guild Wars 2 hesap adı o kanaldaki herkese görünür. Kimin katıldığı asla paylaşılmaz, yalnızca kaç kişi olduğu paylaşılır. Etkinlik gizlenir ya da silinirse veya hesabını silersen paylaşım kaldırılır.",
-    "Resmi sunucudaysan bot, hesabın olan her bölgenin ve haberdar olmayı seçtiğin her etkinlik türünün rolünü sana verir. Seni girişteki Discord kullanıcı kimliğinle bulur. Seçtiğin türleri sen değiştirene ya da hesabını silene kadar saklarız, sildiğinde bot rolleri geri alır.",
-    "Katıldığın bir herkese açık etkinliğin başlamasına yarım saat kala bot, resmi sunucudaki etkinlik konusunda Discord kullanıcın olarak seni anar."
+    "Resmi sunucudaysan bot, hesabın olan her bölgenin rolünü sana verir. Seni girişteki Discord kullanıcı kimliğinle bulur ve hesabını silersen rolü geri alır.",
+    "Katıldığın bir herkese açık etkinlik başladığında bot, resmi sunucuda yalnızca organizatörün ve katılanların (geliyorum ya da belki) görebildiği bir metin ve bir ses kanalı açar ve onları Discord kullanıcıları olarak anar. Kanallar etkinlikten sonra silinir."
    ],
    "Kullanılan hizmetler",
    [
