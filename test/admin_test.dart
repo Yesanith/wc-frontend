@@ -627,7 +627,8 @@ void openEventTests() {
       bool requested = false,
       bool eu = true,
       bool na = true,
-      int kinds = 7,
+      int kinds = 8,
+      bool activeCategory = true,
       String? error,
       int failing = 0,
       int rolesWaiting = 2,
@@ -638,6 +639,8 @@ void openEventTests() {
           'setup_requested': requested,
           'channels': {'eu': eu, 'na': na},
           'roles': {'eu': eu, 'na': na, 'kinds': kinds},
+          'active_category': activeCategory,
+          'active_events': 2,
           'last_error': error,
           'posts_waiting': 3,
           'posts_failing': failing,
@@ -669,7 +672,7 @@ void openEventTests() {
       expect(o.count('posts_waiting'), 0);
       expect(o.lastError, isNull);
       expect(o.generatedAt, isNull);
-      expect(o.health().length, 4);
+      expect(o.health().length, 5);
     });
 
     test('says where the setup is: not made, being made, not whole, whole', () {
@@ -677,7 +680,9 @@ void openEventTests() {
       expect(line(official(configured: false), 'Server').detail, contains('/official setup'));
       expect(line(official(requested: true), 'Server').detail, contains('Being set up'));
       expect(line(official(na: false), 'Server').detail, contains('not completely'));
-      expect(line(official(kinds: 6), 'Server').detail, contains('not completely'), reason: 'a kind without its role');
+      expect(line(official(kinds: 7), 'Server').detail, contains('not completely'), reason: 'a kind without its channel');
+      expect(line(official(activeCategory: false), 'Server').detail, contains('not completely'), reason: 'no category for the events going on');
+      expect(line(official(), 'Events going on').detail, '2 with channels open');
       expect(line(official(), 'Server').level, HealthLevel.good);
       expect(official().complete, isTrue);
     });

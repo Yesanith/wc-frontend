@@ -379,17 +379,3 @@ final officialDiscordProvider = FutureProvider.autoDispose<OfficialDiscord>((ref
   if (j is! Map) return (configured: false, inviteUrl: null);
   return (configured: j['configured'] == true, inviteUrl: j['invite_url'] == null ? null : '${j['invite_url']}');
 });
-
-/// the kinds of event the player asked to be told of in the official server
-final openEventTypesProvider = FutureProvider.autoDispose<Set<String>>((ref) async {
-  final j = await _rpc('my_open_event_types', {});
-  return {
-    if (j is List)
-      for (final t in j)
-        if (openEventRoleKinds.contains('$t')) '$t'
-  };
-});
-
-Future<void> saveOpenEventTypes(Set<String> kinds) async {
-  await _rpc('set_open_event_types', {'p_types': kinds.toList()..sort()});
-}

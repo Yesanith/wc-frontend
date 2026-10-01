@@ -876,10 +876,8 @@ const frStrings = <String, String>{
   'oe_join_as': 'S\'inscrire en tant que',
   'oe_roles_title': 'Discord officiel',
   'oe_roles_body':
-      'Le serveur Discord officiel de Tyria Companion publie les événements publics dans un salon par région. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte, et les rôles des types d\'événements choisis ci-dessous, que les publications mentionnent.',
-  'oe_roles_kinds': 'Préviens-moi pour',
+      'Le serveur Discord officiel de Tyria Companion publie les événements publics dans un salon par région et par type d\'événement. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte. Quand un événement auquel tu t\'es inscrit commence, le bot ouvre pour lui un salon textuel et un salon vocal que seuls les inscrits voient.',
   'oe_roles_join': 'Rejoindre le Discord officiel',
-  'oe_roles_saved': 'Enregistré. Tes rôles sur le serveur suivent dans quelques minutes.',
   'oe_roles_none': 'Il n\'y a pas encore de serveur Discord officiel.',
   'oe_map_pill': 'Carte {id}',
 };

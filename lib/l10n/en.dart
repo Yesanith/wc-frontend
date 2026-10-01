@@ -871,10 +871,8 @@ const enStrings = <String, String>{
   'oe_join_as': 'Sign up as',
   'oe_roles_title': 'Official Discord',
   'oe_roles_body':
-      'The official Tyria Companion Discord server posts public events in a channel for each region. Join it with the Discord account you signed in with: you get the role of each region you have an account in, and the roles of the kinds of event you pick below, which the posts mention.',
-  'oe_roles_kinds': 'Tell me about',
+      'The official Tyria Companion Discord server posts public events in a channel for each region and kind of event. Join it with the Discord account you signed in with: you get the role of each region you have an account in. When an event you signed up for starts, the bot opens a text and a voice channel for it that only those who signed up can see.',
   'oe_roles_join': 'Join the official Discord',
-  'oe_roles_saved': 'Saved. Your roles in the server follow within a few minutes.',
   'oe_roles_none': 'There is no official Discord server yet.',
   'oe_map_pill': 'Map {id}',
 };
