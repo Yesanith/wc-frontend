@@ -265,9 +265,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             children: [
               Expanded(
                 child: FilledButton(
-                  onPressed: _busy || (e.isFull && e.myStatus != 'going')
-                      ? null
-                      : () => _join(e, 'going'),
+                  onPressed: _busy || (e.isFull && e.myStatus != 'going') ? null : () => _join(e, 'going'),
                   child: Text(e.isFull && e.myStatus != 'going'
                       ? s.t('oe_full')
                       : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
@@ -286,9 +284,10 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             TextButton(onPressed: _busy ? null : () => _act(() => leaveOpenEvent(e.id)), child: Text(s.t('oe_leave'))),
           if (!e.mine)
             Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(s.t('oe_join_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
-          ),
+              padding: const EdgeInsets.only(top: 4),
+              child:
+                  Text(s.t('oe_join_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+            ),
         ],
         if (e.mine) ...[
           Wrap(
@@ -384,8 +383,10 @@ class _Roster extends ConsumerWidget {
                                     Text(p.name),
                                     if (p.role != null || p.profession != null)
                                       Text(
-                                        [if (p.role != null) s.t('role_${p.role}'), if (p.profession != null) p.profession!]
-                                            .join(' · '),
+                                        [
+                                          if (p.role != null) s.t('role_${p.role}'),
+                                          if (p.profession != null) p.profession!
+                                        ].join(' · '),
                                         style: const TextStyle(fontSize: 12, color: AppColors.muted),
                                       ),
                                   ],

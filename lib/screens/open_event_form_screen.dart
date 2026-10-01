@@ -225,7 +225,8 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    onPressed: (_roles[key] ?? 0) >= 50 ? null : () => setState(() => _roles[key] = (_roles[key] ?? 0) + 1),
+                    onPressed:
+                        (_roles[key] ?? 0) >= 50 ? null : () => setState(() => _roles[key] = (_roles[key] ?? 0) + 1),
                     icon: const Icon(Icons.add_circle_outline, size: 20),
                   ),
                 ],
