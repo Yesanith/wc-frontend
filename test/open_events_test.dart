@@ -105,8 +105,45 @@ void main() {
         {'name': 'Cy.6', 'status': 'maybe'},
         'junk',
       ]);
-      expect(roster, [(name: 'Bo.5', status: 'going'), (name: 'Cy.6', status: 'maybe')]);
+      expect(roster, [
+        (name: 'Bo.5', status: 'going', role: null, profession: null),
+        (name: 'Cy.6', status: 'maybe', role: null, profession: null),
+      ]);
       expect(parseOpenRoster(null), isEmpty);
+    });
+
+    test('with the role and the profession each comes as', () {
+      final roster = parseOpenRoster([
+        {'name': 'Bo.5', 'status': 'going', 'role': 'healer', 'profession': 'Guardian'},
+      ]);
+      expect(roster.single.role, 'healer');
+      expect(roster.single.profession, 'Guardian');
+    });
+
+    test('an event has its composition, with how many take each role, and what the player comes as', () {
+      final e = OpenEvent.fromJson({
+        'id': 'e1',
+        'title': 'Squad',
+        'roles': [
+          {'role': 'healer', 'slots': 2, 'taken': 1},
+          {'role': 'dps', 'slots': 6, 'taken': 0},
+        ],
+        'my_role': 'healer',
+        'my_profession': 'Guardian',
+      });
+      expect(e.hasRoles, isTrue);
+      expect(e.totalSlots, 8);
+      expect(e.roles.first, (role: 'healer', slots: 2, taken: 1));
+      expect(e.myRole, 'healer');
+      expect(e.myProfession, 'Guardian');
+      expect(OpenEvent.fromJson({'id': 'e2'}).hasRoles, isFalse);
+      expect(OpenEvent.fromJson({'id': 'e2'}).myRole, isNull);
+    });
+
+    test('and what a role that cannot be had says', () {
+      for (final hint in ['role_required', 'profession_required', 'bad_profession', 'role_full', 'bad_roles']) {
+        expect(openEventErrorKey(OpenEventFailure(hint)), isNot('oe_err_generic'), reason: hint);
+      }
     });
   });
 
@@ -346,6 +383,14 @@ void main() {
           'oe_err_wrong_region',
           'oe_err_tags',
           'oe_join_as',
+          'oe_err_role_required',
+          'oe_err_profession',
+          'oe_err_role_full',
+          'oe_err_roles',
+          'oe_places_roles',
+          'oe_come_as',
+          'oe_profession_btn',
+          'oe_role_full',
           'oe_roles_title',
           'oe_roles_body',
           'oe_roles_join',

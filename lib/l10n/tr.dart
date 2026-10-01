@@ -871,6 +871,14 @@ const trStrings = <String, String>{
   'oe_roles_body':
       'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
   'oe_roles_join': 'Resmi Discord\'a katıl',
+  'oe_err_role_required': 'Etkinliğin rollerinden birini seç.',
+  'oe_err_profession': 'Hangi meslekle geldiğini seç.',
+  'oe_err_role_full': 'Bu rol dolu.',
+  'oe_err_roles': 'Etkinliğin rolleri geçerli değil.',
+  'oe_places_roles': '{n} yer, rollerin yerleri',
+  'oe_come_as': 'Şununla geliyorsun',
+  'oe_profession_btn': 'Mesleğini seç',
+  'oe_role_full': 'Dolu',
   'oe_roles_none': 'Henüz resmi bir Discord sunucusu yok.',
   'oe_map_pill': 'Harita {id}',
 };

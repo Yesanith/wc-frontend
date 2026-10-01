@@ -829,6 +829,14 @@ const zhStrings = <String, String>{
   'oe_roles_body':
       '官方 Tyria Companion Discord 服务器会在每个区域、每种活动类型的频道中发布公开活动。请用你登录时使用的 Discord 账号加入：你会获得每个你有账号的区域的身份组。当你报名的活动开始时，机器人会为它创建一个只有报名者能看到的文字频道和语音频道。',
   'oe_roles_join': '加入官方 Discord',
+  'oe_err_role_required': '请选择活动的一个职责。',
+  'oe_err_profession': '请选择你要使用的职业。',
+  'oe_err_role_full': '该职责已满。',
+  'oe_err_roles': '活动的职责无效。',
+  'oe_places_roles': '共 {n} 个名额（各职责名额之和）',
+  'oe_come_as': '你的职责',
+  'oe_profession_btn': '选择你的职业',
+  'oe_role_full': '已满',
   'oe_roles_none': '目前还没有官方 Discord 服务器。',
   'oe_map_pill': '地图 {id}',
 };
