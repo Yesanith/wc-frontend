@@ -50,6 +50,20 @@ Future<void> moderateOpenEvent(WidgetRef ref, String eventId, String action) asy
   ref.invalidate(adminOpenEventsProvider);
 }
 
+/// the official Discord server, for an administrator: whether it is set up, what waits to be posted, how the roles
+/// of the players are doing, and who is kept from making public events
+final adminOfficialProvider = FutureProvider.autoDispose<AdminOfficial>((ref) async {
+  final answer = await Supabase.instance.client.rpc('admin_official');
+  return AdminOfficial(Map<String, dynamic>.from(answer as Map));
+});
+
+/// lets somebody who was kept from making public events make them again
+Future<void> unbanOpenCreator(WidgetRef ref, String userId) async {
+  await Supabase.instance.client.rpc('admin_unban_open_creator', params: {'p_user': userId});
+  ref.invalidate(adminOfficialProvider);
+  ref.invalidate(adminOpenEventsProvider);
+}
+
 /// the limits of the free plan this backend runs on, so the usage can be told as a share of them. the plan
 /// is chosen on the Supabase dashboard, which shows the rest (traffic, storage, function calls)
 const freeDatabaseBytes = 500 * 1024 * 1024;
@@ -523,5 +537,63 @@ class AdminOpenEvents {
                 waiting >= 5 ? HealthLevel.bad : HealthLevel.warn),
         HealthLine('Hidden', '${count('hidden')} hidden, ${count('banned')} organizers kept from making more',
             HealthLevel.good),
+      ];
+}
+
+/// how the official Discord server is doing, as the database tells an administrator
+class AdminOfficial {
+  const AdminOfficial(this.raw);
+
+  final Map<String, dynamic> raw;
+
+  Map<String, dynamic> _part(String key) =>
+      raw[key] is Map ? Map<String, dynamic>.from(raw[key] as Map) : const <String, dynamic>{};
+
+  bool get configured => raw['configured'] == true;
+
+  /// an administrator asked for the setup and the sync has not made it yet
+  bool get setupRequested => raw['setup_requested'] == true;
+
+  int count(String key) => asInt(raw[key]);
+
+  String? get lastError => raw['last_error'] == null ? null : '${raw['last_error']}';
+
+  /// who is kept from making public events: user_id, name, banned_at
+  List<Map<String, dynamic>> get bans => _maps(raw['bans']);
+
+  DateTime? get generatedAt => DateTime.tryParse('${raw['generated_at'] ?? ''}')?.toLocal();
+
+  /// a channel and a role for each region, and a role for each of the seven kinds
+  bool get complete {
+    final channels = _part('channels');
+    final roles = _part('roles');
+    return channels['eu'] == true &&
+        channels['na'] == true &&
+        roles['eu'] == true &&
+        roles['na'] == true &&
+        asInt(roles['kinds']) >= 7;
+  }
+
+  List<HealthLine> health() => [
+        if (!configured)
+          const HealthLine('Server', 'Not set up. Run /official setup in the server', HealthLevel.warn)
+        else if (setupRequested)
+          const HealthLine('Server', 'Being set up, the roles and channels are made in a minute', HealthLevel.warn)
+        else if (!complete)
+          const HealthLine('Server', 'Set up, but not completely. Run /official setup again', HealthLevel.warn)
+        else
+          const HealthLine('Server', 'Set up', HealthLevel.good),
+        lastError == null
+            ? const HealthLine('Last problem', 'None recorded', HealthLevel.good)
+            : HealthLine('Last problem', lastError!, HealthLevel.bad),
+        count('posts_failing') > 0
+            ? HealthLine('Posts', '${count('posts_waiting')} waiting, ${count('posts_failing')} failing', HealthLevel.warn)
+            : HealthLine(
+                'Posts', '${count('posts_waiting')} waiting, ${count('posted_events')} events posted', HealthLevel.good),
+        HealthLine(
+          'Roles',
+          '${count('roles_waiting')} of ${count('players_tracked')} players wait to be looked at',
+          count('roles_waiting') > 50 ? HealthLevel.warn : HealthLevel.good,
+        ),
       ];
 }

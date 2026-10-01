@@ -620,4 +620,78 @@ void openEventTests() {
       expect(events(hidden: 2, banned: 1).health().last.detail, '2 hidden, 1 organizers kept from making more');
     });
   });
+
+  group('the official server', () {
+    AdminOfficial official({
+      bool configured = true,
+      bool requested = false,
+      bool eu = true,
+      bool na = true,
+      int kinds = 7,
+      String? error,
+      int failing = 0,
+      int rolesWaiting = 2,
+    }) =>
+        AdminOfficial({
+          'generated_at': '2026-10-01T12:00:00+00:00',
+          'configured': configured,
+          'setup_requested': requested,
+          'channels': {'eu': eu, 'na': na},
+          'roles': {'eu': eu, 'na': na, 'kinds': kinds},
+          'last_error': error,
+          'posts_waiting': 3,
+          'posts_failing': failing,
+          'posted_events': 12,
+          'players_tracked': 80,
+          'roles_waiting': rolesWaiting,
+          'bans': [
+            {'user_id': 'u1', 'name': 'Kai.3', 'banned_at': '2026-09-30T10:00:00+00:00'},
+          ],
+        });
+
+    HealthLine line(AdminOfficial o, String label) => o.health().firstWhere((l) => l.label == label);
+
+    test('is read: the setup, the problem, the queues and who is kept from making events', () {
+      final o = official(error: 'missing_permissions');
+      expect(o.configured, isTrue);
+      expect(o.lastError, 'missing_permissions');
+      expect(o.count('posted_events'), 12);
+      expect(o.bans.single['name'], 'Kai.3');
+      expect(o.generatedAt, isNotNull);
+      expect(official().lastError, isNull);
+    });
+
+    test('survives an answer with parts missing or of another kind', () {
+      const o = AdminOfficial({'channels': 'x', 'roles': 5, 'bans': 'none'});
+      expect(o.configured, isFalse);
+      expect(o.complete, isFalse);
+      expect(o.bans, isEmpty);
+      expect(o.count('posts_waiting'), 0);
+      expect(o.lastError, isNull);
+      expect(o.generatedAt, isNull);
+      expect(o.health().length, 4);
+    });
+
+    test('says where the setup is: not made, being made, not whole, whole', () {
+      expect(line(official(configured: false), 'Server').level, HealthLevel.warn);
+      expect(line(official(configured: false), 'Server').detail, contains('/official setup'));
+      expect(line(official(requested: true), 'Server').detail, contains('Being set up'));
+      expect(line(official(na: false), 'Server').detail, contains('not completely'));
+      expect(line(official(kinds: 6), 'Server').detail, contains('not completely'), reason: 'a kind without its role');
+      expect(line(official(), 'Server').level, HealthLevel.good);
+      expect(official().complete, isTrue);
+    });
+
+    test('says the last problem, and failing posts and roles that wait', () {
+      expect(line(official(), 'Last problem').level, HealthLevel.good);
+      expect(line(official(error: 'missing_permissions'), 'Last problem').level, HealthLevel.bad);
+      expect(line(official(error: 'missing_permissions'), 'Last problem').detail, 'missing_permissions');
+      expect(line(official(), 'Posts').level, HealthLevel.good);
+      expect(line(official(), 'Posts').detail, '3 waiting, 12 events posted');
+      expect(line(official(failing: 1), 'Posts').level, HealthLevel.warn);
+      expect(line(official(failing: 1), 'Posts').detail, '3 waiting, 1 failing');
+      expect(line(official(), 'Roles').detail, '2 of 80 players wait to be looked at');
+      expect(line(official(rolesWaiting: 51), 'Roles').level, HealthLevel.warn);
+    });
+  });
 }

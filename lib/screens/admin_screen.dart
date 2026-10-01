@@ -1203,12 +1203,59 @@ class _Versions extends StatelessWidget {
 
 // ------------------------------------------------------------------ public events
 
+/// somebody who is kept from making public events, and the way to let them make them again
+class _BanRow extends ConsumerWidget {
+  const _BanRow(this.ban);
+
+  final Map<String, dynamic> ban;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final id = '${ban['user_id']}';
+    final name = ban['name'] == null ? 'A player with no linked account' : '${ban['name']}';
+    final since = '${ban['banned_at'] ?? ''}';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Panel(
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  if (since.length >= 10)
+                    Text('since ${since.substring(0, 10)}',
+                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await unbanOpenCreator(ref, id);
+                  if (context.mounted) showToast(context, 'They may make public events again');
+                } catch (_) {
+                  if (context.mounted) showToast(context, 'That did not work');
+                }
+              },
+              child: const Text('Let them make events'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// what to do with a public event somebody reported, or that is hidden, or was made lately
 class _PublicEventsTab extends ConsumerWidget {
   const _PublicEventsTab();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // the official server is shown when it has been read, the tab does not wait for it
+    final official = ref.watch(adminOfficialProvider).valueOrNull;
     return AsyncView<AdminOpenEvents>(
       value: ref.watch(adminOpenEventsProvider),
       onRetry: () => ref.invalidate(adminOpenEventsProvider),
@@ -1217,6 +1264,7 @@ class _PublicEventsTab extends ConsumerWidget {
           updated: o.generatedAt,
           onRefresh: () async {
             ref.invalidate(adminOpenEventsProvider);
+            ref.invalidate(adminOfficialProvider);
             await ref.read(adminOpenEventsProvider.future);
           },
           primary: [
@@ -1249,6 +1297,14 @@ class _PublicEventsTab extends ConsumerWidget {
             ]),
             const SizedBox(height: 10),
             _Health(o.health()),
+            if (official != null) ...[
+              const Eyebrow('Official Discord'),
+              _Health(official.health()),
+              if (official.bans.isNotEmpty) ...[
+                const Eyebrow('Kept from making events'),
+                for (final b in official.bans) _BanRow(b),
+              ],
+            ],
             const Eyebrow('Made lately'),
             if (o.recent.isEmpty)
               const Panel(child: Text('No public event has been made yet.', style: TextStyle(color: AppColors.muted)))

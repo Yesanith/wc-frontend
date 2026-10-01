@@ -11,6 +11,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'guild_events_screen.dart' show activityIcon, eventWhen, statusColor;
+import 'open_event_roles_screen.dart';
 
 String _two(int n) => n.toString().padLeft(2, '0');
 
@@ -178,6 +179,34 @@ class _FilterBar extends ConsumerWidget {
               onChanged: (v) => set(filter.withLanguage(v)),
             ),
           ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String?>(
+              value: filter.region,
+              dropdownColor: AppColors.surface2,
+              items: [
+                DropdownMenuItem<String?>(value: null, child: Text(s.t('oe_region_all'))),
+                for (final r in const ['eu', 'na']) DropdownMenuItem<String?>(value: r, child: Text(s.t('oe_region_$r'))),
+              ],
+              onChanged: (v) => set(filter.withRegion(v)),
+            ),
+          ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<String?>(
+              value: filter.tag,
+              dropdownColor: AppColors.surface2,
+              items: [
+                DropdownMenuItem<String?>(value: null, child: Text(s.t('oe_tag_any'))),
+                for (final t in openEventTags) DropdownMenuItem<String?>(value: t, child: Text(s.t('oe_tag_$t'))),
+              ],
+              onChanged: (v) => set(filter.withTag(v)),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OpenEventRolesScreen())),
+            icon: const Icon(Icons.forum_outlined, size: 18),
+            label: Text(s.t('oe_roles_title')),
+          ),
         ],
       ),
     );
@@ -266,7 +295,9 @@ class _OpenEventCard extends ConsumerWidget {
                     if (e.cancelled) Pill(s.t('oe_cancelled'), color: AppColors.red),
                     if (e.hidden) Pill(s.t('oe_hidden'), color: AppColors.amber),
                     if (live) Pill(s.t('event_live'), color: AppColors.green),
+                    Pill(s.t('oe_region_${e.region}')),
                     Pill(_languageName(s, e.language)),
+                    for (final t in e.tags) Pill(s.t('oe_tag_$t')),
                     Pill(e.maxParticipants == null
                         ? s.t('oe_going', {'n': e.going})
                         : s.t('oe_places', {'n': e.going, 'max': e.maxParticipants})),
@@ -322,6 +353,9 @@ class _EventBody extends ConsumerStatefulWidget {
 class _EventBodyState extends ConsumerState<_EventBody> {
   bool _busy = false;
 
+  /// the account the player picked to sign up as, when they have more than one of the region of the event
+  String? _account;
+
   S get _s => ref.read(stringsProvider);
 
   void _refresh() {
@@ -329,6 +363,40 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     ref.invalidate(openEventsFeedProvider);
     ref.invalidate(myOpenEventsProvider);
     ref.invalidate(openRosterProvider(widget.event.id));
+  }
+
+  /// the accounts of the player that may take part, and what to ask for: nothing when there is no choice to make
+  List<OpenAccount> _eligible(OpenEvent e) => ref.read(myRegionsProvider).valueOrNull?.forRegion(e.region) ?? const [];
+
+  String? _chosenAccount(OpenEvent e) {
+    final eligible = _eligible(e);
+    if (eligible.length < 2) return null;
+    return eligible.any((a) => a.id == _account) ? _account : eligible.first.id;
+  }
+
+  List<Widget> _accountChooser(S s, OpenEvent e) {
+    final mine = ref.watch(myRegionsProvider).valueOrNull;
+    if (mine == null) return const [];
+    final eligible = mine.forRegion(e.region);
+    if (mine.hasAccount && eligible.isEmpty) {
+      return [
+        Text(s.t('oe_err_wrong_region'), style: const TextStyle(color: AppColors.amber, height: 1.4)),
+        const SizedBox(height: 8),
+      ];
+    }
+    if (eligible.length < 2) return const [];
+    return [
+      Kicker(s.t('oe_join_as')),
+      const SizedBox(height: 6),
+      DropdownButtonFormField<String>(
+        initialValue: eligible.any((a) => a.id == _account) ? _account : eligible.first.id,
+        dropdownColor: AppColors.surface,
+        decoration: fieldDecoration(''),
+        items: [for (final a in eligible) DropdownMenuItem(value: a.id, child: Text(a.name))],
+        onChanged: (v) => setState(() => _account = v),
+      ),
+      const SizedBox(height: 12),
+    ];
   }
 
   Future<void> _act(Future<void> Function() action, {String? done, bool leave = false}) async {
@@ -413,7 +481,10 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             if (e.hidden) Pill(s.t('oe_hidden'), color: AppColors.amber),
             if (e.isLive(DateTime.now())) Pill(s.t('event_live'), color: AppColors.green),
             Pill(s.t('activity_${e.activity}')),
+            Pill(s.t('oe_region_${e.region}')),
             Pill(_languageName(s, e.language)),
+            if (e.mapId != null) Pill(s.t('oe_map_pill', {'id': e.mapId})),
+            for (final t in e.tags) Pill(s.t('oe_tag_$t')),
             Pill(s.t('oe_going', {'n': e.going})),
             if (e.maybe > 0) Pill(s.t('oe_maybe', {'n': e.maybe})),
             if (e.maxParticipants != null) Pill(s.t('oe_places', {'n': e.going, 'max': e.maxParticipants})),
@@ -451,13 +522,14 @@ class _EventBodyState extends ConsumerState<_EventBody> {
         ],
         const SizedBox(height: 16),
         if (canSignUp) ...[
+          ..._accountChooser(s, e),
           Row(
             children: [
               Expanded(
                 child: FilledButton(
                   onPressed: _busy || (e.isFull && e.myStatus != 'going')
                       ? null
-                      : () => _act(() => joinOpenEvent(e.id, 'going')),
+                      : () => _act(() => joinOpenEvent(e.id, 'going', account: _chosenAccount(e))),
                   child: Text(e.isFull && e.myStatus != 'going'
                       ? s.t('oe_full')
                       : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
@@ -466,7 +538,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: _busy ? null : () => _act(() => joinOpenEvent(e.id, 'maybe')),
+                  onPressed: _busy ? null : () => _act(() => joinOpenEvent(e.id, 'maybe', account: _chosenAccount(e))),
                   child: Text(e.myStatus == 'maybe' ? s.t('oe_you_maybe') : s.t('oe_maybe_btn')),
                 ),
               ),
@@ -594,6 +666,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
   late final TextEditingController _title;
   late final TextEditingController _description;
   late final TextEditingController _max;
+  late final TextEditingController _map;
+  late String _region;
+  late final Set<String> _tags;
   late String _activity;
   late String _language;
   late DateTime _start;
@@ -607,6 +682,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
     _title = TextEditingController(text: e?.title ?? '');
     _description = TextEditingController(text: e?.description ?? '');
     _max = TextEditingController(text: e?.maxParticipants?.toString() ?? '');
+    _map = TextEditingController(text: e?.mapId?.toString() ?? '');
+    _region = e?.region ?? 'all';
+    _tags = Set<String>.of(e?.tags ?? const []);
     _activity = e?.activity ?? 'raid';
     _language = e?.language ?? 'any';
     // tomorrow at eight in the evening, which is when most are played
@@ -620,6 +698,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
     _title.dispose();
     _description.dispose();
     _max.dispose();
+    _map.dispose();
     super.dispose();
   }
 
@@ -656,6 +735,12 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
       showToast(context, s.t('oe_err_capacity'));
       return;
     }
+    final mapText = _map.text.trim();
+    final mapId = mapText.isEmpty ? null : int.tryParse(mapText);
+    if (mapText.isNotEmpty && (mapId == null || mapId < 1 || mapId > 100000)) {
+      showToast(context, s.t('oe_err_map'));
+      return;
+    }
     setState(() => _busy = true);
     try {
       final editing = widget.editing;
@@ -668,6 +753,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
           activity: _activity,
           language: _language,
           maxParticipants: max,
+          region: _region,
+          tags: _tags.toList()..sort(),
+          mapId: mapId,
         );
       } else {
         await updateOpenEvent(
@@ -679,6 +767,8 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
           activity: _activity,
           language: _language,
           maxParticipants: max,
+          tags: _tags.toList()..sort(),
+          mapId: mapId,
         );
       }
       if (!mounted) return;
@@ -696,6 +786,8 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final editing = widget.editing != null;
+    final mine = ref.watch(myRegionsProvider).valueOrNull;
+    final makeable = mine?.makeable ?? const ['all'];
     return Scaffold(
       appBar: AppBar(title: Text(s.t(editing ? 'oe_form_edit' : 'oe_form_create'))),
       body: ContentFrame(
@@ -722,6 +814,25 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               onChanged: (v) => setState(() => _activity = v ?? _activity),
             ),
             const SizedBox(height: 16),
+            Kicker(s.t('oe_region')),
+            const SizedBox(height: 6),
+            if (editing)
+              // what an event is for stays what it was made for: those who signed up did so with an account of it
+              Text(s.t('oe_region_$_region'), style: const TextStyle(fontWeight: FontWeight.w700))
+            else
+              DropdownButtonFormField<String>(
+                initialValue: makeable.contains(_region) ? _region : 'all',
+                dropdownColor: AppColors.surface,
+                decoration: fieldDecoration(''),
+                items: [for (final r in makeable) DropdownMenuItem(value: r, child: Text(s.t('oe_region_$r')))],
+                onChanged: (v) => setState(() => _region = v ?? _region),
+              ),
+            const SizedBox(height: 6),
+            Text(
+              mine != null && mine.hasAccount && mine.regions.isEmpty ? s.t('oe_region_unknown') : s.t('oe_region_note'),
+              style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45),
+            ),
+            const SizedBox(height: 16),
             Kicker(s.t('oe_language')),
             const SizedBox(height: 6),
             DropdownButtonFormField<String>(
@@ -732,6 +843,37 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               onChanged: (v) => setState(() => _language = v ?? _language),
             ),
             const SizedBox(height: 16),
+            Kicker(s.t('oe_tags')),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              children: [
+                for (final t in openEventTags)
+                  FilterChip(
+                    label: Text(s.t('oe_tag_$t')),
+                    selected: _tags.contains(t),
+                    onSelected: (on) => setState(() {
+                      if (!on) {
+                        _tags.remove(t);
+                      } else if (_tags.length < 3) {
+                        _tags.add(t);
+                      }
+                    }),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Kicker(s.t('oe_map')),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _map,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              maxLength: 6,
+              decoration: fieldDecoration(''),
+            ),
+            const SizedBox(height: 8),
             Kicker(s.t('event_when')),
             const SizedBox(height: 6),
             Row(
