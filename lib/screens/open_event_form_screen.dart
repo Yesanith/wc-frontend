@@ -197,7 +197,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               initialValue: _language,
               dropdownColor: AppColors.surface,
               decoration: fieldDecoration(''),
-              items: [for (final l in openEventLanguages) DropdownMenuItem(value: l, child: Text(openEventLanguageName(s, l)))],
+              items: [
+                for (final l in openEventLanguages) DropdownMenuItem(value: l, child: Text(openEventLanguageName(s, l)))
+              ],
               onChanged: (v) => setState(() => _language = v ?? _language),
             ),
             const SizedBox(height: 16),
