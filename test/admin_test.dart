@@ -31,6 +31,7 @@ AdminDashboard dash({
 
 void main() {
   serverTests();
+  historyTests();
   final now = DateTime.utc(2026, 10, 1, 12);
 
   group('what the database says', () {
@@ -261,6 +262,163 @@ void serverTests() {
           reason: 'few dead rows against many live ones');
       expect(s.health(now).where((l) => l.label == 'tiny'), isEmpty, reason: 'too few to matter');
       expect(line(s, 'News feeds').detail, '1 failing: Mistwalkers news, timeout');
+    });
+  });
+}
+
+AdminHistory history({
+  List<Map<String, dynamic>> snapshots = const [],
+  List<Map<String, dynamic>> functions = const [],
+  List<Map<String, dynamic>> keys = const [],
+  List<Map<String, dynamic>> servers = const [],
+  List<int> linksOk = const [],
+  List<int> linksFailed = const [],
+  List<int> botErrors = const [],
+  Map<String, dynamic>? broken,
+}) {
+  List<Map<String, dynamic>> days(List<int> counts) => [
+        for (var i = 0; i < counts.length; i++) {'day': '2026-09-${(i + 1).toString().padLeft(2, '0')}', 'count': counts[i]},
+      ];
+  return AdminHistory({
+    'generated_at': '2026-10-01T12:00:00+00:00',
+    'snapshots': snapshots,
+    'functions': functions,
+    'metric_keys': keys,
+    'servers': servers,
+    'series': {'links_ok': days(linksOk), 'links_failed': days(linksFailed), 'bot_errors': days(botErrors)},
+    ...?broken,
+  });
+}
+
+void historyTests() {
+  final now = DateTime.utc(2026, 10, 1, 12);
+  HealthLine line(AdminHistory h, String label) => h.health(now).firstWhere((l) => l.label == label);
+  HealthLine fn(AdminHistory h, String label) => h.functionLines(now).firstWhere((l) => l.label == label);
+
+  group('when the database will be full', () {
+    ({DateTime day, int bytes}) at(int day, int mb) => (day: DateTime(2026, 9, day), bytes: mb * 1048576);
+
+    test('is told from how it has grown, in days', () {
+      // 10 MB a day, 200 MB now, 300 to go
+      expect(projectDaysToLimit([at(1, 100), at(11, 200)], freeDatabaseBytes), 30);
+      expect(projectDaysToLimit([at(1, 100), at(11, 200)], 210 * 1048576), 1);
+    });
+
+    test('is not told from too little, or from a database that does not grow, or says it is full', () {
+      expect(projectDaysToLimit([at(1, 100)], freeDatabaseBytes), isNull);
+      expect(projectDaysToLimit([at(1, 100), at(5, 140)], freeDatabaseBytes), isNull, reason: 'under a week');
+      expect(projectDaysToLimit([at(1, 100), at(11, 100)], freeDatabaseBytes), isNull);
+      expect(projectDaysToLimit([at(1, 200), at(11, 100)], freeDatabaseBytes), isNull, reason: 'it got smaller');
+      expect(projectDaysToLimit([at(1, 400), at(11, 600)], freeDatabaseBytes), 0);
+    });
+
+    test('the last of a list', () {
+      expect(tail([1, 2, 3, 4], 2), [3, 4]);
+      expect(tail([1], 5), [1]);
+    });
+  });
+
+  group('the history', () {
+    test('is read as days, megabytes and what was counted most', () {
+      final h = history(snapshots: [
+        {'day': '2026-09-01', 'users': 10, 'db_bytes': 100 * 1048576},
+        {'day': '2026-09-12', 'users': 40, 'db_bytes': 210 * 1048576},
+      ], keys: [
+        {'name': 'discord', 'key': 'command:/event create', 'total': 12},
+        {'name': 'discord', 'key': 'command:/tyria status', 'total': 30},
+        {'name': 'discord', 'key': 'command:/ping', 'total': 2},
+        {'name': 'discord', 'key': 'component:rsvp', 'total': 99},
+        {'name': 'gw2-link', 'key': 'error:401', 'total': 4},
+      ]);
+      expect(h.snapshotSeries('users').map((d) => d.count), [10, 40]);
+      expect(h.databaseMegabytes.map((d) => d.count), [100, 210]);
+      expect(h.daysToDatabaseLimit, 29);
+      expect(h.top('discord', 'command:/').map((c) => c.key), ['tyria status', 'event create', 'ping'], reason: 'the most first, the prefix taken off');
+      expect(h.top('discord', 'command:/', limit: 2), hasLength(2));
+      expect(h.top('gw2-link', 'error:').single.key, '401');
+      expect(h.top('discord', 'nothing:'), isEmpty);
+    });
+
+    test('survives an answer with parts missing or of another kind', () {
+      const h = AdminHistory({'snapshots': 'nothing', 'series': 5});
+      expect(h.list('snapshots'), isEmpty);
+      expect(h.series('commands'), isEmpty);
+      expect(h.snapshotSeries('users'), isEmpty);
+      expect(h.daysToDatabaseLimit, isNull);
+      expect(h.generatedAt, isNull);
+    });
+  });
+
+  group('the functions', () {
+    Map<String, dynamic> f({String name = 'discord-sync', String? ok, String? err, String? why, int ms = 400, int runs = 100, int failures = 0}) => {
+          'name': name,
+          'last_run_at': '2026-10-01T11:58:00+00:00',
+          'last_ok_at': ok,
+          'last_error_at': err,
+          'last_error': why,
+          'last_duration_ms': ms,
+          'runs': runs,
+          'failures': failures,
+        };
+
+    test('one that worked is fine, and says when and how long', () {
+      final h = history(functions: [f(ok: '2026-10-01T11:58:00+00:00', failures: 3)]);
+      expect(fn(h, 'discord-sync').level, HealthLevel.good);
+      expect(fn(h, 'discord-sync').detail, 'Ran 2 min ago. 100 runs, 3 failed, last one took 0.4 s');
+    });
+
+    test('one whose last run failed is an alarm, with why, even if it worked before', () {
+      final h = history(functions: [f(ok: '2026-10-01T09:00:00+00:00', err: '2026-10-01T11:30:00+00:00', why: 'boom', failures: 1)]);
+      expect(fn(h, 'discord-sync').level, HealthLevel.bad);
+      expect(fn(h, 'discord-sync').detail, startsWith('The last run failed 30 min ago: boom.'));
+    });
+
+    test('one that failed and then worked is fine again', () {
+      final h = history(functions: [f(ok: '2026-10-01T11:58:00+00:00', err: '2026-10-01T09:00:00+00:00', why: 'boom', failures: 1)]);
+      expect(fn(h, 'discord-sync').level, HealthLevel.good);
+    });
+
+    test('one that has never worked and failed is an alarm, a slow one a warning', () {
+      expect(fn(history(functions: [f(err: '2026-10-01T11:00:00+00:00', why: 'x')]), 'discord-sync').level, HealthLevel.bad);
+      final slow = fn(history(functions: [f(ok: '2026-10-01T11:58:00+00:00', ms: 31000)]), 'discord-sync');
+      expect(slow.level, HealthLevel.warn);
+      expect(slow.detail, startsWith('Slow: the last run took 31.0 s.'));
+    });
+  });
+
+  group('what else is worth a look', () {
+    test('servers that went wrong in the last day are told, older errors are not', () {
+      final h = history(servers: [
+        {'guild': 'Null Sector', 'tag': 'NULL', 'last_error': 'missing_permissions', 'last_error_at': '2026-10-01T10:00:00+00:00'},
+        {'guild': 'Old', 'tag': 'OLD', 'last_error': 'gone', 'last_error_at': '2026-09-20T10:00:00+00:00'},
+      ]);
+      expect(line(h, 'Null Sector').level, HealthLevel.warn);
+      expect(line(h, 'Null Sector').detail, 'missing_permissions 2 h ago');
+      expect(h.health(now).where((l) => l.label == 'Old'), isEmpty);
+      expect(line(history(), 'Discord servers').level, HealthLevel.good);
+    });
+
+    test('linking is told by how much of it failed this week, once there is enough of it to say', () {
+      expect(line(history(linksOk: [20], linksFailed: [2]), 'Linking game accounts').level, HealthLevel.good);
+      expect(line(history(linksOk: [10], linksFailed: [5]), 'Linking game accounts').level, HealthLevel.warn);
+      expect(line(history(linksOk: [4], linksFailed: [9]), 'Linking game accounts').level, HealthLevel.bad);
+      expect(line(history(linksOk: [2], linksFailed: [3]), 'Linking game accounts').level, HealthLevel.good, reason: 'five tries say nothing');
+      expect(line(history(), 'Linking game accounts').detail, 'None in the last 7 days');
+    });
+
+    test('the bot calls that broke today are a warning', () {
+      expect(line(history(botErrors: [4, 0]), 'Bot calls').level, HealthLevel.good);
+      final h = history(botErrors: [0, 3]);
+      expect(line(h, 'Bot calls').level, HealthLevel.warn);
+      expect(line(h, 'Bot calls').detail, '3 database errors today that were not a refusal');
+    });
+
+    test('a part that could not be read says why', () {
+      final h = history(broken: {
+        'guilds': {'error': 'permission denied'},
+      });
+      expect(h.problem('guilds'), 'permission denied');
+      expect(line(h, 'Could not read guilds').detail, 'permission denied');
     });
   });
 }

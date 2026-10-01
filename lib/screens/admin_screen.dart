@@ -17,7 +17,7 @@ class AdminScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 4,
+      length: 7,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Backend'),
@@ -27,6 +27,7 @@ class AdminScreen extends ConsumerWidget {
               onPressed: () {
                 ref.invalidate(adminDashboardProvider);
                 ref.invalidate(adminServerProvider);
+                ref.invalidate(adminHistoryProvider);
               },
               icon: const Icon(Icons.refresh),
             ),
@@ -34,9 +35,14 @@ class AdminScreen extends ConsumerWidget {
         ),
         body: const Column(
           children: [
-            AppTabBar(scrollable: true, labels: ['Overview', 'Server', 'Activity', 'Users and limits']),
+            AppTabBar(
+              scrollable: true,
+              labels: ['Overview', 'Server', 'Activity', 'History', 'Bot', 'Guilds', 'Users and limits'],
+            ),
             Expanded(
-              child: TabBarView(children: [_OverviewTab(), _ServerTab(), _ActivityTab(), _UsersTab()]),
+              child: TabBarView(
+                children: [_OverviewTab(), _ServerTab(), _ActivityTab(), _HistoryTab(), _BotTab(), _GuildsTab(), _UsersTab()],
+              ),
             ),
           ],
         ),
@@ -739,10 +745,13 @@ class _Health extends StatelessWidget {
 }
 
 class _Bars extends StatelessWidget {
-  const _Bars({required this.title, required this.days});
+  const _Bars({required this.title, required this.days, this.summary});
 
   final String title;
   final List<({String day, int count})> days;
+
+  /// what to say in the corner: by default the sum, for numbers that are kept day by day what it is now
+  final String Function(List<int> values)? summary;
 
   @override
   Widget build(BuildContext context) {
@@ -757,7 +766,7 @@ class _Bars extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
-              Text('$total in 30 days', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text(summary?.call(values) ?? '$total in 30 days', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 12),
@@ -768,7 +777,7 @@ class _Bars extends StatelessWidget {
             children: [
               Text(days.isEmpty ? '' : short(days.first.day),
                   style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text('most in a day: $peak', style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(summary == null ? 'most in a day: $peak' : 'most: $peak', style: const TextStyle(fontSize: 11, color: AppColors.hint)),
               Text(days.isEmpty ? '' : short(days.last.day),
                   style: const TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
@@ -801,4 +810,298 @@ class _BarsPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_BarsPainter oldDelegate) => oldDelegate.values != values;
+}
+
+// ------------------------------------------------------------------ history
+
+/// the numbers of each day, kept, so that how they grow is seen
+class _HistoryTab extends ConsumerWidget {
+  const _HistoryTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AsyncView<AdminHistory>(
+      value: ref.watch(adminHistoryProvider),
+      onRetry: () => ref.invalidate(adminHistoryProvider),
+      builder: (h) {
+        List<({String day, int count})> last30(String field) => tail(h.snapshotSeries(field), 30);
+        String now(List<int> v) => v.isEmpty ? '' : 'now ${fmtInt(v.last)}';
+        final days = h.daysToDatabaseLimit;
+        final problem = h.problem('snapshots');
+        final mb = tail(h.databaseMegabytes, 30);
+        return _Tab(
+          updated: h.generatedAt,
+          onRefresh: () async {
+            ref.invalidate(adminHistoryProvider);
+            await ref.read(adminHistoryProvider.future);
+          },
+          primary: [
+            const Eyebrow('Players'),
+            if (problem != null)
+              Panel(child: Text(problem, style: const TextStyle(color: AppColors.amber)))
+            else ...[
+              _Bars(title: 'Players', days: last30('users'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Active in a day', days: last30('active_24h'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Active in a month', days: last30('active_30d'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Devices with notifications', days: last30('devices'), summary: now),
+            ],
+          ],
+          secondary: [
+            const Eyebrow('What they use'),
+            if (problem == null) ...[
+              _Bars(title: 'Game accounts', days: last30('gw2_accounts'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Guilds', days: last30('guilds'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Guilds read by a leader', days: last30('guilds_read'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Discord servers', days: last30('discord_servers'), summary: now),
+              const SizedBox(height: 10),
+              _Bars(title: 'Events to come', days: last30('events_upcoming'), summary: now),
+            ],
+            const Eyebrow('Database'),
+            if (problem == null) ...[
+              _Bars(title: 'Size in megabytes', days: mb, summary: (v) => v.isEmpty ? '' : 'now ${v.last} MB of ${freeDatabaseBytes ~/ 1048576}'),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+                child: Text(
+                  days == null
+                      ? 'Not enough days yet, or not growing, to say when it fills.'
+                      : (days == 0 ? 'It has reached the limit of the free plan.' : 'At this rate it reaches the limit of the free plan in about ${fmtInt(days)} days.'),
+                  style: TextStyle(fontSize: 12, height: 1.4, color: days != null && days < 60 ? AppColors.amber : AppColors.hint),
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ------------------------------------------------------------------ the bot
+
+class _BotTab extends ConsumerWidget {
+  const _BotTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AsyncView<AdminHistory>(
+      value: ref.watch(adminHistoryProvider),
+      onRetry: () => ref.invalidate(adminHistoryProvider),
+      builder: (h) {
+        final now = DateTime.now();
+        final used = h.top('discord', 'command:/');
+        final other = [...h.top('discord', 'component:', limit: 5), ...h.top('discord', 'modal:', limit: 3)];
+        final refused = h.top('discord', 'refused:');
+        final broken = h.top('discord', 'rpc_error:');
+        final linkErrors = h.top('gw2-link', 'error:');
+        final servers = h.list('servers');
+        return _Tab(
+          updated: h.generatedAt,
+          onRefresh: () async {
+            ref.invalidate(adminHistoryProvider);
+            await ref.read(adminHistoryProvider.future);
+          },
+          primary: [
+            const Eyebrow('Health'),
+            _Health(h.health(now)),
+            const Eyebrow('Functions'),
+            h.list('functions').isEmpty
+                ? const Panel(child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
+                : _Health(h.functionLines(now)),
+            const Eyebrow('Last 30 days'),
+            _Bars(title: 'Commands used', days: h.series('commands')),
+            const SizedBox(height: 10),
+            _Bars(title: 'Buttons and forms used', days: h.series('buttons')),
+            const SizedBox(height: 10),
+            _Bars(title: 'Bot calls that broke', days: h.series('bot_errors')),
+            const SizedBox(height: 10),
+            _Bars(title: 'Game accounts linked', days: h.series('links_ok')),
+            const SizedBox(height: 10),
+            _Bars(title: 'Linking that failed', days: h.series('links_failed')),
+          ],
+          secondary: [
+            const Eyebrow('Most used'),
+            _Counts(used, empty: 'No command has been used since the counters began.'),
+            if (other.isNotEmpty) ...[const SizedBox(height: 10), _Counts(other, empty: '')],
+            const Eyebrow('Refused'),
+            _Counts(refused, empty: 'Nothing was refused.'),
+            const Eyebrow('Broke'),
+            _Counts([...broken, ...linkErrors], empty: 'Nothing broke.'),
+            const Eyebrow('Discord servers'),
+            _ServerStatus(servers, now),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _Counts extends StatelessWidget {
+  const _Counts(this.counts, {required this.empty});
+
+  final List<({String key, int total})> counts;
+  final String empty;
+
+  @override
+  Widget build(BuildContext context) {
+    if (counts.isEmpty) return Panel(child: Text(empty, style: const TextStyle(color: AppColors.muted)));
+    return Panel(
+      child: Column(children: [for (final c in counts) _Line(c.key, fmtInt(c.total))]),
+    );
+  }
+}
+
+class _ServerStatus extends StatelessWidget {
+  const _ServerStatus(this.servers, this.now);
+
+  final List<Map<String, dynamic>> servers;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    if (servers.isEmpty) return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
+    return Panel(
+      child: Column(
+        children: [
+          for (final s in servers)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      _Dot(s['last_error'] == null ? HealthLevel.good : HealthLevel.warn),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text('${s['guild']}${'${s['tag'] ?? ''}'.isEmpty ? '' : ' [${s['tag']}]'}',
+                            style: const TextStyle(fontWeight: FontWeight.w700)),
+                      ),
+                      Text(
+                        DateTime.tryParse('${s['roles_synced_at'] ?? ''}') == null
+                            ? 'roles: never'
+                            : 'roles ${ago(DateTime.parse('${s['roles_synced_at']}'), now)}',
+                        style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                      ),
+                    ],
+                  ),
+                  if (s['last_error'] != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 19, top: 2),
+                      child: Text(
+                        '${s['last_error']}${DateTime.tryParse('${s['last_error_at'] ?? ''}') == null ? '' : ' · ${ago(DateTime.parse('${s['last_error_at']}'), now)}'}',
+                        style: const TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ------------------------------------------------------------------ guilds
+
+class _GuildsTab extends ConsumerWidget {
+  const _GuildsTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AsyncView<AdminHistory>(
+      value: ref.watch(adminHistoryProvider),
+      onRetry: () => ref.invalidate(adminHistoryProvider),
+      builder: (h) {
+        final guilds = h.list('guilds');
+        final now = DateTime.now();
+        final read = guilds.where((g) => g['leader_read_at'] != null).length;
+        final discord = guilds.where((g) => g['discord'] == true).length;
+        final active = guilds.where((g) => asInt(g['events_30d']) > 0).length;
+        return _Tab(
+          updated: h.generatedAt,
+          onRefresh: () async {
+            ref.invalidate(adminHistoryProvider);
+            await ref.read(adminHistoryProvider.future);
+          },
+          primary: [
+            const Eyebrow('Guilds'),
+            _StatGrid(children: [
+              _Stat('Guilds', fmtInt(guilds.length), 'that use the app'),
+              _Stat('Read by a leader', fmtInt(read), 'the leader has opened the app'),
+              _Stat('With Discord', fmtInt(discord), 'a server is connected'),
+              _Stat('Made events', fmtInt(active), 'in the last 30 days'),
+            ]),
+            const SizedBox(height: 10),
+            if (h.problem('guilds') != null)
+              Panel(child: Text(h.problem('guilds')!, style: const TextStyle(color: AppColors.amber)))
+            else
+              _GuildList(guilds, now),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _GuildList extends StatelessWidget {
+  const _GuildList(this.guilds, this.now);
+
+  final List<Map<String, dynamic>> guilds;
+  final DateTime now;
+
+  @override
+  Widget build(BuildContext context) {
+    if (guilds.isEmpty) return const Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
+    return Panel(
+      child: Column(
+        children: [
+          for (final g in guilds)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 7),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${g['name']}${'${g['tag'] ?? ''}'.isEmpty ? '' : ' [${g['tag']}]'}',
+                            style: const TextStyle(fontWeight: FontWeight.w700)),
+                        Text(
+                          [
+                            '${g['members']} in the app${g['members_in_game'] == null ? '' : ' of ${g['members_in_game']}'}',
+                            if (g['level'] != null) 'level ${g['level']}',
+                            if (DateTime.tryParse('${g['leader_read_at'] ?? ''}') != null)
+                              'read ${ago(DateTime.parse('${g['leader_read_at']}'), now)}'
+                            else
+                              'not read by a leader',
+                          ].join(' · '),
+                          style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('${asInt(g['events'])} events', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                      Text(
+                        '${asInt(g['events_30d'])} in 30 d${g['discord'] == true ? ' · Discord' : ''}',
+                        style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

@@ -29,6 +29,12 @@ final adminServerProvider = FutureProvider.autoDispose<AdminServer>((ref) async 
   return AdminServer(Map<String, dynamic>.from(answer as Map));
 });
 
+/// the history of the backend: the daily numbers, the status of the functions, the counters, every guild and server
+final adminHistoryProvider = FutureProvider.autoDispose<AdminHistory>((ref) async {
+  final answer = await Supabase.instance.client.rpc('admin_history');
+  return AdminHistory(Map<String, dynamic>.from(answer as Map));
+});
+
 /// the limits of the free plan this backend runs on, so the usage can be told as a share of them. the plan
 /// is chosen on the Supabase dashboard, which shows the rest (traffic, storage, function calls)
 const freeDatabaseBytes = 500 * 1024 * 1024;
@@ -261,6 +267,139 @@ class AdminServer {
       'queues',
       'cron_history'
     ]) {
+      final why = problem(name);
+      if (why != null) lines.add(HealthLine('Could not read $name', why, HealthLevel.warn));
+    }
+    return lines;
+  }
+}
+
+/// how many days until the database reaches [limit] if it keeps growing as it has since the first day given. null
+/// when there is too little to go on (under a week) or it is not growing
+int? projectDaysToLimit(List<({DateTime day, int bytes})> points, int limit) {
+  if (points.length < 2) return null;
+  final first = points.first;
+  final last = points.last;
+  final span = last.day.difference(first.day).inDays;
+  if (span < 7) return null;
+  final perDay = (last.bytes - first.bytes) / span;
+  if (perDay <= 0) return null;
+  final left = limit - last.bytes;
+  if (left <= 0) return 0;
+  return (left / perDay).ceil();
+}
+
+/// the last [n] of a list
+List<T> tail<T>(List<T> list, int n) => list.length <= n ? list : list.sublist(list.length - n);
+
+/// how the backend has done: the numbers of each day, what each function did, what was counted, every guild and
+/// every Discord server
+class AdminHistory {
+  const AdminHistory(this.raw);
+
+  final Map<String, dynamic> raw;
+
+  List<Map<String, dynamic>> list(String name) => _maps(raw[name]);
+
+  /// why a part could not be read, null when it could
+  String? problem(String name) {
+    final v = raw[name];
+    return v is Map && v['error'] != null ? '${v['error']}' : null;
+  }
+
+  DateTime? get generatedAt => DateTime.tryParse('${raw['generated_at'] ?? ''}')?.toLocal();
+
+  /// the counters of each of the last thirty days: commands, buttons, bot_errors, links_ok, links_failed, runs_failed
+  List<({String day, int count})> series(String name) {
+    final v = raw['series'];
+    return v is Map ? _days(v[name]) : const [];
+  }
+
+  /// a number of the daily snapshots, by day, oldest first
+  List<({String day, int count})> snapshotSeries(String field) =>
+      [for (final s in list('snapshots')) (day: '${s['day']}', count: asInt(s[field]))];
+
+  /// the size of the database in megabytes, by day
+  List<({String day, int count})> get databaseMegabytes =>
+      [for (final s in list('snapshots')) (day: '${s['day']}', count: (asInt(s['db_bytes']) / 1048576).round())];
+
+  int? get daysToDatabaseLimit => projectDaysToLimit([
+        for (final s in list('snapshots'))
+          if (DateTime.tryParse('${s['day']}') != null) (day: DateTime.parse('${s['day']}'), bytes: asInt(s['db_bytes'])),
+      ], freeDatabaseBytes);
+
+  /// the most counted of a function whose key begins with [prefix], with the prefix taken off
+  List<({String key, int total})> top(String name, String prefix, {int limit = 8}) {
+    final rows = [
+      for (final k in list('metric_keys'))
+        if (k['name'] == name && '${k['key']}'.startsWith(prefix)) (key: '${k['key']}'.substring(prefix.length), total: asInt(k['total'])),
+    ]..sort((a, b) => b.total.compareTo(a.total));
+    return rows.take(limit).toList();
+  }
+
+  int _sum(List<({String day, int count})> days) => days.fold<int>(0, (a, d) => a + d.count);
+
+  /// each function that has run, whether its last run worked and how long it took
+  List<HealthLine> functionLines(DateTime now) {
+    final lines = <HealthLine>[];
+    for (final f in list('functions')) {
+      final name = '${f['name']}';
+      final ranAt = DateTime.tryParse('${f['last_run_at'] ?? ''}');
+      final okAt = DateTime.tryParse('${f['last_ok_at'] ?? ''}');
+      final errorAt = DateTime.tryParse('${f['last_error_at'] ?? ''}');
+      final runs = asInt(f['runs']);
+      final failures = asInt(f['failures']);
+      final ms = asInt(f['last_duration_ms']);
+      final summary = '$runs runs, $failures failed${ms > 0 ? ', last one took ${(ms / 1000).toStringAsFixed(1)} s' : ''}';
+      if (errorAt != null && (okAt == null || errorAt.isAfter(okAt))) {
+        final why = '${f['last_error'] ?? ''}'.trim();
+        lines.add(HealthLine(name, 'The last run failed ${ago(errorAt, now)}${why.isEmpty ? '' : ': $why'}. $summary', HealthLevel.bad));
+      } else if (ms >= 20000) {
+        lines.add(HealthLine(name, 'Slow: the last run took ${(ms / 1000).toStringAsFixed(1)} s. $summary', HealthLevel.warn));
+      } else {
+        lines.add(HealthLine(name, '${ranAt == null ? 'No run yet' : 'Ran ${ago(ranAt, now)}'}. $summary', HealthLevel.good));
+      }
+    }
+    return lines;
+  }
+
+  /// what else is worth a look: a server that went wrong, linking that fails, the bot's calls that broke
+  List<HealthLine> health(DateTime now) {
+    final lines = <HealthLine>[];
+
+    final recent = [
+      for (final s in list('servers'))
+        if (s['last_error'] != null && (DateTime.tryParse('${s['last_error_at'] ?? ''}')?.isAfter(now.subtract(const Duration(days: 1))) ?? false)) s,
+    ];
+    if (recent.isEmpty) {
+      lines.add(const HealthLine('Discord servers', 'None had an error in the last day', HealthLevel.good));
+    } else {
+      for (final s in recent) {
+        lines.add(HealthLine('${s['guild']}', '${s['last_error']} ${ago(DateTime.parse('${s['last_error_at']}'), now)}', HealthLevel.warn));
+      }
+    }
+
+    final linksOk = _sum(tail(series('links_ok'), 7));
+    final linksFailed = _sum(tail(series('links_failed'), 7));
+    final attempts = linksOk + linksFailed;
+    if (attempts >= 10) {
+      final share = linksFailed / attempts;
+      lines.add(HealthLine('Linking game accounts', '$linksFailed of $attempts failed in the last 7 days',
+          share > 0.5 ? HealthLevel.bad : (share > 0.25 ? HealthLevel.warn : HealthLevel.good)));
+    } else {
+      lines.add(HealthLine('Linking game accounts', attempts == 0 ? 'None in the last 7 days' : '$linksFailed of $attempts failed in the last 7 days',
+          HealthLevel.good));
+    }
+
+    final today = series('bot_errors').isEmpty ? 0 : series('bot_errors').last.count;
+    lines.add(today == 0
+        ? const HealthLine('Bot calls', 'No database error today', HealthLevel.good)
+        : HealthLine('Bot calls', '$today database errors today that were not a refusal', HealthLevel.warn));
+
+    final broken = [for (final f in list('functions')) if (asInt(f['failures']) > 0 && f['last_error'] == null) f];
+    if (broken.isNotEmpty) lines.add(HealthLine('Functions', '${broken.length} failed without saying why', HealthLevel.warn));
+
+    for (final name in const ['snapshots', 'functions', 'metric_keys', 'series', 'guilds', 'servers']) {
       final why = problem(name);
       if (why != null) lines.add(HealthLine('Could not read $name', why, HealthLevel.warn));
     }
