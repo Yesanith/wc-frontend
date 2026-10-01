@@ -10,7 +10,7 @@ import 'widgets.dart';
 
 /// the numbers of each day, kept, so that how they grow is seen
 class AdminHistoryTab extends ConsumerWidget {
-  const AdminHistoryTab();
+  const AdminHistoryTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

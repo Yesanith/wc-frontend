@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../l10n/strings.dart';
 
 String pad2(int n) => n.toString().padLeft(2, '0');

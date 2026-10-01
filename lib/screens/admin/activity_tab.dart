@@ -8,7 +8,7 @@ import '../../widgets/meters.dart';
 import 'widgets.dart';
 
 class AdminActivityTab extends ConsumerWidget {
-  const AdminActivityTab();
+  const AdminActivityTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

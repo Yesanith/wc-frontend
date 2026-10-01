@@ -55,7 +55,7 @@ class _BanRow extends ConsumerWidget {
 
 /// what to do with a public event somebody reported, or that is hidden, or was made lately
 class AdminPublicEventsTab extends ConsumerWidget {
-  const AdminPublicEventsTab();
+  const AdminPublicEventsTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
