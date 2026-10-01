@@ -277,7 +277,8 @@ AdminHistory history({
   Map<String, dynamic>? broken,
 }) {
   List<Map<String, dynamic>> days(List<int> counts) => [
-        for (var i = 0; i < counts.length; i++) {'day': '2026-09-${(i + 1).toString().padLeft(2, '0')}', 'count': counts[i]},
+        for (var i = 0; i < counts.length; i++)
+          {'day': '2026-09-${(i + 1).toString().padLeft(2, '0')}', 'count': counts[i]},
       ];
   return AdminHistory({
     'generated_at': '2026-10-01T12:00:00+00:00',
@@ -333,7 +334,8 @@ void historyTests() {
       expect(h.snapshotSeries('users').map((d) => d.count), [10, 40]);
       expect(h.databaseMegabytes.map((d) => d.count), [100, 210]);
       expect(h.daysToDatabaseLimit, 29);
-      expect(h.top('discord', 'command:/').map((c) => c.key), ['tyria status', 'event create', 'ping'], reason: 'the most first, the prefix taken off');
+      expect(h.top('discord', 'command:/').map((c) => c.key), ['tyria status', 'event create', 'ping'],
+          reason: 'the most first, the prefix taken off');
       expect(h.top('discord', 'command:/', limit: 2), hasLength(2));
       expect(h.top('gw2-link', 'error:').single.key, '401');
       expect(h.top('discord', 'nothing:'), isEmpty);
@@ -350,7 +352,15 @@ void historyTests() {
   });
 
   group('the functions', () {
-    Map<String, dynamic> f({String name = 'discord-sync', String? ok, String? err, String? why, int ms = 400, int runs = 100, int failures = 0}) => {
+    Map<String, dynamic> f(
+            {String name = 'discord-sync',
+            String? ok,
+            String? err,
+            String? why,
+            int ms = 400,
+            int runs = 100,
+            int failures = 0}) =>
+        {
           'name': name,
           'last_run_at': '2026-10-01T11:58:00+00:00',
           'last_ok_at': ok,
@@ -368,18 +378,21 @@ void historyTests() {
     });
 
     test('one whose last run failed is an alarm, with why, even if it worked before', () {
-      final h = history(functions: [f(ok: '2026-10-01T09:00:00+00:00', err: '2026-10-01T11:30:00+00:00', why: 'boom', failures: 1)]);
+      final h = history(
+          functions: [f(ok: '2026-10-01T09:00:00+00:00', err: '2026-10-01T11:30:00+00:00', why: 'boom', failures: 1)]);
       expect(fn(h, 'discord-sync').level, HealthLevel.bad);
       expect(fn(h, 'discord-sync').detail, startsWith('The last run failed 30 min ago: boom.'));
     });
 
     test('one that failed and then worked is fine again', () {
-      final h = history(functions: [f(ok: '2026-10-01T11:58:00+00:00', err: '2026-10-01T09:00:00+00:00', why: 'boom', failures: 1)]);
+      final h = history(
+          functions: [f(ok: '2026-10-01T11:58:00+00:00', err: '2026-10-01T09:00:00+00:00', why: 'boom', failures: 1)]);
       expect(fn(h, 'discord-sync').level, HealthLevel.good);
     });
 
     test('one that has never worked and failed is an alarm, a slow one a warning', () {
-      expect(fn(history(functions: [f(err: '2026-10-01T11:00:00+00:00', why: 'x')]), 'discord-sync').level, HealthLevel.bad);
+      expect(fn(history(functions: [f(err: '2026-10-01T11:00:00+00:00', why: 'x')]), 'discord-sync').level,
+          HealthLevel.bad);
       final slow = fn(history(functions: [f(ok: '2026-10-01T11:58:00+00:00', ms: 31000)]), 'discord-sync');
       expect(slow.level, HealthLevel.warn);
       expect(slow.detail, startsWith('Slow: the last run took 31.0 s.'));
@@ -389,7 +402,12 @@ void historyTests() {
   group('what else is worth a look', () {
     test('servers that went wrong in the last day are told, older errors are not', () {
       final h = history(servers: [
-        {'guild': 'Null Sector', 'tag': 'NULL', 'last_error': 'missing_permissions', 'last_error_at': '2026-10-01T10:00:00+00:00'},
+        {
+          'guild': 'Null Sector',
+          'tag': 'NULL',
+          'last_error': 'missing_permissions',
+          'last_error_at': '2026-10-01T10:00:00+00:00'
+        },
         {'guild': 'Old', 'tag': 'OLD', 'last_error': 'gone', 'last_error_at': '2026-09-20T10:00:00+00:00'},
       ]);
       expect(line(h, 'Null Sector').level, HealthLevel.warn);
@@ -402,7 +420,8 @@ void historyTests() {
       expect(line(history(linksOk: [20], linksFailed: [2]), 'Linking game accounts').level, HealthLevel.good);
       expect(line(history(linksOk: [10], linksFailed: [5]), 'Linking game accounts').level, HealthLevel.warn);
       expect(line(history(linksOk: [4], linksFailed: [9]), 'Linking game accounts').level, HealthLevel.bad);
-      expect(line(history(linksOk: [2], linksFailed: [3]), 'Linking game accounts').level, HealthLevel.good, reason: 'five tries say nothing');
+      expect(line(history(linksOk: [2], linksFailed: [3]), 'Linking game accounts').level, HealthLevel.good,
+          reason: 'five tries say nothing');
       expect(line(history(), 'Linking game accounts').detail, 'None in the last 7 days');
     });
 
