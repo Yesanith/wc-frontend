@@ -62,7 +62,8 @@ class _Overview extends StatelessWidget {
       AdminStat('Devices', fmtInt(d.count('push', 'devices')), languages.isEmpty ? 'with notifications' : languages),
       AdminStat('Events to come', fmtInt(d.count('events', 'upcoming')),
           '${d.count('events', 'going_upcoming')} going · ${d.count('events', 'weekly_series')} weekly'),
-      AdminStat('Database', formatBytes(d.count('database', 'size_bytes')), '${d.count('events', 'reports')} reports kept'),
+      AdminStat(
+          'Database', formatBytes(d.count('database', 'size_bytes')), '${d.count('events', 'reports')} reports kept'),
     ]);
   }
 }
