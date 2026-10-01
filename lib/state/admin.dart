@@ -36,6 +36,20 @@ final adminHistoryProvider = FutureProvider.autoDispose<AdminHistory>((ref) asyn
   return AdminHistory(Map<String, dynamic>.from(answer as Map));
 });
 
+/// the public events, for an administrator: what waits for a look, what is hidden, what was made lately
+final adminOpenEventsProvider = FutureProvider.autoDispose<AdminOpenEvents>((ref) async {
+  final answer = await Supabase.instance.client.rpc('admin_open_events');
+  return AdminOpenEvents(Map<String, dynamic>.from(answer as Map));
+});
+
+/// what an administrator does to a public event, in the words the database knows: keep (the reports were
+/// wrong, they are done), hide, unhide, delete, ban_creator (no more public events from the organizer, and the
+/// ones that are to come are hidden)
+Future<void> moderateOpenEvent(WidgetRef ref, String eventId, String action) async {
+  await Supabase.instance.client.rpc('admin_set_open_event', params: {'p_event': eventId, 'p_action': action});
+  ref.invalidate(adminOpenEventsProvider);
+}
+
 /// the limits of the free plan this backend runs on, so the usage can be told as a share of them. the plan
 /// is chosen on the Supabase dashboard, which shows the rest (traffic, storage, function calls)
 const freeDatabaseBytes = 500 * 1024 * 1024;
@@ -290,6 +304,17 @@ int? projectDaysToLimit(List<({DateTime day, int bytes})> points, int limit) {
   return (left / perDay).ceil();
 }
 
+/// in 25 min, in 3 h, in 2 d for what is to come, 3 min ago for what is over
+String whenText(DateTime at, DateTime now) {
+  final d = at.difference(now);
+  if (!d.isNegative && d.inMinutes >= 1) {
+    if (d.inMinutes < 60) return 'in ${d.inMinutes} min';
+    if (d.inHours < 24) return 'in ${d.inHours} h';
+    return 'in ${d.inDays} d';
+  }
+  return ago(at, now);
+}
+
 /// the last [n] of a list
 List<T> tail<T>(List<T> list, int n) => list.length <= n ? list : list.sublist(list.length - n);
 
@@ -464,4 +489,34 @@ class AdminHistory {
     }
     return lines;
   }
+}
+
+/// the public events as an administrator sees them: the numbers, the events that were reported and wait for a look,
+/// the hidden ones, the latest ones
+class AdminOpenEvents {
+  const AdminOpenEvents(this.raw);
+
+  final Map<String, dynamic> raw;
+
+  Map<String, dynamic> get summary => raw['summary'] is Map ? Map<String, dynamic>.from(raw['summary'] as Map) : const <String, dynamic>{};
+
+  int count(String key) => asInt(summary[key]);
+
+  List<Map<String, dynamic>> get reports => _maps(raw['reports']);
+  List<Map<String, dynamic>> get hidden => _maps(raw['hidden']);
+  List<Map<String, dynamic>> get recent => _maps(raw['recent']);
+
+  /// the events that were reported and nobody has looked at
+  int get waiting => count('reports_waiting');
+
+  DateTime? get generatedAt => DateTime.tryParse('${raw['generated_at'] ?? ''}')?.toLocal();
+
+  List<HealthLine> health() => [
+        waiting == 0
+            ? const HealthLine('Reports', 'Nothing waits for a look', HealthLevel.good)
+            : HealthLine('Reports',
+                waiting == 1 ? '1 event was reported and waits for a look' : '$waiting events were reported and wait for a look',
+                waiting >= 5 ? HealthLevel.bad : HealthLevel.warn),
+        HealthLine('Hidden', '${count('hidden')} hidden, ${count('banned')} organizers kept from making more', HealthLevel.good),
+      ];
 }

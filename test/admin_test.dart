@@ -34,6 +34,7 @@ void main() {
   serverTests();
   historyTests();
   versionTests();
+  openEventTests();
   final now = DateTime.utc(2026, 10, 1, 12);
 
   group('what the database says', () {
@@ -541,6 +542,69 @@ void versionTests() {
       final old = [for (var i = 0; i < 20; i++) 100];
       final h = news(ok: [...old, 50, 50, 50, 50, 50, 50, 50], failed: [...old.map((_) => 900), 0, 0, 0, 0, 0, 0, 0]);
       expect(line(h).level, HealthLevel.good, reason: 'the failures were weeks ago');
+    });
+  });
+}
+
+void openEventTests() {
+  final now = DateTime.utc(2026, 10, 1, 12);
+
+  group('when', () {
+    test('is told for what is to come and what is over', () {
+      expect(whenText(now.add(const Duration(minutes: 25)), now), 'in 25 min');
+      expect(whenText(now.add(const Duration(hours: 3, minutes: 10)), now), 'in 3 h');
+      expect(whenText(now.add(const Duration(days: 2, hours: 5)), now), 'in 2 d');
+      expect(whenText(now.subtract(const Duration(minutes: 40)), now), '40 min ago');
+      expect(whenText(now.subtract(const Duration(days: 1, hours: 1)), now), '1 d ago');
+      expect(whenText(now.add(const Duration(seconds: 20)), now), 'just now', reason: 'under a minute either way');
+    });
+  });
+
+  group('the public events', () {
+    AdminOpenEvents events({int waiting = 0, int hidden = 0, int banned = 0}) => AdminOpenEvents({
+          'generated_at': '2026-10-01T12:00:00+00:00',
+          'summary': {'reports_waiting': waiting, 'hidden': hidden, 'banned': banned, 'upcoming': 7, 'going_upcoming': 31},
+          'reports': [
+            {'id': 'e1', 'title': 'Raid night', 'organizer': 'Leo.1', 'reports': 3, 'reasons': ['spam', 'other'], 'notes': ['looks like an advert']},
+          ],
+          'hidden': [
+            {'id': 'e2', 'title': 'Old', 'organizer': 'Mira.2', 'reason': 'admin'},
+          ],
+          'recent': [
+            {'id': 'e3', 'title': 'Fractals', 'organizer': 'Kai.3', 'going': 4},
+          ],
+        });
+
+    test('are read as numbers, reports, hidden ones and the latest', () {
+      final o = events(waiting: 2, hidden: 1, banned: 5);
+      expect(o.count('upcoming'), 7);
+      expect(o.count('nothing'), 0);
+      expect(o.waiting, 2);
+      expect(o.reports.single['title'], 'Raid night');
+      expect(o.hidden.single['reason'], 'admin');
+      expect(o.recent.single['going'], 4);
+      expect(o.generatedAt, isNotNull);
+    });
+
+    test('survive an answer with parts missing or of another kind', () {
+      const o = AdminOpenEvents({'summary': 5, 'reports': 'none'});
+      expect(o.count('upcoming'), 0);
+      expect(o.waiting, 0);
+      expect(o.reports, isEmpty);
+      expect(o.hidden, isEmpty);
+      expect(o.generatedAt, isNull);
+    });
+
+    test('say what waits for a look: nothing is fine, a few events are a warning, many an alarm', () {
+      HealthLine reports(AdminOpenEvents o) => o.health().firstWhere((l) => l.label == 'Reports');
+      expect(reports(events()).level, HealthLevel.good);
+      expect(reports(events()).detail, 'Nothing waits for a look');
+      expect(reports(events(waiting: 1)).level, HealthLevel.warn);
+      expect(reports(events(waiting: 1)).detail, '1 event was reported and waits for a look');
+      expect(reports(events(waiting: 4)).level, HealthLevel.warn);
+      expect(reports(events(waiting: 5)).level, HealthLevel.bad);
+      expect(reports(events(waiting: 5)).detail, '5 events were reported and wait for a look');
+      expect(events(hidden: 2, banned: 1).health().last.detail, '2 hidden, 1 organizers kept from making more');
     });
   });
 }
