@@ -324,7 +324,8 @@ class AdminVersions extends StatelessWidget {
 
 /// a tab of numbers: pull to refresh, a width it can be read in, and the parts in two columns where there is room
 class AdminTab extends StatelessWidget {
-  const AdminTab({super.key, required this.updated, required this.onRefresh, required this.primary, this.secondary = const []});
+  const AdminTab(
+      {super.key, required this.updated, required this.onRefresh, required this.primary, this.secondary = const []});
 
   final DateTime? updated;
   final Future<void> Function() onRefresh;
