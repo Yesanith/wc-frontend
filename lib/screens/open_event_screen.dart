@@ -7,6 +7,7 @@ import '../state/open_events.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/event_pickers.dart';
 import '../widgets/responsive.dart';
 import 'guild_events_screen.dart' show activityIcon, eventWhen, statusColor;
 import 'open_event_form_screen.dart';
@@ -93,6 +94,19 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     ];
   }
 
+  /// signs up. going to an event with roles asks the role and the profession first
+  Future<void> _join(OpenEvent e, String status) async {
+    String? role;
+    String? profession;
+    if (status == 'going' && e.hasRoles) {
+      role = await pickEventRole(context, _s, e.roles, current: e.myRole);
+      if (role == null || !mounted) return;
+      profession = await pickEventProfession(context, _s, role);
+      if (profession == null) return;
+    }
+    await _act(() => joinOpenEvent(e.id, status, account: _chosenAccount(e), role: role, profession: profession));
+  }
+
   Future<void> _act(Future<void> Function() action, {String? done, bool leave = false}) async {
     setState(() => _busy = true);
     try {
@@ -140,7 +154,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     final s = ref.watch(stringsProvider);
     final e = widget.event;
     final over = e.isOver(DateTime.now());
-    final canSignUp = !e.mine && !e.cancelled && !e.hidden && !over;
+    // the organizer is going already, and can change how they come
+    final canSignUp = !e.cancelled && !e.hidden && !over;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
       children: [
@@ -183,6 +198,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             if (e.maybe > 0) Pill(s.t('oe_maybe', {'n': e.maybe})),
             if (e.maxParticipants != null) Pill(s.t('oe_places', {'n': e.going, 'max': e.maxParticipants})),
             if (e.myStatus != null) Pill(s.t('rsvp_${e.myStatus}'), color: statusColor(e.myStatus)),
+            if (e.myRole != null) Pill(s.t('role_${e.myRole}')),
+            if (e.myProfession != null) Pill(e.myProfession!),
           ],
         ),
         const SizedBox(height: 16),
@@ -214,6 +231,33 @@ class _EventBodyState extends ConsumerState<_EventBody> {
           const SizedBox(height: 12),
           Panel(child: Text(e.description, style: const TextStyle(height: 1.45))),
         ],
+        if (e.hasRoles) ...[
+          const SizedBox(height: 12),
+          Kicker(s.t('event_roles').toUpperCase()),
+          const SizedBox(height: 6),
+          Panel(
+            child: Column(
+              children: [
+                for (final r in e.roles)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(s.t('role_${r.role}'))),
+                        Text(
+                          '${r.taken}/${r.slots}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            color: r.taken >= r.slots ? AppColors.muted : AppColors.gold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
         const SizedBox(height: 16),
         if (canSignUp) ...[
           ..._accountChooser(s, e),
@@ -223,7 +267,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                 child: FilledButton(
                   onPressed: _busy || (e.isFull && e.myStatus != 'going')
                       ? null
-                      : () => _act(() => joinOpenEvent(e.id, 'going', account: _chosenAccount(e))),
+                      : () => _join(e, 'going'),
                   child: Text(e.isFull && e.myStatus != 'going'
                       ? s.t('oe_full')
                       : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
@@ -232,15 +276,16 @@ class _EventBodyState extends ConsumerState<_EventBody> {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: _busy ? null : () => _act(() => joinOpenEvent(e.id, 'maybe', account: _chosenAccount(e))),
+                  onPressed: _busy ? null : () => _join(e, 'maybe'),
                   child: Text(e.myStatus == 'maybe' ? s.t('oe_you_maybe') : s.t('oe_maybe_btn')),
                 ),
               ),
             ],
           ),
-          if (e.myStatus != null)
+          if (e.myStatus != null && !e.mine)
             TextButton(onPressed: _busy ? null : () => _act(() => leaveOpenEvent(e.id)), child: Text(s.t('oe_leave'))),
-          Padding(
+          if (!e.mine)
+            Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(s.t('oe_join_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
           ),
@@ -332,7 +377,20 @@ class _Roster extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Row(
                             children: [
-                              Expanded(child: Text(p.name)),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(p.name),
+                                    if (p.role != null || p.profession != null)
+                                      Text(
+                                        [if (p.role != null) s.t('role_${p.role}'), if (p.profession != null) p.profession!]
+                                            .join(' · '),
+                                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                      ),
+                                  ],
+                                ),
+                              ),
                               Pill(s.t('rsvp_${p.status}'), color: statusColor(p.status)),
                             ],
                           ),

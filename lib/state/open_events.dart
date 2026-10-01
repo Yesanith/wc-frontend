@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../util.dart';
+import 'guild_events.dart' show eventRoleKeys;
 
 /// what a public event can be about, the same as a guild's
 const openEventActivities = ['raid', 'strike', 'fractal', 'worldboss', 'meta', 'wvw', 'pvp', 'dungeon', 'other'];
@@ -55,10 +56,25 @@ String openEventErrorKey(Object e) {
     'bad_region': 'oe_err_region',
     'bad_tags': 'oe_err_tags',
     'bad_map': 'oe_err_map',
+    'role_required': 'oe_err_role_required',
+    'profession_required': 'oe_err_profession',
+    'bad_profession': 'oe_err_profession',
+    'role_full': 'oe_err_role_full',
+    'bad_roles': 'oe_err_roles',
   };
   final code = e is OpenEventFailure ? e.code : (e is PostgrestException ? e.hint : null);
   return keys[code] ?? 'oe_err_generic';
 }
+
+/// a role of an event with its places and how many are going as it
+typedef OpenRole = ({String role, int slots, int taken});
+
+List<OpenRole> parseOpenRoles(dynamic rows) => rows is List
+    ? [
+        for (final r in rows)
+          if (r is Map) (role: '${r['role']}', slots: asInt(r['slots']), taken: asInt(r['taken']))
+      ]
+    : const [];
 
 class OpenEvent {
   const OpenEvent({
@@ -80,6 +96,9 @@ class OpenEvent {
     required this.myStatus,
     required this.status,
     required this.hidden,
+    this.roles = const [],
+    this.myRole,
+    this.myProfession,
   });
 
   factory OpenEvent.fromJson(Map<String, dynamic> j) => OpenEvent(
@@ -101,6 +120,9 @@ class OpenEvent {
         myStatus: j['my_status'] == null ? null : '${j['my_status']}',
         status: '${j['status'] ?? 'scheduled'}',
         hidden: j['hidden'] == true,
+        roles: parseOpenRoles(j['roles']),
+        myRole: j['my_role'] == null ? null : '${j['my_role']}',
+        myProfession: j['my_profession'] == null ? null : '${j['my_profession']}',
       );
 
   final String id;
@@ -132,6 +154,18 @@ class OpenEvent {
   /// waiting for an administrator to look at it, which only its organizer is told
   final bool hidden;
 
+  /// the composition, with how many are going as each. none when anybody may come as anything
+  final List<OpenRole> roles;
+
+  /// the role and the profession the player comes as
+  final String? myRole;
+  final String? myProfession;
+
+  bool get hasRoles => roles.isNotEmpty;
+
+  /// the places of all the roles
+  int get totalSlots => roles.fold(0, (a, r) => a + r.slots);
+
   DateTime get endAt => startAt.add(Duration(minutes: durationMinutes));
 
   bool get cancelled => status == 'cancelled';
@@ -154,12 +188,18 @@ List<OpenEvent> parseOpenEvents(dynamic rows) => rows is List
     : const [];
 
 /// a name and whether they are going, from the organizer's list of who signed up
-typedef OpenRosterEntry = ({String name, String status});
+typedef OpenRosterEntry = ({String name, String status, String? role, String? profession});
 
 List<OpenRosterEntry> parseOpenRoster(dynamic rows) => rows is List
     ? [
         for (final r in rows)
-          if (r is Map) (name: '${r['name']}', status: '${r['status']}')
+          if (r is Map)
+            (
+              name: '${r['name']}',
+              status: '${r['status']}',
+              role: r['role'] == null ? null : '${r['role']}',
+              profession: r['profession'] == null ? null : '${r['profession']}',
+            )
       ]
     : const [];
 
@@ -250,6 +290,12 @@ final openRosterProvider = FutureProvider.autoDispose.family<List<OpenRosterEntr
   return parseOpenRoster(await _rpc('open_event_roster', {'p_event': id}));
 });
 
+/// the roles as the database takes them, in the order they are listed, the ones with no place left out
+List<Map<String, Object>> _rolesJson(Map<String, int> roles) => [
+      for (final k in eventRoleKeys)
+        if ((roles[k] ?? 0) > 0) {'role': k, 'slots': roles[k]!}
+    ];
+
 String _utc(DateTime t) => t.toUtc().toIso8601String();
 
 Future<String> createOpenEvent({
@@ -263,6 +309,9 @@ Future<String> createOpenEvent({
   String region = 'all',
   List<String> tags = const [],
   int? mapId,
+  Map<String, int> roles = const {},
+  String? myRole,
+  String? myProfession,
 }) async {
   final id = await _rpc('create_open_event', {
     'p_title': title,
@@ -275,6 +324,9 @@ Future<String> createOpenEvent({
     'p_region': region,
     'p_tags': tags,
     'p_map_id': mapId,
+    'p_roles': _rolesJson(roles),
+    'p_my_role': myRole,
+    'p_my_profession': myProfession,
   });
   return '$id';
 }
@@ -290,6 +342,7 @@ Future<void> updateOpenEvent(
   int? maxParticipants,
   List<String> tags = const [],
   int? mapId,
+  Map<String, int>? roles,
 }) async {
   await _rpc('update_open_event', {
     'p_event': id,
@@ -302,6 +355,7 @@ Future<void> updateOpenEvent(
     'p_max_participants': maxParticipants,
     'p_tags': tags,
     'p_map_id': mapId,
+    'p_roles': roles == null ? null : _rolesJson(roles),
   });
 }
 
@@ -314,8 +368,14 @@ Future<void> deleteOpenEvent(String id) async {
 }
 
 /// signs up as going or maybe, as the account asked for, or the first of the region of the event
-Future<void> joinOpenEvent(String id, String status, {String? account}) async {
-  await _rpc('join_open_event', {'p_event': id, 'p_status': status, 'p_account': account});
+Future<void> joinOpenEvent(String id, String status, {String? account, String? role, String? profession}) async {
+  await _rpc('join_open_event', {
+    'p_event': id,
+    'p_status': status,
+    'p_account': account,
+    'p_role': role,
+    'p_profession': profession,
+  });
 }
 
 Future<void> leaveOpenEvent(String id) async {

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
+import '../state/guild_events.dart' show eventRoleKeys, eventRolePresets;
 import '../state/open_events.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/event_pickers.dart';
 import '../widgets/responsive.dart';
 import 'open_event_labels.dart';
 
@@ -29,6 +32,11 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
   late String _language;
   late DateTime _start;
   late int _duration;
+  late final Map<String, int> _roles;
+
+  /// how the organizer comes, when there are roles
+  String? _myRole;
+  String? _myProfession;
   bool _busy = false;
 
   @override
@@ -47,6 +55,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
     final base = DateTime.now().add(const Duration(days: 1));
     _start = e?.startAt ?? DateTime(base.year, base.month, base.day, 20);
     _duration = e?.durationMinutes ?? 120;
+    _roles = {for (final r in e?.roles ?? const <OpenRole>[]) r.role: r.slots};
   }
 
   @override
@@ -87,7 +96,8 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
     }
     final maxText = _max.text.trim();
     final max = maxText.isEmpty ? null : int.tryParse(maxText);
-    if (maxText.isNotEmpty && (max == null || max < 2 || max > 100)) {
+    // with roles the places are those of the roles
+    if (_roles.isEmpty && maxText.isNotEmpty && (max == null || max < 2 || max > 100)) {
       showToast(context, s.t('oe_err_capacity'));
       return;
     }
@@ -96,6 +106,16 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
     if (mapText.isNotEmpty && (mapId == null || mapId < 1 || mapId > 100000)) {
       showToast(context, s.t('oe_err_map'));
       return;
+    }
+    if (_roles.isNotEmpty && widget.editing == null) {
+      if (_myRole == null || !_roles.containsKey(_myRole)) {
+        showToast(context, s.t('oe_err_role_required'));
+        return;
+      }
+      if (_myProfession == null) {
+        showToast(context, s.t('oe_err_profession'));
+        return;
+      }
     }
     setState(() => _busy = true);
     try {
@@ -108,10 +128,13 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
           description: _description.text.trim(),
           activity: _activity,
           language: _language,
-          maxParticipants: max,
+          maxParticipants: _roles.isEmpty ? max : null,
           region: _region,
           tags: _tags.toList()..sort(),
           mapId: mapId,
+          roles: _roles,
+          myRole: _myRole,
+          myProfession: _myProfession,
         );
       } else {
         await updateOpenEvent(
@@ -122,9 +145,10 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
           description: _description.text.trim(),
           activity: _activity,
           language: _language,
-          maxParticipants: max,
+          maxParticipants: _roles.isEmpty ? max : null,
           tags: _tags.toList()..sort(),
           mapId: mapId,
+          roles: _roles,
         );
       }
       if (!mounted) return;
@@ -136,6 +160,113 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
         showToast(context, s.t(openEventErrorKey(e)));
       }
     }
+  }
+
+  int get _roleTotal => _roles.values.fold(0, (a, b) => a + b);
+
+  /// the organizer cannot come as a role the event does not have
+  void _rolesChanged() {
+    if (_myRole != null && !_roles.containsKey(_myRole)) {
+      _myRole = null;
+      _myProfession = null;
+    }
+  }
+
+  void _preset(String key) => setState(() {
+        _roles
+          ..clear()
+          ..addAll(eventRolePresets[key]!);
+        _rolesChanged();
+      });
+
+  /// the composition, as a guild's event has it, and for a new event how the organizer comes
+  List<Widget> _rolesSection(S s, bool editing) {
+    return [
+      Kicker(s.t('event_roles')),
+      const SizedBox(height: 6),
+      Wrap(
+        spacing: 6,
+        children: [
+          ActionChip(label: Text(s.t('event_preset_squad10')), onPressed: () => _preset('squad10')),
+          ActionChip(label: Text(s.t('event_preset_party5')), onPressed: () => _preset('party5')),
+          ActionChip(
+            label: Text(s.t('event_preset_none')),
+            onPressed: () => setState(() {
+              _roles.clear();
+              _rolesChanged();
+            }),
+          ),
+        ],
+      ),
+      const SizedBox(height: 6),
+      Panel(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        child: Column(
+          children: [
+            for (final key in eventRoleKeys)
+              Row(
+                children: [
+                  Expanded(child: Text(s.t('role_$key'))),
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: (_roles[key] ?? 0) == 0
+                        ? null
+                        : () => setState(() {
+                              final n = (_roles[key] ?? 0) - 1;
+                              n == 0 ? _roles.remove(key) : _roles[key] = n;
+                              _rolesChanged();
+                            }),
+                    icon: const Icon(Icons.remove_circle_outline, size: 20),
+                  ),
+                  SizedBox(
+                    width: 24,
+                    child: Text('${_roles[key] ?? 0}',
+                        textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800)),
+                  ),
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: (_roles[key] ?? 0) >= 50 ? null : () => setState(() => _roles[key] = (_roles[key] ?? 0) + 1),
+                    icon: const Icon(Icons.add_circle_outline, size: 20),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+      if (_roles.isNotEmpty) ...[
+        const SizedBox(height: 8),
+        Text(s.t('oe_places_roles', {'n': _roleTotal}), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        if (!editing) ...[
+          const SizedBox(height: 12),
+          Kicker(s.t('oe_come_as')),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            children: [
+              for (final key in eventRoleKeys)
+                if (_roles.containsKey(key))
+                  ChoiceChip(
+                    label: Text(s.t('role_$key')),
+                    selected: _myRole == key,
+                    onSelected: (_) => setState(() => _myRole = key),
+                  ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _myRole == null
+                ? null
+                : () async {
+                    final p = await pickEventProfession(context, s, _myRole!);
+                    if (p != null && mounted) setState(() => _myProfession = p);
+                  },
+            icon: const Icon(Icons.shield_outlined, size: 18),
+            label: Text(_myProfession ?? s.t('oe_profession_btn')),
+          ),
+        ],
+      ],
+      const SizedBox(height: 16),
+    ];
   }
 
   @override
@@ -268,15 +399,18 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               onChanged: (v) => setState(() => _duration = v ?? _duration),
             ),
             const SizedBox(height: 16),
-            Kicker(s.t('oe_places_field')),
-            const SizedBox(height: 6),
-            TextField(
-              controller: _max,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: fieldDecoration(''),
-            ),
-            const SizedBox(height: 16),
+            ..._rolesSection(s, editing),
+            if (_roles.isEmpty) ...[
+              Kicker(s.t('oe_places_field')),
+              const SizedBox(height: 6),
+              TextField(
+                controller: _max,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: fieldDecoration(''),
+              ),
+              const SizedBox(height: 16),
+            ],
             Kicker(s.t('event_description')),
             const SizedBox(height: 6),
             TextField(
