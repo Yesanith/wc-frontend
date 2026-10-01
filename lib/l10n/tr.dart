@@ -849,8 +849,10 @@ const trStrings = <String, String>{
   'oe_region_eu': 'Avrupa',
   'oe_region_na': 'Kuzey Amerika',
   'oe_region_all': 'Tüm bölgeler',
-  'oe_region_note': 'Bir bölgenin etkinliği, o bölgedeki bir dünyada oyun hesabı olan oyunculara yöneliktir. Hesabının bölgesi, bağladığında veya yenilediğinde dünyasından okunur.',
-  'oe_region_unknown': 'Hesabının bölgesi henüz bilinmiyor, bu yüzden yalnızca tüm bölgeler için etkinlik oluşturabilir ve katılabilirsin. Ayarlar\'da Guild Wars 2 bağlantını aç ve yenile.',
+  'oe_region_note':
+      'Bir bölgenin etkinliği, o bölgedeki bir dünyada oyun hesabı olan oyunculara yöneliktir. Hesabının bölgesi, bağladığında veya yenilediğinde dünyasından okunur.',
+  'oe_region_unknown':
+      'Hesabının bölgesi henüz bilinmiyor, bu yüzden yalnızca tüm bölgeler için etkinlik oluşturabilir ve katılabilirsin. Ayarlar\'da Guild Wars 2 bağlantını aç ve yenile.',
   'oe_tags': 'Etiketler (en fazla 3)',
   'oe_tag_any': 'Herhangi bir etiket',
   'oe_tag_meta': 'Meta',
@@ -866,7 +868,8 @@ const trStrings = <String, String>{
   'oe_err_tags': 'Listeden en fazla üç etiket seç.',
   'oe_join_as': 'Şu hesapla katıl',
   'oe_roles_title': 'Resmi Discord',
-  'oe_roles_body': 'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü ve aşağıda seçtiğin etkinlik türlerinin rollerini alırsın, paylaşımlar bu rolleri anar.',
+  'oe_roles_body':
+      'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü ve aşağıda seçtiğin etkinlik türlerinin rollerini alırsın, paylaşımlar bu rolleri anar.',
   'oe_roles_kinds': 'Beni şunlardan haberdar et',
   'oe_roles_join': 'Resmi Discord\'a katıl',
   'oe_roles_saved': 'Kaydedildi. Sunucudaki rollerin birkaç dakika içinde güncellenir.',

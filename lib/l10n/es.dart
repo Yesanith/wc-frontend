@@ -854,8 +854,10 @@ const esStrings = <String, String>{
   'oe_region_eu': 'Europa',
   'oe_region_na': 'Norteamérica',
   'oe_region_all': 'Todas las regiones',
-  'oe_region_note': 'Un evento de una región es para jugadores con una cuenta del juego en un mundo de esa región. La región de tu cuenta se lee de su mundo al vincularla o actualizarla.',
-  'oe_region_unknown': 'La región de tu cuenta aún no se conoce, así que solo puedes crear y unirte a eventos para todas las regiones. Abre tu vínculo de Guild Wars 2 en Ajustes y actualízalo.',
+  'oe_region_note':
+      'Un evento de una región es para jugadores con una cuenta del juego en un mundo de esa región. La región de tu cuenta se lee de su mundo al vincularla o actualizarla.',
+  'oe_region_unknown':
+      'La región de tu cuenta aún no se conoce, así que solo puedes crear y unirte a eventos para todas las regiones. Abre tu vínculo de Guild Wars 2 en Ajustes y actualízalo.',
   'oe_tags': 'Etiquetas (hasta 3)',
   'oe_tag_any': 'Cualquier etiqueta',
   'oe_tag_meta': 'Meta',
@@ -871,7 +873,8 @@ const esStrings = <String, String>{
   'oe_err_tags': 'Elige hasta tres etiquetas de la lista.',
   'oe_join_as': 'Apuntarse como',
   'oe_roles_title': 'Discord oficial',
-  'oe_roles_body': 'El servidor oficial de Discord de Tyria Companion publica eventos públicos en un canal por región. Únete con la cuenta de Discord con la que iniciaste sesión: recibes el rol de cada región en la que tienes una cuenta y los roles de los tipos de evento que elijas abajo, que las publicaciones mencionan.',
+  'oe_roles_body':
+      'El servidor oficial de Discord de Tyria Companion publica eventos públicos en un canal por región. Únete con la cuenta de Discord con la que iniciaste sesión: recibes el rol de cada región en la que tienes una cuenta y los roles de los tipos de evento que elijas abajo, que las publicaciones mencionan.',
   'oe_roles_kinds': 'Avísame de',
   'oe_roles_join': 'Unirse al Discord oficial',
   'oe_roles_saved': 'Guardado. Tus roles en el servidor se actualizan en unos minutos.',

@@ -185,7 +185,8 @@ class _FilterBar extends ConsumerWidget {
               dropdownColor: AppColors.surface2,
               items: [
                 DropdownMenuItem<String?>(value: null, child: Text(s.t('oe_region_all'))),
-                for (final r in const ['eu', 'na']) DropdownMenuItem<String?>(value: r, child: Text(s.t('oe_region_$r'))),
+                for (final r in const ['eu', 'na'])
+                  DropdownMenuItem<String?>(value: r, child: Text(s.t('oe_region_$r'))),
               ],
               onChanged: (v) => set(filter.withRegion(v)),
             ),
@@ -829,7 +830,9 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               ),
             const SizedBox(height: 6),
             Text(
-              mine != null && mine.hasAccount && mine.regions.isEmpty ? s.t('oe_region_unknown') : s.t('oe_region_note'),
+              mine != null && mine.hasAccount && mine.regions.isEmpty
+                  ? s.t('oe_region_unknown')
+                  : s.t('oe_region_note'),
               style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45),
             ),
             const SizedBox(height: 16),

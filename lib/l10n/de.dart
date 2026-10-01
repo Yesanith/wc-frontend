@@ -858,8 +858,10 @@ const deStrings = <String, String>{
   'oe_region_eu': 'Europa',
   'oe_region_na': 'Nordamerika',
   'oe_region_all': 'Alle Regionen',
-  'oe_region_note': 'Ein Event einer Region ist für Spieler mit einem Spielkonto auf einer Welt dieser Region. Die Region deines Kontos wird beim Verknüpfen oder Aktualisieren aus seiner Welt gelesen.',
-  'oe_region_unknown': 'Die Region deines Kontos ist noch nicht bekannt, du kannst also nur Events für alle Regionen erstellen und beitreten. Öffne deine Guild-Wars-2-Verknüpfung in den Einstellungen und aktualisiere sie.',
+  'oe_region_note':
+      'Ein Event einer Region ist für Spieler mit einem Spielkonto auf einer Welt dieser Region. Die Region deines Kontos wird beim Verknüpfen oder Aktualisieren aus seiner Welt gelesen.',
+  'oe_region_unknown':
+      'Die Region deines Kontos ist noch nicht bekannt, du kannst also nur Events für alle Regionen erstellen und beitreten. Öffne deine Guild-Wars-2-Verknüpfung in den Einstellungen und aktualisiere sie.',
   'oe_tags': 'Tags (bis zu 3)',
   'oe_tag_any': 'Beliebiger Tag',
   'oe_tag_meta': 'Meta',
@@ -875,7 +877,8 @@ const deStrings = <String, String>{
   'oe_err_tags': 'Wähle bis zu drei Tags aus der Liste.',
   'oe_join_as': 'Anmelden als',
   'oe_roles_title': 'Offizieller Discord',
-  'oe_roles_body': 'Der offizielle Tyria-Companion-Discord-Server veröffentlicht öffentliche Events in einem Kanal pro Region. Tritt mit dem Discord-Konto bei, mit dem du angemeldet bist: Du erhältst die Rolle jeder Region, in der du ein Konto hast, und die Rollen der unten gewählten Event-Arten, die die Beiträge erwähnen.',
+  'oe_roles_body':
+      'Der offizielle Tyria-Companion-Discord-Server veröffentlicht öffentliche Events in einem Kanal pro Region. Tritt mit dem Discord-Konto bei, mit dem du angemeldet bist: Du erhältst die Rolle jeder Region, in der du ein Konto hast, und die Rollen der unten gewählten Event-Arten, die die Beiträge erwähnen.',
   'oe_roles_kinds': 'Benachrichtige mich über',
   'oe_roles_join': 'Dem offiziellen Discord beitreten',
   'oe_roles_saved': 'Gespeichert. Deine Rollen im Server folgen in wenigen Minuten.',

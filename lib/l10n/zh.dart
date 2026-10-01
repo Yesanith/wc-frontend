@@ -826,7 +826,8 @@ const zhStrings = <String, String>{
   'oe_err_tags': '请从列表中最多选择三个标签。',
   'oe_join_as': '报名账号',
   'oe_roles_title': '官方 Discord',
-  'oe_roles_body': '官方 Tyria Companion Discord 服务器会在每个区域的频道中发布公开活动。请用你登录所用的 Discord 账号加入：你会获得所有拥有账号的区域的身份组，以及下方所选活动类型的身份组，帖子会提及这些身份组。',
+  'oe_roles_body':
+      '官方 Tyria Companion Discord 服务器会在每个区域的频道中发布公开活动。请用你登录所用的 Discord 账号加入：你会获得所有拥有账号的区域的身份组，以及下方所选活动类型的身份组，帖子会提及这些身份组。',
   'oe_roles_kinds': '通知我这些类型',
   'oe_roles_join': '加入官方 Discord',
   'oe_roles_saved': '已保存。你在服务器中的身份组会在几分钟内更新。',

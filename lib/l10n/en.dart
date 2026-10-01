@@ -851,8 +851,10 @@ const enStrings = <String, String>{
   'oe_region_eu': 'Europe',
   'oe_region_na': 'North America',
   'oe_region_all': 'All regions',
-  'oe_region_note': 'An event of a region is for players with a game account on a world of that region. Your account\'s region is read from its world when you link or refresh it.',
-  'oe_region_unknown': 'Your account\'s region is not known yet, so you can only make and join events for all regions. Open your Guild Wars 2 link in Settings and refresh it.',
+  'oe_region_note':
+      'An event of a region is for players with a game account on a world of that region. Your account\'s region is read from its world when you link or refresh it.',
+  'oe_region_unknown':
+      'Your account\'s region is not known yet, so you can only make and join events for all regions. Open your Guild Wars 2 link in Settings and refresh it.',
   'oe_tags': 'Tags (up to 3)',
   'oe_tag_any': 'Any tag',
   'oe_tag_meta': 'Meta',
@@ -868,7 +870,8 @@ const enStrings = <String, String>{
   'oe_err_tags': 'Pick up to three tags from the list.',
   'oe_join_as': 'Sign up as',
   'oe_roles_title': 'Official Discord',
-  'oe_roles_body': 'The official Tyria Companion Discord server posts public events in a channel for each region. Join it with the Discord account you signed in with: you get the role of each region you have an account in, and the roles of the kinds of event you pick below, which the posts mention.',
+  'oe_roles_body':
+      'The official Tyria Companion Discord server posts public events in a channel for each region. Join it with the Discord account you signed in with: you get the role of each region you have an account in, and the roles of the kinds of event you pick below, which the posts mention.',
   'oe_roles_kinds': 'Tell me about',
   'oe_roles_join': 'Join the official Discord',
   'oe_roles_saved': 'Saved. Your roles in the server follow within a few minutes.',

@@ -856,8 +856,10 @@ const frStrings = <String, String>{
   'oe_region_eu': 'Europe',
   'oe_region_na': 'Amérique du Nord',
   'oe_region_all': 'Toutes les régions',
-  'oe_region_note': 'Un événement d\'une région est destiné aux joueurs ayant un compte de jeu sur un monde de cette région. La région de ton compte est lue depuis son monde lors de la liaison ou de l\'actualisation.',
-  'oe_region_unknown': 'La région de ton compte n\'est pas encore connue, tu ne peux donc créer et rejoindre que des événements pour toutes les régions. Ouvre ta liaison Guild Wars 2 dans les réglages et actualise-la.',
+  'oe_region_note':
+      'Un événement d\'une région est destiné aux joueurs ayant un compte de jeu sur un monde de cette région. La région de ton compte est lue depuis son monde lors de la liaison ou de l\'actualisation.',
+  'oe_region_unknown':
+      'La région de ton compte n\'est pas encore connue, tu ne peux donc créer et rejoindre que des événements pour toutes les régions. Ouvre ta liaison Guild Wars 2 dans les réglages et actualise-la.',
   'oe_tags': 'Étiquettes (3 max.)',
   'oe_tag_any': 'Toute étiquette',
   'oe_tag_meta': 'Méta',
@@ -873,7 +875,8 @@ const frStrings = <String, String>{
   'oe_err_tags': 'Choisis jusqu\'à trois étiquettes dans la liste.',
   'oe_join_as': 'S\'inscrire en tant que',
   'oe_roles_title': 'Discord officiel',
-  'oe_roles_body': 'Le serveur Discord officiel de Tyria Companion publie les événements publics dans un salon par région. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte, et les rôles des types d\'événements choisis ci-dessous, que les publications mentionnent.',
+  'oe_roles_body':
+      'Le serveur Discord officiel de Tyria Companion publie les événements publics dans un salon par région. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte, et les rôles des types d\'événements choisis ci-dessous, que les publications mentionnent.',
   'oe_roles_kinds': 'Préviens-moi pour',
   'oe_roles_join': 'Rejoindre le Discord officiel',
   'oe_roles_saved': 'Enregistré. Tes rôles sur le serveur suivent dans quelques minutes.',
