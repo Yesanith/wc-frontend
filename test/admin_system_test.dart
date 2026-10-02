@@ -494,7 +494,8 @@ void main() {
           reason: 'the job with when it runs next');
       expect(find.textContaining('Not set up. Run /official setup'), findsOneWidget);
       expect(find.textContaining('2 made'), findsOneWidget);
-      expect(find.textContaining('2 tables, 28,002 rows'), findsOneWidget, reason: 'the rows of both tables: 2 and 28,000');
+      expect(find.textContaining('2 tables, 28,002 rows'), findsOneWidget,
+          reason: 'the rows of both tables: 2 and 28,000');
       expect(find.text('tp_latest'), findsOneWidget);
       expect(find.text('open_events'), findsOneWidget);
       expect(tester.takeException(), isNull);
