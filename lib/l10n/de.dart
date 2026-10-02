@@ -547,6 +547,7 @@ const deStrings = <String, String>{
   'hours_short': 'Std.',
   'n_items': '{n} Gegenstände',
   'language': 'Sprache',
+  'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':
       'Charaktere, Geldbeutel, Handelsposten, Weltbosse, Handwerk, Weltkarte und Gildenevents, alles an einem Ort. Kostenlos und inoffiziell.',

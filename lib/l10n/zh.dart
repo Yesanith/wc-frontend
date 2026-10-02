@@ -507,6 +507,7 @@ const zhStrings = <String, String>{
   'hours_short': '小时',
   'n_items': '{n} 件物品',
   'language': '语言',
+  'alert_push_hint': '登录并允许通知后，即使应用已关闭也会收到提醒。',
   'landing_title': '你的激战2助手',
   'landing_sub': '角色、钱包、交易行、世界首领、制作、世界地图和公会活动，尽在一处。免费且非官方。',
   'landing_start': '开始使用',

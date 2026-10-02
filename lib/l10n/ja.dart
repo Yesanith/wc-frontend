@@ -509,6 +509,7 @@ const jaStrings = <String, String>{
   'hours_short': '時間',
   'n_items': '{n} 件',
   'language': '言語',
+  'alert_push_hint': 'ログインして通知を許可すると、アプリを閉じていても通知されます。',
   'landing_title': 'あなたの Guild Wars 2 コンパニオン',
   'landing_sub': 'キャラクター、財布、トレーディングポスト、ワールドボス、クラフト、ワールドマップ、ギルドイベントをひとつに。無料・非公式です。',
   'landing_start': 'はじめる',

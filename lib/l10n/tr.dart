@@ -538,6 +538,7 @@ const trStrings = <String, String>{
   'hours_short': 'sa',
   'n_items': '{n} item',
   'language': 'Dil',
+  'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':
       'Karakterler, cüzdan, trading post, dünya bossları, üretim, dünya haritası ve guild etkinlikleri, hepsi tek yerde. Ücretsiz ve resmî olmayan.',

@@ -540,6 +540,7 @@ const enStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} items',
   'language': 'Language',
+  'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
   'landing_sub':
       'Characters, wallet, trading post, world bosses, crafting, a world map and guild events, all in one place. Free and unofficial.',

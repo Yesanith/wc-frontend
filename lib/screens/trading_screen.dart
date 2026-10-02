@@ -13,6 +13,7 @@ import '../state/gem_history.dart';
 import '../state/items.dart';
 import '../state/market.dart';
 import '../state/price_history.dart';
+import '../state/server_price_alerts.dart';
 import '../state/settings.dart';
 import '../state/trading.dart';
 import '../theme.dart';

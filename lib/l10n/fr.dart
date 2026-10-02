@@ -544,6 +544,7 @@ const frStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} objets',
   'language': 'Langue',
+  'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
   'landing_title': 'Ton compagnon Guild Wars 2',
   'landing_sub':
       'Personnages, portefeuille, comptoir commercial, boss mondiaux, artisanat, carte du monde et événements de guilde, tout au même endroit. Gratuit et non officiel.',

@@ -10,6 +10,7 @@ import '../state/app_open.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/navigation.dart';
+import '../state/server_price_alerts.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../state/trading.dart';
@@ -443,6 +444,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, __) => _recordWealth());
     ref.listen<AsyncValue<Json>>(accountProvider, (_, __) => _recordWealth());
     final sync = ref.watch(syncProvider);
+    // the price alerts of the device are told to the server, so that they arrive when the app is shut
+    ref.watch(priceAlertSyncProvider);
     // a page is an address in the browser, so that its back button, a link to it and a refresh all lead to it
     ref.listen<AppSection>(sectionProvider, (_, next) {
       if (kIsWeb) announceSection(next);
