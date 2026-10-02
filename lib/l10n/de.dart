@@ -548,7 +548,8 @@ const deStrings = <String, String>{
   'n_items': '{n} Gegenstände',
   'language': 'Sprache',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
-  'landing_sub': 'Charaktere, Geldbeutel, Handelsposten, Weltbosse, Handwerk, Weltkarte und Gildenevents, alles an einem Ort. Kostenlos und inoffiziell.',
+  'landing_sub':
+      'Charaktere, Geldbeutel, Handelsposten, Weltbosse, Handwerk, Weltkarte und Gildenevents, alles an einem Ort. Kostenlos und inoffiziell.',
   'landing_start': 'Los geht\'s',
   'landing_guest': 'Als Gast fortfahren',
   'landing_f_characters': 'Ausrüstung, Builds und Spielzeit jedes Charakters.',

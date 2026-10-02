@@ -75,7 +75,9 @@ void main() {
       expect(sectionFromBrowser, isNull);
     });
 
-    test('say it is dealt with for an address that is no page, so that it is not taken for a page of the navigator to push', () {
+    test(
+        'say it is dealt with for an address that is no page, so that it is not taken for a page of the navigator to push',
+        () {
       final shown = <AppSection>[];
       expect(followBrowser(Uri.parse('/access_token=abc'), AppSection.home, shown.add), isTrue);
       expect(shown, isEmpty);
@@ -87,14 +89,16 @@ void main() {
 
     setUp(() {
       calls.clear();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
         if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
         return null;
       });
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
       sectionFromBrowser = null;
     });
 

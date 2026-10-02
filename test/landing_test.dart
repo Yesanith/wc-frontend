@@ -35,7 +35,8 @@ void main() {
         for (final key in ['search_placeholder', 'search_in_wiki', 'search_item', 'search_page']) {
           expect(s.t(key), isNot(key), reason: '$key in ${lang.code}');
         }
-        expect(s.t('search_in_wiki').contains('{q}'), isTrue, reason: 'it has a place for what was typed in ${lang.code}');
+        expect(s.t('search_in_wiki').contains('{q}'), isTrue,
+            reason: 'it has a place for what was typed in ${lang.code}');
       }
     });
   });
@@ -104,7 +105,8 @@ void main() {
       await tester.tap(find.text(s.t('landing_guest')).first);
       await tester.pump();
       expect(container.read(guestModeProvider), isTrue);
-      expect(container.read(landingDismissedProvider), isFalse, reason: 'the guest goes to the app, not to the sign in');
+      expect(container.read(landingDismissedProvider), isFalse,
+          reason: 'the guest goes to the app, not to the sign in');
     });
 
     testWidgets('changes its words with the language, and keeps all of its cards', (tester) async {

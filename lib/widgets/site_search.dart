@@ -123,7 +123,8 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
       child: RawAutocomplete<SearchHit>(
         textEditingController: _controller,
         focusNode: _focus,
-        optionsBuilder: (value) => searchHits(value.text, index: index, labels: widget.labels, wikiLabel: widget.wikiLabel),
+        optionsBuilder: (value) =>
+            searchHits(value.text, index: index, labels: widget.labels, wikiLabel: widget.wikiLabel),
         // what is chosen is gone to, and the box is empty again
         displayStringForOption: (_) => '',
         onSelected: (hit) {
@@ -144,9 +145,12 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
             prefixIcon: const Icon(Icons.search, size: 18, color: AppColors.muted),
             prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 36),
             contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.gold)),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.gold)),
           ),
         ),
         optionsViewBuilder: (context, onSelected, options) => Align(
@@ -156,7 +160,8 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
             child: Material(
               color: AppColors.surface,
               elevation: 8,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14), side: const BorderSide(color: AppColors.line)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14), side: const BorderSide(color: AppColors.line)),
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: widget.width + 140, maxHeight: 420),

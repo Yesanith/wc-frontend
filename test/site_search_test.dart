@@ -19,7 +19,12 @@ void main() {
   const wiki = 'Search the wiki for “{q}”';
 
   List<SearchHit> hits(String q, {Map<AppSection, String>? withLabels, int itemLimit = 6, int sectionLimit = 3}) =>
-      searchHits(q, index: index, labels: withLabels ?? labels, wikiLabel: wiki, itemLimit: itemLimit, sectionLimit: sectionLimit);
+      searchHits(q,
+          index: index,
+          labels: withLabels ?? labels,
+          wikiLabel: wiki,
+          itemLimit: itemLimit,
+          sectionLimit: sectionLimit);
 
   group('what a search finds', () {
     test('is nothing for less than two letters: it would be every item there is', () {
@@ -55,7 +60,8 @@ void main() {
       expect(found.first.kind, SearchKind.section);
       expect(found.first.section, AppSection.trading);
       expect(found.first.label, 'S-trading');
-      expect(found.map((h) => h.kind), [SearchKind.section, SearchKind.item, SearchKind.wiki], reason: 'a page, an item, the wiki');
+      expect(found.map((h) => h.kind), [SearchKind.section, SearchKind.item, SearchKind.wiki],
+          reason: 'a page, an item, the wiki');
       expect(found[1].label, 'Trading Post Voucher');
     });
 
@@ -70,14 +76,16 @@ void main() {
       final found = hits('world', withLabels: named);
       final pages = found.where((h) => h.kind == SearchKind.section).toList();
       expect(pages.length, 3, reason: 'no more than a few');
-      expect(pages.map((h) => h.section), [AppSection.bosses, AppSection.maps, AppSection.wvw], reason: 'in the order of the menu, those that begin with it');
+      expect(pages.map((h) => h.section), [AppSection.bosses, AppSection.maps, AppSection.wvw],
+          reason: 'in the order of the menu, those that begin with it');
       expect(found.any((h) => h.label == 'Newsworld'), isFalse);
     });
 
     test('has no more items than it is asked for, and none that is not in the index', () {
       expect(hits('great', itemLimit: 2).where((h) => h.kind == SearchKind.item).length, 2);
       expect(hits('great', itemLimit: 0).where((h) => h.kind == SearchKind.item), isEmpty);
-      expect(searchHits('great', index: ItemIndex.empty, labels: labels, wikiLabel: wiki).map((h) => h.kind), [SearchKind.wiki]);
+      expect(searchHits('great', index: ItemIndex.empty, labels: labels, wikiLabel: wiki).map((h) => h.kind),
+          [SearchKind.wiki]);
     });
 
     test('is the same for capitals, and takes what was typed as it was typed for the wiki', () {
@@ -129,7 +137,8 @@ void main() {
       expect(find.byType(ListTile), findsNothing);
     });
 
-    testWidgets('opens what it found under it as something is typed, the items, the pages and the wiki', (tester) async {
+    testWidgets('opens what it found under it as something is typed, the items, the pages and the wiki',
+        (tester) async {
       await show(tester);
       await tester.enterText(find.byType(TextField), 'great');
       await tester.pumpAndSettle();

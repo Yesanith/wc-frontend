@@ -545,7 +545,8 @@ const frStrings = <String, String>{
   'n_items': '{n} objets',
   'language': 'Langue',
   'landing_title': 'Ton compagnon Guild Wars 2',
-  'landing_sub': 'Personnages, portefeuille, comptoir commercial, boss mondiaux, artisanat, carte du monde et événements de guilde, tout au même endroit. Gratuit et non officiel.',
+  'landing_sub':
+      'Personnages, portefeuille, comptoir commercial, boss mondiaux, artisanat, carte du monde et événements de guilde, tout au même endroit. Gratuit et non officiel.',
   'landing_start': 'Commencer',
   'landing_guest': 'Continuer en invité',
   'landing_f_characters': 'Équipement, builds et temps de jeu de chaque personnage.',

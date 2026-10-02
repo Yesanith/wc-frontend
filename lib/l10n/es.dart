@@ -543,7 +543,8 @@ const esStrings = <String, String>{
   'n_items': '{n} objetos',
   'language': 'Idioma',
   'landing_title': 'Tu compañero de Guild Wars 2',
-  'landing_sub': 'Personajes, cartera, banco de comercio, jefes del mundo, artesanía, mapa del mundo y eventos de hermandad, todo en un solo lugar. Gratis y no oficial.',
+  'landing_sub':
+      'Personajes, cartera, banco de comercio, jefes del mundo, artesanía, mapa del mundo y eventos de hermandad, todo en un solo lugar. Gratis y no oficial.',
   'landing_start': 'Empezar',
   'landing_guest': 'Continuar como invitado',
   'landing_f_characters': 'Equipo, builds y tiempo de juego de cada personaje.',
