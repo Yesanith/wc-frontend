@@ -11,7 +11,8 @@ import 'responsive.dart';
 /// the others in a folder of their own
 const siteBase = 'https://yesanith.github.io/tyria-companion/';
 
-String sitePageUrl(AppLang lang, String page) => lang == AppLang.en ? '$siteBase$page.html' : '$siteBase${lang.code}/$page.html';
+String sitePageUrl(AppLang lang, String page) =>
+    lang == AppLang.en ? '$siteBase$page.html' : '$siteBase${lang.code}/$page.html';
 
 /// the sections that stand on their own in the bar of a site, and the groups of the others, each with the key of its heading.
 /// settings and about are at the end of the bar. every section is in one of them: what is not could not be reached
@@ -71,7 +72,8 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final nav = <Widget>[
-      for (final sec in siteNavSingles) SiteNavButton(label: labels[sec]!, selected: current == sec, onTap: () => onSelect(sec)),
+      for (final sec in siteNavSingles)
+        SiteNavButton(label: labels[sec]!, selected: current == sec, onTap: () => onSelect(sec)),
       for (var i = 0; i < siteNavGroups.length; i++)
         _SiteNavMenu(
           label: groupLabels[i],
@@ -226,7 +228,8 @@ class _SiteNavMenu extends StatelessWidget {
       style: MenuStyle(
         backgroundColor: WidgetStatePropertyAll(AppColors.surface),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: AppColors.line)),
+          RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), side: const BorderSide(color: AppColors.line)),
         ),
       ),
       menuChildren: [
@@ -274,12 +277,17 @@ class SiteFooter extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(note, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                    child: Text(note,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12, color: AppColors.hint)),
                   ),
                   for (final link in links)
                     TextButton(
                       onPressed: link.onTap,
-                      style: TextButton.styleFrom(foregroundColor: AppColors.muted, textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                      style: TextButton.styleFrom(
+                          foregroundColor: AppColors.muted,
+                          textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                       child: Text(link.label),
                     ),
                 ],

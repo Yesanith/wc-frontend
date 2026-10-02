@@ -20,7 +20,8 @@ void main() {
     });
 
     test('has the groups the menu of the app has', () {
-      expect(siteNavGroups.map((g) => g.$1), ['nav_group_account', 'nav_group_economy', 'nav_group_world', 'nav_group_reference']);
+      expect(siteNavGroups.map((g) => g.$1),
+          ['nav_group_account', 'nav_group_economy', 'nav_group_world', 'nav_group_reference']);
     });
   });
 
@@ -69,7 +70,8 @@ void main() {
       ));
     }
 
-    testWidgets('has the name, the sections that stand alone, the groups, the account and the settings', (tester) async {
+    testWidgets('has the name, the sections that stand alone, the groups, the account and the settings',
+        (tester) async {
       await show(tester, current: AppSection.home, onSelect: (_) {});
       expect(find.text('Tyria Codex'), findsOneWidget);
       for (final sec in siteNavSingles) {
@@ -84,7 +86,8 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
-    testWidgets('goes to a section that stands alone, to the settings and to the home page by its name', (tester) async {
+    testWidgets('goes to a section that stands alone, to the settings and to the home page by its name',
+        (tester) async {
       final chosen = <AppSection>[];
       await show(tester, current: AppSection.home, onSelect: chosen.add);
       await tester.tap(find.text('S-daily'));
@@ -94,7 +97,8 @@ void main() {
       expect(chosen, [AppSection.daily, AppSection.settings, AppSection.about, AppSection.home]);
     });
 
-    testWidgets('opens a group under its heading, and what is chosen in it is gone to and the menu shut', (tester) async {
+    testWidgets('opens a group under its heading, and what is chosen in it is gone to and the menu shut',
+        (tester) async {
       final chosen = <AppSection>[];
       await show(tester, current: AppSection.home, onSelect: chosen.add);
       await tester.tap(find.text('Economy'));
@@ -120,7 +124,9 @@ void main() {
       expect(selected('S-daily'), isFalse);
     });
 
-    testWidgets('does not overflow in a window just wide enough for it, and has the progress bar only while something is updating', (tester) async {
+    testWidgets(
+        'does not overflow in a window just wide enough for it, and has the progress bar only while something is updating',
+        (tester) async {
       await show(tester, current: AppSection.home, onSelect: (_) {}, size: const Size(1100, 800));
       expect(tester.takeException(), isNull);
       expect(find.byType(LinearProgressIndicator), findsNothing);
