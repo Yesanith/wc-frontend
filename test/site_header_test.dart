@@ -126,7 +126,8 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
-    testWidgets('has every section within reach at the widths the page gives it, the search in the bar does not push them out of it',
+    testWidgets(
+        'has every section within reach at the widths the page gives it, the search in the bar does not push them out of it',
         (tester) async {
       addTearDown(tester.view.reset);
       // what the page puts in the bar at a width: (the width, the width of the search, the account)
