@@ -75,130 +75,131 @@ class LandingScreen extends ConsumerWidget {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: contentMaxWidth),
                     child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            const DiamondEmblem(size: 34),
-                            const SizedBox(width: 12),
-                            Text('Tyria Codex', style: display(20)),
-                            const SizedBox(width: 8),
-                            const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
-                            const Spacer(),
-                            PopupMenuButton<AppLang>(
-                              tooltip: s.t('language'),
-                              initialValue: lang,
-                              onSelected: (l) => ref.read(langProvider.notifier).set(l),
-                              itemBuilder: (_) =>
-                                  [for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName))],
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.translate, size: 18, color: AppColors.gold),
-                                    const SizedBox(width: 6),
-                                    Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                                  ],
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const DiamondEmblem(size: 34),
+                              const SizedBox(width: 12),
+                              Text('Tyria Codex', style: display(20)),
+                              const SizedBox(width: 8),
+                              const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                              const Spacer(),
+                              PopupMenuButton<AppLang>(
+                                tooltip: s.t('language'),
+                                initialValue: lang,
+                                onSelected: (l) => ref.read(langProvider.notifier).set(l),
+                                itemBuilder: (_) => [
+                                  for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName))
+                                ],
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.translate, size: 18, color: AppColors.gold),
+                                      const SizedBox(width: 6),
+                                      Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: width >= 900 ? 84 : 48),
-                        Text(
-                          s.t('landing_title'),
-                          textAlign: TextAlign.center,
-                          style: display(width >= 900 ? 54 : 36),
-                        ),
-                        const SizedBox(height: 18),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 700),
-                          child: Text(
-                            s.t('landing_sub'),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 17, height: 1.55, color: AppColors.muted),
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            alignment: WrapAlignment.center,
-                            children: [startButton, guestButton]),
-                        const SizedBox(height: 18),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
-                            const SizedBox(width: 6),
-                            Flexible(
-                                child: Text(s.t('privacy_note'),
-                                    style: const TextStyle(fontSize: 12, color: AppColors.hint))),
-                          ],
-                        ),
-                        SizedBox(height: width >= 900 ? 84 : 48),
-                        LayoutBuilder(
-                          builder: (context, box) {
-                            final columns = landingColumns(box.maxWidth);
-                            final cardWidth = (box.maxWidth - (columns - 1) * 16) / columns;
-                            return Wrap(
-                              spacing: 16,
-                              runSpacing: 16,
-                              children: [
-                                for (final (icon, title, body) in landingFeatures)
-                                  SizedBox(
-                                    width: cardWidth,
-                                    child: Panel(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.gold.withValues(alpha: 0.12),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: Icon(icon, color: AppColors.gold, size: 24),
-                                          ),
-                                          const SizedBox(height: 14),
-                                          Text(s.t(title),
-                                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                                          const SizedBox(height: 6),
-                                          Text(s.t(body),
-                                              style:
-                                                  const TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 56),
-                        Panel(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-                          child: Column(
-                            children: [
-                              Text(s.t('landing_title'), textAlign: TextAlign.center, style: display(24)),
-                              const SizedBox(height: 18),
-                              Wrap(
-                                  spacing: 12,
-                                  runSpacing: 12,
-                                  alignment: WrapAlignment.center,
-                                  children: [startButton, guestButton]),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 40),
-                      ],
+                          SizedBox(height: width >= 900 ? 84 : 48),
+                          Text(
+                            s.t('landing_title'),
+                            textAlign: TextAlign.center,
+                            style: display(width >= 900 ? 54 : 36),
+                          ),
+                          const SizedBox(height: 18),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 700),
+                            child: Text(
+                              s.t('landing_sub'),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 17, height: 1.55, color: AppColors.muted),
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                          Wrap(
+                              spacing: 12,
+                              runSpacing: 12,
+                              alignment: WrapAlignment.center,
+                              children: [startButton, guestButton]),
+                          const SizedBox(height: 18),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                  child: Text(s.t('privacy_note'),
+                                      style: const TextStyle(fontSize: 12, color: AppColors.hint))),
+                            ],
+                          ),
+                          SizedBox(height: width >= 900 ? 84 : 48),
+                          LayoutBuilder(
+                            builder: (context, box) {
+                              final columns = landingColumns(box.maxWidth);
+                              final cardWidth = (box.maxWidth - (columns - 1) * 16) / columns;
+                              return Wrap(
+                                spacing: 16,
+                                runSpacing: 16,
+                                children: [
+                                  for (final (icon, title, body) in landingFeatures)
+                                    SizedBox(
+                                      width: cardWidth,
+                                      child: Panel(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.gold.withValues(alpha: 0.12),
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Icon(icon, color: AppColors.gold, size: 24),
+                                            ),
+                                            const SizedBox(height: 14),
+                                            Text(s.t(title),
+                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                                            const SizedBox(height: 6),
+                                            Text(s.t(body),
+                                                style: const TextStyle(
+                                                    fontSize: 14, height: 1.45, color: AppColors.muted)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 56),
+                          Panel(
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                            child: Column(
+                              children: [
+                                Text(s.t('landing_title'), textAlign: TextAlign.center, style: display(24)),
+                                const SizedBox(height: 18),
+                                Wrap(
+                                    spacing: 12,
+                                    runSpacing: 12,
+                                    alignment: WrapAlignment.center,
+                                    children: [startButton, guestButton]),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 ),
               ],
             ),
