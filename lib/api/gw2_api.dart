@@ -59,6 +59,7 @@ class Gw2Api {
     this.cache,
     this.onRevalidated,
     this.onBackground,
+    this.serverPrices,
     http.Client? client,
   }) : _client = client ?? http.Client();
 
@@ -67,6 +68,9 @@ class Gw2Api {
 
   /// +1 when a background refresh starts, -1 when it ends
   final void Function(int delta)? onBackground;
+
+  /// the prices the server has read, for these items. the game is asked for the ones it has not, or has not read lately
+  final Future<List<Json>> Function(List<int> ids)? serverPrices;
 
   /// upper bound per static cache (items, skills, ...) kept on disk
   static const _maxCachedPerKind = 6000;
@@ -372,10 +376,25 @@ class Gw2Api {
     return raw.map((e) => e is Map ? Map<String, dynamic>.from(e) : null).toList();
   }
 
-  /// trading post buy/sell listings, keyed by item id. not cached, prices move
+  /// trading post buy/sell listings, keyed by item id. not cached, prices move. the server's, when it has read them lately, else the
+  /// game's
   Future<Map<int, Json>> prices(Iterable<int> ids) async {
+    final wanted = ids.where((id) => id > 0).toSet().toList();
     final out = <int, Json>{};
-    for (final chunk in _chunks(ids.where((id) => id > 0).toSet().toList())) {
+    final server = serverPrices;
+    if (server != null && wanted.isNotEmpty) {
+      try {
+        for (final chunk in _chunks(wanted)) {
+          for (final row in await server(chunk)) {
+            if (serverPriceFresh(row)) out[asInt(row['id'])] = row;
+          }
+        }
+      } catch (_) {
+        // the server is a shortcut, never a need: the game is asked for all of it
+        out.clear();
+      }
+    }
+    for (final chunk in _chunks([for (final id in wanted) if (!out.containsKey(id)) id])) {
       try {
         final raw = await get('/commerce/prices', {'ids': chunk.join(',')});
         for (final e in _list(raw)) {
@@ -792,4 +811,16 @@ bool pathNeedsKey(String path) {
   return RegExp(
     r'^/guild/[0-9A-Fa-f-]{36}/(log|members|ranks|stash|storage|teams|treasury|upgrades)',
   ).hasMatch(p);
+}
+
+/// how old a price of the server may be, and still be taken for the price now: it reads every ten minutes
+const serverPriceMaxAge = Duration(minutes: 25);
+
+/// whether a price the server gives was read lately enough
+bool serverPriceFresh(Json row, {DateTime? now}) {
+  final at = DateTime.tryParse('${row['updated_at']}');
+  if (at == null) return false;
+  final age = (now ?? DateTime.now()).difference(at);
+  // a clock a few minutes ahead is not a reason to distrust a price
+  return age < serverPriceMaxAge && age > const Duration(minutes: -5);
 }
