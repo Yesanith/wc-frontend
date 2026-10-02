@@ -87,9 +87,9 @@ class LandingScreen extends ConsumerWidget {
                               const SizedBox(width: 12),
                               Text('Tyria Codex', style: display(20)),
                               if (!narrow) ...[
-                              const SizedBox(width: 8),
-                              const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
-                            ],
+                                const SizedBox(width: 8),
+                                const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                              ],
                               const Spacer(),
                               PopupMenuButton<AppLang>(
                                 tooltip: s.t('language'),
@@ -105,9 +105,9 @@ class LandingScreen extends ConsumerWidget {
                                     children: [
                                       const Icon(Icons.translate, size: 18, color: AppColors.gold),
                                       if (!narrow) ...[
-                                      const SizedBox(width: 6),
-                                      Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                                    ],
+                                        const SizedBox(width: 6),
+                                        Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                                      ],
                                     ],
                                   ),
                                 ),
