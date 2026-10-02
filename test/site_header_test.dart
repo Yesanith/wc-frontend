@@ -26,7 +26,9 @@ void main() {
   });
 
   group('what the bar has room for', () {
-    test('is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest', () {
+    test(
+        'is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest',
+        () {
       expect(siteBarLayout(1000).searchWidth, isNull);
       expect(siteBarLayout(1499).searchWidth, isNull);
       expect(siteBarLayout(1500).searchWidth, 200);
@@ -157,7 +159,9 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
-    testWidgets('has every section within reach at every width the page gives it, with the search the bar has room for in it', (tester) async {
+    testWidgets(
+        'has every section within reach at every width the page gives it, with the search the bar has room for in it',
+        (tester) async {
       addTearDown(tester.view.reset);
       for (final width in [1100.0, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
         final layout = siteBarLayout(width);
