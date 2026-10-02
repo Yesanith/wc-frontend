@@ -26,7 +26,9 @@ void main() {
   });
 
   group('what the bar has room for', () {
-    test('is a site from a width that has room for the whole bar, with the search as a button where the box does not fit', () {
+    test(
+        'is a site from a width that has room for the whole bar, with the search as a button where the box does not fit',
+        () {
       expect(siteMinWidth, 1280);
       expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
       expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
@@ -295,13 +297,15 @@ void main() {
         ),
       ));
       expect(tester.takeException(), isNull);
-      expect(tester.getSize(find.byType(SiteFooter)).height, SiteFooter.height + 1, reason: 'a line, and the rule above it');
+      expect(tester.getSize(find.byType(SiteFooter)).height, SiteFooter.height + 1,
+          reason: 'a line, and the rule above it');
       final owner = tester.getTopLeft(find.text('© 2026 Tyria Codex')).dy;
       final link = tester.getTopLeft(find.text('Privacy')).dy;
       expect((owner - link).abs() < 12, isTrue, reason: 'on one line');
     });
 
-    testWidgets('puts its parts one under another where there is no room for a line, and does not overflow', (tester) async {
+    testWidgets('puts its parts one under another where there is no room for a line, and does not overflow',
+        (tester) async {
       tester.view.physicalSize = const Size(390, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -310,7 +314,11 @@ void main() {
         home: Scaffold(
           bottomNavigationBar: SiteFooter(
             note: 'An unofficial Guild Wars 2 companion. Not affiliated with ArenaNet or NCSOFT.',
-            links: [(label: 'Privacy', onTap: () {}), (label: 'Terms', onTap: () {}), (label: 'Source code', onTap: () {})],
+            links: [
+              (label: 'Privacy', onTap: () {}),
+              (label: 'Terms', onTap: () {}),
+              (label: 'Source code', onTap: () {})
+            ],
             year: 2026,
           ),
         ),
