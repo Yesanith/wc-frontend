@@ -549,7 +549,8 @@ const deStrings = <String, String>{
   'language': 'Sprache',
   'ui_scale': 'Größe der Oberfläche',
   'ui_scale_auto': 'Automatisch',
-  'ui_scale_hint': 'Macht alles auf einem großen Bildschirm größer. Automatisch wächst es ab einer Bildschirmbreite von 1600 Pixeln.',
+  'ui_scale_hint':
+      'Macht alles auf einem großen Bildschirm größer. Automatisch wächst es ab einer Bildschirmbreite von 1600 Pixeln.',
   'open_arena_net': 'account.arena.net öffnen',
   'paste': 'Einfügen',
   'permissions': 'BERECHTIGUNGEN',
