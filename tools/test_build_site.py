@@ -118,6 +118,42 @@ class SiteTest(unittest.TestCase):
             for a in parser.lang_links:
                 self.assertTrue(a["href"].endswith(page), (path, a["href"]))
 
+    def test_every_page_says_what_it_is_for_a_search_engine_and_a_chat_that_shows_a_link(self):
+        for path, html in self.pages.items():
+            if not path.endswith(".html"):
+                continue
+            for needle in ('<meta name="description" content="', '<link rel="canonical" href="', 'property="og:title"',
+                           'property="og:description"', 'property="og:url"', 'property="og:image"', 'name="twitter:card"',
+                           'name="theme-color"', '<link rel="icon"'):
+                self.assertIn(needle, html, "%s lacks %s" % (path, needle))
+            self.assertIn('og:image" content="https://yesanith.github.io/tyria-companion/app/icons/Icon-512.png"', html, path)
+
+    def test_a_page_is_its_own_canonical_address_and_says_it_in_its_language(self):
+        privacy = self.pages["tr/privacy.html"]
+        self.assertIn('<link rel="canonical" href="https://yesanith.github.io/tyria-companion/tr/privacy.html">', privacy)
+        self.assertIn('property="og:url" content="https://yesanith.github.io/tyria-companion/tr/privacy.html"', privacy)
+        self.assertIn('property="og:locale" content="tr"', privacy)
+        self.assertIn("Android, iPhone ve tarayıcı için", privacy, "the description is in the language of the page")
+        self.assertIn('content="https://yesanith.github.io/tyria-companion/privacy.html"', self.pages["privacy.html"])
+        # the icon is the app's, found from a folder of a language too
+        self.assertIn('<link rel="icon" href="../app/favicon.png">', privacy)
+        self.assertIn('<link rel="icon" href="app/favicon.png">', self.pages["privacy.html"])
+
+    def test_the_title_of_a_link_has_the_name_of_the_site_and_is_not_made_of_markup(self):
+        for path, html in self.pages.items():
+            if not path.endswith(".html"):
+                continue
+            title = re.search(r'property="og:title" content="([^"]*)"', html).group(1)
+            self.assertIn("Tyria Codex", title, path)
+            self.assertNotIn("<", title, path)
+            self.assertNotIn("&lt;", title, path)
+
+    def test_what_is_put_in_a_tag_cannot_end_it(self):
+        contents = {lang: site.load(lang) for lang in site.LANGS}
+        tags = site.social_tags("en", "index", 'A "quoted" <b>title</b>', "", contents)
+        self.assertIn('content="A &quot;quoted&quot; title · Tyria Codex"', tags)
+        self.assertNotIn('"quoted"', tags)
+
     def test_the_page_says_its_language_and_offers_the_others_to_search_engines(self):
         for lang in site.LANGS:
             text = self.pages[site.page_file(lang, "faq")]

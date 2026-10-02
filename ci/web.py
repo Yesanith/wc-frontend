@@ -5,6 +5,7 @@ iOS needs to add it to the home screen and run it like an app. Run after
 import json
 import re
 import sys
+from html import escape
 from pathlib import Path
 
 WEB = Path("web")
@@ -13,6 +14,7 @@ GOLD = "#DFC295"  # its accent
 NAME = "Tyria Codex"
 DESCRIPTION = "An unofficial Guild Wars 2 companion: characters, wallet, trading post, crafting, world bosses, a world map and guild events."
 ICON = Path("ci/launcher/play_store_512.png")
+SITE = "https://yesanith.github.io/tyria-companion/"
 
 
 def patch_index(html: str) -> str:
@@ -22,6 +24,14 @@ def patch_index(html: str) -> str:
     # a phone shows the page edge to edge, and the colours of the app instead of white
     extra = f"""
   <meta name="theme-color" content="{BG}">
+  <link rel="canonical" href="{SITE}app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{NAME}">
+  <meta property="og:title" content="{NAME}">
+  <meta property="og:description" content="{escape(DESCRIPTION)}">
+  <meta property="og:url" content="{SITE}app/">
+  <meta property="og:image" content="{SITE}app/icons/Icon-512.png">
+  <meta name="twitter:card" content="summary">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
