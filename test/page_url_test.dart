@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tyria_codex/state/navigation.dart';
@@ -124,6 +125,43 @@ void main() {
       announceSection(AppSection.news);
       expect(calls.single['uri'], '/news');
       expect(sectionFromBrowser, isNull);
+    });
+  });
+
+  group('the address put back', () {
+    final calls = <Map<dynamic, dynamic>>[];
+
+    setUp(() {
+      calls.clear();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
+        return null;
+      });
+    });
+
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, null);
+    });
+
+    test('is the page the app is at, in place of what is there and with no new place in the history', () {
+      restoreSectionUrl(AppSection.wiki);
+      expect(calls.single['uri'], '/wiki');
+      expect(calls.single['replace'], true);
+      restoreSectionUrl(AppSection.home);
+      expect(calls.last['uri'], '/');
+      expect(calls.last['replace'], true);
+    });
+
+    test('is asked for whenever a route is pushed, taken off, removed or replaced, by the observer of the navigator', () {
+      var asked = 0;
+      final observer = UrlRestorer(() => asked++);
+      final a = MaterialPageRoute<void>(builder: (_) => const SizedBox());
+      final b = MaterialPageRoute<void>(builder: (_) => const SizedBox());
+      observer.didPush(a, null);
+      observer.didPop(a, null);
+      observer.didRemove(a, b);
+      observer.didReplace(newRoute: b, oldRoute: a);
+      expect(asked, 4);
     });
   });
 }
