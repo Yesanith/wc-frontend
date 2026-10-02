@@ -94,7 +94,8 @@ void announceSection(AppSection next) {
 /// puts the address of the page the app is at back in the browser, in place of what is there, so without a new place in the history. the navigator of the app
 /// tells the browser the name of the route it is at, which is "/" for the page of the app, and so puts out the address of a page that was opened by a link, and
 /// does it again when a window or a page is closed. what the page is is the app's to say
-void restoreSectionUrl(AppSection section) => SystemNavigator.routeInformationUpdated(uri: Uri(path: sectionPath(section)), replace: true);
+void restoreSectionUrl(AppSection section) =>
+    SystemNavigator.routeInformationUpdated(uri: Uri(path: sectionPath(section)), replace: true);
 
 /// the navigator of the app, watched: whenever a route is pushed or taken off [restore] is called, to put the address of the page back
 class UrlRestorer extends NavigatorObserver {
