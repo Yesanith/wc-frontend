@@ -261,7 +261,8 @@ class AdminSystem {
 
   List<SystemTable> get tables => [
         for (final t in _maps(raw['tables']))
-          SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest']), dead: asInt(t['dead']), vacuumed: _time(t['vacuumed'])),
+          SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest']),
+              dead: asInt(t['dead']), vacuumed: _time(t['vacuumed'])),
       ];
 
   /// the largest tables kept outside the app's own (the scheduler's log, the answers of pg_net, the accounts), with their rows as the planner counts them
