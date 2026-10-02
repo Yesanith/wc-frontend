@@ -15,8 +15,9 @@ on:
         description: 'The address of the site, without a slash at the end (the pages of github when empty)'
         required: false
 
+# write, to keep what went wrong on a branch where it can be read
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   smoke:
@@ -48,10 +49,43 @@ jobs:
         working-directory: e2e
 
       - name: Look at the site
-        run: npx playwright test
+        run: |
+          set -o pipefail
+          npx playwright test 2>&1 | tee "$RUNNER_TEMP/smoke.log"
         working-directory: e2e
         env:
           BASE_URL: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}
+
+      # what went wrong, on a branch of its own, so that it can be read without opening the run: what the tests said, and for each that failed what the page
+      # had in it when it did (the tree the browser reads the page by, which says what is there and what it is called)
+      - name: Keep the failure where it can be read
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          test -f "$RUNNER_TEMP/smoke.log" || exit 0
+          dir="$(mktemp -d)"
+          mkdir -p "$dir/snapshots"
+          # the files of the tests that failed, the longest of them cut
+          find e2e/test-results -name 'error-context.md' 2>/dev/null | while read -r f; do
+            name="$(basename "$(dirname "$f")")"
+            head -n 220 "$f" > "$dir/snapshots/${name:0:90}.md"
+          done
+          cd "$dir"
+          git init -q
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git checkout -q -b ci-logs-smoke
+          {
+            echo "commit: $GITHUB_SHA"
+            echo "run: $GITHUB_RUN_ID"
+            echo "site: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}"
+            echo
+            head -n 700 "$RUNNER_TEMP/smoke.log"
+          } > smoke-failure.txt
+          git add -A
+          git commit -q -m "The smoke failure of $GITHUB_SHA"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-smoke
 
       # what the browser saw, to look at when something is wrong and when it is not
       - name: Keep what was seen
