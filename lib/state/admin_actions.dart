@@ -147,7 +147,8 @@ String rowTitle(List<TableColumn> columns, Map<String, dynamic> row, {int parts 
 String rowJson(Map<String, dynamic> row) => const JsonEncoder.withIndent('  ').convert(row);
 
 /// whether an address is one of a Discord webhook, which is all the alerts may be sent to
-bool isDiscordWebhook(String url) => RegExp(r'^https://(discord|discordapp)\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+$').hasMatch(url.trim());
+bool isDiscordWebhook(String url) =>
+    RegExp(r'^https://(discord|discordapp)\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+$').hasMatch(url.trim());
 
 /// something that was sent to the administrator, or a test
 class AlertEntry {
@@ -180,7 +181,11 @@ class AdminAlerts {
   List<AlertEntry> get recent => [
         for (final r in (raw['recent'] as List? ?? const []))
           if (r is Map)
-            AlertEntry(at: DateTime.tryParse('${r['at']}')?.toLocal(), kind: '${r['kind']}', message: '${r['message']}', sent: r['sent'] == true),
+            AlertEntry(
+                at: DateTime.tryParse('${r['at']}')?.toLocal(),
+                kind: '${r['kind']}',
+                message: '${r['message']}',
+                sent: r['sent'] == true),
       ];
 }
 
@@ -237,7 +242,8 @@ class SupabaseAdminBackend implements AdminBackend {
   }
 
   @override
-  Future<AdminAlerts> alerts() async => AdminAlerts(Map<String, dynamic>.from(await _client.rpc('admin_alerts') as Map));
+  Future<AdminAlerts> alerts() async =>
+      AdminAlerts(Map<String, dynamic>.from(await _client.rpc('admin_alerts') as Map));
 
   @override
   Future<bool> setAlertWebhook(String? url) async {

@@ -510,7 +510,8 @@ void main() {
         ],
       });
       expect([alerts.webhookSet, alerts.webhookTail], [true, '-xyz']);
-      expect(alerts.problemsNow.map((p) => (p.key, p.severity)), [('sync:tp-sync:refused', 'bad'), ('db:size', 'warn')], reason: 'a warning when it says no more');
+      expect(alerts.problemsNow.map((p) => (p.key, p.severity)), [('sync:tp-sync:refused', 'bad'), ('db:size', 'warn')],
+          reason: 'a warning when it says no more');
       expect(alerts.recent.length, 2);
       expect(alerts.recent.first.at, isNotNull);
       expect(alerts.recent.first.sent, isTrue);
@@ -531,7 +532,8 @@ void main() {
           prefsProvider.overrideWithValue(prefs),
           adminBackendProvider.overrideWithValue(backend),
           adminPollEveryProvider.overrideWithValue(Duration.zero),
-          adminSystemProvider.overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
+          adminSystemProvider
+              .overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
           adminDashboardProvider.overrideWith((ref) async => AdminDashboard({})),
         ],
         child: MaterialApp(
@@ -547,7 +549,8 @@ void main() {
       return backend;
     }
 
-    testWidgets('say that they go nowhere when there is no webhook, and offer to set one, and none of the rest', (tester) async {
+    testWidgets('say that they go nowhere when there is no webhook, and offer to set one, and none of the rest',
+        (tester) async {
       await showAlerts(tester, FakeBackend());
       expect(find.textContaining('Nowhere: set a Discord webhook'), findsOneWidget);
       expect(find.text('Set webhook'), findsOneWidget);
@@ -556,7 +559,9 @@ void main() {
       expect(find.text('Nothing is wrong'), findsOneWidget);
     });
 
-    testWidgets('say where they go by the last letters of the webhook, and offer to change it, test it and take it away', (tester) async {
+    testWidgets(
+        'say where they go by the last letters of the webhook, and offer to change it, test it and take it away',
+        (tester) async {
       await showAlerts(tester, FakeBackend(alerts: const AdminAlerts({'webhook_set': true, 'webhook_tail': '-xyz'})));
       expect(find.text('Sent to a Discord webhook (…-xyz)'), findsOneWidget);
       expect(find.text('Change webhook'), findsOneWidget);
@@ -590,7 +595,8 @@ void main() {
     });
 
     testWidgets('take the webhook away', (tester) async {
-      final backend = await showAlerts(tester, FakeBackend(alerts: const AdminAlerts({'webhook_set': true, 'webhook_tail': '-xyz'})));
+      final backend = await showAlerts(
+          tester, FakeBackend(alerts: const AdminAlerts({'webhook_set': true, 'webhook_tail': '-xyz'})));
       await tester.tap(find.text('Remove'));
       await tester.pumpAndSettle();
       expect(backend.webhooks, [null]);
@@ -629,7 +635,9 @@ void main() {
     testWidgets('say so when the test could not be sent', (tester) async {
       await showAlerts(
         tester,
-        FakeBackend(alerts: const AdminAlerts({'webhook_set': true, 'webhook_tail': '-xyz'}), failWith: Exception('no webhook')),
+        FakeBackend(
+            alerts: const AdminAlerts({'webhook_set': true, 'webhook_tail': '-xyz'}),
+            failWith: Exception('no webhook')),
       );
       await tester.tap(find.text('Send a test'));
       await tester.pumpAndSettle();
@@ -648,13 +656,26 @@ void main() {
               {'key': 'sync:tp-sync:refused', 'message': 'tp-sync is refused by every call (401)', 'severity': 'bad'},
             ],
             'recent': [
-              {'at': DateTime.now().subtract(const Duration(minutes: 10)).toUtc().toIso8601String(), 'kind': 'raised', 'key': 'k', 'message': 'tp-sync is refused by every call (401)', 'sent': true},
-              {'at': DateTime.now().subtract(const Duration(hours: 3)).toUtc().toIso8601String(), 'kind': 'resolved', 'key': 'j', 'message': 'Old problem', 'sent': false},
+              {
+                'at': DateTime.now().subtract(const Duration(minutes: 10)).toUtc().toIso8601String(),
+                'kind': 'raised',
+                'key': 'k',
+                'message': 'tp-sync is refused by every call (401)',
+                'sent': true
+              },
+              {
+                'at': DateTime.now().subtract(const Duration(hours: 3)).toUtc().toIso8601String(),
+                'kind': 'resolved',
+                'key': 'j',
+                'message': 'Old problem',
+                'sent': false
+              },
             ],
           }),
         ),
       );
-      expect(find.text('tp-sync is refused by every call (401)'), findsNWidgets(2), reason: 'wrong now, and what was sent of it');
+      expect(find.text('tp-sync is refused by every call (401)'), findsNWidgets(2),
+          reason: 'wrong now, and what was sent of it');
       expect(find.text('Nothing is wrong'), findsNothing);
       expect(find.text('10 min ago'), findsOneWidget);
       expect(find.text('3 h ago · not sent'), findsOneWidget);
