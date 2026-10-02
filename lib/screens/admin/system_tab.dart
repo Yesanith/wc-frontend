@@ -387,7 +387,8 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(headline, style: TextStyle(fontWeight: FontWeight.w800, color: good ? AppColors.gold : AppColors.ember)),
+            Text(headline,
+                style: TextStyle(fontWeight: FontWeight.w800, color: good ? AppColors.gold : AppColors.ember)),
             const SizedBox(height: 10),
             Flexible(child: SingleChildScrollView(child: SelectableText(body, style: const TextStyle(fontSize: 13)))),
           ],
@@ -430,7 +431,9 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
       a == null ? 'No answer yet' : (a.ok ? 'Discord accepted it (${a.summary})' : 'Discord answered ${a.summary}'),
       a == null
           ? 'Discord has not answered in fifteen seconds. Look in the channel in a minute.'
-          : (a.ok ? 'Look for it in the channel of the webhook.' : (a.content.isEmpty ? 'It said nothing.' : a.content)),
+          : (a.ok
+              ? 'Look for it in the channel of the webhook.'
+              : (a.content.isEmpty ? 'It said nothing.' : a.content)),
       good: a?.ok == true,
     );
   }
@@ -452,7 +455,9 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     return ref.watch(adminAlertsProvider).when(
-          loading: () => const Panel(child: Center(child: Padding(padding: EdgeInsets.all(8), child: CircularProgressIndicator(strokeWidth: 2)))),
+          loading: () => const Panel(
+              child:
+                  Center(child: Padding(padding: EdgeInsets.all(8), child: CircularProgressIndicator(strokeWidth: 2)))),
           error: (e, _) => Panel(
             child: Row(
               children: [
@@ -472,8 +477,13 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        alerts.webhookSet ? 'Sent to a Discord webhook (…${alerts.webhookTail})' : 'Nowhere: set a Discord webhook to be told when something is wrong',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: alerts.webhookSet ? AppColors.textSoft : AppColors.ember),
+                        alerts.webhookSet
+                            ? 'Sent to a Discord webhook (…${alerts.webhookTail})'
+                            : 'Nowhere: set a Discord webhook to be told when something is wrong',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: alerts.webhookSet ? AppColors.textSoft : AppColors.ember),
                       ),
                       const SizedBox(height: 4),
                       const Text(
@@ -502,7 +512,8 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                 problems.isEmpty
                     ? const AdminHealth([HealthLine('Right now', 'Nothing is wrong', HealthLevel.good)])
                     : AdminHealth([
-                        for (final p in problems) HealthLine('Wrong now', p.message, p.severity == 'bad' ? HealthLevel.bad : HealthLevel.warn),
+                        for (final p in problems)
+                          HealthLine('Wrong now', p.message, p.severity == 'bad' ? HealthLevel.bad : HealthLevel.warn),
                       ]),
                 if (alerts.recent.isNotEmpty) ...[
                   const SizedBox(height: 10),
@@ -511,7 +522,9 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('SENT LATELY', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+                        const Text('SENT LATELY',
+                            style: TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
                         const SizedBox(height: 4),
                         for (final e in alerts.recent)
                           Padding(
@@ -521,7 +534,9 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                               children: [
                                 Text(_icon(e.kind), style: const TextStyle(fontSize: 13)),
                                 const SizedBox(width: 8),
-                                Expanded(child: Text(e.message, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                                Expanded(
+                                    child: Text(e.message,
+                                        style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
                                 const SizedBox(width: 8),
                                 Text(
                                   '${e.at == null ? '' : ago(e.at!, now)}${e.sent ? '' : ' · not sent'}',
@@ -569,7 +584,8 @@ class _WebhookDialogState extends State<_WebhookDialog> {
   void _save() {
     final url = _controller.text.trim();
     if (!isDiscordWebhook(url)) {
-      setState(() => _error = 'That is not the address of a Discord webhook. It begins with https://discord.com/api/webhooks/');
+      setState(() =>
+          _error = 'That is not the address of a Discord webhook. It begins with https://discord.com/api/webhooks/');
       return;
     }
     Navigator.of(context).pop(url);
@@ -592,7 +608,8 @@ class _WebhookDialogState extends State<_WebhookDialog> {
             controller: _controller,
             autofocus: true,
             keyboardType: TextInputType.url,
-            decoration: InputDecoration(hintText: 'https://discord.com/api/webhooks/…', errorText: _error, errorMaxLines: 3),
+            decoration:
+                InputDecoration(hintText: 'https://discord.com/api/webhooks/…', errorText: _error, errorMaxLines: 3),
             onSubmitted: (_) => _save(),
           ),
         ],
