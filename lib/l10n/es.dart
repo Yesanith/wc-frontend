@@ -542,6 +542,7 @@ const esStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} objetos',
   'language': 'Idioma',
+  'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
   'landing_sub':
       'Personajes, cartera, banco de comercio, jefes del mundo, artesanía, mapa del mundo y eventos de hermandad, todo en un solo lugar. Gratis y no oficial.',

@@ -270,6 +270,8 @@ Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemI
           ),
           const SizedBox(height: 8),
           Text(s.t('alert_in_gold'), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+          const SizedBox(height: 6),
+          Text(s.t('alert_push_hint'), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
         ],
       ),
       actions: [
@@ -288,5 +290,9 @@ Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemI
   sell.dispose();
   buy.dispose();
   // null means cancelled, an empty alert means remove
-  if (result != null) await ref.read(priceAlertsProvider.notifier).set(itemId, result);
+  if (result != null) {
+    await ref.read(priceAlertsProvider.notifier).set(itemId, result);
+    // and the server, so that it comes as a notification when the app is shut
+    unawaited(ref.read(priceAlertMirrorProvider).mirror(itemId, name, result));
+  }
 }

@@ -111,7 +111,7 @@
  },
  "privacy": {
   "title": "Privacy policy",
-  "updated": "Last updated 1 October 2026",
+  "updated": "Last updated 2 October 2026",
   "blocks": [
    [
     "p",
@@ -142,7 +142,8 @@
      "<strong>Guild events:</strong> events you create, including weekly ones, your answers, the role, profession and other roles you offer, the Guild Wars 2 account you choose, the Discord roles an event is open to, and the Arcdps report links (dps.report) members add with the boss, the result, the number of players and the duration that dps.report gives for them.",
      "<strong>Notifications:</strong> if you allow them, your device's notification token and the app's language, to send event reminders.",
      "<strong>Discord servers:</strong> if you lead a guild and connect a Discord server: the server's id and the channel events are posted to, its settings (time zone, language, threads, scheduled events, reminders), the channels and the optional role for news, daily achievements and game updates, the Discord roles matched to guild ranks, and which roles the bot gave to which Discord user so that it can take back only those. The bot cannot read messages. It receives the commands and buttons people use, and with a button press Discord sends the person's id and their roles in that server, which are used for that moment and not stored.",
-     "<strong>Counts without a name:</strong> to see that it works and which versions are in use, our servers count, per day and with nothing that says who, how often each version of the app is opened by a signed in player and on what it runs (Android or the browser), what the Discord bot's commands do and how many requests succeed or fail. These are numbers only."
+     "<strong>Counts without a name:</strong> to see that it works and which versions are in use, our servers count, per day and with nothing that says who, how often each version of the app is opened by a signed in player and on what it runs (Android or the browser), what the Discord bot's commands do and how many requests succeed or fail. These are numbers only.",
+     "<strong>Price alerts:</strong> if you set one while signed in, the app also keeps it on our servers: the item, its name, your prices and when it last notified you, so that we can send a notification when the trading post reaches them. It is deleted when you remove it or delete your account."
     ]
    ],
    [

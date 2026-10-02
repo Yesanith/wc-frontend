@@ -111,7 +111,7 @@
  },
  "privacy": {
   "title": "Gizlilik politikası",
-  "updated": "Son güncelleme 1 Ekim 2026",
+  "updated": "Son güncelleme 2 Ekim 2026",
   "blocks": [
    "Tyria Codex resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam ve analiz aracı içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
@@ -125,7 +125,8 @@
     "<strong>Lonca etkinlikleri:</strong> oluşturduğun (haftalık olanlar dahil) etkinlikler, katılımların, rolün, sınıfın ve sunduğun diğer roller, seçtiğin GW2 hesabı, etkinliğin açık olduğu Discord rolleri ve üyelerin eklediği Arcdps rapor bağlantıları (dps.report) ile dps.report'un onlar için verdiği boss, sonuç, oyuncu sayısı ve süre.",
     "<strong>Bildirimler:</strong> izin verirsen cihazının bildirim token'ı ve uygulama dili.",
     "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber, günlük başarım ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
-    "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır."
+    "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır.",
+    "<strong>Fiyat alarmları:</strong> giriş yapmışken bir alarm kurarsan uygulama onu sunucularımızda da tutar: eşya, adı, fiyatların ve sana en son ne zaman bildirim gönderildiği. Böylece trading post bu fiyatlara ulaşınca bildirim gönderebiliriz. Alarmı kaldırdığında ya da hesabını sildiğinde silinir."
    ],
    "Kimler görür",
    [

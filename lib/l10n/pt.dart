@@ -541,6 +541,7 @@ const ptStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} itens',
   'language': 'Idioma',
+  'alert_push_hint': 'Com login e notificações permitidas, você é avisado também com o app fechado.',
   'landing_title': 'Seu companheiro de Guild Wars 2',
   'landing_sub':
       'Personagens, carteira, posto de troca, chefes do mundo, criação, mapa-múndi e eventos de guilda, tudo em um só lugar. Grátis e não oficial.',
