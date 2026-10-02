@@ -469,7 +469,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     // footer under the page, as a site has, not a panel beside it as an app has
     final wide = useSideMenu(MediaQuery.sizeOf(context));
     _wide = wide;
-    final site = kIsWeb && wide;
+    final site = kIsWeb && wide && MediaQuery.sizeOf(context).width >= siteMinWidth;
     // the tab of the browser says which page it is, as the tab of a site does
     if (kIsWeb) _setPageTitle(sitePageTitle(section, s.t(_titleKeys[section]!)));
     final lang = ref.watch(langProvider);

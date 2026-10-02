@@ -26,6 +26,12 @@ void main() {
   });
 
   group('what the bar has room for', () {
+    test('is a site from a width that has room for the whole bar, with the search as a button where the box does not fit', () {
+      expect(siteMinWidth, 1280);
+      expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
+      expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
+    });
+
     test(
         'is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest',
         () {
@@ -163,7 +169,7 @@ void main() {
         'has every section within reach at every width the page gives it, with the search the bar has room for in it',
         (tester) async {
       addTearDown(tester.view.reset);
-      for (final width in [1100.0, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
+      for (final width in [siteMinWidth, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
         final layout = siteBarLayout(width);
         tester.view.physicalSize = Size(width, 900);
         tester.view.devicePixelRatio = 1;
@@ -274,6 +280,50 @@ void main() {
   });
 
   group('the footer', () {
+    testWidgets('is one thin line where there is room for it, and does not fill the window', (tester) async {
+      tester.view.physicalSize = const Size(1800, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        theme: buildTheme(),
+        home: Scaffold(
+          bottomNavigationBar: SiteFooter(
+            note: 'An unofficial companion',
+            links: [(label: 'Privacy', onTap: () {})],
+            year: 2026,
+          ),
+        ),
+      ));
+      expect(tester.takeException(), isNull);
+      expect(tester.getSize(find.byType(SiteFooter)).height, SiteFooter.height + 1, reason: 'a line, and the rule above it');
+      final owner = tester.getTopLeft(find.text('© 2026 Tyria Codex')).dy;
+      final link = tester.getTopLeft(find.text('Privacy')).dy;
+      expect((owner - link).abs() < 12, isTrue, reason: 'on one line');
+    });
+
+    testWidgets('puts its parts one under another where there is no room for a line, and does not overflow', (tester) async {
+      tester.view.physicalSize = const Size(390, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        theme: buildTheme(),
+        home: Scaffold(
+          bottomNavigationBar: SiteFooter(
+            note: 'An unofficial Guild Wars 2 companion. Not affiliated with ArenaNet or NCSOFT.',
+            links: [(label: 'Privacy', onTap: () {}), (label: 'Terms', onTap: () {}), (label: 'Source code', onTap: () {})],
+            year: 2026,
+          ),
+        ),
+      ));
+      expect(tester.takeException(), isNull);
+      expect(find.text('© 2026 Tyria Codex'), findsOneWidget);
+      expect(find.text('Source code'), findsOneWidget);
+      final owner = tester.getTopLeft(find.text('© 2026 Tyria Codex')).dy;
+      final note = tester.getTopLeft(find.textContaining('An unofficial')).dy;
+      final link = tester.getTopLeft(find.text('Privacy')).dy;
+      expect(owner < note && note < link, isTrue, reason: 'one under another');
+    });
+
     testWidgets('says whose it is and the year, the year of the day when none is given', (tester) async {
       await tester.pumpWidget(MaterialApp(
         theme: buildTheme(),
