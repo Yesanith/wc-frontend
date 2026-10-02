@@ -371,7 +371,8 @@ void main() {
       expect(next('50 3 * * *', 1, 0), DateTime.utc(2026, 10, 2, 3, 50));
       expect(next('50 3 * * *', 3, 50), DateTime.utc(2026, 10, 3, 3, 50));
       expect(next('50 3 * * *', 12, 0), DateTime.utc(2026, 10, 3, 3, 50));
-      expect(next('5 0 * * *', 0, 1), DateTime.utc(2026, 10, 2, 0, 5), reason: 'five past midnight is still to come at one past');
+      expect(next('5 0 * * *', 0, 1), DateTime.utc(2026, 10, 2, 0, 5),
+          reason: 'five past midnight is still to come at one past');
       expect(next('5 0 * * *', 0, 6), DateTime.utc(2026, 10, 3, 0, 5), reason: 'and tomorrow\'s at six past');
     });
 
