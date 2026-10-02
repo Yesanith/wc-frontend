@@ -39,10 +39,25 @@ void main() {
       expect(parseServerSnapshot(null), isNull);
       expect(parseServerSnapshot('text'), isNull);
       expect(parseServerSnapshot([]), isNull);
-      expect(parseServerSnapshot({'updated_at': null, 'rows': [[1, 1, 1, 1, 1]]}), isNull, reason: 'nothing read yet');
+      expect(
+          parseServerSnapshot({
+            'updated_at': null,
+            'rows': [
+              [1, 1, 1, 1, 1]
+            ]
+          }),
+          isNull,
+          reason: 'nothing read yet');
       expect(parseServerSnapshot({'updated_at': ago(1), 'rows': []}), isNull);
       expect(parseServerSnapshot({'updated_at': ago(1), 'rows': 'x'}), isNull);
-      expect(parseServerSnapshot({'updated_at': 'yesterday', 'rows': [[1, 1, 1, 1, 1]]}), isNull);
+      expect(
+          parseServerSnapshot({
+            'updated_at': 'yesterday',
+            'rows': [
+              [1, 1, 1, 1, 1]
+            ]
+          }),
+          isNull);
     });
 
     test('has the same rows as the copy kept on the device, so one is read as the other', () {
