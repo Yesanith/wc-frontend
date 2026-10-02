@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../services/item_index.dart';
 import '../util.dart';
@@ -71,6 +72,37 @@ class TpPrice {
   double get margin => buy <= 0 ? 0 : flip / buy;
 }
 
+/// how old the server's list may be and still be the prices now: it reads all of the trading post every ten minutes
+const marketSnapshotMaxAge = Duration(minutes: 30);
+
+/// whether a list the server made at [at] is recent enough
+bool snapshotFresh(DateTime at, {DateTime? now}) {
+  final age = (now ?? DateTime.now()).difference(at);
+  // a clock a few minutes ahead is not a reason to distrust it
+  return age < marketSnapshotMaxAge && age > const Duration(minutes: -5);
+}
+
+/// the server's list of the prices of every item, and when it read them. null when it is not a list
+({DateTime at, Map<int, TpPrice> prices})? parseServerSnapshot(dynamic raw) {
+  if (raw is! Map) return null;
+  final at = DateTime.tryParse('${raw['updated_at']}');
+  final rows = raw['rows'];
+  if (at == null || rows is! List || rows.isEmpty) return null;
+  return (at: at, prices: decodeMarketPrices(rows));
+}
+
+/// the whole list of prices as the server read it: one request where the game takes a hundred and forty. anybody has it, signed in or
+/// not. null when the server cannot be reached or has nothing yet
+Future<({DateTime at, Map<int, TpPrice> prices})?> fetchServerSnapshot() async {
+  final SupabaseClient client;
+  try {
+    client = Supabase.instance.client;
+  } catch (_) {
+    return null;
+  }
+  return parseServerSnapshot(await client.rpc('tp_snapshot'));
+}
+
 /// how far the price download is, 0 to 1
 final marketPricesProgressProvider = StateProvider<double>((ref) => 0);
 
@@ -78,7 +110,7 @@ final marketPricesProgressProvider = StateProvider<double>((ref) => 0);
 /// again. about 140 requests each time, too many to repeat on every visit
 const marketPricesTtl = Duration(minutes: 10);
 
-/// the price of every tradable item, a few requests at a time. refreshed by
+/// the price of every tradable item: the server's list in one request, else the game's, a few requests at a time. refreshed by
 /// pull to refresh only: an automatic timer kept downloading several
 /// megabytes every few minutes while the tab sat behind another section.
 /// released when the browse tab closes
@@ -91,6 +123,17 @@ final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) as
     final cached = await cache?.read('market_prices', maxAge: marketPricesTtl);
     final rows = cached?['rows'];
     if (rows is List && rows.isNotEmpty) return decodeMarketPrices(rows);
+  }
+  // the server has read all of it lately: one request instead of a hundred and forty. the game is asked only when it has not
+  try {
+    final snapshot = await fetchServerSnapshot();
+    if (snapshot != null && snapshotFresh(snapshot.at)) {
+      Future(() => ref.read(marketPricesProgressProvider.notifier).state = 1);
+      await cache?.write('market_prices', {'rows': encodeMarketPrices(snapshot.prices)});
+      return snapshot.prices;
+    }
+  } catch (_) {
+    // the server is a shortcut, never a need
   }
   final ids = [for (final e in entries) e.id];
   final chunks = [
