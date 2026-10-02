@@ -157,31 +157,31 @@ class _Columns extends StatelessWidget {
       child: Material(
         type: MaterialType.transparency,
         child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          title: Text('${columns.length} columns', style: const TextStyle(fontWeight: FontWeight.w700)),
-          subtitle: Text(
-            orderedBy == null ? 'In no order that is known' : 'Newest first, by $orderedBy',
-            style: const TextStyle(fontSize: 12, color: AppColors.muted),
-          ),
-          childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (final c in columns)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Row(
-                  children: [
-                    Icon(c.key ? Icons.key : (c.hidden ? Icons.visibility_off_outlined : Icons.circle),
-                        size: c.key || c.hidden ? 14 : 5, color: AppColors.gold),
-                    const SizedBox(width: 8),
-                    Expanded(child: Text(c.name, style: const TextStyle(fontSize: 13))),
-                    Text(c.type, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
-                  ],
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            title: Text('${columns.length} columns', style: const TextStyle(fontWeight: FontWeight.w700)),
+            subtitle: Text(
+              orderedBy == null ? 'In no order that is known' : 'Newest first, by $orderedBy',
+              style: const TextStyle(fontSize: 12, color: AppColors.muted),
+            ),
+            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final c in columns)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    children: [
+                      Icon(c.key ? Icons.key : (c.hidden ? Icons.visibility_off_outlined : Icons.circle),
+                          size: c.key || c.hidden ? 14 : 5, color: AppColors.gold),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(c.name, style: const TextStyle(fontSize: 13))),
+                      Text(c.type, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                    ],
+                  ),
                 ),
-              ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
@@ -207,44 +207,44 @@ class _RowCard extends StatelessWidget {
         child: Material(
           type: MaterialType.transparency,
           child: Theme(
-          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            title: Text(rowTitle(columns, row),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-            subtitle: stamp == null
-                ? null
-                : Text(ago(stamp, now), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-            childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (final c in columns)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(c.name, style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-                      SelectableText(cellText(row[c.name]), style: const TextStyle(fontSize: 13)),
-                    ],
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: Text(rowTitle(columns, row),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+              subtitle: stamp == null
+                  ? null
+                  : Text(ago(stamp, now), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              expandedCrossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final c in columns)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(c.name, style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                        SelectableText(cellText(row[c.name]), style: const TextStyle(fontSize: 13)),
+                      ],
+                    ),
+                  ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      await Clipboard.setData(ClipboardData(text: rowJson(row)));
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Row copied')));
+                      }
+                    },
+                    icon: const Icon(Icons.copy, size: 16),
+                    label: const Text('Copy as JSON'),
                   ),
                 ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: rowJson(row)));
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Row copied')));
-                    }
-                  },
-                  icon: const Icon(Icons.copy, size: 16),
-                  label: const Text('Copy as JSON'),
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
           ),
         ),
       ),
