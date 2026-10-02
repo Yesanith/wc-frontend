@@ -277,37 +277,41 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
     final backend = ref.read(adminBackendProvider);
     final every = ref.read(adminPollEveryProvider);
     final messenger = ScaffoldMessenger.of(context);
+    // what is to be told when it is over: a title, what happened, and what it said. told once the button has stopped turning
+    ({String headline, String body, bool good})? outcome;
     try {
       final result = await backend.run(job.name);
       if (!mounted) return;
-      if (!result.ok) {
-        await _say(job.name, 'It failed', result.error ?? 'No reason was given');
-        return;
-      }
       final request = result.requestId;
-      if (job.wakes && request != null) {
+      if (!result.ok) {
+        outcome = (headline: 'It failed', body: result.error ?? 'No reason was given', good: false);
+      } else if (job.wakes && request != null) {
         messenger.showSnackBar(SnackBar(content: Text('${job.name}: called, waiting for its answer')));
         final answer = await waitForAnswer(() => backend.callResult(request), every: every);
         if (!mounted) return;
         messenger.hideCurrentSnackBar();
-        await _say(
-          job.name,
-          answer == null ? 'No answer yet' : 'Answered ${answer.summary}',
-          answer == null
-              ? 'It has not answered in fifteen seconds. It may still be working: look at the sync functions below in a minute.'
-              : (answer.content.isEmpty ? 'It said nothing.' : answer.content),
-          good: answer?.ok == true,
-        );
+        outcome = answer == null
+            ? (
+                headline: 'No answer yet',
+                body: 'It has not answered in fifteen seconds. It may still be working: look at the sync functions below in a minute.',
+                good: false,
+              )
+            : (
+                headline: 'Answered ${answer.summary}',
+                body: answer.content.isEmpty ? 'It said nothing.' : answer.content,
+                good: answer.ok,
+              );
       } else {
         messenger.showSnackBar(SnackBar(content: Text('${job.name}: done')));
       }
       ref.invalidate(adminSystemProvider);
       ref.invalidate(adminDashboardProvider);
     } catch (e) {
-      if (mounted) await _say(job.name, 'It failed', '$e');
+      outcome = (headline: 'It failed', body: '$e', good: false);
     } finally {
       if (mounted) setState(() => _running.remove(job.name));
     }
+    if (outcome != null && mounted) await _say(job.name, outcome.headline, outcome.body, good: outcome.good);
   }
 
   @override
