@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tyria_codex/screens/admin/system_tab.dart';
 import 'package:tyria_codex/state/admin.dart';
 import 'package:tyria_codex/state/admin_system.dart';
+import 'package:tyria_codex/state/settings.dart';
 import 'package:tyria_codex/theme.dart';
 
 void main() {
@@ -369,7 +371,8 @@ void main() {
       expect(next('50 3 * * *', 1, 0), DateTime.utc(2026, 10, 2, 3, 50));
       expect(next('50 3 * * *', 3, 50), DateTime.utc(2026, 10, 3, 3, 50));
       expect(next('50 3 * * *', 12, 0), DateTime.utc(2026, 10, 3, 3, 50));
-      expect(next('5 0 * * *', 0, 1), DateTime.utc(2026, 10, 3, 0, 5));
+      expect(next('5 0 * * *', 0, 1), DateTime.utc(2026, 10, 2, 0, 5), reason: 'five past midnight is still to come at one past');
+      expect(next('5 0 * * *', 0, 6), DateTime.utc(2026, 10, 3, 0, 5), reason: 'and tomorrow\'s at six past');
     });
 
     test(
@@ -444,6 +447,9 @@ void main() {
       tester.view.physicalSize = const Size(1800, 9000);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
+      // the words of the page come from the language, which is kept in the preferences
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
       final sys = system({
         'sync': [sync('discord-sync', calls: 3, ok: 0, unauthorized: 3, status: 401), sync('tp-sync')],
         'sync_calls_total': 7,
@@ -456,6 +462,7 @@ void main() {
       });
       await tester.pumpWidget(ProviderScope(
         overrides: [
+          prefsProvider.overrideWithValue(prefs),
           adminSystemProvider.overrideWith((ref) async => sys),
           adminDashboardProvider.overrideWith((ref) async => AdminDashboard({
                 'cron': [
