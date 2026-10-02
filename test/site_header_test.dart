@@ -126,6 +126,35 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
+    testWidgets('has the search between the sections and the account when it is given one, and none when it is not', (tester) async {
+      tester.view.physicalSize = const Size(1400, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      Widget header({Widget? search}) => MaterialApp(
+            theme: buildTheme(),
+            home: Scaffold(
+              appBar: SiteHeader(
+                current: AppSection.home,
+                onSelect: (_) {},
+                labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+                icons: {for (final sec in AppSection.values) sec: Icons.circle},
+                groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+                account: 'Leo.1234',
+                search: search,
+              ),
+              body: const SizedBox.expand(),
+            ),
+          );
+      await tester.pumpWidget(header());
+      expect(find.text('SEARCH BOX'), findsNothing);
+      await tester.pumpWidget(header(search: const SizedBox(width: 260, child: Text('SEARCH BOX'))));
+      expect(find.text('SEARCH BOX'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      final box = tester.getCenter(find.text('SEARCH BOX')).dx;
+      expect(box < tester.getCenter(find.text('Leo.1234')).dx, isTrue, reason: 'before the account');
+      expect(box > tester.getCenter(find.text('S-weekly')).dx, isTrue, reason: 'after the sections');
+    });
+
     testWidgets('goes to a section that stands alone, to the settings and to the home page by its name',
         (tester) async {
       final chosen = <AppSection>[];
