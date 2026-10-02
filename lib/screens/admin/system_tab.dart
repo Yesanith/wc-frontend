@@ -128,7 +128,15 @@ class AdminSystemTab extends ConsumerWidget {
                   title: 'Signed up, by profession', rows: [for (final e in sys.byProfession) (e.label, '${e.count}')]),
             ],
             const Eyebrow('Every table'),
+            AdminHealth([sys.databaseLine()]),
+            const SizedBox(height: 10),
             _Tables(sys.tables, now),
+            if (sys.hidden.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _Panel(title: "Outside the app's tables", rows: [
+                for (final h in sys.hidden) (h.name, '${formatBytes(h.bytes)} · about ${fmtInt(h.rows)} rows'),
+              ]),
+            ],
           ],
         );
       },
@@ -195,12 +203,20 @@ class _Tables extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 5,
-                      child: Text(t.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(t.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                        // what is dead takes room: told when there is much of it
+                        if (t.dead >= 1000)
+                          Text(
+                            '${fmtInt(t.dead)} dead rows${t.vacuumed == null ? '' : ', vacuumed ${ago(t.vacuumed!, now)}'}',
+                            style: TextStyle(fontSize: 11, color: t.bloated ? AppColors.ember : AppColors.hint),
+                          ),
+                      ],
                     ),
+                  ),
                     Expanded(
                       flex: 2,
                       child: Text(fmtInt(t.rows),

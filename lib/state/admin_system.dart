@@ -30,12 +30,19 @@ List<({String label, int count})> _byLabel(dynamic v, String labelKey) =>
 
 /// a table of the database: how many rows it has, how big it is with its indexes, and when something was last put in it
 class SystemTable {
-  const SystemTable(this.name, this.rows, this.bytes, this.newest);
+  const SystemTable(this.name, this.rows, this.bytes, this.newest, {this.dead = 0, this.vacuumed});
 
   final String name;
   final int rows;
   final int bytes;
   final DateTime? newest;
+
+  /// rows that were rewritten or deleted and not yet cleared away by the vacuum: they take room and are no part of the table
+  final int dead;
+  final DateTime? vacuumed;
+
+  /// more dead rows than there are live ones, and enough of them to matter: the table is mostly what it was
+  bool get bloated => dead >= 1000 && dead > rows;
 }
 
 class AdminSystem {
@@ -254,8 +261,33 @@ class AdminSystem {
 
   List<SystemTable> get tables => [
         for (final t in _maps(raw['tables']))
-          SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest'])),
+          SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest']), dead: asInt(t['dead']), vacuumed: _time(t['vacuumed'])),
       ];
+
+  /// the largest tables kept outside the app's own (the scheduler's log, the answers of pg_net, the accounts), with their rows as the planner counts them
+  List<SystemTable> get hidden => [
+        for (final t in _maps(raw['hidden'])) SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), null),
+      ];
+
+  // ---------------------------------------------------------------- the whole database
+
+  int get databaseBytes => asInt(_map(raw['database'])['size_bytes']);
+
+  /// what the plan holds
+  int get databaseLimit => asInt(_map(raw['database'])['limit_bytes']);
+
+  /// how much of what the plan holds is used, from 0 to 1. null when it is not known
+  double? get databaseShare => databaseLimit <= 0 || databaseBytes <= 0 ? null : databaseBytes / databaseLimit;
+
+  /// the size of the whole database, of what the plan holds: well under it is well, over three fifths is a warning, over four fifths an alarm
+  HealthLine databaseLine() {
+    final share = databaseShare;
+    if (share == null) return const HealthLine('Database', 'The size is not known', HealthLevel.warn);
+    final percent = share * 100;
+    final shown = percent < 1 ? 'under 1%' : '${percent.round()}%';
+    final level = share < 0.6 ? HealthLevel.good : (share < 0.8 ? HealthLevel.warn : HealthLevel.bad);
+    return HealthLine('Database', '${formatBytes(databaseBytes)} of ${formatBytes(databaseLimit)} ($shown)', level);
+  }
 
   int get totalRows => tables.fold(0, (sum, t) => sum + t.rows);
 
