@@ -45,7 +45,8 @@ int? siteGroupIndex(AppSection section) {
 }
 
 /// what the tab of the browser says: the name of the page and of the site, the site alone for its home page
-String sitePageTitle(AppSection section, String name) => section == AppSection.home ? 'Tyria Codex' : '$name · Tyria Codex';
+String sitePageTitle(AppSection section, String name) =>
+    section == AppSection.home ? 'Tyria Codex' : '$name · Tyria Codex';
 
 /// the bar at the top of the page on a wide screen in a browser: the name, the sections along it, the groups opening under their heading,
 /// the account and the settings at the end. it is what a site has in place of the menu beside the page that an app has
@@ -180,7 +181,8 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
               height: 2,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [Colors.transparent, AppColors.gold.withValues(alpha: 0.7), Colors.transparent]),
+                  gradient: LinearGradient(
+                      colors: [Colors.transparent, AppColors.gold.withValues(alpha: 0.7), Colors.transparent]),
                 ),
               ),
             ),

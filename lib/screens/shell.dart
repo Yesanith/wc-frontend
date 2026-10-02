@@ -161,7 +161,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     if (_pageTitle == title) return;
     _pageTitle = title;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setApplicationSwitcherDescription(ApplicationSwitcherDescription(label: title, primaryColor: 0xFF0D0B09));
+      SystemChrome.setApplicationSwitcherDescription(
+          ApplicationSwitcherDescription(label: title, primaryColor: 0xFF0D0B09));
     });
   }
 
@@ -555,7 +556,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                         alignment: Alignment.centerLeft,
                                         child: SitePageHeading(
                                           title: s.t(_titleKeys[sec]!),
-                                          kicker: siteGroupIndex(sec) == null ? null : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                          kicker: siteGroupIndex(sec) == null
+                                              ? null
+                                              : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
                                         ),
                                       ),
                                     ),
