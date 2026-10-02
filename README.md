@@ -193,3 +193,10 @@ checks that every language has everything English has, that a translation keeps 
 emphasis of the English text, and that every link leads somewhere. The translations say that the English
 version applies where they differ. The app in the browser (`site/app/`) is built when the site is published and
 is not part of this.
+
+## Smoke tests in a browser
+
+`e2e/` has tests that open the site in a real browser (Playwright): that a link to it shows its name and picture, that a visitor is shown what the app is, that a guest gets the app with the bar of a site, that
+the pages have addresses and the back button goes between them, that the search finds a page, and that the page throws no error. Flutter draws on a canvas, so the tests switch its accessibility tree on to read it.
+They run in the workflow Smoke, which is not part of the deploy: after the site has been deployed, every morning and on request (`BASE_URL` takes the address of a build served anywhere else). What the browser saw is kept as
+screenshots for two weeks.

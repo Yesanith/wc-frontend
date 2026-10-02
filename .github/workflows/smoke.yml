@@ -1,0 +1,67 @@
+name: Smoke
+
+# the site in a real browser: the page loads, a visitor is shown what the app is, a guest gets the app with its bar, the pages have addresses, the
+# search finds them, and nothing the page throws goes unseen. it is a workflow of its own, so that it does not hold up the deploy of the site: it runs
+# when the site has been deployed (after a wait, the pages are not served at once), every morning, and when it is asked to
+on:
+  workflow_run:
+    workflows: ['Site']
+    types: [completed]
+  schedule:
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'The address of the site, without a slash at the end (the pages of github when empty)'
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    # after a deploy that went well
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for the pages to be served
+        if: github.event_name == 'workflow_run'
+        run: sleep 90
+
+      - name: Install
+        run: npm install --no-audit --no-fund
+        working-directory: e2e
+
+      - name: Check the tests
+        run: npx tsc --noEmit
+        working-directory: e2e
+
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+        working-directory: e2e
+
+      - name: Look at the site
+        run: npx playwright test
+        working-directory: e2e
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}
+
+      # what the browser saw, to look at when something is wrong and when it is not
+      - name: Keep what was seen
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke
+          path: |
+            e2e/screenshots
+            e2e/playwright-report
+            e2e/test-results
+          if-no-files-found: ignore
+          retention-days: 14

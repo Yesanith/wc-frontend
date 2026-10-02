@@ -1,0 +1,14 @@
+{
+  "name": "tyria-codex-e2e",
+  "private": true,
+  "description": "Smoke tests of the site in a real browser: the page loads, a visitor is shown what the app is, a guest gets the app with its bar, the pages have addresses and the search finds them",
+  "scripts": {
+    "test": "playwright test",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
