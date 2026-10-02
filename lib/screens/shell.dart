@@ -16,6 +16,7 @@ import '../state/trading.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
+import '../widgets/site_header.dart';
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../state/period_refresh.dart';
@@ -392,9 +393,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     }
     _opened.add(section);
 
-    // a computer or a tablet held sideways keeps the menu open beside the page
+    // a computer or a tablet held sideways keeps the menu open beside the page. in a browser the menu is a bar along the top and a
+    // footer under the page, as a site has, not a panel beside it as an app has
     final wide = useSideMenu(MediaQuery.sizeOf(context));
     _wide = wide;
+    final site = kIsWeb && wide;
+    final lang = ref.watch(langProvider);
     final menu = NavigationDrawer(
       selectedIndex: section.index,
       onDestinationSelected: (i) => _select(AppSection.values[i]),
@@ -456,7 +460,18 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     final scaffold = Scaffold(
       key: _scaffoldKey,
       onDrawerChanged: _drawerChanged,
-      appBar: AppBar(
+      appBar: site
+          ? SiteHeader(
+              current: section,
+              onSelect: _select,
+              labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
+              icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
+              groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
+              account: accountName,
+              busy: sync.running || refreshing != 0,
+              progress: sync.running ? sync.ratio : null,
+            )
+          : AppBar(
         backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(s.t(_titleKeys[section]!), style: display(20)),
@@ -474,6 +489,16 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                 ),
               ),
       ),
+      bottomNavigationBar: site
+          ? SiteFooter(
+              note: s.t('site_footer_note'),
+              links: [
+                (label: s.t('site_privacy'), onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))),
+                (label: s.t('site_terms'), onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))),
+                (label: s.t('site_source'), onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))),
+              ],
+            )
+          : null,
       drawer: wide ? null : menu,
       body: SwipeToOpen(
         // the map pans sideways, the menu stays on the button and back there
@@ -498,7 +523,21 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                       ? const SizedBox.shrink()
                       : (!hasKey && sectionNeedsKey(sec))
                           ? const NeedsKeyView()
-                          : _page(sec),
+                          : site && sec != AppSection.maps && sec != AppSection.home
+                              // a page of a site has its name at the top of it, the bar of an app is where an app has it
+                              ? Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(20, 22, 20, 0),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(s.t(_titleKeys[sec]!), style: display(30)),
+                                      ),
+                                    ),
+                                    Expanded(child: _page(sec)),
+                                  ],
+                                )
+                              : _page(sec),
                 ),
               ),
           ],
@@ -513,7 +552,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _rootBack();
       },
-      child: wide
+      child: wide && !site
           ? Row(
               children: [
                 SizedBox(

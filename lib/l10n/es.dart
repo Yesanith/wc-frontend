@@ -542,6 +542,10 @@ const esStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} objetos',
   'language': 'Idioma',
+  'site_footer_note': 'Un compañero no oficial de Guild Wars 2. Sin relación con ArenaNet ni NCSOFT.',
+  'site_privacy': 'Privacidad',
+  'site_terms': 'Términos',
+  'site_source': 'Código fuente',
   'ui_scale': 'Tamaño de la interfaz',
   'ui_scale_auto': 'Automático',
   'ui_scale_hint':
