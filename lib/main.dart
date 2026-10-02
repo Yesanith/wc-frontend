@@ -15,6 +15,7 @@ import 'state/api.dart';
 import 'state/settings.dart';
 import 'theme.dart';
 import 'util.dart';
+import 'widgets/ui_zoom.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,10 +58,16 @@ class TyriaCodexApp extends ConsumerWidget {
     };
     final key = ref.watch(apiKeyProvider);
     final guest = ref.watch(guestModeProvider);
+    final chosenScale = ref.watch(uiScaleProvider);
     return MaterialApp(
       title: 'Tyria Codex',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
+      // on the web a wide screen shows everything larger, so a 2K monitor is not a phone's layout in the middle of it
+      builder: (context, child) => UiZoom(
+        scale: kIsWeb ? uiZoomFor(MediaQuery.sizeOf(context).width, chosenScale) : 1.0,
+        child: child ?? const SizedBox.shrink(),
+      ),
       home: key.when(
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (error, stack) => const OnboardingScreen(),
