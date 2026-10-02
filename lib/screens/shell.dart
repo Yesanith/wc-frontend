@@ -472,30 +472,39 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               progress: sync.running ? sync.ratio : null,
             )
           : AppBar(
-        backgroundColor: AppColors.bg,
-        surfaceTintColor: Colors.transparent,
-        title: Text(s.t(_titleKeys[section]!), style: display(20)),
-        // a full sync shows real progress, a background refresh only says
-        // that something is updating
-        bottom: !sync.running && refreshing == 0
-            ? null
-            : PreferredSize(
-                preferredSize: const Size.fromHeight(2),
-                child: LinearProgressIndicator(
-                  value: sync.running ? sync.ratio : null,
-                  minHeight: 2,
-                  backgroundColor: AppColors.track,
-                  color: AppColors.gold,
-                ),
-              ),
-      ),
+              backgroundColor: AppColors.bg,
+              surfaceTintColor: Colors.transparent,
+              title: Text(s.t(_titleKeys[section]!), style: display(20)),
+              // a full sync shows real progress, a background refresh only says
+              // that something is updating
+              bottom: !sync.running && refreshing == 0
+                  ? null
+                  : PreferredSize(
+                      preferredSize: const Size.fromHeight(2),
+                      child: LinearProgressIndicator(
+                        value: sync.running ? sync.ratio : null,
+                        minHeight: 2,
+                        backgroundColor: AppColors.track,
+                        color: AppColors.gold,
+                      ),
+                    ),
+            ),
       bottomNavigationBar: site
           ? SiteFooter(
               note: s.t('site_footer_note'),
               links: [
-                (label: s.t('site_privacy'), onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))),
-                (label: s.t('site_terms'), onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))),
-                (label: s.t('site_source'), onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))),
+                (
+                  label: s.t('site_privacy'),
+                  onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))
+                ),
+                (
+                  label: s.t('site_terms'),
+                  onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))
+                ),
+                (
+                  label: s.t('site_source'),
+                  onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))
+                ),
               ],
             )
           : null,
