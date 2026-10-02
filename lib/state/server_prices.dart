@@ -39,8 +39,7 @@ Future<List<PricePoint>> fetchServerHistory(int itemId, {int days = 180}) async 
 List<PricePoint> parseServerHistory(dynamic raw) {
   final points = [
     for (final e in (raw is List ? raw : const []))
-      if (e is Map && '${e['d']}'.length >= 10)
-        PricePoint('${e['d']}'.substring(0, 10), asInt(e['b']), asInt(e['s'])),
+      if (e is Map && '${e['d']}'.length >= 10) PricePoint('${e['d']}'.substring(0, 10), asInt(e['b']), asInt(e['s'])),
   ];
   points.sort((a, b) => a.day.compareTo(b.day));
   return points;

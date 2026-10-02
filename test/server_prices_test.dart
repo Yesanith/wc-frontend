@@ -40,7 +40,15 @@ void main() {
 
   group('what the server answers', () {
     test('prices are the rows that have an id, and nothing else', () {
-      expect(parseServerPrices([row(1), 'x', null, {'nothing': true}, row(2)]).map((e) => e['id']), [1, 2]);
+      expect(
+          parseServerPrices([
+            row(1),
+            'x',
+            null,
+            {'nothing': true},
+            row(2)
+          ]).map((e) => e['id']),
+          [1, 2]);
       expect(parseServerPrices(null), isEmpty);
       expect(parseServerPrices({'id': 1}), isEmpty);
     });

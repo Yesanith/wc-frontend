@@ -394,7 +394,10 @@ class Gw2Api {
         out.clear();
       }
     }
-    for (final chunk in _chunks([for (final id in wanted) if (!out.containsKey(id)) id])) {
+    for (final chunk in _chunks([
+      for (final id in wanted)
+        if (!out.containsKey(id)) id
+    ])) {
       try {
         final raw = await get('/commerce/prices', {'ids': chunk.join(',')});
         for (final e in _list(raw)) {
