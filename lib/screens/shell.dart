@@ -543,14 +543,15 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
               // the room of the bar decides what is in it: the account and a wide search, a narrower search, or a button that opens the
               // search in a window, so that the sections are always all there
-              account: MediaQuery.sizeOf(context).width >= 1560 ? accountName : null,
-              search: MediaQuery.sizeOf(context).width >= 1400
-                  ? _search(width: MediaQuery.sizeOf(context).width >= 1560 ? 260 : 200, onSelect: _openHit)
-                  : IconButton(
-                      tooltip: s.t('search_placeholder'),
-                      onPressed: _showSearch,
-                      icon: const Icon(Icons.search, color: AppColors.muted),
-                    ),
+              account: siteBarLayout(MediaQuery.sizeOf(context).width).account ? accountName : null,
+              search: switch (siteBarLayout(MediaQuery.sizeOf(context).width).searchWidth) {
+                final width? => _search(width: width, onSelect: _openHit),
+                null => IconButton(
+                    tooltip: s.t('search_placeholder'),
+                    onPressed: _showSearch,
+                    icon: const Icon(Icons.search, color: AppColors.muted),
+                  ),
+              },
               busy: sync.running || refreshing != 0,
               progress: sync.running ? sync.ratio : null,
             )

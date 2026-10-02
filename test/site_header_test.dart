@@ -25,6 +25,37 @@ void main() {
     });
   });
 
+  group('what the bar has room for', () {
+    test('is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest', () {
+      expect(siteBarLayout(1000).searchWidth, isNull);
+      expect(siteBarLayout(1499).searchWidth, isNull);
+      expect(siteBarLayout(1500).searchWidth, 200);
+      expect(siteBarLayout(1699).searchWidth, 200);
+      expect(siteBarLayout(1700).searchWidth, 260);
+      expect(siteBarLayout(3840).searchWidth, 260);
+    });
+
+    test('has the account only where the bar is widest, and never takes it when the search is a button', () {
+      expect(siteBarLayout(1000).account, isFalse);
+      expect(siteBarLayout(1699).account, isFalse);
+      expect(siteBarLayout(1700).account, isTrue);
+      for (var w = 800.0; w <= 3000; w += 50) {
+        final layout = siteBarLayout(w);
+        if (layout.searchWidth == null) expect(layout.account, isFalse, reason: '$w');
+      }
+    });
+
+    test('only gets wider with the window: a window wider than another has at least as much of the bar', () {
+      var previous = siteBarLayout(800);
+      for (var w = 850.0; w <= 3000; w += 50) {
+        final now = siteBarLayout(w);
+        expect((now.searchWidth ?? 0) >= (previous.searchWidth ?? 0), isTrue, reason: '$w');
+        expect(now.account || !previous.account, isTrue, reason: '$w');
+        previous = now;
+      }
+    });
+  });
+
   group('the heading and the title of a page', () {
     test('a page in a group says the group, and one that stands alone none', () {
       expect(siteGroupIndex(AppSection.trading), 1);
@@ -126,20 +157,19 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
-    testWidgets(
-        'has every section within reach at the widths the page gives it, the search in the bar does not push them out of it',
-        (tester) async {
+    testWidgets('has every section within reach at every width the page gives it, with the search the bar has room for in it', (tester) async {
       addTearDown(tester.view.reset);
-      // what the page puts in the bar at a width: (the width, the width of the search, the account)
-      for (final (width, search, account) in [
-        (1400.0, 200.0, null),
-        (1560.0, 260.0, 'Leo.1234'),
-        (1900.0, 260.0, 'Leo.1234'),
-      ]) {
+      for (final width in [1100.0, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
+        final layout = siteBarLayout(width);
         tester.view.physicalSize = Size(width, 900);
         tester.view.devicePixelRatio = 1;
         await tester.pumpWidget(MaterialApp(
           theme: buildTheme(),
+          // the font of a test has every letter as wide as it is tall, a real one a little over half of that
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)),
+            child: child!,
+          ),
           home: Scaffold(
             appBar: SiteHeader(
               current: AppSection.home,
@@ -147,8 +177,8 @@ void main() {
               labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
               icons: {for (final sec in AppSection.values) sec: Icons.circle},
               groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
-              account: account,
-              search: SizedBox(width: search, child: const Text('SEARCH')),
+              account: layout.account ? 'Leo.1234' : null,
+              search: SizedBox(width: layout.searchWidth ?? 48, child: const Text('SEARCH')),
             ),
             body: const SizedBox.expand(),
           ),

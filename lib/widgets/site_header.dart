@@ -36,6 +36,14 @@ const siteNavGroups = <(String, List<AppSection>)>[
   ('nav_group_reference', [AppSection.professions, AppSection.wiki, AppSection.news]),
 ];
 
+/// what the bar has room for at a width: a search box of a width and the account, or the search as a button that opens it in a window, so
+/// that the sections are never pushed out of the bar. the room is a width of the window and not of the bar, which is never wider than a page
+({double? searchWidth, bool account}) siteBarLayout(double width) {
+  if (width >= 1700) return (searchWidth: 260, account: true);
+  if (width >= 1500) return (searchWidth: 200, account: false);
+  return (searchWidth: null, account: false);
+}
+
 /// which group a section is in, by its place in [siteNavGroups], or null for one that stands alone
 int? siteGroupIndex(AppSection section) {
   for (var i = 0; i < siteNavGroups.length; i++) {
