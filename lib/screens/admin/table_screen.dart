@@ -153,7 +153,10 @@ class _Columns extends StatelessWidget {
   Widget build(BuildContext context) {
     return Panel(
       padding: EdgeInsets.zero,
-      child: Theme(
+      // a tile paints on the material above it, which would be hidden by the colour of the panel: it has one of its own
+      child: Material(
+        type: MaterialType.transparency,
+        child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           title: Text('${columns.length} columns', style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -179,6 +182,7 @@ class _Columns extends StatelessWidget {
               ),
           ],
         ),
+        ),
       ),
     );
   }
@@ -200,7 +204,9 @@ class _RowCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Panel(
         padding: EdgeInsets.zero,
-        child: Theme(
+        child: Material(
+          type: MaterialType.transparency,
+          child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
             title: Text(rowTitle(columns, row),
@@ -238,6 +244,7 @@ class _RowCard extends StatelessWidget {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),
