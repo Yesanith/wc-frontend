@@ -546,7 +546,8 @@ const frStrings = <String, String>{
   'language': 'Langue',
   'ui_scale': 'Taille de l\'interface',
   'ui_scale_auto': 'Automatique',
-  'ui_scale_hint': 'Agrandit tout sur un grand écran. Automatique grandit à partir d\'un écran de 1600 pixels de large.',
+  'ui_scale_hint':
+      'Agrandit tout sur un grand écran. Automatique grandit à partir d\'un écran de 1600 pixels de large.',
   'open_arena_net': 'Ouvrir account.arena.net',
   'paste': 'Coller',
   'permissions': 'AUTORISATIONS',

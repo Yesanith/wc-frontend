@@ -544,7 +544,8 @@ const esStrings = <String, String>{
   'language': 'Idioma',
   'ui_scale': 'Tamaño de la interfaz',
   'ui_scale_auto': 'Automático',
-  'ui_scale_hint': 'Agranda todo en una pantalla grande. Automático crece a partir de una pantalla de 1600 píxeles de ancho.',
+  'ui_scale_hint':
+      'Agranda todo en una pantalla grande. Automático crece a partir de una pantalla de 1600 píxeles de ancho.',
   'open_arena_net': 'Abrir account.arena.net',
   'paste': 'Pegar',
   'permissions': 'PERMISOS',
