@@ -547,6 +547,10 @@ const deStrings = <String, String>{
   'hours_short': 'Std.',
   'n_items': '{n} Gegenstände',
   'language': 'Sprache',
+  'site_footer_note': 'Ein inoffizieller Guild-Wars-2-Begleiter. Nicht mit ArenaNet oder NCSOFT verbunden.',
+  'site_privacy': 'Datenschutz',
+  'site_terms': 'Bedingungen',
+  'site_source': 'Quellcode',
   'ui_scale': 'Größe der Oberfläche',
   'ui_scale_auto': 'Automatisch',
   'ui_scale_hint':
