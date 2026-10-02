@@ -60,6 +60,15 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
   final _navigator = GlobalKey<NavigatorState>();
   late final _urlRestorer = UrlRestorer(_restoreUrl);
 
+  /// the back button goes between the pages only with a history of more than one place. it is asked for after the first frame: the navigator, as it begins, chooses a history of
+  /// one place, which would undo it if it were asked for before
+  void _startHistory() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await keepHistoryOfPages();
+      if (mounted) restoreSectionUrl(ref.read(sectionProvider));
+    });
+  }
+
   /// puts the address of the page back in the browser once the frame is made, which is when the navigator has told it its own, and again a moment later
   /// in case it does so later
   void _restoreUrl() {
@@ -70,6 +79,8 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
 
     WidgetsBinding.instance.addPostFrameCallback((_) => put());
     Future<void>.delayed(const Duration(milliseconds: 500), put);
+    // and once more, when the history has been changed over
+    Future<void>.delayed(const Duration(milliseconds: 1500), put);
   }
 
   // the observer is put in before the app's own, which would take an address it does not know for a page to push, and so is asked first
@@ -78,8 +89,7 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
     super.initState();
     if (kIsWeb) {
       WidgetsBinding.instance.addObserver(this);
-      // the back button goes between the pages, which it does only with a history of more than one place
-      keepHistoryOfPages();
+      _startHistory();
       // a link to a page opens it: its address is what the browser has to say, not the "/" of the navigator
       _restoreUrl();
     }
