@@ -133,14 +133,16 @@ void main() {
 
     setUp(() {
       calls.clear();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
         if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
         return null;
       });
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
     });
 
     test('is the page the app is at, in place of what is there and with no new place in the history', () {
@@ -152,7 +154,8 @@ void main() {
       expect(calls.last['replace'], true);
     });
 
-    test('is asked for whenever a route is pushed, taken off, removed or replaced, by the observer of the navigator', () {
+    test('is asked for whenever a route is pushed, taken off, removed or replaced, by the observer of the navigator',
+        () {
       var asked = 0;
       final observer = UrlRestorer(() => asked++);
       final a = MaterialPageRoute<void>(builder: (_) => const SizedBox());
