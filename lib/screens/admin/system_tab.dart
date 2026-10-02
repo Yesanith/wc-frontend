@@ -203,20 +203,23 @@ class _Tables extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(t.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                        // what is dead takes room: told when there is much of it
-                        if (t.dead >= 1000)
-                          Text(
-                            '${fmtInt(t.dead)} dead rows${t.vacuumed == null ? '' : ', vacuumed ${ago(t.vacuumed!, now)}'}',
-                            style: TextStyle(fontSize: 11, color: t.bloated ? AppColors.ember : AppColors.hint),
-                          ),
-                      ],
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(t.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                          // what is dead takes room: told when there is much of it
+                          if (t.dead >= 1000)
+                            Text(
+                              '${fmtInt(t.dead)} dead rows${t.vacuumed == null ? '' : ', vacuumed ${ago(t.vacuumed!, now)}'}',
+                              style: TextStyle(fontSize: 11, color: t.bloated ? AppColors.ember : AppColors.hint),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
                     Expanded(
                       flex: 2,
                       child: Text(fmtInt(t.rows),

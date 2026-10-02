@@ -358,7 +358,8 @@ void main() {
       expect(system({}).hidden, isEmpty);
     });
 
-    test('has in each table what is dead of it and when it was vacuumed, and a table that is mostly dead is bloated', () {
+    test('has in each table what is dead of it and when it was vacuumed, and a table that is mostly dead is bloated',
+        () {
       final sys = system({
         'tables': [
           {'name': 'tp_snapshot', 'rows': 1, 'bytes': 40000000, 'dead': 52, 'vacuumed': at(5)},
@@ -562,7 +563,8 @@ void main() {
       expect(find.text('tp_latest'), findsOneWidget);
       expect(find.text('open_events'), findsOneWidget);
       expect(find.textContaining('30.0 MB of 500.0 MB (6%)'), findsOneWidget, reason: 'how much of the plan is used');
-      expect(find.textContaining('60,000 dead rows, vacuumed 3 min ago'), findsOneWidget, reason: 'a table that has much that is dead says so');
+      expect(find.textContaining('60,000 dead rows, vacuumed 3 min ago'), findsOneWidget,
+          reason: 'a table that has much that is dead says so');
       expect(find.text('cron.job_run_details'), findsOneWidget, reason: 'what is kept outside the tables of the app');
       expect(tester.takeException(), isNull);
     });
