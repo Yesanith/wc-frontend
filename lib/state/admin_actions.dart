@@ -146,6 +146,44 @@ String rowTitle(List<TableColumn> columns, Map<String, dynamic> row, {int parts 
 /// a row as JSON that can be copied, written out
 String rowJson(Map<String, dynamic> row) => const JsonEncoder.withIndent('  ').convert(row);
 
+/// whether an address is one of a Discord webhook, which is all the alerts may be sent to
+bool isDiscordWebhook(String url) => RegExp(r'^https://(discord|discordapp)\.com/api/webhooks/[0-9]+/[A-Za-z0-9_-]+$').hasMatch(url.trim());
+
+/// something that was sent to the administrator, or a test
+class AlertEntry {
+  const AlertEntry({required this.at, required this.kind, required this.message, required this.sent});
+
+  final DateTime? at;
+
+  /// raised, reminder, resolved or test
+  final String kind;
+  final String message;
+
+  /// it left for Discord: false when there was no webhook to send to
+  final bool sent;
+}
+
+/// what is wrong, what was sent, and whether the alerts have anywhere to go
+class AdminAlerts {
+  const AdminAlerts(this.raw);
+
+  final Map<String, dynamic> raw;
+
+  bool get webhookSet => raw['webhook_set'] == true;
+  String get webhookTail => '${raw['webhook_tail'] ?? ''}';
+
+  List<({String key, String message, String severity})> get problemsNow => [
+        for (final p in (raw['problems_now'] as List? ?? const []))
+          if (p is Map) (key: '${p['key']}', message: '${p['message']}', severity: '${p['severity'] ?? 'warn'}'),
+      ];
+
+  List<AlertEntry> get recent => [
+        for (final r in (raw['recent'] as List? ?? const []))
+          if (r is Map)
+            AlertEntry(at: DateTime.tryParse('${r['at']}')?.toLocal(), kind: '${r['kind']}', message: '${r['message']}', sent: r['sent'] == true),
+      ];
+}
+
 /// everything the dashboard asks of the database to do and to show. one place, so that a test can put another in its stead
 abstract class AdminBackend {
   Future<List<AdminJob>> jobs();
@@ -155,6 +193,14 @@ abstract class AdminBackend {
   Future<CallAnswer?> callResult(int requestId);
 
   Future<AdminTablePage> table(TableQuery query);
+
+  Future<AdminAlerts> alerts();
+
+  /// where the alerts go: the address of a Discord webhook, or none to take it away. whether there is one now
+  Future<bool> setAlertWebhook(String? url);
+
+  /// sends a test to the webhook and gives the number of its call
+  Future<int> testAlert();
 }
 
 class SupabaseAdminBackend implements AdminBackend {
@@ -189,6 +235,18 @@ class SupabaseAdminBackend implements AdminBackend {
     });
     return AdminTablePage(Map<String, dynamic>.from(raw as Map));
   }
+
+  @override
+  Future<AdminAlerts> alerts() async => AdminAlerts(Map<String, dynamic>.from(await _client.rpc('admin_alerts') as Map));
+
+  @override
+  Future<bool> setAlertWebhook(String? url) async {
+    final raw = await _client.rpc('admin_set_alert_webhook', params: {'p_url': url});
+    return raw is Map && raw['set'] == true;
+  }
+
+  @override
+  Future<int> testAlert() async => asInt(await _client.rpc('admin_test_alert'));
 }
 
 final adminBackendProvider = Provider<AdminBackend>((ref) => const SupabaseAdminBackend());
@@ -200,3 +258,5 @@ final adminJobsProvider = FutureProvider.autoDispose<List<AdminJob>>((ref) => re
 
 final adminTableProvider = FutureProvider.autoDispose
     .family<AdminTablePage, TableQuery>((ref, query) => ref.watch(adminBackendProvider).table(query));
+
+final adminAlertsProvider = FutureProvider.autoDispose<AdminAlerts>((ref) => ref.watch(adminBackendProvider).alerts());
