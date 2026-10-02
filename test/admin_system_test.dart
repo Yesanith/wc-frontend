@@ -318,6 +318,65 @@ void main() {
     });
   });
 
+  group('the whole database', () {
+    AdminSystem sized(int bytes, {int limit = 524288000}) => system({
+          'database': {'size_bytes': bytes, 'limit_bytes': limit},
+        });
+
+    test('says how big it is of what the plan holds, and well under it is well', () {
+      final line = sized(31457280).databaseLine();
+      expect(line.detail, '30.0 MB of 500.0 MB (6%)');
+      expect(line.level, HealthLevel.good);
+      expect(sized(31457280).databaseShare, closeTo(0.06, 0.001));
+    });
+
+    test('is a warning over three fifths of it and an alarm over four fifths', () {
+      expect(sized(200 * 1048576).databaseLine().level, HealthLevel.good);
+      expect(sized(310 * 1048576).databaseLine().level, HealthLevel.warn);
+      expect(sized(420 * 1048576).databaseLine().level, HealthLevel.bad);
+      expect(sized(500 * 1048576).databaseLine().detail, contains('(100%)'));
+    });
+
+    test('is told as under one percent when it is, and not known when the server does not say', () {
+      expect(sized(2 * 1048576).databaseLine().detail, endsWith('(under 1%)'));
+      expect(system({}).databaseLine().level, HealthLevel.warn);
+      expect(system({}).databaseLine().detail, 'The size is not known');
+      expect(sized(1000, limit: 0).databaseShare, isNull);
+      expect(system({}).databaseShare, isNull);
+    });
+
+    test('has the largest tables kept outside the app\'s own, with their size', () {
+      final sys = system({
+        'hidden': [
+          {'name': 'cron.job_run_details', 'rows': 120000, 'bytes': 31457280},
+          {'name': 'auth.users', 'rows': 40, 'bytes': 65536},
+        ],
+      });
+      expect(sys.hidden.map((h) => h.name), ['cron.job_run_details', 'auth.users']);
+      expect(sys.hidden.first.bytes, 31457280);
+      expect(sys.hidden.first.rows, 120000);
+      expect(system({}).hidden, isEmpty);
+    });
+
+    test('has in each table what is dead of it and when it was vacuumed, and a table that is mostly dead is bloated', () {
+      final sys = system({
+        'tables': [
+          {'name': 'tp_snapshot', 'rows': 1, 'bytes': 40000000, 'dead': 52, 'vacuumed': at(5)},
+          {'name': 'tp_latest', 'rows': 28000, 'bytes': 9000000, 'dead': 60000, 'vacuumed': null},
+          {'name': 'big', 'rows': 100000, 'bytes': 1, 'dead': 20000},
+          {'name': 'old', 'rows': 5},
+        ],
+      });
+      final byName = {for (final t in sys.tables) t.name: t};
+      expect(byName['tp_snapshot']!.dead, 52);
+      expect(byName['tp_snapshot']!.vacuumed, isNotNull);
+      expect(byName['tp_snapshot']!.bloated, isFalse, reason: 'a few dead rows are nothing');
+      expect(byName['tp_latest']!.bloated, isTrue, reason: 'more dead than alive, and many');
+      expect(byName['big']!.bloated, isFalse, reason: 'many dead, but fewer than live');
+      expect(byName['old']!.dead, 0, reason: 'none when it is not said');
+    });
+  });
+
   group('the schedule of a job', () {
     test('is how often it runs, for the shapes the backend uses', () {
       expect(cronPeriod('20 seconds'), const Duration(seconds: 20));
@@ -456,9 +515,13 @@ void main() {
         'sync_calls_total': 7,
         'official': {'configured': false},
         'public_events': {'total': 2},
+        'database': {'size_bytes': 31457280, 'limit_bytes': 524288000},
+        'hidden': [
+          {'name': 'cron.job_run_details', 'rows': 120000, 'bytes': 31457280},
+        ],
         'tables': [
           {'name': 'open_events', 'rows': 2, 'bytes': 8192, 'newest': at(5)},
-          {'name': 'tp_latest', 'rows': 28000, 'bytes': 3000000, 'newest': null},
+          {'name': 'tp_latest', 'rows': 28000, 'bytes': 3000000, 'newest': null, 'dead': 60000, 'vacuumed': at(3)},
         ],
       });
       await tester.pumpWidget(ProviderScope(
@@ -498,6 +561,9 @@ void main() {
           reason: 'the rows of both tables: 2 and 28,000');
       expect(find.text('tp_latest'), findsOneWidget);
       expect(find.text('open_events'), findsOneWidget);
+      expect(find.textContaining('30.0 MB of 500.0 MB (6%)'), findsOneWidget, reason: 'how much of the plan is used');
+      expect(find.textContaining('60,000 dead rows, vacuumed 3 min ago'), findsOneWidget, reason: 'a table that has much that is dead says so');
+      expect(find.text('cron.job_run_details'), findsOneWidget, reason: 'what is kept outside the tables of the app');
       expect(tester.takeException(), isNull);
     });
   });
