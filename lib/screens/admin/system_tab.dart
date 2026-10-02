@@ -185,39 +185,40 @@ class _Tables extends StatelessWidget {
           const SizedBox(height: 6),
           for (final t in tables)
             InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => AdminTableScreen(table: t.name))),
+              onTap: () =>
+                  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => AdminTableScreen(table: t.name))),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Text(t.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(fmtInt(t.rows),
-                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.gold)),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(formatBytes(t.bytes),
-                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      t.newest == null ? '' : ago(t.newest!, now),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Text(t.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      flex: 2,
+                      child: Text(fmtInt(t.rows),
+                          textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(formatBytes(t.bytes),
+                          textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        t.newest == null ? '' : ago(t.newest!, now),
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
             ),
         ],
       ),
@@ -246,7 +247,8 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(headline, style: TextStyle(fontWeight: FontWeight.w800, color: good ? AppColors.gold : AppColors.ember)),
+            Text(headline,
+                style: TextStyle(fontWeight: FontWeight.w800, color: good ? AppColors.gold : AppColors.ember)),
             const SizedBox(height: 10),
             Flexible(child: SingleChildScrollView(child: SelectableText(body, style: const TextStyle(fontSize: 13)))),
           ],
@@ -311,11 +313,14 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
   @override
   Widget build(BuildContext context) {
     return ref.watch(adminJobsProvider).when(
-          loading: () => const Panel(child: Center(child: Padding(padding: EdgeInsets.all(8), child: CircularProgressIndicator(strokeWidth: 2)))),
+          loading: () => const Panel(
+              child:
+                  Center(child: Padding(padding: EdgeInsets.all(8), child: CircularProgressIndicator(strokeWidth: 2)))),
           error: (e, _) => Panel(
             child: Row(
               children: [
-                const Expanded(child: Text('The list of jobs could not be read.', style: TextStyle(color: AppColors.muted))),
+                const Expanded(
+                    child: Text('The list of jobs could not be read.', style: TextStyle(color: AppColors.muted))),
                 TextButton(onPressed: () => ref.invalidate(adminJobsProvider), child: const Text('Retry')),
               ],
             ),

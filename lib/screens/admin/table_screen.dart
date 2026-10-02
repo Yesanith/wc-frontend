@@ -82,7 +82,8 @@ class _AdminTableScreenState extends ConsumerState<AdminTableScreen> {
                 onRetry: () => ref.invalidate(adminTableProvider(query)),
                 builder: (p) => _Rows(
                   page: p,
-                  onPrevious: p.hasPrevious ? () => setState(() => _offset = (_offset - p.limit).clamp(0, 1 << 30)) : null,
+                  onPrevious:
+                      p.hasPrevious ? () => setState(() => _offset = (_offset - p.limit).clamp(0, 1 << 30)) : null,
                   onNext: p.hasNext ? () => setState(() => _offset += p.limit) : null,
                 ),
               ),
@@ -130,7 +131,8 @@ class _Rows extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(tooltip: 'Previous page', onPressed: onPrevious, icon: const Icon(Icons.chevron_left)),
-              Text(rowsLabel(page.offset, rows.length, page.total), style: const TextStyle(fontWeight: FontWeight.w700)),
+              Text(rowsLabel(page.offset, rows.length, page.total),
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
               IconButton(tooltip: 'Next page', onPressed: onNext, icon: const Icon(Icons.chevron_right)),
             ],
           ),
@@ -167,7 +169,8 @@ class _Columns extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   children: [
-                    Icon(c.key ? Icons.key : (c.hidden ? Icons.visibility_off_outlined : Icons.circle), size: c.key || c.hidden ? 14 : 5, color: AppColors.gold),
+                    Icon(c.key ? Icons.key : (c.hidden ? Icons.visibility_off_outlined : Icons.circle),
+                        size: c.key || c.hidden ? 14 : 5, color: AppColors.gold),
                     const SizedBox(width: 8),
                     Expanded(child: Text(c.name, style: const TextStyle(fontSize: 13))),
                     Text(c.type, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
@@ -200,8 +203,13 @@ class _RowCard extends StatelessWidget {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
-            title: Text(rowTitle(columns, row), maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-            subtitle: stamp == null ? null : Text(ago(stamp, now), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            title: Text(rowTitle(columns, row),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+            subtitle: stamp == null
+                ? null
+                : Text(ago(stamp, now), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
             childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             children: [

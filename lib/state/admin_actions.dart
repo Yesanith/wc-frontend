@@ -19,7 +19,8 @@ class AdminJob {
 
   static AdminJob? parse(dynamic raw) {
     if (raw is! Map || raw['name'] == null) return null;
-    return AdminJob('${raw['name']}', '${raw['what'] ?? raw['name']}', '${raw['kind'] ?? 'job'}', raw['danger'] == true);
+    return AdminJob(
+        '${raw['name']}', '${raw['what'] ?? raw['name']}', '${raw['kind'] ?? 'job'}', raw['danger'] == true);
   }
 }
 
@@ -73,7 +74,8 @@ class CallAnswer {
 }
 
 /// asks for what a call answered until it has, a number of times, a while apart. null when it never did: the call is slower than that
-Future<CallAnswer?> waitForAnswer(Future<CallAnswer?> Function() ask, {int tries = 15, Duration every = const Duration(seconds: 1)}) async {
+Future<CallAnswer?> waitForAnswer(Future<CallAnswer?> Function() ask,
+    {int tries = 15, Duration every = const Duration(seconds: 1)}) async {
   for (var i = 0; i < tries; i++) {
     final answer = await ask();
     if (answer != null) return answer;
@@ -170,10 +172,12 @@ class SupabaseAdminBackend implements AdminBackend {
   }
 
   @override
-  Future<JobResult> run(String job) async => JobResult.parse(await _client.rpc('admin_run_job', params: {'p_job': job}));
+  Future<JobResult> run(String job) async =>
+      JobResult.parse(await _client.rpc('admin_run_job', params: {'p_job': job}));
 
   @override
-  Future<CallAnswer?> callResult(int requestId) async => CallAnswer.parse(await _client.rpc('admin_call_result', params: {'p_request_id': requestId}));
+  Future<CallAnswer?> callResult(int requestId) async =>
+      CallAnswer.parse(await _client.rpc('admin_call_result', params: {'p_request_id': requestId}));
 
   @override
   Future<AdminTablePage> table(TableQuery query) async {
@@ -194,4 +198,5 @@ final adminPollEveryProvider = Provider<Duration>((ref) => const Duration(second
 
 final adminJobsProvider = FutureProvider.autoDispose<List<AdminJob>>((ref) => ref.watch(adminBackendProvider).jobs());
 
-final adminTableProvider = FutureProvider.autoDispose.family<AdminTablePage, TableQuery>((ref, query) => ref.watch(adminBackendProvider).table(query));
+final adminTableProvider = FutureProvider.autoDispose
+    .family<AdminTablePage, TableQuery>((ref, query) => ref.watch(adminBackendProvider).table(query));
