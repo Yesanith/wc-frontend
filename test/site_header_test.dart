@@ -25,6 +25,45 @@ void main() {
     });
   });
 
+  group('the heading and the title of a page', () {
+    test('a page in a group says the group, and one that stands alone none', () {
+      expect(siteGroupIndex(AppSection.trading), 1);
+      expect(siteNavGroups[siteGroupIndex(AppSection.trading)!].$1, 'nav_group_economy');
+      expect(siteGroupIndex(AppSection.wiki), 3);
+      expect(siteGroupIndex(AppSection.home), isNull);
+      expect(siteGroupIndex(AppSection.daily), isNull);
+      expect(siteGroupIndex(AppSection.settings), isNull);
+    });
+
+    test('every section of a group has its group, and the others have none', () {
+      for (final sec in AppSection.values) {
+        final inGroup = siteNavGroups.any((g) => g.$2.contains(sec));
+        expect(siteGroupIndex(sec) != null, inGroup, reason: sec.name);
+      }
+    });
+
+    test('the tab says the page and the site, the site alone for the home page', () {
+      expect(sitePageTitle(AppSection.home, 'Home'), 'Tyria Codex');
+      expect(sitePageTitle(AppSection.trading, 'Trading post'), 'Trading post · Tyria Codex');
+    });
+
+    testWidgets('the heading has the group above the name, and none above a page that stands alone', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: buildTheme(),
+        home: const Scaffold(
+          body: Column(children: [
+            SitePageHeading(title: 'Trading post', kicker: 'Economy'),
+            SitePageHeading(title: 'Daily'),
+          ]),
+        ),
+      ));
+      expect(find.text('ECONOMY'), findsOneWidget, reason: 'in capitals, small');
+      expect(find.text('Trading post'), findsOneWidget);
+      expect(find.text('Daily'), findsOneWidget);
+      expect(find.text('DAILY'), findsNothing);
+    });
+  });
+
   group('the address of a page of the static site', () {
     test('is at the root in English and in a folder of its own in the other languages', () {
       expect(sitePageUrl(AppLang.en, 'privacy'), 'https://yesanith.github.io/tyria-companion/privacy.html');
@@ -81,6 +120,7 @@ void main() {
         expect(find.text(label), findsOneWidget, reason: label);
       }
       expect(find.text('Leo.1234'), findsOneWidget);
+      expect(find.byIcon(Icons.person_outline), findsOneWidget, reason: 'the account is a badge');
       expect(find.byTooltip('S-settings'), findsOneWidget);
       expect(find.byTooltip('S-about'), findsOneWidget);
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
@@ -136,6 +176,19 @@ void main() {
   });
 
   group('the footer', () {
+    testWidgets('says whose it is and the year, the year of the day when none is given', (tester) async {
+      await tester.pumpWidget(MaterialApp(
+        theme: buildTheme(),
+        home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [], year: 2031)),
+      ));
+      expect(find.text('© 2031 Tyria Codex'), findsOneWidget);
+      await tester.pumpWidget(MaterialApp(
+        theme: buildTheme(),
+        home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [])),
+      ));
+      expect(find.text('© ${DateTime.now().year} Tyria Codex'), findsOneWidget);
+    });
+
     testWidgets('has the note and the links, which are followed', (tester) async {
       final followed = <String>[];
       await tester.pumpWidget(MaterialApp(

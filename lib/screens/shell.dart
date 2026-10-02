@@ -154,6 +154,17 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   /// the window is wide enough for a menu that stays open, set on every build
   bool _wide = false;
 
+  /// what the tab of the browser says now, set when it changes
+  String? _pageTitle;
+
+  void _setPageTitle(String title) {
+    if (_pageTitle == title) return;
+    _pageTitle = title;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SystemChrome.setApplicationSwitcherDescription(ApplicationSwitcherDescription(label: title, primaryColor: 0xFF0D0B09));
+    });
+  }
+
   /// the guilds whose leader was already asked in this run, so it happens once
   static final _reviewAsked = <String>{};
 
@@ -398,6 +409,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     final wide = useSideMenu(MediaQuery.sizeOf(context));
     _wide = wide;
     final site = kIsWeb && wide;
+    // the tab of the browser says which page it is, as the tab of a site does
+    if (kIsWeb) _setPageTitle(sitePageTitle(section, s.t(_titleKeys[section]!)));
     final lang = ref.watch(langProvider);
     final menu = NavigationDrawer(
       selectedIndex: section.index,
@@ -537,10 +550,13 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                               ? Column(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.fromLTRB(20, 22, 20, 0),
+                                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text(s.t(_titleKeys[sec]!), style: display(30)),
+                                        child: SitePageHeading(
+                                          title: s.t(_titleKeys[sec]!),
+                                          kicker: siteGroupIndex(sec) == null ? null : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                        ),
                                       ),
                                     ),
                                     Expanded(child: _page(sec)),

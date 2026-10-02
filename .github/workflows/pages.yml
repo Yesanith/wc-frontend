@@ -60,6 +60,11 @@ jobs:
         run: python3 -m unittest test_build_site
         working-directory: tools
 
+      # the page of the app: its name, what it is and what a link to it shows
+      - name: Check the page of the app
+        run: python3 -m unittest test_web
+        working-directory: ci
+
       # not kept in the repository: made here from tools/site_content, then the backend is filled in
       - name: Make the pages
         run: python3 tools/build_site.py

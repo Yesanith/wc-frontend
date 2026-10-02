@@ -12,6 +12,7 @@ import json
 import os
 import re
 import sys
+from html import escape
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(HERE, "site_content")
@@ -113,6 +114,31 @@ def nav(lang, ui):
             % (ui["nav_home"], ui["nav_faq"], ui["nav_privacy"], ui["nav_terms"], ui["nav_delete"], ISSUES, ui["nav_contact"]))
 
 
+def social_tags(lang, page, title, root, contents):
+    """what a search engine and a chat that shows a link need to know of a page: what it says, where it is, what to call it and the
+    picture to show, in the language of the page"""
+    url = SITE_URL + page_file(lang, page)
+    name = plain(title)
+    headline = name if "Tyria Codex" in name else "%s · Tyria Codex" % name
+    description = plain(contents[lang]["index"]["tagline"])
+    image = SITE_URL + "app/icons/Icon-512.png"
+    tags = [
+        '<meta name="description" content="%s">' % escape(description),
+        '<link rel="canonical" href="%s">' % url,
+        '<meta name="theme-color" content="#0D0B09">',
+        '<link rel="icon" href="%sapp/favicon.png">' % root,
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="Tyria Codex">',
+        '<meta property="og:title" content="%s">' % escape(headline),
+        '<meta property="og:description" content="%s">' % escape(description),
+        '<meta property="og:url" content="%s">' % url,
+        '<meta property="og:image" content="%s">' % image,
+        '<meta property="og:locale" content="%s">' % contents[lang]["meta"]["html_lang"].replace("-", "_"),
+        '<meta name="twitter:card" content="summary">',
+    ]
+    return "".join("\n  " + t for t in tags)
+
+
 def shell(lang, page, title, body, contents, extra_head="", extra_end=""):
     root = "" if lang == "en" else "../"
     alternates = "".join(
@@ -126,7 +152,7 @@ def shell(lang, page, title, body, contents, extra_head="", extra_end=""):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>%s</title>
-  <link rel="stylesheet" href="%sstyle.css">%s%s
+  <link rel="stylesheet" href="%sstyle.css">%s%s%s
 </head>
 <body>
 %s
@@ -137,7 +163,7 @@ def shell(lang, page, title, body, contents, extra_head="", extra_end=""):
 <script>document.addEventListener('click', (e) => { document.querySelectorAll('.lang details[open]').forEach((d) => { if (!d.contains(e.target)) d.open = false; }); });</script>%s
 </body>
 </html>
-""" % (contents[lang]["meta"]["html_lang"], plain(title), root, alternates, extra_head,
+""" % (contents[lang]["meta"]["html_lang"], plain(title), root, alternates, social_tags(lang, page, title, root, contents), extra_head,
        picker(lang, page, contents), nav(lang, ui), body, extra_end)
     return text.replace("{ROOT}", root)
 
