@@ -17,6 +17,8 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
+import '../widgets/site_search.dart';
+import 'item_detail_screen.dart' show showItemDetails;
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../state/period_refresh.dart';
@@ -156,6 +158,19 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   /// what the tab of the browser says now, set when it changes
   String? _pageTitle;
+
+  /// what was chosen in the search of the site: the page, the item, or the wiki asked for what was typed
+  void _openHit(SearchHit hit) {
+    switch (hit.kind) {
+      case SearchKind.section:
+        _select(hit.section!);
+      case SearchKind.item:
+        showItemDetails(context, hit.itemId!);
+      case SearchKind.wiki:
+        ref.read(wikiSearchRequestProvider.notifier).state = hit.query;
+        _select(AppSection.wiki);
+    }
+  }
 
   void _setPageTitle(String title) {
     if (_pageTitle == title) return;
@@ -387,6 +402,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     ref.listen<AsyncValue<List<WalletEntry>>>(walletProvider, (_, __) => _recordWealth());
     ref.listen<AsyncValue<Json>>(accountProvider, (_, __) => _recordWealth());
     final sync = ref.watch(syncProvider);
+    // a page is an address in the browser, so that its back button, a link to it and a refresh all lead to it
+    ref.listen<AppSection>(sectionProvider, (_, next) {
+      if (kIsWeb) announceSection(next);
+    });
     // keeps the phone's alarms for pinned world events in line, see boss_alerts
     ref.watch(bossAlertsSyncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
@@ -481,7 +500,17 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
               icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
               groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
-              account: accountName,
+              // a window just wide enough keeps the search narrow and leaves the account to the settings
+              account: MediaQuery.sizeOf(context).width >= 1360 ? accountName : null,
+              search: SiteSearch(
+                width: MediaQuery.sizeOf(context).width >= 1360 ? 260 : 190,
+                labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
+                placeholder: s.t('search_placeholder'),
+                wikiLabel: s.t('search_in_wiki'),
+                pageLabel: s.t('search_page'),
+                itemLabel: s.t('search_item'),
+                onSelect: _openHit,
+              ),
               busy: sync.running || refreshing != 0,
               progress: sync.running ? sync.ratio : null,
             )

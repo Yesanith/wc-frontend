@@ -59,6 +59,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
     required this.icons,
     required this.groupLabels,
     required this.account,
+    this.search,
     this.busy = false,
     this.progress,
   });
@@ -71,6 +72,9 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
   /// the heading of each group, in the order of [siteNavGroups]
   final List<String> groupLabels;
   final String? account;
+
+  /// the box to search in, between the sections and the account
+  final Widget? search;
 
   /// something is being updated: the thin bar along the foot of the header, with how far it is or none
   final bool busy;
@@ -132,6 +136,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                         child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: nav)),
                       ),
                       const SizedBox(width: 12),
+                      if (search != null) ...[search!, const SizedBox(width: 12)],
                       Container(width: 1, height: 28, color: AppColors.line),
                       const SizedBox(width: 12),
                       if (account != null)

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'l10n/strings.dart';
+import 'screens/landing_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/shell.dart';
 import 'services/cache.dart';
@@ -12,6 +13,7 @@ import 'services/icon_cache.dart';
 import 'services/push.dart';
 import 'state/community.dart';
 import 'state/api.dart';
+import 'state/navigation.dart';
 import 'state/settings.dart';
 import 'theme.dart';
 import 'util.dart';
@@ -44,11 +46,40 @@ Future<void> main() async {
   );
 }
 
-class TyriaCodexApp extends ConsumerWidget {
+class TyriaCodexApp extends ConsumerStatefulWidget {
   const TyriaCodexApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TyriaCodexApp> createState() => _TyriaCodexAppState();
+}
+
+class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindingObserver {
+  final _navigator = GlobalKey<NavigatorState>();
+
+  // the observer is put in before the app's own, which would take an address it does not know for a page to push, and so is asked first
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    if (kIsWeb) WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// the back and forward buttons of the browser and a link to a page: the page is shown, and what was open over the last one is closed
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) async {
+    return followBrowser(routeInformation.uri, ref.read(sectionProvider), (section) {
+      _navigator.currentState?.popUntil((route) => route.isFirst);
+      ref.read(sectionProvider.notifier).state = section;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final lang = ref.watch(langProvider);
     groupSeparator = switch (lang) {
       AppLang.en || AppLang.ja || AppLang.zh => ',',
@@ -60,6 +91,9 @@ class TyriaCodexApp extends ConsumerWidget {
     final guest = ref.watch(guestModeProvider);
     final chosenScale = ref.watch(uiScaleProvider);
     return MaterialApp(
+      navigatorKey: _navigator,
+      // the address in the browser is the page, which the shell reads, not a route of the navigator
+      initialRoute: '/',
       title: 'Tyria Codex',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
@@ -71,7 +105,10 @@ class TyriaCodexApp extends ConsumerWidget {
       home: key.when(
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (error, stack) => const OnboardingScreen(),
-        data: (k) => (k == null || k.isEmpty) && !guest ? const OnboardingScreen() : const AppShell(),
+        // a visitor of the site is shown what the app is first, then asked to sign in. the app on a phone goes straight to signing in
+        data: (k) => (k == null || k.isEmpty) && !guest
+            ? (kIsWeb && !ref.watch(landingDismissedProvider) ? const LandingScreen() : const OnboardingScreen())
+            : const AppShell(),
       ),
     );
   }

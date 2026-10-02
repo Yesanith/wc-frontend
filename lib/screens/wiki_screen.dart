@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/wiki_api.dart';
 import '../state/api.dart';
+import '../state/navigation.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
@@ -33,6 +34,20 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
   bool _loading = false;
   String? _error;
   int _requestId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // something that was searched for from the search of the site before this page was open
+    final waiting = ref.read(wikiSearchRequestProvider);
+    if (waiting != null && waiting.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _searchFor(waiting);
+        ref.read(wikiSearchRequestProvider.notifier).state = null;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -91,6 +106,12 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
     final lang = ref.watch(langProvider);
+    // and what is searched for while it is
+    ref.listen<String?>(wikiSearchRequestProvider, (_, q) {
+      if (q == null || q.isEmpty) return;
+      _searchFor(q);
+      Future(() => ref.read(wikiSearchRequestProvider.notifier).state = null);
+    });
     final searching = _ctrl.text.trim().isNotEmpty;
     final error = _error;
 
