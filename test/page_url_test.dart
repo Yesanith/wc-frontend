@@ -147,7 +147,8 @@ void main() {
 
     test('has a history of the pages, which the back and forward buttons go between', () async {
       final methods = <String>[];
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
         methods.add(call.method);
         return null;
       });
