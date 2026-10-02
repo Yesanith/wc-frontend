@@ -85,7 +85,7 @@ void main() {
       WidgetTester tester, {
       required AppSection current,
       required void Function(AppSection) onSelect,
-      Size size = const Size(1400, 900),
+      Size size = const Size(1800, 900),
       bool busy = false,
     }) async {
       tester.view.physicalSize = size;
@@ -128,7 +128,7 @@ void main() {
 
     testWidgets('has the search between the sections and the account when it is given one, and none when it is not',
         (tester) async {
-      tester.view.physicalSize = const Size(1400, 900);
+      tester.view.physicalSize = const Size(1800, 900);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       Widget header({Widget? search}) => MaterialApp(

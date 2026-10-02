@@ -227,7 +227,7 @@ class SiteNavButton extends StatelessWidget {
       focusColor: AppColors.surface2,
       child: Container(
         height: SiteHeader.height,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 11),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? AppColors.gold.withValues(alpha: 0.07) : null,
