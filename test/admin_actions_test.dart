@@ -62,7 +62,12 @@ AdminTablePage page(TableQuery q, {int total = 5, int limit = 2, List<Map<String
       ],
       'rows': rows ??
           [
-            {'id': q.offset + 1, 'note': 'alpha', 'api_token': '••••', 'created_at': DateTime.now().subtract(const Duration(minutes: 5)).toUtc().toIso8601String()},
+            {
+              'id': q.offset + 1,
+              'note': 'alpha',
+              'api_token': '••••',
+              'created_at': DateTime.now().subtract(const Duration(minutes: 5)).toUtc().toIso8601String()
+            },
             {'id': q.offset + 2, 'note': 'beta', 'api_token': '••••', 'created_at': null},
           ],
       'total': total,
@@ -83,7 +88,8 @@ void main() {
       expect(AdminJob.parse(null), isNull);
     });
 
-    test('have a result: it went well, or how it did not, and the number of the call for a function that was woken', () {
+    test('have a result: it went well, or how it did not, and the number of the call for a function that was woken',
+        () {
       final ok = JobResult.parse({'ok': true, 'job': 'dispatch-tp-sync', 'request_id': 77});
       expect([ok.ok, ok.requestId, ok.error], [true, 77, null]);
       final bad = JobResult.parse({'ok': false, 'error': 'boom'});
@@ -113,7 +119,9 @@ void main() {
 
     test('is waited for, a number of times, until it comes', () async {
       var asked = 0;
-      final answer = await waitForAnswer(() async => ++asked < 3 ? null : const CallAnswer(statusCode: 200, content: 'x', timedOut: false), every: Duration.zero);
+      final answer = await waitForAnswer(
+          () async => ++asked < 3 ? null : const CallAnswer(statusCode: 200, content: 'x', timedOut: false),
+          every: Duration.zero);
       expect(answer!.statusCode, 200);
       expect(asked, 3);
     });
@@ -149,7 +157,13 @@ void main() {
     test('has a place before it and after it where there are rows', () {
       final middle = page((table: 't', offset: 2, filter: ''));
       expect([middle.hasPrevious, middle.hasNext], [true, true]);
-      final last = page((table: 't', offset: 4, filter: ''), rows: [{'id': 5}]);
+      final last = page((
+        table: 't',
+        offset: 4,
+        filter: ''
+      ), rows: [
+        {'id': 5}
+      ]);
       expect([last.hasPrevious, last.hasNext], [true, false]);
       expect(const AdminTablePage({}).rows, isEmpty);
       expect(const AdminTablePage({}).limit, 50, reason: 'fifty when it says none');
@@ -174,11 +188,16 @@ void main() {
     test('has rows that are called by their key, else by their first columns, and never by a secret', () {
       final columns = page((table: 't', offset: 0, filter: '')).columns;
       expect(rowTitle(columns, {'id': 7, 'note': 'x'}), 'id: 7');
-      final noKey = [const TableColumn('name', 'text', false, false), const TableColumn('kind', 'text', false, false), const TableColumn('size', 'int', false, false)];
+      final noKey = [
+        const TableColumn('name', 'text', false, false),
+        const TableColumn('kind', 'text', false, false),
+        const TableColumn('size', 'int', false, false)
+      ];
       expect(rowTitle(noKey, {'name': 'a', 'kind': 'b', 'size': 3}), 'name: a, kind: b');
       expect(rowTitle(noKey, {'name': 'a', 'kind': 'b'}, parts: 3), 'name: a, kind: b, size: null');
       final secret = [const TableColumn('token', 'text', true, true), const TableColumn('note', 'text', false, false)];
-      expect(rowTitle(secret, {'token': '••••', 'note': 'hello'}), 'note: hello', reason: 'a key that is a secret is not told');
+      expect(rowTitle(secret, {'token': '••••', 'note': 'hello'}), 'note: hello',
+          reason: 'a key that is a secret is not told');
       expect(rowTitle(const [], {}), '(row)');
     });
 
@@ -220,7 +239,9 @@ void main() {
       return backend;
     }
 
-    testWidgets('lists the jobs with what each does and its name, and the ones that let go of data say so on their button', (tester) async {
+    testWidgets(
+        'lists the jobs with what each does and its name, and the ones that let go of data say so on their button',
+        (tester) async {
       await show(tester, FakeBackend());
       expect(find.text('Read all of the trading post now'), findsOneWidget);
       expect(find.text('dispatch-tp-sync'), findsOneWidget);
@@ -287,7 +308,8 @@ void main() {
     });
 
     testWidgets('says so when a function has not answered after all its tries', (tester) async {
-      final backend = await show(tester, FakeBackend(results: {'dispatch-tp-sync': const JobResult(ok: true, requestId: 5)}));
+      final backend =
+          await show(tester, FakeBackend(results: {'dispatch-tp-sync': const JobResult(ok: true, requestId: 5)}));
       await tester.tap(find.text('Run').first);
       await tester.pumpAndSettle();
       expect(backend.asked, 15);
@@ -383,7 +405,8 @@ void main() {
 
     testWidgets('goes to the next page and back, and neither where there is none', (tester) async {
       final backend = await open(tester, FakeBackend(pageOf: (q) => page(q)));
-      expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.chevron_left)).onPressed, isNull, reason: 'none before the first');
+      expect(tester.widget<IconButton>(find.widgetWithIcon(IconButton, Icons.chevron_left)).onPressed, isNull,
+          reason: 'none before the first');
       await tester.tap(find.byIcon(Icons.chevron_right));
       await tester.pumpAndSettle();
       expect(backend.queries.last.offset, 2);
@@ -406,7 +429,8 @@ void main() {
       await tester.enterText(find.byType(TextField), '  alpha ');
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await tester.pumpAndSettle();
-      expect(backend.queries.last, (table: 'zz_admin_test', offset: 0, filter: 'alpha'), reason: 'trimmed, and from the first page');
+      expect(backend.queries.last, (table: 'zz_admin_test', offset: 0, filter: 'alpha'),
+          reason: 'trimmed, and from the first page');
       await tester.tap(find.byIcon(Icons.close));
       await tester.pumpAndSettle();
       expect(backend.queries.last, (table: 'zz_admin_test', offset: 0, filter: ''));
