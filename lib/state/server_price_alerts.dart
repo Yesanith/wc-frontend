@@ -33,7 +33,11 @@ List<int> alertsToSend(Map<int, PriceAlert> local, List<ServerAlert> remote) {
   final known = {for (final r in remote) r.itemId: r};
   return [
     for (final e in local.entries)
-      if (!e.value.isEmpty && (known[e.key] == null || known[e.key]!.sellBelow != e.value.sellBelow || known[e.key]!.buyAbove != e.value.buyAbove)) e.key,
+      if (!e.value.isEmpty &&
+          (known[e.key] == null ||
+              known[e.key]!.sellBelow != e.value.sellBelow ||
+              known[e.key]!.buyAbove != e.value.buyAbove))
+        e.key,
   ];
 }
 
@@ -113,7 +117,8 @@ class PriceAlertMirror {
   }
 }
 
-final priceAlertMirrorProvider = Provider<PriceAlertMirror>((ref) => PriceAlertMirror(ref.watch(priceAlertBackendProvider)));
+final priceAlertMirrorProvider =
+    Provider<PriceAlertMirror>((ref) => PriceAlertMirror(ref.watch(priceAlertBackendProvider)));
 
 /// the alerts of the device are told to the server once a session, when somebody is signed in. the names are those of the item index
 final priceAlertSyncProvider = FutureProvider<void>((ref) async {
