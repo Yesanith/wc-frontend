@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/admin.dart';
+import '../state/admin_system.dart';
 import '../widgets/common.dart';
 import 'admin/activity_tab.dart';
 import 'admin/bot_tab.dart';
@@ -10,6 +11,7 @@ import 'admin/history_tab.dart';
 import 'admin/overview_tab.dart';
 import 'admin/public_events_tab.dart';
 import 'admin/server_tab.dart';
+import 'admin/system_tab.dart';
 import 'admin/users_tab.dart';
 
 /// the state of the backend for whoever runs it. the database gives these numbers to an administrator only
@@ -21,7 +23,7 @@ class AdminScreen extends ConsumerWidget {
     // a number on the tab says how many public events wait for a look
     final waiting = ref.watch(adminOpenEventsProvider).valueOrNull?.waiting ?? 0;
     return DefaultTabController(
-      length: 8,
+      length: 9,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Backend'),
@@ -31,6 +33,7 @@ class AdminScreen extends ConsumerWidget {
               onPressed: () {
                 ref.invalidate(adminDashboardProvider);
                 ref.invalidate(adminServerProvider);
+                ref.invalidate(adminSystemProvider);
                 ref.invalidate(adminHistoryProvider);
                 ref.invalidate(adminOpenEventsProvider);
               },
@@ -45,6 +48,7 @@ class AdminScreen extends ConsumerWidget {
               labels: [
                 'Overview',
                 'Server',
+                'System',
                 'Activity',
                 'History',
                 'Bot',
@@ -58,6 +62,7 @@ class AdminScreen extends ConsumerWidget {
                 children: [
                   AdminOverviewTab(),
                   AdminServerTab(),
+                  AdminSystemTab(),
                   AdminActivityTab(),
                   AdminHistoryTab(),
                   AdminBotTab(),
