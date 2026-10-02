@@ -126,6 +126,39 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
+    testWidgets('has every section within reach at the widths the page gives it, the search in the bar does not push them out of it',
+        (tester) async {
+      addTearDown(tester.view.reset);
+      // what the page puts in the bar at a width: (the width, the width of the search, the account)
+      for (final (width, search, account) in [
+        (1400.0, 200.0, null),
+        (1560.0, 260.0, 'Leo.1234'),
+        (1900.0, 260.0, 'Leo.1234'),
+      ]) {
+        tester.view.physicalSize = Size(width, 900);
+        tester.view.devicePixelRatio = 1;
+        await tester.pumpWidget(MaterialApp(
+          theme: buildTheme(),
+          home: Scaffold(
+            appBar: SiteHeader(
+              current: AppSection.home,
+              onSelect: (_) {},
+              labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+              icons: {for (final sec in AppSection.values) sec: Icons.circle},
+              groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+              account: account,
+              search: SizedBox(width: search, child: const Text('SEARCH')),
+            ),
+            body: const SizedBox.expand(),
+          ),
+        ));
+        for (final label in ['S-home', 'S-bosses', 'S-daily', 'S-weekly', 'Account', 'Economy', 'World', 'Reference']) {
+          expect(find.text(label).hitTestable(), findsOneWidget, reason: '$label at $width');
+        }
+        expect(tester.takeException(), isNull, reason: 'at $width');
+      }
+    });
+
     testWidgets('has the search between the sections and the account when it is given one, and none when it is not',
         (tester) async {
       tester.view.physicalSize = const Size(1800, 900);
