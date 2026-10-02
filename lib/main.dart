@@ -21,6 +21,8 @@ import 'widgets/ui_zoom.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // the page a link opened is read now, before the app has begun: the navigator tells the browser its own address ("/") as it begins, and what is read after is that
+  final startSection = initialSection();
   final prefs = await SharedPreferences.getInstance();
   // a browser has no disk to keep them on, everything then comes from the network
   final cache = kIsWeb ? null : await DiskCache.open();
@@ -38,6 +40,7 @@ Future<void> main() async {
     ProviderScope(
       overrides: [
         prefsProvider.overrideWithValue(prefs),
+        sectionProvider.overrideWith((ref) => startSection),
         diskCacheProvider.overrideWithValue(cache),
         iconCacheProvider.overrideWithValue(icons),
       ],
@@ -75,6 +78,8 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
     super.initState();
     if (kIsWeb) {
       WidgetsBinding.instance.addObserver(this);
+      // the back button goes between the pages, which it does only with a history of more than one place
+      keepHistoryOfPages();
       // a link to a page opens it: its address is what the browser has to say, not the "/" of the navigator
       _restoreUrl();
     }

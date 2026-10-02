@@ -91,6 +91,10 @@ void announceSection(AppSection next) {
   SystemNavigator.routeInformationUpdated(uri: Uri(path: sectionPath(next)));
 }
 
+/// lets the back and forward buttons of the browser go between the pages of the app. an app that has a navigator and no router is given a history of one place: the
+/// address changes but the history does not, and the back button would go to what was before the app. with this each page is a place in the history
+Future<void> keepHistoryOfPages() => SystemNavigator.selectMultiEntryHistory();
+
 /// puts the address of the page the app is at back in the browser, in place of what is there, so without a new place in the history. the navigator of the app
 /// tells the browser the name of the route it is at, which is "/" for the page of the app, and so puts out the address of a page that was opened by a link, and
 /// does it again when a window or a page is closed. what the page is is the app's to say

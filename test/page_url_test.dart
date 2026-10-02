@@ -145,6 +145,16 @@ void main() {
           .setMockMethodCallHandler(SystemChannels.navigation, null);
     });
 
+    test('has a history of the pages, which the back and forward buttons go between', () async {
+      final methods = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        methods.add(call.method);
+        return null;
+      });
+      await keepHistoryOfPages();
+      expect(methods, ['selectMultiEntryHistory']);
+    });
+
     test('is the page the app is at, in place of what is there and with no new place in the history', () {
       restoreSectionUrl(AppSection.wiki);
       expect(calls.single['uri'], '/wiki');
