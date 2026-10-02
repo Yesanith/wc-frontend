@@ -293,7 +293,8 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
         outcome = answer == null
             ? (
                 headline: 'No answer yet',
-                body: 'It has not answered in fifteen seconds. It may still be working: look at the sync functions below in a minute.',
+                body:
+                    'It has not answered in fifteen seconds. It may still be working: look at the sync functions below in a minute.',
                 good: false,
               )
             : (
