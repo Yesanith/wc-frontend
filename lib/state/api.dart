@@ -8,6 +8,7 @@ import '../api/gw2_api.dart';
 import '../api/wiki_api.dart';
 import '../services/cache.dart';
 import '../util.dart';
+import 'server_prices.dart';
 import 'settings.dart';
 
 final storageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
@@ -159,6 +160,8 @@ final gw2ApiProvider = Provider<Gw2Api>((ref) {
       final next = counter.state + delta;
       counter.state = next < 0 ? 0 : next;
     },
+    // the trading post's prices the server has read lately, so the game is not asked for them by every device
+    serverPrices: fetchServerPrices,
   );
 });
 

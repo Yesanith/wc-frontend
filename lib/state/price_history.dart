@@ -20,6 +20,13 @@ class PricePoint {
   static PricePoint fromJson(Map<String, dynamic> j) => PricePoint('${j['d']}', asInt(j['b']), asInt(j['s']));
 }
 
+/// the server's history and the device's own as one: the server's where it has a day, the device's for the days only it saw. the days
+/// the server has not kept yet (before the item was first asked for) come from the device
+List<PricePoint> mergePriceHistory(List<PricePoint> server, List<PricePoint> device) {
+  final byDay = {for (final p in device) p.day: p, for (final p in server) p.day: p};
+  return byDay.values.toList()..sort((a, b) => a.day.compareTo(b.day));
+}
+
 String _dayOf(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
 /// the trading post keeps no price history, so the app writes its own: one

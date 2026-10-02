@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/price_history.dart';
+import '../state/server_history.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import 'coin_text.dart';
@@ -29,7 +30,10 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final all = ref.watch(priceHistoryProvider)[widget.itemId] ?? const <PricePoint>[];
+    final device = ref.watch(priceHistoryProvider)[widget.itemId] ?? const <PricePoint>[];
+    // the server has kept the days this device was not there to see
+    final server = ref.watch(serverHistoryProvider(widget.itemId)).valueOrNull ?? const <PricePoint>[];
+    final all = mergePriceHistory(server, device);
     if (all.length < 2) {
       return Panel(
         child: Column(
