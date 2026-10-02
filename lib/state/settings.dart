@@ -127,6 +127,27 @@ class CharacterSortNotifier extends Notifier<CharacterSort> {
 
 final characterSortProvider = NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);
 
+/// how large the interface is on the web: a number, or null for the automatic size that grows with a wide screen
+class UiScaleNotifier extends Notifier<double?> {
+  static const _key = 'ui_scale';
+
+  @override
+  double? build() => parseUiScale(ref.read(prefsProvider).getString(_key));
+
+  Future<void> set(double? scale) async {
+    state = scale;
+    await ref.read(prefsProvider).setString(_key, scale == null ? 'auto' : '$scale');
+  }
+}
+
+/// what was saved as the interface size: a size of the ones there are, anything else is automatic
+double? parseUiScale(String? saved) {
+  final n = double.tryParse(saved ?? '');
+  return n != null && const [1.0, 1.25, 1.5, 1.75, 2.0].contains(n) ? n : null;
+}
+
+final uiScaleProvider = NotifierProvider<UiScaleNotifier, double?>(UiScaleNotifier.new);
+
 /// material storage categories folded away on the account screen, by id
 class CollapsedMaterialsNotifier extends Notifier<Set<int>> {
   static const _key = 'collapsed_materials';

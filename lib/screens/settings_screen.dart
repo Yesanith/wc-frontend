@@ -21,6 +21,7 @@ import '../theme.dart';
 import '../util.dart';
 import 'admin_screen.dart';
 import '../widgets/common.dart';
+import '../widgets/ui_zoom.dart';
 import 'onboarding_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -102,6 +103,7 @@ class SettingsScreen extends ConsumerWidget {
       children: [
         // only for whoever runs the backend
         const _AdminTile(),
+        if (kIsWeb) ...[const _UiSizePanel(), const SizedBox(height: 12)],
         Panel(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Column(
@@ -941,6 +943,41 @@ class _AdminTile extends ConsumerWidget {
               style: TextStyle(color: AppColors.muted, fontSize: 12)),
           trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
         ),
+      ),
+    );
+  }
+}
+
+/// how large the interface is in the browser: automatic, which grows with a wide screen, or one of the sizes
+class _UiSizePanel extends ConsumerWidget {
+  const _UiSizePanel();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final chosen = ref.watch(uiScaleProvider);
+    return Panel(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('ui_scale').toUpperCase()),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final size in uiScaleChoices)
+                ChoiceChip(
+                  label: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
+                  selected: chosen == size,
+                  onSelected: (_) => ref.read(uiScaleProvider.notifier).set(size),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(s.t('ui_scale_hint'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
       ),
     );
   }
