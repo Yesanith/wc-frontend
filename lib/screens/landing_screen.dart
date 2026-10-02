@@ -37,6 +37,8 @@ class LandingScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final lang = ref.watch(langProvider);
     final width = MediaQuery.sizeOf(context).width;
+    // on a phone the row at the top has no room for the version and the name of the language
+    final narrow = width < 600;
     void start() => ref.read(landingDismissedProvider.notifier).state = true;
     final startButton = FilledButton(
       onPressed: start,
@@ -84,8 +86,10 @@ class LandingScreen extends ConsumerWidget {
                               const DiamondEmblem(size: 34),
                               const SizedBox(width: 12),
                               Text('Tyria Codex', style: display(20)),
+                              if (!narrow) ...[
                               const SizedBox(width: 8),
                               const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                            ],
                               const Spacer(),
                               PopupMenuButton<AppLang>(
                                 tooltip: s.t('language'),
@@ -100,8 +104,10 @@ class LandingScreen extends ConsumerWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       const Icon(Icons.translate, size: 18, color: AppColors.gold),
+                                      if (!narrow) ...[
                                       const SizedBox(width: 6),
                                       Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                                    ],
                                     ],
                                   ),
                                 ),
