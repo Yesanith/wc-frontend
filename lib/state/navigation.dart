@@ -71,8 +71,9 @@ AppSection? sectionFromPath(String? path) {
 }
 
 /// the page the app was opened at: the address in the browser, the home page anywhere else and when it is not a page
-AppSection initialSection({String? route}) =>
-    kIsWeb || route != null ? sectionFromPath(route ?? PlatformDispatcher.instance.defaultRouteName) ?? AppSection.home : AppSection.home;
+AppSection initialSection({String? route}) => kIsWeb || route != null
+    ? sectionFromPath(route ?? PlatformDispatcher.instance.defaultRouteName) ?? AppSection.home
+    : AppSection.home;
 
 final sectionProvider = StateProvider<AppSection>((ref) => initialSection());
 

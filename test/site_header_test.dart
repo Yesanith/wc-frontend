@@ -126,7 +126,8 @@ void main() {
       expect(find.text('S-trading'), findsNothing, reason: 'the sections of a group are under its heading, shut');
     });
 
-    testWidgets('has the search between the sections and the account when it is given one, and none when it is not', (tester) async {
+    testWidgets('has the search between the sections and the account when it is given one, and none when it is not',
+        (tester) async {
       tester.view.physicalSize = const Size(1400, 900);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);

@@ -541,7 +541,8 @@ const enStrings = <String, String>{
   'n_items': '{n} items',
   'language': 'Language',
   'landing_title': 'Your Guild Wars 2 companion',
-  'landing_sub': 'Characters, wallet, trading post, world bosses, crafting, a world map and guild events, all in one place. Free and unofficial.',
+  'landing_sub':
+      'Characters, wallet, trading post, world bosses, crafting, a world map and guild events, all in one place. Free and unofficial.',
   'landing_start': 'Get started',
   'landing_guest': 'Continue as guest',
   'landing_f_characters': 'Gear, builds and playtime of every character.',

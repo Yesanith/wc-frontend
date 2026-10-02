@@ -539,7 +539,8 @@ const trStrings = <String, String>{
   'n_items': '{n} item',
   'language': 'Dil',
   'landing_title': 'Guild Wars 2 yardımcın',
-  'landing_sub': 'Karakterler, cüzdan, trading post, dünya bossları, üretim, dünya haritası ve guild etkinlikleri, hepsi tek yerde. Ücretsiz ve resmî olmayan.',
+  'landing_sub':
+      'Karakterler, cüzdan, trading post, dünya bossları, üretim, dünya haritası ve guild etkinlikleri, hepsi tek yerde. Ücretsiz ve resmî olmayan.',
   'landing_start': 'Başla',
   'landing_guest': 'Misafir olarak devam et',
   'landing_f_characters': 'Her karakterin ekipmanı, buildi ve oynama süresi.',

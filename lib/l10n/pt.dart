@@ -542,7 +542,8 @@ const ptStrings = <String, String>{
   'n_items': '{n} itens',
   'language': 'Idioma',
   'landing_title': 'Seu companheiro de Guild Wars 2',
-  'landing_sub': 'Personagens, carteira, posto de troca, chefes do mundo, criação, mapa-múndi e eventos de guilda, tudo em um só lugar. Grátis e não oficial.',
+  'landing_sub':
+      'Personagens, carteira, posto de troca, chefes do mundo, criação, mapa-múndi e eventos de guilda, tudo em um só lugar. Grátis e não oficial.',
   'landing_start': 'Começar',
   'landing_guest': 'Continuar como convidado',
   'landing_f_characters': 'Equipamento, builds e tempo de jogo de cada personagem.',
