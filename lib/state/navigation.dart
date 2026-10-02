@@ -2,6 +2,7 @@ import 'dart:ui' show PlatformDispatcher;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show SystemNavigator;
+import 'package:flutter/widgets.dart' show NavigatorObserver, Route, VoidCallback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// top level sections shown in the side drawer.
@@ -88,6 +89,30 @@ void announceSection(AppSection next) {
   }
   sectionFromBrowser = null;
   SystemNavigator.routeInformationUpdated(uri: Uri(path: sectionPath(next)));
+}
+
+/// puts the address of the page the app is at back in the browser, in place of what is there, so without a new place in the history. the navigator of the app
+/// tells the browser the name of the route it is at, which is "/" for the page of the app, and so puts out the address of a page that was opened by a link, and
+/// does it again when a window or a page is closed. what the page is is the app's to say
+void restoreSectionUrl(AppSection section) => SystemNavigator.routeInformationUpdated(uri: Uri(path: sectionPath(section)), replace: true);
+
+/// the navigator of the app, watched: whenever a route is pushed or taken off [restore] is called, to put the address of the page back
+class UrlRestorer extends NavigatorObserver {
+  UrlRestorer(this.restore);
+
+  final VoidCallback restore;
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) => restore();
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) => restore();
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) => restore();
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) => restore();
 }
 
 /// the browser went to an address (its back or forward button, or a link): the page it is is shown, without a new place in the history.

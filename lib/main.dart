@@ -55,12 +55,29 @@ class TyriaCodexApp extends ConsumerStatefulWidget {
 
 class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindingObserver {
   final _navigator = GlobalKey<NavigatorState>();
+  late final _urlRestorer = UrlRestorer(_restoreUrl);
+
+  /// puts the address of the page back in the browser once the frame is made, which is when the navigator has told it its own, and again a moment later
+  /// in case it does so later
+  void _restoreUrl() {
+    if (!kIsWeb) return;
+    void put() {
+      if (mounted) restoreSectionUrl(ref.read(sectionProvider));
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => put());
+    Future<void>.delayed(const Duration(milliseconds: 500), put);
+  }
 
   // the observer is put in before the app's own, which would take an address it does not know for a page to push, and so is asked first
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) WidgetsBinding.instance.addObserver(this);
+    if (kIsWeb) {
+      WidgetsBinding.instance.addObserver(this);
+      // a link to a page opens it: its address is what the browser has to say, not the "/" of the navigator
+      _restoreUrl();
+    }
   }
 
   @override
@@ -92,6 +109,7 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
     final chosenScale = ref.watch(uiScaleProvider);
     return MaterialApp(
       navigatorKey: _navigator,
+      navigatorObservers: [_urlRestorer],
       // the address in the browser is the page, which the shell reads, not a route of the navigator
       initialRoute: '/',
       title: 'Tyria Codex',
