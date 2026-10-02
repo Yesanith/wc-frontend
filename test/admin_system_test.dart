@@ -10,7 +10,15 @@ void main() {
   final now = DateTime.now();
   String at(int minutesAgo) => now.subtract(Duration(minutes: minutesAgo)).toUtc().toIso8601String();
 
-  Map<String, dynamic> sync(String fn, {int calls = 4, int ok = 4, int unauthorized = 0, int failed = 0, int timedOut = 0, int noAnswer = 0, int? status = 200}) => {
+  Map<String, dynamic> sync(String fn,
+          {int calls = 4,
+          int ok = 4,
+          int unauthorized = 0,
+          int failed = 0,
+          int timedOut = 0,
+          int noAnswer = 0,
+          int? status = 200}) =>
+      {
         'fn': fn,
         'calls': calls,
         'ok': ok,
@@ -27,7 +35,9 @@ void main() {
 
   group('what the sync functions answered', () {
     test('one that is refused by every call says why and what to do, and is the thing to see first', () {
-      final lines = system({'sync': [sync('discord-sync', calls: 3, ok: 0, unauthorized: 3, status: 401), sync('tp-sync')]}).syncLines(now);
+      final lines = system({
+        'sync': [sync('discord-sync', calls: 3, ok: 0, unauthorized: 3, status: 401), sync('tp-sync')]
+      }).syncLines(now);
       final line = lines.firstWhere((l) => l.label == 'discord-sync');
       expect(line.level, HealthLevel.bad);
       expect(line.detail, contains('Refused 3 of 3 calls (401)'));
@@ -35,23 +45,25 @@ void main() {
     });
 
     test('one that is refused by some and not by others is a warning, with how many', () {
-      final line = system({'sync': [sync('discord-sync', ok: 2, unauthorized: 2, status: 200), sync('tp-sync')]})
-          .syncLines(now)
-          .firstWhere((l) => l.label == 'discord-sync');
+      final line = system({
+        'sync': [sync('discord-sync', ok: 2, unauthorized: 2, status: 200), sync('tp-sync')]
+      }).syncLines(now).firstWhere((l) => l.label == 'discord-sync');
       expect(line.level, HealthLevel.warn);
       expect(line.detail, contains('2 of 4 calls refused (401), 2 ok'));
     });
 
     test('one that failed or timed out is a warning, with what it was', () {
-      final line = system({'sync': [sync('push-sync', ok: 1, failed: 2, timedOut: 1, status: 500), sync('tp-sync')]})
-          .syncLines(now)
-          .firstWhere((l) => l.label == 'push-sync');
+      final line = system({
+        'sync': [sync('push-sync', ok: 1, failed: 2, timedOut: 1, status: 500), sync('tp-sync')]
+      }).syncLines(now).firstWhere((l) => l.label == 'push-sync');
       expect(line.level, HealthLevel.warn);
       expect(line.detail, contains('2 failed, 1 timed out, 1 ok of 4'));
     });
 
     test('one with calls and no answer yet is a warning, and one that is all well is good with its last answer', () {
-      final lines = system({'sync': [sync('push-sync', calls: 1, ok: 0, noAnswer: 1, status: null), sync('tp-sync', noAnswer: 1)]}).syncLines(now);
+      final lines = system({
+        'sync': [sync('push-sync', calls: 1, ok: 0, noAnswer: 1, status: null), sync('tp-sync', noAnswer: 1)]
+      }).syncLines(now);
       expect(lines.firstWhere((l) => l.label == 'push-sync').level, HealthLevel.warn);
       expect(lines.firstWhere((l) => l.label == 'push-sync').detail, contains('No answer yet to 1 call'));
       final good = lines.firstWhere((l) => l.label == 'tp-sync');
@@ -61,12 +73,19 @@ void main() {
       expect(good.detail, contains('1 waiting'));
     });
 
-    test('the trading post function that was not called in the last hour is said, since it is woken every ten minutes', () {
-      final lines = system({'sync': [sync('discord-sync')]}).syncLines(now);
+    test('the trading post function that was not called in the last hour is said, since it is woken every ten minutes',
+        () {
+      final lines = system({
+        'sync': [sync('discord-sync')]
+      }).syncLines(now);
       final tp = lines.firstWhere((l) => l.label == 'tp-sync');
       expect(tp.level, HealthLevel.warn);
       expect(tp.detail, contains('every ten minutes'));
-      expect(system({'sync': [sync('tp-sync')]}).syncLines(now).where((l) => l.label == 'tp-sync').length, 1);
+      expect(
+          system({
+            'sync': [sync('tp-sync')]
+          }).syncLines(now).where((l) => l.label == 'tp-sync').length,
+          1);
       expect(system({}).syncLines(now).single.label, 'tp-sync', reason: 'with nothing at all, that is what is said');
     });
   });
@@ -94,7 +113,9 @@ void main() {
           },
         };
 
-    test('has a list that is the price now while it was read in the last twenty five minutes, a warning to an hour, and an alarm after', () {
+    test(
+        'has a list that is the price now while it was read in the last twenty five minutes, a warning to an hour, and an alarm after',
+        () {
       HealthLine list(int? minutes) => system(trading(readMinutesAgo: minutes)).tradingLines(now).first;
       expect(list(5).level, HealthLevel.good);
       expect(list(24).level, HealthLevel.good);
@@ -123,7 +144,9 @@ void main() {
     });
 
     test('has no points yet when there is no history, and is none of it when the server has nothing', () {
-      final empty = system({'trading_post': {'snapshot_at': null, 'history_oldest': null}});
+      final empty = system({
+        'trading_post': {'snapshot_at': null, 'history_oldest': null}
+      });
       expect(empty.tradingLines(now).last.detail, 'No points yet');
       expect(system({}).tradingLines(now).first.level, HealthLevel.warn);
       expect(system({}).historyByDay, isEmpty);
@@ -131,7 +154,14 @@ void main() {
   });
 
   group('the official server', () {
-    Map<String, dynamic> official({bool configured = true, String? error, bool invite = true, bool voice = false, int attempts = 0, int due = 3}) => {
+    Map<String, dynamic> official(
+            {bool configured = true,
+            String? error,
+            bool invite = true,
+            bool voice = false,
+            int attempts = 0,
+            int due = 3}) =>
+        {
           'official': {
             'configured': configured,
             'guild_tail': '5678',
@@ -144,7 +174,13 @@ void main() {
             'last_error_at': error == null ? null : at(3),
             'messages': 14,
             'outbox': [
-              {'title': 'EU raid', 'region': 'eu', 'attempts': attempts, 'last_error': attempts > 0 ? 'missing_permissions' : null, 'queued_at': at(9)},
+              {
+                'title': 'EU raid',
+                'region': 'eu',
+                'attempts': attempts,
+                'last_error': attempts > 0 ? 'missing_permissions' : null,
+                'queued_at': at(9)
+              },
             ],
             'active': [
               {'title': 'Fractals', 'region': 'eu', 'voice': voice, 'text': true, 'granted': 5},
@@ -180,22 +216,26 @@ void main() {
       final bad = system(official(error: 'Voice: refused')).officialLines(now);
       expect(bad.firstWhere((l) => l.label == 'Last problem').level, HealthLevel.bad);
       expect(bad.firstWhere((l) => l.label == 'Last problem').detail, contains('Voice: refused'));
-      expect(system(official()).officialLines(now).firstWhere((l) => l.label == 'Last problem').level, HealthLevel.good);
+      expect(
+          system(official()).officialLines(now).firstWhere((l) => l.label == 'Last problem').level, HealthLevel.good);
       final events = system(official()).officialLines(now).firstWhere((l) => l.label == 'Events going on');
       expect(events.level, HealthLevel.warn);
       expect(events.detail, '1 with channels, 1 without a voice channel');
-      expect(system(official(voice: true)).officialLines(now).firstWhere((l) => l.label == 'Events going on').level, HealthLevel.good);
+      expect(system(official(voice: true)).officialLines(now).firstWhere((l) => l.label == 'Events going on').level,
+          HealthLevel.good);
     });
 
     test('has the posts that wait, with how many fail, and the roles that are due', () {
       final posts = system(official(attempts: 2)).officialLines(now).firstWhere((l) => l.label == 'Posts waiting');
       expect(posts.level, HealthLevel.warn);
       expect(posts.detail, '1 waiting, 1 failing, 14 messages kept');
-      expect(system(official()).officialLines(now).firstWhere((l) => l.label == 'Posts waiting').level, HealthLevel.good);
+      expect(
+          system(official()).officialLines(now).firstWhere((l) => l.label == 'Posts waiting').level, HealthLevel.good);
       final roles = system(official()).officialLines(now).firstWhere((l) => l.label == 'Roles');
       expect(roles.detail, contains('120 players tracked'));
       expect(roles.detail, contains('3 due'));
-      expect(system(official(due: 80)).officialLines(now).firstWhere((l) => l.label == 'Roles').level, HealthLevel.warn);
+      expect(
+          system(official(due: 80)).officialLines(now).firstWhere((l) => l.label == 'Roles').level, HealthLevel.warn);
     });
 
     test('has the forms and the time zones', () {
@@ -283,7 +323,17 @@ void main() {
       expect(cronPeriod('*/10 * * * *'), const Duration(minutes: 10));
       expect(cronPeriod('5 * * * *'), const Duration(hours: 1));
       expect(cronPeriod('50 3 * * *'), const Duration(days: 1));
-      for (final odd in ['0 seconds', '*/0 * * * *', '*/60 * * * *', '61 * * * *', '5 24 * * *', '0 0 1 * *', '* * * * 1', 'nonsense', '']) {
+      for (final odd in [
+        '0 seconds',
+        '*/0 * * * *',
+        '*/60 * * * *',
+        '61 * * * *',
+        '5 24 * * *',
+        '0 0 1 * *',
+        '* * * * 1',
+        'nonsense',
+        ''
+      ]) {
         expect(cronPeriod(odd), isNull, reason: odd);
       }
     });
@@ -297,16 +347,22 @@ void main() {
       expect(cronEvery('0 0 1 * *'), '0 0 1 * *', reason: 'as written when it is none of those');
     });
 
-    test('has a next run for a step of minutes, to the minute that is next of the hour, and the first of the next hour after the last', () {
+    test(
+        'has a next run for a step of minutes, to the minute that is next of the hour, and the first of the next hour after the last',
+        () {
       DateTime next(String s, int h, int m) => nextCronRun(s, DateTime.utc(2026, 10, 2, h, m, 30))!;
       expect(next('*/10 * * * *', 12, 3), DateTime.utc(2026, 10, 2, 12, 10));
-      expect(next('*/10 * * * *', 12, 10), DateTime.utc(2026, 10, 2, 12, 20), reason: 'it ran at ten, the next is twenty');
+      expect(next('*/10 * * * *', 12, 10), DateTime.utc(2026, 10, 2, 12, 20),
+          reason: 'it ran at ten, the next is twenty');
       expect(next('*/10 * * * *', 12, 55), DateTime.utc(2026, 10, 2, 13));
-      expect(next('*/7 * * * *', 12, 56), DateTime.utc(2026, 10, 2, 13), reason: 'a step of seven goes 0, 7, ... 56 and then the hour');
+      expect(next('*/7 * * * *', 12, 56), DateTime.utc(2026, 10, 2, 13),
+          reason: 'a step of seven goes 0, 7, ... 56 and then the hour');
       expect(next('*/10 * * * *', 23, 55), DateTime.utc(2026, 10, 3, 0), reason: 'over the end of the day');
     });
 
-    test('has a next run for the time of an hour and of a day, today when it is to come and tomorrow when it has passed', () {
+    test(
+        'has a next run for the time of an hour and of a day, today when it is to come and tomorrow when it has passed',
+        () {
       DateTime next(String s, int h, int m) => nextCronRun(s, DateTime.utc(2026, 10, 2, h, m, 30))!;
       expect(next('5 * * * *', 12, 3), DateTime.utc(2026, 10, 2, 12, 5));
       expect(next('5 * * * *', 12, 5), DateTime.utc(2026, 10, 2, 13, 5));
@@ -316,7 +372,9 @@ void main() {
       expect(next('5 0 * * *', 0, 1), DateTime.utc(2026, 10, 3, 0, 5));
     });
 
-    test('has none for a job that runs every so many seconds, which is always about to, and for the shapes it does not know', () {
+    test(
+        'has none for a job that runs every so many seconds, which is always about to, and for the shapes it does not know',
+        () {
       expect(nextCronRun('20 seconds', now), isNull);
       for (final odd in ['0 0 1 * *', 'nonsense', '', '*/70 * * * *', '5 25 * * *']) {
         expect(nextCronRun(odd, now), isNull, reason: odd);
@@ -330,11 +388,13 @@ void main() {
       expect(untilLabel(const Duration(days: 2, hours: 3)), 'in 2 d');
     });
 
-    test('is overdue when the job has not run for much more than it says it does, and never for one that is not known', () {
+    test('is overdue when the job has not run for much more than it says it does, and never for one that is not known',
+        () {
       final t = DateTime.utc(2026, 10, 2, 12);
       expect(cronOverdue('*/10 * * * *', t.subtract(const Duration(minutes: 15)), t), isFalse);
       expect(cronOverdue('*/10 * * * *', t.subtract(const Duration(minutes: 30)), t), isTrue);
-      expect(cronOverdue('20 seconds', t.subtract(const Duration(minutes: 2)), t), isFalse, reason: 'two minutes of grace');
+      expect(cronOverdue('20 seconds', t.subtract(const Duration(minutes: 2)), t), isFalse,
+          reason: 'two minutes of grace');
       expect(cronOverdue('20 seconds', t.subtract(const Duration(minutes: 5)), t), isTrue);
       expect(cronOverdue('50 3 * * *', t.subtract(const Duration(hours: 30)), t), isFalse);
       expect(cronOverdue('50 3 * * *', t.subtract(const Duration(days: 3)), t), isTrue);
@@ -343,9 +403,22 @@ void main() {
 
     test('is a line for each job, with its state', () {
       final jobs = [
-        {'name': 'dispatch-tp-sync', 'schedule': '*/10 * * * *', 'active': true, 'last_status': 'succeeded', 'last_run': at(4)},
+        {
+          'name': 'dispatch-tp-sync',
+          'schedule': '*/10 * * * *',
+          'active': true,
+          'last_status': 'succeeded',
+          'last_run': at(4)
+        },
         {'name': 'late', 'schedule': '*/10 * * * *', 'active': true, 'last_status': 'succeeded', 'last_run': at(90)},
-        {'name': 'broken', 'schedule': '50 3 * * *', 'active': true, 'last_status': 'failed', 'last_run': at(30), 'last_message': 'boom'},
+        {
+          'name': 'broken',
+          'schedule': '50 3 * * *',
+          'active': true,
+          'last_status': 'failed',
+          'last_run': at(30),
+          'last_message': 'boom'
+        },
         {'name': 'fresh', 'schedule': '20 seconds', 'active': true, 'last_status': null, 'last_run': null},
         {'name': 'off', 'schedule': '5 0 * * *', 'active': false, 'last_status': 'succeeded', 'last_run': at(500)},
       ];
@@ -365,7 +438,9 @@ void main() {
   });
 
   group('the tab', () {
-    testWidgets('shows what the sync functions answered, the jobs, the official server, the public events and every table', (tester) async {
+    testWidgets(
+        'shows what the sync functions answered, the jobs, the official server, the public events and every table',
+        (tester) async {
       tester.view.physicalSize = const Size(1800, 9000);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -384,7 +459,13 @@ void main() {
           adminSystemProvider.overrideWith((ref) async => sys),
           adminDashboardProvider.overrideWith((ref) async => AdminDashboard({
                 'cron': [
-                  {'name': 'dispatch-tp-sync', 'schedule': '*/10 * * * *', 'active': true, 'last_status': 'succeeded', 'last_run': at(4)},
+                  {
+                    'name': 'dispatch-tp-sync',
+                    'schedule': '*/10 * * * *',
+                    'active': true,
+                    'last_status': 'succeeded',
+                    'last_run': at(4)
+                  },
                 ],
               })),
         ],
@@ -401,7 +482,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.textContaining('Refused 3 of 3 calls (401)'), findsOneWidget, reason: 'the first thing to see');
       expect(find.textContaining('7 calls are kept'), findsOneWidget);
-      expect(find.textContaining('every 10 min, ran 4 min ago'), findsOneWidget, reason: 'the job with when it runs next');
+      expect(find.textContaining('every 10 min, ran 4 min ago'), findsOneWidget,
+          reason: 'the job with when it runs next');
       expect(find.textContaining('Not set up. Run /official setup'), findsOneWidget);
       expect(find.textContaining('2 made'), findsOneWidget);
       expect(find.textContaining('2 tables, 28,000 rows'), findsOneWidget);

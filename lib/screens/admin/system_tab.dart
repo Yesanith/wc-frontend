@@ -76,7 +76,9 @@ class AdminSystemTab extends ConsumerWidget {
                   for (final p in sys.outbox)
                     (
                       '${p['title']} (${p['region']})',
-                      asInt(p['attempts']) == 0 ? 'waiting' : '${asInt(p['attempts'])} tries: ${p['last_error'] ?? 'no reason given'}',
+                      asInt(p['attempts']) == 0
+                          ? 'waiting'
+                          : '${asInt(p['attempts'])} tries: ${p['last_error'] ?? 'no reason given'}',
                     ),
                 ]),
               ],
@@ -99,11 +101,15 @@ class AdminSystemTab extends ConsumerWidget {
             ],
             if (sys.upcomingByRegion.isNotEmpty) ...[
               const SizedBox(height: 10),
-              _Panel(title: 'Still to come, by region', rows: [for (final e in sys.upcomingByRegion) (e.label, '${e.count}')]),
+              _Panel(
+                  title: 'Still to come, by region',
+                  rows: [for (final e in sys.upcomingByRegion) (e.label, '${e.count}')]),
             ],
             if (sys.byActivity.isNotEmpty) ...[
               const SizedBox(height: 10),
-              _Panel(title: 'Made in the last 30 days, by kind', rows: [for (final e in sys.byActivity) (e.label, '${e.count}')]),
+              _Panel(
+                  title: 'Made in the last 30 days, by kind',
+                  rows: [for (final e in sys.byActivity) (e.label, '${e.count}')]),
             ],
             if (sys.byRole.isNotEmpty) ...[
               const SizedBox(height: 10),
@@ -111,7 +117,8 @@ class AdminSystemTab extends ConsumerWidget {
             ],
             if (sys.byProfession.isNotEmpty) ...[
               const SizedBox(height: 10),
-              _Panel(title: 'Signed up, by profession', rows: [for (final e in sys.byProfession) (e.label, '${e.count}')]),
+              _Panel(
+                  title: 'Signed up, by profession', rows: [for (final e in sys.byProfession) (e.label, '${e.count}')]),
             ],
             const Eyebrow('Every table'),
             _Tables(sys.tables, now),
@@ -136,7 +143,9 @@ class _Panel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title.toUpperCase(), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+          Text(title.toUpperCase(),
+              style:
+                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           const SizedBox(height: 4),
           for (final (label, value) in rows) AdminLine(label, value),
         ],
@@ -176,15 +185,20 @@ class _Tables extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 5,
-                    child: Text(t.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                    child: Text(t.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text(fmtInt(t.rows), textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+                    child: Text(fmtInt(t.rows),
+                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.gold)),
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text(formatBytes(t.bytes), textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    child: Text(formatBytes(t.bytes),
+                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                   ),
                   Expanded(
                     flex: 3,
