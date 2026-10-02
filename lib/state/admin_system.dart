@@ -79,12 +79,14 @@ class AdminSystem {
         lines.add(HealthLine(fn, 'No answer yet to $calls ${calls == 1 ? 'call' : 'calls'}$called', HealthLevel.warn));
       } else {
         final status = f['last_status'] == null ? '' : ', last answer ${f['last_status']}';
-        lines.add(HealthLine(fn, '$ok of $calls ok$status$called${none > 0 ? ', $none waiting' : ''}', HealthLevel.good));
+        lines.add(
+            HealthLine(fn, '$ok of $calls ok$status$called${none > 0 ? ', $none waiting' : ''}', HealthLevel.good));
       }
     }
     // the trading post is read every ten minutes whatever else happens, so a quiet hour is a function that is not woken
     if (!sync.any((f) => f['fn'] == 'tp-sync')) {
-      lines.add(const HealthLine('tp-sync', 'Not called in the last hour. It is woken every ten minutes', HealthLevel.warn));
+      lines.add(
+          const HealthLine('tp-sync', 'Not called in the last hour. It is woken every ten minutes', HealthLevel.warn));
     }
     return lines;
   }
@@ -114,7 +116,8 @@ class AdminSystem {
     } else {
       final age = now.difference(at);
       final level = age.inMinutes < 25 ? HealthLevel.good : (age.inMinutes < 60 ? HealthLevel.warn : HealthLevel.bad);
-      list = HealthLine('List of prices', '$items items, read ${ago(at, now)}, ${formatBytes(asInt(t['snapshot_bytes']))}', level);
+      list = HealthLine(
+          'List of prices', '$items items, read ${ago(at, now)}, ${formatBytes(asInt(t['snapshot_bytes']))}', level);
     }
     final oldest = t['history_oldest'];
     final newest = t['history_newest'];
@@ -173,7 +176,9 @@ class AdminSystem {
       HealthLine(
         'Categories',
         'Europe ${categories['eu'] == true ? 'yes' : 'no'}, North America ${categories['na'] == true ? 'yes' : 'no'}, events going on ${categories['active'] == true ? 'yes' : 'no'}',
-        categories['eu'] == true && categories['na'] == true && categories['active'] == true ? HealthLevel.good : HealthLevel.warn,
+        categories['eu'] == true && categories['na'] == true && categories['active'] == true
+            ? HealthLevel.good
+            : HealthLevel.warn,
       ),
       HealthLine(
         'Channels of the kinds',
@@ -204,7 +209,10 @@ class AdminSystem {
         HealthLevel.good,
       ),
       if (lock != null && lock.isAfter(now))
-        HealthLine('Sync', 'The setup is being made, until ${lock.hour.toString().padLeft(2, '0')}:${lock.minute.toString().padLeft(2, '0')}', HealthLevel.good),
+        HealthLine(
+            'Sync',
+            'The setup is being made, until ${lock.hour.toString().padLeft(2, '0')}:${lock.minute.toString().padLeft(2, '0')}',
+            HealthLevel.good),
     ];
   }
 
@@ -234,7 +242,8 @@ class AdminSystem {
     return [
       HealthLine('Events', '$total made, $withRoles with roles', HealthLevel.good),
       HealthLine('Signed up', '${asInt(p['going'])} going, ${asInt(p['maybe'])} maybe', HealthLevel.good),
-      HealthLine('Organizers', '${asInt(p['organizers'])} players, ${asInt(p['banned'])} kept from making events', HealthLevel.good),
+      HealthLine('Organizers', '${asInt(p['organizers'])} players, ${asInt(p['banned'])} kept from making events',
+          HealthLevel.good),
       waiting > 0
           ? HealthLine('Reports', '$waiting events wait for a look', HealthLevel.warn)
           : const HealthLine('Reports', 'None wait', HealthLevel.good),
@@ -244,7 +253,8 @@ class AdminSystem {
   // ---------------------------------------------------------------- every table
 
   List<SystemTable> get tables => [
-        for (final t in _maps(raw['tables'])) SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest'])),
+        for (final t in _maps(raw['tables']))
+          SystemTable('${t['name']}', asInt(t['rows']), asInt(t['bytes']), _time(t['newest'])),
       ];
 
   int get totalRows => tables.fold(0, (sum, t) => sum + t.rows);
@@ -349,7 +359,8 @@ List<HealthLine> cronLines(List<Map<String, dynamic>> jobs, DateTime now) {
       lines.add(HealthLine(name, '$every, has not run yet$nextText', HealthLevel.warn));
     } else if (status == 'failed') {
       final message = '${job['last_message'] ?? ''}'.trim();
-      lines.add(HealthLine(name, '$every, failed ${ago(at, now)}${message.isEmpty ? '' : ': $message'}', HealthLevel.bad));
+      lines.add(
+          HealthLine(name, '$every, failed ${ago(at, now)}${message.isEmpty ? '' : ': $message'}', HealthLevel.bad));
     } else if (cronOverdue(schedule, at, now)) {
       lines.add(HealthLine(name, '$every, overdue: ran ${ago(at, now)}$nextText', HealthLevel.bad));
     } else {
