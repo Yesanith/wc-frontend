@@ -71,8 +71,10 @@ class LandingScreen extends ConsumerWidget {
           SafeArea(
             child: ListView(
               children: [
-                ContentFrame(
-                  child: Padding(
+                Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: contentMaxWidth),
+                    child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
@@ -196,6 +198,7 @@ class LandingScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                ),
                 ),
               ],
             ),

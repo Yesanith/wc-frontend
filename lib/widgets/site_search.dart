@@ -74,6 +74,7 @@ class SiteSearch extends ConsumerStatefulWidget {
     required this.itemLabel,
     required this.onSelect,
     this.width = 260,
+    this.autofocus = false,
   });
 
   final Map<AppSection, String> labels;
@@ -87,6 +88,9 @@ class SiteSearch extends ConsumerStatefulWidget {
   final String itemLabel;
   final ValueChanged<SearchHit> onSelect;
   final double width;
+
+  /// the cursor is in it from the start, as when it was opened to be typed in
+  final bool autofocus;
 
   @override
   ConsumerState<SiteSearch> createState() => _SiteSearchState();
@@ -135,6 +139,7 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
         fieldViewBuilder: (context, controller, focusNode, onSubmitted) => TextField(
           controller: controller,
           focusNode: focusNode,
+          autofocus: widget.autofocus,
           onSubmitted: (_) => onSubmitted(),
           style: const TextStyle(fontSize: 14),
           decoration: InputDecoration(

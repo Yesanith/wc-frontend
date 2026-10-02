@@ -172,6 +172,47 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     }
   }
 
+  /// the search of the site, as the bar and the window that opens from its button both have it
+  SiteSearch _search({required double width, required ValueChanged<SearchHit> onSelect, bool autofocus = false}) {
+    final s = ref.read(stringsProvider);
+    return SiteSearch(
+      width: width,
+      autofocus: autofocus,
+      labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
+      placeholder: s.t('search_placeholder'),
+      wikiLabel: s.t('search_in_wiki'),
+      pageLabel: s.t('search_page'),
+      itemLabel: s.t('search_item'),
+      onSelect: onSelect,
+    );
+  }
+
+  /// the search in a window of its own, for a bar with no room for the box
+  void _showSearch() {
+    showDialog<void>(
+      context: context,
+      builder: (dialog) => Dialog(
+        alignment: Alignment.topCenter,
+        insetPadding: const EdgeInsets.only(top: 80, left: 24, right: 24),
+        backgroundColor: AppColors.navBg,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: 440,
+            child: _search(
+              width: 440,
+              autofocus: true,
+              onSelect: (hit) {
+                Navigator.of(dialog).pop();
+                _openHit(hit);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _setPageTitle(String title) {
     if (_pageTitle == title) return;
     _pageTitle = title;
@@ -500,17 +541,16 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
               icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
               groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
-              // a window just wide enough keeps the search narrow and leaves the account to the settings
-              account: MediaQuery.sizeOf(context).width >= 1360 ? accountName : null,
-              search: SiteSearch(
-                width: MediaQuery.sizeOf(context).width >= 1360 ? 260 : 190,
-                labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
-                placeholder: s.t('search_placeholder'),
-                wikiLabel: s.t('search_in_wiki'),
-                pageLabel: s.t('search_page'),
-                itemLabel: s.t('search_item'),
-                onSelect: _openHit,
-              ),
+              // the room of the bar decides what is in it: the account and a wide search, a narrower search, or a button that opens the
+              // search in a window, so that the sections are always all there
+              account: MediaQuery.sizeOf(context).width >= 1560 ? accountName : null,
+              search: MediaQuery.sizeOf(context).width >= 1400
+                  ? _search(width: MediaQuery.sizeOf(context).width >= 1560 ? 260 : 200, onSelect: _openHit)
+                  : IconButton(
+                      tooltip: s.t('search_placeholder'),
+                      onPressed: _showSearch,
+                      icon: const Icon(Icons.search, color: AppColors.muted),
+                    ),
               busy: sync.running || refreshing != 0,
               progress: sync.running ? sync.ratio : null,
             )
