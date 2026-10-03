@@ -50,9 +50,16 @@ jobs:
           # the tags too, the app in the browser names the release it is built after
           fetch-depth: 0
 
-      # before the recipe data step below, which fetches one commit and cuts the history the tag is found in
+      # the release that was published last, which is what the download button leads to. a tag is not a release: the build of a tag can fail, and the
+      # tag stays, so the newest tag may name a version that has no app to download. the tag is the fallback for a repository that has no release yet
       - name: Find the release
-        run: echo "APP_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo dev)" >> "$GITHUB_ENV"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="$(gh release view --json tagName --jq .tagName 2>/dev/null || true)"
+          if [ -z "$TAG" ]; then TAG="$(git describe --tags --abbrev=0 2>/dev/null || echo dev)"; fi
+          echo "the app is named after $TAG"
+          echo "APP_TAG=$TAG" >> "$GITHUB_ENV"
 
       # every language must have everything English has, a translation must keep every link and
       # command, and every link must lead somewhere
