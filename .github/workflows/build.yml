@@ -147,7 +147,8 @@ jobs:
           FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         run: |
-          # maven central sometimes answers 429 to shared runners, wait and retry
+          # maven central sometimes answers 429 to shared runners, and the network sometimes drops: those are tried again after a wait. a build that fails
+          # for any other reason (the code does not compile) fails again the same way, and waiting for it is minutes of nothing
           for attempt in 1 2 3; do
             flutter build apk --release \
               --build-name="$VERSION" \
@@ -162,7 +163,11 @@ jobs:
             # the result of the build, not of tee
             if [ "${PIPESTATUS[0]}" = "0" ]; then exit 0; fi
             cp "$RUNNER_TEMP/build-attempt.log" "$RUNNER_TEMP/build.log"
-            echo "build attempt $attempt failed, retrying in 60s"
+            if ! grep -qiE '(\b429\b|too many requests|timed out|connection (reset|refused)|could not (get|resolve|download)|received status code 5[0-9][0-9]|unexpected end of stream|temporary failure)' "$RUNNER_TEMP/build-attempt.log"; then
+              echo "build attempt $attempt failed, and not for a reason that waiting helps with"
+              exit 1
+            fi
+            echo "build attempt $attempt failed on the network, retrying in 60s"
             sleep 60
           done
           exit 1
