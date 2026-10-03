@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../util.dart';
+import 'admin_logs.dart';
 
 /// one of the jobs an administrator may run by hand, as the database lists them: its name, what it does, whether it wakes a sync function
 /// (kind 'wake') or runs in the database ('job'), and whether it lets go of data
@@ -206,6 +207,9 @@ abstract class AdminBackend {
 
   /// sends a test to the webhook and gives the number of its call
   Future<int> testAlert();
+
+  /// what the Edge Functions said, newest first, [logsPageSize] lines at a time
+  Future<FunctionLogsPage> functionLogs(LogQuery query);
 }
 
 class SupabaseAdminBackend implements AdminBackend {
@@ -242,6 +246,15 @@ class SupabaseAdminBackend implements AdminBackend {
   }
 
   @override
+  Future<FunctionLogsPage> functionLogs(LogQuery query) async => FunctionLogsPage.parse(await _client.rpc('admin_function_logs', params: {
+        'p_fn': query.fn,
+        'p_level': query.level?.code,
+        'p_search': query.search.isEmpty ? null : query.search,
+        'p_limit': logsPageSize,
+        'p_before': query.before,
+      }));
+
+  @override
   Future<AdminAlerts> alerts() async =>
       AdminAlerts(Map<String, dynamic>.from(await _client.rpc('admin_alerts') as Map));
 
@@ -266,3 +279,7 @@ final adminTableProvider = FutureProvider.autoDispose
     .family<AdminTablePage, TableQuery>((ref, query) => ref.watch(adminBackendProvider).table(query));
 
 final adminAlertsProvider = FutureProvider.autoDispose<AdminAlerts>((ref) => ref.watch(adminBackendProvider).alerts());
+
+/// a page of what the Edge Functions said
+final adminLogsProvider = FutureProvider.autoDispose
+    .family<FunctionLogsPage, LogQuery>((ref, query) => ref.watch(adminBackendProvider).functionLogs(query));

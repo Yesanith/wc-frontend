@@ -7,6 +7,7 @@ import 'package:tyria_codex/screens/admin/system_tab.dart';
 import 'package:tyria_codex/screens/admin/table_screen.dart';
 import 'package:tyria_codex/state/admin.dart';
 import 'package:tyria_codex/state/admin_actions.dart';
+import 'package:tyria_codex/state/admin_logs.dart';
 import 'package:tyria_codex/state/admin_system.dart';
 import 'package:tyria_codex/state/settings.dart';
 import 'package:tyria_codex/theme.dart';
@@ -19,7 +20,7 @@ const _jobs = [
 
 /// a database that does what it is told to and says what it was told to say
 class FakeBackend implements AdminBackend {
-  FakeBackend({this.results = const {}, this.answers = const [], this.pageOf, this.failWith, AdminAlerts? alerts})
+  FakeBackend({this.results = const {}, this.answers = const [], this.pageOf, this.failWith, AdminAlerts? alerts, this.logsOf})
       : alertsValue = alerts ?? const AdminAlerts({'webhook_set': false, 'problems_now': [], 'recent': []});
 
   final Map<String, JobResult> results;
@@ -27,6 +28,8 @@ class FakeBackend implements AdminBackend {
   final AdminTablePage Function(TableQuery query)? pageOf;
   final Object? failWith;
   final AdminAlerts alertsValue;
+  final FunctionLogsPage Function(LogQuery query)? logsOf;
+  final logQueries = <LogQuery>[];
   final ran = <String>[];
   final queries = <TableQuery>[];
   final webhooks = <String?>[];
@@ -53,6 +56,13 @@ class FakeBackend implements AdminBackend {
   Future<AdminTablePage> table(TableQuery query) async {
     queries.add(query);
     return pageOf!(query);
+  }
+
+  @override
+  Future<FunctionLogsPage> functionLogs(LogQuery query) async {
+    logQueries.add(query);
+    if (failWith != null) throw failWith!;
+    return logsOf?.call(query) ?? const FunctionLogsPage(rows: [], functions: [], total: 0);
   }
 
   @override
