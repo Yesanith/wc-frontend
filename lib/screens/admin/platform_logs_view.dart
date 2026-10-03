@@ -262,66 +262,68 @@ class _PlatformCardState extends State<_PlatformCard> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
                       child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text.rich(
-                        TextSpan(children: [
-                          TextSpan(
-                            text: line.fn.isEmpty
-                                ? (line.fnId.isEmpty
-                                    ? 'platform'
-                                    : line.fnId.substring(0, line.fnId.length < 8 ? line.fnId.length : 8))
-                                : line.fn,
-                            style: TextStyle(fontWeight: FontWeight.w700, color: color),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text.rich(
+                                  TextSpan(children: [
+                                    TextSpan(
+                                      text: line.fn.isEmpty
+                                          ? (line.fnId.isEmpty
+                                              ? 'platform'
+                                              : line.fnId.substring(0, line.fnId.length < 8 ? line.fnId.length : 8))
+                                          : line.fn,
+                                      style: TextStyle(fontWeight: FontWeight.w700, color: color),
+                                    ),
+                                    TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
+                                  ]),
+                                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: 'Copy',
+                                visualDensity: VisualDensity.compact,
+                                icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
+                                onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, text, attrs))),
+                              ),
+                            ],
                           ),
-                          TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
-                        ]),
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
-                      ),
-                    ),
-                    IconButton(
-                      tooltip: 'Copy',
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
-                      onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, text, attrs))),
-                    ),
-                  ],
-                ),
-                _open
-                    ? SelectableText(text, style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
-                    : Text(text,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
-                // a request has what the function wrote of it too, as its message
-                if (_open && line.isRequest && line.message.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child:
-                        SelectableText(line.message, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
-                  ),
-                if (_open && line.at != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child:
-                        Text(line.at!.toIso8601String(), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-                  ),
-                if (_open && attrs != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: SelectableText(attrs,
-                        style: const TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
-                  ),
-                if (!_open && attrs != null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child:
-                        Text('Tap for what the platform knows', style: TextStyle(fontSize: 11, color: AppColors.hint)),
-                  ),
-              ],
+                          _open
+                              ? SelectableText(text,
+                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
+                              : Text(text,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
+                          // a request has what the function wrote of it too, as its message
+                          if (_open && line.isRequest && line.message.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: SelectableText(line.message,
+                                  style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                            ),
+                          if (_open && line.at != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(line.at!.toIso8601String(),
+                                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                            ),
+                          if (_open && attrs != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: SelectableText(attrs,
+                                  style: const TextStyle(
+                                      fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
+                            ),
+                          if (!_open && attrs != null)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Text('Tap for what the platform knows',
+                                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
+                            ),
+                        ],
                       ),
                     ),
                   ),

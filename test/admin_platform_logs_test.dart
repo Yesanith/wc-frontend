@@ -507,7 +507,8 @@ void main() {
         expect(find.textContaining('Analytics logs: read'), findsOneWidget);
         expect(find.textContaining('PLATFORM_LOGS_TOKEN'), findsWidgets);
         expect(find.textContaining('Deploy workflow'), findsOneWidget);
-        expect(find.text('Try again'), findsOneWidget, reason: 'what is done once the token is in and the function is deployed');
+        expect(find.text('Try again'), findsOneWidget,
+            reason: 'what is done once the token is in and the function is deployed');
         await tester.tap(find.text('Copy the secret name'));
         await tester.pump();
         expect(copied.last, 'PLATFORM_LOGS_TOKEN');
