@@ -20,13 +20,16 @@ class AdminRecruitReports extends ConsumerWidget {
       error: (_, __) => Panel(
         child: Row(
           children: [
-            const Expanded(child: Text('The recruitment pages could not be read.', style: TextStyle(color: AppColors.muted))),
+            const Expanded(
+                child: Text('The recruitment pages could not be read.', style: TextStyle(color: AppColors.muted))),
             TextButton(onPressed: () => ref.invalidate(adminRecruitReportsProvider), child: const Text('Try again')),
           ],
         ),
       ),
       data: (list) => list.isEmpty
-          ? const Panel(child: Text('No recruitment page was reported, and none is hidden.', style: TextStyle(color: AppColors.muted)))
+          ? const Panel(
+              child: Text('No recruitment page was reported, and none is hidden.',
+                  style: TextStyle(color: AppColors.muted)))
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -72,16 +75,26 @@ class _ReportCard extends ConsumerWidget {
             children: [
               Expanded(child: Text(report.title, style: const TextStyle(fontWeight: FontWeight.w800))),
               Text(report.hidden ? 'Hidden' : (report.published ? 'Shown' : 'Draft'),
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: report.hidden ? AppColors.ember : AppColors.muted)),
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: report.hidden ? AppColors.ember : AppColors.muted)),
             ],
           ),
-          if (report.headline.isNotEmpty) Text(report.headline, style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+          if (report.headline.isNotEmpty)
+            Text(report.headline, style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
           const SizedBox(height: 6),
           Text(report.reports == 1 ? 'Reported by 1 player' : 'Reported by ${report.reports} players',
               style: const TextStyle(fontSize: 12, color: AppColors.amber)),
-          for (final reason in report.reasons) Padding(padding: const EdgeInsets.only(top: 2), child: SelectableText('“$reason”', style: const TextStyle(fontSize: 12, color: AppColors.muted))),
+          for (final reason in report.reasons)
+            Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: SelectableText('“$reason”', style: const TextStyle(fontSize: 12, color: AppColors.muted))),
           if (report.hidden && report.hiddenReason != null)
-            Padding(padding: const EdgeInsets.only(top: 6), child: Text('Hidden because: ${report.hiddenReason}', style: const TextStyle(fontSize: 12, color: AppColors.ember))),
+            Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text('Hidden because: ${report.hiddenReason}',
+                    style: const TextStyle(fontSize: 12, color: AppColors.ember))),
           Wrap(
             spacing: 8,
             children: [
