@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../state/admin.dart';
 import '../../state/admin_actions.dart';
+import '../../state/admin_logs.dart';
 import '../../state/admin_system.dart';
 import '../../theme.dart';
 import '../../util.dart';
 import '../../widgets/common.dart';
 import '../../widgets/meters.dart';
+import 'logs_screen.dart';
 import 'table_screen.dart';
 import 'widgets.dart';
 
@@ -31,6 +33,7 @@ class AdminSystemTab extends ConsumerWidget {
             ref.invalidate(adminSystemProvider);
             ref.invalidate(adminDashboardProvider);
             ref.invalidate(adminAlertsProvider);
+            ref.invalidate(adminLogsProvider);
             await ref.read(adminSystemProvider.future);
           },
           primary: [
@@ -38,6 +41,8 @@ class AdminSystemTab extends ConsumerWidget {
             const _RunByHand(),
             const Eyebrow('Alerts'),
             const _AlertsPanel(),
+            const Eyebrow('Edge function logs'),
+            const _EdgeFunctions(),
             const Eyebrow('Sync functions, last hour'),
             AdminHealth(sys.syncLines(now)),
             Padding(
@@ -164,6 +169,57 @@ class _Panel extends StatelessWidget {
           const SizedBox(height: 4),
           for (final (label, value) in rows) AdminLine(label, value),
         ],
+      ),
+    );
+  }
+}
+
+/// what the Edge Functions said in the last day: how each did, and a way into the lines themselves, all of them or those of one
+class _EdgeFunctions extends ConsumerWidget {
+  const _EdgeFunctions();
+
+  void _open(BuildContext context, {String? fn}) =>
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => AdminLogsScreen(fn: fn)));
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logs = ref.watch(adminLogsProvider(noLogQuery));
+    final now = DateTime.now();
+    return logs.when(
+      loading: () => const Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
+      // an older backend has no logs to give: said, and nothing else is held up by it
+      error: (_, __) => const Panel(
+        child: Text('The logs of the functions could not be read. The backend may not have them yet.',
+            style: TextStyle(color: AppColors.amber, fontSize: 13)),
+      ),
+      data: (page) => Panel(
+        padding: const EdgeInsets.fromLTRB(16, 8, 8, 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (page.functions.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text('Nothing has been said in the last day.', style: TextStyle(color: AppColors.muted, fontSize: 13)),
+              ),
+            for (final f in page.functions)
+              InkWell(
+                onTap: () => _open(context, fn: f.fn),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: AdminLine(
+                    f.fn,
+                    f.lastAt == null ? f.summary : '${f.summary} · ${ago(f.lastAt!, now)}',
+                    valueColor: f.errors > 0 ? AppColors.ember : (f.warnings > 0 ? AppColors.amber : null),
+                  ),
+                ),
+              ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(onPressed: () => _open(context), child: Text('All logs (${page.total})')),
+            ),
+          ],
+        ),
       ),
     );
   }
