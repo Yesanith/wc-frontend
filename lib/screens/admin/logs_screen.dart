@@ -7,11 +7,15 @@ import '../../state/admin_actions.dart';
 import '../../state/admin_logs.dart';
 import '../../theme.dart';
 import '../../widgets/responsive.dart';
+import 'platform_logs_view.dart';
 
 /// what the Edge Functions said, newest first: of one function or all, of one level or all, with a search for the lines that have a text in them. a line opens to what it knew of the
 /// matter, which can be selected and copied. the older lines are asked for a page at a time. nothing can be changed from here
 class AdminLogsScreen extends ConsumerStatefulWidget {
-  const AdminLogsScreen({super.key, this.fn});
+  const AdminLogsScreen({super.key, this.fn, this.platform = false});
+
+  /// the logs of the platform, which Supabase keeps, are shown first and not the lines the functions kept
+  final bool platform;
 
   /// the function the logs begin with, when they were opened from one
   final String? fn;
@@ -23,6 +27,7 @@ class AdminLogsScreen extends ConsumerStatefulWidget {
 class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
   final _search = TextEditingController();
   late String? _fn = widget.fn;
+  late bool _platform = widget.platform;
   LogLevel? _level;
   String _text = '';
 
@@ -46,6 +51,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     for (final before in _pages) {
       ref.invalidate(adminLogsProvider(_query(before)));
     }
+    ref.invalidate(adminPlatformLogsProvider);
   }
 
   @override
@@ -64,6 +70,17 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           children: [
+            // what the functions kept for themselves, or what the platform recorded of them
+            SegmentedButton<bool>(
+              segments: const [
+                ButtonSegment(value: false, label: Text('Saved by the functions')),
+                ButtonSegment(value: true, label: Text('Supabase platform')),
+              ],
+              selected: {_platform},
+              onSelectionChanged: (choice) => setState(() => _platform = choice.first),
+            ),
+            const SizedBox(height: 12),
+            if (_platform) const PlatformLogsView() else ...[
             TextField(
               key: const Key('log-search'),
               controller: _search,
@@ -132,6 +149,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                 onOlder: (before) => setState(() => _pages = [..._pages, before]),
                 onRetry: _refresh,
               ),
+            ],
           ],
         ),
       ),

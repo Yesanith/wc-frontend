@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../util.dart';
 import 'admin_logs.dart';
+import 'admin_platform_logs.dart';
 
 /// one of the jobs an administrator may run by hand, as the database lists them: its name, what it does, whether it wakes a sync function
 /// (kind 'wake') or runs in the database ('job'), and whether it lets go of data
@@ -210,6 +211,12 @@ abstract class AdminBackend {
 
   /// what the Edge Functions said, newest first, [logsPageSize] lines at a time
   Future<FunctionLogsPage> functionLogs(LogQuery query);
+
+  /// what the platform recorded of the functions: their console, or the requests made to them. throws [PlatformLogsException] when it could not be read
+  Future<PlatformLogsPage> platformLogs(PlatformQuery query);
+
+  /// the keys the platform's logs of the functions really carry, to see what a query that was refused should have asked for
+  Future<List<PlatformKey>> platformKeys();
 }
 
 class SupabaseAdminBackend implements AdminBackend {
@@ -255,6 +262,29 @@ class SupabaseAdminBackend implements AdminBackend {
         'p_before': query.before,
       }));
 
+  /// the function answers 200 with {ok: false, error} for what went wrong at the platform, and 401/403 for the player. what is neither is an exception of the network
+  Future<Object?> _platform(Map<String, dynamic> body) async {
+    try {
+      return (await _client.functions.invoke('platform-logs', body: body)).data;
+    } on FunctionException catch (e) {
+      final details = e.details;
+      final code = details is Map ? details['error'] : null;
+      throw PlatformLogsException(code != null
+          ? PlatformProblem.of(code)
+          : e.status == 401
+              ? PlatformProblem.notSignedIn
+              : e.status == 403
+                  ? PlatformProblem.notAdmin
+                  : PlatformProblem.upstream);
+    }
+  }
+
+  @override
+  Future<PlatformLogsPage> platformLogs(PlatformQuery query) async => PlatformLogsPage.parse(await _platform(platformBody(query)));
+
+  @override
+  Future<List<PlatformKey>> platformKeys() async => PlatformKey.parseAll(await _platform({'source': 'diagnose'}));
+
   @override
   Future<AdminAlerts> alerts() async =>
       AdminAlerts(Map<String, dynamic>.from(await _client.rpc('admin_alerts') as Map));
@@ -280,6 +310,13 @@ final adminTableProvider = FutureProvider.autoDispose
     .family<AdminTablePage, TableQuery>((ref, query) => ref.watch(adminBackendProvider).table(query));
 
 final adminAlertsProvider = FutureProvider.autoDispose<AdminAlerts>((ref) => ref.watch(adminBackendProvider).alerts());
+
+/// a page of what the platform recorded of the functions
+final adminPlatformLogsProvider = FutureProvider.autoDispose
+    .family<PlatformLogsPage, PlatformQuery>((ref, query) => ref.watch(adminBackendProvider).platformLogs(query));
+
+/// the keys the platform's logs of the functions carry
+final adminPlatformKeysProvider = FutureProvider.autoDispose<List<PlatformKey>>((ref) => ref.watch(adminBackendProvider).platformKeys());
 
 /// a page of what the Edge Functions said
 final adminLogsProvider = FutureProvider.autoDispose
