@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../l10n/strings.dart';
 import '../../state/community.dart';
 import '../../state/navigation.dart';
 import '../../state/recruitment.dart';
