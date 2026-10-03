@@ -94,6 +94,25 @@ test.describe('the app in a browser', () => {
     expect(errors).toEqual([]);
   });
 
+  test('a link to an item keeps its address, opens the sheet of the item and can be copied from it', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    const errors = await open(page, '#/item/19721');
+    await asGuest(page);
+    // the address is the item's, not the page behind it, while the sheet is open
+    await expect(page).toHaveURL(/#\/item\/19721$/);
+    await page.reload();
+    await page.waitForSelector('flt-glass-pane', { state: 'attached', timeout: 90_000 });
+    await expect(page).toHaveURL(/#\/item\/19721$/);
+    expect(errors).toEqual([]);
+  });
+
+  test('a link to a public event that is not there says so, and keeps its address', async ({ page }) => {
+    const errors = await open(page, '#/event/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c');
+    await asGuest(page);
+    await expect(page).toHaveURL(/#\/event\/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c$/);
+    expect(errors).toEqual([]);
+  });
+
   test('the search finds a page and goes to it', async ({ page }) => {
     const errors = await open(page);
     await asGuest(page);
