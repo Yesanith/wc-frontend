@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
+import '../state/community.dart';
 import '../state/navigation.dart';
 import '../state/open_events.dart';
 import '../state/settings.dart';
@@ -23,6 +24,17 @@ Future<void> showOpenEvent(BuildContext context, String eventId, {bool announce 
       .whenComplete(closed);
 }
 
+/// whether the page of a public event can be shown to whoever opened it: the community account is what the events are read with, so a link that somebody was sent is
+/// first asked of the account
+enum EventAccess { unavailable, waiting, signInNeeded, open }
+
+EventAccess eventAccess({required bool ready, required AsyncValue<Object?>? session}) {
+  if (!ready || session == null) return EventAccess.unavailable;
+  if (session.valueOrNull != null) return EventAccess.open;
+  // the session is read when the app begins: until it has been, there is nothing to say
+  return session.isLoading ? EventAccess.waiting : EventAccess.signInNeeded;
+}
+
 class OpenEventScreen extends ConsumerWidget {
   const OpenEventScreen({super.key, required this.eventId});
 
@@ -31,10 +43,12 @@ class OpenEventScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final event = ref.watch(openEventProvider(eventId));
+    final access = eventAccess(ready: communityReady, session: communityReady ? ref.watch(sessionProvider) : null);
+    // the event is asked of the database only when there is an account to ask with: a guest who follows a link is told to sign in, not shown what the database refused
+    final event = access == EventAccess.open ? ref.watch(openEventProvider(eventId)) : null;
     return Scaffold(
       appBar: AppBar(
-          title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis),
+          title: Text(event?.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis),
           actions: [
             // the address of this event, which opens the app at it
             if (isEventId(eventId))
@@ -47,12 +61,54 @@ class OpenEventScreen extends ConsumerWidget {
                 },
               ),
           ]),
-      body: AsyncView<OpenEvent?>(
-        value: event,
-        onRetry: () => ref.invalidate(openEventProvider(eventId)),
-        builder: (e) => e == null
-            ? Center(child: Text(s.t('oe_err_gone'), style: const TextStyle(color: AppColors.muted)))
-            : ContentFrame(maxWidth: readingMaxWidth, child: _EventBody(event: e)),
+      body: switch (access) {
+        EventAccess.unavailable => _EventNotice(text: s.t('oe_unavailable')),
+        EventAccess.waiting => const Center(child: CircularProgressIndicator()),
+        EventAccess.signInNeeded => _EventNotice(text: s.t('oe_sign_in'), toSettings: true),
+        EventAccess.open => AsyncView<OpenEvent?>(
+            value: event!,
+            onRetry: () => ref.invalidate(openEventProvider(eventId)),
+            builder: (e) => e == null
+                ? Center(child: Text(s.t('oe_err_gone'), style: const TextStyle(color: AppColors.muted)))
+                : ContentFrame(maxWidth: readingMaxWidth, child: _EventBody(event: e)),
+          ),
+      },
+    );
+  }
+}
+
+/// what is said where the event would be: that events are not here, or that the player has to sign in, with the way to the settings where they do
+class _EventNotice extends ConsumerWidget {
+  const _EventNotice({required this.text, this.toSettings = false});
+
+  final String text;
+  final bool toSettings;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.public, size: 40, color: AppColors.muted),
+            const SizedBox(height: 12),
+            Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.4)),
+            if (toSettings) ...[
+              const SizedBox(height: 16),
+              FilledButton.tonal(
+                onPressed: () {
+                  // the page of the event is closed, and the settings are where the app is
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  ref.read(sectionProvider.notifier).state = AppSection.settings;
+                },
+                child: Text(s.t('nav_settings')),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
