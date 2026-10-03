@@ -119,12 +119,13 @@ test.describe('the app in a browser', () => {
     expect(errors).toEqual([]);
   });
 
-  test('a link to a public event that is not there says so, and keeps its address', async ({ page }) => {
+  test('a link to a public event asks a guest to sign in, and keeps its address', async ({ page }) => {
     const errors = await open(page, '#/event/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c');
     await goOn(page);
     await expect(page).toHaveURL(/#\/event\/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c$/);
-    // the page of the event is open, and says that there is none
-    await expect(written(page, 'That event is not there any more.')).toBeAttached({ timeout: 60_000 });
+    // the page of the event is open, and a guest is told what to do: not what the database refused
+    await expect(written(page, /Sign in with Discord in Settings/)).toBeAttached({ timeout: 60_000 });
+    await expect(page.getByText(/OpenEventFailure|went wrong/)).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 

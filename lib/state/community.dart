@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -44,6 +44,10 @@ bool _ready = false;
 
 /// whether the community backend could be reached at start
 bool get communityReady => _ready;
+
+/// a test says whether it could
+@visibleForTesting
+void debugSetCommunityReady(bool ready) => _ready = ready;
 
 /// connects to the backend once at start. a failure only switches the
 /// community account off, the rest of the app never depends on it
