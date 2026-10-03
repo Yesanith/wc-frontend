@@ -211,6 +211,46 @@ void main() {
     });
   });
 
+  group('a page that was reported', () {
+    Map<String, dynamic> row([Map<String, dynamic> over = const {}]) => {
+          'guild_id': _id,
+          'name': 'Mistwalkers',
+          'tag': 'MIST',
+          'headline': 'Raids on Thursdays',
+          'reports': 3,
+          'reasons': ['spam', 'rude', 'other'],
+          'last_at': '2026-10-03T10:00:00Z',
+          'hidden': false,
+          'hidden_reason': null,
+          'published': true,
+          ...over,
+        };
+
+    test('is read, with how many reported it and what the last said', () {
+      final r = RecruitReport.parse(row())!;
+      expect(r.title, 'Mistwalkers [MIST]');
+      expect(r.reports, 3);
+      expect(r.reasons, ['spam', 'rude', 'other']);
+      expect(r.lastAt, isNotNull);
+      expect((r.hidden, r.published, r.hiddenReason), (false, true, null));
+    });
+
+    test('is read when it is hidden, with why', () {
+      final r = RecruitReport.parse(row({'hidden': true, 'hidden_reason': 'Spam', 'reports': 0}))!;
+      expect((r.hidden, r.hiddenReason, r.reports), (true, 'Spam', 0));
+    });
+
+    test('is not read without a number or a name, and keeps what it can of the rest', () {
+      expect(RecruitReport.parse(null), isNull);
+      expect(RecruitReport.parse({'name': 'X'}), isNull);
+      expect(RecruitReport.parse({'guild_id': _id}), isNull);
+      final bare = RecruitReport.parse({'guild_id': _id, 'name': 'X', 'reports': 'many', 'reasons': 'no'})!;
+      expect(bare.reports, 0);
+      expect(bare.reasons, isEmpty);
+      expect(bare.title, 'X');
+    });
+  });
+
   group('a page being edited', () {
     test('is what the page was, and is sent whole', () {
       final draft = RecruitDraft.fromPage(RecruitPage.parse(_page())!);

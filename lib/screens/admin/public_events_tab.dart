@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../state/admin.dart';
+import '../../state/recruitment.dart' show adminRecruitReportsProvider;
 import '../../theme.dart';
 import '../../util.dart';
 import '../../widgets/common.dart';
 import '../../widgets/meters.dart';
+import 'recruitment_reports.dart';
 import 'widgets.dart';
 
 /// somebody who is kept from making public events, and the way to let them make them again
@@ -69,6 +71,7 @@ class AdminPublicEventsTab extends ConsumerWidget {
           updated: o.generatedAt,
           onRefresh: () async {
             ref.invalidate(adminOpenEventsProvider);
+            ref.invalidate(adminRecruitReportsProvider);
             ref.invalidate(adminOfficialProvider);
             await ref.read(adminOpenEventsProvider.future);
           },
@@ -91,6 +94,8 @@ class AdminPublicEventsTab extends ConsumerWidget {
                 _EventCard({...e, 'hidden': true}, context: context, ref: ref),
                 const SizedBox(height: 10),
               ],
+            const Eyebrow('Guild recruitment pages'),
+            const AdminRecruitReports(),
           ],
           secondary: [
             const Eyebrow('Public events'),
