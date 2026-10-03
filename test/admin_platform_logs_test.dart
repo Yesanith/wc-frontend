@@ -274,7 +274,8 @@ void main() {
     setUp(() => copied = []);
 
     Future<FakeBackend> open(WidgetTester tester, FakeBackend backend, {bool platform = true}) async {
-      tester.view.physicalSize = const Size(1400, 4200);
+      // tall enough for a full page of fifty lines, which a button at the bottom of it needs to be on the screen
+      tester.view.physicalSize = const Size(1400, 9000);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
@@ -339,7 +340,8 @@ void main() {
       await tester.tap(find.text('tp sync failed'));
       await tester.pumpAndSettle();
       expect(find.textContaining('version: 7'), findsOneWidget);
-      await tester.tap(find.text('tp sync failed'));
+      // closed by the line above it: what is open is text that can be selected, and a tap on it is for selecting
+      await tester.tap(find.textContaining('tp-sync ·'));
       await tester.pumpAndSettle();
       expect(find.textContaining('version: 7'), findsNothing);
     });
