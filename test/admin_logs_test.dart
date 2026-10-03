@@ -336,7 +336,7 @@ void main() {
           adminPollEveryProvider.overrideWithValue(Duration.zero),
           adminSystemProvider
               .overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
-          adminDashboardProvider.overrideWith((ref) async => AdminDashboard({})),
+          adminDashboardProvider.overrideWith((ref) async => const AdminDashboard({})),
         ],
         child: MaterialApp(
           theme: buildTheme(),

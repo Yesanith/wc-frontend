@@ -286,7 +286,7 @@ class _SiteNavMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       style: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(AppColors.surface),
+        backgroundColor: const WidgetStatePropertyAll(AppColors.surface),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12), side: const BorderSide(color: AppColors.line)),

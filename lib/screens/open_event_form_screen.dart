@@ -77,14 +77,16 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
       firstDate: first,
       lastDate: today.add(const Duration(days: 91)),
     );
-    if (picked != null)
+    if (picked != null) {
       setState(() => _start = DateTime(picked.year, picked.month, picked.day, _start.hour, _start.minute));
+    }
   }
 
   Future<void> _pickTime() async {
     final picked = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_start));
-    if (picked != null)
+    if (picked != null) {
       setState(() => _start = DateTime(_start.year, _start.month, _start.day, picked.hour, picked.minute));
+    }
   }
 
   Future<void> _save() async {
