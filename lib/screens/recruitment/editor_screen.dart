@@ -97,18 +97,6 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     }
   }
 
-  Future<void> _touch() async {
-    final s = ref.read(stringsProvider);
-    try {
-      await ref.read(recruitBackendProvider).touch(widget.guild.guildId);
-      if (!mounted) return;
-      _refreshLists();
-      showToast(context, s.t('rec_saved'));
-    } catch (e) {
-      if (mounted) showToast(context, s.t(recruitErrorKey(e)));
-    }
-  }
-
   Future<void> _delete() async {
     final s = ref.read(stringsProvider);
     final yes = await showDialog<bool>(
@@ -295,21 +283,18 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           ),
         const SizedBox(height: 12),
         FilledButton(onPressed: _busy ? null : _save, child: Text(s.t('rec_save'))),
-        if (_page != null) ...[
-          const SizedBox(height: 12),
-          OutlinedButton(onPressed: _busy ? null : _touch, child: Text(s.t('rec_still_looking'))),
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(s.t('rec_still_looking_hint'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+        // saving is what keeps the page in the list: a page that is not saved for sixty days leaves it, and there is no other button for it
+        Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Text(s.t('rec_save_hint'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+        ),
+        if (_page != null && widget.guild.isLeader) ...[
+          const SizedBox(height: 16),
+          TextButton(
+            onPressed: _busy ? null : _delete,
+            style: TextButton.styleFrom(foregroundColor: AppColors.ember),
+            child: Text(s.t('rec_delete')),
           ),
-          if (widget.guild.isLeader) ...[
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: _busy ? null : _delete,
-              style: TextButton.styleFrom(foregroundColor: AppColors.ember),
-              child: Text(s.t('rec_delete')),
-            ),
-          ],
         ],
       ],
     );

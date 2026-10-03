@@ -519,7 +519,6 @@ abstract interface class RecruitBackend {
   Future<List<MyRecruitGuild>> mine();
   Future<RecruitPage?> save(String guildId, RecruitDraft draft);
   Future<RecruitPage?> setPublished(String guildId, bool published);
-  Future<void> touch(String guildId);
   Future<void> delete(String guildId);
   Future<List<RecruiterEntry>> recruiters(String guildId);
   Future<void> grant(String guildId, String userId);
@@ -580,11 +579,6 @@ class SupabaseRecruitBackend implements RecruitBackend {
   @override
   Future<RecruitPage?> setPublished(String guildId, bool published) async =>
       RecruitPage.parse(await _rpc('set_recruitment_published', {'p_guild': guildId, 'p_published': published}));
-
-  @override
-  Future<void> touch(String guildId) async {
-    await _rpc('touch_recruitment', {'p_guild': guildId});
-  }
 
   @override
   Future<void> delete(String guildId) async {

@@ -133,7 +133,6 @@ class FakeRecruit implements RecruitBackend {
   /// the pages that were reported or are hidden, for the administrator, and what was done to them
   List<RecruitReport> reported = const [];
   final hides = <(String, bool, String?)>[];
-  var touches = 0;
   var deletes = 0;
   var mineCalls = 0;
 
@@ -188,12 +187,6 @@ class FakeRecruit implements RecruitBackend {
     calls.add('publish:$published');
     current = _with(current, RecruitDraft.fromPage(current!), published: published);
     return current;
-  }
-
-  @override
-  Future<void> touch(String guildId) async {
-    if (fail != null) throw fail!;
-    touches++;
   }
 
   @override
@@ -754,7 +747,6 @@ void main() {
       expect(text(tester, 'rec-description'), '');
       expect(tester.widget<SwitchListTile>(find.byKey(const Key('rec-recruiting'))).value, isTrue);
       expect(tester.widget<SwitchListTile>(find.byKey(const Key('rec-published'))).value, isFalse);
-      expect(find.text('Still looking'), findsNothing);
       expect(find.text('Delete the page'), findsNothing);
     });
 
@@ -875,7 +867,7 @@ void main() {
         'says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes',
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      const hint = 'It is also posted in the guild-recruitment forum of the official Discord server.';
+      const hint = 'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is locked.';
       expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
       await fill(tester);
       expect(find.text(hint), findsOneWidget);
@@ -947,23 +939,19 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('says that the guild is still looking, which is not a change of the page', (tester) async {
+    testWidgets('has no button of its own to say that the guild is still looking: saving is what keeps the page in the list', (tester) async {
       final fake = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
-      expect(
-          find.text('Keeps the page in the list. It leaves the list after 60 days without an update.'), findsOneWidget);
-      await tapOn(tester, find.text('Still looking'));
-      expect(fake.touches, 1);
-      expect(fake.saves, isEmpty);
+      expect(find.text('Still looking'), findsNothing);
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'), findsOneWidget);
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves.length, 1, reason: 'a page that is saved as it is is saved, which is what renews it');
       expect(find.text('Saved.'), findsOneWidget);
       await settle(tester);
     });
 
-    testWidgets('tells why it could not say that the guild is still looking', (tester) async {
-      final fake = FakeRecruit(current: _thePage(canEdit: true), fail: const RecruitFailure('not_allowed'));
-      await editor(tester, fake);
-      await tapOn(tester, find.text('Still looking'));
-      expect(find.text('You may not do that for this guild.'), findsOneWidget);
-      await settle(tester);
+    testWidgets('says how a page is kept in the list, for a page that has not been made yet too', (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'), findsOneWidget);
     });
 
     testWidgets('is deleted by the leader, who is asked first', (tester) async {
@@ -983,7 +971,7 @@ void main() {
     testWidgets('is not deleted by one who only manages it: there is no button', (tester) async {
       await editor(tester, FakeRecruit(current: _thePage(canEdit: true)), guild: _mine(leader: false));
       expect(find.text('Delete the page'), findsNothing);
-      expect(find.text('Still looking'), findsOneWidget, reason: 'though they may say that the guild is still looking');
+      expect(find.text('Save'), findsOneWidget, reason: 'though they may save it, which keeps it in the list');
     });
 
     testWidgets('says that a moderator hid the page', (tester) async {
