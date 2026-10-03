@@ -452,7 +452,8 @@ const enStrings = <String, String>{
   'copied': 'Copied.',
   'copy_page_link': 'Copy link to this page',
   'recruitment': 'Recruitment',
-  'rec_intro': 'Guilds that are looking for players. Anyone can read these pages. Reach a guild with the details it gives.',
+  'rec_intro':
+      'Guilds that are looking for players. Anyone can read these pages. Reach a guild with the details it gives.',
   'rec_unavailable': 'Recruitment pages are not available in this build.',
   'rec_search': 'Search by name, tag or headline',
   'rec_region_any': 'Any region',
@@ -502,13 +503,15 @@ const enStrings = <String, String>{
   'rec_f_published': 'Show this page to everybody',
   'rec_save': 'Save',
   'rec_saved': 'Saved.',
-  'rec_publish_needs': 'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.',
+  'rec_publish_needs':
+      'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.',
   'rec_still_looking': 'Still looking',
   'rec_still_looking_hint': 'Keeps the page in the list. It leaves the list after 60 days without an update.',
   'rec_delete': 'Delete the page',
   'rec_delete_ask': 'Delete this guild\'s recruitment page?',
   'rec_rec_title': 'Who may edit the page',
-  'rec_rec_intro': 'You lead this guild, so you decide who may open and edit its recruitment page. This is not the same as being an officer.',
+  'rec_rec_intro':
+      'You lead this guild, so you decide who may open and edit its recruitment page. This is not the same as being an officer.',
   'rec_rec_none': 'Nobody besides you.',
   'rec_rec_add': 'Allow a member',
   'rec_rec_remove': 'Take it back',
@@ -516,7 +519,8 @@ const enStrings = <String, String>{
   'rec_err_not_allowed': 'You may not do that for this guild.',
   'rec_err_signin': 'Sign in first.',
   'rec_err_hidden': 'A moderator hid this page, so it cannot be shown.',
-  'rec_err_invalid': 'Something on the page is not valid: a text that is too long, or an invite that is not a Discord invite.',
+  'rec_err_invalid':
+      'Something on the page is not valid: a text that is too long, or an invite that is not a Discord invite.',
   'rec_err_not_member': 'That player is not a member of this guild.',
   'rec_err_own_role': 'The leader may edit the page already.',
   'rec_err_no_page': 'There is no page yet. Save it first.',

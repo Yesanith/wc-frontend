@@ -453,7 +453,8 @@ const ptStrings = <String, String>{
   'copied': 'Copiado.',
   'copy_page_link': 'Copiar link desta página',
   'recruitment': 'Recrutamento',
-  'rec_intro': 'Guildas que procuram jogadores. Qualquer pessoa pode ler estas páginas. Entre em contato com uma guilda pelos dados que ela informa.',
+  'rec_intro':
+      'Guildas que procuram jogadores. Qualquer pessoa pode ler estas páginas. Entre em contato com uma guilda pelos dados que ela informa.',
   'rec_unavailable': 'As páginas de recrutamento não estão disponíveis nesta versão.',
   'rec_search': 'Buscar por nome, tag ou título',
   'rec_region_any': 'Qualquer região',
@@ -503,13 +504,15 @@ const ptStrings = <String, String>{
   'rec_f_published': 'Mostrar esta página a todos',
   'rec_save': 'Salvar',
   'rec_saved': 'Salvo.',
-  'rec_publish_needs': 'Para mostrá-la a todos, ela precisa de um título, uma descrição com pelo menos 20 caracteres e uma forma de contato.',
+  'rec_publish_needs':
+      'Para mostrá-la a todos, ela precisa de um título, uma descrição com pelo menos 20 caracteres e uma forma de contato.',
   'rec_still_looking': 'Ainda procuramos',
   'rec_still_looking_hint': 'Mantém a página na lista. Ela sai da lista após 60 dias sem atualização.',
   'rec_delete': 'Excluir a página',
   'rec_delete_ask': 'Excluir a página de recrutamento desta guilda?',
   'rec_rec_title': 'Quem pode editar a página',
-  'rec_rec_intro': 'Você lidera esta guilda, então decide quem pode criar e editar a página de recrutamento. Isso não é o mesmo que ser oficial.',
+  'rec_rec_intro':
+      'Você lidera esta guilda, então decide quem pode criar e editar a página de recrutamento. Isso não é o mesmo que ser oficial.',
   'rec_rec_none': 'Ninguém além de você.',
   'rec_rec_add': 'Permitir um membro',
   'rec_rec_remove': 'Retirar',

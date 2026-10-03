@@ -16,7 +16,8 @@ import 'editor_screen.dart';
 /// opens the page of a guild over the page the app is at. it has an address of its own (/recruit/<number>), in the browser while it is open, and its button copies it.
 /// [announce] is false for a link that was followed or that the app was opened with
 Future<void> showRecruitPage(BuildContext context, String guildId, {bool announce = true}) {
-  final closed = linkOpened(ProviderScope.containerOf(context, listen: false), RecruitLink(guildId), announce: announce);
+  final closed =
+      linkOpened(ProviderScope.containerOf(context, listen: false), RecruitLink(guildId), announce: announce);
   return Navigator.of(context)
       .push(MaterialPageRoute<void>(builder: (_) => RecruitPageScreen(guildId: guildId)))
       .whenComplete(closed);
@@ -34,7 +35,11 @@ class RecruitPageScreen extends ConsumerWidget {
     if (!communityReady) {
       return Scaffold(
         appBar: AppBar(title: Text(s.t('recruitment'))),
-        body: Center(child: Padding(padding: const EdgeInsets.all(32), child: Text(s.t('rec_unavailable'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)))),
+        body: Center(
+            child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text(s.t('rec_unavailable'),
+                    textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)))),
       );
     }
     final page = ref.watch(recruitPageProvider(guildId));
@@ -99,7 +104,8 @@ class RecruitPageScreen extends ConsumerWidget {
 
   Future<void> _report(BuildContext context, WidgetRef ref) async {
     final s = ref.read(stringsProvider);
-    final reason = await showDialog<String>(context: context, builder: (_) => _ReportDialog(question: s.t('rec_report_why')));
+    final reason =
+        await showDialog<String>(context: context, builder: (_) => _ReportDialog(question: s.t('rec_report_why')));
     if (reason == null || !context.mounted) return;
     try {
       await ref.read(recruitBackendProvider).report(guildId, reason);
@@ -166,7 +172,9 @@ class _PageBody extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+              Text(label.toUpperCase(),
+                  style: const TextStyle(
+                      fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
               const SizedBox(height: 6),
               child,
             ],
@@ -175,7 +183,10 @@ class _PageBody extends ConsumerWidget {
     Widget note(String text, Color color) => Container(
           margin: const EdgeInsets.only(top: 12),
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(AppRadius.card), border: Border.all(color: color)),
+          decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(color: color)),
           child: Text(text, style: TextStyle(fontSize: 13, color: color, height: 1.35)),
         );
     return ListView(
@@ -200,22 +211,37 @@ class _PageBody extends ConsumerWidget {
             ),
           ],
         ),
-        if (page.hidden) note(s.t('rec_hidden_note') + (page.hiddenReason == null ? '' : '\n${page.hiddenReason}'), AppColors.ember)
-        else if (!page.published) note(s.t('rec_draft_note'), AppColors.amber),
+        if (page.hidden)
+          note(s.t('rec_hidden_note') + (page.hiddenReason == null ? '' : '\n${page.hiddenReason}'), AppColors.ember)
+        else if (!page.published)
+          note(s.t('rec_draft_note'), AppColors.amber),
         if (page.stale && page.published && !page.hidden) note(s.t('rec_stale'), AppColors.amber),
         if (page.headline.isNotEmpty)
-          Padding(padding: const EdgeInsets.only(top: 14), child: Text(page.headline, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
+          Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Text(page.headline,
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
         if (page.description.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: SelectableText(page.description, style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
+            child: SelectableText(page.description,
+                style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
           ),
         if (page.lookingFor.isNotEmpty)
-          fact(s.t('rec_page_looking_for'), Wrap(spacing: 8, runSpacing: 4, children: [for (final t in page.lookingFor) _Tag(recruitTagLabel(s, t))])),
-        if (page.requirements.isNotEmpty) fact(s.t('rec_page_requirements'), SelectableText(page.requirements, style: const TextStyle(height: 1.4))),
+          fact(
+              s.t('rec_page_looking_for'),
+              Wrap(
+                  spacing: 8, runSpacing: 4, children: [for (final t in page.lookingFor) _Tag(recruitTagLabel(s, t))])),
+        if (page.requirements.isNotEmpty)
+          fact(s.t('rec_page_requirements'), SelectableText(page.requirements, style: const TextStyle(height: 1.4))),
         if (page.playTimes.isNotEmpty) fact(s.t('rec_page_play_times'), SelectableText(page.playTimes)),
         if (page.languages.isNotEmpty)
-          fact(s.t('rec_page_languages'), Wrap(spacing: 8, runSpacing: 4, children: [for (final l in page.languages) _Tag(recruitLanguageLabel(l))])),
+          fact(
+              s.t('rec_page_languages'),
+              Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [for (final l in page.languages) _Tag(recruitLanguageLabel(l))])),
         if (page.region != RecruitRegion.any) fact(s.t('rec_page_region'), Text(recruitRegionLabel(s, page.region))),
         if (page.canBeReached)
           fact(
@@ -234,7 +260,9 @@ class _PageBody extends ConsumerWidget {
                     padding: EdgeInsets.only(top: page.discordInvite == null ? 0 : 10),
                     child: Row(
                       children: [
-                        Expanded(child: SelectableText(page.contact, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+                        Expanded(
+                            child: SelectableText(page.contact,
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
                         IconButton(
                           icon: const Icon(Icons.copy, size: 18),
                           onPressed: () {
@@ -261,7 +289,10 @@ class _Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(999), border: Border.all(color: AppColors.line)),
+        decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: AppColors.line)),
         child: Text(text, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
       );
 }

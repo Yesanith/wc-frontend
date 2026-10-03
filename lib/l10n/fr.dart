@@ -456,7 +456,8 @@ const frStrings = <String, String>{
   'copied': 'Copié.',
   'copy_page_link': 'Copier le lien de cette page',
   'recruitment': 'Recrutement',
-  'rec_intro': 'Guildes qui recherchent des joueurs. Tout le monde peut lire ces pages. Contacte une guilde avec les informations qu\'elle donne.',
+  'rec_intro':
+      'Guildes qui recherchent des joueurs. Tout le monde peut lire ces pages. Contacte une guilde avec les informations qu\'elle donne.',
   'rec_unavailable': 'Les pages de recrutement ne sont pas disponibles dans cette version.',
   'rec_search': 'Chercher par nom, tag ou titre',
   'rec_region_any': 'Toute région',
@@ -506,13 +507,15 @@ const frStrings = <String, String>{
   'rec_f_published': 'Montrer cette page à tout le monde',
   'rec_save': 'Enregistrer',
   'rec_saved': 'Enregistré.',
-  'rec_publish_needs': 'Pour la montrer à tout le monde, il faut un titre, une description d\'au moins 20 caractères et un moyen de vous joindre.',
+  'rec_publish_needs':
+      'Pour la montrer à tout le monde, il faut un titre, une description d\'au moins 20 caractères et un moyen de vous joindre.',
   'rec_still_looking': 'Nous recrutons toujours',
   'rec_still_looking_hint': 'Garde la page dans la liste. Elle en sort après 60 jours sans mise à jour.',
   'rec_delete': 'Supprimer la page',
   'rec_delete_ask': 'Supprimer la page de recrutement de cette guilde ?',
   'rec_rec_title': 'Qui peut modifier la page',
-  'rec_rec_intro': 'Tu diriges cette guilde, c\'est donc toi qui décides qui peut créer et modifier sa page de recrutement. Ce n\'est pas la même chose qu\'être officier.',
+  'rec_rec_intro':
+      'Tu diriges cette guilde, c\'est donc toi qui décides qui peut créer et modifier sa page de recrutement. Ce n\'est pas la même chose qu\'être officier.',
   'rec_rec_none': 'Personne d\'autre que toi.',
   'rec_rec_add': 'Autoriser un membre',
   'rec_rec_remove': 'Retirer',
@@ -520,7 +523,8 @@ const frStrings = <String, String>{
   'rec_err_not_allowed': 'Tu ne peux pas faire ça pour cette guilde.',
   'rec_err_signin': 'Connecte-toi d\'abord.',
   'rec_err_hidden': 'Un modérateur a masqué la page, elle ne peut pas être affichée.',
-  'rec_err_invalid': 'Quelque chose n\'est pas valide : un texte trop long, ou une invitation qui n\'est pas une invitation Discord.',
+  'rec_err_invalid':
+      'Quelque chose n\'est pas valide : un texte trop long, ou une invitation qui n\'est pas une invitation Discord.',
   'rec_err_not_member': 'Ce joueur n\'est pas membre de cette guilde.',
   'rec_err_own_role': 'Le chef peut déjà modifier la page.',
   'rec_err_no_page': 'Il n\'y a pas encore de page. Enregistre-la d\'abord.',

@@ -484,7 +484,8 @@ void main() {
       expect(linkFromPath('/RECRUIT/$guildId/'), const RecruitLink(guildId));
       expect(linkFromPath('recruit/$guildId'), const RecruitLink(guildId));
       expect(linkFromPath('/recruit/$guildId?x=1#top'), const RecruitLink(guildId));
-      expect(linkFromPath('/recruit/${guildId.toUpperCase()}'), const RecruitLink(guildId), reason: 'a number is kept in small letters');
+      expect(linkFromPath('/recruit/${guildId.toUpperCase()}'), const RecruitLink(guildId),
+          reason: 'a number is kept in small letters');
     });
 
     test('is none when what follows is not the number of a guild', () {

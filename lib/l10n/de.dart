@@ -459,7 +459,8 @@ const deStrings = <String, String>{
   'copied': 'Kopiert.',
   'copy_page_link': 'Link zu dieser Seite kopieren',
   'recruitment': 'Gildensuche',
-  'rec_intro': 'Gilden, die Spieler suchen. Jeder kann diese Seiten lesen. Melde dich bei einer Gilde über die angegebenen Kontaktdaten.',
+  'rec_intro':
+      'Gilden, die Spieler suchen. Jeder kann diese Seiten lesen. Melde dich bei einer Gilde über die angegebenen Kontaktdaten.',
   'rec_unavailable': 'Gildensuche-Seiten sind in dieser Version nicht verfügbar.',
   'rec_search': 'Nach Name, Tag oder Titel suchen',
   'rec_region_any': 'Jede Region',
@@ -469,7 +470,8 @@ const deStrings = <String, String>{
   'rec_recruiting': 'Sucht Spieler',
   'rec_closed': 'Sucht gerade nicht',
   'rec_mine': 'Die Seiten deiner Gilden',
-  'rec_mine_hint': 'Erstelle oder bearbeite die Seite einer Gilde, die du leitest oder für die dich der Leiter berechtigt hat.',
+  'rec_mine_hint':
+      'Erstelle oder bearbeite die Seite einer Gilde, die du leitest oder für die dich der Leiter berechtigt hat.',
   'rec_status_none': 'Noch keine Seite',
   'rec_status_draft': 'Entwurf, nur du siehst ihn',
   'rec_status_published': 'Veröffentlicht',
@@ -479,7 +481,8 @@ const deStrings = <String, String>{
   'rec_edit': 'Bearbeiten',
   'rec_view': 'Ansehen',
   'rec_recruiters': 'Wer bearbeiten darf',
-  'rec_sign_in': 'Melde dich in den Einstellungen mit Discord an, um die Seite deiner Gilde zu erstellen oder zu bearbeiten.',
+  'rec_sign_in':
+      'Melde dich in den Einstellungen mit Discord an, um die Seite deiner Gilde zu erstellen oder zu bearbeiten.',
   'rec_tag_strikes': 'Strikes',
   'rec_tag_open_world': 'Offene Welt',
   'rec_tag_farming': 'Farmen',
@@ -509,13 +512,15 @@ const deStrings = <String, String>{
   'rec_f_published': 'Diese Seite für alle sichtbar machen',
   'rec_save': 'Speichern',
   'rec_saved': 'Gespeichert.',
-  'rec_publish_needs': 'Damit sie für alle sichtbar ist, braucht sie einen Titel, eine Beschreibung mit mindestens 20 Zeichen und einen Kontaktweg.',
+  'rec_publish_needs':
+      'Damit sie für alle sichtbar ist, braucht sie einen Titel, eine Beschreibung mit mindestens 20 Zeichen und einen Kontaktweg.',
   'rec_still_looking': 'Wir suchen noch',
   'rec_still_looking_hint': 'Hält die Seite in der Liste. Nach 60 Tagen ohne Aktualisierung verschwindet sie daraus.',
   'rec_delete': 'Seite löschen',
   'rec_delete_ask': 'Die Gildensuche-Seite dieser Gilde löschen?',
   'rec_rec_title': 'Wer die Seite bearbeiten darf',
-  'rec_rec_intro': 'Du leitest diese Gilde und entscheidest, wer ihre Gildensuche-Seite anlegen und bearbeiten darf. Das ist nicht dasselbe wie Offizier zu sein.',
+  'rec_rec_intro':
+      'Du leitest diese Gilde und entscheidest, wer ihre Gildensuche-Seite anlegen und bearbeiten darf. Das ist nicht dasselbe wie Offizier zu sein.',
   'rec_rec_none': 'Außer dir niemand.',
   'rec_rec_add': 'Mitglied berechtigen',
   'rec_rec_remove': 'Zurücknehmen',
@@ -523,7 +528,8 @@ const deStrings = <String, String>{
   'rec_err_not_allowed': 'Das darfst du für diese Gilde nicht.',
   'rec_err_signin': 'Melde dich zuerst an.',
   'rec_err_hidden': 'Ein Moderator hat die Seite ausgeblendet, sie kann nicht angezeigt werden.',
-  'rec_err_invalid': 'Etwas auf der Seite ist ungültig: ein zu langer Text oder eine Einladung, die keine Discord-Einladung ist.',
+  'rec_err_invalid':
+      'Etwas auf der Seite ist ungültig: ein zu langer Text oder eine Einladung, die keine Discord-Einladung ist.',
   'rec_err_not_member': 'Dieser Spieler ist kein Mitglied dieser Gilde.',
   'rec_err_own_role': 'Der Leiter darf die Seite bereits bearbeiten.',
   'rec_err_no_page': 'Es gibt noch keine Seite. Speichere sie zuerst.',
