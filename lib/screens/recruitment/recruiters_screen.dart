@@ -30,7 +30,8 @@ class RecruitersScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final recruiters = ref.watch(recruitersProvider(guild.guildId));
     return Scaffold(
-      appBar: AppBar(title: Text('${s.t('rec_rec_title')} · ${guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis)),
+      appBar:
+          AppBar(title: Text('${s.t('rec_rec_title')} · ${guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis)),
       body: ContentFrame(
         maxWidth: readingMaxWidth,
         child: ListView(
@@ -55,7 +56,8 @@ class RecruitersScreen extends ConsumerWidget {
                       leading: const Icon(Icons.person_outline),
                       title: Text(r.accountName),
                       trailing: TextButton(
-                        onPressed: () => _change(context, ref, () => ref.read(recruitBackendProvider).revoke(guild.guildId, r.userId)),
+                        onPressed: () => _change(
+                            context, ref, () => ref.read(recruitBackendProvider).revoke(guild.guildId, r.userId)),
                         child: Text(s.t('rec_rec_remove')),
                       ),
                     ),
@@ -88,7 +90,10 @@ class RecruitersScreen extends ConsumerWidget {
       builder: (context) => SimpleDialog(
         title: Text(s.t('rec_rec_pick')),
         children: [
-          if (candidates.isEmpty) Padding(padding: const EdgeInsets.all(24), child: Text(s.t('rec_rec_none'), style: const TextStyle(color: AppColors.muted))),
+          if (candidates.isEmpty)
+            Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(s.t('rec_rec_none'), style: const TextStyle(color: AppColors.muted))),
           for (final m in candidates)
             SimpleDialogOption(onPressed: () => Navigator.of(context).pop(m), child: Text(m.accountName)),
         ],

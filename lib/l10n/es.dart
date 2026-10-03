@@ -454,7 +454,8 @@ const esStrings = <String, String>{
   'copied': 'Copiado.',
   'copy_page_link': 'Copiar enlace a esta página',
   'recruitment': 'Reclutamiento',
-  'rec_intro': 'Hermandades que buscan jugadores. Cualquiera puede leer estas páginas. Contacta con una hermandad con los datos que ofrece.',
+  'rec_intro':
+      'Hermandades que buscan jugadores. Cualquiera puede leer estas páginas. Contacta con una hermandad con los datos que ofrece.',
   'rec_unavailable': 'Las páginas de reclutamiento no están disponibles en esta versión.',
   'rec_search': 'Buscar por nombre, etiqueta o título',
   'rec_region_any': 'Cualquier región',
@@ -504,13 +505,15 @@ const esStrings = <String, String>{
   'rec_f_published': 'Mostrar esta página a todos',
   'rec_save': 'Guardar',
   'rec_saved': 'Guardado.',
-  'rec_publish_needs': 'Para mostrarla a todos necesita un título, una descripción de al menos 20 caracteres y una forma de contacto.',
+  'rec_publish_needs':
+      'Para mostrarla a todos necesita un título, una descripción de al menos 20 caracteres y una forma de contacto.',
   'rec_still_looking': 'Seguimos buscando',
   'rec_still_looking_hint': 'Mantiene la página en la lista. Sale de ella tras 60 días sin actualizar.',
   'rec_delete': 'Eliminar la página',
   'rec_delete_ask': '¿Eliminar la página de reclutamiento de esta hermandad?',
   'rec_rec_title': 'Quién puede editar la página',
-  'rec_rec_intro': 'Diriges esta hermandad, así que decides quién puede crear y editar su página de reclutamiento. No es lo mismo que ser oficial.',
+  'rec_rec_intro':
+      'Diriges esta hermandad, así que decides quién puede crear y editar su página de reclutamiento. No es lo mismo que ser oficial.',
   'rec_rec_none': 'Nadie más que tú.',
   'rec_rec_add': 'Permitir a un miembro',
   'rec_rec_remove': 'Retirar',

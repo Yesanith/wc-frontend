@@ -500,13 +500,15 @@ const trStrings = <String, String>{
   'rec_f_published': 'Bu sayfayı herkese göster',
   'rec_save': 'Kaydet',
   'rec_saved': 'Kaydedildi.',
-  'rec_publish_needs': 'Herkese göstermek için bir başlık, en az 20 karakterlik bir açıklama ve ulaşılabilir bir iletişim yolu gerekir.',
+  'rec_publish_needs':
+      'Herkese göstermek için bir başlık, en az 20 karakterlik bir açıklama ve ulaşılabilir bir iletişim yolu gerekir.',
   'rec_still_looking': 'Hâlâ arıyoruz',
   'rec_still_looking_hint': 'Sayfayı listede tutar. 60 gün güncellenmezse listeden çıkar.',
   'rec_delete': 'Sayfayı sil',
   'rec_delete_ask': 'Bu loncanın alım sayfası silinsin mi?',
   'rec_rec_title': 'Sayfayı kim düzenleyebilir',
-  'rec_rec_intro': 'Bu loncanın lideri sensin; alım sayfasını kimin açıp düzenleyebileceğine sen karar verirsin. Bu, görevli olmakla aynı şey değildir.',
+  'rec_rec_intro':
+      'Bu loncanın lideri sensin; alım sayfasını kimin açıp düzenleyebileceğine sen karar verirsin. Bu, görevli olmakla aynı şey değildir.',
   'rec_rec_none': 'Senden başka kimse yok.',
   'rec_rec_add': 'Bir üyeye izin ver',
   'rec_rec_remove': 'Geri al',

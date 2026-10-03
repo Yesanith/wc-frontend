@@ -143,7 +143,8 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     final s = ref.watch(stringsProvider);
     final page = ref.watch(recruitPageProvider(widget.guild.guildId));
     return Scaffold(
-      appBar: AppBar(title: Text('${s.t('rec_editor')} · ${widget.guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis)),
+      appBar: AppBar(
+          title: Text('${s.t('rec_editor')} · ${widget.guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis)),
       body: AsyncView<RecruitPage?>(
         value: page,
         onRetry: () => ref.invalidate(recruitPageProvider(widget.guild.guildId)),
@@ -163,7 +164,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     final languages = [...recruitLanguages, ..._draft.languages.where((l) => !recruitLanguages.contains(l))];
     Widget label(String text) => Padding(
           padding: const EdgeInsets.only(top: 18, bottom: 6),
-          child: Text(text.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+          child: Text(text.toUpperCase(),
+              style:
+                  const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
         );
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
@@ -226,7 +229,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
         ),
         label(s.t('rec_page_region')),
         SegmentedButton<RecruitRegion>(
-          segments: [for (final r in RecruitRegion.values) ButtonSegment(value: r, label: Text(recruitRegionLabel(s, r)))],
+          segments: [
+            for (final r in RecruitRegion.values) ButtonSegment(value: r, label: Text(recruitRegionLabel(s, r)))
+          ],
           selected: {_draft.region},
           onSelectionChanged: (v) => _set(_draft.copyWith(region: v.first)),
         ),
@@ -256,7 +261,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           decoration: InputDecoration(
             labelText: s.t('rec_f_discord'),
             // an invite that is none is said when it is typed and not when it is sent
-            errorText: _draft.discordInvite.trim().isNotEmpty && !isDiscordInvite(_draft.discordInvite.trim()) ? s.t('rec_err_invalid') : null,
+            errorText: _draft.discordInvite.trim().isNotEmpty && !isDiscordInvite(_draft.discordInvite.trim())
+                ? s.t('rec_err_invalid')
+                : null,
           ),
           onChanged: (v) => _set(_draft.copyWith(discordInvite: v)),
         ),
@@ -273,7 +280,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           key: const Key('rec-published'),
           contentPadding: EdgeInsets.zero,
           title: Text(s.t('rec_f_published')),
-          subtitle: missing.isNotEmpty && !_published ? Text(s.t('rec_publish_needs'), style: const TextStyle(color: AppColors.amber, fontSize: 12)) : null,
+          subtitle: missing.isNotEmpty && !_published
+              ? Text(s.t('rec_publish_needs'), style: const TextStyle(color: AppColors.amber, fontSize: 12))
+              : null,
           value: _published,
           // it can be shown once it has what it takes, and always taken back
           onChanged: _published || missing.isEmpty ? (v) => setState(() => _published = v) : null,
