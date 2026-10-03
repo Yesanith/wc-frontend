@@ -501,6 +501,7 @@ const enStrings = <String, String>{
   'rec_f_languages': 'Languages (up to 5)',
   'rec_f_recruiting': 'Recruiting right now',
   'rec_f_published': 'Show this page to everybody',
+  'rec_f_published_hint': 'It is also posted in the guild-recruitment forum of the official Discord server.',
   'rec_save': 'Save',
   'rec_saved': 'Saved.',
   'rec_publish_needs':

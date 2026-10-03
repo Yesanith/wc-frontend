@@ -505,6 +505,7 @@ const frStrings = <String, String>{
   'rec_f_languages': 'Langues (5 au maximum)',
   'rec_f_recruiting': 'Nous recrutons en ce moment',
   'rec_f_published': 'Montrer cette page à tout le monde',
+  'rec_f_published_hint': 'Elle est aussi publiée dans le forum guild-recruitment du serveur Discord officiel.',
   'rec_save': 'Enregistrer',
   'rec_saved': 'Enregistré.',
   'rec_publish_needs':

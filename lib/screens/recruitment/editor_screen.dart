@@ -280,9 +280,10 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           key: const Key('rec-published'),
           contentPadding: EdgeInsets.zero,
           title: Text(s.t('rec_f_published')),
+          // what it takes, until it has it, and then where it is shown besides the app: the page is also read in a server that everybody is in
           subtitle: missing.isNotEmpty && !_published
               ? Text(s.t('rec_publish_needs'), style: const TextStyle(color: AppColors.amber, fontSize: 12))
-              : null,
+              : Text(s.t('rec_f_published_hint'), style: const TextStyle(color: AppColors.hint, fontSize: 12)),
           value: _published,
           // it can be shown once it has what it takes, and always taken back
           onChanged: _published || missing.isEmpty ? (v) => setState(() => _published = v) : null,

@@ -502,6 +502,7 @@ const ptStrings = <String, String>{
   'rec_f_languages': 'Idiomas (até 5)',
   'rec_f_recruiting': 'Recrutando agora',
   'rec_f_published': 'Mostrar esta página a todos',
+  'rec_f_published_hint': 'Também é publicada no fórum guild-recruitment do servidor oficial do Discord.',
   'rec_save': 'Salvar',
   'rec_saved': 'Salvo.',
   'rec_publish_needs':

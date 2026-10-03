@@ -470,6 +470,7 @@ const jaStrings = <String, String>{
   'rec_f_languages': '言語（最大5つ）',
   'rec_f_recruiting': '現在募集中',
   'rec_f_published': 'このページを全員に公開',
+  'rec_f_published_hint': '公式Discordサーバーのguild-recruitmentフォーラムにも投稿されます。',
   'rec_save': '保存',
   'rec_saved': '保存しました。',
   'rec_publish_needs': '全員に公開するには、見出し、20文字以上の説明、連絡手段が必要です。',

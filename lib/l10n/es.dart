@@ -503,6 +503,7 @@ const esStrings = <String, String>{
   'rec_f_languages': 'Idiomas (hasta 5)',
   'rec_f_recruiting': 'Reclutando ahora mismo',
   'rec_f_published': 'Mostrar esta página a todos',
+  'rec_f_published_hint': 'También se publica en el foro guild-recruitment del servidor oficial de Discord.',
   'rec_save': 'Guardar',
   'rec_saved': 'Guardado.',
   'rec_publish_needs':
