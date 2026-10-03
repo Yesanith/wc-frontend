@@ -163,6 +163,9 @@ void main() {
       await tester.tap(find.byTooltip('Copy link to this page'));
       await tester.pump();
       expect(copied, ['https://yesanith.github.io/tyria-companion/app/#/event/$_id']);
+      // the notice that it was copied goes away by itself after a few seconds: let it, a timer that is pending is a test that did not end
+      await tester.pump(const Duration(seconds: 4));
+      await tester.pumpAndSettle();
     });
 
     testWidgets('has no such button for a number that is no event\'s, so that no address is made of it',
