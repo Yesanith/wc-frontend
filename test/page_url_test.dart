@@ -197,14 +197,31 @@ void main() {
       expect(linkFromPath('item/19721'), const ItemLink(19721), reason: 'the slash at the front is not needed');
       expect(linkFromPath('/item/19721?lang=de'), const ItemLink(19721));
       expect(linkFromPath('/item/19721#top'), const ItemLink(19721));
-      expect(linkFromPath('/event/${eventId.toUpperCase()}'), const EventLink(eventId), reason: 'a number is kept in small letters');
+      expect(linkFromPath('/event/${eventId.toUpperCase()}'), const EventLink(eventId),
+          reason: 'a number is kept in small letters');
     });
 
     test('is none when it is not an item or an event, so that nothing is made up of what is not one', () {
       for (final path in [
-        '/item', '/item/', '/item/0', '/item/-5', '/item/abc', '/item/12.5', '/item/1234567890', '/item/19721/extra',
-        '/event', '/event/', '/event/abc', '/event/${eventId.substring(1)}', '/event/${eventId}0', '/event/${eventId.replaceAll('-', '')}',
-        '/event/zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz', '/events/$eventId', '/items/19721', '/nothing', '/access_token=abc',
+        '/item',
+        '/item/',
+        '/item/0',
+        '/item/-5',
+        '/item/abc',
+        '/item/12.5',
+        '/item/1234567890',
+        '/item/19721/extra',
+        '/event',
+        '/event/',
+        '/event/abc',
+        '/event/${eventId.substring(1)}',
+        '/event/${eventId}0',
+        '/event/${eventId.replaceAll('-', '')}',
+        '/event/zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz',
+        '/events/$eventId',
+        '/items/19721',
+        '/nothing',
+        '/access_token=abc',
       ]) {
         expect(linkFromPath(path), isNull, reason: path);
       }
@@ -224,7 +241,8 @@ void main() {
     test('is a whole address when it is shared, which opens the app at it', () {
       expect(linkUrl(const ItemLink(19721)), 'https://yesanith.github.io/tyria-companion/app/#/item/19721');
       expect(linkUrl(const EventLink(eventId)), 'https://yesanith.github.io/tyria-companion/app/#/event/$eventId');
-      expect(linkUrl(const SectionLink(AppSection.trading)), 'https://yesanith.github.io/tyria-companion/app/#/trading');
+      expect(
+          linkUrl(const SectionLink(AppSection.trading)), 'https://yesanith.github.io/tyria-companion/app/#/trading');
       expect(linkUrl(const SectionLink(AppSection.home)), 'https://yesanith.github.io/tyria-companion/app/#/');
       expect(appBase.endsWith('/app/'), isTrue);
     });
@@ -236,7 +254,8 @@ void main() {
       expect(const SectionLink(AppSection.bosses), const SectionLink(AppSection.bosses));
       expect(const SectionLink(AppSection.bosses), isNot(const SectionLink(AppSection.daily)));
       expect(const ItemLink(1), isNot(const SectionLink(AppSection.home)));
-      expect(<AppLink>{const ItemLink(1), const ItemLink(1), const EventLink(eventId)}.length, 2, reason: 'and in a set');
+      expect(<AppLink>{const ItemLink(1), const ItemLink(1), const EventLink(eventId)}.length, 2,
+          reason: 'and in a set');
     });
 
     test('tells a number that is an event\'s', () {
@@ -272,14 +291,17 @@ void main() {
   group('what a notification opens', () {
     test('is the public event it is about, or the item', () {
       expect(linkFromPushData({'open_event_id': eventId, 'kind': 'open_reminder'}), const EventLink(eventId));
-      expect(linkFromPushData({'open_event_id': eventId.toUpperCase(), 'kind': 'open_cancelled'}), const EventLink(eventId));
-      expect(linkFromPushData({'item_id': '19721', 'kind': 'price'}), const ItemLink(19721), reason: 'a notification carries text only');
+      expect(linkFromPushData({'open_event_id': eventId.toUpperCase(), 'kind': 'open_cancelled'}),
+          const EventLink(eventId));
+      expect(linkFromPushData({'item_id': '19721', 'kind': 'price'}), const ItemLink(19721),
+          reason: 'a notification carries text only');
       expect(linkFromPushData({'item_id': 19721}), const ItemLink(19721));
     });
 
     test('is the event when it carries both, and nothing when it carries neither', () {
       expect(linkFromPushData({'open_event_id': eventId, 'item_id': '5'}), const EventLink(eventId));
-      expect(linkFromPushData({'event_id': eventId, 'kind': 'reminder'}), isNull, reason: 'a guild\'s event is not a public one');
+      expect(linkFromPushData({'event_id': eventId, 'kind': 'reminder'}), isNull,
+          reason: 'a guild\'s event is not a public one');
       expect(linkFromPushData({'kind': 'promoted'}), isNull);
       expect(linkFromPushData({}), isNull);
       expect(linkFromPushData(null), isNull);
@@ -292,7 +314,8 @@ void main() {
       expect(linkFromPushData({'item_id': '0'}), isNull);
       expect(linkFromPushData({'item_id': '-3'}), isNull);
       expect(linkFromPushData({'item_id': 'x'}), isNull);
-      expect(linkFromPushData({'open_event_id': 'abc', 'item_id': '7'}), const ItemLink(7), reason: 'what is good is used');
+      expect(linkFromPushData({'open_event_id': 'abc', 'item_id': '7'}), const ItemLink(7),
+          reason: 'what is good is used');
     });
   });
 
@@ -315,7 +338,8 @@ void main() {
     setUp(() {
       calls.clear();
       container = ProviderContainer();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
         if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
         return null;
       });
@@ -323,7 +347,8 @@ void main() {
 
     tearDown(() {
       container.dispose();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, null);
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
     });
 
     test('is the open one while it is, and its address is a new place in the history', () {
@@ -416,7 +441,9 @@ void main() {
     test('goes back from a link to the page it was opened over by closing it', () {
       var closed = 0;
       final shown = <AppSection>[];
-      expect(followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++), isTrue);
+      expect(
+          followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++),
+          isTrue);
       expect(closed, 1);
       expect(shown, isEmpty, reason: 'it is the page that is shown already');
     });

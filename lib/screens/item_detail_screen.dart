@@ -24,8 +24,9 @@ import 'trading_screen.dart';
 /// a plain item has an address of its own (/item/19721), which is in the browser while the sheet is open and is what the sheet's button copies. one that is an
 /// item of a character, with its chosen stats and upgrades, is not the item and has none. [announce] is false for a link that was followed
 void showItemDetails(BuildContext context, int itemId, {Json? instance, bool announce = true}) {
-  final closed =
-      instance == null ? linkOpened(ProviderScope.containerOf(context, listen: false), ItemLink(itemId), announce: announce) : null;
+  final closed = instance == null
+      ? linkOpened(ProviderScope.containerOf(context, listen: false), ItemLink(itemId), announce: announce)
+      : null;
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
