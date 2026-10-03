@@ -17,6 +17,7 @@ import '../state/community.dart';
 import '../state/link_refresh.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
+import '../state/trade_notify.dart';
 import '../theme.dart';
 import '../util.dart';
 import 'admin_screen.dart';
@@ -150,6 +151,11 @@ class SettingsScreen extends ConsumerWidget {
         if (bossAlertsReady) ...[
           const SizedBox(height: 16),
           const _BossAlertsPanel(),
+          // what the trading post did for the player, from the phone: the api key stays on it
+          if (!kIsWeb) ...[
+            const SizedBox(height: 16),
+            const _TradeNotifyPanel(),
+          ],
         ],
         const SizedBox(height: 16),
         Panel(
@@ -807,6 +813,52 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
       onChanged: _busy ? null : _set,
       title: Text(s.t('push_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
       subtitle: Text(s.t('push_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+    );
+  }
+}
+
+/// the notifications of the trading post: an item that was sold, a buy order that was filled. the phone looks at the history with the player's own key, which stays on it
+class _TradeNotifyPanel extends ConsumerStatefulWidget {
+  const _TradeNotifyPanel();
+
+  @override
+  ConsumerState<_TradeNotifyPanel> createState() => _TradeNotifyPanelState();
+}
+
+class _TradeNotifyPanelState extends ConsumerState<_TradeNotifyPanel> {
+  bool _busy = false;
+
+  Future<void> _set(bool on) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      final outcome = await ref.read(tradeNotifyProvider.notifier).set(on);
+      if (!mounted) return;
+      switch (outcome) {
+        case TradeNotifyOutcome.needsKey:
+          showToast(context, s.t('tp_notify_needs_key'));
+        case TradeNotifyOutcome.denied:
+          showToast(context, s.t('push_denied'));
+        case TradeNotifyOutcome.on:
+        case TradeNotifyOutcome.off:
+          break;
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    return Panel(
+      child: SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        value: ref.watch(tradeNotifyProvider),
+        onChanged: _busy ? null : _set,
+        title: Text(s.t('tp_notify_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+        subtitle: Text(s.t('tp_notify_hint'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+      ),
     );
   }
 }

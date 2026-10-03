@@ -31,6 +31,8 @@ import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart' show initialPushData, pushTapped;
+import '../services/trade_check.dart';
+import '../state/trade_notify.dart';
 import '../state/boss_alerts.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
@@ -292,6 +294,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           duration: const Duration(seconds: 6));
     });
     WidgetsBinding.instance.addObserver(this);
+    // what the trading post did for the player is looked at every few minutes while the app is open, and once now. while it is closed Android does it every quarter of an hour
+    if (!kIsWeb) {
+      _tradeTimer = Timer.periodic(const Duration(minutes: 5), (_) => _checkTrades());
+      WidgetsBinding.instance.addPostFrameCallback((_) => _checkTrades());
+    }
     // after a game patch the static data cache is cleared once
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(patchCheckProvider.future).catchError((_) => false);
@@ -312,6 +319,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   void dispose() {
     _pushWhileOpen?.cancel();
     _pushTaps?.cancel();
+    _tradeTimer?.cancel();
     _alertTaps?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -320,6 +328,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   DateTime? _backgroundSince;
   StreamSubscription<Object?>? _pushWhileOpen;
   StreamSubscription<Map<String, dynamic>>? _pushTaps;
+  Timer? _tradeTimer;
+  bool _checkingTrades = false;
   StreamSubscription<String?>? _alertTaps;
 
   /// the item or the public event a link asked for, opened over the page now that there is one
@@ -338,8 +348,27 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   }
 
   void _openFromAlert(String? payload) {
-    if (!isBossAlertPayload(payload) || !mounted) return;
-    ref.read(sectionProvider.notifier).state = AppSection.bosses;
+    if (!mounted) return;
+    if (isTradePayload(payload)) {
+      ref.read(sectionProvider.notifier).state = AppSection.trading;
+    } else if (isBossAlertPayload(payload)) {
+      ref.read(sectionProvider.notifier).state = AppSection.bosses;
+    }
+  }
+
+  /// a look at what the trading post did for the player since the last, when they asked to be told. one at a time, and a failure is only a look that did not happen
+  Future<void> _checkTrades() async {
+    if (_checkingTrades || !bossAlertsReady || !ref.read(tradeNotifyProvider)) return;
+    final keys = ref.read(keysProvider).valueOrNull ?? const <StoredKey>[];
+    if (keys.isEmpty) return;
+    _checkingTrades = true;
+    try {
+      await checkTradingPost(keys: keys, prefs: ref.read(prefsProvider), lang: ref.read(langProvider));
+    } catch (_) {
+      // at the next look
+    } finally {
+      _checkingTrades = false;
+    }
   }
 
   void _startPush() {
@@ -354,6 +383,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     } else if (state == AppLifecycleState.resumed) {
       // a permission may have been given in the phone's settings meanwhile
       ref.read(bossAlertsRecheckProvider.notifier).bump();
+      if (!kIsWeb) _checkTrades();
       final away = _backgroundSince == null ? Duration.zero : DateTime.now().difference(_backgroundSince!);
       _backgroundSince = null;
       // a short switch away is not worth a refresh, a few minutes is

@@ -142,6 +142,36 @@ String? bossAlertLaunchPayload;
 
 bool isBossAlertPayload(String? payload) => payload == _payload;
 
+const _tradeChannelId = 'trading_post';
+const _tradePayload = 'trading_post';
+
+/// a tap on what the trading post did for the player: the app opens at the trading post
+bool isTradePayload(String? payload) => payload == _tradePayload;
+
+/// tells the player what the trading post did: items sold, or buy orders filled. [id] is the notification's own, so that the next does not replace it
+Future<void> showTradeNotification({
+  required int id,
+  required String title,
+  required String body,
+  required String channelName,
+  required String channelDescription,
+}) =>
+    _plugin.show(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          _tradeChannelId,
+          channelName,
+          channelDescription: channelDescription,
+          // the lines of what sold are all there when it is opened
+          styleInformation: BigTextStyleInformation(body),
+        ),
+      ),
+      payload: _tradePayload,
+    );
+
 Future<void> initBossAlerts() async {
   try {
     await _plugin.initialize(

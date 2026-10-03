@@ -13,6 +13,23 @@ import 'settings.dart';
 
 final storageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
 
+/// where the keys are kept in the secure storage
+const storedKeysStorageKey = 'gw2_api_keys';
+
+/// the keys as they are kept, those that are none left out. also read by what runs in the background, which has no providers
+List<StoredKey> parseStoredKeys(String? raw) {
+  if (raw == null) return const [];
+  try {
+    return (jsonDecode(raw) as List)
+        .whereType<Map>()
+        .map((e) => StoredKey.fromJson(Map<String, dynamic>.from(e)))
+        .where((k) => k.key.isNotEmpty)
+        .toList();
+  } catch (_) {
+    return const [];
+  }
+}
+
 /// one saved api key with the account name it belongs to
 class StoredKey {
   const StoredKey(this.name, this.key);
@@ -26,24 +43,14 @@ class StoredKey {
 
 /// every key the user added, in the order they were added
 class KeysNotifier extends AsyncNotifier<List<StoredKey>> {
-  static const _storageKey = 'gw2_api_keys';
+  static const _storageKey = storedKeysStorageKey;
   static const _legacyKey = 'gw2_api_key';
 
   @override
   Future<List<StoredKey>> build() async {
     final storage = ref.read(storageProvider);
     final raw = await storage.read(key: _storageKey);
-    if (raw != null) {
-      try {
-        return (jsonDecode(raw) as List)
-            .whereType<Map>()
-            .map((e) => StoredKey.fromJson(Map<String, dynamic>.from(e)))
-            .where((k) => k.key.isNotEmpty)
-            .toList();
-      } catch (_) {
-        return const [];
-      }
-    }
+    if (raw != null) return parseStoredKeys(raw);
     // migrate the single key older versions stored
     final legacy = await storage.read(key: _legacyKey);
     if (legacy != null && legacy.isNotEmpty) {

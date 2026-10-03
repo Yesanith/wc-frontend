@@ -437,6 +437,11 @@ class Gw2Api {
     return out;
   }
 
+  /// the newest page of one side of the history (history/sells or history/buys), as it is now and not from the disk: what a look for what completed needs.
+  /// needs the tradingpost permission
+  Future<List<Json>> recentTransactions(String kind) async =>
+      _list(await get('/commerce/transactions/$kind', {'page_size': '200', 'page': '0'}));
+
   /// coins and items waiting to be picked up at a trading post npc
   Future<Json> delivery() async => Map<String, dynamic>.from(await get('/commerce/delivery') as Map);
 

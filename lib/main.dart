@@ -8,6 +8,8 @@ import 'screens/landing_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/open_link.dart';
 import 'screens/shell.dart';
+import 'services/trade_background.dart';
+import 'state/trade_alerts.dart' show tradeNotifyPref;
 import 'services/cache.dart';
 import 'services/boss_alerts.dart';
 import 'services/icon_cache.dart';
@@ -37,6 +39,9 @@ Future<void> main() async {
     await initPush();
     // alerts before pinned world events, from the phone's own alarms
     await initBossAlerts();
+    // the look at the trading post while the app is closed, asked for again each time in case an update of the app lost it
+    await initTradeBackground();
+    if (prefs.getBool(tradeNotifyPref) == true) await setTradeBackground(true);
   }
   runApp(
     ProviderScope(
