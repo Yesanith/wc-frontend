@@ -21,7 +21,11 @@ jobs:
           channel: stable
           cache: true
 
-      - run: flutter pub get
+      # each step keeps its output, so that whichever fails can be read without opening the run
+      - name: Packages
+        run: |
+          set -o pipefail
+          flutter pub get 2>&1 | tee "$RUNNER_TEMP/1-pub-get.log"
 
       # same settings as the format workflow, so a push that skipped it fails
       # here instead of drifting until the next manual run
@@ -29,24 +33,30 @@ jobs:
       # would only report what is already being repaired
       - name: Check formatting
         if: github.event_name != 'push' || github.ref != 'refs/heads/main'
-        run: dart format --line-length 120 --set-exit-if-changed --output=none lib test
+        run: |
+          set -o pipefail
+          dart format --line-length 120 --set-exit-if-changed --output=none lib test 2>&1 | tee "$RUNNER_TEMP/2-format.log"
 
       # lint hints stay advisory, errors and warnings fail the run
-      - run: flutter analyze --no-fatal-infos
+      - name: Analyze
+        run: |
+          set -o pipefail
+          flutter analyze --no-fatal-infos 2>&1 | tee "$RUNNER_TEMP/3-analyze.log"
 
       - name: Test
         run: |
           set -o pipefail
-          flutter test 2>&1 | tee "$RUNNER_TEMP/flutter-test.log"
+          flutter test 2>&1 | tee "$RUNNER_TEMP/4-test.log"
 
-      # when it fails, the end of the log goes to a branch of its own, one commit that is replaced each
-      # time, so the failure can be read without opening the run
+      # when it fails, what each step said goes to a branch of its own, one commit that is replaced each
+      # time, so the failure can be read without opening the run: the packages, the format, the analysis
+      # and the tests (without the list of those that passed)
       - name: Keep the failure where it can be read
-        if: failure() && github.event_name == 'push'
+        if: failure() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          test -f "$RUNNER_TEMP/flutter-test.log" || exit 0
+          ls "$RUNNER_TEMP"/*.log >/dev/null 2>&1 || exit 0
           dir="$(mktemp -d)"
           cd "$dir"
           git init -q
@@ -56,10 +66,12 @@ jobs:
           {
             echo "commit: $GITHUB_SHA"
             echo "run: $GITHUB_RUN_ID"
-            echo
-            # everything but the list of the tests that passed
-            grep -v '^✅' "$RUNNER_TEMP/flutter-test.log" | head -n 500
-          } > test-failure.txt
-          git add test-failure.txt
-          git commit -q -m "The test failure of $GITHUB_SHA"
+            for f in "$RUNNER_TEMP"/[0-9]-*.log; do
+              echo
+              echo "=================== $(basename "$f")"
+              grep -v '^✅' "$f" | head -n 400
+            done
+          } > check-failure.txt
+          git add check-failure.txt
+          git commit -q -m "The failure of the check of $GITHUB_SHA"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs

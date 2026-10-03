@@ -227,17 +227,22 @@ class _LogCardState extends State<_LogCard> {
         child: InkWell(
           borderRadius: BorderRadius.circular(AppRadius.card),
           onTap: () => setState(() => _open = !_open),
+          // one border all round, which a rounded corner needs, and the colour of the level as a strip along its edge
           child: Container(
-            padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border(
-                  left: BorderSide(color: color, width: 3),
-                  top: const BorderSide(color: AppColors.line),
-                  right: const BorderSide(color: AppColors.line),
-                  bottom: const BorderSide(color: AppColors.line)),
+              border: Border.all(color: AppColors.line),
             ),
-            child: Column(
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(width: 3, color: color),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+                      child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -286,6 +291,11 @@ class _LogCardState extends State<_LogCard> {
                     child: Text('Tap for what it knew', style: TextStyle(fontSize: 11, color: AppColors.hint)),
                   ),
               ],
+            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
