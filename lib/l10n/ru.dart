@@ -449,6 +449,7 @@ const ruStrings = <String, String>{
   'chat_code_note': 'Создан по id палитры, проверьте в игре',
   'copy': 'Копировать',
   'copied': 'Скопировано.',
+  'copy_page_link': 'Скопировать ссылку на эту страницу',
   'specializations': 'Специализации',
   'skill_bar': 'Панель навыков',
   'heal_skill': 'ЛЕЧЕНИЕ',

@@ -448,6 +448,7 @@ const trStrings = <String, String>{
   'chat_code_note': 'Palet ID’lerinden üretildi, oyunda doğrula',
   'copy': 'Kopyala',
   'copied': 'Kopyalandı.',
+  'copy_page_link': 'Bu sayfanın bağlantısını kopyala',
   'specializations': 'Spesifikasyonlar',
   'skill_bar': 'Yetenek çubuğu',
   'heal_skill': 'İYİLEŞTİRME',

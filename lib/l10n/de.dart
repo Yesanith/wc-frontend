@@ -457,6 +457,7 @@ const deStrings = <String, String>{
   'chat_code_note': 'Aus Palette-Ids erzeugt, im Spiel prüfen',
   'copy': 'Kopieren',
   'copied': 'Kopiert.',
+  'copy_page_link': 'Link zu dieser Seite kopieren',
   'specializations': 'Spezialisierungen',
   'skill_bar': 'Fertigkeitsleiste',
   'heal_skill': 'HEILUNG',

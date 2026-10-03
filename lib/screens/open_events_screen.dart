@@ -239,7 +239,7 @@ class _OpenEventCard extends ConsumerWidget {
     final live = e.isLive(DateTime.now());
     return AppCard(
       onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => OpenEventScreen(eventId: e.id)));
+        await showOpenEvent(context, e.id);
         ref.invalidate(openEventsFeedProvider);
         ref.invalidate(myOpenEventsProvider);
       },

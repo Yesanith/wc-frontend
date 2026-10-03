@@ -420,6 +420,7 @@ const jaStrings = <String, String>{
   'chat_code_note': 'パレット ID から生成しています。ゲーム内で確認してください',
   'copy': 'コピー',
   'copied': 'コピーしました。',
+  'copy_page_link': 'このページへのリンクをコピー',
   'specializations': 'スペシャライゼーション',
   'skill_bar': 'スキルバー',
   'heal_skill': '回復',

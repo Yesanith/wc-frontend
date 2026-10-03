@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/strings.dart';
 import 'screens/landing_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/open_link.dart';
 import 'screens/shell.dart';
 import 'services/cache.dart';
 import 'services/boss_alerts.dart';
@@ -22,6 +23,7 @@ import 'widgets/ui_zoom.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // the page a link opened is read now, before the app has begun: the navigator tells the browser its own address ("/") as it begins, and what is read after is that
+  final startLink = initialLink();
   final startSection = initialSection();
   final prefs = await SharedPreferences.getInstance();
   // a browser has no disk to keep them on, everything then comes from the network
@@ -41,6 +43,8 @@ Future<void> main() async {
       overrides: [
         prefsProvider.overrideWithValue(prefs),
         sectionProvider.overrideWith((ref) => startSection),
+        // a link to an item or to an event is opened by the page once there is one: the player may have to choose to go on first
+        pendingLinkProvider.overrideWith((ref) => startLink is SectionLink ? null : startLink),
         diskCacheProvider.overrideWithValue(cache),
         iconCacheProvider.overrideWithValue(icons),
       ],
@@ -65,16 +69,23 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
   void _startHistory() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await keepHistoryOfPages();
-      if (mounted) restoreSectionUrl(ref.read(sectionProvider));
+      if (mounted) restoreAddress(_address());
     });
   }
+
+  /// what the address in the browser is now: what is open over the page, a link not opened yet, or the page
+  String _address() => currentAddress(
+        section: ref.read(sectionProvider),
+        open: ref.read(openLinkProvider),
+        pending: ref.read(pendingLinkProvider),
+      );
 
   /// puts the address of the page back in the browser once the frame is made, which is when the navigator has told it its own, and again a moment later
   /// in case it does so later
   void _restoreUrl() {
     if (!kIsWeb) return;
     void put() {
-      if (mounted) restoreSectionUrl(ref.read(sectionProvider));
+      if (mounted) restoreAddress(_address());
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => put());
@@ -104,10 +115,30 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
   /// the back and forward buttons of the browser and a link to a page: the page is shown, and what was open over the last one is closed
   @override
   Future<bool> didPushRouteInformation(RouteInformation routeInformation) async {
-    return followBrowser(routeInformation.uri, ref.read(sectionProvider), (section) {
-      _navigator.currentState?.popUntil((route) => route.isFirst);
-      ref.read(sectionProvider.notifier).state = section;
-    });
+    return followBrowser(
+      routeInformation.uri,
+      ref.read(sectionProvider),
+      (section) {
+        _closeOver();
+        ref.read(sectionProvider.notifier).state = section;
+      },
+      open: _openFollowed,
+      linkIsOpen: ref.read(openLinkProvider) != null,
+      close: _closeOver,
+    );
+  }
+
+  /// what is open over the page is closed. the link that was open is forgotten first: the browser is where it should be, and has nothing to be put back
+  void _closeOver() {
+    ref.read(openLinkProvider.notifier).state = null;
+    _navigator.currentState?.popUntil((route) => route.isFirst);
+  }
+
+  /// the browser went to a link to an item or an event: what was open is closed and the link is opened, without a new place in the history
+  void _openFollowed(AppLink link) {
+    _closeOver();
+    final context = _navigator.currentContext;
+    if (context != null) openLinkNow(context, link, announce: false);
   }
 
   @override

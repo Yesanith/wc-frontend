@@ -450,6 +450,7 @@ const enStrings = <String, String>{
   'chat_code_note': 'Generated from palette ids, check it in game',
   'copy': 'Copy',
   'copied': 'Copied.',
+  'copy_page_link': 'Copy link to this page',
   'specializations': 'Specializations',
   'skill_bar': 'Skill bar',
   'heal_skill': 'HEAL',

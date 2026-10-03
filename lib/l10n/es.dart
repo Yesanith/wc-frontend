@@ -452,6 +452,7 @@ const esStrings = <String, String>{
   'chat_code_note': 'Generado con ids de paleta, compruébalo en el juego',
   'copy': 'Copiar',
   'copied': 'Copiado.',
+  'copy_page_link': 'Copiar enlace a esta página',
   'specializations': 'Especializaciones',
   'skill_bar': 'Barra de habilidades',
   'heal_skill': 'SANACIÓN',
