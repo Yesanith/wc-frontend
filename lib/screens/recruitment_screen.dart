@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../l10n/strings.dart';
 import '../state/community.dart';
 import '../state/navigation.dart';
 import '../state/recruitment.dart';
 import '../state/settings.dart';
 import '../theme.dart';
-import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'recruitment/editor_screen.dart';
 import 'recruitment/page_screen.dart';

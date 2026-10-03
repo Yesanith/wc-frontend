@@ -508,7 +508,11 @@ void main() {
       expect(const RecruitLink(guildId).hashCode, const RecruitLink(guildId).hashCode);
       expect(const RecruitLink(guildId), isNot(const EventLink(guildId)));
       expect(const RecruitLink(guildId), isNot(const RecruitLink('3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c')));
-      expect(<AppLink>{const RecruitLink(guildId), const RecruitLink(guildId), const EventLink(guildId)}.length, 2);
+      final set = <AppLink>{}
+        ..add(const RecruitLink(guildId))
+        ..add(const RecruitLink(guildId))
+        ..add(const EventLink(guildId));
+      expect(set.length, 2);
     });
 
     test('is behind the recruitment page, which is what the app begins at', () {
