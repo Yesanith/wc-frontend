@@ -85,7 +85,7 @@
    ],
    [
     "Bot neler yapabilir?",
-    "<code>/event create</code> ve <code>/event weekly</code> etkinlik açar, oyuncular sınıflarıyla ve rolleriyle düğmelerle katılır. <code>/event report</code> Arcdps raporu ekler. <code>/tyria settings</code> thread, Discord etkinliği ve hatırlatmaları ayarlar. <code>/tyria notify</code> günlük başarımları, haberleri ve oyun güncellemelerini paylaşır. <code>/tyria roles</code> ve <code>/tyria rankrole</code> lonca rütbeleri için Discord rolü verir. Bot mesajları okuyamaz."
+    "<code>/event create</code> ve <code>/event weekly</code> etkinlik açar, oyuncular sınıflarıyla ve rolleriyle düğmelerle katılır. <code>/event report</code> Arcdps raporu ekler. <code>/tyria settings</code> thread, Discord etkinliği ve hatırlatmaları ayarlar. <code>/tyria notify</code> haberleri ve oyun güncellemelerini paylaşır. <code>/tyria roles</code> ve <code>/tyria rankrole</code> lonca rütbeleri için Discord rolü verir. Bot mesajları okuyamaz."
    ],
    [
     "Discord rolleri lonca rütbelerini nasıl izler?",
