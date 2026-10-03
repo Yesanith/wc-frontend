@@ -21,6 +21,7 @@ import '../widgets/site_header.dart';
 import '../widgets/site_search.dart';
 import 'item_detail_screen.dart' show showItemDetails;
 import 'open_link.dart';
+import 'recruitment_screen.dart';
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../state/period_refresh.dart';
@@ -80,6 +81,7 @@ const _titleKeys = {
   AppSection.guilds: 'guilds',
   AppSection.guildEvents: 'guild_events',
   AppSection.publicEvents: 'public_events',
+  AppSection.recruitment: 'recruitment',
   AppSection.trading: 'trading_post',
   AppSection.bosses: 'world_bosses',
   AppSection.maps: 'maps',
@@ -103,6 +105,7 @@ const _icons = {
   AppSection.guilds: (Icons.groups_outlined, Icons.groups),
   AppSection.guildEvents: (Icons.event_note_outlined, Icons.event_note),
   AppSection.publicEvents: (Icons.public_outlined, Icons.public),
+  AppSection.recruitment: (Icons.person_search_outlined, Icons.person_search),
   AppSection.trading: (Icons.storefront_outlined, Icons.storefront),
   AppSection.bosses: (Icons.schedule_outlined, Icons.schedule),
   AppSection.maps: (Icons.map_outlined, Icons.map),
@@ -136,6 +139,7 @@ Widget _page(AppSection section) => switch (section) {
       AppSection.guilds => const GuildsScreen(),
       AppSection.guildEvents => const GuildEventsScreen(),
       AppSection.publicEvents => const OpenEventsScreen(),
+      AppSection.recruitment => const RecruitmentScreen(),
       AppSection.trading => const TradingHubScreen(),
       AppSection.bosses => const EventsScreen(embedded: true),
       AppSection.maps => const WorldMapScreen(),

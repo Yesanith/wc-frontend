@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tyria_codex/state/navigation.dart';
+import 'package:tyria_codex/widgets/site_header.dart' show siteGroupIndex;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -467,6 +468,70 @@ void main() {
     test('needs no callbacks to be safe, a link or a page', () {
       expect(followBrowser(Uri.parse('/item/5'), AppSection.home, (_) {}), isTrue);
       expect(followBrowser(Uri.parse('/trading'), AppSection.trading, (_) {}, linkIsOpen: true), isTrue);
+    });
+  });
+
+  const guildId = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
+
+  group('the address of the recruitment page of a guild', () {
+    test('is /recruit/ and the number of the guild, and the list is a page of its own at /recruitment', () {
+      expect(linkFromPath('/recruit/$guildId'), const RecruitLink(guildId));
+      expect(linkFromPath('/recruitment'), const SectionLink(AppSection.recruitment));
+      expect(sectionPath(AppSection.recruitment), '/recruitment');
+    });
+
+    test('is found whatever the case, a slash at the end, a query or a fragment', () {
+      expect(linkFromPath('/RECRUIT/$guildId/'), const RecruitLink(guildId));
+      expect(linkFromPath('recruit/$guildId'), const RecruitLink(guildId));
+      expect(linkFromPath('/recruit/$guildId?x=1#top'), const RecruitLink(guildId));
+      expect(linkFromPath('/recruit/${guildId.toUpperCase()}'), const RecruitLink(guildId), reason: 'a number is kept in small letters');
+    });
+
+    test('is none when what follows is not the number of a guild', () {
+      expect(linkFromPath('/recruit/abc'), isNull);
+      expect(linkFromPath('/recruit/'), isNull);
+      expect(linkFromPath('/recruit'), isNull, reason: 'the list is /recruitment');
+      expect(linkFromPath('/recruit/${guildId}x'), isNull);
+      expect(linkFromPath('/recruit/${'z' * 36}'), isNull, reason: 'of the right length, and not a number');
+    });
+
+    test('is written as it is read, and shared as a whole address', () {
+      expect(linkPath(const RecruitLink(guildId)), '/recruit/$guildId');
+      expect(linkPath(RecruitLink(guildId.toUpperCase())), '/recruit/$guildId');
+      expect(linkFromPath(linkPath(const RecruitLink(guildId))), const RecruitLink(guildId));
+      expect(linkUrl(const RecruitLink(guildId)), 'https://yesanith.github.io/tyria-companion/app/#/recruit/$guildId');
+    });
+
+    test('is a link of its own, not equal to an event with the same number', () {
+      expect(const RecruitLink(guildId), const RecruitLink(guildId));
+      expect(const RecruitLink(guildId).hashCode, const RecruitLink(guildId).hashCode);
+      expect(const RecruitLink(guildId), isNot(const EventLink(guildId)));
+      expect(const RecruitLink(guildId), isNot(const RecruitLink('3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c')));
+      expect(<AppLink>{const RecruitLink(guildId), const RecruitLink(guildId), const EventLink(guildId)}.length, 2);
+    });
+
+    test('is behind the recruitment page, which is what the app begins at', () {
+      expect(sectionForLink(const RecruitLink(guildId)), AppSection.recruitment);
+      expect(initialLink(route: '/recruit/$guildId'), const RecruitLink(guildId));
+      expect(initialSection(route: '/recruit/$guildId'), AppSection.recruitment);
+      expect(initialSection(route: '/recruit/nope'), AppSection.home);
+    });
+
+    test('is what the address bar says while it is open', () {
+      expect(currentAddress(section: AppSection.wiki, open: const RecruitLink(guildId)), '/recruit/$guildId');
+      expect(currentAddress(section: AppSection.recruitment, open: null), '/recruitment');
+    });
+
+    test('is opened by the browser going to it, and no page is shown', () {
+      final shown = <AppSection>[];
+      final opened = <AppLink>[];
+      expect(followBrowser(Uri.parse('/recruit/$guildId'), AppSection.home, shown.add, open: opened.add), isTrue);
+      expect(opened, [const RecruitLink(guildId)]);
+      expect(shown, isEmpty);
+    });
+
+    test('has its own place in the menu and the bar, with the other pages of the account', () {
+      expect(siteGroupIndex(AppSection.recruitment), siteGroupIndex(AppSection.publicEvents));
     });
   });
 }

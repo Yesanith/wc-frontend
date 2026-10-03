@@ -29,6 +29,7 @@ const siteNavGroups = <(String, List<AppSection>)>[
       AppSection.guilds,
       AppSection.guildEvents,
       AppSection.publicEvents,
+      AppSection.recruitment,
     ],
   ),
   ('nav_group_economy', [AppSection.trading, AppSection.recipes]),

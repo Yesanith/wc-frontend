@@ -121,6 +121,7 @@ void main() {
       AppSection.about,
       AppSection.guildEvents,
       AppSection.publicEvents,
+      AppSection.recruitment,
     ]) {
       expect(sectionNeedsKey(s), isFalse, reason: '$s');
     }
