@@ -6,7 +6,8 @@ import 'community.dart';
 
 /// what a guild may say it is looking for, as the database knows them. the app has words for each (rec_tag_<code>)
 const recruitTags = [
-  'raids', 'fractals', 'strikes', 'dungeons', 'open_world', 'achievements', 'wvw', 'pvp', 'farming', 'casual', 'social', 'newcomers', 'roleplay', //
+  'raids', 'fractals', 'strikes', 'dungeons', 'open_world', 'achievements', 'wvw', 'pvp', 'farming', 'casual', 'social',
+  'newcomers', 'roleplay', //
 ];
 
 /// what a thing a guild looks for is called, in the language of the app. most have a word already (the activities of events, the tags); the others have their own
@@ -70,7 +71,8 @@ enum RecruitRegion {
 
   String get code => name;
 
-  static RecruitRegion parse(Object? value) => values.firstWhere((r) => r.name == value, orElse: () => RecruitRegion.any);
+  static RecruitRegion parse(Object? value) =>
+      values.firstWhere((r) => r.name == value, orElse: () => RecruitRegion.any);
 }
 
 List<String> _strings(Object? v) => [
@@ -230,7 +232,9 @@ class RecruitPage {
       languages: _strings(raw['languages']),
       region: RecruitRegion.parse(raw['region']),
       recruiting: raw['recruiting'] != false,
-      discordInvite: raw['discord_invite'] is String && (raw['discord_invite'] as String).isNotEmpty ? raw['discord_invite'] as String : null,
+      discordInvite: raw['discord_invite'] is String && (raw['discord_invite'] as String).isNotEmpty
+          ? raw['discord_invite'] as String
+          : null,
       contact: '${raw['contact'] ?? ''}',
       updatedAt: _time(raw['updated_at']),
       publishedAt: _time(raw['published_at']),
@@ -305,7 +309,10 @@ class RecruiterEntry {
 
   static RecruiterEntry? parse(Object? raw) {
     if (raw is! Map || raw['user_id'] is! String) return null;
-    return RecruiterEntry(userId: raw['user_id'] as String, accountName: '${raw['account_name'] ?? '?'}', grantedAt: _time(raw['granted_at']));
+    return RecruiterEntry(
+        userId: raw['user_id'] as String,
+        accountName: '${raw['account_name'] ?? '?'}',
+        grantedAt: _time(raw['granted_at']));
   }
 }
 
@@ -490,7 +497,14 @@ String recruitErrorKey(Object e) {
 }
 
 /// what the list is asked for: a language, a region, one thing looked for, a text, only the guilds that are recruiting, and how many are skipped
-typedef RecruitFilter = ({String? language, RecruitRegion? region, String? lookingFor, String search, bool openOnly, int offset});
+typedef RecruitFilter = ({
+  String? language,
+  RecruitRegion? region,
+  String? lookingFor,
+  String search,
+  bool openOnly,
+  int offset
+});
 
 const noRecruitFilter = (language: null, region: null, lookingFor: null, search: '', openOnly: false, offset: 0);
 
@@ -546,7 +560,8 @@ class SupabaseRecruitBackend implements RecruitBackend {
       }));
 
   @override
-  Future<RecruitPage?> page(String guildId) async => RecruitPage.parse(await _rpc('recruitment_page', {'p_guild': guildId}));
+  Future<RecruitPage?> page(String guildId) async =>
+      RecruitPage.parse(await _rpc('recruitment_page', {'p_guild': guildId}));
 
   @override
   Future<List<MyRecruitGuild>> mine() async {
@@ -620,12 +635,12 @@ class SupabaseRecruitBackend implements RecruitBackend {
 final recruitBackendProvider = Provider<RecruitBackend>((ref) => const SupabaseRecruitBackend());
 
 /// a page of the list for a filter
-final recruitListProvider =
-    FutureProvider.autoDispose.family<RecruitList, RecruitFilter>((ref, filter) => ref.watch(recruitBackendProvider).list(filter));
+final recruitListProvider = FutureProvider.autoDispose
+    .family<RecruitList, RecruitFilter>((ref, filter) => ref.watch(recruitBackendProvider).list(filter));
 
 /// the page of a guild
-final recruitPageProvider =
-    FutureProvider.autoDispose.family<RecruitPage?, String>((ref, guildId) => ref.watch(recruitBackendProvider).page(guildId));
+final recruitPageProvider = FutureProvider.autoDispose
+    .family<RecruitPage?, String>((ref, guildId) => ref.watch(recruitBackendProvider).page(guildId));
 
 /// the guilds whose page the player may manage. nothing for a player who is not signed in
 final myRecruitProvider = FutureProvider.autoDispose<List<MyRecruitGuild>>((ref) async {
@@ -636,8 +651,9 @@ final myRecruitProvider = FutureProvider.autoDispose<List<MyRecruitGuild>>((ref)
 });
 
 /// who the leader allowed to edit the page of a guild
-final recruitersProvider =
-    FutureProvider.autoDispose.family<List<RecruiterEntry>, String>((ref, guildId) => ref.watch(recruitBackendProvider).recruiters(guildId));
+final recruitersProvider = FutureProvider.autoDispose
+    .family<List<RecruiterEntry>, String>((ref, guildId) => ref.watch(recruitBackendProvider).recruiters(guildId));
 
 /// for an administrator: the pages that were reported or are hidden
-final adminRecruitReportsProvider = FutureProvider.autoDispose<List<RecruitReport>>((ref) => ref.watch(recruitBackendProvider).adminReports());
+final adminRecruitReportsProvider =
+    FutureProvider.autoDispose<List<RecruitReport>>((ref) => ref.watch(recruitBackendProvider).adminReports());
