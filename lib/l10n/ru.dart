@@ -500,6 +500,7 @@ const ruStrings = <String, String>{
   'rec_f_languages': 'Языки (до 5)',
   'rec_f_recruiting': 'Сейчас идёт набор',
   'rec_f_published': 'Показывать эту страницу всем',
+  'rec_f_published_hint': 'Она также публикуется на форуме guild-recruitment официального сервера Discord.',
   'rec_save': 'Сохранить',
   'rec_saved': 'Сохранено.',
   'rec_publish_needs': 'Чтобы показать страницу всем, нужны заголовок, описание не короче 20 символов и способ связи.',

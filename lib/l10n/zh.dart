@@ -468,6 +468,7 @@ const zhStrings = <String, String>{
   'rec_f_languages': '语言（最多5种）',
   'rec_f_recruiting': '目前正在招募',
   'rec_f_published': '向所有人公开此页面',
+  'rec_f_published_hint': '也会发布到官方 Discord 服务器的 guild-recruitment 论坛。',
   'rec_save': '保存',
   'rec_saved': '已保存。',
   'rec_publish_needs': '要向所有人公开，需要标题、至少20个字符的描述和一种联系方式。',
