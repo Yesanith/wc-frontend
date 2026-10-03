@@ -56,8 +56,9 @@ class _GuildList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (guilds.isEmpty)
+    if (guilds.isEmpty) {
       return const Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
+    }
     return Panel(
       child: Column(
         children: [

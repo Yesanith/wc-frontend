@@ -196,7 +196,7 @@ void main() {
 
     test('that is not known, or has no reason, is told in general words', () {
       expect(openEventErrorKey(const OpenEventFailure('something_new')), 'oe_err_generic');
-      expect(openEventErrorKey(PostgrestException(message: 'x')), 'oe_err_generic');
+      expect(openEventErrorKey(const PostgrestException(message: 'x')), 'oe_err_generic');
       expect(openEventErrorKey(StateError('offline')), 'oe_err_generic');
     });
 

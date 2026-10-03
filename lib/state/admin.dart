@@ -508,8 +508,9 @@ class AdminHistory {
       for (final f in list('functions'))
         if (asInt(f['failures']) > 0 && f['last_error'] == null) f
     ];
-    if (broken.isNotEmpty)
+    if (broken.isNotEmpty) {
       lines.add(HealthLine('Functions', '${broken.length} failed without saying why', HealthLevel.warn));
+    }
 
     for (final name in const ['snapshots', 'functions', 'metric_keys', 'series', 'guilds', 'servers', 'app_versions']) {
       final why = problem(name);

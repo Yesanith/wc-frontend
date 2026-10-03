@@ -196,7 +196,7 @@ void serverTests() {
       expect(s.series('nothing'), isEmpty);
       expect(s.list('tables'), isEmpty);
       expect(s.generatedAt, isNotNull);
-      expect(AdminServer(const {'server': 5}).count('server', 'size_bytes'), 0,
+      expect(const AdminServer({'server': 5}).count('server', 'size_bytes'), 0,
           reason: 'a part of another kind is nothing');
     });
 

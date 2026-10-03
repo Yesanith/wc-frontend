@@ -89,8 +89,9 @@ class _ServerStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (servers.isEmpty)
+    if (servers.isEmpty) {
       return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
+    }
     return Panel(
       child: Column(
         children: [

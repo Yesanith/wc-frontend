@@ -256,7 +256,7 @@ void main() {
                   {'name': 'tp_latest', 'rows': 28000, 'bytes': 3000000, 'newest': null},
                 ],
               })),
-          adminDashboardProvider.overrideWith((ref) async => AdminDashboard({})),
+          adminDashboardProvider.overrideWith((ref) async => const AdminDashboard({})),
         ],
         child: MaterialApp(
           theme: buildTheme(),
@@ -508,7 +508,7 @@ void main() {
     });
 
     test('are what the database says: whether there is a webhook, what is wrong now and what was sent', () {
-      final alerts = AdminAlerts({
+      const alerts = AdminAlerts({
         'webhook_set': true,
         'webhook_tail': '-xyz',
         'problems_now': [
@@ -545,7 +545,7 @@ void main() {
           adminPollEveryProvider.overrideWithValue(Duration.zero),
           adminSystemProvider
               .overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
-          adminDashboardProvider.overrideWith((ref) async => AdminDashboard({})),
+          adminDashboardProvider.overrideWith((ref) async => const AdminDashboard({})),
         ],
         child: MaterialApp(
           theme: buildTheme(),
