@@ -272,7 +272,8 @@ void main() {
       expect(backend.logQueries.last.search, 'fcm');
       await tester.tap(find.byTooltip('Clear'));
       await tester.pumpAndSettle();
-      expect(tester.widget<TextField>(find.byKey(const Key('log-search'))).controller!.text, '', reason: 'the field is empty');
+      expect(tester.widget<TextField>(find.byKey(const Key('log-search'))).controller!.text, '',
+          reason: 'the field is empty');
       expect(find.byTooltip('Clear'), findsNothing, reason: 'and there is nothing to clear');
     });
 
@@ -411,4 +412,5 @@ List<Map<String, dynamic>> lines() => [
     ];
 
 /// whether a chip of the filters is the chosen one
-bool _chosen(WidgetTester tester, String label) => tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, label)).selected;
+bool _chosen(WidgetTester tester, String label) =>
+    tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, label)).selected;
