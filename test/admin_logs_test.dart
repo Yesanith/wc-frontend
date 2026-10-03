@@ -16,7 +16,8 @@ import 'admin_actions_test.dart' show FakeBackend;
 
 String _at(int minutesAgo) => DateTime.now().toUtc().subtract(Duration(minutes: minutesAgo)).toIso8601String();
 
-Map<String, dynamic> _line(int id, String fn, String level, String message, {int minutesAgo = 5, Map<String, dynamic>? detail}) =>
+Map<String, dynamic> _line(int id, String fn, String level, String message,
+        {int minutesAgo = 5, Map<String, dynamic>? detail}) =>
     {'id': id, 'at': _at(minutesAgo), 'fn': fn, 'level': level, 'message': message, 'detail': detail};
 
 FunctionLogsPage _page(List<Map<String, dynamic>> rows, {int total = 0, List<Map<String, dynamic>>? functions}) =>
@@ -50,17 +51,20 @@ void main() {
       expect(line.detailText, contains('"code": "x"'));
       expect(FunctionLogLine.parse(_line(1, 'a', 'warn', 'm'))!.repeats, 1, reason: 'once when it is not counted');
       expect(FunctionLogLine.parse(_line(1, 'a', 'warn', 'm', detail: {'repeats': 1}))!.repeats, 1);
-      expect(FunctionLogLine.parse(_line(1, 'a', 'warn', 'm', detail: {'repeats': 3}))!.detailText, isNull, reason: 'a count is not something it knew');
+      expect(FunctionLogLine.parse(_line(1, 'a', 'warn', 'm', detail: {'repeats': 3}))!.detailText, isNull,
+          reason: 'a count is not something it knew');
     });
 
     test('is not read when it lacks what a line must have, so that nothing is made up', () {
       expect(FunctionLogLine.parse(null), isNull);
       expect(FunctionLogLine.parse('text'), isNull);
       expect(FunctionLogLine.parse({'id': 1, 'fn': 'a', 'message': 'm'}), isNull, reason: 'no level');
-      expect(FunctionLogLine.parse({'id': 1, 'fn': 'a', 'level': 'loud', 'message': 'm'}), isNull, reason: 'a level that is none');
+      expect(FunctionLogLine.parse({'id': 1, 'fn': 'a', 'level': 'loud', 'message': 'm'}), isNull,
+          reason: 'a level that is none');
       expect(FunctionLogLine.parse({'id': 1, 'level': 'error', 'message': 'm'}), isNull, reason: 'no function');
       expect(FunctionLogLine.parse({'id': 1, 'fn': 'a', 'level': 'error'}), isNull, reason: 'no words');
-      expect(FunctionLogLine.parse({'id': 1, 'fn': 'a', 'level': 'info', 'message': 'm', 'at': 'not a time'})!.at, isNull);
+      expect(
+          FunctionLogLine.parse({'id': 1, 'fn': 'a', 'level': 'info', 'message': 'm', 'at': 'not a time'})!.at, isNull);
     });
 
     test('has levels that are named as the database names them', () {
@@ -104,12 +108,20 @@ void main() {
 
     test('may have older lines only when it is full', () {
       expect(_page([_line(1, 'a', 'info', 'm')]).mayHaveOlder, isFalse);
-      expect(_page([for (var i = 100; i > 50; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isFalse, reason: '49 lines');
-      expect(_page([for (var i = 100; i > 49; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isTrue, reason: '50 lines');
+      expect(_page([for (var i = 100; i > 50; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isFalse,
+          reason: '49 lines');
+      expect(_page([for (var i = 100; i > 49; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isTrue,
+          reason: '50 lines');
     });
 
     test('is nothing, without failing, when the answer is not what was expected', () {
-      for (final raw in [null, 'x', <dynamic>[], {'rows': 'no'}, <String, dynamic>{}]) {
+      for (final raw in [
+        null,
+        'x',
+        <dynamic>[],
+        {'rows': 'no'},
+        <String, dynamic>{}
+      ]) {
         final page = FunctionLogsPage.parse(raw);
         expect(page.rows, isEmpty);
         expect(page.functions, isEmpty);
@@ -120,8 +132,15 @@ void main() {
 
     test('leaves out a line that cannot be read and keeps the rest', () {
       final page = FunctionLogsPage.parse({
-        'rows': [_line(2, 'a', 'error', 'ok'), {'id': 1, 'fn': 'a'}, 'junk'],
-        'functions': [{'fn': 'a', 'errors': 1}, {'errors': 5}],
+        'rows': [
+          _line(2, 'a', 'error', 'ok'),
+          {'id': 1, 'fn': 'a'},
+          'junk'
+        ],
+        'functions': [
+          {'fn': 'a', 'errors': 1},
+          {'errors': 5}
+        ],
         'total': 3,
       });
       expect(page.rows.length, 1);
@@ -165,13 +184,15 @@ void main() {
       expect(find.textContaining('×3'), findsOneWidget, reason: 'said three times in that minute');
       expect(find.textContaining('5 min ago'), findsWidgets);
       expect(find.text('3 lines kept, for two weeks'), findsOneWidget);
-      expect(tester.getTopLeft(find.text('tp sync failed')).dy < tester.getTopLeft(find.text('read 28000 prices')).dy, isTrue);
+      expect(tester.getTopLeft(find.text('tp sync failed')).dy < tester.getTopLeft(find.text('read 28000 prices')).dy,
+          isTrue);
     });
 
     testWidgets('begins with the newest page of all of them, and nothing is asked twice for it', (tester) async {
       final backend = await open(tester, FakeBackend(logsOf: (q) => _page(lines)));
       expect(backend.logQueries.first, noLogQuery);
-      expect(backend.logQueries.toSet().length, 1, reason: 'the page of the lines and the page for the chips are the same page');
+      expect(backend.logQueries.toSet().length, 1,
+          reason: 'the page of the lines and the page for the chips are the same page');
     });
 
     testWidgets('opens a line to what it knew, which can be copied', (tester) async {
@@ -243,7 +264,8 @@ void main() {
       expect(backend.logQueries.last.search, '');
     });
 
-    testWidgets('keeps the function it was opened from, and shows its chip even when it has said nothing lately', (tester) async {
+    testWidgets('keeps the function it was opened from, and shows its chip even when it has said nothing lately',
+        (tester) async {
       final backend = await open(tester, FakeBackend(logsOf: (q) => _page(lines, functions: [])), fn: 'quiet-one');
       expect(backend.logQueries.first.fn, 'quiet-one');
       expect(find.text('quiet-one'), findsOneWidget);
@@ -259,7 +281,10 @@ void main() {
       final newest = [for (var i = 200; i > 150; i--) _line(i, 'tp-sync', 'info', 'line $i')];
       final backend = await open(
         tester,
-        FakeBackend(logsOf: (q) => q.before == null ? _page(newest, total: 80) : _page([_line(149, 'tp-sync', 'info', 'line 149')], total: 80)),
+        FakeBackend(
+            logsOf: (q) => q.before == null
+                ? _page(newest, total: 80)
+                : _page([_line(149, 'tp-sync', 'info', 'line 149')], total: 80)),
       );
       expect(find.text('Older'), findsOneWidget, reason: 'a full page');
       await tester.ensureVisible(find.text('Older'));
@@ -273,7 +298,10 @@ void main() {
 
     testWidgets('begins again at the newest when a filter is changed', (tester) async {
       final newest = [for (var i = 200; i > 150; i--) _line(i, 'tp-sync', 'info', 'line $i')];
-      final backend = await open(tester, FakeBackend(logsOf: (q) => q.before == null ? _page(newest) : _page([_line(149, 'tp-sync', 'info', 'line 149')])));
+      final backend = await open(
+          tester,
+          FakeBackend(
+              logsOf: (q) => q.before == null ? _page(newest) : _page([_line(149, 'tp-sync', 'info', 'line 149')])));
       await tester.ensureVisible(find.text('Older'));
       await tester.tap(find.text('Older'));
       await tester.pumpAndSettle();
@@ -306,7 +334,8 @@ void main() {
           prefsProvider.overrideWithValue(prefs),
           adminBackendProvider.overrideWithValue(backend),
           adminPollEveryProvider.overrideWithValue(Duration.zero),
-          adminSystemProvider.overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
+          adminSystemProvider
+              .overrideWith((ref) async => AdminSystem({'generated_at': DateTime.now().toUtc().toIso8601String()})),
           adminDashboardProvider.overrideWith((ref) async => AdminDashboard({})),
         ],
         child: MaterialApp(
@@ -351,7 +380,9 @@ void main() {
       expect(find.text('All logs (0)'), findsOneWidget);
     });
 
-    testWidgets('says that the logs cannot be read, an old backend has none, and the rest of the tab is there all the same', (tester) async {
+    testWidgets(
+        'says that the logs cannot be read, an old backend has none, and the rest of the tab is there all the same',
+        (tester) async {
       await show(tester, FakeBackend(failWith: Exception('function does not exist')));
       expect(find.textContaining('could not be read'), findsOneWidget);
       expect(find.text('RUN BY HAND'), findsOneWidget);

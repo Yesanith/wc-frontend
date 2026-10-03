@@ -246,7 +246,8 @@ class SupabaseAdminBackend implements AdminBackend {
   }
 
   @override
-  Future<FunctionLogsPage> functionLogs(LogQuery query) async => FunctionLogsPage.parse(await _client.rpc('admin_function_logs', params: {
+  Future<FunctionLogsPage> functionLogs(LogQuery query) async =>
+      FunctionLogsPage.parse(await _client.rpc('admin_function_logs', params: {
         'p_fn': query.fn,
         'p_level': query.level?.code,
         'p_search': query.search.isEmpty ? null : query.search,
