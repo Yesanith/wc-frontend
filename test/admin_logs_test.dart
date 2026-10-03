@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tyria_codex/screens/admin/logs_screen.dart';
+import 'package:tyria_codex/screens/admin/widgets.dart' show AdminLine;
 import 'package:tyria_codex/screens/admin/system_tab.dart';
 import 'package:tyria_codex/state/admin.dart';
 import 'package:tyria_codex/state/admin_actions.dart';
@@ -108,9 +109,9 @@ void main() {
 
     test('may have older lines only when it is full', () {
       expect(_page([_line(1, 'a', 'info', 'm')]).mayHaveOlder, isFalse);
-      expect(_page([for (var i = 100; i > 50; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isFalse,
+      expect(_page([for (var i = 100; i > 51; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isFalse,
           reason: '49 lines');
-      expect(_page([for (var i = 100; i > 49; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isTrue,
+      expect(_page([for (var i = 100; i > 50; i--) _line(i, 'a', 'info', 'm$i')]).mayHaveOlder, isTrue,
           reason: '50 lines');
     });
 
@@ -149,8 +150,8 @@ void main() {
   });
 
   group('the screen of the logs', () {
-    Future<FakeBackend> open(WidgetTester tester, FakeBackend backend, {String? fn}) async {
-      tester.view.physicalSize = const Size(1400, 3200);
+    Future<FakeBackend> open(WidgetTester tester, FakeBackend backend, {String? fn, double height = 3200}) async {
+      tester.view.physicalSize = Size(1400, height);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       SharedPreferences.setMockInitialValues({});
@@ -203,7 +204,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.textContaining('"status": 503'), findsOneWidget);
       expect(find.textContaining('"repeats"'), findsNothing, reason: 'the count is not something it knew');
-      await tester.tap(find.text('tp sync failed'));
+      // the message is selectable while it is open, and takes the tap: the line above it closes the card
+      await tester.tap(find.textContaining('×3'));
       await tester.pumpAndSettle();
       expect(find.textContaining('"status": 503'), findsNothing, reason: 'closed again');
     });
@@ -235,9 +237,15 @@ void main() {
       await tester.tap(find.text('tp-sync · 2'));
       await tester.pumpAndSettle();
       expect(backend.logQueries.last, (fn: 'tp-sync', level: null, search: '', before: null));
+      expect(_chosen(tester, 'tp-sync · 2'), isTrue);
+      expect(_chosen(tester, 'All functions'), isFalse);
+      final asked = backend.logQueries.length;
       await tester.tap(find.text('All functions'));
       await tester.pumpAndSettle();
-      expect(backend.logQueries.last.fn, isNull);
+      // the page of all of them is the one the chips are made from, kept: it is not asked for again
+      expect(backend.logQueries.length, asked);
+      expect(_chosen(tester, 'All functions'), isTrue);
+      expect(_chosen(tester, 'tp-sync · 2'), isFalse);
     });
 
     testWidgets('asks for one level, and for all of them again', (tester) async {
@@ -248,9 +256,12 @@ void main() {
       await tester.tap(find.text('Warnings'));
       await tester.pumpAndSettle();
       expect(backend.logQueries.last.level, LogLevel.warn);
+      expect(_chosen(tester, 'Warnings'), isTrue);
+      expect(_chosen(tester, 'Errors'), isFalse);
       await tester.tap(find.text('All levels'));
       await tester.pumpAndSettle();
-      expect(backend.logQueries.last.level, isNull);
+      expect(_chosen(tester, 'All levels'), isTrue);
+      expect(_chosen(tester, 'Warnings'), isFalse);
     });
 
     testWidgets('searches for a text, trimmed, and clears the search', (tester) async {
@@ -261,7 +272,8 @@ void main() {
       expect(backend.logQueries.last.search, 'fcm');
       await tester.tap(find.byTooltip('Clear'));
       await tester.pumpAndSettle();
-      expect(backend.logQueries.last.search, '');
+      expect(tester.widget<TextField>(find.byKey(const Key('log-search'))).controller!.text, '', reason: 'the field is empty');
+      expect(find.byTooltip('Clear'), findsNothing, reason: 'and there is nothing to clear');
     });
 
     testWidgets('keeps the function it was opened from, and shows its chip even when it has said nothing lately',
@@ -285,6 +297,7 @@ void main() {
             logsOf: (q) => q.before == null
                 ? _page(newest, total: 80)
                 : _page([_line(149, 'tp-sync', 'info', 'line 149')], total: 80)),
+        height: 9000,
       );
       expect(find.text('Older'), findsOneWidget, reason: 'a full page');
       await tester.ensureVisible(find.text('Older'));
@@ -301,7 +314,8 @@ void main() {
       final backend = await open(
           tester,
           FakeBackend(
-              logsOf: (q) => q.before == null ? _page(newest) : _page([_line(149, 'tp-sync', 'info', 'line 149')])));
+              logsOf: (q) => q.before == null ? _page(newest) : _page([_line(149, 'tp-sync', 'info', 'line 149')])),
+          height: 9000);
       await tester.ensureVisible(find.text('Older'));
       await tester.tap(find.text('Older'));
       await tester.pumpAndSettle();
@@ -354,7 +368,7 @@ void main() {
     testWidgets('says how each function did in the last day and how many lines there are', (tester) async {
       await show(tester, FakeBackend(logsOf: (q) => _page(lines(), total: 42)));
       expect(find.text('EDGE FUNCTION LOGS'), findsOneWidget);
-      expect(find.text('tp-sync'), findsOneWidget);
+      expect(find.widgetWithText(AdminLine, 'tp-sync'), findsOneWidget);
       expect(find.textContaining('2 errors'), findsOneWidget);
       expect(find.textContaining('1 warning'), findsOneWidget);
       expect(find.text('All logs (42)'), findsOneWidget);
@@ -362,7 +376,7 @@ void main() {
 
     testWidgets('opens the lines of a function from its line, and all of them from the button', (tester) async {
       final backend = await show(tester, FakeBackend(logsOf: (q) => _page(lines())));
-      await tester.tap(find.text('tp-sync'));
+      await tester.tap(find.widgetWithText(AdminLine, 'tp-sync'));
       await tester.pumpAndSettle();
       expect(find.byType(AdminLogsScreen), findsOneWidget);
       expect(backend.logQueries.last.fn, 'tp-sync');
@@ -384,7 +398,7 @@ void main() {
         'says that the logs cannot be read, an old backend has none, and the rest of the tab is there all the same',
         (tester) async {
       await show(tester, FakeBackend(failWith: Exception('function does not exist')));
-      expect(find.textContaining('could not be read'), findsOneWidget);
+      expect(find.textContaining('logs of the functions could not be read'), findsOneWidget);
       expect(find.text('RUN BY HAND'), findsOneWidget);
     });
   });
@@ -395,3 +409,6 @@ List<Map<String, dynamic>> lines() => [
       _line(20, 'push-sync', 'warn', 'fcm refused a message: 404'),
       _line(10, 'tp-sync', 'info', 'read 28000 prices'),
     ];
+
+/// whether a chip of the filters is the chosen one
+bool _chosen(WidgetTester tester, String label) => tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, label)).selected;
