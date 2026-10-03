@@ -30,7 +30,6 @@ import '../services/push.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../services/boss_alerts.dart';
-import '../services/push.dart' show initialPushData, pushTapped;
 import '../services/trade_check.dart';
 import '../state/trade_notify.dart';
 import '../state/boss_alerts.dart';

@@ -254,8 +254,7 @@ void main() {
       expect(const SectionLink(AppSection.bosses), const SectionLink(AppSection.bosses));
       expect(const SectionLink(AppSection.bosses), isNot(const SectionLink(AppSection.daily)));
       expect(const ItemLink(1), isNot(const SectionLink(AppSection.home)));
-      expect(<AppLink>{const ItemLink(1), const ItemLink(1), const EventLink(eventId)}.length, 2,
-          reason: 'and in a set');
+      expect(<AppLink>[const ItemLink(1), const ItemLink(1), const EventLink(eventId)].toSet().length, 2, reason: 'and in a set');
     });
 
     test('tells a number that is an event\'s', () {
