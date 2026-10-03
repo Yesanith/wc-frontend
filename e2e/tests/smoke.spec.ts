@@ -21,9 +21,17 @@ async function open(page: Page, hash = ''): Promise<string[]> {
  */
 const written = (page: Page, text: string | RegExp) => page.getByText(text).or(page.getByLabel(text)).first();
 
+/**
+ * A link to an item or to an event opens over the page, a sheet and a page of its own, and what is under them is out of the tree the browser reads the app by: the bar of a
+ * site is not there to be waited for. The visitor only chooses to go on.
+ */
+async function goOn(page: Page) {
+  await page.getByRole('button', { name: 'Continue as guest' }).first().click();
+}
+
 /** a visitor who has not signed in looks around as a guest */
 async function asGuest(page: Page) {
-  await page.getByRole('button', { name: 'Continue as guest' }).first().click();
+  await goOn(page);
   // the bar of a site: its groups open under their name
   await expect(written(page, /^Economy$/)).toBeVisible();
 }
@@ -97,9 +105,14 @@ test.describe('the app in a browser', () => {
   test('a link to an item keeps its address, opens the sheet of the item and can be copied from it', async ({ page, context }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     const errors = await open(page, '#/item/19721');
-    await asGuest(page);
+    await goOn(page);
     // the address is the item's, not the page behind it, while the sheet is open
     await expect(page).toHaveURL(/#\/item\/19721$/);
+    // the sheet is open: it has the button that copies its address
+    const copy = written(page, 'Copy link to this page');
+    await expect(copy).toBeAttached({ timeout: 60_000 });
+    await copy.click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`${BASE_URL}/app/#/item/19721`);
     await page.reload();
     await page.waitForSelector('flt-glass-pane', { state: 'attached', timeout: 90_000 });
     await expect(page).toHaveURL(/#\/item\/19721$/);
@@ -108,8 +121,10 @@ test.describe('the app in a browser', () => {
 
   test('a link to a public event that is not there says so, and keeps its address', async ({ page }) => {
     const errors = await open(page, '#/event/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c');
-    await asGuest(page);
+    await goOn(page);
     await expect(page).toHaveURL(/#\/event\/3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c$/);
+    // the page of the event is open, and says that there is none
+    await expect(written(page, 'That event is not there any more.')).toBeAttached({ timeout: 60_000 });
     expect(errors).toEqual([]);
   });
 
