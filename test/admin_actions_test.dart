@@ -8,6 +8,7 @@ import 'package:tyria_codex/screens/admin/table_screen.dart';
 import 'package:tyria_codex/state/admin.dart';
 import 'package:tyria_codex/state/admin_actions.dart';
 import 'package:tyria_codex/state/admin_logs.dart';
+import 'package:tyria_codex/state/admin_platform_logs.dart';
 import 'package:tyria_codex/state/admin_system.dart';
 import 'package:tyria_codex/state/settings.dart';
 import 'package:tyria_codex/theme.dart';
@@ -21,7 +22,7 @@ const _jobs = [
 /// a database that does what it is told to and says what it was told to say
 class FakeBackend implements AdminBackend {
   FakeBackend(
-      {this.results = const {}, this.answers = const [], this.pageOf, this.failWith, AdminAlerts? alerts, this.logsOf})
+      {this.results = const {}, this.answers = const [], this.pageOf, this.failWith, AdminAlerts? alerts, this.logsOf, this.platformOf, this.keysOf})
       : alertsValue = alerts ?? const AdminAlerts({'webhook_set': false, 'problems_now': [], 'recent': []});
 
   final Map<String, JobResult> results;
@@ -31,6 +32,10 @@ class FakeBackend implements AdminBackend {
   final AdminAlerts alertsValue;
   final FunctionLogsPage Function(LogQuery query)? logsOf;
   final logQueries = <LogQuery>[];
+  final PlatformLogsPage Function(PlatformQuery query)? platformOf;
+  final List<PlatformKey> Function()? keysOf;
+  final platformQueries = <PlatformQuery>[];
+  int keyRequests = 0;
   final ran = <String>[];
   final queries = <TableQuery>[];
   final webhooks = <String?>[];
@@ -64,6 +69,18 @@ class FakeBackend implements AdminBackend {
     logQueries.add(query);
     if (failWith != null) throw failWith!;
     return logsOf?.call(query) ?? const FunctionLogsPage(rows: [], functions: [], total: 0);
+  }
+
+  @override
+  Future<PlatformLogsPage> platformLogs(PlatformQuery query) async {
+    platformQueries.add(query);
+    return platformOf?.call(query) ?? const PlatformLogsPage(rows: [], functions: []);
+  }
+
+  @override
+  Future<List<PlatformKey>> platformKeys() async {
+    keyRequests++;
+    return keysOf?.call() ?? const [];
   }
 
   @override
