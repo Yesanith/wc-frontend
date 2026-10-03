@@ -197,7 +197,9 @@ void main() {
 
     test('is nothing, and no failure, when the platform had nothing', () {
       final page = PlatformLogsPage.parse({'ok': true});
-      expect((page.rows, page.functions, page.oldest), ([], [], null));
+      expect(page.rows, isEmpty);
+      expect(page.functions, isEmpty);
+      expect(page.oldest, isNull);
     });
 
     test('leaves out a line or a function that cannot be read and keeps the rest', () {
@@ -505,7 +507,7 @@ void main() {
         expect(find.textContaining('Analytics logs: read'), findsOneWidget);
         expect(find.textContaining('PLATFORM_LOGS_TOKEN'), findsWidgets);
         expect(find.textContaining('Deploy workflow'), findsOneWidget);
-        expect(find.text('Try again'), findsNothing, reason: 'trying again does not set it up');
+        expect(find.text('Try again'), findsOneWidget, reason: 'what is done once the token is in and the function is deployed');
         await tester.tap(find.text('Copy the secret name'));
         await tester.pump();
         expect(copied.last, 'PLATFORM_LOGS_TOKEN');
