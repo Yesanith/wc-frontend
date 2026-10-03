@@ -158,11 +158,41 @@ jobs:
               --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
               --dart-define=FIREBASE_APP_ID="$FIREBASE_APP_ID" \
               --dart-define=FIREBASE_SENDER_ID="$FIREBASE_SENDER_ID" \
-              --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" && exit 0
+              --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" 2>&1 | tee "$RUNNER_TEMP/build-attempt.log"
+            # the result of the build, not of tee
+            if [ "${PIPESTATUS[0]}" = "0" ]; then exit 0; fi
+            cp "$RUNNER_TEMP/build-attempt.log" "$RUNNER_TEMP/build.log"
             echo "build attempt $attempt failed, retrying in 60s"
             sleep 60
           done
           exit 1
+
+      # when the build fails, what it said goes to a branch of its own, replaced each time, so that it can be read without opening the run
+      - name: Keep the failure where it can be read
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          test -f "$RUNNER_TEMP/build.log" || exit 0
+          dir="$(mktemp -d)"
+          cd "$dir"
+          git init -q
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git checkout -q -b ci-logs-build
+          {
+            echo "commit: $GITHUB_SHA"
+            echo "run: $GITHUB_RUN_ID"
+            echo
+            # the errors first, then the end of the output
+            grep -nE "FAILURE|error:|Error:|e: |What went wrong|Execution failed|Could not|> |BUILD FAILED|Exception" "$RUNNER_TEMP/build.log" | head -n 120
+            echo
+            echo "=================== the end"
+            tail -n 120 "$RUNNER_TEMP/build.log"
+          } > build-failure.txt
+          git add build-failure.txt
+          git commit -q -m "The failure of the build of $GITHUB_SHA"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-build
 
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk

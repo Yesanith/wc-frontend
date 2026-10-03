@@ -147,7 +147,7 @@ void main() {
       expect(coinsText(10000), '1g');
       expect(coinsText(10005), '1g 5c');
       expect(coinsText(12345), '1g 23s 45c');
-      expect(coinsText(4_200_000), '420g');
+      expect(coinsText(4200000), '420g');
       expect(coinsText(-5), '0c', reason: 'no price below nothing');
     });
   });
