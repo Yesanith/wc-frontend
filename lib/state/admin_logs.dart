@@ -73,7 +73,8 @@ class FunctionLogLine {
 
 /// how a function did in the last day
 class FunctionStat {
-  const FunctionStat({required this.fn, required this.errors, required this.warnings, required this.notes, this.lastAt});
+  const FunctionStat(
+      {required this.fn, required this.errors, required this.warnings, required this.notes, this.lastAt});
 
   final String fn;
   final int errors;

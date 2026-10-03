@@ -90,7 +90,10 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
               spacing: 8,
               runSpacing: 4,
               children: [
-                ChoiceChip(label: const Text('All functions'), selected: _fn == null, onSelected: (_) => _change(() => _fn = null)),
+                ChoiceChip(
+                    label: const Text('All functions'),
+                    selected: _fn == null,
+                    onSelected: (_) => _change(() => _fn = null)),
                 for (final name in names)
                   ChoiceChip(
                     label: Text(_chipLabel(name, functions)),
@@ -104,9 +107,15 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
               spacing: 8,
               runSpacing: 4,
               children: [
-                ChoiceChip(label: const Text('All levels'), selected: _level == null, onSelected: (_) => _change(() => _level = null)),
+                ChoiceChip(
+                    label: const Text('All levels'),
+                    selected: _level == null,
+                    onSelected: (_) => _change(() => _level = null)),
                 for (final level in LogLevel.values)
-                  ChoiceChip(label: Text(level.label), selected: _level == level, onSelected: (_) => _change(() => _level = level)),
+                  ChoiceChip(
+                      label: Text(level.label),
+                      selected: _level == level,
+                      onSelected: (_) => _change(() => _level = level)),
               ],
             ),
             const SizedBox(height: 12),
@@ -139,7 +148,8 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
 
 /// one page of lines, watched by itself, so that the older ones are added under the newer and the newer ones are not asked for again
 class _LogPage extends ConsumerWidget {
-  const _LogPage({required this.query, required this.newest, required this.last, required this.onOlder, required this.onRetry});
+  const _LogPage(
+      {required this.query, required this.newest, required this.last, required this.onOlder, required this.onRetry});
 
   final LogQuery query;
   final bool newest;
@@ -170,7 +180,8 @@ class _LogPage extends ConsumerWidget {
             if (newest && data.rows.isEmpty)
               const Padding(
                 padding: EdgeInsets.all(24),
-                child: Center(child: Text('Nothing like that has been said.', style: TextStyle(color: AppColors.muted))),
+                child:
+                    Center(child: Text('Nothing like that has been said.', style: TextStyle(color: AppColors.muted))),
               ),
             for (final line in data.rows) _LogCard(line: line, now: now),
             if (last && data.mayHaveOlder && data.oldestId != null)
@@ -221,7 +232,11 @@ class _LogCardState extends State<_LogCard> {
             padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border(left: BorderSide(color: color, width: 3), top: const BorderSide(color: AppColors.line), right: const BorderSide(color: AppColors.line), bottom: const BorderSide(color: AppColors.line)),
+              border: Border(
+                  left: BorderSide(color: color, width: 3),
+                  top: const BorderSide(color: AppColors.line),
+                  right: const BorderSide(color: AppColors.line),
+                  bottom: const BorderSide(color: AppColors.line)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +248,8 @@ class _LogCardState extends State<_LogCard> {
                         TextSpan(children: [
                           TextSpan(text: line.fn, style: TextStyle(fontWeight: FontWeight.w700, color: color)),
                           TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
-                          if (line.repeats > 1) TextSpan(text: '  ×${line.repeats}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                          if (line.repeats > 1)
+                            TextSpan(text: '  ×${line.repeats}', style: const TextStyle(fontWeight: FontWeight.w700)),
                         ]),
                         style: const TextStyle(fontSize: 12, color: AppColors.muted),
                       ),
@@ -247,17 +263,23 @@ class _LogCardState extends State<_LogCard> {
                   ],
                 ),
                 _open
-                    ? SelectableText(line.message, style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
-                    : Text(line.message, maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
+                    ? SelectableText(line.message,
+                        style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
+                    : Text(line.message,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
                 if (_open && line.at != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(line.at!.toIso8601String(), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                    child:
+                        Text(line.at!.toIso8601String(), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
                   ),
                 if (_open && detail != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: SelectableText(detail, style: const TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
+                    child: SelectableText(detail,
+                        style: const TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
                   ),
                 if (!_open && detail != null)
                   const Padding(

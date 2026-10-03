@@ -186,7 +186,8 @@ class _EdgeFunctions extends ConsumerWidget {
     final logs = ref.watch(adminLogsProvider(noLogQuery));
     final now = DateTime.now();
     return logs.when(
-      loading: () => const Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
+      loading: () =>
+          const Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
       // an older backend has no logs to give: said, and nothing else is held up by it
       error: (_, __) => const Panel(
         child: Text('The logs of the functions could not be read. The backend may not have them yet.',
@@ -200,7 +201,8 @@ class _EdgeFunctions extends ConsumerWidget {
             if (page.functions.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text('Nothing has been said in the last day.', style: TextStyle(color: AppColors.muted, fontSize: 13)),
+                child: Text('Nothing has been said in the last day.',
+                    style: TextStyle(color: AppColors.muted, fontSize: 13)),
               ),
             for (final f in page.functions)
               InkWell(
