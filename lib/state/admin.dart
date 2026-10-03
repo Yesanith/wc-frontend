@@ -293,7 +293,8 @@ class AdminServer {
     final failing = count('feeds', 'with_error');
     if (failing > 0) {
       final first = _maps(section('feeds')['errors']).firstOrNull;
-      final which = first == null ? '' : ': ${first['guild']} ${first['kind']}, ${feedProblemText('${first['error']}')}';
+      final which =
+          first == null ? '' : ': ${first['guild']} ${first['kind']}, ${feedProblemText('${first['error']}')}';
       lines.add(HealthLine('News feeds', '$failing failing$which', HealthLevel.warn));
     }
 
