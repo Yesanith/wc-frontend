@@ -69,7 +69,7 @@ jobs:
             for f in "$RUNNER_TEMP"/[0-9]-*.log; do
               echo
               echo "=================== $(basename "$f")"
-              grep -v '^✅' "$f" | head -n 400
+              grep -v '^✅' "$f" | grep -vE '^[[:space:]]*(#[0-9]+[[:space:]]|package:|dart:|\(elided)' | head -n 700
             done
           } > check-failure.txt
           git add check-failure.txt
