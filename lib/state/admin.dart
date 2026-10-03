@@ -101,6 +101,19 @@ String ago(DateTime then, DateTime now) {
   return '${d.inDays} d ago';
 }
 
+/// what the code a feed recorded for its last failure means, for whoever has to put it right. a code that is not known is shown as it is
+String feedProblemText(String code) => switch (code) {
+      'missing_permissions' =>
+        'the bot may not post in the channel of this feed: it needs View Channel, Send Messages and Embed Links there (missing_permissions)',
+      'channel_gone' => 'the channel of this feed is gone, or the bot cannot see it (channel_gone)',
+      'rate_limited' => 'Discord is limiting how fast the bot may post (rate_limited)',
+      'source_unreachable' => 'the source of the feed, the game site or its API, did not answer (source_unreachable)',
+      'roles_failed' => 'the bot could not change the roles (roles_failed)',
+      'threads_failed' => 'the bot could not make or write in the thread (threads_failed)',
+      'events_failed' => 'the bot could not make the Discord event (events_failed)',
+      _ => code,
+    };
+
 String formatBytes(int bytes) {
   const units = ['B', 'KB', 'MB', 'GB', 'TB'];
   var value = bytes.toDouble();
@@ -280,7 +293,7 @@ class AdminServer {
     final failing = count('feeds', 'with_error');
     if (failing > 0) {
       final first = _maps(section('feeds')['errors']).firstOrNull;
-      final which = first == null ? '' : ': ${first['guild']} ${first['kind']}, ${first['error']}';
+      final which = first == null ? '' : ': ${first['guild']} ${first['kind']}, ${feedProblemText('${first['error']}')}';
       lines.add(HealthLine('News feeds', '$failing failing$which', HealthLevel.warn));
     }
 

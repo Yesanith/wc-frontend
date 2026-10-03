@@ -92,7 +92,7 @@ class AdminActivityTab extends ConsumerWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
-                        '${e['guild']} · ${e['kind']}: ${e['error']}',
+                        '${e['guild']} · ${e['kind']}: ${feedProblemText('${e['error']}')}',
                         style: const TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
                       ),
                     ),
