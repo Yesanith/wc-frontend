@@ -867,7 +867,8 @@ void main() {
         'says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes',
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      const hint = 'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is locked.';
+      const hint =
+          'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is locked.';
       expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
       await fill(tester);
       expect(find.text(hint), findsOneWidget);
@@ -939,10 +940,13 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('has no button of its own to say that the guild is still looking: saving is what keeps the page in the list', (tester) async {
+    testWidgets(
+        'has no button of its own to say that the guild is still looking: saving is what keeps the page in the list',
+        (tester) async {
       final fake = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
       expect(find.text('Still looking'), findsNothing);
-      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'), findsOneWidget);
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
+          findsOneWidget);
       await tapOn(tester, find.text('Save'));
       expect(fake.saves.length, 1, reason: 'a page that is saved as it is is saved, which is what renews it');
       expect(find.text('Saved.'), findsOneWidget);
@@ -951,7 +955,8 @@ void main() {
 
     testWidgets('says how a page is kept in the list, for a page that has not been made yet too', (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'), findsOneWidget);
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
+          findsOneWidget);
     });
 
     testWidgets('is deleted by the leader, who is asked first', (tester) async {

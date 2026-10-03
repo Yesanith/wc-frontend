@@ -510,7 +510,8 @@ const deStrings = <String, String>{
   'rec_f_languages': 'Sprachen (bis zu 5)',
   'rec_f_recruiting': 'Wir suchen gerade Spieler',
   'rec_f_published': 'Diese Seite für alle sichtbar machen',
-  'rec_f_published_hint': 'Sie wird auch im Forum guild-recruitment des offiziellen Discord-Servers veröffentlicht. Wenn du sie ausschaltest, wird der Beitrag dort gesperrt.',
+  'rec_f_published_hint':
+      'Sie wird auch im Forum guild-recruitment des offiziellen Discord-Servers veröffentlicht. Wenn du sie ausschaltest, wird der Beitrag dort gesperrt.',
   'rec_save_hint': 'Speichern hält die Seite in der Liste. Nach 60 Tagen ohne Speichern verschwindet sie daraus.',
   'rec_save': 'Speichern',
   'rec_saved': 'Gespeichert.',

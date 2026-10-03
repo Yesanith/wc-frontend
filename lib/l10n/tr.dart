@@ -498,7 +498,8 @@ const trStrings = <String, String>{
   'rec_f_languages': 'Diller (en fazla 5)',
   'rec_f_recruiting': 'Şu an alım yapıyoruz',
   'rec_f_published': 'Bu sayfayı herkese göster',
-  'rec_f_published_hint': 'Resmî Discord sunucusunun guild-recruitment forumunda da paylaşılır. Kapatırsan oradaki gönderi kilitlenir.',
+  'rec_f_published_hint':
+      'Resmî Discord sunucusunun guild-recruitment forumunda da paylaşılır. Kapatırsan oradaki gönderi kilitlenir.',
   'rec_save_hint': 'Kaydetmek sayfayı listede tutar. 60 gün kaydedilmezse listeden çıkar.',
   'rec_save': 'Kaydet',
   'rec_saved': 'Kaydedildi.',
