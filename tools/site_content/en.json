@@ -85,7 +85,7 @@
    ],
    [
     "What can the bot do?",
-    "<code>/event create</code> and <code>/event weekly</code> make events, players sign up with buttons, with their profession and roles. <code>/event report</code> adds an Arcdps report link. <code>/tyria settings</code> sets threads, Discord events and reminders. <code>/tyria notify</code> posts daily achievements, news and game updates. <code>/tyria roles</code> and <code>/tyria rankrole</code> give Discord roles for guild ranks. The bot cannot read messages."
+    "<code>/event create</code> and <code>/event weekly</code> make events, players sign up with buttons, with their profession and roles. <code>/event report</code> adds an Arcdps report link. <code>/tyria settings</code> sets threads, Discord events and reminders. <code>/tyria notify</code> posts the game's news and game updates. <code>/tyria roles</code> and <code>/tyria rankrole</code> give Discord roles for guild ranks. The bot cannot read messages."
    ],
    [
     "How do Discord roles follow guild ranks?",
