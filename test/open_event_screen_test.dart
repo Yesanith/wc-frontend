@@ -26,7 +26,8 @@ void main() {
     test('is not when the community backend is not there, whatever the session is', () {
       expect(eventAccess(ready: false, session: const AsyncData<Object?>('x')), EventAccess.unavailable);
       expect(eventAccess(ready: false, session: null), EventAccess.unavailable);
-      expect(eventAccess(ready: true, session: null), EventAccess.unavailable, reason: 'no session to ask about is none to ask with');
+      expect(eventAccess(ready: true, session: null), EventAccess.unavailable,
+          reason: 'no session to ask about is none to ask with');
     });
 
     test('is once there is a session', () {
@@ -40,7 +41,10 @@ void main() {
     });
 
     test('is open while a session is there even if it is being read again', () {
-      expect(eventAccess(ready: true, session: const AsyncLoading<Object?>().copyWithPrevious(const AsyncData<Object?>('x'))), EventAccess.open);
+      expect(
+          eventAccess(
+              ready: true, session: const AsyncLoading<Object?>().copyWithPrevious(const AsyncData<Object?>('x'))),
+          EventAccess.open);
     });
   });
 
@@ -88,7 +92,8 @@ void main() {
       return container;
     }
 
-    testWidgets('says that events are not here when the community backend is not, and asks the database nothing', (tester) async {
+    testWidgets('says that events are not here when the community backend is not, and asks the database nothing',
+        (tester) async {
       debugSetCommunityReady(false);
       await show(tester, session: Stream.value(null));
       await tester.pumpAndSettle();
@@ -96,7 +101,9 @@ void main() {
       expect(asked, isEmpty);
     });
 
-    testWidgets('tells a guest who followed a link to sign in, with the way to the settings, and asks the database nothing', (tester) async {
+    testWidgets(
+        'tells a guest who followed a link to sign in, with the way to the settings, and asks the database nothing',
+        (tester) async {
       await show(tester, session: Stream.value(null));
       await tester.pumpAndSettle();
       expect(find.text('Sign in with Discord in Settings to see public events and make your own.'), findsOneWidget);
@@ -115,7 +122,9 @@ void main() {
       expect(container.read(sectionProvider), AppSection.settings);
     });
 
-    testWidgets('waits while the session is read, and neither asks the database nor tells the player to sign in meanwhile', (tester) async {
+    testWidgets(
+        'waits while the session is read, and neither asks the database nor tells the player to sign in meanwhile',
+        (tester) async {
       final never = StreamController<Session?>();
       addTearDown(never.close);
       await show(tester, session: never.stream);
@@ -137,7 +146,8 @@ void main() {
       expect(find.text('That event is not there any more.'), findsOneWidget);
     });
 
-    testWidgets('asks the database for the event once there is a session, and says when it is not there any more', (tester) async {
+    testWidgets('asks the database for the event once there is a session, and says when it is not there any more',
+        (tester) async {
       await show(tester, session: Stream.value(_session()));
       await tester.pumpAndSettle();
       expect(asked, [_id]);
@@ -148,13 +158,15 @@ void main() {
     testWidgets('has the button that copies the address of the event, for an event that has one', (tester) async {
       await show(tester, session: Stream.value(null));
       await tester.pumpAndSettle();
-      expect(find.byTooltip('Copy link to this page'), findsOneWidget, reason: 'also for a guest: the address is what is shared');
+      expect(find.byTooltip('Copy link to this page'), findsOneWidget,
+          reason: 'also for a guest: the address is what is shared');
       await tester.tap(find.byTooltip('Copy link to this page'));
       await tester.pump();
       expect(copied, ['https://yesanith.github.io/tyria-companion/app/#/event/$_id']);
     });
 
-    testWidgets('has no such button for a number that is no event\'s, so that no address is made of it', (tester) async {
+    testWidgets('has no such button for a number that is no event\'s, so that no address is made of it',
+        (tester) async {
       await show(tester, session: Stream.value(null), eventId: 'not-an-event');
       await tester.pumpAndSettle();
       expect(find.byTooltip('Copy link to this page'), findsNothing);
