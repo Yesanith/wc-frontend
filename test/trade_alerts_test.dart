@@ -20,7 +20,12 @@ Json _row(int id, int item, int price, int quantity) => {
 
 /// the history and the names of the items, as the test says they are
 class _Source implements TradeSource {
-  _Source({this.sold = const [], this.bought = const [], this.itemNames = const {}, this.failHistory, this.failNames = false});
+  _Source(
+      {this.sold = const [],
+      this.bought = const [],
+      this.itemNames = const {},
+      this.failHistory,
+      this.failNames = false});
 
   List<Json> sold;
   List<Json> bought;
@@ -41,7 +46,10 @@ class _Source implements TradeSource {
   Future<Map<int, String>> names(List<int> itemIds) async {
     namesAsked.add(itemIds);
     if (failNames) throw Exception('items are down');
-    return {for (final id in itemIds) if (itemNames.containsKey(id)) id: itemNames[id]!};
+    return {
+      for (final id in itemIds)
+        if (itemNames.containsKey(id)) id: itemNames[id]!
+    };
   }
 }
 
@@ -62,7 +70,8 @@ void main() {
     test('is read when the api gives numbers as text', () {
       final fill = parseFills([
         {'id': '9', 'item_id': '5', 'price': '100', 'quantity': '2'},
-      ], TradeSide.bought).single;
+      ], TradeSide.bought)
+          .single;
       expect((fill.id, fill.itemId, fill.price, fill.quantity), (9, 5, 100, 2));
     });
 
@@ -154,14 +163,16 @@ void main() {
 
   group('what a notification says', () {
     test('is the quantity, the item and what it came to, with a title for what was sold', () {
-      final n = composeTrade(_en, TradeSide.sold, const [TradeLine(itemId: 19685, quantity: 3, copper: 42000)], {19685: 'Mithril Ore'});
+      final n = composeTrade(
+          _en, TradeSide.sold, const [TradeLine(itemId: 19685, quantity: 3, copper: 42000)], {19685: 'Mithril Ore'});
       expect(n.title, 'Trading post: sold');
       expect(n.body, '3× Mithril Ore · 4g 20s');
       expect(n.side, TradeSide.sold);
     });
 
     test('has another title for what was bought', () {
-      final n = composeTrade(_en, TradeSide.bought, const [TradeLine(itemId: 1, quantity: 250, copper: 100)], {1: 'Copper Ore'});
+      final n = composeTrade(
+          _en, TradeSide.bought, const [TradeLine(itemId: 1, quantity: 250, copper: 100)], {1: 'Copper Ore'});
       expect(n.title, 'Trading post: bought');
       expect(n.body, '250× Copper Ore · 1s');
     });
@@ -175,7 +186,8 @@ void main() {
       expect(shown.last, '+3 more');
       expect(n.body.contains('Item 7'), isFalse);
       // exactly the number that fits has no "more"
-      final fit = composeTrade(_en, TradeSide.sold, lines.take(tradeLinesShown).toList(), {for (var i = 1; i <= 9; i++) i: 'Item $i'});
+      final fit = composeTrade(
+          _en, TradeSide.sold, lines.take(tradeLinesShown).toList(), {for (var i = 1; i <= 9; i++) i: 'Item $i'});
       expect(fit.body.contains('more'), isFalse);
     });
 
@@ -184,13 +196,17 @@ void main() {
         TradeLine(itemId: 77, quantity: 1, copper: 5),
         TradeLine(itemId: 78, quantity: 2, copper: 4),
         TradeLine(itemId: 79, quantity: 3, copper: 3),
-      ], {78: '', 79: '   '});
+      ], {
+        78: '',
+        79: '   '
+      });
       expect(n.body.split('\n'), ['1× #77 · 5c', '2× #78 · 4c', '3× #79 · 3c']);
     });
 
     test('names the account when there are several', () {
       const lines = [TradeLine(itemId: 1, quantity: 1, copper: 1)];
-      expect(composeTrade(_en, TradeSide.sold, lines, {1: 'X'}, account: 'Leo.1234').title, 'Trading post: sold · Leo.1234');
+      expect(composeTrade(_en, TradeSide.sold, lines, {1: 'X'}, account: 'Leo.1234').title,
+          'Trading post: sold · Leo.1234');
       expect(composeTrade(_en, TradeSide.sold, lines, {1: 'X'}, account: '').title, 'Trading post: sold');
       expect(composeTrade(_en, TradeSide.sold, lines, {1: 'X'}, account: '  ').title, 'Trading post: sold');
       expect(composeTrade(_en, TradeSide.sold, lines, {1: 'X'}).title, 'Trading post: sold');
@@ -211,7 +227,13 @@ void main() {
         final more = composeTrade(s, TradeSide.sold, many, {}).body.split('\n').last;
         expect(more.contains('2'), isTrue, reason: '${lang.code}: how many more');
         expect(more.startsWith('tp_'), isFalse, reason: lang.code);
-        for (final key in ['tp_notify_title', 'tp_notify_hint', 'tp_notify_needs_key', 'tp_channel', 'tp_channel_desc']) {
+        for (final key in [
+          'tp_notify_title',
+          'tp_notify_hint',
+          'tp_notify_needs_key',
+          'tp_channel',
+          'tp_channel_desc'
+        ]) {
           expect(s.t(key), isNot(key), reason: '${lang.code}: $key');
         }
       }
@@ -229,7 +251,8 @@ void main() {
       told.clear();
     });
 
-    Future<TradeCheckResult> look(_Source source, {String id = 'a', String? account, Future<void> Function(TradeNotification)? notify}) =>
+    Future<TradeCheckResult> look(_Source source,
+            {String id = 'a', String? account, Future<void> Function(TradeNotification)? notify}) =>
         runTradeCheck(
           source: source,
           prefs: prefs,
@@ -310,7 +333,8 @@ void main() {
       expect(told.single.title, 'Trading post: sold · Leo.1234');
     });
 
-    test('is remembered before it is told: a notification that cannot be shown is not tried again at every look', () async {
+    test('is remembered before it is told: a notification that cannot be shown is not tried again at every look',
+        () async {
       final source = _Source();
       await look(source);
       source.sold = [_row(1, 5, 100, 1)];
@@ -377,7 +401,9 @@ void main() {
       }
     });
 
-    test('remembers no more than it keeps, and what it let go of is not told of again as long as the api no longer gives it', () async {
+    test(
+        'remembers no more than it keeps, and what it let go of is not told of again as long as the api no longer gives it',
+        () async {
       final source = _Source();
       await look(source);
       var id = 1;
@@ -437,7 +463,9 @@ void main() {
       expect(container().read(tradeNotifyProvider), isTrue);
     });
 
-    test('asks for the permission, remembers the choice, asks for the look while the app is closed and makes the first look', () async {
+    test(
+        'asks for the permission, remembers the choice, asks for the look while the app is closed and makes the first look',
+        () async {
       final effects = _Effects();
       final c = container(effects: effects);
       await c.read(keysProvider.future);
@@ -476,7 +504,8 @@ void main() {
       expect(c.read(tradeNotifyProvider), isTrue);
     });
 
-    test('lets go of the look while the app is closed when it is turned off, and does not ask for anything else', () async {
+    test('lets go of the look while the app is closed when it is turned off, and does not ask for anything else',
+        () async {
       final effects = _Effects();
       final c = container(effects: effects);
       await c.read(keysProvider.future);

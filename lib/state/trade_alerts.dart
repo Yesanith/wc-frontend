@@ -22,7 +22,8 @@ enum TradeSide {
 
 /// one transaction of the history that completed: a number that is its own, the item, the price of one and how many
 class TradeFill {
-  const TradeFill({required this.id, required this.itemId, required this.price, required this.quantity, required this.side});
+  const TradeFill(
+      {required this.id, required this.itemId, required this.price, required this.quantity, required this.side});
 
   final int id;
   final int itemId;
@@ -69,7 +70,10 @@ class TradeSeen {
     try {
       final map = jsonDecode(raw);
       if (map is! Map) return null;
-      List<int> ids(Object? v) => [for (final n in (v is List ? v : const [])) if (n is int) n];
+      List<int> ids(Object? v) => [
+            for (final n in (v is List ? v : const []))
+              if (n is int) n
+          ];
       return TradeSeen(sold: ids(map['sold']), bought: ids(map['bought']));
     } catch (_) {
       return null;
@@ -218,7 +222,8 @@ Future<TradeCheckResult> runTradeCheck({
   if (seen == null) {
     await prefs.setString(
       storageKey,
-      TradeSeen(sold: remember(const [], sold.map((f) => f.id)), bought: remember(const [], bought.map((f) => f.id))).toJson(),
+      TradeSeen(sold: remember(const [], sold.map((f) => f.id)), bought: remember(const [], bought.map((f) => f.id)))
+          .toJson(),
     );
     return const TradeCheckResult(first: true);
   }
@@ -237,7 +242,9 @@ Future<TradeCheckResult> runTradeCheck({
 
   var names = const <int, String>{};
   try {
-    names = await source.names({for (final f in [...newSold, ...newBought]) f.itemId}.toList());
+    names = await source.names({
+      for (final f in [...newSold, ...newBought]) f.itemId
+    }.toList());
   } catch (_) {
     // the items are then told by their number
   }

@@ -452,7 +452,8 @@ const enStrings = <String, String>{
   'copied': 'Copied.',
   'copy_page_link': 'Copy link to this page',
   'tp_notify_title': 'Trading post notifications',
-  'tp_notify_hint': 'Tells you when an item you listed is sold or a buy order is filled, also when the app is closed (every 15 minutes at the most). Needs an API key with the trading post permission.',
+  'tp_notify_hint':
+      'Tells you when an item you listed is sold or a buy order is filled, also when the app is closed (every 15 minutes at the most). Needs an API key with the trading post permission.',
   'tp_notify_needs_key': 'Add an API key with the trading post permission first.',
   'tp_sold': 'Trading post: sold',
   'tp_bought': 'Trading post: bought',

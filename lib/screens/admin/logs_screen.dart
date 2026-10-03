@@ -243,55 +243,60 @@ class _LogCardState extends State<_LogCard> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
                       child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text.rich(
-                        TextSpan(children: [
-                          TextSpan(text: line.fn, style: TextStyle(fontWeight: FontWeight.w700, color: color)),
-                          TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
-                          if (line.repeats > 1)
-                            TextSpan(text: '  ×${line.repeats}', style: const TextStyle(fontWeight: FontWeight.w700)),
-                        ]),
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text.rich(
+                                  TextSpan(children: [
+                                    TextSpan(
+                                        text: line.fn, style: TextStyle(fontWeight: FontWeight.w700, color: color)),
+                                    TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
+                                    if (line.repeats > 1)
+                                      TextSpan(
+                                          text: '  ×${line.repeats}',
+                                          style: const TextStyle(fontWeight: FontWeight.w700)),
+                                  ]),
+                                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: 'Copy',
+                                visualDensity: VisualDensity.compact,
+                                icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
+                                onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, detail))),
+                              ),
+                            ],
+                          ),
+                          _open
+                              ? SelectableText(line.message,
+                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
+                              : Text(line.message,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
+                          if (_open && line.at != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(line.at!.toIso8601String(),
+                                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                            ),
+                          if (_open && detail != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: SelectableText(detail,
+                                  style: const TextStyle(
+                                      fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
+                            ),
+                          if (!_open && detail != null)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child:
+                                  Text('Tap for what it knew', style: TextStyle(fontSize: 11, color: AppColors.hint)),
+                            ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      tooltip: 'Copy',
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
-                      onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, detail))),
-                    ),
-                  ],
-                ),
-                _open
-                    ? SelectableText(line.message,
-                        style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
-                    : Text(line.message,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
-                if (_open && line.at != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child:
-                        Text(line.at!.toIso8601String(), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-                  ),
-                if (_open && detail != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6),
-                    child: SelectableText(detail,
-                        style: const TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
-                  ),
-                if (!_open && detail != null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Text('Tap for what it knew', style: TextStyle(fontSize: 11, color: AppColors.hint)),
-                  ),
-              ],
-            ),
                     ),
                   ),
                 ],

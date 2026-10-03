@@ -459,7 +459,8 @@ const deStrings = <String, String>{
   'copied': 'Kopiert.',
   'copy_page_link': 'Link zu dieser Seite kopieren',
   'tp_notify_title': 'Benachrichtigungen des Handelspostens',
-  'tp_notify_hint': 'Sagt dir Bescheid, wenn ein eingestellter Gegenstand verkauft oder eine Kauforder erfüllt wurde, auch bei geschlossener App (höchstens alle 15 Minuten). Braucht einen API-Schlüssel mit der Berechtigung für den Handelsposten.',
+  'tp_notify_hint':
+      'Sagt dir Bescheid, wenn ein eingestellter Gegenstand verkauft oder eine Kauforder erfüllt wurde, auch bei geschlossener App (höchstens alle 15 Minuten). Braucht einen API-Schlüssel mit der Berechtigung für den Handelsposten.',
   'tp_notify_needs_key': 'Füge zuerst einen API-Schlüssel mit der Berechtigung für den Handelsposten hinzu.',
   'tp_sold': 'Handelsposten: verkauft',
   'tp_bought': 'Handelsposten: gekauft',
