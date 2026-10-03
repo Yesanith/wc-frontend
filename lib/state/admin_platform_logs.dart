@@ -15,9 +15,18 @@ enum PlatformSource {
 
 /// what the logs of the platform are asked for: which source, which function (by the number the platform gives it), which level of the console, a text, how many hours back from the
 /// end of the window, the end of the window when it is not now (the time of the oldest line seen, which is how older lines are asked for), and of the requests only those that failed
-typedef PlatformQuery = ({PlatformSource source, String? fnId, LogLevel? level, String search, int hours, String? before, bool onlyErrors});
+typedef PlatformQuery = ({
+  PlatformSource source,
+  String? fnId,
+  LogLevel? level,
+  String search,
+  int hours,
+  String? before,
+  bool onlyErrors
+});
 
-const platformStart = (source: PlatformSource.console, fnId: null, level: null, search: '', hours: 1, before: null, onlyErrors: false);
+const platformStart =
+    (source: PlatformSource.console, fnId: null, level: null, search: '', hours: 1, before: null, onlyErrors: false);
 
 /// how many hours back a window may go, which is as many as the platform's API takes
 const platformHours = [1, 6, 24];
@@ -204,7 +213,8 @@ class PlatformLogsPage {
   static PlatformLogsPage parse(Object? raw) {
     final map = raw is Map ? raw : const {};
     if (map['ok'] != true) {
-      throw PlatformLogsException(PlatformProblem.of(map['error']), map['detail'] is String ? map['detail'] as String : null);
+      throw PlatformLogsException(
+          PlatformProblem.of(map['error']), map['detail'] is String ? map['detail'] as String : null);
     }
     return PlatformLogsPage(
       rows: [
@@ -231,7 +241,8 @@ class PlatformKey {
   static List<PlatformKey> parseAll(Object? raw) {
     final map = raw is Map ? raw : const {};
     if (map['ok'] != true) {
-      throw PlatformLogsException(PlatformProblem.of(map['error']), map['detail'] is String ? map['detail'] as String : null);
+      throw PlatformLogsException(
+          PlatformProblem.of(map['error']), map['detail'] is String ? map['detail'] as String : null);
     }
     return [
       for (final k in (map['keys'] as List? ?? const []))

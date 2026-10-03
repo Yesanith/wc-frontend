@@ -14,13 +14,17 @@ import 'admin_actions_test.dart' show FakeBackend;
 
 String _at(int minutesAgo) => DateTime.now().toUtc().subtract(Duration(minutes: minutesAgo)).toIso8601String();
 
-Map<String, dynamic> _line(String id, String level, String message, {String fn = 'tp-sync', String fnId = 'f-1', int minutesAgo = 5, Map<String, dynamic>? more}) =>
+Map<String, dynamic> _line(String id, String level, String message,
+        {String fn = 'tp-sync', String fnId = 'f-1', int minutesAgo = 5, Map<String, dynamic>? more}) =>
     {'id': id, 'at': _at(minutesAgo), 'level': level, 'message': message, 'fn': fn, 'fnId': fnId, ...?more};
 
-Map<String, dynamic> _request(String id, int status, {int? ms = 1235, String path = 'https://abc.supabase.co/functions/v1/tp-sync'}) =>
-    _line(id, status >= 500 ? 'error' : (status >= 400 ? 'warn' : 'info'), 'POST | $status', more: {'status': status, 'method': 'POST', 'path': path, 'ms': ms});
+Map<String, dynamic> _request(String id, int status,
+        {int? ms = 1235, String path = 'https://abc.supabase.co/functions/v1/tp-sync'}) =>
+    _line(id, status >= 500 ? 'error' : (status >= 400 ? 'warn' : 'info'), 'POST | $status',
+        more: {'status': status, 'method': 'POST', 'path': path, 'ms': ms});
 
-PlatformLogsPage _page(List<Map<String, dynamic>> rows, {List<Map<String, dynamic>>? functions, String? oldest}) => PlatformLogsPage.parse({
+PlatformLogsPage _page(List<Map<String, dynamic>> rows, {List<Map<String, dynamic>>? functions, String? oldest}) =>
+    PlatformLogsPage.parse({
       'ok': true,
       'rows': rows,
       'functions': functions ??
@@ -38,16 +42,61 @@ void main() {
     });
 
     test('has the function, the text and the end of the window when they are chosen', () {
-      final body = platformBody((source: PlatformSource.console, fnId: 'f-1', level: null, search: 'boom', hours: 6, before: '2026-10-03T09:30:00.000Z', onlyErrors: false));
-      expect(body, {'source': 'console', 'fnId': 'f-1', 'search': 'boom', 'hours': 6, 'before': '2026-10-03T09:30:00.000Z', 'limit': 50});
+      final body = platformBody((
+        source: PlatformSource.console,
+        fnId: 'f-1',
+        level: null,
+        search: 'boom',
+        hours: 6,
+        before: '2026-10-03T09:30:00.000Z',
+        onlyErrors: false
+      ));
+      expect(body, {
+        'source': 'console',
+        'fnId': 'f-1',
+        'search': 'boom',
+        'hours': 6,
+        'before': '2026-10-03T09:30:00.000Z',
+        'limit': 50
+      });
     });
 
     test('has the level for the console only, and only the failed for the requests only', () {
-      expect(platformBody((source: PlatformSource.console, fnId: null, level: LogLevel.error, search: '', hours: 1, before: null, onlyErrors: true)),
-          {'source': 'console', 'level': 'error', 'hours': 1, 'limit': 50}, reason: 'a request that failed is of the requests');
-      expect(platformBody((source: PlatformSource.requests, fnId: null, level: LogLevel.warn, search: '', hours: 24, before: null, onlyErrors: true)),
-          {'source': 'requests', 'onlyErrors': true, 'hours': 24, 'limit': 50}, reason: 'a level is of the console');
-      expect(platformBody((source: PlatformSource.requests, fnId: null, level: null, search: '', hours: 1, before: null, onlyErrors: false)).containsKey('onlyErrors'), isFalse);
+      expect(
+          platformBody((
+            source: PlatformSource.console,
+            fnId: null,
+            level: LogLevel.error,
+            search: '',
+            hours: 1,
+            before: null,
+            onlyErrors: true
+          )),
+          {'source': 'console', 'level': 'error', 'hours': 1, 'limit': 50},
+          reason: 'a request that failed is of the requests');
+      expect(
+          platformBody((
+            source: PlatformSource.requests,
+            fnId: null,
+            level: LogLevel.warn,
+            search: '',
+            hours: 24,
+            before: null,
+            onlyErrors: true
+          )),
+          {'source': 'requests', 'onlyErrors': true, 'hours': 24, 'limit': 50},
+          reason: 'a level is of the console');
+      expect(
+          platformBody((
+            source: PlatformSource.requests,
+            fnId: null,
+            level: null,
+            search: '',
+            hours: 1,
+            before: null,
+            onlyErrors: false
+          )).containsKey('onlyErrors'),
+          isFalse);
     });
 
     test('has sources that are named as the function names them', () {
@@ -76,7 +125,9 @@ void main() {
 
   group('a line of the platform logs', () {
     test('is read: when, how serious, what it said and of which function', () {
-      final line = PlatformLogLine.parse(_line('a', 'error', 'tp sync failed', more: {'attrs': {'version': '7', 'function_id': 'f-1'}}))!;
+      final line = PlatformLogLine.parse(_line('a', 'error', 'tp sync failed', more: {
+        'attrs': {'version': '7', 'function_id': 'f-1'}
+      }))!;
       expect(line.id, 'a');
       expect(line.level, LogLevel.error);
       expect(line.message, 'tp sync failed');
@@ -94,7 +145,8 @@ void main() {
       expect(line.ms, 1235);
       expect(line.requestLine, 'POST /functions/v1/tp-sync → 503 · 1235 ms');
       expect(PlatformLogLine.parse(_request('r', 200, ms: null))!.requestLine, 'POST /functions/v1/tp-sync → 200');
-      expect(PlatformLogLine.parse(_request('r', 200, path: '/functions/v1/x'))!.requestLine, 'POST /functions/v1/x → 200 · 1235 ms');
+      expect(PlatformLogLine.parse(_request('r', 200, path: '/functions/v1/x'))!.requestLine,
+          'POST /functions/v1/x → 200 · 1235 ms');
       expect(PlatformLogLine.parse(_line('x', 'info', 'm', more: {'status': 404}))!.requestLine, '→ 404');
     });
 
@@ -110,14 +162,17 @@ void main() {
     });
 
     test('has attributes written as text, whatever they were', () {
-      final line = PlatformLogLine.parse(_line('a', 'info', 'm', more: {'attrs': {'n': 5, 'b': true}}))!;
+      final line = PlatformLogLine.parse(_line('a', 'info', 'm', more: {
+        'attrs': {'n': 5, 'b': true}
+      }))!;
       expect(line.attrs, {'n': '5', 'b': 'true'});
     });
   });
 
   group('a page of the platform logs', () {
     test('has its lines, the functions to choose among and where the next page begins', () {
-      final page = _page([_line('b', 'error', 'new'), _line('a', 'info', 'old', minutesAgo: 30)], oldest: '2026-10-03T11:00:00.000Z');
+      final page = _page([_line('b', 'error', 'new'), _line('a', 'info', 'old', minutesAgo: 30)],
+          oldest: '2026-10-03T11:00:00.000Z');
       expect(page.rows.map((r) => r.id), ['b', 'a']);
       expect(page.functions.map((f) => f.slug), ['tp-sync', 'push-sync']);
       expect(page.oldest, '2026-10-03T11:00:00.000Z');
@@ -148,7 +203,11 @@ void main() {
     test('leaves out a line or a function that cannot be read and keeps the rest', () {
       final page = PlatformLogsPage.parse({
         'ok': true,
-        'rows': [_line('a', 'info', 'ok'), {'id': 'b'}, 'junk'],
+        'rows': [
+          _line('a', 'info', 'ok'),
+          {'id': 'b'},
+          'junk'
+        ],
         'functions': [
           {'id': 'f-1', 'slug': 'x'},
           {'slug': 'no id'},
@@ -168,7 +227,9 @@ void main() {
         ('text', PlatformProblem.unknown),
         (<String, dynamic>{}, PlatformProblem.unknown),
       ]) {
-        expect(() => PlatformLogsPage.parse(raw), throwsA(isA<PlatformLogsException>().having((e) => e.problem, 'problem', problem)), reason: '$raw');
+        expect(() => PlatformLogsPage.parse(raw),
+            throwsA(isA<PlatformLogsException>().having((e) => e.problem, 'problem', problem)),
+            reason: '$raw');
       }
     });
 
@@ -195,7 +256,8 @@ void main() {
           'junk',
         ],
       });
-      expect(keys.map((k) => (k.source, k.key, k.events)), [('function_logs', 'function_id', 120), ('function_edge_logs', 'response.status_code', 98)]);
+      expect(keys.map((k) => (k.source, k.key, k.events)),
+          [('function_logs', 'function_id', 120), ('function_edge_logs', 'response.status_code', 98)]);
     });
 
     test('are an exception when the answer did not go well', () {
@@ -224,7 +286,8 @@ void main() {
         overrides: [prefsProvider.overrideWithValue(prefs), adminBackendProvider.overrideWithValue(backend)],
         child: MaterialApp(
           theme: buildTheme(),
-          builder: (context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)), child: child!),
+          builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)), child: child!),
           home: AdminLogsScreen(platform: platform),
         ),
       ));
@@ -232,7 +295,12 @@ void main() {
       return backend;
     }
 
-    final console = [_line('b', 'error', 'tp sync failed', more: {'attrs': {'version': '7'}}), _line('a', 'info', 'read 28000 prices', fn: 'push-sync', fnId: 'f-2', minutesAgo: 20)];
+    final console = [
+      _line('b', 'error', 'tp sync failed', more: {
+        'attrs': {'version': '7'}
+      }),
+      _line('a', 'info', 'read 28000 prices', fn: 'push-sync', fnId: 'f-2', minutesAgo: 20)
+    ];
 
     testWidgets('begins with the lines the functions kept, and the platform\'s is a choice', (tester) async {
       final backend = await open(tester, FakeBackend(platformOf: (q) => _page(console)), platform: false);
@@ -255,7 +323,9 @@ void main() {
       expect(backend.platformQueries.first, platformStart);
     });
 
-    testWidgets('shows what the functions wrote, which function, how long ago and how serious, and opens a line to what the platform knows', (tester) async {
+    testWidgets(
+        'shows what the functions wrote, which function, how long ago and how serious, and opens a line to what the platform knows',
+        (tester) async {
       await open(tester, FakeBackend(platformOf: (q) => _page(console)));
       expect(find.text('tp sync failed'), findsOneWidget);
       expect(find.text('read 28000 prices'), findsOneWidget);
@@ -272,7 +342,9 @@ void main() {
       expect(find.textContaining('version: 7'), findsNothing);
     });
 
-    testWidgets('shows a request by its line, with how it was answered, and what the function said of it when it is opened', (tester) async {
+    testWidgets(
+        'shows a request by its line, with how it was answered, and what the function said of it when it is opened',
+        (tester) async {
       await open(tester, FakeBackend(platformOf: (q) => _page([_request('r1', 503)])));
       await tester.tap(find.text('Requests'));
       await tester.pumpAndSettle();
@@ -283,7 +355,8 @@ void main() {
       expect(find.text('POST | 503'), findsOneWidget, reason: 'the message, once it is opened');
     });
 
-    testWidgets('copies a line, with when, how serious, which function, what and what the platform knows', (tester) async {
+    testWidgets('copies a line, with when, how serious, which function, what and what the platform knows',
+        (tester) async {
       await open(tester, FakeBackend(platformOf: (q) => _page(console)));
       await tester.tap(find.byTooltip('Copy').first);
       await tester.pump();
@@ -311,7 +384,10 @@ void main() {
       await tester.tap(find.widgetWithText(ChoiceChip, 'tp-sync'));
       await tester.pumpAndSettle();
       expect(backend.platformQueries.last.fnId, 'f-1');
-      expect(find.byType(ChoiceChip).evaluate().any((e) => (e.widget as ChoiceChip).selected && (e.widget as ChoiceChip).label.toString().contains('f-1')), isTrue,
+      expect(
+          find.byType(ChoiceChip).evaluate().any(
+              (e) => (e.widget as ChoiceChip).selected && (e.widget as ChoiceChip).label.toString().contains('f-1')),
+          isTrue,
           reason: 'it is still there, named by its number');
     });
 
@@ -381,11 +457,16 @@ void main() {
       expect(find.text('Older'), findsNothing);
     });
 
-    testWidgets('asks for the older lines with the time of the oldest of the page as the end of the window, and keeps the newer ones', (tester) async {
+    testWidgets(
+        'asks for the older lines with the time of the oldest of the page as the end of the window, and keeps the newer ones',
+        (tester) async {
       final newest = [for (var i = 0; i < 50; i++) _line('n$i', 'info', 'newer $i', minutesAgo: i)];
       final backend = await open(
         tester,
-        FakeBackend(platformOf: (q) => q.before == null ? _page(newest, oldest: '2026-10-03T10:00:00.000Z') : _page([_line('o1', 'info', 'older one', minutesAgo: 90)])),
+        FakeBackend(
+            platformOf: (q) => q.before == null
+                ? _page(newest, oldest: '2026-10-03T10:00:00.000Z')
+                : _page([_line('o1', 'info', 'older one', minutesAgo: 90)])),
       );
       await tester.ensureVisible(find.text('Older'));
       await tester.tap(find.text('Older'));
@@ -398,7 +479,12 @@ void main() {
 
     testWidgets('begins again at the newest when a filter is changed', (tester) async {
       final newest = [for (var i = 0; i < 50; i++) _line('n$i', 'info', 'newer $i', minutesAgo: i)];
-      await open(tester, FakeBackend(platformOf: (q) => q.before == null ? _page(newest, oldest: '2026-10-03T10:00:00.000Z') : _page([_line('o1', 'info', 'older one', minutesAgo: 90)])));
+      await open(
+          tester,
+          FakeBackend(
+              platformOf: (q) => q.before == null
+                  ? _page(newest, oldest: '2026-10-03T10:00:00.000Z')
+                  : _page([_line('o1', 'info', 'older one', minutesAgo: 90)])));
       await tester.ensureVisible(find.text('Older'));
       await tester.tap(find.text('Older'));
       await tester.pumpAndSettle();
@@ -409,7 +495,8 @@ void main() {
     });
 
     group('when it cannot be read', () {
-      PlatformLogsPage failWith(PlatformProblem problem, [String? detail]) => throw PlatformLogsException(problem, detail);
+      PlatformLogsPage failWith(PlatformProblem problem, [String? detail]) =>
+          throw PlatformLogsException(problem, detail);
 
       testWidgets('tells how to set it up when there is no token, with the steps and what to copy', (tester) async {
         await open(tester, FakeBackend(platformOf: (q) => failWith(PlatformProblem.notConfigured)));
@@ -498,7 +585,8 @@ void main() {
       });
 
       testWidgets('says so when the keys cannot be read or there are none', (tester) async {
-        await open(tester, FakeBackend(platformOf: (q) => failWith(PlatformProblem.queryError, 'x'), keysOf: () => const []));
+        await open(
+            tester, FakeBackend(platformOf: (q) => failWith(PlatformProblem.queryError, 'x'), keysOf: () => const []));
         await tester.tap(find.text('Show what the logs have'));
         await tester.pumpAndSettle();
         expect(find.text('No lines in the last minute.'), findsOneWidget);

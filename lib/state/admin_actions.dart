@@ -280,7 +280,8 @@ class SupabaseAdminBackend implements AdminBackend {
   }
 
   @override
-  Future<PlatformLogsPage> platformLogs(PlatformQuery query) async => PlatformLogsPage.parse(await _platform(platformBody(query)));
+  Future<PlatformLogsPage> platformLogs(PlatformQuery query) async =>
+      PlatformLogsPage.parse(await _platform(platformBody(query)));
 
   @override
   Future<List<PlatformKey>> platformKeys() async => PlatformKey.parseAll(await _platform({'source': 'diagnose'}));
@@ -316,7 +317,8 @@ final adminPlatformLogsProvider = FutureProvider.autoDispose
     .family<PlatformLogsPage, PlatformQuery>((ref, query) => ref.watch(adminBackendProvider).platformLogs(query));
 
 /// the keys the platform's logs of the functions carry
-final adminPlatformKeysProvider = FutureProvider.autoDispose<List<PlatformKey>>((ref) => ref.watch(adminBackendProvider).platformKeys());
+final adminPlatformKeysProvider =
+    FutureProvider.autoDispose<List<PlatformKey>>((ref) => ref.watch(adminBackendProvider).platformKeys());
 
 /// a page of what the Edge Functions said
 final adminLogsProvider = FutureProvider.autoDispose

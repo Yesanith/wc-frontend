@@ -80,75 +80,77 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
               onSelectionChanged: (choice) => setState(() => _platform = choice.first),
             ),
             const SizedBox(height: 12),
-            if (_platform) const PlatformLogsView() else ...[
-            TextField(
-              key: const Key('log-search'),
-              controller: _search,
-              textInputAction: TextInputAction.search,
-              onSubmitted: (text) => _change(() => _text = text.trim()),
-              decoration: InputDecoration(
-                hintText: 'Search what they said',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _text.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: 'Clear',
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          _search.clear();
-                          _change(() => _text = '');
-                        },
-                      ),
+            if (_platform)
+              const PlatformLogsView()
+            else ...[
+              TextField(
+                key: const Key('log-search'),
+                controller: _search,
+                textInputAction: TextInputAction.search,
+                onSubmitted: (text) => _change(() => _text = text.trim()),
+                decoration: InputDecoration(
+                  hintText: 'Search what they said',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _text.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: 'Clear',
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _search.clear();
+                            _change(() => _text = '');
+                          },
+                        ),
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                ChoiceChip(
-                    label: const Text('All functions'),
-                    selected: _fn == null,
-                    onSelected: (_) => _change(() => _fn = null)),
-                for (final name in names)
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
                   ChoiceChip(
-                    label: Text(_chipLabel(name, functions)),
-                    selected: _fn == name,
-                    onSelected: (_) => _change(() => _fn = name),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                ChoiceChip(
-                    label: const Text('All levels'),
-                    selected: _level == null,
-                    onSelected: (_) => _change(() => _level = null)),
-                for (final level in LogLevel.values)
+                      label: const Text('All functions'),
+                      selected: _fn == null,
+                      onSelected: (_) => _change(() => _fn = null)),
+                  for (final name in names)
+                    ChoiceChip(
+                      label: Text(_chipLabel(name, functions)),
+                      selected: _fn == name,
+                      onSelected: (_) => _change(() => _fn = name),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
                   ChoiceChip(
-                      label: Text(level.label),
-                      selected: _level == level,
-                      onSelected: (_) => _change(() => _level = level)),
-              ],
-            ),
-            const SizedBox(height: 12),
-            if (first.valueOrNull case final page?)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Text('${page.total} lines kept, for two weeks',
-                    style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                      label: const Text('All levels'),
+                      selected: _level == null,
+                      onSelected: (_) => _change(() => _level = null)),
+                  for (final level in LogLevel.values)
+                    ChoiceChip(
+                        label: Text(level.label),
+                        selected: _level == level,
+                        onSelected: (_) => _change(() => _level = level)),
+                ],
               ),
-            for (var i = 0; i < _pages.length; i++)
-              _LogPage(
-                query: _query(_pages[i]),
-                newest: i == 0,
-                last: i == _pages.length - 1,
-                onOlder: (before) => setState(() => _pages = [..._pages, before]),
-                onRetry: _refresh,
-              ),
+              const SizedBox(height: 12),
+              if (first.valueOrNull case final page?)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text('${page.total} lines kept, for two weeks',
+                      style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                ),
+              for (var i = 0; i < _pages.length; i++)
+                _LogPage(
+                  query: _query(_pages[i]),
+                  newest: i == 0,
+                  last: i == _pages.length - 1,
+                  onOlder: (before) => setState(() => _pages = [..._pages, before]),
+                  onRetry: _refresh,
+                ),
             ],
           ],
         ),
