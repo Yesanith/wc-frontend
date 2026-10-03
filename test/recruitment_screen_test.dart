@@ -871,7 +871,9 @@ void main() {
       expect(find.textContaining('To show it to everybody'), findsNothing, reason: 'nothing more is asked of it');
     });
 
-    testWidgets('says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes', (tester) async {
+    testWidgets(
+        'says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes',
+        (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       const hint = 'It is also posted in the guild-recruitment forum of the official Discord server.';
       expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
