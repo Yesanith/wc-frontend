@@ -453,7 +453,8 @@ const ptStrings = <String, String>{
   'copied': 'Copiado.',
   'copy_page_link': 'Copiar link desta página',
   'tp_notify_title': 'Notificações do Mercado',
-  'tp_notify_hint': 'Avisa quando um item que você anunciou é vendido ou uma ordem de compra é concluída, também com o app fechado (a cada 15 minutos, no máximo). Precisa de uma chave de API com a permissão do Mercado.',
+  'tp_notify_hint':
+      'Avisa quando um item que você anunciou é vendido ou uma ordem de compra é concluída, também com o app fechado (a cada 15 minutos, no máximo). Precisa de uma chave de API com a permissão do Mercado.',
   'tp_notify_needs_key': 'Adicione primeiro uma chave de API com a permissão do Mercado.',
   'tp_sold': 'Mercado: vendido',
   'tp_bought': 'Mercado: comprado',

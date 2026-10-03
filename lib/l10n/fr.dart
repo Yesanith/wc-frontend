@@ -456,7 +456,8 @@ const frStrings = <String, String>{
   'copied': 'Copié.',
   'copy_page_link': 'Copier le lien de cette page',
   'tp_notify_title': 'Notifications de l\'Hôtel des ventes',
-  'tp_notify_hint': 'Te prévient quand un objet que tu as mis en vente est vendu ou qu\'un ordre d\'achat est exécuté, même quand l\'appli est fermée (toutes les 15 minutes au plus). Nécessite une clé API avec la permission de l\'Hôtel des ventes.',
+  'tp_notify_hint':
+      'Te prévient quand un objet que tu as mis en vente est vendu ou qu\'un ordre d\'achat est exécuté, même quand l\'appli est fermée (toutes les 15 minutes au plus). Nécessite une clé API avec la permission de l\'Hôtel des ventes.',
   'tp_notify_needs_key': 'Ajoute d\'abord une clé API avec la permission de l\'Hôtel des ventes.',
   'tp_sold': 'Hôtel des ventes : vendu',
   'tp_bought': 'Hôtel des ventes : acheté',

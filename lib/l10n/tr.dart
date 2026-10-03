@@ -450,7 +450,8 @@ const trStrings = <String, String>{
   'copied': 'Kopyalandı.',
   'copy_page_link': 'Bu sayfanın bağlantısını kopyala',
   'tp_notify_title': 'Ticaret merkezi bildirimleri',
-  'tp_notify_hint': 'Listelediğin bir eşya satıldığında ya da bir alış siparişi tamamlandığında haber verir, uygulama kapalıyken de (en sık 15 dakikada bir). Ticaret merkezi iznine sahip bir API anahtarı gerekir.',
+  'tp_notify_hint':
+      'Listelediğin bir eşya satıldığında ya da bir alış siparişi tamamlandığında haber verir, uygulama kapalıyken de (en sık 15 dakikada bir). Ticaret merkezi iznine sahip bir API anahtarı gerekir.',
   'tp_notify_needs_key': 'Önce ticaret merkezi iznine sahip bir API anahtarı ekle.',
   'tp_sold': 'Ticaret merkezi: satıldı',
   'tp_bought': 'Ticaret merkezi: alındı',
