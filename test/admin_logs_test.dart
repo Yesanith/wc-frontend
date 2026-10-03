@@ -386,7 +386,9 @@ void main() {
       await tester.tap(find.text('All logs (3)'));
       await tester.pumpAndSettle();
       expect(find.byType(AdminLogsScreen), findsOneWidget);
-      expect(backend.logQueries.last.fn, isNull);
+      // the lines of all of them are the page the tab was made from, kept: they are not asked for again, and what is chosen is all of them
+      expect(_chosen(tester, 'All functions'), isTrue);
+      expect(_chosen(tester, 'tp-sync · 2'), isFalse);
     });
 
     testWidgets('says so when nothing was said in the last day', (tester) async {
