@@ -20,6 +20,7 @@ import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
 import '../widgets/site_search.dart';
 import 'item_detail_screen.dart' show showItemDetails;
+import 'open_link.dart';
 import '../widgets/swipe_open.dart';
 import '../state/wealth.dart';
 import '../state/period_refresh.dart';
@@ -29,6 +30,7 @@ import '../services/push.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../services/boss_alerts.dart';
+import '../services/push.dart' show initialPushData, pushTapped;
 import '../state/boss_alerts.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
@@ -277,6 +279,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       bossAlertLaunchPayload = null;
       WidgetsBinding.instance.addPostFrameCallback((_) => _openFromAlert(payload));
     }
+    // a notification that was tapped opens what it is about, also when it started the app; and so does a link the app was opened with
+    _pushTaps = pushTapped.stream.listen(_openFromPush);
+    final started = linkFromPushData(initialPushData);
+    initialPushData = null;
+    if (started != null) ref.read(pendingLinkProvider.notifier).state = started;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openPending());
     _pushWhileOpen = pushWhileOpen.stream.listen((message) {
       final n = message.notification;
       if (n == null || !mounted) return;
@@ -303,6 +311,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   @override
   void dispose() {
     _pushWhileOpen?.cancel();
+    _pushTaps?.cancel();
     _alertTaps?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -310,7 +319,23 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   DateTime? _backgroundSince;
   StreamSubscription<Object?>? _pushWhileOpen;
+  StreamSubscription<Map<String, dynamic>>? _pushTaps;
   StreamSubscription<String?>? _alertTaps;
+
+  /// the item or the public event a link asked for, opened over the page now that there is one
+  void _openPending() {
+    final link = ref.read(pendingLinkProvider);
+    if (link == null || !mounted) return;
+    ref.read(pendingLinkProvider.notifier).state = null;
+    // the browser already has its address
+    openLinkNow(context, link, announce: false);
+  }
+
+  void _openFromPush(Map<String, dynamic> data) {
+    final link = linkFromPushData(data);
+    if (link == null || !mounted) return;
+    openLinkNow(context, link);
+  }
 
   void _openFromAlert(String? payload) {
     if (!isBossAlertPayload(payload) || !mounted) return;

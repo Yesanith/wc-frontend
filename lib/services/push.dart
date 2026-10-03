@@ -25,6 +25,12 @@ bool get pushReady => _ready && communityReady;
 /// on its own then, the shell shows them in the app instead
 final pushWhileOpen = StreamController<RemoteMessage>.broadcast();
 
+/// a notification that was tapped while the app was in the background, with what it carried
+final pushTapped = StreamController<Map<String, dynamic>>.broadcast();
+
+/// the notification that was tapped to start the app, with what it carried, until the shell has used it
+Map<String, dynamic>? initialPushData;
+
 StreamSubscription<String>? _tokenRefresh;
 
 /// starts firebase with the values from the build, no google-services.json
@@ -41,6 +47,9 @@ Future<void> initPush() async {
       ),
     );
     FirebaseMessaging.onMessage.listen(pushWhileOpen.add);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) => pushTapped.add(Map<String, dynamic>.from(message.data)));
+    final first = await FirebaseMessaging.instance.getInitialMessage();
+    if (first != null) initialPushData = Map<String, dynamic>.from(first.data);
     _ready = true;
   } catch (_) {
     _ready = false;

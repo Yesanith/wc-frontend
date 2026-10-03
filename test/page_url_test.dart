@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tyria_codex/state/navigation.dart';
 
@@ -176,6 +177,265 @@ void main() {
       observer.didRemove(a, b);
       observer.didReplace(newRoute: b, oldRoute: a);
       expect(asked, 4);
+    });
+  });
+
+  const eventId = '3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c';
+
+  group('the address of an item or an event', () {
+    test('is /item/ and the number of the item, or /event/ and the number of the event, and a page is as it was', () {
+      expect(linkFromPath('/item/19721'), const ItemLink(19721));
+      expect(linkFromPath('/event/$eventId'), const EventLink(eventId));
+      expect(linkFromPath('/trading'), const SectionLink(AppSection.trading));
+      expect(linkFromPath('/'), const SectionLink(AppSection.home));
+      expect(linkFromPath(''), const SectionLink(AppSection.home));
+      expect(linkFromPath(null), const SectionLink(AppSection.home));
+    });
+
+    test('is found whatever the case, a slash at the end, a query or a fragment', () {
+      expect(linkFromPath('/ITEM/19721/'), const ItemLink(19721));
+      expect(linkFromPath('item/19721'), const ItemLink(19721), reason: 'the slash at the front is not needed');
+      expect(linkFromPath('/item/19721?lang=de'), const ItemLink(19721));
+      expect(linkFromPath('/item/19721#top'), const ItemLink(19721));
+      expect(linkFromPath('/event/${eventId.toUpperCase()}'), const EventLink(eventId), reason: 'a number is kept in small letters');
+    });
+
+    test('is none when it is not an item or an event, so that nothing is made up of what is not one', () {
+      for (final path in [
+        '/item', '/item/', '/item/0', '/item/-5', '/item/abc', '/item/12.5', '/item/1234567890', '/item/19721/extra',
+        '/event', '/event/', '/event/abc', '/event/${eventId.substring(1)}', '/event/${eventId}0', '/event/${eventId.replaceAll('-', '')}',
+        '/event/zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz', '/events/$eventId', '/items/19721', '/nothing', '/access_token=abc',
+      ]) {
+        expect(linkFromPath(path), isNull, reason: path);
+      }
+    });
+
+    test('is written as it is read, for an item, an event and every page', () {
+      expect(linkPath(const ItemLink(19721)), '/item/19721');
+      expect(linkPath(const EventLink(eventId)), '/event/$eventId');
+      expect(linkPath(EventLink(eventId.toUpperCase())), '/event/$eventId', reason: 'in small letters');
+      for (final section in AppSection.values) {
+        expect(linkFromPath(linkPath(SectionLink(section))), SectionLink(section), reason: '$section');
+      }
+      expect(linkFromPath(linkPath(const ItemLink(5))), const ItemLink(5));
+      expect(linkFromPath(linkPath(const EventLink(eventId))), const EventLink(eventId));
+    });
+
+    test('is a whole address when it is shared, which opens the app at it', () {
+      expect(linkUrl(const ItemLink(19721)), 'https://yesanith.github.io/tyria-companion/app/#/item/19721');
+      expect(linkUrl(const EventLink(eventId)), 'https://yesanith.github.io/tyria-companion/app/#/event/$eventId');
+      expect(linkUrl(const SectionLink(AppSection.trading)), 'https://yesanith.github.io/tyria-companion/app/#/trading');
+      expect(linkUrl(const SectionLink(AppSection.home)), 'https://yesanith.github.io/tyria-companion/app/#/');
+      expect(appBase.endsWith('/app/'), isTrue);
+    });
+
+    test('has links that are equal when they are of the same thing and not otherwise', () {
+      expect(const ItemLink(1), const ItemLink(1));
+      expect(const ItemLink(1), isNot(const ItemLink(2)));
+      expect(const EventLink(eventId), const EventLink(eventId));
+      expect(const SectionLink(AppSection.bosses), const SectionLink(AppSection.bosses));
+      expect(const SectionLink(AppSection.bosses), isNot(const SectionLink(AppSection.daily)));
+      expect(const ItemLink(1), isNot(const SectionLink(AppSection.home)));
+      expect(<AppLink>{const ItemLink(1), const ItemLink(1), const EventLink(eventId)}.length, 2, reason: 'and in a set');
+    });
+
+    test('tells a number that is an event\'s', () {
+      expect(isEventId(eventId), isTrue);
+      expect(isEventId(eventId.toUpperCase()), isTrue);
+      for (final bad in [null, '', 'abc', '123', '${eventId}x', ' $eventId']) {
+        expect(isEventId(bad), isFalse, reason: '$bad');
+      }
+    });
+  });
+
+  group('what a link is behind', () {
+    test('is the page itself, the trading post for an item, the public events for an event', () {
+      expect(sectionForLink(const SectionLink(AppSection.wiki)), AppSection.wiki);
+      expect(sectionForLink(const ItemLink(5)), AppSection.trading);
+      expect(sectionForLink(const EventLink(eventId)), AppSection.publicEvents);
+    });
+
+    test('is what the app begins at: the page behind the link, and the link itself', () {
+      expect(initialLink(route: '/item/5'), const ItemLink(5));
+      expect(initialSection(route: '/item/5'), AppSection.trading);
+      expect(initialLink(route: '/event/$eventId'), const EventLink(eventId));
+      expect(initialSection(route: '/event/$eventId'), AppSection.publicEvents);
+      expect(initialLink(route: '/wiki'), const SectionLink(AppSection.wiki));
+      expect(initialSection(route: '/wiki'), AppSection.wiki);
+      expect(initialLink(route: '/nothing'), isNull);
+      expect(initialSection(route: '/nothing'), AppSection.home, reason: 'not a page is the home page');
+      expect(initialSection(route: '/item/0'), AppSection.home, reason: 'nor is an item that is none');
+      expect(initialLink(), isNull, reason: 'outside a browser the app begins at no link');
+    });
+  });
+
+  group('what a notification opens', () {
+    test('is the public event it is about, or the item', () {
+      expect(linkFromPushData({'open_event_id': eventId, 'kind': 'open_reminder'}), const EventLink(eventId));
+      expect(linkFromPushData({'open_event_id': eventId.toUpperCase(), 'kind': 'open_cancelled'}), const EventLink(eventId));
+      expect(linkFromPushData({'item_id': '19721', 'kind': 'price'}), const ItemLink(19721), reason: 'a notification carries text only');
+      expect(linkFromPushData({'item_id': 19721}), const ItemLink(19721));
+    });
+
+    test('is the event when it carries both, and nothing when it carries neither', () {
+      expect(linkFromPushData({'open_event_id': eventId, 'item_id': '5'}), const EventLink(eventId));
+      expect(linkFromPushData({'event_id': eventId, 'kind': 'reminder'}), isNull, reason: 'a guild\'s event is not a public one');
+      expect(linkFromPushData({'kind': 'promoted'}), isNull);
+      expect(linkFromPushData({}), isNull);
+      expect(linkFromPushData(null), isNull);
+    });
+
+    test('is nothing for a number that is none, so that a bad notification opens nothing', () {
+      expect(linkFromPushData({'open_event_id': 'abc'}), isNull);
+      expect(linkFromPushData({'open_event_id': ''}), isNull);
+      expect(linkFromPushData({'open_event_id': 5}), isNull);
+      expect(linkFromPushData({'item_id': '0'}), isNull);
+      expect(linkFromPushData({'item_id': '-3'}), isNull);
+      expect(linkFromPushData({'item_id': 'x'}), isNull);
+      expect(linkFromPushData({'open_event_id': 'abc', 'item_id': '7'}), const ItemLink(7), reason: 'what is good is used');
+    });
+  });
+
+  group('the address in the browser', () {
+    const home = AppSection.home;
+
+    test('is what is open over the page, or else a link not opened yet, or else the page', () {
+      expect(currentAddress(section: AppSection.wiki), '/wiki');
+      expect(currentAddress(section: AppSection.wiki, pending: const ItemLink(5)), '/item/5');
+      expect(currentAddress(section: AppSection.wiki, open: const EventLink(eventId)), '/event/$eventId');
+      expect(currentAddress(section: AppSection.wiki, open: const ItemLink(1), pending: const ItemLink(2)), '/item/1');
+      expect(currentAddress(section: home), '/');
+    });
+  });
+
+  group('a link that is open over the page', () {
+    final calls = <Map<dynamic, dynamic>>[];
+    late ProviderContainer container;
+
+    setUp(() {
+      calls.clear();
+      container = ProviderContainer();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
+        return null;
+      });
+    });
+
+    tearDown(() {
+      container.dispose();
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.navigation, null);
+    });
+
+    test('is the open one while it is, and its address is a new place in the history', () {
+      final closed = linkOpened(container, const ItemLink(19721), announce: true, web: true);
+      expect(container.read(openLinkProvider), const ItemLink(19721));
+      expect(calls.single['uri'], '/item/19721');
+      expect(calls.single['replace'], false, reason: 'back goes back from it');
+      closed();
+    });
+
+    test('has no address put in the browser when it is one that was followed or that the app was opened with', () {
+      linkOpened(container, const ItemLink(5), announce: false, web: true);
+      expect(container.read(openLinkProvider), const ItemLink(5), reason: 'it is open all the same');
+      expect(calls, isEmpty, reason: 'the browser is already there');
+    });
+
+    test('has no address outside a browser, which has none', () {
+      final closed = linkOpened(container, const ItemLink(5), announce: true, web: false);
+      expect(container.read(openLinkProvider), const ItemLink(5));
+      closed();
+      expect(container.read(openLinkProvider), isNull);
+      expect(calls, isEmpty);
+    });
+
+    test('puts the address of the page back in place of its own when it is closed', () {
+      container.read(sectionProvider.notifier).state = AppSection.wiki;
+      final closed = linkOpened(container, const EventLink(eventId), announce: true, web: true);
+      calls.clear();
+      closed();
+      expect(container.read(openLinkProvider), isNull);
+      expect(calls.single['uri'], '/wiki');
+      expect(calls.single['replace'], true, reason: 'in place, not a new place in the history');
+    });
+
+    test('puts the address of a link not opened yet back, when that is what the browser has to say', () {
+      container.read(pendingLinkProvider.notifier).state = const ItemLink(9);
+      final closed = linkOpened(container, const ItemLink(5), announce: false, web: true);
+      closed();
+      expect(calls.single['uri'], '/item/9');
+    });
+
+    test('is not closed by the closing of one that was open before it: the browser went from one link to another', () {
+      final first = linkOpened(container, const ItemLink(1), announce: false, web: true);
+      final second = linkOpened(container, const ItemLink(2), announce: false, web: true);
+      calls.clear();
+      first();
+      expect(container.read(openLinkProvider), const ItemLink(2), reason: 'the second is still open');
+      expect(calls, isEmpty);
+      second();
+      expect(container.read(openLinkProvider), isNull);
+      expect(calls.length, 1);
+    });
+
+    test('is closed once, closing it again does nothing', () {
+      final closed = linkOpened(container, const ItemLink(1), announce: false, web: true);
+      closed();
+      calls.clear();
+      closed();
+      expect(calls, isEmpty);
+      expect(container.read(openLinkProvider), isNull);
+    });
+
+    test('is forgotten without the address being touched when the browser itself has closed it', () {
+      final closed = linkOpened(container, const ItemLink(1), announce: true, web: true);
+      calls.clear();
+      // the app closes it for a browser that went back: it forgets it first, and the sheet's own closing then finds nothing to do
+      container.read(openLinkProvider.notifier).state = null;
+      closed();
+      expect(calls, isEmpty);
+    });
+  });
+
+  group('the browser going to a link', () {
+    test('opens an item or an event, and no page is shown', () {
+      final shown = <AppSection>[];
+      final opened = <AppLink>[];
+      expect(followBrowser(Uri.parse('/item/19721'), AppSection.home, shown.add, open: opened.add), isTrue);
+      expect(followBrowser(Uri.parse('/event/$eventId'), AppSection.home, shown.add, open: opened.add), isTrue);
+      expect(opened, [const ItemLink(19721), const EventLink(eventId)]);
+      expect(shown, isEmpty);
+    });
+
+    test('does not open one that is none, and is not taken for a page to push either', () {
+      final opened = <AppLink>[];
+      expect(followBrowser(Uri.parse('/item/0'), AppSection.home, (_) {}, open: opened.add), isTrue);
+      expect(followBrowser(Uri.parse('/event/nope'), AppSection.home, (_) {}, open: opened.add), isTrue);
+      expect(opened, isEmpty);
+    });
+
+    test('goes back from a link to the page it was opened over by closing it', () {
+      var closed = 0;
+      final shown = <AppSection>[];
+      expect(followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++), isTrue);
+      expect(closed, 1);
+      expect(shown, isEmpty, reason: 'it is the page that is shown already');
+    });
+
+    test('does not close anything when nothing is open, and shows a page that is another', () {
+      var closed = 0;
+      final shown = <AppSection>[];
+      followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: false, close: () => closed++);
+      expect(closed, 0);
+      followBrowser(Uri.parse('/wiki'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++);
+      expect(shown, [AppSection.wiki]);
+      expect(closed, 0, reason: 'showing a page closes what is over it by itself');
+      expect(sectionFromBrowser, AppSection.wiki);
+      sectionFromBrowser = null;
+    });
+
+    test('needs no callbacks to be safe, a link or a page', () {
+      expect(followBrowser(Uri.parse('/item/5'), AppSection.home, (_) {}), isTrue);
+      expect(followBrowser(Uri.parse('/trading'), AppSection.trading, (_) {}, linkIsOpen: true), isTrue);
     });
   });
 }

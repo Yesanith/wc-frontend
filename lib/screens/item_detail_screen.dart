@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/account.dart';
 import '../state/crafting.dart';
 import '../state/items.dart';
+import '../state/navigation.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -19,7 +20,12 @@ import 'trading_screen.dart';
 /// everything about one item, in a sheet that slides up over the page.
 /// [instance] is the equipment entry it came from, which carries the chosen
 /// stats, runes, sigils and infusions
-void showItemDetails(BuildContext context, int itemId, {Json? instance}) {
+///
+/// a plain item has an address of its own (/item/19721), which is in the browser while the sheet is open and is what the sheet's button copies. one that is an
+/// item of a character, with its chosen stats and upgrades, is not the item and has none. [announce] is false for a link that was followed
+void showItemDetails(BuildContext context, int itemId, {Json? instance, bool announce = true}) {
+  final closed =
+      instance == null ? linkOpened(ProviderScope.containerOf(context, listen: false), ItemLink(itemId), announce: announce) : null;
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -34,7 +40,7 @@ void showItemDetails(BuildContext context, int itemId, {Json? instance}) {
       maxChildSize: 0.95,
       builder: (context, scroll) => ItemDetails(itemId: itemId, instance: instance, scroll: scroll),
     ),
-  );
+  ).whenComplete(() => closed?.call());
 }
 
 class ItemDetails extends ConsumerStatefulWidget {
@@ -112,6 +118,18 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                   showToast(context, '${s.t('copied')} $chatLink');
                 },
                 icon: const Icon(Icons.link_rounded),
+              ),
+            ],
+            // the address of this page, which opens the app at it
+            if (instance == null) ...[
+              const SizedBox(width: 8),
+              IconButton.outlined(
+                tooltip: s.t('copy_page_link'),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: linkUrl(ItemLink(itemId))));
+                  showToast(context, s.t('copied'));
+                },
+                icon: const Icon(Icons.share_outlined),
               ),
             ],
           ],

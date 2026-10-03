@@ -418,6 +418,7 @@ const zhStrings = <String, String>{
   'chat_code_note': '根据技能面板 ID 生成，请在游戏中核对',
   'copy': '复制',
   'copied': '已复制。',
+  'copy_page_link': '复制此页面的链接',
   'specializations': '特性专精',
   'skill_bar': '技能栏',
   'heal_skill': '治疗',

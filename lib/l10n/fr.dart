@@ -454,6 +454,7 @@ const frStrings = <String, String>{
   'chat_code_note': 'Généré depuis les ids de palette, à vérifier en jeu',
   'copy': 'Copier',
   'copied': 'Copié.',
+  'copy_page_link': 'Copier le lien de cette page',
   'specializations': 'Spécialisations',
   'skill_bar': 'Barre de compétences',
   'heal_skill': 'SOIN',

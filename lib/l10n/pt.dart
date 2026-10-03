@@ -451,6 +451,7 @@ const ptStrings = <String, String>{
   'chat_code_note': 'Gerado a partir dos ids de paleta, confira no jogo',
   'copy': 'Copiar',
   'copied': 'Copiado.',
+  'copy_page_link': 'Copiar link desta página',
   'specializations': 'Especializações',
   'skill_bar': 'Barra de habilidades',
   'heal_skill': 'CURA',

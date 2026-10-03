@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
+import '../state/navigation.dart';
 import '../state/open_events.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -12,6 +13,15 @@ import '../widgets/responsive.dart';
 import 'guild_events_screen.dart' show activityIcon, eventWhen, statusColor;
 import 'open_event_form_screen.dart';
 import 'open_event_labels.dart';
+
+/// opens a public event's page over the page the app is at. it has an address of its own (/event/<number>), in the browser while it is open, and its button copies it.
+/// [announce] is false for a link that was followed or that the app was opened with
+Future<void> showOpenEvent(BuildContext context, String eventId, {bool announce = true}) {
+  final closed = linkOpened(ProviderScope.containerOf(context, listen: false), EventLink(eventId), announce: announce);
+  return Navigator.of(context)
+      .push(MaterialPageRoute<void>(builder: (_) => OpenEventScreen(eventId: eventId)))
+      .whenComplete(closed);
+}
 
 class OpenEventScreen extends ConsumerWidget {
   const OpenEventScreen({super.key, required this.eventId});
@@ -24,7 +34,19 @@ class OpenEventScreen extends ConsumerWidget {
     final event = ref.watch(openEventProvider(eventId));
     return Scaffold(
       appBar: AppBar(
-          title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis)),
+          title: Text(event.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis),
+          actions: [
+            // the address of this event, which opens the app at it
+            if (isEventId(eventId))
+              IconButton(
+                tooltip: s.t('copy_page_link'),
+                icon: const Icon(Icons.share_outlined),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: linkUrl(EventLink(eventId))));
+                  showToast(context, s.t('copied'));
+                },
+              ),
+          ]),
       body: AsyncView<OpenEvent?>(
         value: event,
         onRetry: () => ref.invalidate(openEventProvider(eventId)),
