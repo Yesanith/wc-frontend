@@ -135,13 +135,16 @@ class FunctionLogsPage {
 
   static FunctionLogsPage parse(Object? raw) {
     final map = raw is Map ? raw : const {};
+    // a part that is not a list is none, which a cast would make a failure
+    final rows = map['rows'];
+    final functions = map['functions'];
     return FunctionLogsPage(
       rows: [
-        for (final r in (map['rows'] as List? ?? const []))
+        for (final r in (rows is List ? rows : const []))
           if (FunctionLogLine.parse(r) case final line?) line,
       ],
       functions: [
-        for (final f in (map['functions'] as List? ?? const []))
+        for (final f in (functions is List ? functions : const []))
           if (FunctionStat.parse(f) case final stat?) stat,
       ],
       total: asInt(map['total']),
