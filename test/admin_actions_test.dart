@@ -22,7 +22,14 @@ const _jobs = [
 /// a database that does what it is told to and says what it was told to say
 class FakeBackend implements AdminBackend {
   FakeBackend(
-      {this.results = const {}, this.answers = const [], this.pageOf, this.failWith, AdminAlerts? alerts, this.logsOf, this.platformOf, this.keysOf})
+      {this.results = const {},
+      this.answers = const [],
+      this.pageOf,
+      this.failWith,
+      AdminAlerts? alerts,
+      this.logsOf,
+      this.platformOf,
+      this.keysOf})
       : alertsValue = alerts ?? const AdminAlerts({'webhook_set': false, 'problems_now': [], 'recent': []});
 
   final Map<String, JobResult> results;
