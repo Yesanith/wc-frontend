@@ -20,6 +20,7 @@ enum AppSection {
   guilds,
   guildEvents,
   publicEvents,
+  recruitment,
   trading,
   recipes,
   maps,
@@ -44,6 +45,7 @@ const sectionPaths = <AppSection, String>{
   AppSection.guilds: '/guilds',
   AppSection.guildEvents: '/guild-events',
   AppSection.publicEvents: '/events',
+  AppSection.recruitment: '/recruitment',
   AppSection.trading: '/trading',
   AppSection.recipes: '/recipes',
   AppSection.maps: '/map',
@@ -119,6 +121,19 @@ final class EventLink extends AppLink {
   int get hashCode => Object.hash('event', eventId);
 }
 
+final class RecruitLink extends AppLink {
+  const RecruitLink(this.guildId);
+
+  /// the number of the guild in the app, which is a UUID: its recruitment page is at its address
+  final String guildId;
+
+  @override
+  bool operator ==(Object other) => other is RecruitLink && other.guildId == guildId;
+
+  @override
+  int get hashCode => Object.hash('recruit', guildId);
+}
+
 final _uuid = RegExp(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$');
 
 /// whether a text is the number of a public event, and so may be put in an address and be asked of the database
@@ -134,6 +149,8 @@ AppLink? linkFromPath(String? path) {
   }
   final event = RegExp(r'^/event/([0-9a-f-]{36})$').firstMatch(p);
   if (event != null) return isEventId(event.group(1)) ? EventLink(event.group(1)!) : null;
+  final recruit = RegExp(r'^/recruit/([0-9a-f-]{36})$').firstMatch(p);
+  if (recruit != null) return isEventId(recruit.group(1)) ? RecruitLink(recruit.group(1)!) : null;
   final section = sectionFromPath(path);
   return section == null ? null : SectionLink(section);
 }
@@ -143,6 +160,7 @@ String linkPath(AppLink link) => switch (link) {
       SectionLink(:final section) => sectionPath(section),
       ItemLink(:final itemId) => '/item/$itemId',
       EventLink(:final eventId) => '/event/${eventId.toLowerCase()}',
+      RecruitLink(:final guildId) => '/recruit/${guildId.toLowerCase()}',
     };
 
 /// where the app is on the web. a link to it is this, and the address of the link after the #
@@ -166,6 +184,7 @@ AppSection sectionForLink(AppLink link) => switch (link) {
       SectionLink(:final section) => section,
       ItemLink() => AppSection.trading,
       EventLink() => AppSection.publicEvents,
+      RecruitLink() => AppSection.recruitment,
     };
 
 /// what the app was opened at: the address in the browser, nothing anywhere else and when it is not an address of the app
@@ -277,6 +296,8 @@ bool followBrowser(
     case final ItemLink link:
       open?.call(link);
     case final EventLink link:
+      open?.call(link);
+    case final RecruitLink link:
       open?.call(link);
     case null:
       break;
