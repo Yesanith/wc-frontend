@@ -4,8 +4,7 @@ part of '../gw2_api.dart';
 extension Gw2GuildWvwApi on Gw2Api {
   /// guild endpoints. most need the guilds permission and some also
   /// require the account to lead the guild
-  Future<Json> guild(String id) async =>
-      _object(await cachedGet('/guild/$id', ttl: const Duration(hours: 6)));
+  Future<Json> guild(String id) async => _object(await cachedGet('/guild/$id', ttl: const Duration(hours: 6)));
 
   Future<List<Json>> guildStash(String id) async => _list(await cachedGet('/guild/$id/stash'));
 
