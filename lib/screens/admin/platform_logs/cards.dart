@@ -16,7 +16,7 @@ class _PlatformCardState extends State<_PlatformCard> {
   @override
   Widget build(BuildContext context) {
     final line = widget.line;
-    final color = _levelColor(line.level);
+    final color = logLevelColor(line.level);
     final attrs = line.attrsText;
     // a request is told by its line, a line of the console by what it said
     final text = line.isRequest ? line.requestLine : line.message;
