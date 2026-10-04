@@ -60,16 +60,16 @@ class VaultShopScreen extends ConsumerWidget {
                     if (season != null) Text('${season['title'] ?? ''}', style: display(17)),
                     if (end != null)
                       Text(s.t('season_ends', {'d': '${end.day}.${end.month}.${end.year}'}),
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
                           child: Text(s.t('astral_acclaim'),
-                              style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                              style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                         ),
                         Text(fmtInt(balance),
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
                       ],
                     ),
                   ],

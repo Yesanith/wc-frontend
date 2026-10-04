@@ -38,7 +38,7 @@ class AdminGuildsTab extends ConsumerWidget {
             ]),
             const SizedBox(height: 10),
             if (h.problem('guilds') != null)
-              Panel(child: Text(h.problem('guilds')!, style: const TextStyle(color: AppColors.amber)))
+              Panel(child: Text(h.problem('guilds')!, style: TextStyle(color: AppColors.amber)))
             else
               _GuildList(guilds, now),
           ],
@@ -57,7 +57,7 @@ class _GuildList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (guilds.isEmpty) {
-      return const Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
+      return Panel(child: Text('No guild uses the app yet.', style: TextStyle(color: AppColors.muted)));
     }
     return Panel(
       child: Column(
@@ -83,7 +83,7 @@ class _GuildList extends StatelessWidget {
                             else
                               'not read by a leader',
                           ].join(' · '),
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35),
                         ),
                       ],
                     ),
@@ -91,10 +91,10 @@ class _GuildList extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('${asInt(g['events'])} events', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                      Text('${asInt(g['events'])} events', style: TextStyle(fontSize: 12, color: AppColors.gold)),
                       Text(
                         '${asInt(g['events_30d'])} in 30 d${g['discord'] == true ? ' · Discord' : ''}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                        style: TextStyle(fontSize: 11, color: AppColors.hint),
                       ),
                     ],
                   ),

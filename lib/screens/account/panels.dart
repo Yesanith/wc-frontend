@@ -21,16 +21,16 @@ class _AccountCounters extends ConsumerWidget {
         children: [
           Kicker(s.t('account_progress').toUpperCase()),
           const SizedBox(height: 4),
-          Text(s.t('account_progress_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.muted)),
+          Text(s.t('account_progress_note'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.muted)),
           const SizedBox(height: 8),
           for (final (label, value) in rows)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                  Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                   Text(fmtInt(value),
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ],
               ),
             ),
@@ -53,7 +53,7 @@ class _WealthPanel extends ConsumerWidget {
     if (points.length < 2) {
       return Panel(
         child:
-            Text(s.t('wealth_collecting'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            Text(s.t('wealth_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
       );
     }
     final week = changeOver(points, 7, (p) => p.coins);
@@ -62,10 +62,10 @@ class _WealthPanel extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+              Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
               const SizedBox(height: 2),
               if (value == null)
-                const Text('-', style: TextStyle(color: AppColors.muted))
+                Text('-', style: TextStyle(color: AppColors.muted))
               else
                 Row(
                   children: [

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/strings.dart';
+import '../theme.dart' show AppPalette;
 
 /// overridden in main() once SharedPreferences is loaded
 final prefsProvider = Provider<SharedPreferences>((ref) => throw UnimplementedError());
@@ -26,6 +27,34 @@ class LangNotifier extends Notifier<AppLang> {
 }
 
 final langProvider = NotifierProvider<LangNotifier, AppLang>(LangNotifier.new);
+
+/// which look the app has: the palette of the day, the one of the night, or
+/// whichever the phone is set to
+enum LookMode { system, light, dark }
+
+class LookNotifier extends Notifier<LookMode> {
+  static const _key = 'look';
+
+  @override
+  LookMode build() {
+    final saved = ref.read(prefsProvider).getString(_key);
+    return LookMode.values.where((m) => m.name == saved).firstOrNull ?? LookMode.system;
+  }
+
+  Future<void> set(LookMode mode) async {
+    state = mode;
+    await ref.read(prefsProvider).setString(_key, mode.name);
+  }
+}
+
+final lookProvider = NotifierProvider<LookNotifier, LookMode>(LookNotifier.new);
+
+/// the palette for a choice, which for "system" is read from the phone's own brightness
+AppPalette paletteFor(LookMode mode, Brightness system) => switch (mode) {
+      LookMode.light => AppPalette.light,
+      LookMode.dark => AppPalette.night,
+      LookMode.system => system == Brightness.dark ? AppPalette.night : AppPalette.light,
+    };
 
 final stringsProvider = Provider<S>((ref) => S(ref.watch(langProvider)));
 

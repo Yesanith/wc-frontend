@@ -46,7 +46,7 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
           if (left == null || right == null) {
             return Padding(
               padding: const EdgeInsets.all(24),
-              child: Center(child: Text(s.t('need_two_characters'), style: const TextStyle(color: AppColors.muted))),
+              child: Center(child: Text(s.t('need_two_characters'), style: TextStyle(color: AppColors.muted))),
             );
           }
 
@@ -161,7 +161,7 @@ class _CompareRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
           const SizedBox(height: 4),
           Row(
@@ -217,13 +217,13 @@ class _GearSummary extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text(rarity, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                      child: Text(rarity, style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                     ),
                     Text('${counts[rarity]}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800)),
                   ],
                 ),
               ),
-          if (counts.isEmpty) const Text('-', style: TextStyle(color: AppColors.muted)),
+          if (counts.isEmpty) Text('-', style: TextStyle(color: AppColors.muted)),
         ],
       ),
     );

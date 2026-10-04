@@ -68,7 +68,7 @@ class DailyScreen extends ConsumerWidget {
               visualDensity: VisualDensity.compact,
               onPressed: () =>
                   Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
-              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+              icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
             ),
             child: AsyncView(
               value: vault,
@@ -156,7 +156,7 @@ class _ChecklistGrid extends StatelessWidget {
                       Text(t.label,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 11, color: AppColors.muted)),
                       Text(t.value ?? '…', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                     ],
                   ),
@@ -213,7 +213,7 @@ class FoldSection extends StatelessWidget {
               ],
               Expanded(child: Text(title, style: display(16), maxLines: 1, overflow: TextOverflow.ellipsis)),
               if (note != null)
-                Text(note, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                Text(note, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
               if (extra != null) extra,
             ],
           ),
@@ -254,7 +254,7 @@ class PeriodicCategoryList extends StatelessWidget {
                         ),
                       ),
                       if (r.done)
-                        const Positioned(
+                        Positioned(
                           right: -4,
                           bottom: -4,
                           child: Icon(Icons.check_circle, size: 14, color: AppColors.green),
@@ -272,7 +272,7 @@ class PeriodicCategoryList extends StatelessWidget {
                       )),
                 ),
                 if (!r.done && r.max > 0 && r.current > 0)
-                  Text('${r.current}/${r.max}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  Text('${r.current}/${r.max}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
           ),
@@ -293,10 +293,10 @@ class ResetBanner extends StatelessWidget {
     return Panel(
       child: Row(
         children: [
-          const Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 20),
+          Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 20),
           const SizedBox(width: 10),
-          Expanded(child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
-          Text(timeUntil(at), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+          Expanded(child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
+          Text(timeUntil(at), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
         ],
       ),
     );
@@ -321,7 +321,7 @@ class ChecklistRow extends StatelessWidget {
           Icon(complete ? Icons.check_circle : icon, size: 18, color: complete ? AppColors.green : AppColors.gold),
           const SizedBox(width: 10),
           Expanded(child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
-          Text(value ?? '…', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+          Text(value ?? '…', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
         ],
       ),
     );
@@ -337,7 +337,7 @@ class _GameIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final u = url;
-    if (u == null || u.isEmpty) return const Icon(Icons.emoji_events_outlined, size: 20, color: AppColors.gold);
+    if (u == null || u.isEmpty) return Icon(Icons.emoji_events_outlined, size: 20, color: AppColors.gold);
     return ClipRRect(borderRadius: BorderRadius.circular(4), child: CachedIcon(url: u, fit: BoxFit.contain));
   }
 }
@@ -350,7 +350,7 @@ class VaultIcon extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final url = ref.watch(astralAcclaimIconProvider).valueOrNull;
     return url == null
-        ? const Icon(Icons.auto_awesome, size: 20, color: AppColors.gold)
+        ? Icon(Icons.auto_awesome, size: 20, color: AppColors.gold)
         : CachedIcon(url: url, fit: BoxFit.contain);
   }
 }

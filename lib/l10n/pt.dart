@@ -632,6 +632,10 @@ const ptStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} itens',
   'language': 'Idioma',
+  'look': 'Aparência',
+  'look_system': 'Como o dispositivo',
+  'look_light': 'Claro',
+  'look_dark': 'Escuro',
   'alert_push_hint': 'Com login e notificações permitidas, você é avisado também com o app fechado.',
   'landing_title': 'Seu companheiro de Guild Wars 2',
   'landing_sub':

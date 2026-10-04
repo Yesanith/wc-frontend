@@ -83,7 +83,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         if (b.isEmpty) {
           return Padding(
             padding: const EdgeInsets.all(24),
-            child: Text(s.t('no_recipe_data'), style: const TextStyle(color: AppColors.muted, height: 1.5)),
+            child: Text(s.t('no_recipe_data'), style: TextStyle(color: AppColors.muted, height: 1.5)),
           );
         }
 
@@ -114,7 +114,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 onChanged: _onChanged,
                 decoration: fieldDecoration(
                   s.t('search_recipes'),
-                  prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                  prefixIcon: Icon(Icons.search, color: AppColors.muted),
                 ),
               ),
             ),
@@ -162,7 +162,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   s.t('recipes_count', {'n': fmtInt(total)}),
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
               ),
             ),
@@ -247,10 +247,10 @@ class _RecipeRow extends ConsumerWidget {
             ),
           ),
           if (learned) ...[
-            const Icon(Icons.check_circle, size: 18, color: AppColors.green),
+            Icon(Icons.check_circle, size: 18, color: AppColors.green),
             const SizedBox(width: 4),
           ],
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

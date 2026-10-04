@@ -26,7 +26,7 @@ class _VaultState extends ConsumerState<_Vault> {
                 selectedBackgroundColor: AppColors.gold.withValues(alpha: 0.18),
                 selectedForegroundColor: AppColors.text,
                 foregroundColor: AppColors.muted,
-                side: const BorderSide(color: AppColors.line),
+                side: BorderSide(color: AppColors.line),
               ),
               segments: [
                 ButtonSegment(value: 'daily', label: Text(s.t('vault_daily'))),
@@ -81,7 +81,7 @@ class _VaultState extends ConsumerState<_Vault> {
                                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 4),
                             Text(s.t('acclaim_left', {'n': fmtInt(left)}),
-                                style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                                style: TextStyle(fontSize: 12, color: AppColors.muted)),
                           ],
                         ),
                       ),
@@ -148,13 +148,13 @@ class _Objective extends StatelessWidget {
                 color: claimed ? AppColors.green : AppColors.amber, size: 20)
           else
             Text('${asInt(o['progress_current'])}/${asInt(o['progress_complete'])}',
-                style: const TextStyle(fontSize: 12, color: AppColors.muted, fontFeatures: _tabular)),
+                style: TextStyle(fontSize: 12, color: AppColors.muted, fontFeatures: _tabular)),
           const SizedBox(width: 8),
           SizedBox(
             width: 34,
             child: Text('${asInt(o['acclaim'])}',
                 textAlign: TextAlign.end,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
           ),
         ],
       ),

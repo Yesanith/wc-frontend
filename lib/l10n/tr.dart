@@ -628,6 +628,10 @@ const trStrings = <String, String>{
   'hours_short': 'sa',
   'n_items': '{n} item',
   'language': 'Dil',
+  'look': 'Görünüm',
+  'look_system': 'Cihazla aynı',
+  'look_light': 'Açık',
+  'look_dark': 'Koyu',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':

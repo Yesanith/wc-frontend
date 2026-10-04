@@ -633,6 +633,10 @@ const esStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} objetos',
   'language': 'Idioma',
+  'look': 'Apariencia',
+  'look_system': 'Como el dispositivo',
+  'look_light': 'Claro',
+  'look_dark': 'Oscuro',
   'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
   'landing_sub':

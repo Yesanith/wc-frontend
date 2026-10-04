@@ -51,7 +51,7 @@ class _FloorButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.stairs_outlined, size: 18, color: AppColors.gold),
+            Icon(Icons.stairs_outlined, size: 18, color: AppColors.gold),
             const SizedBox(width: 6),
             Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           ],
@@ -92,7 +92,7 @@ class _SearchBox extends StatelessWidget {
             controller: controller,
             focusNode: focus,
             onChanged: onChanged,
-            decoration: fieldDecoration(hint, prefixIcon: const Icon(Icons.search, color: AppColors.muted)),
+            decoration: fieldDecoration(hint, prefixIcon: Icon(Icons.search, color: AppColors.muted)),
           ),
         ),
         if (results.isNotEmpty)
@@ -115,7 +115,7 @@ class _SearchBox extends StatelessWidget {
                   title: Text(m.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                   subtitle: Text(
                     m.kind == 'map' || m.kind == 'region' ? kindLabel(m.kind) : '${kindLabel(m.kind)} · ${m.mapName}',
-                    style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                    style: TextStyle(fontSize: 11, color: AppColors.muted),
                   ),
                   onTap: () => onPick(m),
                 );

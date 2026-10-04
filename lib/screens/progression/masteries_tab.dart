@@ -32,7 +32,7 @@ class _MasteriesTab extends ConsumerWidget {
                                 style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                           ),
                           Text(s.t('points_spent', {'a': asInt(p['spent']), 'b': asInt(p['earned'])}),
-                              style: const TextStyle(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w800)),
+                              style: TextStyle(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w800)),
                         ],
                       ),
                     ),
@@ -133,7 +133,7 @@ class _MasteryTile extends StatelessWidget {
           for (var i = 0; i < row.levels.length; i++) _MasteryLevelRow(row.levels[i], done: i < row.level),
           if (!row.started && row.requirement.isNotEmpty) ...[
             const SizedBox(height: 6),
-            Text(row.requirement, style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+            Text(row.requirement, style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
           ],
         ],
       ),

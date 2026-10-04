@@ -64,7 +64,7 @@ class _Toast extends StatelessWidget {
               child: Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.text, fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppColors.text, fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ),
           ),

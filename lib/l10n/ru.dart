@@ -630,6 +630,10 @@ const ruStrings = <String, String>{
   'hours_short': 'ч',
   'n_items': 'Предметов: {n}',
   'language': 'Язык',
+  'look': 'Оформление',
+  'look_system': 'Как в системе',
+  'look_light': 'Светлая',
+  'look_dark': 'Тёмная',
   'alert_push_hint': 'Если вы вошли и разрешили уведомления, вы узнаете об этом и при закрытом приложении.',
   'landing_title': 'Ваш помощник по Guild Wars 2',
   'landing_sub':

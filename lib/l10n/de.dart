@@ -641,6 +641,10 @@ const deStrings = <String, String>{
   'hours_short': 'Std.',
   'n_items': '{n} Gegenstände',
   'language': 'Sprache',
+  'look': 'Darstellung',
+  'look_system': 'Wie das Gerät',
+  'look_light': 'Hell',
+  'look_dark': 'Dunkel',
   'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':

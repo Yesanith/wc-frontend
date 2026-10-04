@@ -29,7 +29,7 @@ class _SpecCard extends StatelessWidget {
                   height: 36,
                   child: info?['icon'] is String
                       ? CachedIcon(url: info!['icon'] as String)
-                      : const ColoredBox(color: AppColors.surface2),
+                      : ColoredBox(color: AppColors.surface2),
                 ),
               ),
               const SizedBox(width: 10),
@@ -41,7 +41,7 @@ class _SpecCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: AppColors.gold),
                   ),
-                  child: const Text('ELITE',
+                  child: Text('ELITE',
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ),
             ],
@@ -86,7 +86,7 @@ class _MinorTrait extends StatelessWidget {
           child: Text((trait?['name'] as String?) ?? '-',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppColors.muted)),
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppColors.muted)),
         ),
       ],
     );
@@ -215,7 +215,7 @@ class _PetRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(label,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                 Text((pet?['name'] as String?) ?? '-',
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),

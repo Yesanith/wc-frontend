@@ -23,7 +23,7 @@ class Ring extends StatelessWidget {
         duration: const Duration(milliseconds: 700),
         curve: Curves.easeOutCubic,
         builder: (context, v, _) => CustomPaint(
-          painter: _RingPainter(v, stroke, AppColors.track, colors ?? const [AppColors.gold, AppColors.ember]),
+          painter: _RingPainter(v, stroke, AppColors.track, colors ?? [AppColors.gold, AppColors.ember]),
           child: Center(child: child),
         ),
       ),
@@ -91,13 +91,13 @@ class Meter extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            const ColoredBox(color: AppColors.track),
+            ColoredBox(color: AppColors.track),
             FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: value.clamp(0, 1).toDouble(),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  gradient: color == null ? const LinearGradient(colors: [AppColors.gold, AppColors.ember]) : null,
+                  gradient: color == null ? LinearGradient(colors: [AppColors.gold, AppColors.ember]) : null,
                   color: color,
                   borderRadius: BorderRadius.circular(height),
                 ),
@@ -127,7 +127,7 @@ class Eyebrow extends StatelessWidget {
             child: Text(
               text.toUpperCase(),
               style:
-                  const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
+                  TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
             ),
           ),
           if (trailing != null) trailing!,

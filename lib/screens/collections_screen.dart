@@ -19,7 +19,7 @@ class CollectionsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        Text(s.t('collections_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+        Text(s.t('collections_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
         const SizedBox(height: 12),
         CardWrap(minWidth: 400, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
       ],
@@ -54,19 +54,19 @@ class _CollectionTile extends ConsumerWidget {
               Expanded(child: Text(s.t('col_${kind.key}'), style: display(18))),
               if (p != null)
                 Text('${(p.ratio * 100).round()}%',
-                    style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
-              if (kind.hasDetails) const Icon(Icons.chevron_right, color: AppColors.chevron),
+                    style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
+              if (kind.hasDetails) Icon(Icons.chevron_right, color: AppColors.chevron),
             ],
           ),
           const SizedBox(height: 4),
           if (progress.hasError)
             Text(s.t('needs_permission', {'p': 'unlocks'}),
-                style: const TextStyle(fontSize: 12, color: AppColors.muted))
+                style: TextStyle(fontSize: 12, color: AppColors.muted))
           else if (p == null)
-            const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+            LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
           else ...[
             Text('${fmtInt(p.unlocked)} / ${fmtInt(p.total)}',
-                style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                style: TextStyle(fontSize: 12, color: AppColors.muted)),
             const SizedBox(height: 10),
             Bar(value: p.ratio, color: p.ratio >= 1 ? AppColors.green : AppColors.gold),
           ],
@@ -147,7 +147,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                       onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
                       decoration: fieldDecoration(
                         s.t('search'),
-                        prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                        prefixIcon: Icon(Icons.search, color: AppColors.muted),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -187,7 +187,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                       alignment: Alignment.centerLeft,
                       child: Text(
                         '${fmtInt(shown)} / ${fmtInt(list.length)}',
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                        style: TextStyle(fontSize: 12, color: AppColors.muted),
                       ),
                     ),
                   ],
@@ -227,7 +227,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                                   ),
                                 ),
                                 if (e.subtype != null)
-                                  Text(e.subtype!, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                                  Text(e.subtype!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
                               ],
                             ),
                           ),

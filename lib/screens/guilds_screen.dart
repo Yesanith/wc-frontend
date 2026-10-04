@@ -31,14 +31,14 @@ class GuildsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
-        Text(s.t('guilds_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+        Text(s.t('guilds_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
         const SizedBox(height: 12),
         AsyncView<List<String>>(
           value: ids,
           onRetry: () => ref.invalidate(guildIdsProvider),
           builder: (list) {
             if (list.isEmpty) {
-              return Panel(child: Text(s.t('no_guilds'), style: const TextStyle(color: AppColors.muted)));
+              return Panel(child: Text(s.t('no_guilds'), style: TextStyle(color: AppColors.muted)));
             }
             return Column(
               children: [
@@ -78,15 +78,15 @@ class _GuildCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(name, style: display(18)),
-                if (tag.isNotEmpty) Text('[$tag]', style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+                if (tag.isNotEmpty) Text('[$tag]', style: TextStyle(fontSize: 13, color: AppColors.gold)),
               ],
             ),
           ),
           if (asInt(guild?['level']) > 0)
             Text('${asInt(guild?['level'])}',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
           const SizedBox(width: 6),
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

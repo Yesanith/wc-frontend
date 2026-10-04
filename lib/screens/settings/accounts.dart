@@ -48,16 +48,16 @@ class _AccountsPanel extends ConsumerWidget {
               title: Text(keys[i].name.isEmpty ? s.t('unnamed_account') : keys[i].name,
                   style: const TextStyle(fontWeight: FontWeight.w700)),
               subtitle: Text(_mask(keys[i].key),
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.muted)),
+                  style: TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.muted)),
               trailing: IconButton(
                 tooltip: s.t('remove_key'),
                 onPressed: () => _remove(context, ref, i, keys[i].name),
-                icon: const Icon(Icons.delete_outline, size: 20, color: AppColors.muted),
+                icon: Icon(Icons.delete_outline, size: 20, color: AppColors.muted),
               ),
             ),
           const SizedBox(height: 4),
           if (keys.isEmpty)
-            Text(s.t('guest_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
+            Text(s.t('guest_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
           else
             AsyncView<Json>(
               value: info,

@@ -47,7 +47,7 @@ class ItemRow extends StatelessWidget {
                     maxLines: titleLines,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                if (sub != null) Text(sub, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                if (sub != null) Text(sub, style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
           ),

@@ -48,7 +48,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
               padding: const EdgeInsets.all(24),
               child: Center(
                 child: Text(s.t('no_recipe'),
-                    textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+                    textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.5)),
               ),
             );
           }
@@ -77,16 +77,16 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(s.t('quantity'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                      child: Text(s.t('quantity'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                     ),
                     IconButton(
                       onPressed: _quantity <= 1 ? null : () => setState(() => _quantity--),
-                      icon: const Icon(Icons.remove_circle_outline, color: AppColors.gold),
+                      icon: Icon(Icons.remove_circle_outline, color: AppColors.gold),
                     ),
                     Text('$_quantity', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                     IconButton(
                       onPressed: () => setState(() => _quantity++),
-                      icon: const Icon(Icons.add_circle_outline, color: AppColors.gold),
+                      icon: Icon(Icons.add_circle_outline, color: AppColors.gold),
                     ),
                   ],
                 ),
@@ -175,7 +175,7 @@ class _CostPanel extends ConsumerWidget {
             children: [
               Expanded(
                 child: Text(s.t('missing_materials_cost'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                    style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               CoinText(missingCost, size: 16),
             ],
@@ -184,7 +184,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('already_owned_value'), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                child: Text(s.t('already_owned_value'), style: TextStyle(fontSize: 13, color: AppColors.muted)),
               ),
               CoinText(ownedValue, size: 13),
             ],
@@ -193,7 +193,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('material_value'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                child: Text(s.t('material_value'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               CoinText(materialValue, size: 16),
             ],
@@ -201,16 +201,16 @@ class _CostPanel extends ConsumerWidget {
           if (unpriced > 0) ...[
             const SizedBox(height: 6),
             Text(s.t('unpriced_materials', {'n': unpriced}),
-                style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
+                style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
           ],
           if (buyInstead > 0) ...[
             const SizedBox(height: 10),
-            const Divider(color: AppColors.track, height: 1),
+            Divider(color: AppColors.track, height: 1),
             const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
-                  child: Text(s.t('buy_instead'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                  child: Text(s.t('buy_instead'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                 ),
                 CoinText(buyInstead, size: 16),
               ],

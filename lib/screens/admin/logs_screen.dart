@@ -141,7 +141,7 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text('${page.total} lines kept, for two weeks',
-                      style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                      style: TextStyle(fontSize: 12, color: AppColors.hint)),
                 ),
               for (var i = 0; i < _pages.length; i++)
                 _LogPage(
@@ -186,7 +186,7 @@ class _LogPage extends ConsumerWidget {
         child: Column(
           children: [
             Text('The logs could not be read: ${e is Exception ? e : e.toString()}',
-                style: const TextStyle(color: AppColors.amber, fontSize: 13)),
+                style: TextStyle(color: AppColors.amber, fontSize: 13)),
             TextButton(onPressed: onRetry, child: const Text('Try again')),
           ],
         ),
@@ -197,7 +197,7 @@ class _LogPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (newest && data.rows.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(24),
                 child:
                     Center(child: Text('Nothing like that has been said.', style: TextStyle(color: AppColors.muted))),
@@ -272,39 +272,39 @@ class _LogCardState extends State<_LogCard> {
                                           text: '  ×${line.repeats}',
                                           style: const TextStyle(fontWeight: FontWeight.w700)),
                                   ]),
-                                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                                 ),
                               ),
                               IconButton(
                                 tooltip: 'Copy',
                                 visualDensity: VisualDensity.compact,
-                                icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
+                                icon: Icon(Icons.copy, size: 16, color: AppColors.hint),
                                 onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, detail))),
                               ),
                             ],
                           ),
                           _open
                               ? SelectableText(line.message,
-                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
+                                  style: TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
                               : Text(line.message,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
+                                  style: TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
                           if (_open && line.at != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(line.at!.toIso8601String(),
-                                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
                             ),
                           if (_open && detail != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: SelectableText(detail,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
                             ),
                           if (!_open && detail != null)
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 4),
                               child:
                                   Text('Tap for what it knew', style: TextStyle(fontSize: 11, color: AppColors.hint)),

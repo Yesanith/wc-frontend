@@ -20,7 +20,7 @@ class VaultObjectives extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final objectives = ((data['objectives'] as List?) ?? const []).whereType<Map>().toList();
     if (objectives.isEmpty) {
-      return Panel(child: Text(s.t('vault_empty'), style: const TextStyle(color: AppColors.muted)));
+      return Panel(child: Text(s.t('vault_empty'), style: TextStyle(color: AppColors.muted)));
     }
     final list = Column(
       children: [
@@ -69,7 +69,7 @@ class _ObjectiveRow extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text('$cur/$total',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 8),

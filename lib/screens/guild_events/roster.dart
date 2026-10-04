@@ -55,12 +55,12 @@ class _RsvpBar extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.lock_outline, size: 16, color: AppColors.gold),
+                Icon(Icons.lock_outline, size: 16, color: AppColors.gold),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     s.t('event_discord_only'),
-                    style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.textSoft),
+                    style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.textSoft),
                   ),
                 ),
               ],
@@ -79,7 +79,7 @@ class _RsvpBar extends ConsumerWidget {
             child: Text(
               '${s.t('event_your_role')}: ${s.t('role_${mine!.role}')}${mine!.profession == null ? '' : ' · ${mine!.profession}'}',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 12, color: AppColors.muted),
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
             ),
           ),
         if (onChangeAccount != null && mine != null)
@@ -90,7 +90,7 @@ class _RsvpBar extends ConsumerWidget {
                 child: Text(
                   s.t('event_signed_up_as', {'name': mine!.name}),
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
               ),
               TextButton(
@@ -127,7 +127,7 @@ class _FlexChips extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(s.t('event_flex'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(s.t('event_flex'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
           const SizedBox(height: 6),
           Wrap(
             spacing: 6,
@@ -183,13 +183,13 @@ class _Group extends ConsumerWidget {
                       if (numbered)
                         SizedBox(
                           width: 22,
-                          child: Text('${i + 1}.', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          child: Text('${i + 1}.', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                         ),
                       CircleAvatar(
                         radius: 14,
                         backgroundColor: AppColors.surface2,
                         foregroundImage: people[i].avatarUrl == null ? null : NetworkImage(people[i].avatarUrl!),
-                        child: const Icon(Icons.person_outline, size: 16, color: AppColors.muted),
+                        child: Icon(Icons.person_outline, size: 16, color: AppColors.muted),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -202,18 +202,18 @@ class _Group extends ConsumerWidget {
                         ProfessionIcon(url: professions[people[i].profession]?.icon, size: 18),
                         const SizedBox(width: 4),
                         Text(professions[people[i].profession]?.name ?? people[i].profession!,
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                         const SizedBox(width: 8),
                       ],
                       if (showRole && people[i].role != null)
                         Text(s.t('role_${people[i].role}'),
-                            style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            style: TextStyle(fontSize: 12, color: AppColors.muted)),
                       if (showRole && people[i].flex.isNotEmpty)
                         Flexible(
                           child: Text(
                             ' +${people[i].flex.map((r) => s.t('role_$r')).join('/')}',
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 11, color: AppColors.gold),
+                            style: TextStyle(fontSize: 11, color: AppColors.gold),
                           ),
                         ),
                     ],

@@ -142,7 +142,7 @@ class _NowLine extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
                   child: Text(label,
-                      style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
                 ),
                 Expanded(child: Container(width: 2, color: AppColors.red)),
               ],
@@ -186,7 +186,7 @@ class _Lane extends StatelessWidget {
                 Transform.translate(offset: Offset(scroll.hasClients ? scroll.offset : 0, 0), child: child),
             child: Text(
               map.name,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.muted),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.muted),
             ),
           ),
         ),
@@ -250,15 +250,15 @@ class _Block extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (pinned) ...[
-                  const Icon(Icons.push_pin, size: 11, color: AppColors.gold),
+                  Icon(Icons.push_pin, size: 11, color: AppColors.gold),
                   const SizedBox(width: 3),
                 ],
                 if (looted) ...[
-                  const Icon(Icons.check_rounded, size: 12, color: AppColors.green),
+                  Icon(Icons.check_rounded, size: 12, color: AppColors.green),
                   const SizedBox(width: 3),
                 ],
                 if (o.event.kind == MetaKind.hardBoss) ...[
-                  const Icon(Icons.local_fire_department_rounded, size: 12, color: AppColors.red),
+                  Icon(Icons.local_fire_department_rounded, size: 12, color: AppColors.red),
                   const SizedBox(width: 2),
                 ],
                 Text(

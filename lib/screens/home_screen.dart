@@ -114,7 +114,7 @@ class _Greeting extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 4),
       child: Text(
         short.isEmpty ? s.t('welcome') : s.t(key, {'name': short}),
-        style: const TextStyle(fontSize: 16, color: AppColors.textSoft),
+        style: TextStyle(fontSize: 16, color: AppColors.textSoft),
       ),
     );
   }
@@ -145,7 +145,7 @@ class _Resets extends ConsumerWidget {
                           Text(label,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                              style: TextStyle(fontSize: 12, color: AppColors.muted)),
                           const SizedBox(height: 2),
                           Text(
                             countdown(next.difference(now)),
@@ -255,7 +255,7 @@ class _TallyRow extends ConsumerWidget {
           SizedBox(
             width: 48,
             child: tally.hasError
-                ? const Icon(Icons.lock_outline, size: 16, color: AppColors.hint)
+                ? Icon(Icons.lock_outline, size: 16, color: AppColors.hint)
                 : Text(
                     t == null ? '–' : '${t.done}/${t.total}',
                     textAlign: TextAlign.end,

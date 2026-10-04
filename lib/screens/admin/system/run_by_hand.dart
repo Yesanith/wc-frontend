@@ -98,7 +98,7 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
           error: (e, _) => Panel(
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                     child: Text('The list of jobs could not be read.', style: TextStyle(color: AppColors.muted))),
                 TextButton(onPressed: () => ref.invalidate(adminJobsProvider), child: const Text('Retry')),
               ],
@@ -118,7 +118,7 @@ class _RunByHandState extends ConsumerState<_RunByHand> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(job.what, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-                              Text(job.name, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                              Text(job.name, style: TextStyle(fontSize: 12, color: AppColors.hint)),
                             ],
                           ),
                         ),

@@ -95,7 +95,7 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
           error: (e, _) => Panel(
             child: Row(
               children: [
-                const Expanded(child: Text('The alerts could not be read.', style: TextStyle(color: AppColors.muted))),
+                Expanded(child: Text('The alerts could not be read.', style: TextStyle(color: AppColors.muted))),
                 TextButton(onPressed: () => ref.invalidate(adminAlertsProvider), child: const Text('Retry')),
               ],
             ),
@@ -120,7 +120,7 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                             color: alerts.webhookSet ? AppColors.textSoft : AppColors.ember),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'Looked for every five minutes. A new problem is sent at once, one that stays every six hours, one that is gone is told to be.',
                         style: TextStyle(fontSize: 12, color: AppColors.hint),
                       ),
@@ -156,7 +156,7 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('SENT LATELY',
+                        Text('SENT LATELY',
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
                         const SizedBox(height: 4),
@@ -170,7 +170,7 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                     child: Text(e.message,
-                                        style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                                        style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                                 const SizedBox(width: 8),
                                 Text(
                                   '${e.at == null ? '' : ago(e.at!, now)}${e.sent ? '' : ' · not sent'}',
@@ -233,7 +233,7 @@ class _WebhookDialogState extends State<_WebhookDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Make one in the settings of a channel (Integrations, Webhooks) and paste its address here. It is kept secret: it is not shown again.',
             style: TextStyle(fontSize: 13, color: AppColors.muted),
           ),

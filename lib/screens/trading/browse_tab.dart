@@ -88,7 +88,7 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
               for (final o in options)
                 ListTile(
                   title: Text(o.$2),
-                  trailing: Text(o.$3, style: const TextStyle(color: AppColors.muted)),
+                  trailing: Text(o.$3, style: TextStyle(color: AppColors.muted)),
                   onTap: () => Navigator.of(context).pop((o.$1,)),
                 ),
             ],
@@ -144,7 +144,7 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
     final progress = ref.watch(marketPricesProgressProvider);
 
     return entries.when(
-      loading: () => const Center(child: CircularProgressIndicator(color: AppColors.gold)),
+      loading: () => Center(child: CircularProgressIndicator(color: AppColors.gold)),
       error: (e, _) => ErrorBox(error: e, onRetry: () => ref.invalidate(marketIndexProvider)),
       data: (list) {
         if (list.isEmpty) {
@@ -170,11 +170,11 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
             },
             decoration: fieldDecoration(
               s.t('search_items'),
-              prefixIcon: const Icon(Icons.search, color: AppColors.gold),
+              prefixIcon: Icon(Icons.search, color: AppColors.gold),
               suffixIcon: _ctrl.text.isEmpty
                   ? null
                   : IconButton(
-                      icon: const Icon(Icons.close, color: AppColors.muted),
+                      icon: Icon(Icons.close, color: AppColors.muted),
                       onPressed: () {
                         _ctrl.clear();
                         _set(_f.copyWith(query: ''));
@@ -231,11 +231,11 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
             children: [
               Expanded(
                 child: Text(s.t('n_items', {'n': fmtInt(ids.length)}),
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
               ),
               if (prices.isLoading)
                 Text(s.t('prices_loading', {'n': (progress * 100).round()}),
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
               if (prices.hasError)
                 TextButton(onPressed: () => ref.invalidate(allPricesProvider), child: Text(s.t('retry'))),
             ],
@@ -299,7 +299,7 @@ class _BrowseRow extends ConsumerWidget {
         _typeLabel(s, '${item?['type']}'),
       if (level > 0) s.t('level_n', {'n': level}),
     ].join(' · ');
-    const small = TextStyle(fontSize: 11, color: AppColors.muted);
+    final small = TextStyle(fontSize: 11, color: AppColors.muted);
     return _ItemTile(
       itemId: id,
       item: item,

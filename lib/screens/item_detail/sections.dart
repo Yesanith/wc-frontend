@@ -93,7 +93,7 @@ class _PricePanel extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(s.t('not_tradable'), style: const TextStyle(fontSize: 14, color: AppColors.muted)),
+            Text(s.t('not_tradable'), style: TextStyle(fontSize: 14, color: AppColors.muted)),
             if (vendor > 0) ...[
               const SizedBox(height: 8),
               stepper,
@@ -120,11 +120,11 @@ class _PricePanel extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.muted)),
+                Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.muted)),
                 const SizedBox(height: 6),
                 CoinDots(unit * qty, size: 16, weight: FontWeight.w800),
                 const SizedBox(height: 6),
-                Text('$countLabel ${compact(count)}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                Text('$countLabel ${compact(count)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
           ),
@@ -153,7 +153,7 @@ class _PricePanel extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(s.t('flip_profit'), style: const TextStyle(fontSize: 14)),
-                  Text('${(margin * 100).round()}%', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  Text('${(margin * 100).round()}%', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -220,10 +220,10 @@ class _UpgradeRow extends ConsumerWidget {
                   Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                   if (buff.isNotEmpty)
                     Text(buff.replaceAll(RegExp(r'<[^>]*>'), ''),
-                        style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
                   for (var i = 0; i < bonuses.length; i++)
                     Text('(${i + 1}) ${bonuses[i]}',
-                        style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
                 ],
               ),
             ),

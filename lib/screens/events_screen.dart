@@ -102,7 +102,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(s.t('timer_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  child: Text(s.t('timer_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ),
                 IconButton(
                   tooltip: listView ? s.t('timeline_view') : s.t('list_view'),
@@ -208,7 +208,7 @@ class _AgendaList extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(24, 16, 20, 4),
                     child: Text(
                       '${pad2(o.start.toLocal().hour)}:00',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
                     ),
                   ),
@@ -267,7 +267,7 @@ class MetaRow extends ConsumerWidget {
                             ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
                             : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
                         maxLines: 1,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 11, color: AppColors.muted, fontFeatures: [FontFeature.tabularFigures()]),
                       ),
                     ],
@@ -286,7 +286,7 @@ class MetaRow extends ConsumerWidget {
                       Row(
                         children: [
                           if (o.event.kind == MetaKind.hardBoss) ...[
-                            const Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
+                            Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
                             const SizedBox(width: 3),
                           ],
                           Flexible(
@@ -308,7 +308,7 @@ class MetaRow extends ConsumerWidget {
                       Text(o.map.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -318,10 +318,10 @@ class MetaRow extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                     decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(999)),
                     child: Text(s.t('now'),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
                   )
                 else if (looted)
-                  const Icon(Icons.check_rounded, size: 18, color: AppColors.green)
+                  Icon(Icons.check_rounded, size: 18, color: AppColors.green)
                 else
                   ExpansionBadge(o.map.release, size: 30),
                 if (pinnable)

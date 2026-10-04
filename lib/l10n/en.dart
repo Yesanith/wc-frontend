@@ -632,6 +632,10 @@ const enStrings = <String, String>{
   'hours_short': 'h',
   'n_items': '{n} items',
   'language': 'Language',
+  'look': 'Appearance',
+  'look_system': 'Match phone',
+  'look_light': 'Light',
+  'look_dark': 'Dark',
   'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
   'landing_sub':
