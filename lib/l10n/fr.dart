@@ -503,7 +503,8 @@ const frStrings = <String, String>{
   'rec_f_discord': 'Invitation Discord (https://discord.gg/…)',
   'rec_f_contact': 'Nom à chuchoter en jeu (facultatif)',
   'rec_f_languages': 'Langues',
-  'rec_f_tags_hint': 'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis 5 entre ce que vous cherchez et les langues. {n} sur 5 choisis.',
+  'rec_f_tags_hint':
+      'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis 5 entre ce que vous cherchez et les langues. {n} sur 5 choisis.',
   'rec_f_recruiting': 'Nous recrutons en ce moment',
   'rec_f_recruiting_hint':
       'Si tu le désactives, la publication de cette page dans le forum du serveur Discord officiel est verrouillée : personne ne peut y répondre.',

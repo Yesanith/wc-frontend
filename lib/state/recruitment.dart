@@ -52,6 +52,7 @@ const recruitDescriptionMax = 2000;
 const recruitRequirementsMax = 500;
 const recruitPlayTimesMax = 120;
 const recruitContactMax = 120;
+
 /// what a page looks for and its languages are the tags of its post in the forum, which carries five at the most: five between the two
 const recruitTagsMax = 5;
 const recruitDescriptionMin = 20;
@@ -463,7 +464,17 @@ class RecruitDraft {
 }
 
 /// the fields of a page, for saying which one is not right
-enum RecruitField { headline, description, requirements, playTimes, contact, discordInvite, lookingFor, languages, tags }
+enum RecruitField {
+  headline,
+  description,
+  requirements,
+  playTimes,
+  contact,
+  discordInvite,
+  lookingFor,
+  languages,
+  tags
+}
 
 /// why the database refused, as the hint it gave
 class RecruitFailure implements Exception {

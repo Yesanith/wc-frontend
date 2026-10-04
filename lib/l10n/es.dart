@@ -501,7 +501,8 @@ const esStrings = <String, String>{
   'rec_f_discord': 'Invitación de Discord (https://discord.gg/…)',
   'rec_f_contact': 'Nombre al que susurrar en el juego (opcional)',
   'rec_f_languages': 'Idiomas',
-  'rec_f_tags_hint': 'La página se publica en el foro del servidor oficial de Discord con estas etiquetas, y una publicación tiene 5 como máximo: elige 5 entre lo que buscáis y los idiomas. {n} de 5 elegidas.',
+  'rec_f_tags_hint':
+      'La página se publica en el foro del servidor oficial de Discord con estas etiquetas, y una publicación tiene 5 como máximo: elige 5 entre lo que buscáis y los idiomas. {n} de 5 elegidas.',
   'rec_f_recruiting': 'Reclutando ahora mismo',
   'rec_f_recruiting_hint':
       'Si lo desactivas, la publicación de esta página en el foro del servidor oficial de Discord se bloquea: nadie puede responderla.',

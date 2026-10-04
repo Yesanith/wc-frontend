@@ -384,7 +384,9 @@ void main() {
       expect(find.text('No guild matches. Try fewer filters.'), findsOneWidget);
     });
 
-    testWidgets('has a chip for each of the seven languages that the forum has a tag for, and none for Japanese or Chinese', (tester) async {
+    testWidgets(
+        'has a chip for each of the seven languages that the forum has a tag for, and none for Japanese or Chinese',
+        (tester) async {
       await show(tester, FakeRecruit(), home: const RecruitmentScreen());
       for (final code in recruitLanguages) {
         expect(find.widgetWithText(ChoiceChip, recruitLanguageLabel(code)), findsOneWidget, reason: code);
@@ -825,7 +827,9 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('lets a guild choose five tags in all, between what it looks for and its languages, and the others wait until one is taken off', (tester) async {
+    testWidgets(
+        'lets a guild choose five tags in all, between what it looks for and its languages, and the others wait until one is taken off',
+        (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       final s = S(AppLang.en);
       Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
@@ -850,7 +854,8 @@ void main() {
       expect(tester.widget<FilterChip>(lang(3)).onSelected, isNull, reason: 'five again');
     });
 
-    testWidgets('lets a guild say five languages and nothing looked for, and five things looked for and no language', (tester) async {
+    testWidgets('lets a guild say five languages and nothing looked for, and five things looked for and no language',
+        (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       for (final code in recruitLanguages.take(5)) {
         await tapOn(tester, find.widgetWithText(FilterChip, recruitLanguageLabel(code)));
@@ -873,7 +878,9 @@ void main() {
       expect(find.text(hint(1)), findsOneWidget, reason: 'it counts what is taken off');
     });
 
-    testWidgets('has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags', (tester) async {
+    testWidgets(
+        'has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags',
+        (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       expect(find.widgetWithText(FilterChip, '日本語'), findsNothing);
       expect(find.widgetWithText(FilterChip, '中文'), findsNothing);
@@ -881,7 +888,9 @@ void main() {
       expect(find.widgetWithText(FilterChip, 'English'), findsOneWidget);
     });
 
-    testWidgets('keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is', (tester) async {
+    testWidgets(
+        'keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is',
+        (tester) async {
       final old = RecruitPage(
         guildId: _id,
         gw2GuildId: 'g',
@@ -898,7 +907,10 @@ void main() {
       expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, '日本語')).selected, isTrue);
       await tapOn(tester, find.text('Save'));
       expect(fake.saves, isEmpty, reason: 'ten tags and a language that is no tag');
-      expect(find.text('The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. 10 of 5 chosen.'), findsWidgets);
+      expect(
+          find.text(
+              'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. 10 of 5 chosen.'),
+          findsWidgets);
       await settle(tester);
       // taken off: the language, and enough of what it looks for
       await tapOn(tester, find.widgetWithText(FilterChip, '日本語'));

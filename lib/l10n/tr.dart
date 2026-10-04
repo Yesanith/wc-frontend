@@ -496,7 +496,8 @@ const trStrings = <String, String>{
   'rec_f_discord': 'Discord daveti (https://discord.gg/…)',
   'rec_f_contact': 'Oyunda fısıldanacak ad (isteğe bağlı)',
   'rec_f_languages': 'Diller',
-  'rec_f_tags_hint': 'Sayfa, resmî Discord sunucusunun forumunda bunlar etiket olarak paylaşılır ve bir gönderide en çok 5 etiket olur: aradıkların ile diller arasında toplam 5 seç. {n} / 5 seçildi.',
+  'rec_f_tags_hint':
+      'Sayfa, resmî Discord sunucusunun forumunda bunlar etiket olarak paylaşılır ve bir gönderide en çok 5 etiket olur: aradıkların ile diller arasında toplam 5 seç. {n} / 5 seçildi.',
   'rec_f_recruiting': 'Şu an alım yapıyoruz',
   'rec_f_recruiting_hint':
       'Kapatırsan bu sayfanın resmî Discord sunucusundaki forum gönderisi kilitlenir: kimse yanıt veremez.',
