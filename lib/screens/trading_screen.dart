@@ -26,6 +26,8 @@ import 'item_detail_screen.dart';
 
 part 'trading/item_page.dart';
 part 'trading/overview_tab.dart';
+part 'trading/gems.dart';
+part 'trading/gem_chart.dart';
 part 'trading/history_tab.dart';
 part 'trading/stats_tab.dart';
 part 'trading/browse_tab.dart';
