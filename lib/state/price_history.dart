@@ -27,8 +27,6 @@ List<PricePoint> mergePriceHistory(List<PricePoint> server, List<PricePoint> dev
   return byDay.values.toList()..sort((a, b) => a.day.compareTo(b.day));
 }
 
-String _dayOf(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
 /// the trading post keeps no price history, so the app writes its own: one
 /// point per item and day whenever it sees the price. only on this device
 class PriceHistoryNotifier extends Notifier<Map<int, List<PricePoint>>> {
@@ -65,7 +63,7 @@ class PriceHistoryNotifier extends Notifier<Map<int, List<PricePoint>>> {
   Future<void> record(Map<int, Json> prices, {DateTime? now}) async {
     if (prices.isEmpty) return;
     final at = now ?? DateTime.now();
-    final day = _dayOf(at);
+    final day = dayKey(at);
     final next = {...state};
     var changed = false;
     for (final e in prices.entries) {
@@ -105,7 +103,7 @@ class PriceHistoryNotifier extends Notifier<Map<int, List<PricePoint>>> {
 /// drops the history of items that are not watched and were not seen for
 /// [PriceHistoryNotifier.forgetAfterDays]
 Map<int, List<PricePoint>> prune(Map<int, List<PricePoint>> history, Set<int> watched, DateTime now) {
-  final cutoff = _dayOf(now.subtract(const Duration(days: PriceHistoryNotifier.forgetAfterDays)));
+  final cutoff = dayKey(now.subtract(const Duration(days: PriceHistoryNotifier.forgetAfterDays)));
   return {
     for (final e in history.entries)
       if (e.value.isNotEmpty && (watched.contains(e.key) || e.value.last.day.compareTo(cutoff) >= 0)) e.key: e.value,
@@ -118,7 +116,7 @@ final priceHistoryProvider =
 /// the points of the last [days] days, all of them when [days] is null
 List<PricePoint> lastDays(List<PricePoint> points, int? days, {DateTime? now}) {
   if (days == null) return points;
-  final cutoff = _dayOf((now ?? DateTime.now()).subtract(Duration(days: days)));
+  final cutoff = dayKey((now ?? DateTime.now()).subtract(Duration(days: days)));
   return [
     for (final p in points)
       if (p.day.compareTo(cutoff) > 0) p,

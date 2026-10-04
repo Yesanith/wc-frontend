@@ -215,12 +215,6 @@ class _LogPage extends ConsumerWidget {
   }
 }
 
-Color _levelColor(LogLevel level) => switch (level) {
-      LogLevel.error => AppColors.ember,
-      LogLevel.warn => AppColors.amber,
-      LogLevel.info => AppColors.muted,
-    };
-
 class _LogCard extends StatefulWidget {
   const _LogCard({required this.line, required this.now});
 
@@ -238,7 +232,7 @@ class _LogCardState extends State<_LogCard> {
   Widget build(BuildContext context) {
     final line = widget.line;
     final detail = line.detailText;
-    final color = _levelColor(line.level);
+    final color = logLevelColor(line.level);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(

@@ -244,7 +244,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                   onPressed: _pickDate,
                   icon: const Icon(Icons.calendar_today_outlined, size: 18),
                   label:
-                      Text('${s.t('wd_${_start.weekday}')} ${_two(_start.day)}.${_two(_start.month)}.${_start.year}'),
+                      Text('${s.t('wd_${_start.weekday}')} ${pad2(_start.day)}.${pad2(_start.month)}.${_start.year}'),
                 ),
               ),
               const SizedBox(width: 8),
