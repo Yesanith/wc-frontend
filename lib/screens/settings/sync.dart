@@ -27,7 +27,7 @@ class _SyncPanel extends ConsumerWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Text('${_two(at.hour)}:${_two(at.minute)}',
+                Text('${pad2(at.hour)}:${pad2(at.minute)}',
                     style: const TextStyle(fontSize: 12, color: AppColors.muted)),
                 if (sync.failed > 0) ...[
                   const SizedBox(width: 8),
@@ -49,8 +49,6 @@ class _SyncPanel extends ConsumerWidget {
     );
   }
 }
-
-String _two(int n) => n.toString().padLeft(2, '0');
 
 /// shows the installed version and offers the apk of a newer release
 class _UpdatePanel extends ConsumerWidget {

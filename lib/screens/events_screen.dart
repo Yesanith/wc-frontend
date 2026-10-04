@@ -5,6 +5,7 @@ import '../data/metas.dart';
 import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
+import '../util.dart';
 import '../widgets/clock.dart';
 import '../state/periodic.dart';
 import '../state/progression.dart';
@@ -16,11 +17,9 @@ import '../widgets/expansion_badge.dart';
 part 'events/timeline.dart';
 part 'events/sheet.dart';
 
-String _two(int n) => n.toString().padLeft(2, '0');
-
 String localClock(DateTime t) {
   final l = t.toLocal();
-  return '${_two(l.hour)}:${_two(l.minute)}';
+  return '${pad2(l.hour)}:${pad2(l.minute)}';
 }
 
 enum KindFilter { all, bosses, metas, pinned }
@@ -208,7 +207,7 @@ class _AgendaList extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24, 16, 20, 4),
                     child: Text(
-                      '${_two(o.start.toLocal().hour)}:00',
+                      '${pad2(o.start.toLocal().hour)}:00',
                       style: const TextStyle(
                           fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
                     ),
