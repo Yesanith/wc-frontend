@@ -21,11 +21,11 @@ class WikiScreen extends ConsumerStatefulWidget {
 class _WikiScreenState extends ConsumerState<WikiScreen> {
   // key prefix in the strings table, color
   static List<(String, Color)> get _categories => <(String, Color)>[
-    ('cat_meta', AppColors.gold),
-    ('cat_crafting', Color(0xFF5FC07F)),
-    ('cat_mastery', Color(0xFF72C1D9)),
-    ('cat_fractals', Color(0xFFC08BE0)),
-  ];
+        ('cat_meta', AppColors.gold),
+        ('cat_crafting', Color(0xFF5FC07F)),
+        ('cat_mastery', Color(0xFF72C1D9)),
+        ('cat_fractals', Color(0xFFC08BE0)),
+      ];
 
   final _ctrl = TextEditingController();
   Timer? _debounce;
