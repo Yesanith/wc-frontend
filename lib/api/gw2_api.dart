@@ -378,6 +378,9 @@ class Gw2Api {
 
 List<Json> _list(dynamic raw) => (raw as List).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 
+/// one object of a response, copied so it can be kept
+Json _object(dynamic raw) => Map<String, dynamic>.from(raw as Map);
+
 /// the api accepts at most 200 ids per request
 Iterable<List<T>> _chunks<T>(List<T> ids) sync* {
   for (var i = 0; i < ids.length; i += 200) {

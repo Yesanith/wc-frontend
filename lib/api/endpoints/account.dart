@@ -2,9 +2,9 @@ part of '../gw2_api.dart';
 
 /// the account's own data: what the key can read. most of it is kept on disk and refreshed in the background
 extension Gw2AccountApi on Gw2Api {
-  Future<Json> tokenInfo() async => Map<String, dynamic>.from(await get('/tokeninfo') as Map);
+  Future<Json> tokenInfo() async => _object(await get('/tokeninfo'));
 
-  Future<Json> account() async => Map<String, dynamic>.from(await cachedGet('/account') as Map);
+  Future<Json> account() async => _object(await cachedGet('/account'));
 
   Future<List<Json>> characters() async => _list(await cachedGet('/characters', query: {'ids': 'all'}));
 
@@ -23,7 +23,7 @@ extension Gw2AccountApi on Gw2Api {
   }
 
   /// daily, weekly or special objectives of the wizard's vault
-  Future<Json> vault(String track) async => Map<String, dynamic>.from(await cachedGet(
+  Future<Json> vault(String track) async => _object(await cachedGet(
         '/account/wizardsvault/$track',
         // the api itself refreshes about every five minutes, shorter is pointless
         ttl: const Duration(minutes: 5),
@@ -32,7 +32,7 @@ extension Gw2AccountApi on Gw2Api {
           'weekly' => lastWeeklyReset(),
           _ => null,
         },
-      ) as Map);
+      ));
 
   /// raid encounters cleared this week and the wing layout
   Future<List<String>> accountRaids() async =>
@@ -59,13 +59,13 @@ extension Gw2AccountApi on Gw2Api {
   }
 
   /// the team and guild the account plays world vs world with
-  Future<Json> accountWvw() async => Map<String, dynamic>.from(await cachedGet('/account/wvw') as Map);
+  Future<Json> accountWvw() async => _object(await cachedGet('/account/wvw'));
 
   /// one part of a character, such as heropoints, sab, quests or training
   Future<dynamic> characterPart(String name, String part) =>
       cachedGet('/characters/${Uri.encodeComponent(name)}/$part');
 
-  Future<Json> vaultSeason() async => Map<String, dynamic>.from(await get('/wizardsvault') as Map);
+  Future<Json> vaultSeason() async => _object(await get('/wizardsvault'));
 
   /// the astral reward shop with what this account already bought
   Future<List<Json>> vaultListings() async => _list(await cachedGet('/account/wizardsvault/listings'));
@@ -81,7 +81,7 @@ extension Gw2AccountApi on Gw2Api {
 
   Future<List<Json>> accountMasteries() async => _list(await cachedGet('/account/masteries'));
 
-  Future<Json> masteryPoints() async => Map<String, dynamic>.from(await cachedGet('/account/mastery/points') as Map);
+  Future<Json> masteryPoints() async => _object(await cachedGet('/account/mastery/points'));
 
   Future<List<Json>> legendaryArmory() async => _list(await cachedGet('/account/legendaryarmory'));
 

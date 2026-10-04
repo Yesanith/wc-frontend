@@ -26,7 +26,7 @@ extension Gw2PvpApi on Gw2Api {
     }
   }
 
-  Future<Json> pvpStats() async => Map<String, dynamic>.from(await cachedGet('/pvp/stats') as Map);
+  Future<Json> pvpStats() async => _object(await cachedGet('/pvp/stats'));
 
   /// the nine rank tiers, Rabbit through Dragon. static
   Future<List<Json>> pvpRanks() async => details('/pvp/ranks', await idList('/pvp/ranks'));

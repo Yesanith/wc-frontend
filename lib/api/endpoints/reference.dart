@@ -81,7 +81,7 @@ extension Gw2ReferenceApi on Gw2Api {
   }
 
   /// weapons, palettes and skill lists of a profession
-  Future<Json> profession(String name) async => Map<String, dynamic>.from(await get('/professions/$name') as Map);
+  Future<Json> profession(String name) async => _object(await get('/professions/$name'));
 
   Future<List<Json>> raidWings() async {
     final ids = await idList('/raids');

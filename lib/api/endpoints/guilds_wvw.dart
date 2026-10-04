@@ -5,7 +5,7 @@ extension Gw2GuildWvwApi on Gw2Api {
   /// guild endpoints. most need the guilds permission and some also
   /// require the account to lead the guild
   Future<Json> guild(String id) async =>
-      Map<String, dynamic>.from(await cachedGet('/guild/$id', ttl: const Duration(hours: 6)) as Map);
+      _object(await cachedGet('/guild/$id', ttl: const Duration(hours: 6)));
 
   Future<List<Json>> guildStash(String id) async => _list(await cachedGet('/guild/$id/stash'));
 
@@ -21,7 +21,7 @@ extension Gw2GuildWvwApi on Gw2Api {
 
   Future<Json?> wvwMatch(int team) async {
     try {
-      return Map<String, dynamic>.from(await get('/wvw/matches', {'world': '$team'}) as Map);
+      return _object(await get('/wvw/matches', {'world': '$team'}));
     } on Gw2ApiException catch (e) {
       if (e.status == 404) return null;
       rethrow;
@@ -36,5 +36,5 @@ extension Gw2GuildWvwApi on Gw2Api {
   }
 
   /// next lockout or team assignment per region, kind is lockout or teamAssignment
-  Future<Json> wvwTimer(String kind) async => Map<String, dynamic>.from(await get('/wvw/timers/$kind') as Map);
+  Future<Json> wvwTimer(String kind) async => _object(await get('/wvw/timers/$kind'));
 }
