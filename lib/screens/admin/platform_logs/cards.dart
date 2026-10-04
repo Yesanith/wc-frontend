@@ -96,8 +96,7 @@ class _PlatformCardState extends State<_PlatformCard> {
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: SelectableText(attrs,
-                                  style: TextStyle(
-                                      fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
+                                  style: TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
                             ),
                           if (!_open && attrs != null)
                             Padding(

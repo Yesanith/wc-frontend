@@ -60,13 +60,11 @@ class _CollectionTile extends ConsumerWidget {
           ),
           const SizedBox(height: 4),
           if (progress.hasError)
-            Text(s.t('needs_permission', {'p': 'unlocks'}),
-                style: TextStyle(fontSize: 12, color: AppColors.muted))
+            Text(s.t('needs_permission', {'p': 'unlocks'}), style: TextStyle(fontSize: 12, color: AppColors.muted))
           else if (p == null)
             LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
           else ...[
-            Text('${fmtInt(p.unlocked)} / ${fmtInt(p.total)}',
-                style: TextStyle(fontSize: 12, color: AppColors.muted)),
+            Text('${fmtInt(p.unlocked)} / ${fmtInt(p.total)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
             const SizedBox(height: 10),
             Bar(value: p.ratio, color: p.ratio >= 1 ? AppColors.green : AppColors.gold),
           ],

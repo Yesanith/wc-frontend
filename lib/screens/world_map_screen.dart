@@ -424,8 +424,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-              Text('${_kindLabel(s, m.kind)} · ${m.mapName}',
-                  style: TextStyle(fontSize: 13, color: AppColors.muted)),
+              Text('${_kindLabel(s, m.kind)} · ${m.mapName}', style: TextStyle(fontSize: 13, color: AppColors.muted)),
               if (m.chatLink.isNotEmpty) ...[
                 const SizedBox(height: 14),
                 OutlinedButton.icon(

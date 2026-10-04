@@ -174,8 +174,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('missing_materials_cost'),
-                    style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                child: Text(s.t('missing_materials_cost'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               CoinText(missingCost, size: 16),
             ],

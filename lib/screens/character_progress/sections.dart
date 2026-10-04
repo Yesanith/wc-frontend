@@ -36,10 +36,8 @@ class _HeroPoints extends ConsumerWidget {
             children: [
               Icon(Icons.stars_outlined, color: AppColors.gold),
               const SizedBox(width: 12),
-              Expanded(
-                  child: Text(s.t('hero_challenges'), style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
-              Text(fmtInt(count),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              Expanded(child: Text(s.t('hero_challenges'), style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
+              Text(fmtInt(count), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
             ],
           ),
         );

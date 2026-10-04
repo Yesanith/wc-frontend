@@ -27,8 +27,7 @@ class _SyncPanel extends ConsumerWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Text('${pad2(at.hour)}:${pad2(at.minute)}',
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                Text('${pad2(at.hour)}:${pad2(at.minute)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 if (sync.failed > 0) ...[
                   const SizedBox(width: 8),
                   Icon(Icons.error_outline, size: 14, color: AppColors.red),
@@ -70,8 +69,7 @@ class _UpdatePanel extends ConsumerWidget {
               Expanded(
                 child: Text(s.t('version'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
-              Text(appVersion,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              Text(appVersion, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
               IconButton(
                 tooltip: s.t('check_updates'),
                 onPressed: () => ref.invalidate(updateProvider),

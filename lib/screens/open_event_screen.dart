@@ -363,8 +363,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
           if (!e.mine)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child:
-                  Text(s.t('oe_join_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+              child: Text(s.t('oe_join_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
             ),
         ],
         if (e.mine) ...[
@@ -442,8 +441,7 @@ class _Roster extends ConsumerWidget {
                 child: SizedBox(
                     width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
           ),
-          error: (e, _) =>
-              Panel(child: Text(s.t(openEventErrorKey(e)), style: TextStyle(color: AppColors.amber))),
+          error: (e, _) => Panel(child: Text(s.t(openEventErrorKey(e)), style: TextStyle(color: AppColors.amber))),
           data: (people) => Panel(
             child: people.isEmpty
                 ? Text(s.t('oe_roster_none'), style: TextStyle(color: AppColors.muted))

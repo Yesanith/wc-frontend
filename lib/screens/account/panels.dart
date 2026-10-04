@@ -52,8 +52,7 @@ class _WealthPanel extends ConsumerWidget {
     final points = ref.watch(wealthProvider)[name] ?? const <WealthPoint>[];
     if (points.length < 2) {
       return Panel(
-        child:
-            Text(s.t('wealth_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+        child: Text(s.t('wealth_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
       );
     }
     final week = changeOver(points, 7, (p) => p.coins);

@@ -94,8 +94,7 @@ class _Tables extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
-                  Expanded(
-                      child: Text('${t['name']}', style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                  Expanded(child: Text('${t['name']}', style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                   SizedBox(
                     width: 70,
                     child: Text(fmtInt(asInt(t['rows'])),
@@ -149,8 +148,7 @@ class _Queries extends StatelessWidget {
                   Text('${q['query']}',
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 11.5, color: AppColors.muted, height: 1.35, fontFamily: 'monospace')),
+                      style: TextStyle(fontSize: 11.5, color: AppColors.muted, height: 1.35, fontFamily: 'monospace')),
                 ],
               ),
             ),

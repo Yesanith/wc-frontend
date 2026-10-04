@@ -28,8 +28,7 @@ class _GemHistoryChart extends ConsumerWidget {
           Kicker(s.t('gem_history_title').toUpperCase()),
           const SizedBox(height: 12),
           if (points.length < 2)
-            Text(s.t('gem_history_collecting'),
-                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
+            Text(s.t('gem_history_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
           else ...[
             SizedBox(
               height: 120,

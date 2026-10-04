@@ -35,8 +35,7 @@ class AdminBotTab extends ConsumerWidget {
             AdminHealth(h.health(now)),
             const Eyebrow('Functions'),
             h.list('functions').isEmpty
-                ? Panel(
-                    child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
+                ? Panel(child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
                 : AdminHealth(h.functionLines(now)),
             const Eyebrow('Last 30 days'),
             AdminBars(title: 'Commands used', days: h.series('commands')),

@@ -128,7 +128,8 @@ class Kicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: color ?? AppColors.textSoft),
+      style:
+          TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.8, color: color ?? AppColors.textSoft),
     );
   }
 }
@@ -146,8 +147,7 @@ class SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: Text(title, style: display(16))),
-        if (t != null)
-          Text(t, style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13)),
+        if (t != null) Text(t, style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13)),
       ],
     );
   }
@@ -308,8 +308,7 @@ class VersionPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: AppColors.line),
       ),
-      child:
-          Text(version, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSoft)),
+      child: Text(version, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppColors.textSoft)),
     );
   }
 }

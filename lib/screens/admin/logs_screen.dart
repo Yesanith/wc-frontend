@@ -300,8 +300,7 @@ class _LogCardState extends State<_LogCard> {
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: SelectableText(detail,
-                                  style: TextStyle(
-                                      fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
+                                  style: TextStyle(fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
                             ),
                           if (!_open && detail != null)
                             Padding(

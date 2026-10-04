@@ -34,8 +34,7 @@ class PvpMatchesScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             children: [
-              Text(s.t('match_history_note'),
-                  style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+              Text(s.t('match_history_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 14),
               for (final game in list) ...[
                 _MatchCard(game),
@@ -345,8 +344,7 @@ class _BoardList extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(fmtInt(main.$2), style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                        if (main.$1.isNotEmpty)
-                          Text(main.$1, style: TextStyle(fontSize: 10, color: AppColors.muted)),
+                        if (main.$1.isNotEmpty) Text(main.$1, style: TextStyle(fontSize: 10, color: AppColors.muted)),
                       ],
                     ),
                 ],

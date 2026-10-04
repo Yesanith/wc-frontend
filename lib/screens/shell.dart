@@ -464,8 +464,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                         const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                       ],
                     ),
-                    if (accountName != null)
-                      Text(accountName, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    if (accountName != null) Text(accountName, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),

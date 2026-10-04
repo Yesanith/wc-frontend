@@ -167,8 +167,7 @@ class _Panel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title.toUpperCase(),
-              style:
-                  TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           const SizedBox(height: 4),
           for (final (label, value) in rows) AdminLine(label, value),
         ],
@@ -189,8 +188,7 @@ class _EdgeFunctions extends ConsumerWidget {
     final logs = ref.watch(adminLogsProvider(noLogQuery));
     final now = DateTime.now();
     return logs.when(
-      loading: () =>
-          Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
+      loading: () => Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
       // an older backend has no logs to give: said, and nothing else is held up by it
       error: (_, __) => Panel(
         child: Text('The logs of the functions could not be read. The backend may not have them yet.',

@@ -141,8 +141,7 @@ class _NowLine extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
-                  child: Text(label,
-                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
+                  child: Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
                 ),
                 Expanded(child: Container(width: 2, color: AppColors.red)),
               ],

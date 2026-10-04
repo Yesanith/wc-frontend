@@ -126,8 +126,7 @@ class Eyebrow extends StatelessWidget {
           Expanded(
             child: Text(
               text.toUpperCase(),
-              style:
-                  TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
             ),
           ),
           if (trailing != null) trailing!,

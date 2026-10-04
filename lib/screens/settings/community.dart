@@ -302,8 +302,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
           if (!activeLinked)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text(s.t('gw2_refresh_other'),
-                  style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+              child: Text(s.t('gw2_refresh_other'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
             ),
         ],
         const SizedBox(height: 4),

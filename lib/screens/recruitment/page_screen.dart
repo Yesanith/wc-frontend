@@ -172,8 +172,7 @@ class _PageBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
               const SizedBox(height: 6),
               child,
             ],
