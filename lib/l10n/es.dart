@@ -502,9 +502,10 @@ const esStrings = <String, String>{
   'rec_f_contact': 'Nombre al que susurrar en el juego (opcional)',
   'rec_f_languages': 'Idiomas (hasta 5)',
   'rec_f_recruiting': 'Reclutando ahora mismo',
+  'rec_f_recruiting_hint': 'Si lo desactivas, la publicación de esta página en el foro del servidor oficial de Discord se bloquea: nadie puede responderla.',
   'rec_f_published': 'Mostrar esta página a todos',
   'rec_f_published_hint':
-      'También se publica en el foro guild-recruitment del servidor oficial de Discord. Si la desactivas, la publicación allí se bloquea.',
+      'También se publica en el foro guild-recruitment del servidor oficial de Discord. Si la desactivas, la publicación allí se elimina.',
   'rec_save_hint': 'Guardar mantiene la página en la lista. Sale de ella tras 60 días sin guardar.',
   'rec_save': 'Guardar',
   'rec_saved': 'Guardado.',

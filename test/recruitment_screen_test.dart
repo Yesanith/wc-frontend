@@ -868,13 +868,23 @@ void main() {
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       const hint =
-          'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is locked.';
+          'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.';
       expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
       await fill(tester);
       expect(find.text(hint), findsOneWidget);
       await tester.pumpWidget(const SizedBox());
       await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
       expect(find.text(hint), findsOneWidget, reason: 'and for a page that is shown already');
+    });
+
+    testWidgets('says that the post in the forum is locked while the guild is not recruiting, which is what that switch does and the one that shows the page does not', (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      const lock = 'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.';
+      expect(find.text(lock), findsOneWidget, reason: 'under the switch of recruiting, always: it is there before the page is whole');
+      final recruiting = find.byKey(const Key('rec-recruiting'));
+      expect(find.descendant(of: recruiting, matching: find.text(lock)), findsOneWidget, reason: 'and it is under that switch and not under the other');
+      final published = find.byKey(const Key('rec-published'));
+      expect(find.descendant(of: published, matching: find.text(lock)), findsNothing);
     });
 
     testWidgets('is shown to everybody when the switch is on and it is saved', (tester) async {
