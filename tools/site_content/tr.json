@@ -11,7 +11,16 @@
   "nav_delete": "Hesabını sil",
   "nav_contact": "İletişim",
   "language": "Dil",
-  "note": "Bu bir çeviridir. İngilizce sürümle bir fark varsa İngilizce sürüm geçerlidir."
+  "note": "Bu bir çeviridir. İngilizce sürümle bir fark varsa İngilizce sürüm geçerlidir.",
+  "nav_features": "Özellikler",
+  "nav_app": "Uygulamayı aç",
+  "skip": "İçeriğe geç",
+  "footer_product": "Uygulama",
+  "footer_legal": "Yasal",
+  "footer_project": "Proje",
+  "nav_source": "Kaynak kodu",
+  "nav_releases": "İndirmeler",
+  "toc": "Bu sayfada"
  },
  "index": {
   "tagline": "Android, iPhone ve tarayıcı için resmi olmayan bir Guild Wars 2 yardımcısı.",
@@ -22,7 +31,62 @@
   "open_button": "Tyria Codex'i aç",
   "iphone": "<strong>iPhone:</strong> Safari'de aç, paylaş düğmesine dokun ve <em>Ana Ekrana Ekle</em>'yi seç. Sonra uygulama gibi kendi başına açılır.",
   "limits": "Tarayıcı sürümünde bildirim, dünya olayı uyarıları ve cihazda önbellek yoktur, bu yüzden daha yavaş yüklenir. API key'in bu tarayıcıda kalır ve yalnızca Guild Wars 2 sunucularına gönderilir.",
-  "fan": "Tyria Codex bir hayran projesidir; ArenaNet veya NCSOFT ile bağlantısı yoktur, onlar tarafından onaylanmamıştır. Guild Wars 2 ve tüm logoları ile tasarımları NCSOFT Corporation'ın ticari markalarıdır."
+  "fan": "Tyria Codex bir hayran projesidir; ArenaNet veya NCSOFT ile bağlantısı yoktur, onlar tarafından onaylanmamıştır. Guild Wars 2 ve tüm logoları ile tasarımları NCSOFT Corporation'ın ticari markalarıdır.",
+  "eyebrow": "Resmi olmayan Guild Wars 2 yardımcısı",
+  "hero_h": "Tyria'n, <em>tek bakışta</em>.",
+  "chips": [
+   "Ücretsiz",
+   "Reklamsız",
+   "Analitiksiz",
+   "Açık kaynak"
+  ],
+  "features_h": "Oyunun sana söylemediği her şey",
+  "features_p": "Oyunun dışındaki oyun için tek uygulama: hesabın, pazarlar, dünya ve loncan.",
+  "features": [
+   [
+    "Günün hazır",
+    "Sıfırlama geri sayımları, Büyücü Kasası hedefleri, hâlâ katılabileceğin meta etkinlikler, günlük kontrol listesi ve cüzdanın tek sayfada."
+   ],
+   [
+    "Karakterler ve buildler",
+    "Rün, sigil ve infüzyonlu ekipman, özellik ızgarasıyla tam build, gardırop, yan yana karşılaştırma ve paylaşılabilir kahraman kartları."
+   ],
+   [
+    "Ticaret merkezi",
+    "Fiyatlar, fiyat uyarılı bir izleme listesi, 90 günlük kâr ve zarar ve Android'de emirlerin gerçekleştiğinde bir bildirim."
+   ],
+   [
+    "Zanaat",
+    "Tüm zanaat ve Mistik Ocak tarifleri; hesabının neleri zaten karşıladığını ve satın almanın daha ucuz olup olmadığını bilen bir hesaplayıcıyla."
+   ],
+   [
+    "Dünya ve WvW",
+    "Uyarılı dünya bossu ve meta zamanlayıcıları, her yol noktası ve simge yapıyla haritalar ve canlı Dünya Dünyaya Karşı eşleşmeleri."
+   ],
+   [
+    "Koleksiyonlar ve ilerleme",
+    "Binekler, görünümler, minikler ve boyalar, başarımlar, ustalıklar ve bu haftaki baskın ve zindan temizlemeleri."
+   ],
+   [
+    "Loncalar ve etkinlikler",
+    "Katılımlı lonca etkinlikleri, rütbelerini izleyen Discord rolleri, hazine, depo ve günlük, ayrıca sunucun için bir bot."
+   ],
+   [
+    "Bir grup ya da lonca bul",
+    "Her oyun tarzı için herkese açık etkinliklere katıl ya da alım yapan loncalara göz at ve tek dokunuşla Discord'larına katıl."
+   ]
+  ],
+  "platforms_h": "Oynadığın yerde kullan",
+  "android_h": "Android",
+  "android_p": "Tam uygulama: dünya olayları, fiyat uyarıları ve satılan eşyalar için bildirimler, oyun verisi de cihazında.",
+  "discord_h": "Loncan için bir Discord botu",
+  "discord_p": "Katılımlı ve bekleme listeli lonca etkinlikleri, lonca rütbelerini izleyen roller, haber ve yama akışları ve resmî sunucuda loncaların üye aradığı bir forum.",
+  "discord_link": "Bot nasıl eklenir",
+  "privacy_h": "API key'in senin kalır",
+  "privacy_p": "Cihazında ya da tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gider. Reklam yok, analitik yok; isteğe bağlı hesabı istediğin zaman silebilirsin.",
+  "privacy_link": "Gizlilik politikasını oku",
+  "cta_h": "Göz at, kayıt gerekmez",
+  "cta_p": "Tyria Codex'i misafir olarak aç, kendi hesabını görmek istediğinde bir API key ekle."
  },
  "delete": {
   "title": "Hesabını sil",
@@ -107,11 +171,14 @@
     "Bir şey yanlış. Nereye bildiririm?",
     "<a href='https://github.com/Yesanith/tyria-companion/issues'>GitHub'da bir konu aç</a>, ne yaptığını ve ne gördüğünü yaz. Ekran görüntüsü yardımcı olur. API key'ini asla paylaşma."
    ]
-  ]
+  ],
+  "lead": "En sık duyduğumuz sorulara kısa yanıtlar.",
+  "more": "Sorun burada yok mu?",
+  "more_btn": "GitHub'da sor"
  },
  "privacy": {
   "title": "Gizlilik politikası",
-  "updated": "Son güncelleme 2 Ekim 2026",
+  "updated": "Son güncelleme 4 Ekim 2026",
   "blocks": [
    "Tyria Codex resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam ve analiz aracı içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
@@ -149,6 +216,13 @@
     "Resmi sunucudaysan bot, hesabın olan her bölgenin rolünü sana verir. Seni girişteki Discord kullanıcı kimliğinle bulur ve hesabını silersen rolü geri alır.",
     "Katıldığın bir herkese açık etkinlik başladığında bot, resmi sunucuda yalnızca organizatörün ve katılanların (geliyorum ya da belki) görebildiği bir metin ve bir ses kanalı açar ve onları Discord kullanıcıları olarak anar. Kanallar etkinlikten sonra silinir.",
     "Discord botuyla herkese açık bir etkinlik oluşturursan, ona verdiğin saat dilimi (örneğin Europe/Istanbul) her seferinde söylememen için Discord kullanıcı kimliğinle birlikte saklanır ve hesabını sildiğinde silinir."
+   ],
+   "Lonca alımı sayfaları",
+   [
+    "Bir lonca lideri ya da liderin izin verdiği bir üye, loncası için lonca alımı sayfası oluşturabilir. Başlık, açıklama, gereksinimler, oynama saatleri, diller, bölge, Discord daveti ve oyunda fısıldanacak ad onlar tarafından yazılır ve sayfa gösterildiğinde, giriş yapmamış ziyaretçiler dahil herkese, loncanın adı ve etiketiyle birlikte gösterilir. Sayfa, kimin oluşturduğunu belirtmez. Herkesin okumasını istemeyeceğin hiçbir şeyi yazma.",
+    "Gösterilen bir sayfa aynı içerikle resmî Tyria Codex Discord sunucusunun bir forumunda da yayınlanır; o sunucudaki herkes okuyabilir. Sayfayı taslağa çekmek ya da silmek gönderiyi kaldırır. Bir moderatör şartları ihlal eden bir sayfayı gizleyebilir.",
+    "Giriş yapmış her oyuncu bir sayfayı bildirebilir. Kimin bildirdiğini ve ne yazdığını saklarız, yalnızca yöneticiler görür ve sayfayla ya da hesabınla birlikte silinir.",
+    "Liderin sayfayı düzenleme izni verdiği üyeleri, lider geri alana ya da üye loncadan ayrılana kadar saklarız."
    ],
    "Kullanılan hizmetler",
    [

@@ -14,9 +14,18 @@ ENGLISH = site.load("en")
 def strings(content):
     """every text of a language paired with the same one in English: (where, english, other)"""
     pairs = []
+    def flat(where, english, other):
+        if isinstance(english, list):
+            for i, (e, o) in enumerate(zip(english, other)):
+                flat("%s[%d]" % (where, i), e, o)
+        else:
+            pairs.append((where, english, other))
+
     for section in ("ui", "index", "delete"):
         for k in ENGLISH[section]:
-            pairs.append(("%s.%s" % (section, k), ENGLISH[section][k], content[section][k]))
+            flat("%s.%s" % (section, k), ENGLISH[section][k], content[section][k])
+    for k in ("lead", "more", "more_btn"):
+        pairs.append(("faq.%s" % k, ENGLISH["faq"][k], content["faq"][k]))
     for (q, a), (q2, a2) in zip(ENGLISH["faq"]["items"], content["faq"]["items"]):
         pairs.append(("faq question", q, q2))
         pairs.append(("faq answer", a, a2))
@@ -43,27 +52,28 @@ def structure(text):
 class Links(HTMLParser):
     def __init__(self):
         super().__init__()
-        self.hrefs, self.stack, self.bad, self.lang_links, self.in_lang = [], [], [], [], False
+        self.hrefs, self.stack, self.bad, self.lang_links, self.in_lang, self.lang_depth = [], [], [], [], False, 0
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
-        if tag == "div" and a.get("class") == "lang":
-            self.in_lang = True
-        if tag not in ("meta", "link", "br", "hr", "input", "img"):
+        if tag not in ("meta", "link", "br", "hr", "input", "img", "base"):
             self.stack.append(tag)
+        if tag == "div" and a.get("class") == "lang":
+            # the picker is in the top of the page, among other things: it ends where the part of the page it began in goes on
+            self.in_lang, self.lang_depth = True, len(self.stack)
         if tag == "a" and "href" in a:
             self.hrefs.append(a["href"])
             if self.in_lang:
                 self.lang_links.append(a)
 
     def handle_endtag(self, tag):
-        if tag in ("meta", "link", "br", "hr", "input", "img"):
+        if tag in ("meta", "link", "br", "hr", "input", "img", "base"):
             return
         if not self.stack or self.stack[-1] != tag:
             self.bad.append(tag)
         else:
             self.stack.pop()
-        if tag == "div" and self.in_lang and "div" not in self.stack:
+        if tag == "div" and self.in_lang and len(self.stack) < self.lang_depth:
             self.in_lang = False
 
 
@@ -126,7 +136,8 @@ class SiteTest(unittest.TestCase):
                            'property="og:description"', 'property="og:url"', 'property="og:image"', 'name="twitter:card"',
                            'name="theme-color"', '<link rel="icon"'):
                 self.assertIn(needle, html, "%s lacks %s" % (path, needle))
-            self.assertIn('og:image" content="https://yesanith.github.io/tyria-companion/app/icons/Icon-512.png"', html, path)
+            self.assertIn('og:image" content="https://yesanith.github.io/tyria-companion/og.png"', html, path)
+            self.assertIn('twitter:card" content="summary_large_image"', html, path)
 
     def test_a_page_is_its_own_canonical_address_and_says_it_in_its_language(self):
         privacy = self.pages["tr/privacy.html"]
@@ -167,7 +178,7 @@ class SiteTest(unittest.TestCase):
             for page in ("privacy", "terms"):
                 self.assertIn(note, self.pages[site.page_file(lang, page)], (lang, page))
         for page in ("privacy", "terms"):
-            self.assertNotIn("translation", self.pages[site.page_file("en", page)].split("<h1>")[1].split("<h2>")[0].lower())
+            self.assertNotIn("translation", self.pages[site.page_file("en", page)].split("<h1>")[1].split("<h2")[0].lower())
 
     def test_nothing_is_left_of_the_templates(self):
         for path, text in self.pages.items():
@@ -201,6 +212,178 @@ class SiteTest(unittest.TestCase):
 
 def plain(text):
     return re.sub(r"<[^>]+>", "", text)
+
+
+class FrameTest(unittest.TestCase):
+    """what every page has round it, the front page, the questions, the long pages, and what the site has beside its pages"""
+    pages = site.build()
+    extra = site.extras()
+    english = site.load("en")
+
+    def test_every_page_has_a_way_past_the_top_a_main_part_a_top_and_a_bottom(self):
+        for path, html in self.pages.items():
+            self.assertIn('<a class="skip" href="#main">', html, path)
+            self.assertEqual(html.count('<main id="main"'), 1, path)
+            self.assertEqual(html.count('<header class="top">'), 1, path)
+            self.assertEqual(html.count('<footer class="foot">'), 1, path)
+            self.assertEqual(html.count("<h1"), 1, "%s has one main heading" % path)
+
+    def test_the_bottom_of_a_page_has_the_other_pages_the_source_the_contact_and_what_the_site_is_not(self):
+        for lang in site.LANGS:
+            html = self.pages[site.page_file(lang, "index")]
+            foot = html.split('<footer class="foot">')[1]
+            for target in ("privacy.html", "terms.html", "delete-account.html", "faq.html", site.REPO, site.ISSUES, site.RELEASES):
+                self.assertIn('href="%s"' % target, foot, (lang, target))
+            self.assertIn(site.load(lang)["index"]["fan"], foot, lang)
+
+    def test_the_top_has_the_app_in_every_language_and_marks_the_page_of_the_questions(self):
+        for lang in site.LANGS:
+            root = "" if lang == "en" else "../"
+            top = self.pages[site.page_file(lang, "index")].split("</header>")[0]
+            self.assertIn('href="%sapp/"' % root, top)
+            faq = self.pages[site.page_file(lang, "faq")].split("</header>")[0]
+            self.assertEqual(faq.count('aria-current="page"'), 1, lang)
+            self.assertEqual(top.count('aria-current="page"'), 0, lang)
+
+    def test_the_front_page_has_its_features_in_every_language_each_with_a_picture_and_a_text(self):
+        for lang in site.LANGS:
+            html = self.pages[site.page_file(lang, "index")]
+            self.assertEqual(html.count('<article class="feature">'), site.FEATURES, lang)
+            self.assertEqual(html.count('<div class="ico"><svg'), site.FEATURES, lang)
+            self.assertIn('id="features"', html, lang)
+            self.assertEqual(html.count('<ul class="chips">'), 1, lang)
+            chips = html.split('<ul class="chips">')[1].split("</ul>")[0]
+            self.assertEqual(chips.count("<li>"), site.CHIPS, lang)
+            for chip in site.load(lang)["index"]["chips"]:
+                self.assertIn("<li>%s</li>" % chip, chips, lang)
+            for title, text in site.load(lang)["index"]["features"]:
+                self.assertIn("<h3>%s</h3><p>%s</p>" % (title, text), html, lang)
+        self.assertEqual(len(site.FEATURE_ICONS), site.FEATURES)
+        self.assertEqual(set(site.FEATURE_ICONS), set(site.ICONS))
+
+    def test_a_picture_is_drawn_by_what_it_says_and_not_by_the_stylesheet(self):
+        for name in site.ICONS:
+            svg = site.icon(name)
+            for needle in ('stroke="currentColor"', 'fill="none"', 'aria-hidden="true"'):
+                self.assertIn(needle, svg, name)
+
+    def test_the_front_page_leads_to_the_question_about_the_bot_and_the_privacy_policy(self):
+        question = self.english["faq"]["items"][site.BOT_QUESTION - 1][0]
+        self.assertIn("bot", question.lower())
+        for lang in site.LANGS:
+            html = self.pages[site.page_file(lang, "index")]
+            self.assertIn('href="faq.html#q%d"' % site.BOT_QUESTION, html, lang)
+            self.assertIn('href="privacy.html"', html, lang)
+            self.assertIn('id="q%d"' % site.BOT_QUESTION, self.pages[site.page_file(lang, "faq")], lang)
+
+    def test_the_front_page_says_what_it_is_to_a_search_engine_as_a_program(self):
+        for lang in site.LANGS:
+            html = self.pages[site.page_file(lang, "index")]
+            data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+            self.assertEqual(data["@type"], "SoftwareApplication")
+            self.assertEqual(data["name"], "Tyria Codex")
+            self.assertEqual(data["url"], site.SITE_URL + site.page_file(lang, "index"))
+            self.assertEqual(data["offers"]["price"], "0")
+            self.assertEqual(data["inLanguage"], [site.load(l)["meta"]["html_lang"] for l in site.LANGS])
+
+    def test_the_questions_have_each_an_address_and_are_told_to_a_search_engine(self):
+        for lang in site.LANGS:
+            html = self.pages[site.page_file(lang, "faq")]
+            items = site.load(lang)["faq"]["items"]
+            ids = re.findall(r'<details id="(q\d+)">', html)
+            self.assertEqual(ids, ["q%d" % i for i in range(1, len(items) + 1)], lang)
+            data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+            self.assertEqual(data["@type"], "FAQPage")
+            self.assertEqual(len(data["mainEntity"]), len(items), lang)
+            self.assertEqual(data["mainEntity"][0]["name"], plain(items[0][0]))
+            self.assertNotIn("<", data["mainEntity"][0]["acceptedAnswer"]["text"], "an answer is told as text")
+            self.assertIn("Question", data["mainEntity"][0]["@type"])
+
+    def test_a_script_cannot_be_ended_by_what_it_carries(self):
+        out = site.json_ld({"a": "</script><b>"})
+        self.assertEqual(out.count("</script>"), 1)
+        self.assertIn("<\\/script>", out)
+
+    def test_a_long_page_begins_with_where_its_parts_are_and_each_leads_to_its_part(self):
+        for lang in site.LANGS:
+            for page in ("privacy", "terms"):
+                html = self.pages[site.page_file(lang, page)]
+                toc = re.search(r'<nav class="toc"[^>]*>(.*?)</nav>', html, re.S).group(1)
+                targets = re.findall(r'href="#(s\d+)"', toc)
+                self.assertGreaterEqual(len(targets), 3, (lang, page))
+                for target in targets:
+                    self.assertEqual(html.count('<h2 id="%s">' % target), 1, (lang, page, target))
+                self.assertEqual(len(targets), html.count("<h2 id="), "every heading is in it: %s %s" % (lang, page))
+                self.assertIn(site.load(lang)["ui"]["toc"], toc)
+
+    def test_a_page_that_is_not_long_has_no_table_of_contents(self):
+        for lang in site.LANGS:
+            self.assertNotIn('class="toc"', self.pages[site.page_file(lang, "faq")], lang)
+            self.assertNotIn('class="toc"', self.pages[site.page_file(lang, "index")], lang)
+
+    def test_the_site_has_a_page_for_an_address_that_is_not_here_and_a_map_of_itself(self):
+        self.assertEqual(sorted(self.extra), ["404.html", "sitemap.xml"])
+        lost = self.extra["404.html"]
+        self.assertIn('<base href="%s">' % site.SITE_URL, lost, "it is shown at any address, so its links are from the base of the site")
+        self.assertIn('<meta name="robots" content="noindex">', lost)
+        self.assertNotIn('rel="canonical"', lost)
+        self.assertNotIn('rel="alternate"', lost)
+        self.assertNotIn('class="lang"', lost, "there is no page of it in the other languages")
+        parser = Links()
+        parser.feed(lost)
+        self.assertEqual(parser.bad, [])
+        self.assertEqual(parser.stack, [])
+        self.assertIn("404", lost)
+
+    def test_the_map_of_the_site_has_every_page_of_every_language_each_with_its_others(self):
+        import xml.dom.minidom
+        text = self.extra["sitemap.xml"]
+        xml.dom.minidom.parseString(text)  # well formed
+        locs = re.findall(r"<loc>(.*?)</loc>", text)
+        wanted = [site.SITE_URL + site.page_file(l, p) for p in site.PAGES for l in site.LANGS] + [site.SITE_URL + "app/"]
+        self.assertEqual(sorted(locs), sorted(wanted))
+        self.assertEqual(len(set(locs)), len(locs), "each once")
+        # each page offers itself and the others, and the page to show when nothing says which
+        first = text.split("<url>")[1]
+        self.assertEqual(first.count("hreflang="), len(site.LANGS) + 1)
+        self.assertIn('hreflang="x-default"', first)
+
+    def test_the_picture_of_a_link_is_there_and_is_the_size_that_is_said(self):
+        path = os.path.join(site.SITE, site.IMAGE)
+        self.assertTrue(os.path.exists(path), "run tools/make_site_image.py")
+        with open(path, "rb") as f:
+            head = f.read(24)
+        self.assertEqual(head[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+        self.assertEqual((width, height), site.IMAGE_SIZE)
+        html = self.pages["index.html"]
+        self.assertIn('og:image:width" content="%d"' % width, html)
+        self.assertIn('og:image:height" content="%d"' % height, html)
+
+    def test_a_language_that_lacks_what_the_front_page_lists_is_refused(self):
+        english = self.english
+        for key, broken in (("chips", ["only", "three", "texts"]), ("features", english["index"]["features"][:7]),
+                            ("features", [["a heading"]] * site.FEATURES)):
+            content = json.loads(json.dumps(site.load("de")))
+            content["index"][key] = broken
+            problems = site.validate("de", content, english)
+            self.assertTrue(any(key in p for p in problems), (key, problems))
+        content = json.loads(json.dumps(site.load("de")))
+        content["faq"]["lead"] = ""
+        self.assertTrue(any("faq.lead" in p for p in site.validate("de", content, english)))
+        content = json.loads(json.dumps(site.load("de")))
+        del content["ui"]["skip"]
+        self.assertTrue(any("ui is missing" in p for p in site.validate("de", content, english)))
+
+    def test_what_the_stylesheet_has_to_do_for_the_pages_it_is_said_by(self):
+        with open(os.path.join(site.SITE, "style.css"), encoding="utf-8") as f:
+            css = f.read()
+        for needle in (".skip", ".top", ".hero", ".feature", ".platform", ".band", ".final", ".toc", ".foot", ".fan", ".lost",
+                       "prefers-reduced-motion", "@media print", ":focus-visible", "[hidden]"):
+            self.assertIn(needle, css, needle)
+        # nothing is loaded from elsewhere
+        self.assertNotIn("@import", css)
+        self.assertNotIn("url(http", css)
 
 
 if __name__ == "__main__":
