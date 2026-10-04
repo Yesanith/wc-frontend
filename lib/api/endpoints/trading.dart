@@ -69,7 +69,7 @@ extension Gw2TradingApi on Gw2Api {
       _list(await get('/commerce/transactions/$kind', {'page_size': '200', 'page': '0'}));
 
   /// coins and items waiting to be picked up at a trading post npc
-  Future<Json> delivery() async => Map<String, dynamic>.from(await get('/commerce/delivery') as Map);
+  Future<Json> delivery() async => _object(await get('/commerce/delivery'));
 
   /// how many coins you get for [gems] gems
   Future<int> coinsForGems(int gems) async {
@@ -86,7 +86,7 @@ extension Gw2TradingApi on Gw2Api {
   /// full order book of one item, every price level with its quantity
   Future<Json?> listings(int itemId) async {
     try {
-      return Map<String, dynamic>.from(await get('/commerce/listings/$itemId') as Map);
+      return _object(await get('/commerce/listings/$itemId'));
     } on Gw2ApiException catch (e) {
       // untradeable items answer 404
       if (e.status == 404) return null;
