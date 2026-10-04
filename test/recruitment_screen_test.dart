@@ -384,6 +384,15 @@ void main() {
       expect(find.text('No guild matches. Try fewer filters.'), findsOneWidget);
     });
 
+    testWidgets('has a chip for each of the seven languages that the forum has a tag for, and none for Japanese or Chinese', (tester) async {
+      await show(tester, FakeRecruit(), home: const RecruitmentScreen());
+      for (final code in recruitLanguages) {
+        expect(find.widgetWithText(ChoiceChip, recruitLanguageLabel(code)), findsOneWidget, reason: code);
+      }
+      expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
+    });
+
     testWidgets('asks again for each filter that is chosen, and for the first page', (tester) async {
       final fake = FakeRecruit();
       await show(tester, fake, home: const RecruitmentScreen());
@@ -816,21 +825,32 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('lets a guild look for eight things at the most, and the others wait until one is taken off',
-        (tester) async {
+    testWidgets('lets a guild choose five tags in all, between what it looks for and its languages, and the others wait until one is taken off', (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       final s = S(AppLang.en);
-      for (final tag in recruitTags.take(8)) {
-        await tapOn(tester, find.widgetWithText(FilterChip, recruitTagLabel(s, tag)));
+      Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
+      Finder lang(int i) => find.widgetWithText(FilterChip, recruitLanguageLabel(recruitLanguages[i]));
+      for (final i in [0, 1, 2]) {
+        await tapOn(tester, tag(i));
       }
-      final ninth = find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[8]));
-      await tester.ensureVisible(ninth);
-      expect(tester.widget<FilterChip>(ninth).onSelected, isNull);
-      await tapOn(tester, find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags.first)));
-      expect(tester.widget<FilterChip>(ninth).onSelected, isNotNull);
+      for (final i in [0, 1]) {
+        await tapOn(tester, lang(i));
+      }
+      // five: nothing else can be chosen, of either kind
+      for (final chip in [tag(3), tag(12), lang(2), lang(6)]) {
+        await tester.ensureVisible(chip);
+        expect(tester.widget<FilterChip>(chip).onSelected, isNull);
+      }
+      // and what is chosen can be taken off, which gives the place to either kind
+      await tapOn(tester, lang(0));
+      for (final chip in [tag(3), lang(2)]) {
+        expect(tester.widget<FilterChip>(chip).onSelected, isNotNull);
+      }
+      await tapOn(tester, tag(3));
+      expect(tester.widget<FilterChip>(lang(3)).onSelected, isNull, reason: 'five again');
     });
 
-    testWidgets('lets a guild say five languages at the most', (tester) async {
+    testWidgets('lets a guild say five languages and nothing looked for, and five things looked for and no language', (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       for (final code in recruitLanguages.take(5)) {
         await tapOn(tester, find.widgetWithText(FilterChip, recruitLanguageLabel(code)));
@@ -838,6 +858,58 @@ void main() {
       final sixth = find.widgetWithText(FilterChip, recruitLanguageLabel(recruitLanguages[5]));
       await tester.ensureVisible(sixth);
       expect(tester.widget<FilterChip>(sixth).onSelected, isNull);
+    });
+
+    testWidgets('says how many tags are chosen of the five, and what they are for', (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      String hint(int n) =>
+          'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. $n of 5 chosen.';
+      expect(find.text(hint(0)), findsOneWidget);
+      await tapOn(tester, find.widgetWithText(FilterChip, 'Raids'));
+      expect(find.text(hint(1)), findsOneWidget);
+      await tapOn(tester, find.widgetWithText(FilterChip, 'English'));
+      expect(find.text(hint(2)), findsOneWidget);
+      await tapOn(tester, find.widgetWithText(FilterChip, 'Raids'));
+      expect(find.text(hint(1)), findsOneWidget, reason: 'it counts what is taken off');
+    });
+
+    testWidgets('has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags', (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      expect(find.widgetWithText(FilterChip, '日本語'), findsNothing);
+      expect(find.widgetWithText(FilterChip, '中文'), findsNothing);
+      expect(find.widgetWithText(FilterChip, 'Русский'), findsOneWidget, reason: 'the last of the seven');
+      expect(find.widgetWithText(FilterChip, 'English'), findsOneWidget);
+    });
+
+    testWidgets('keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is', (tester) async {
+      final old = RecruitPage(
+        guildId: _id,
+        gw2GuildId: 'g',
+        name: 'M',
+        tag: 'M',
+        headline: 'H',
+        description: 'A description that is long enough to be one.',
+        contact: 'Whisper me',
+        lookingFor: const ['raids', 'fractals', 'strikes', 'dungeons', 'wvw', 'pvp', 'farming', 'casual'],
+        languages: const ['en', 'ja'],
+        canEdit: true,
+      );
+      final fake = await editor(tester, FakeRecruit(current: old));
+      expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, '日本語')).selected, isTrue);
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves, isEmpty, reason: 'ten tags and a language that is no tag');
+      expect(find.text('The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. 10 of 5 chosen.'), findsWidgets);
+      await settle(tester);
+      // taken off: the language, and enough of what it looks for
+      await tapOn(tester, find.widgetWithText(FilterChip, '日本語'));
+      for (final tag in ['Dungeons', 'WvW', 'PvP', 'Farming', 'Casual']) {
+        await tapOn(tester, find.widgetWithText(FilterChip, tag));
+      }
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves.length, 1);
+      expect(fake.saves.single.lookingFor, {'raids', 'fractals', 'strikes'});
+      expect(fake.saves.single.languages, {'en'});
+      await settle(tester);
     });
 
     testWidgets('keeps a language the app has no choice for, so that it can be taken off', (tester) async {

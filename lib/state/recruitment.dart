@@ -43,8 +43,8 @@ String recruitRegionLabel(S s, RecruitRegion region) => s.t(switch (region) {
       RecruitRegion.any => 'rec_region_any',
     });
 
-/// the languages a guild is offered to say it plays in. the database takes any two lowercase letters, and what it has of others is shown as it is
-const recruitLanguages = ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru', 'ja', 'zh'];
+/// the languages a guild may say it plays in: the seven that the forum of the official server has a tag for, which is what the database takes. a page that chose another before shows it as it is, to be taken off
+const recruitLanguages = ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru'];
 
 /// how much a page may hold, as the database keeps it
 const recruitHeadlineMax = 80;
@@ -52,8 +52,8 @@ const recruitDescriptionMax = 2000;
 const recruitRequirementsMax = 500;
 const recruitPlayTimesMax = 120;
 const recruitContactMax = 120;
-const recruitTagsMax = 8;
-const recruitLanguagesMax = 5;
+/// what a page looks for and its languages are the tags of its post in the forum, which carries five at the most: five between the two
+const recruitTagsMax = 5;
 const recruitDescriptionMin = 20;
 
 /// how many guilds a page of the list holds
@@ -450,8 +450,8 @@ class RecruitDraft {
         if (playTimes.trim().length > recruitPlayTimesMax) RecruitField.playTimes,
         if (contact.trim().length > recruitContactMax) RecruitField.contact,
         if (discordInvite.trim().isNotEmpty && !isDiscordInvite(discordInvite.trim())) RecruitField.discordInvite,
-        if (lookingFor.length > recruitTagsMax) RecruitField.lookingFor,
-        if (languages.length > recruitLanguagesMax) RecruitField.languages,
+        if (lookingFor.length + languages.length > recruitTagsMax) RecruitField.tags,
+        if (languages.any((l) => !recruitLanguages.contains(l))) RecruitField.languages,
       ];
 
   /// what it takes to be shown to everybody: a headline, a description and a way to be reached
@@ -463,7 +463,7 @@ class RecruitDraft {
 }
 
 /// the fields of a page, for saying which one is not right
-enum RecruitField { headline, description, requirements, playTimes, contact, discordInvite, lookingFor, languages }
+enum RecruitField { headline, description, requirements, playTimes, contact, discordInvite, lookingFor, languages, tags }
 
 /// why the database refused, as the hint it gave
 class RecruitFailure implements Exception {
