@@ -11,6 +11,10 @@ import '../util.dart';
 import 'server_prices.dart';
 import 'settings.dart';
 
+// the api's endpoint methods are extensions, so whoever reads the client
+// through its provider needs them in scope too
+export '../api/gw2_api.dart';
+
 final storageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
 
 /// where the keys are kept in the secure storage
