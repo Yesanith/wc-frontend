@@ -181,6 +181,8 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           key: const Key('rec-recruiting'),
           contentPadding: EdgeInsets.zero,
           title: Text(s.t('rec_f_recruiting')),
+          // the post of the page in the forum of the official server is locked while it is off: it is this switch that does it, and nothing else
+          subtitle: Text(s.t('rec_f_recruiting_hint'), style: const TextStyle(color: AppColors.hint, fontSize: 12)),
           value: _draft.recruiting,
           onChanged: (v) => _set(_draft.copyWith(recruiting: v)),
         ),

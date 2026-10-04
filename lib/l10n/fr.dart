@@ -504,9 +504,10 @@ const frStrings = <String, String>{
   'rec_f_contact': 'Nom à chuchoter en jeu (facultatif)',
   'rec_f_languages': 'Langues (5 au maximum)',
   'rec_f_recruiting': 'Nous recrutons en ce moment',
+  'rec_f_recruiting_hint': 'Si tu le désactives, la publication de cette page dans le forum du serveur Discord officiel est verrouillée : personne ne peut y répondre.',
   'rec_f_published': 'Montrer cette page à tout le monde',
   'rec_f_published_hint':
-      'Elle est aussi publiée dans le forum guild-recruitment du serveur Discord officiel. Si tu la désactives, la publication y est verrouillée.',
+      'Elle est aussi publiée dans le forum guild-recruitment du serveur Discord officiel. Si tu la désactives, la publication y est supprimée.',
   'rec_save_hint': 'Enregistrer garde la page dans la liste. Elle en sort après 60 jours sans enregistrement.',
   'rec_save': 'Enregistrer',
   'rec_saved': 'Enregistré.',

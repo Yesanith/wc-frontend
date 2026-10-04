@@ -500,9 +500,10 @@ const enStrings = <String, String>{
   'rec_f_contact': 'Name to whisper in the game (optional)',
   'rec_f_languages': 'Languages (up to 5)',
   'rec_f_recruiting': 'Recruiting right now',
+  'rec_f_recruiting_hint': 'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.',
   'rec_f_published': 'Show this page to everybody',
   'rec_f_published_hint':
-      'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is locked.',
+      'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.',
   'rec_save_hint': 'Saving keeps the page in the list. It leaves the list after 60 days without being saved.',
   'rec_save': 'Save',
   'rec_saved': 'Saved.',
