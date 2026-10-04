@@ -1,6 +1,27 @@
 {
- "meta": {"name": "Deutsch", "html_lang": "de"},
- "ui": {"nav_home": "Tyria Codex", "nav_faq": "FAQ", "nav_privacy": "Datenschutzerklärung", "nav_terms": "Nutzungsbedingungen", "nav_delete": "Konto löschen", "nav_contact": "Kontakt", "language": "Sprache", "note": "Dies ist eine Übersetzung. Bei Abweichungen gilt die englische Fassung."},
+ "meta": {
+  "name": "Deutsch",
+  "html_lang": "de"
+ },
+ "ui": {
+  "nav_home": "Tyria Codex",
+  "nav_faq": "FAQ",
+  "nav_privacy": "Datenschutzerklärung",
+  "nav_terms": "Nutzungsbedingungen",
+  "nav_delete": "Konto löschen",
+  "nav_contact": "Kontakt",
+  "language": "Sprache",
+  "note": "Dies ist eine Übersetzung. Bei Abweichungen gilt die englische Fassung.",
+  "nav_features": "Funktionen",
+  "nav_app": "App öffnen",
+  "skip": "Zum Inhalt springen",
+  "footer_product": "App",
+  "footer_legal": "Rechtliches",
+  "footer_project": "Projekt",
+  "nav_source": "Quellcode",
+  "nav_releases": "Downloads",
+  "toc": "Auf dieser Seite"
+ },
  "index": {
   "tagline": "Ein inoffizieller Guild-Wars-2-Begleiter für Android, iPhone und den Browser.",
   "intro": "Deine Charaktere, Geldbörse, Handelsposten, Handwerk, Weltbosse, das Wizard's Vault und eine Weltkarte, dazu Gildenevents mit Anmeldungen, Rollen und einem Discord-Bot.",
@@ -10,13 +31,70 @@
   "open_button": "Tyria Codex öffnen",
   "iphone": "<strong>iPhone:</strong> Öffne die Seite in Safari, tippe auf „Teilen“ und wähle <em>Zum Home-Bildschirm</em>. Dann startet sie eigenständig wie eine App.",
   "limits": "Die Browserversion hat keine Benachrichtigungen, keine Warnungen für Weltevents und keinen Zwischenspeicher auf dem Gerät und lädt daher langsamer. Dein API-Schlüssel bleibt in diesem Browser und wird nur an die Guild-Wars-2-Server gesendet.",
-  "fan": "Tyria Codex ist ein Fanprojekt und steht in keiner Verbindung zu ArenaNet oder NCSOFT und wird von ihnen nicht unterstützt. Guild Wars 2 und alle zugehörigen Logos und Designs sind Marken oder eingetragene Marken der NCSOFT Corporation."},
+  "fan": "Tyria Codex ist ein Fanprojekt und steht in keiner Verbindung zu ArenaNet oder NCSOFT und wird von ihnen nicht unterstützt. Guild Wars 2 und alle zugehörigen Logos und Designs sind Marken oder eingetragene Marken der NCSOFT Corporation.",
+  "eyebrow": "Inoffizieller Guild-Wars-2-Begleiter",
+  "hero_h": "Dein Tyria, <em>auf einen Blick</em>.",
+  "chips": [
+   "Kostenlos",
+   "Keine Werbung",
+   "Kein Tracking",
+   "Open Source"
+  ],
+  "features_h": "Alles, was das Spiel dir nicht zeigt",
+  "features_p": "Eine App für das Spiel außerhalb des Spiels: dein Konto, die Märkte, die Welt und deine Gilde.",
+  "features": [
+   [
+    "Dein Tag, bereit",
+    "Reset-Countdowns, Ziele des Wizard's Vault, die Metas, bei denen du noch mitmachen kannst, die tägliche Checkliste und deine Geldbörse auf einer Seite."
+   ],
+   [
+    "Charaktere und Builds",
+    "Ausrüstung mit Runen, Siegeln und Infusionen, der komplette Build mit Eigenschaftenraster, die Garderobe, Vergleich nebeneinander und teilbare Heldenkarten."
+   ],
+   [
+    "Handelsposten",
+    "Preise, eine Beobachtungsliste mit Preisalarmen, 90 Tage Gewinn und Verlust und auf Android eine Benachrichtigung, wenn deine Aufträge abgeschlossen sind."
+   ],
+   [
+    "Handwerk",
+    "Alle Handwerks- und Mystische-Schmiede-Rezepte, mit einem Rechner, der weiß, was dein Konto schon abdeckt und ob Kaufen günstiger ist."
+   ],
+   [
+    "Welt und WvW",
+    "Weltboss- und Meta-Timer mit Alarmen, Karten mit jedem Wegpunkt und Wahrzeichen und aktuelle Welt-gegen-Welt-Begegnungen."
+   ],
+   [
+    "Sammlungen und Fortschritt",
+    "Reittiere, Skins, Minis und Farbstoffe, Erfolge, Meisterschaften und die Raid- und Verlies-Clears dieser Woche."
+   ],
+   [
+    "Gilden und Events",
+    "Gildenevents mit Anmeldungen, Discord-Rollen, die deinen Rängen folgen, Schatzkammer, Lager und Protokoll sowie ein Bot für deinen Server."
+   ],
+   [
+    "Eine Gruppe oder Gilde finden",
+    "Nimm an öffentlichen Events für jede Spielweise teil oder stöbere in rekrutierenden Gilden und tritt mit einem Tipp ihrem Discord bei."
+   ]
+  ],
+  "platforms_h": "Nutze es, wo du spielst",
+  "android_h": "Android",
+  "android_p": "Die volle App, mit Benachrichtigungen für Weltereignisse, Preisalarmen und verkauften Items, und mit den Spieldaten auf deinem Gerät.",
+  "discord_h": "Ein Discord-Bot für deine Gilde",
+  "discord_p": "Gildenevents mit Anmeldungen und Wartelisten, Rollen, die den Gildenrängen folgen, News- und Patch-Feeds und ein Forum auf dem offiziellen Server, in dem Gilden Mitglieder suchen.",
+  "discord_link": "So fügst du den Bot hinzu",
+  "privacy_h": "Dein API-Schlüssel bleibt deiner",
+  "privacy_p": "Er bleibt auf deinem Gerät oder in deinem Browser und geht nur an die Guild-Wars-2-Server. Keine Werbung, kein Tracking, und das optionale Konto kannst du jederzeit löschen.",
+  "privacy_link": "Datenschutzerklärung lesen",
+  "cta_h": "Schau dich um, ohne Anmeldung",
+  "cta_p": "Öffne Tyria Codex als Gast und füge einen API-Schlüssel hinzu, wenn du dein eigenes Konto sehen willst."
+ },
  "delete": {
   "title": "Konto löschen",
   "intro": "Dies löscht dein Tyria-Companion-Konto endgültig: dein Profil, verknüpfte Guild-Wars-2-Konten, Gildenmitgliedschaften, Event-Anmeldungen, die von dir erstellten Events und deine Benachrichtigungsgeräte. Dein Guild-Wars-2-Konto, dein Discord-Konto und alles, was die App auf deinem Handy speichert, bleiben unberührt.",
   "signin_p": "Melde dich mit dem Discord-Konto an, das du in der App verwendest.",
   "signin_btn": "Mit Discord anmelden",
-  "signed_prefix": "Angemeldet als ", "signed_suffix": ".",
+  "signed_prefix": "Angemeldet als ",
+  "signed_suffix": ".",
   "sure": "Ich verstehe, dass dies nicht rückgängig gemacht werden kann.",
   "delete_btn": "Mein Konto endgültig löschen",
   "signout_btn": "Abmelden",
@@ -24,103 +102,192 @@
   "app_note": "Du kannst dein Konto auch in der App löschen: Einstellungen, dann Konto löschen.",
   "deleting": "Wird gelöscht …",
   "failed": "Das hat nicht geklappt. Bitte versuche es erneut oder eröffne ein Issue auf GitHub.",
-  "fallback_name": "dein Konto"},
- "faq": {"title": "Häufig gestellte Fragen", "items": [
-  ["Was ist Tyria Codex?", "Ein inoffizieller Guild-Wars-2-Begleiter: deine Charaktere, Geldbörse, Handelsposten, Handwerk, Weltbosse, das Wizard's Vault und eine Weltkarte, dazu Gildenevents mit Anmeldungen und ein Discord-Bot. Es ist ein Fanprojekt, kostenlos und ohne Werbung."],
-  ["Wo kann ich es nutzen?", "Unter Android als App und auf jedem Handy oder Computer im Browser auf der <a href='{ROOT}app/'>App-Seite dieser Website</a>. Eine iPhone-App gibt es noch nicht: Öffne die Browserversion in Safari, tippe auf „Teilen“ und wähle „Zum Home-Bildschirm“, dann startet sie wie eine App. Die Browserversion hat keine Benachrichtigungen und keine Weltevent-Warnungen."],
-  ["Brauche ich einen API-Schlüssel? Welche Berechtigungen?", "Die Spieldaten kommen von deinem eigenen Guild-Wars-2-API-Schlüssel, den du auf account.arena.net erstellst. Wähle aus, was du sehen willst: account wird immer benötigt, characters, inventories, wallet, tradingpost und guilds schalten die jeweiligen Bereiche frei. Ohne Schlüssel kannst du alles nutzen, was nicht dein Konto betrifft."],
-  ["Ist mein API-Schlüssel sicher?", "Dein Schlüssel bleibt auf deinem Gerät, in der Browserversion in deinem Browser, und wird nur an die Guild-Wars-2-Server gesendet. An unsere wird er nie gesendet. Siehe die <a href='privacy.html'>Datenschutzerklärung</a>. Ein Schlüssel kann nur lesen, und du kannst ihn jederzeit auf account.arena.net löschen."],
-  ["Brauche ich das Tyria-Companion-Konto?", "Nein, es ist optional. Du brauchst es für Gildenevents, die Gildeninformationen und den Discord-Bot. Du erstellst es, indem du dich mit Discord anmeldest, und kannst es jederzeit in den Einstellungen oder auf der <a href='delete-account.html'>Seite zum Löschen des Kontos</a> löschen."],
-  ["Was passiert, wenn ich mein Guild-Wars-2-Konto verknüpfe?", "Die App erzeugt ein Token, das zehn Minuten gültig ist, und sendet nur dieses, nie deinen Schlüssel. Wir speichern deinen Kontonamen, deine Gilden und deinen Rang darin. Wenn du eine Gilde leitest, lässt dasselbe Token unsere Server lesen, was das Spiel nur Anführern zeigt, damit die Mitglieder deiner Gilde es in der App sehen können."],
-  ["Warum sehe ich Schatzkammer, Lager oder Protokoll meiner Gilde nicht?", "Das Spiel zeigt sie nur dem Anführer der Gilde. Mitglieder sehen sie hier, wenn ihr Anführer Tyria Codex nutzt und es erlaubt. Der Anführer öffnet die App einmal, wodurch die Gildendaten geholt werden, und wählt, was Mitglieder sehen: Jeder Teil kann verborgen werden. Schatzkammer, Lager und Protokoll, die zeigen, wer was genommen hat, bleiben verborgen, bis der Anführer die Auswahl bestätigt hat."],
-  ["Es steht dort, der Anführer habe das noch nicht geteilt.", "Entweder hat der Anführer die App seit dem Verknüpfen nicht geöffnet, das Spiel hat einen Teil verweigert oder der Anführer hat ihn verborgen. Bitte deinen Anführer, die App zu öffnen und die Augen-Schaltfläche auf der Gildenseite zu prüfen."],
-  ["Wer gilt als Offizier?", "Das Spiel entscheidet. Ein Rang, der einladen, befördern oder entfernen oder Ränge bearbeiten darf, macht Offiziere, und Offiziere können Events erstellen und verwalten. Niemand wird von Hand ernannt. Die App zeigt den Rangnamen, den deine Gilde vergeben hat, etwa Raid Lead."],
-  ["Wie füge ich den Discord-Bot hinzu?", "Lade ihn auf deinen Server ein, dann führt ein Gildenanführer mit der Berechtigung „Server verwalten“ <code>/tyria connect</code> mit Tag oder Name der Gilde in dem Kanal aus, in dem die Events erscheinen sollen. Der Bot muss den Kanal sehen und darin schreiben können; für Threads, geplante Events, Rollen und Erinnerungen braucht er die passenden Berechtigungen, und <code>/tyria status</code> sagt, was fehlt."],
-  ["Was kann der Bot?", "<code>/event create</code> und <code>/event weekly</code> erstellen Events, Spieler melden sich mit Schaltflächen an, mit Beruf und Rollen. <code>/event report</code> fügt einen Arcdps-Berichtslink hinzu. <code>/tyria settings</code> stellt Threads, Discord-Events und Erinnerungen ein. <code>/tyria notify</code> postet Neuigkeiten und Spiel-Updates. <code>/tyria roles</code> und <code>/tyria rankrole</code> vergeben Discord-Rollen für Gildenränge. Der Bot kann keine Nachrichten lesen."],
-  ["Wie folgen Discord-Rollen den Gildenrängen?", "Führe <code>/tyria roles ranks:true</code> aus. Der Bot erstellt dann für jeden Rang deiner Gilde eine Discord-Rolle ohne Berechtigungen und gibt sie dem, der den Rang hat. Es beginnt, sobald die App des Anführers die Ränge geholt hat; bis dahin gelten die Rollen Mitglied, Offizier und Anführer."],
-  ["Warum fehlt im Browser etwas?", "Die Browserversion kann die Benachrichtigungen des Handys, Weltevent-Warnungen oder einen Zwischenspeicher auf dem Gerät nicht nutzen und lädt daher langsamer. Wenn etwas anderes nicht funktioniert, sag uns Bescheid."],
-  ["Wie lösche ich meine Daten?", "Einstellungen, dann Konto löschen, oder die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>. Dein Profil, verknüpfte Konten, Mitgliedschaften, Anmeldungen und die von dir erstellten Events werden sofort gelöscht. Was der Anführer der Gilde geholt hat, wird gelöscht, wenn der letzte Anführer, der die App nutzt, geht."],
-  ["Gehört es zu ArenaNet?", "Nein. Es ist ein Fanprojekt. Guild Wars 2 und seine Logos und Designs sind Marken der NCSOFT Corporation."],
-  ["Etwas stimmt nicht. Wo melde ich es?", "<a href='https://github.com/Yesanith/tyria-companion/issues'>Eröffne ein Issue auf GitHub</a> und schreib, was du getan und was du gesehen hast. Ein Screenshot hilft. Poste niemals deinen API-Schlüssel."]]},
- "privacy": {"title": "Datenschutzerklärung", "updated": "Zuletzt aktualisiert am 2. Oktober 2026", "blocks": [
-  "Tyria Codex ist ein inoffizieller Guild-Wars-2-Begleiter. Es gibt keine Werbung und keine Analysewerkzeuge, wir verfolgen dich nicht und verkaufen oder teilen deine Daten nicht für Werbung. Diese Seite sagt, was verarbeitet wird, wo, wer es sehen kann und wie lange. Sie gilt für die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot.",
-  "Was auf deinem Gerät bleibt",
-  "Deine Guild-Wars-2-API-Schlüssel, die damit geladenen Spieldaten, deine Einstellungen, Favoriten, Beobachtungsliste und der Preisverlauf werden nur auf deinem Gerät gespeichert, in der Browserversion in deinem Browser. Die App spricht direkt mit der offiziellen Guild-Wars-2-API. Deine API-Schlüssel werden nie an unsere Server gesendet. Auf dem Handy geht der Schlüssel in einem Anfrage-Header an ArenaNet. Ein Browser kann das mit der API des Spiels nicht, daher geht er dort in der Adresse der Anfrage, nur an ArenaNet. Im Browser wird der Schlüssel im Speicher dieses Browsers aufbewahrt; das Löschen der Websitedaten entfernt ihn.",
-  "Das optionale Tyria-Companion-Konto",
-  "Gildenevents, Gildeninformationen und der Discord-Bot brauchen ein Konto, das du durch Anmelden mit Discord erstellst. Alles Folgende gilt nur, wenn du das tust.",
-  ["<strong>Von Discord:</strong> deine Discord-Nutzer-ID, dein Name, dein Avatar und, falls Discord sie liefert, deine E-Mail-Adresse.",
-   "<strong>Dein Guild-Wars-2-Konto:</strong> Zum Verknüpfen erzeugt die App ein Token, das zehn Minuten gültig ist und nur dein Konto und deine Gilden lesen kann, und sendet nur dieses Token. Wir speichern deinen Kontonamen und deine ID, die Namen und Tags deiner Gilden, deine Rolle darin und den Rang, den dir das Spiel gibt. Das Token wird für diese wenigen Anfragen verwendet und nicht gespeichert.",
-   "<strong>Wenn du eine Gilde leitest:</strong> Mit demselben zehnminütigen Token lesen unsere Server auch, was das Spiel nur dem Anführer einer Gilde zeigt, und speichern es für die Gilde: Stufe, Nachricht des Tages und Mitgliederzahl, die Mitgliederliste mit Kontoname, Rang und Beitrittsdatum jedes Mitglieds, die Ränge und was jeder Rang darf, die Schatzkammer, das Lager, den Gildenspeicher, das Protokoll, wer was getan hat, die gebauten Verbesserungen und die PvP-Teams. Die Mitgliederliste nennt auch Personen, die Tyria Companion nicht nutzen, so wie das Spiel sie auflistet. Das geschieht jedes Mal, wenn deine App geöffnet wird, höchstens alle halbe Stunde.",
-   "<strong>Gildenevents:</strong> von dir erstellte Events, auch wöchentliche, deine Antworten, die Rolle, den Beruf und weitere Rollen, die du anbietest, das gewählte Guild-Wars-2-Konto, die Discord-Rollen, für die ein Event offen ist, und die Arcdps-Berichtslinks (dps.report), die Mitglieder hinzufügen, mit dem Boss, dem Ergebnis, der Spielerzahl und der Dauer, die dps.report dafür angibt.",
-   "<strong>Benachrichtigungen:</strong> wenn du sie erlaubst, das Benachrichtigungs-Token deines Geräts und die Sprache der App, um Event-Erinnerungen zu senden.",
-   "<strong>Discord-Server:</strong> wenn du eine Gilde leitest und einen Discord-Server verbindest: die ID des Servers und den Kanal, in den Events gepostet werden, seine Einstellungen (Zeitzone, Sprache, Threads, geplante Events, Erinnerungen), die Kanäle und die optionale Rolle für Neuigkeiten, tägliche Erfolge und Spiel-Updates, die Discord-Rollen, die Gildenrängen zugeordnet sind, und welche Rollen der Bot welchem Discord-Nutzer gegeben hat, damit er nur diese zurücknehmen kann. Der Bot kann keine Nachrichten lesen. Er erhält die Befehle und Schaltflächen, die Menschen nutzen, und bei einem Klick sendet Discord die ID der Person und ihre Rollen auf diesem Server, die für diesen Moment verwendet und nicht gespeichert werden.",
-   "<strong>Zählungen ohne Namen:</strong> Um zu sehen, dass alles funktioniert und welche Versionen im Einsatz sind, zählen unsere Server pro Tag und ohne jeden Hinweis darauf, wer es war, wie oft jede Version der App von einem angemeldeten Spieler geöffnet wird und worauf sie läuft (Android oder Browser), was die Befehle des Discord-Bots bewirken und wie viele Anfragen gelingen oder scheitern. Das sind nur Zahlen.",
-   "<strong>Preisalarme:</strong> Wenn du einen setzt, während du angemeldet bist, speichert die App ihn auch auf unseren Servern: das Item, seinen Namen, deine Preise und wann er dich zuletzt benachrichtigt hat, damit wir dir eine Benachrichtigung senden können, wenn der Handelsposten sie erreicht. Er wird gelöscht, wenn du ihn entfernst oder dein Konto löschst."],
-  "Wer es sieht",
-  ["Mitglieder deiner Gilden, die auch Tyria Companion nutzen, sehen deinen Guild-Wars-2-Kontonamen, deinen Rang und deine Antworten auf die Events der Gilde.",
-   "Sie sehen auch, was die App des Anführers von der Gilde geholt hat, so wie der Anführer es wählt: Der Anführer kann jeden Teil verbergen, und Schatzkammer, Lager und Protokoll, die zeigen, wer was genommen hat, bleiben verborgen, bis der Anführer die Auswahl geprüft und bestätigt hat. Der Anführer sieht immer alles.",
-   "Wenn deine Gilde einen Discord-Server verbunden hat, sieht jeder im Kanal die Event-Nachrichten mit den Namen der Angemeldeten.",
-   "Niemand außerhalb deiner Gilden sieht etwas davon. Personen, die Tyria Companion nicht nutzen, werden niemandem gezeigt, der nicht in derselben Gilde ist.",
-   "Jeder angemeldete Spieler sieht die öffentlichen Events mit dem Guild-Wars-2-Kontonamen des Organisators. Nur der Organisator eines Events sieht, wer sich angemeldet hat. Siehe unten „Öffentliche Events“."],
-  "Öffentliche Events",
-  ["Jeder angemeldete Spieler kann ein öffentliches Event erstellen. Es gehört zu keiner Gilde: Titel, Beschreibung, Zeit, Art und Sprache sehen alle angemeldeten Spieler, mit deinem Guild-Wars-2-Kontonamen als Organisator. Zum Erstellen brauchst du ein verknüpftes Guild-Wars-2-Konto.",
-   "Wenn du dich für ein öffentliches Event anmeldest, sieht nur der Organisator deinen Guild-Wars-2-Kontonamen und deine Antwort. Alle anderen sehen nur, wie viele teilnehmen.",
-   "Jeder angemeldete Spieler kann ein öffentliches Event mit einem Grund und einer Notiz von bis zu 300 Zeichen melden. Wir speichern die Meldungen mit dem Absender, ein Administrator liest sie, und der Organisator erfährt nicht, wer gemeldet hat. Drei Meldungen blenden ein Event aus, bis ein Administrator es geprüft hat.",
-   "Ein Administrator kann ein öffentliches Event ausblenden oder löschen und einen Organisator daran hindern, weitere zu erstellen. Das halten wir fest.",
-   "Damit es geordnet bleibt, kannst du fünf kommende öffentliche Events haben, zehn pro Tag erstellen und sie bis zu drei Monate im Voraus planen. Dafür zählen wir zwei Tage lang mit, was du erstellst.",
-   "Wenn du dein Konto löschst, werden die öffentlichen Events, die du erstellt hast, deine Anmeldungen zu den öffentlichen Events anderer und die Meldungen, die du gesendet hast, gelöscht, und der Eintrag, der einen Organisator am Erstellen weiterer hindert, geht mit.",
-   "Jedes Guild-Wars-2-Konto, das du verknüpfst, hat eine Region, Europa oder Nordamerika. Wir lesen sie beim Verknüpfen aus der Welt ab, auf der das Spiel das Konto meldet, und speichern sie beim Konto, bis du es trennst oder dein Konto löschst. Sie bestimmt, für welche öffentlichen Events du etwas erstellen und dich anmelden kannst.",
-   "Öffentliche Events werden außerdem im offiziellen Tyria-Companion-Discord-Server im Kanal ihrer Region gepostet: Titel, Beschreibung, Zeit, Art, Tags, wie viele teilnehmen und der Guild-Wars-2-Kontoname des Organisators, sichtbar für alle in diesem Kanal. Wer sich angemeldet hat, wird nie gepostet, nur wie viele. Der Beitrag wird entfernt, wenn das Event ausgeblendet oder gelöscht wird oder du dein Konto löschst.",
-   "Bist du im offiziellen Server, gibt dir der Bot die Rolle jeder Region, in der du ein Konto hast. Er findet dich über deine Discord-Nutzer-ID aus der Anmeldung und nimmt die Rolle zurück, wenn du dein Konto löschst.",
-   "Wenn ein öffentliches Event beginnt, für das du dich angemeldet hast, öffnet der Bot im offiziellen Server einen Text- und einen Sprachkanal, die nur der Organisator und die Angemeldeten (dabei oder vielleicht) sehen, und erwähnt sie mit ihrem Discord-Benutzer. Die Kanäle werden nach dem Event gelöscht.",
-   "Wenn du mit dem Discord-Bot ein öffentliches Event erstellst, wird die Zeitzone, die du ihm nennst (zum Beispiel Europe/Istanbul), mit deiner Discord-Nutzer-ID gespeichert, damit du sie nicht erneut angeben musst, und gelöscht, wenn du dein Konto löschst."],
-  "Dienste, die wir nutzen",
-  ["<strong>Supabase</strong> hostet die Kontodatenbank, die Anmeldung und die Funktionen, die mit dem Spiel und mit Discord sprechen, in der Europäischen Union (Frankfurt). Der Nachrichtenfeed der Browserversion läuft über eine dieser Funktionen, weil die Website des Spiels einem Browser das Lesen nicht erlaubt.",
-   "<strong>Google Firebase Cloud Messaging</strong> liefert Benachrichtigungen an Handys.",
-   "<strong>Google Fonts</strong> liefert die Schrift der App, daher sieht Google diese Anfrage.",
-   "<strong>Discord</strong> übernimmt die Anmeldung und zeigt Nachrichten auf Servern, die den Bot verbunden haben.",
-   "<strong>Die Guild-Wars-2-API und die Website von ArenaNet</strong> liefern alle Spieldaten, Symbole und Neuigkeiten.",
-   "<strong>dps.report</strong> wird nach den öffentlichen Angaben zu einem Berichtslink gefragt, den ein Mitglied hinzufügt.",
-   "<strong>GitHub</strong> hostet diese Website und die Browserversion und sieht die Besuche."],
-  "Wie lange wir es aufbewahren",
-  ["Deine Kontodaten werden aufbewahrt, bis du das Konto löschst.",
-   "Eine Gilde gehört keiner Person, daher löscht das Löschen eines Kontos sie nicht, aber was die App des Anführers geholt hat, darf den Anführer nicht überdauern: Wenn der letzte Anführer, der die App nutzt, geht, werden Stufe, Nachricht des Tages, Zahlen, Mitgliederliste, Ränge, Schatzkammer, Lager, Protokoll und die Auswahl des Anführers gelöscht, und wenn das letzte Mitglied geht, wird die Gilde mit ihrer Discord-Verbindung gelöscht.",
-   "Eine Gildenmitgliedschaft, die die App 30 Tage lang nicht aktualisiert hat, zählt nicht mehr und wird nach 90 Tagen gelöscht. Wiederkommen und erneut verknüpfen stellt sie wieder her.",
-   "Das Benachrichtigungs-Token eines Geräts wird entfernt, wenn du dich abmeldest, Benachrichtigungen ausschaltest oder das Token nicht mehr funktioniert. Die Daten eines Discord-Servers werden entfernt, wenn er getrennt oder seine Gilde gelöscht wird.",
-   "Ein öffentliches Event wird 30 Tage nach seinem Ende mit Anmeldungen und Meldungen gelöscht. Die Zählung dessen, was du an einem Tag erstellt hast, wird nach zwei Tagen gelöscht."],
-  "Dein Konto löschen und deine Rechte",
-  "In der App öffne die Einstellungen und wähle „Konto löschen“, oder nutze ohne die App die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>. Dein Profil, verknüpfte Guild-Wars-2-Konten, Gildenmitgliedschaften, Anmeldungen, die von dir erstellten Events und deine Benachrichtigungs-Tokens werden sofort gelöscht und können nicht wiederhergestellt werden. Du kannst auch fragen, was wir über dich gespeichert haben, es berichtigen lassen oder der Verwendung widersprechen, und wenn du in der Europäischen Union bist, kannst du dich bei deiner Datenschutzbehörde beschweren. Schreib uns wie unten angegeben. Wir verwenden deine Daten nur, um bereitzustellen, worum du durch Anmelden und Verknüpfen gebeten hast; das ist unsere Grundlage für die Verarbeitung.",
-  "Kinder",
-  "Tyria Codex richtet sich nicht an Kinder unter 13 Jahren.",
-  "Kontakt",
-  "Fragen oder Anliegen: <a href='https://github.com/Yesanith/tyria-companion/issues'>eröffne ein Issue auf GitHub</a>. Änderungen dieser Erklärung werden mit neuem Datum auf dieser Seite veröffentlicht."]},
- "terms": {"title": "Nutzungsbedingungen", "updated": "Zuletzt aktualisiert am 1. Oktober 2026", "blocks": [
-  "Diese Bedingungen gelten zwischen dir und der Person, die Tyria Codex betreibt, die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot. Mit der Nutzung stimmst du diesen Bedingungen zu. Wenn nicht, nutze sie nicht.",
-  "Was es ist",
-  "Tyria Codex ist ein inoffizielles, kostenloses Fanprojekt für Guild Wars 2. Es steht in keiner Verbindung zu ArenaNet oder NCSOFT und wird von ihnen nicht unterstützt. Guild Wars 2 und alle zugehörigen Logos und Designs sind Marken oder eingetragene Marken der NCSOFT Corporation. Spieldaten und Bilder stammen aus der öffentlichen Guild-Wars-2-API von ArenaNet und werden verwendet, soweit deren Bedingungen es erlauben. Die Nutzung von Tyria Codex ändert nichts an deinen Rechten oder Pflichten gegenüber ArenaNet, Discord oder anderen.",
-  "Wer es nutzen darf",
-  "Du musst mindestens 13 Jahre alt sein und alt genug, um diesen Bedingungen dort, wo du lebst, zuzustimmen. Du musst die Bedingungen von Guild Wars 2, Discord und jedem anderen Dienst befolgen, den du damit nutzt.",
-  "Dein Konto und dein API-Schlüssel",
-  ["Das Tyria-Companion-Konto ist optional und wird durch Anmelden mit Discord erstellt. Du bist verantwortlich für das, was darüber geschieht.",
-   "Dein API-Schlüssel gehört dir. Behalte ihn für dich, nutze Schlüssel, die nur die Berechtigungen haben, die du geben willst, und widerrufe ihn auf account.arena.net, wenn du glaubst, dass er offengelegt wurde. Wir fragen nie nach deinem Schlüssel.",
-   "Du darfst nur Guild-Wars-2-Konten verknüpfen, die dir gehören."],
-  "Gilden und was du teilst",
-  ["Ein Gildenanführer, der die App nutzt, lässt unsere Server die Gildendaten lesen und speichern, die das Spiel nur Anführern zeigt, und zeigt sie den Mitgliedern der Gilde, die die App nutzen, so wie der Anführer es wählt. Der Anführer stimmt dem zu und ist für das verantwortlich, was er zu zeigen wählt. Die Datenschutzerklärung sagt, was gespeichert wird und wie lange.",
-   "Verknüpfe kein Konto und verbinde keinen Discord-Server für eine Gilde, die du nicht vertreten darfst.",
-   "Gildenevents, Beschreibungen und Berichte, die du hinzufügst, sind für deine Gilde und, falls ein Discord-Server verbunden ist, für diesen Kanal sichtbar. Poste nichts Rechtswidriges, Hasserfülltes, Belästigendes oder Irreführendes und keine privaten Informationen anderer."],
-  "Was du nicht tun darfst",
-  ["Es nutzen, um Menschen zu belästigen oder sich als jemand anderes auszugeben, zu spammen oder gegen die Regeln des Spiels oder von Discord zu verstoßen.",
-   "Versuchen, an Daten zu kommen, die nicht deine sind, den Dienst zu überlasten oder zu stören oder seine Grenzen zu umgehen.",
-   "Es auszulesen, weiterzuverkaufen oder damit ohne Nachfrage etwas zu bauen, das für andere dasselbe tut.",
-   "Öffentliche Events erstellen, die Spam oder Werbung sind, nichts mit Guild Wars 2 zu tun haben oder Menschen belästigen. Wir dürfen sie ausblenden oder löschen und dich daran hindern, weitere zu erstellen."],
-  "Inhalte und Entfernung",
-  "Was du erstellst, bleibt dein. Du erlaubst uns, es zu speichern und den Personen zu zeigen, für die es gedacht ist, so wie die App funktioniert. Wir dürfen Inhalte oder Konten entfernen, die gegen diese Bedingungen verstoßen oder dem Dienst oder anderen schaden, und dürfen einen Discord-Server trennen, der das tut. Du kannst dein Konto jederzeit löschen, siehe die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>.",
-  "Verfügbarkeit und Änderungen",
-  "Es wird von einer Person in ihrer Freizeit betrieben und hängt von der Guild-Wars-2-API, Discord und anderen Diensten ab, die wir nicht kontrollieren. Es kann langsam, falsch oder nicht verfügbar sein oder sich ohne Ankündigung ändern, und wir dürfen es oder jede seiner Funktionen beenden. Spieldaten sind nur so genau wie die API des Spiels.",
-  "Keine Gewährleistung und Haftungsbeschränkung",
-  "Es wird so bereitgestellt, wie es ist, ohne Zusagen, dass es funktioniert, richtig ist oder zu deinem Zweck passt. Soweit das Gesetz es erlaubt, haften wir nicht für Verluste oder Schäden durch die Nutzung oder die Unmöglichkeit der Nutzung, einschließlich einer verlorenen Anmeldung, eines verpassten Events, falscher Daten oder etwas, das ein Discord-Bot getan oder nicht getan hat. Nichts hier schränkt Rechte ein, die du nach dem Verbraucherschutzrecht hast und die nicht beschränkt werden können.",
-  "Änderungen dieser Bedingungen",
-  "Wir dürfen sie ändern und die neue Fassung mit neuem Datum auf dieser Seite veröffentlichen. Die Nutzung des Dienstes danach bedeutet, dass du die Änderung akzeptierst.",
-  "Kontakt",
-  "Fragen oder Probleme: <a href='https://github.com/Yesanith/tyria-companion/issues'>eröffne ein Issue auf GitHub</a>. Siehe auch die <a href='privacy.html'>Datenschutzerklärung</a> und die <a href='faq.html'>FAQ</a>."]}
+  "fallback_name": "dein Konto"
+ },
+ "faq": {
+  "title": "Häufig gestellte Fragen",
+  "items": [
+   [
+    "Was ist Tyria Codex?",
+    "Ein inoffizieller Guild-Wars-2-Begleiter: deine Charaktere, Geldbörse, Handelsposten, Handwerk, Weltbosse, das Wizard's Vault und eine Weltkarte, dazu Gildenevents mit Anmeldungen und ein Discord-Bot. Es ist ein Fanprojekt, kostenlos und ohne Werbung."
+   ],
+   [
+    "Wo kann ich es nutzen?",
+    "Unter Android als App und auf jedem Handy oder Computer im Browser auf der <a href='{ROOT}app/'>App-Seite dieser Website</a>. Eine iPhone-App gibt es noch nicht: Öffne die Browserversion in Safari, tippe auf „Teilen“ und wähle „Zum Home-Bildschirm“, dann startet sie wie eine App. Die Browserversion hat keine Benachrichtigungen und keine Weltevent-Warnungen."
+   ],
+   [
+    "Brauche ich einen API-Schlüssel? Welche Berechtigungen?",
+    "Die Spieldaten kommen von deinem eigenen Guild-Wars-2-API-Schlüssel, den du auf account.arena.net erstellst. Wähle aus, was du sehen willst: account wird immer benötigt, characters, inventories, wallet, tradingpost und guilds schalten die jeweiligen Bereiche frei. Ohne Schlüssel kannst du alles nutzen, was nicht dein Konto betrifft."
+   ],
+   [
+    "Ist mein API-Schlüssel sicher?",
+    "Dein Schlüssel bleibt auf deinem Gerät, in der Browserversion in deinem Browser, und wird nur an die Guild-Wars-2-Server gesendet. An unsere wird er nie gesendet. Siehe die <a href='privacy.html'>Datenschutzerklärung</a>. Ein Schlüssel kann nur lesen, und du kannst ihn jederzeit auf account.arena.net löschen."
+   ],
+   [
+    "Brauche ich das Tyria-Companion-Konto?",
+    "Nein, es ist optional. Du brauchst es für Gildenevents, die Gildeninformationen und den Discord-Bot. Du erstellst es, indem du dich mit Discord anmeldest, und kannst es jederzeit in den Einstellungen oder auf der <a href='delete-account.html'>Seite zum Löschen des Kontos</a> löschen."
+   ],
+   [
+    "Was passiert, wenn ich mein Guild-Wars-2-Konto verknüpfe?",
+    "Die App erzeugt ein Token, das zehn Minuten gültig ist, und sendet nur dieses, nie deinen Schlüssel. Wir speichern deinen Kontonamen, deine Gilden und deinen Rang darin. Wenn du eine Gilde leitest, lässt dasselbe Token unsere Server lesen, was das Spiel nur Anführern zeigt, damit die Mitglieder deiner Gilde es in der App sehen können."
+   ],
+   [
+    "Warum sehe ich Schatzkammer, Lager oder Protokoll meiner Gilde nicht?",
+    "Das Spiel zeigt sie nur dem Anführer der Gilde. Mitglieder sehen sie hier, wenn ihr Anführer Tyria Codex nutzt und es erlaubt. Der Anführer öffnet die App einmal, wodurch die Gildendaten geholt werden, und wählt, was Mitglieder sehen: Jeder Teil kann verborgen werden. Schatzkammer, Lager und Protokoll, die zeigen, wer was genommen hat, bleiben verborgen, bis der Anführer die Auswahl bestätigt hat."
+   ],
+   [
+    "Es steht dort, der Anführer habe das noch nicht geteilt.",
+    "Entweder hat der Anführer die App seit dem Verknüpfen nicht geöffnet, das Spiel hat einen Teil verweigert oder der Anführer hat ihn verborgen. Bitte deinen Anführer, die App zu öffnen und die Augen-Schaltfläche auf der Gildenseite zu prüfen."
+   ],
+   [
+    "Wer gilt als Offizier?",
+    "Das Spiel entscheidet. Ein Rang, der einladen, befördern oder entfernen oder Ränge bearbeiten darf, macht Offiziere, und Offiziere können Events erstellen und verwalten. Niemand wird von Hand ernannt. Die App zeigt den Rangnamen, den deine Gilde vergeben hat, etwa Raid Lead."
+   ],
+   [
+    "Wie füge ich den Discord-Bot hinzu?",
+    "Lade ihn auf deinen Server ein, dann führt ein Gildenanführer mit der Berechtigung „Server verwalten“ <code>/tyria connect</code> mit Tag oder Name der Gilde in dem Kanal aus, in dem die Events erscheinen sollen. Der Bot muss den Kanal sehen und darin schreiben können; für Threads, geplante Events, Rollen und Erinnerungen braucht er die passenden Berechtigungen, und <code>/tyria status</code> sagt, was fehlt."
+   ],
+   [
+    "Was kann der Bot?",
+    "<code>/event create</code> und <code>/event weekly</code> erstellen Events, Spieler melden sich mit Schaltflächen an, mit Beruf und Rollen. <code>/event report</code> fügt einen Arcdps-Berichtslink hinzu. <code>/tyria settings</code> stellt Threads, Discord-Events und Erinnerungen ein. <code>/tyria notify</code> postet Neuigkeiten und Spiel-Updates. <code>/tyria roles</code> und <code>/tyria rankrole</code> vergeben Discord-Rollen für Gildenränge. Der Bot kann keine Nachrichten lesen."
+   ],
+   [
+    "Wie folgen Discord-Rollen den Gildenrängen?",
+    "Führe <code>/tyria roles ranks:true</code> aus. Der Bot erstellt dann für jeden Rang deiner Gilde eine Discord-Rolle ohne Berechtigungen und gibt sie dem, der den Rang hat. Es beginnt, sobald die App des Anführers die Ränge geholt hat; bis dahin gelten die Rollen Mitglied, Offizier und Anführer."
+   ],
+   [
+    "Warum fehlt im Browser etwas?",
+    "Die Browserversion kann die Benachrichtigungen des Handys, Weltevent-Warnungen oder einen Zwischenspeicher auf dem Gerät nicht nutzen und lädt daher langsamer. Wenn etwas anderes nicht funktioniert, sag uns Bescheid."
+   ],
+   [
+    "Wie lösche ich meine Daten?",
+    "Einstellungen, dann Konto löschen, oder die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>. Dein Profil, verknüpfte Konten, Mitgliedschaften, Anmeldungen und die von dir erstellten Events werden sofort gelöscht. Was der Anführer der Gilde geholt hat, wird gelöscht, wenn der letzte Anführer, der die App nutzt, geht."
+   ],
+   [
+    "Gehört es zu ArenaNet?",
+    "Nein. Es ist ein Fanprojekt. Guild Wars 2 und seine Logos und Designs sind Marken der NCSOFT Corporation."
+   ],
+   [
+    "Etwas stimmt nicht. Wo melde ich es?",
+    "<a href='https://github.com/Yesanith/tyria-companion/issues'>Eröffne ein Issue auf GitHub</a> und schreib, was du getan und was du gesehen hast. Ein Screenshot hilft. Poste niemals deinen API-Schlüssel."
+   ]
+  ],
+  "lead": "Kurze Antworten auf die Fragen, die wir am häufigsten hören.",
+  "more": "Deine Frage ist nicht dabei?",
+  "more_btn": "Auf GitHub fragen"
+ },
+ "privacy": {
+  "title": "Datenschutzerklärung",
+  "updated": "Zuletzt aktualisiert am 4. Oktober 2026",
+  "blocks": [
+   "Tyria Codex ist ein inoffizieller Guild-Wars-2-Begleiter. Es gibt keine Werbung und keine Analysewerkzeuge, wir verfolgen dich nicht und verkaufen oder teilen deine Daten nicht für Werbung. Diese Seite sagt, was verarbeitet wird, wo, wer es sehen kann und wie lange. Sie gilt für die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot.",
+   "Was auf deinem Gerät bleibt",
+   "Deine Guild-Wars-2-API-Schlüssel, die damit geladenen Spieldaten, deine Einstellungen, Favoriten, Beobachtungsliste und der Preisverlauf werden nur auf deinem Gerät gespeichert, in der Browserversion in deinem Browser. Die App spricht direkt mit der offiziellen Guild-Wars-2-API. Deine API-Schlüssel werden nie an unsere Server gesendet. Auf dem Handy geht der Schlüssel in einem Anfrage-Header an ArenaNet. Ein Browser kann das mit der API des Spiels nicht, daher geht er dort in der Adresse der Anfrage, nur an ArenaNet. Im Browser wird der Schlüssel im Speicher dieses Browsers aufbewahrt; das Löschen der Websitedaten entfernt ihn.",
+   "Das optionale Tyria-Companion-Konto",
+   "Gildenevents, Gildeninformationen und der Discord-Bot brauchen ein Konto, das du durch Anmelden mit Discord erstellst. Alles Folgende gilt nur, wenn du das tust.",
+   [
+    "<strong>Von Discord:</strong> deine Discord-Nutzer-ID, dein Name, dein Avatar und, falls Discord sie liefert, deine E-Mail-Adresse.",
+    "<strong>Dein Guild-Wars-2-Konto:</strong> Zum Verknüpfen erzeugt die App ein Token, das zehn Minuten gültig ist und nur dein Konto und deine Gilden lesen kann, und sendet nur dieses Token. Wir speichern deinen Kontonamen und deine ID, die Namen und Tags deiner Gilden, deine Rolle darin und den Rang, den dir das Spiel gibt. Das Token wird für diese wenigen Anfragen verwendet und nicht gespeichert.",
+    "<strong>Wenn du eine Gilde leitest:</strong> Mit demselben zehnminütigen Token lesen unsere Server auch, was das Spiel nur dem Anführer einer Gilde zeigt, und speichern es für die Gilde: Stufe, Nachricht des Tages und Mitgliederzahl, die Mitgliederliste mit Kontoname, Rang und Beitrittsdatum jedes Mitglieds, die Ränge und was jeder Rang darf, die Schatzkammer, das Lager, den Gildenspeicher, das Protokoll, wer was getan hat, die gebauten Verbesserungen und die PvP-Teams. Die Mitgliederliste nennt auch Personen, die Tyria Companion nicht nutzen, so wie das Spiel sie auflistet. Das geschieht jedes Mal, wenn deine App geöffnet wird, höchstens alle halbe Stunde.",
+    "<strong>Gildenevents:</strong> von dir erstellte Events, auch wöchentliche, deine Antworten, die Rolle, den Beruf und weitere Rollen, die du anbietest, das gewählte Guild-Wars-2-Konto, die Discord-Rollen, für die ein Event offen ist, und die Arcdps-Berichtslinks (dps.report), die Mitglieder hinzufügen, mit dem Boss, dem Ergebnis, der Spielerzahl und der Dauer, die dps.report dafür angibt.",
+    "<strong>Benachrichtigungen:</strong> wenn du sie erlaubst, das Benachrichtigungs-Token deines Geräts und die Sprache der App, um Event-Erinnerungen zu senden.",
+    "<strong>Discord-Server:</strong> wenn du eine Gilde leitest und einen Discord-Server verbindest: die ID des Servers und den Kanal, in den Events gepostet werden, seine Einstellungen (Zeitzone, Sprache, Threads, geplante Events, Erinnerungen), die Kanäle und die optionale Rolle für Neuigkeiten, tägliche Erfolge und Spiel-Updates, die Discord-Rollen, die Gildenrängen zugeordnet sind, und welche Rollen der Bot welchem Discord-Nutzer gegeben hat, damit er nur diese zurücknehmen kann. Der Bot kann keine Nachrichten lesen. Er erhält die Befehle und Schaltflächen, die Menschen nutzen, und bei einem Klick sendet Discord die ID der Person und ihre Rollen auf diesem Server, die für diesen Moment verwendet und nicht gespeichert werden.",
+    "<strong>Zählungen ohne Namen:</strong> Um zu sehen, dass alles funktioniert und welche Versionen im Einsatz sind, zählen unsere Server pro Tag und ohne jeden Hinweis darauf, wer es war, wie oft jede Version der App von einem angemeldeten Spieler geöffnet wird und worauf sie läuft (Android oder Browser), was die Befehle des Discord-Bots bewirken und wie viele Anfragen gelingen oder scheitern. Das sind nur Zahlen.",
+    "<strong>Preisalarme:</strong> Wenn du einen setzt, während du angemeldet bist, speichert die App ihn auch auf unseren Servern: das Item, seinen Namen, deine Preise und wann er dich zuletzt benachrichtigt hat, damit wir dir eine Benachrichtigung senden können, wenn der Handelsposten sie erreicht. Er wird gelöscht, wenn du ihn entfernst oder dein Konto löschst."
+   ],
+   "Wer es sieht",
+   [
+    "Mitglieder deiner Gilden, die auch Tyria Companion nutzen, sehen deinen Guild-Wars-2-Kontonamen, deinen Rang und deine Antworten auf die Events der Gilde.",
+    "Sie sehen auch, was die App des Anführers von der Gilde geholt hat, so wie der Anführer es wählt: Der Anführer kann jeden Teil verbergen, und Schatzkammer, Lager und Protokoll, die zeigen, wer was genommen hat, bleiben verborgen, bis der Anführer die Auswahl geprüft und bestätigt hat. Der Anführer sieht immer alles.",
+    "Wenn deine Gilde einen Discord-Server verbunden hat, sieht jeder im Kanal die Event-Nachrichten mit den Namen der Angemeldeten.",
+    "Niemand außerhalb deiner Gilden sieht etwas davon. Personen, die Tyria Companion nicht nutzen, werden niemandem gezeigt, der nicht in derselben Gilde ist.",
+    "Jeder angemeldete Spieler sieht die öffentlichen Events mit dem Guild-Wars-2-Kontonamen des Organisators. Nur der Organisator eines Events sieht, wer sich angemeldet hat. Siehe unten „Öffentliche Events“."
+   ],
+   "Öffentliche Events",
+   [
+    "Jeder angemeldete Spieler kann ein öffentliches Event erstellen. Es gehört zu keiner Gilde: Titel, Beschreibung, Zeit, Art und Sprache sehen alle angemeldeten Spieler, mit deinem Guild-Wars-2-Kontonamen als Organisator. Zum Erstellen brauchst du ein verknüpftes Guild-Wars-2-Konto.",
+    "Wenn du dich für ein öffentliches Event anmeldest, sieht nur der Organisator deinen Guild-Wars-2-Kontonamen und deine Antwort. Alle anderen sehen nur, wie viele teilnehmen.",
+    "Jeder angemeldete Spieler kann ein öffentliches Event mit einem Grund und einer Notiz von bis zu 300 Zeichen melden. Wir speichern die Meldungen mit dem Absender, ein Administrator liest sie, und der Organisator erfährt nicht, wer gemeldet hat. Drei Meldungen blenden ein Event aus, bis ein Administrator es geprüft hat.",
+    "Ein Administrator kann ein öffentliches Event ausblenden oder löschen und einen Organisator daran hindern, weitere zu erstellen. Das halten wir fest.",
+    "Damit es geordnet bleibt, kannst du fünf kommende öffentliche Events haben, zehn pro Tag erstellen und sie bis zu drei Monate im Voraus planen. Dafür zählen wir zwei Tage lang mit, was du erstellst.",
+    "Wenn du dein Konto löschst, werden die öffentlichen Events, die du erstellt hast, deine Anmeldungen zu den öffentlichen Events anderer und die Meldungen, die du gesendet hast, gelöscht, und der Eintrag, der einen Organisator am Erstellen weiterer hindert, geht mit.",
+    "Jedes Guild-Wars-2-Konto, das du verknüpfst, hat eine Region, Europa oder Nordamerika. Wir lesen sie beim Verknüpfen aus der Welt ab, auf der das Spiel das Konto meldet, und speichern sie beim Konto, bis du es trennst oder dein Konto löschst. Sie bestimmt, für welche öffentlichen Events du etwas erstellen und dich anmelden kannst.",
+    "Öffentliche Events werden außerdem im offiziellen Tyria-Companion-Discord-Server im Kanal ihrer Region gepostet: Titel, Beschreibung, Zeit, Art, Tags, wie viele teilnehmen und der Guild-Wars-2-Kontoname des Organisators, sichtbar für alle in diesem Kanal. Wer sich angemeldet hat, wird nie gepostet, nur wie viele. Der Beitrag wird entfernt, wenn das Event ausgeblendet oder gelöscht wird oder du dein Konto löschst.",
+    "Bist du im offiziellen Server, gibt dir der Bot die Rolle jeder Region, in der du ein Konto hast. Er findet dich über deine Discord-Nutzer-ID aus der Anmeldung und nimmt die Rolle zurück, wenn du dein Konto löschst.",
+    "Wenn ein öffentliches Event beginnt, für das du dich angemeldet hast, öffnet der Bot im offiziellen Server einen Text- und einen Sprachkanal, die nur der Organisator und die Angemeldeten (dabei oder vielleicht) sehen, und erwähnt sie mit ihrem Discord-Benutzer. Die Kanäle werden nach dem Event gelöscht.",
+    "Wenn du mit dem Discord-Bot ein öffentliches Event erstellst, wird die Zeitzone, die du ihm nennst (zum Beispiel Europe/Istanbul), mit deiner Discord-Nutzer-ID gespeichert, damit du sie nicht erneut angeben musst, und gelöscht, wenn du dein Konto löschst."
+   ],
+   "Gildensuche-Seiten",
+   [
+    "Ein Gildenleiter oder ein Mitglied, das der Leiter dazu berechtigt hat, kann für die Gilde eine Gildensuche-Seite erstellen. Titel, Beschreibung, Anforderungen, Spielzeiten, Sprachen, Region, Discord-Einladung und der Name zum Anflüstern im Spiel werden von ihnen geschrieben und, sobald die Seite angezeigt wird, allen gezeigt, auch Besuchern ohne Anmeldung, zusammen mit Name und Tag der Gilde. Die Seite nennt nicht, wer sie erstellt hat. Schreibe nichts hinein, was nicht jeder lesen soll.",
+    "Eine angezeigte Seite wird mit demselben Inhalt auch in einem Forum des offiziellen Tyria-Codex-Discord-Servers veröffentlicht, wo sie alle auf diesem Server lesen können. Wird die Seite wieder zum Entwurf oder gelöscht, wird der Beitrag entfernt. Ein Moderator kann eine Seite ausblenden, die gegen die Bedingungen verstößt.",
+    "Jeder angemeldete Spieler kann eine Seite melden. Wir speichern, wer sie gemeldet hat und was er geschrieben hat; nur Administratoren sehen es, und es wird mit der Seite oder mit deinem Konto gelöscht.",
+    "Wir speichern, welche Mitglieder der Leiter zum Bearbeiten der Seite berechtigt hat, bis der Leiter es zurücknimmt oder das Mitglied die Gilde verlässt."
+   ],
+   "Dienste, die wir nutzen",
+   [
+    "<strong>Supabase</strong> hostet die Kontodatenbank, die Anmeldung und die Funktionen, die mit dem Spiel und mit Discord sprechen, in der Europäischen Union (Frankfurt). Der Nachrichtenfeed der Browserversion läuft über eine dieser Funktionen, weil die Website des Spiels einem Browser das Lesen nicht erlaubt.",
+    "<strong>Google Firebase Cloud Messaging</strong> liefert Benachrichtigungen an Handys.",
+    "<strong>Google Fonts</strong> liefert die Schrift der App, daher sieht Google diese Anfrage.",
+    "<strong>Discord</strong> übernimmt die Anmeldung und zeigt Nachrichten auf Servern, die den Bot verbunden haben.",
+    "<strong>Die Guild-Wars-2-API und die Website von ArenaNet</strong> liefern alle Spieldaten, Symbole und Neuigkeiten.",
+    "<strong>dps.report</strong> wird nach den öffentlichen Angaben zu einem Berichtslink gefragt, den ein Mitglied hinzufügt.",
+    "<strong>GitHub</strong> hostet diese Website und die Browserversion und sieht die Besuche."
+   ],
+   "Wie lange wir es aufbewahren",
+   [
+    "Deine Kontodaten werden aufbewahrt, bis du das Konto löschst.",
+    "Eine Gilde gehört keiner Person, daher löscht das Löschen eines Kontos sie nicht, aber was die App des Anführers geholt hat, darf den Anführer nicht überdauern: Wenn der letzte Anführer, der die App nutzt, geht, werden Stufe, Nachricht des Tages, Zahlen, Mitgliederliste, Ränge, Schatzkammer, Lager, Protokoll und die Auswahl des Anführers gelöscht, und wenn das letzte Mitglied geht, wird die Gilde mit ihrer Discord-Verbindung gelöscht.",
+    "Eine Gildenmitgliedschaft, die die App 30 Tage lang nicht aktualisiert hat, zählt nicht mehr und wird nach 90 Tagen gelöscht. Wiederkommen und erneut verknüpfen stellt sie wieder her.",
+    "Das Benachrichtigungs-Token eines Geräts wird entfernt, wenn du dich abmeldest, Benachrichtigungen ausschaltest oder das Token nicht mehr funktioniert. Die Daten eines Discord-Servers werden entfernt, wenn er getrennt oder seine Gilde gelöscht wird.",
+    "Ein öffentliches Event wird 30 Tage nach seinem Ende mit Anmeldungen und Meldungen gelöscht. Die Zählung dessen, was du an einem Tag erstellt hast, wird nach zwei Tagen gelöscht."
+   ],
+   "Dein Konto löschen und deine Rechte",
+   "In der App öffne die Einstellungen und wähle „Konto löschen“, oder nutze ohne die App die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>. Dein Profil, verknüpfte Guild-Wars-2-Konten, Gildenmitgliedschaften, Anmeldungen, die von dir erstellten Events und deine Benachrichtigungs-Tokens werden sofort gelöscht und können nicht wiederhergestellt werden. Du kannst auch fragen, was wir über dich gespeichert haben, es berichtigen lassen oder der Verwendung widersprechen, und wenn du in der Europäischen Union bist, kannst du dich bei deiner Datenschutzbehörde beschweren. Schreib uns wie unten angegeben. Wir verwenden deine Daten nur, um bereitzustellen, worum du durch Anmelden und Verknüpfen gebeten hast; das ist unsere Grundlage für die Verarbeitung.",
+   "Kinder",
+   "Tyria Codex richtet sich nicht an Kinder unter 13 Jahren.",
+   "Kontakt",
+   "Fragen oder Anliegen: <a href='https://github.com/Yesanith/tyria-companion/issues'>eröffne ein Issue auf GitHub</a>. Änderungen dieser Erklärung werden mit neuem Datum auf dieser Seite veröffentlicht."
+  ]
+ },
+ "terms": {
+  "title": "Nutzungsbedingungen",
+  "updated": "Zuletzt aktualisiert am 1. Oktober 2026",
+  "blocks": [
+   "Diese Bedingungen gelten zwischen dir und der Person, die Tyria Codex betreibt, die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot. Mit der Nutzung stimmst du diesen Bedingungen zu. Wenn nicht, nutze sie nicht.",
+   "Was es ist",
+   "Tyria Codex ist ein inoffizielles, kostenloses Fanprojekt für Guild Wars 2. Es steht in keiner Verbindung zu ArenaNet oder NCSOFT und wird von ihnen nicht unterstützt. Guild Wars 2 und alle zugehörigen Logos und Designs sind Marken oder eingetragene Marken der NCSOFT Corporation. Spieldaten und Bilder stammen aus der öffentlichen Guild-Wars-2-API von ArenaNet und werden verwendet, soweit deren Bedingungen es erlauben. Die Nutzung von Tyria Codex ändert nichts an deinen Rechten oder Pflichten gegenüber ArenaNet, Discord oder anderen.",
+   "Wer es nutzen darf",
+   "Du musst mindestens 13 Jahre alt sein und alt genug, um diesen Bedingungen dort, wo du lebst, zuzustimmen. Du musst die Bedingungen von Guild Wars 2, Discord und jedem anderen Dienst befolgen, den du damit nutzt.",
+   "Dein Konto und dein API-Schlüssel",
+   [
+    "Das Tyria-Companion-Konto ist optional und wird durch Anmelden mit Discord erstellt. Du bist verantwortlich für das, was darüber geschieht.",
+    "Dein API-Schlüssel gehört dir. Behalte ihn für dich, nutze Schlüssel, die nur die Berechtigungen haben, die du geben willst, und widerrufe ihn auf account.arena.net, wenn du glaubst, dass er offengelegt wurde. Wir fragen nie nach deinem Schlüssel.",
+    "Du darfst nur Guild-Wars-2-Konten verknüpfen, die dir gehören."
+   ],
+   "Gilden und was du teilst",
+   [
+    "Ein Gildenanführer, der die App nutzt, lässt unsere Server die Gildendaten lesen und speichern, die das Spiel nur Anführern zeigt, und zeigt sie den Mitgliedern der Gilde, die die App nutzen, so wie der Anführer es wählt. Der Anführer stimmt dem zu und ist für das verantwortlich, was er zu zeigen wählt. Die Datenschutzerklärung sagt, was gespeichert wird und wie lange.",
+    "Verknüpfe kein Konto und verbinde keinen Discord-Server für eine Gilde, die du nicht vertreten darfst.",
+    "Gildenevents, Beschreibungen und Berichte, die du hinzufügst, sind für deine Gilde und, falls ein Discord-Server verbunden ist, für diesen Kanal sichtbar. Poste nichts Rechtswidriges, Hasserfülltes, Belästigendes oder Irreführendes und keine privaten Informationen anderer."
+   ],
+   "Was du nicht tun darfst",
+   [
+    "Es nutzen, um Menschen zu belästigen oder sich als jemand anderes auszugeben, zu spammen oder gegen die Regeln des Spiels oder von Discord zu verstoßen.",
+    "Versuchen, an Daten zu kommen, die nicht deine sind, den Dienst zu überlasten oder zu stören oder seine Grenzen zu umgehen.",
+    "Es auszulesen, weiterzuverkaufen oder damit ohne Nachfrage etwas zu bauen, das für andere dasselbe tut.",
+    "Öffentliche Events erstellen, die Spam oder Werbung sind, nichts mit Guild Wars 2 zu tun haben oder Menschen belästigen. Wir dürfen sie ausblenden oder löschen und dich daran hindern, weitere zu erstellen."
+   ],
+   "Inhalte und Entfernung",
+   "Was du erstellst, bleibt dein. Du erlaubst uns, es zu speichern und den Personen zu zeigen, für die es gedacht ist, so wie die App funktioniert. Wir dürfen Inhalte oder Konten entfernen, die gegen diese Bedingungen verstoßen oder dem Dienst oder anderen schaden, und dürfen einen Discord-Server trennen, der das tut. Du kannst dein Konto jederzeit löschen, siehe die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>.",
+   "Verfügbarkeit und Änderungen",
+   "Es wird von einer Person in ihrer Freizeit betrieben und hängt von der Guild-Wars-2-API, Discord und anderen Diensten ab, die wir nicht kontrollieren. Es kann langsam, falsch oder nicht verfügbar sein oder sich ohne Ankündigung ändern, und wir dürfen es oder jede seiner Funktionen beenden. Spieldaten sind nur so genau wie die API des Spiels.",
+   "Keine Gewährleistung und Haftungsbeschränkung",
+   "Es wird so bereitgestellt, wie es ist, ohne Zusagen, dass es funktioniert, richtig ist oder zu deinem Zweck passt. Soweit das Gesetz es erlaubt, haften wir nicht für Verluste oder Schäden durch die Nutzung oder die Unmöglichkeit der Nutzung, einschließlich einer verlorenen Anmeldung, eines verpassten Events, falscher Daten oder etwas, das ein Discord-Bot getan oder nicht getan hat. Nichts hier schränkt Rechte ein, die du nach dem Verbraucherschutzrecht hast und die nicht beschränkt werden können.",
+   "Änderungen dieser Bedingungen",
+   "Wir dürfen sie ändern und die neue Fassung mit neuem Datum auf dieser Seite veröffentlichen. Die Nutzung des Dienstes danach bedeutet, dass du die Änderung akzeptierst.",
+   "Kontakt",
+   "Fragen oder Probleme: <a href='https://github.com/Yesanith/tyria-companion/issues'>eröffne ein Issue auf GitHub</a>. Siehe auch die <a href='privacy.html'>Datenschutzerklärung</a> und die <a href='faq.html'>FAQ</a>."
+  ]
+ }
 }

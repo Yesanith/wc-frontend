@@ -11,7 +11,16 @@
   "nav_delete": "Delete your account",
   "nav_contact": "Contact",
   "language": "Language",
-  "note": ""
+  "note": "",
+  "nav_features": "Features",
+  "nav_app": "Open the app",
+  "skip": "Skip to content",
+  "footer_product": "App",
+  "footer_legal": "Legal",
+  "footer_project": "Project",
+  "nav_source": "Source code",
+  "nav_releases": "Downloads",
+  "toc": "On this page"
  },
  "index": {
   "tagline": "An unofficial Guild Wars 2 companion for Android, iPhone and the browser.",
@@ -22,7 +31,62 @@
   "open_button": "Open Tyria Codex",
   "iphone": "<strong>iPhone:</strong> open it in Safari, tap the share button and choose <em>Add to Home Screen</em>. It then opens on its own, like an app.",
   "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers.",
-  "fan": "Tyria Codex is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation."
+  "fan": "Tyria Codex is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation.",
+  "eyebrow": "Unofficial Guild Wars 2 companion",
+  "hero_h": "Your Tyria, <em>at a glance</em>.",
+  "chips": [
+   "Free",
+   "No ads",
+   "No analytics",
+   "Open source"
+  ],
+  "features_h": "Everything the game does not tell you",
+  "features_p": "One app for the game outside the game: your account, the markets, the world and your guild.",
+  "features": [
+   [
+    "Your day, ready",
+    "Reset countdowns, Wizard's Vault objectives, the metas you can still join, the daily checklist and your wallet on one page."
+   ],
+   [
+    "Characters and builds",
+    "Equipment with runes, sigils and infusions, the full build with its trait grid, the wardrobe, side by side comparison and shareable hero cards."
+   ],
+   [
+    "Trading Post",
+    "Prices, a watchlist with price alerts, 90 days of profit and loss and, on Android, a notification when your orders are filled."
+   ],
+   [
+    "Crafting",
+    "Every crafting and Mystic Forge recipe, with a calculator that knows what your account already covers and whether buying is cheaper."
+   ],
+   [
+    "World and WvW",
+    "World boss and meta timers with alerts, maps with every waypoint and landmark, and live World vs World matchups."
+   ],
+   [
+    "Collections and progress",
+    "Mounts, skins, minis and dyes, achievements, masteries and this week's raid and dungeon clears."
+   ],
+   [
+    "Guilds and events",
+    "Guild events with sign ups, Discord roles that follow your ranks, the treasury, stash and log, and a bot for your server."
+   ],
+   [
+    "Find a group or a guild",
+    "Join public events for any kind of play, or browse the guilds that are recruiting and join their Discord in a tap."
+   ]
+  ],
+  "platforms_h": "Use it where you play",
+  "android_h": "Android",
+  "android_p": "The full app, with notifications for world events, price alerts and sold items, and with the game data kept on your device.",
+  "discord_h": "A Discord bot for your guild",
+  "discord_p": "Guild events with sign ups and waiting lists, roles that follow guild ranks, news and patch feeds, and a forum on the official server where guilds recruit.",
+  "discord_link": "How to add the bot",
+  "privacy_h": "Your API key stays yours",
+  "privacy_p": "It stays on your device, or in your browser, and goes only to the Guild Wars 2 servers. No ads, no analytics, and you can delete the optional account at any time.",
+  "privacy_link": "Read the privacy policy",
+  "cta_h": "Look around, no sign up needed",
+  "cta_p": "Open Tyria Codex as a guest, and add an API key when you want to see your own account."
  },
  "delete": {
   "title": "Delete your account",
@@ -107,11 +171,14 @@
     "Something is wrong. Where do I report it?",
     "<a href='https://github.com/Yesanith/tyria-companion/issues'>Open an issue on GitHub</a> and say what you did and what you saw. A screenshot helps. Never post your API key."
    ]
-  ]
+  ],
+  "lead": "Short answers to the questions we hear most.",
+  "more": "Is your question not here?",
+  "more_btn": "Ask on GitHub"
  },
  "privacy": {
   "title": "Privacy policy",
-  "updated": "Last updated 2 October 2026",
+  "updated": "Last updated 4 October 2026",
   "blocks": [
    [
     "p",
@@ -178,6 +245,19 @@
      "If you are in the official server, the bot gives you the role of each region you have an account in. It finds you with your Discord user ID from your sign-in, and takes the role back if you delete your account.",
      "When a public event you signed up for starts, the bot opens a text channel and a voice channel for it in the official server that only its organizer and those who signed up (going or maybe) can see, and mentions them by their Discord user. The channels are deleted after the event.",
      "If you make a public event with the Discord bot, the time zone you give it, for example Europe/Istanbul, is kept with your Discord user ID so that you do not have to say it again, and is deleted when you delete your account."
+    ]
+   ],
+   [
+    "h2",
+    "Guild recruitment pages"
+   ],
+   [
+    "ul",
+    [
+     "A guild leader, or a member the leader has allowed, can make a recruitment page for the guild. Its headline, description, requirements, play times, languages, region, Discord invite and the name to whisper in the game are written by them and shown to everybody once the page is shown, including visitors who are not signed in, with the guild's name and tag. The page does not say who made it. Do not write anything you would not want everyone to read.",
+     "A page that is shown is also posted, with the same content, in a forum of the official Tyria Codex Discord server, where everyone in that server can read it. Taking a page back to a draft or deleting it takes the post down. A moderator can hide a page that breaks the terms.",
+     "Any signed in player can report a page. We keep who reported it and what they wrote, only administrators see it, and it is deleted with the page, or with your account.",
+     "We keep which members the leader has allowed to edit the page, until the leader takes it back or the member leaves the guild."
     ]
    ],
    [
