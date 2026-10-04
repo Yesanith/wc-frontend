@@ -1,9 +1,12 @@
 name: Format branch
 
 # formats the dart files of the branch it is started on and commits the result
-# to it, for work done where there is no dart sdk. started by hand
+# to it, for work done where there is no dart sdk. runs on every push to a
+# feature branch, and its own commit never starts another run
 on:
   workflow_dispatch:
+  push:
+    branches: ['feature/**']
 
 permissions:
   contents: write
