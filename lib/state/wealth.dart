@@ -24,8 +24,6 @@ class WealthPoint {
 /// wallet currency ids the history keeps
 const _coins = 1, _karma = 2, _gems = 4;
 
-String _dayOf(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-
 /// a year of daily wallet snapshots per account, kept on the device only
 class WealthNotifier extends Notifier<Map<String, List<WealthPoint>>> {
   static const _key = 'wealth_history';
@@ -59,7 +57,7 @@ class WealthNotifier extends Notifier<Map<String, List<WealthPoint>>> {
       return 0;
     }
 
-    final point = WealthPoint(_dayOf(now ?? DateTime.now()), value(_coins), value(_karma), value(_gems));
+    final point = WealthPoint(dayKey(now ?? DateTime.now()), value(_coins), value(_karma), value(_gems));
     final list = [...(state[account] ?? const <WealthPoint>[])];
     if (list.isNotEmpty && list.last.day == point.day) {
       final last = list.last;

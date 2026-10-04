@@ -7,6 +7,7 @@ import '../state/guild_events.dart' show eventRoleKeys, eventRolePresets;
 import '../state/open_events.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/event_pickers.dart';
 import '../widgets/responsive.dart';
