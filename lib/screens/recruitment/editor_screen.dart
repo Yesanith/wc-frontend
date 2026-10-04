@@ -71,7 +71,11 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     if (problems.isNotEmpty) {
       // too many tags, or a language the forum has no tag for, which a page that chose before may have: said as it is, and not as a text that is too long
       final tags = problems.contains(RecruitField.tags) || problems.contains(RecruitField.languages);
-      showToast(context, tags ? s.t('rec_f_tags_hint', {'n': _draft.lookingFor.length + _draft.languages.length}) : s.t('rec_err_invalid'));
+      showToast(
+          context,
+          tags
+              ? s.t('rec_f_tags_hint', {'n': _draft.lookingFor.length + _draft.languages.length})
+              : s.t('rec_err_invalid'));
       return;
     }
     // a page that is shown to everybody stays whole
@@ -196,7 +200,12 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           child: Text(
             s.t('rec_f_tags_hint', {'n': chosen}),
             key: const Key('rec-tags-hint'),
-            style: TextStyle(fontSize: 12, height: 1.4, color: chosen > recruitTagsMax || _draft.problems().contains(RecruitField.languages) ? AppColors.amber : AppColors.hint),
+            style: TextStyle(
+                fontSize: 12,
+                height: 1.4,
+                color: chosen > recruitTagsMax || _draft.problems().contains(RecruitField.languages)
+                    ? AppColors.amber
+                    : AppColors.hint),
           ),
         ),
         label(s.t('rec_page_looking_for')),

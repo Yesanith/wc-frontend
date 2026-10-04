@@ -314,24 +314,38 @@ void main() {
       expect(const RecruitDraft(discordInvite: '  https://discord.gg/abc123  ').problems(), isEmpty);
     });
 
-    test('chooses five tags at the most, between what it looks for and its languages, which are the tags of its post in the forum', () {
+    test(
+        'chooses five tags at the most, between what it looks for and its languages, which are the tags of its post in the forum',
+        () {
       expect(recruitTagsMax, 5);
-      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), isEmpty, reason: 'five things looked for');
+      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), isEmpty,
+          reason: 'five things looked for');
       expect(RecruitDraft(languages: recruitLanguages.take(5).toSet()).problems(), isEmpty, reason: 'five languages');
-      expect(RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(2).toSet()).problems(), isEmpty, reason: 'three and two');
+      expect(
+          RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(2).toSet()).problems(),
+          isEmpty,
+          reason: 'three and two');
       expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
       expect(RecruitDraft(languages: recruitLanguages.take(6).toSet()).problems(), [RecruitField.tags]);
-      expect(RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(3).toSet()).problems(), [RecruitField.tags], reason: 'three and three');
-      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(), isEmpty, reason: 'four and one');
+      expect(
+          RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(3).toSet()).problems(),
+          [RecruitField.tags],
+          reason: 'three and three');
+      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(), isEmpty,
+          reason: 'four and one');
     });
 
-    test('plays in the languages that the forum has a tag for, and a language of another kind is a problem to be taken off', () {
+    test(
+        'plays in the languages that the forum has a tag for, and a language of another kind is a problem to be taken off',
+        () {
       expect(recruitLanguages, ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru']);
       expect(RecruitDraft(languages: {'ja'}).problems(), [RecruitField.languages], reason: 'Japanese is no tag');
       expect(RecruitDraft(languages: {'zh'}).problems(), [RecruitField.languages]);
       expect(RecruitDraft(languages: {'it'}).problems(), [RecruitField.languages]);
       expect(RecruitDraft(languages: {'en', 'ja'}).problems(), [RecruitField.languages]);
-      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet(), languages: {'ja'}).problems(), [RecruitField.tags, RecruitField.languages], reason: 'both');
+      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet(), languages: {'ja'}).problems(),
+          [RecruitField.tags, RecruitField.languages],
+          reason: 'both');
     });
 
     test(
