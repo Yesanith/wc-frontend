@@ -12,6 +12,7 @@ import '../state/navigation.dart';
 import '../state/professions.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../util.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
@@ -22,13 +23,11 @@ part 'guild_events/detail.dart';
 part 'guild_events/roster.dart';
 part 'guild_events/create.dart';
 
-String _two(int n) => n.toString().padLeft(2, '0');
-
 /// "Tue 29.09 · 21:00", in the app's language
 String eventWhen(S s, DateTime local) =>
-    '${s.t('wd_${local.weekday}')} ${_two(local.day)}.${_two(local.month)} · ${_two(local.hour)}:${_two(local.minute)}';
+    '${s.t('wd_${local.weekday}')} ${pad2(local.day)}.${pad2(local.month)} · ${pad2(local.hour)}:${pad2(local.minute)}';
 
-String _clock(DateTime local) => '${_two(local.hour)}:${_two(local.minute)}';
+String _clock(DateTime local) => '${pad2(local.hour)}:${pad2(local.minute)}';
 
 IconData activityIcon(String activity) => switch (activity) {
       'raid' => Icons.shield_outlined,

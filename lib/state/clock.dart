@@ -1,13 +1,12 @@
 import 'periodic.dart';
-
-String _two(int v) => v.toString().padLeft(2, '0');
+import '../util.dart';
 
 /// a countdown with its two largest units: 2d 04h, 3h 05m, 12:07
 String countdown(Duration d) {
   if (d.isNegative) d = Duration.zero;
-  if (d.inDays > 0) return '${d.inDays}d ${_two(d.inHours % 24)}h';
-  if (d.inHours > 0) return '${d.inHours}h ${_two(d.inMinutes % 60)}m';
-  return '${_two(d.inMinutes)}:${_two(d.inSeconds % 60)}';
+  if (d.inDays > 0) return '${d.inDays}d ${pad2(d.inHours % 24)}h';
+  if (d.inHours > 0) return '${d.inHours}h ${pad2(d.inMinutes % 60)}m';
+  return '${pad2(d.inMinutes)}:${pad2(d.inSeconds % 60)}';
 }
 
 /// how far through the day, from midnight utc

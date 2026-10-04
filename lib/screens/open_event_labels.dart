@@ -1,7 +1,5 @@
 import '../l10n/strings.dart';
 
-String pad2(int n) => n.toString().padLeft(2, '0');
-
 /// 90 min, 2 h, 2 h 30 min
 String openEventDuration(int minutes) {
   if (minutes < 60) return '$minutes min';

@@ -157,3 +157,9 @@ DateTime nextResetAfter([DateTime? now]) {
   final weekly = lastWeeklyReset(n).add(const Duration(days: 7));
   return daily.isBefore(weekly) ? daily : weekly;
 }
+
+/// a number as two digits, for clocks and dates
+String pad2(int n) => n.toString().padLeft(2, '0');
+
+/// a day as 2026-09-29, the key the daily snapshots are kept under
+String dayKey(DateTime d) => '${d.year}-${pad2(d.month)}-${pad2(d.day)}';
