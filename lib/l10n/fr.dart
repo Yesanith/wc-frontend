@@ -637,7 +637,7 @@ const frStrings = <String, String>{
   'n_items': '{n} objets',
   'language': 'Langue',
   'look': 'Apparence',
-  'look_system': 'Comme l'appareil',
+  'look_system': 'Comme l\'appareil',
   'look_light': 'Clair',
   'look_dark': 'Sombre',
   'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
