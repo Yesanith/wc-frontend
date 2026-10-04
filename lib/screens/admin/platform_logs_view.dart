@@ -214,7 +214,7 @@ class _PlatformPage extends ConsumerWidget {
   }
 }
 
-Color _levelColor(LogLevel level) => switch (level) {
+Color logLevelColor(LogLevel level) => switch (level) {
       LogLevel.error => AppColors.ember,
       LogLevel.warn => AppColors.amber,
       LogLevel.info => AppColors.muted,
