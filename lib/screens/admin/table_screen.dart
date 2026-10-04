@@ -41,7 +41,6 @@ class _AdminTableScreenState extends ConsumerState<AdminTableScreen> {
     final page = ref.watch(adminTableProvider(query));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         title: Text(widget.table),
         actions: [
           IconButton(

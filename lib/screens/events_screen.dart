@@ -169,9 +169,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     if (widget.embedded) return refreshable;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('world_bosses'), style: display(20)),
+        title: Text(s.t('world_bosses'), style: display(20, color: AppColors.accent)),
       ),
       body: refreshable,
     );

@@ -94,9 +94,8 @@ class CharacterDetailScreen extends ConsumerWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.bg,
           surfaceTintColor: Colors.transparent,
-          title: Text(name, style: display(20)),
+          title: Text(name, style: display(20, color: AppColors.accent)),
           actions: [
             if (c != null)
               IconButton(

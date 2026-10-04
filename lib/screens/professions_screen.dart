@@ -100,7 +100,6 @@ class ProfessionDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(p?.name ?? id, style: display(20, color: color)),
       ),

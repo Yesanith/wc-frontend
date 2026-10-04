@@ -523,9 +523,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               progress: sync.running ? sync.ratio : null,
             )
           : AppBar(
-              backgroundColor: AppColors.bg,
               surfaceTintColor: Colors.transparent,
-              title: Text(s.t(_titleKeys[section]!), style: display(20)),
+              title: Text(s.t(_titleKeys[section]!), style: display(20, color: AppColors.accent)),
               // a full sync shows real progress, a background refresh only says
               // that something is updating
               bottom: !sync.running && refreshing == 0

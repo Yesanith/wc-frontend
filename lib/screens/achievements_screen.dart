@@ -21,9 +21,8 @@ class AchievementGroupsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('achievements'), style: display(20)),
+        title: Text(s.t('achievements'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<AchievementGroup>>(
         value: groups,
@@ -73,9 +72,8 @@ class _CategoriesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(group.name, style: display(20)),
+        title: Text(group.name, style: display(20, color: AppColors.accent)),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -111,9 +109,8 @@ class AchievementCategoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(category.name, style: display(20)),
+        title: Text(category.name, style: display(20, color: AppColors.accent)),
         actions: [
           if (done != null)
             Padding(

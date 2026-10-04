@@ -35,9 +35,8 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20)),
+        title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<CraftNode>(
         value: tree,
