@@ -118,22 +118,16 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            ChipRow(
               height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  for (final d in [_legendary, ...b.disciplines]) ...[
-                    ChoiceChip(
-                      label: Text(_label(s, d)),
-                      selected: _query.isEmpty && _filter == d,
-                      onSelected: (_) => setState(() => _filter = d),
-                    ),
-                    const SizedBox(width: 8),
-                  ],
-                ],
-              ),
+              children: [
+                for (final d in [_legendary, ...b.disciplines])
+                  ChoiceChip(
+                    label: Text(_label(s, d)),
+                    selected: _query.isEmpty && _filter == d,
+                    onSelected: (_) => setState(() => _filter = d),
+                  ),
+              ],
             ),
             if (learned.isNotEmpty)
               Padding(

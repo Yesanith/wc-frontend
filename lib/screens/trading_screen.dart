@@ -100,9 +100,7 @@ class _ItemTile extends StatelessWidget {
       subtitle: sub,
       trailing: trailing,
       iconSize: 44,
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-      ),
+      onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: itemId)),
     );
   }
 }
