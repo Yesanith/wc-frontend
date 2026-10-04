@@ -509,7 +509,8 @@ const deStrings = <String, String>{
   'rec_f_contact': 'Name zum Anflüstern im Spiel (optional)',
   'rec_f_languages': 'Sprachen (bis zu 5)',
   'rec_f_recruiting': 'Wir suchen gerade Spieler',
-  'rec_f_recruiting_hint': 'Wenn du es ausschaltest, wird der Beitrag dieser Seite im Forum des offiziellen Discord-Servers gesperrt: Niemand kann darauf antworten.',
+  'rec_f_recruiting_hint':
+      'Wenn du es ausschaltest, wird der Beitrag dieser Seite im Forum des offiziellen Discord-Servers gesperrt: Niemand kann darauf antworten.',
   'rec_f_published': 'Diese Seite für alle sichtbar machen',
   'rec_f_published_hint':
       'Sie wird auch im Forum guild-recruitment des offiziellen Discord-Servers veröffentlicht. Wenn du sie ausschaltest, wird der Beitrag dort entfernt.',

@@ -501,7 +501,8 @@ const ptStrings = <String, String>{
   'rec_f_contact': 'Nome para sussurrar no jogo (opcional)',
   'rec_f_languages': 'Idiomas (até 5)',
   'rec_f_recruiting': 'Recrutando agora',
-  'rec_f_recruiting_hint': 'Se você desativar, a publicação desta página no fórum do servidor oficial do Discord é bloqueada: ninguém pode respondê-la.',
+  'rec_f_recruiting_hint':
+      'Se você desativar, a publicação desta página no fórum do servidor oficial do Discord é bloqueada: ninguém pode respondê-la.',
   'rec_f_published': 'Mostrar esta página a todos',
   'rec_f_published_hint':
       'Também é publicada no fórum guild-recruitment do servidor oficial do Discord. Se você desativar, a publicação lá é removida.',
