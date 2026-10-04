@@ -88,8 +88,8 @@ class _AchievementsTab extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                    style: TextStyle(
-                                        fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                    style:
+                                        TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
                                 AchievementPinButton(id: a.id),
                               ],
                             ),

@@ -206,8 +206,7 @@ class _Group extends ConsumerWidget {
                         const SizedBox(width: 8),
                       ],
                       if (showRole && people[i].role != null)
-                        Text(s.t('role_${people[i].role}'),
-                            style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                        Text(s.t('role_${people[i].role}'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                       if (showRole && people[i].flex.isNotEmpty)
                         Flexible(
                           child: Text(

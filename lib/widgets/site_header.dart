@@ -291,8 +291,7 @@ class _SiteNavMenu extends StatelessWidget {
       style: MenuStyle(
         backgroundColor: WidgetStatePropertyAll(AppColors.surface),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), side: BorderSide(color: AppColors.line)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: AppColors.line)),
         ),
       ),
       menuChildren: [

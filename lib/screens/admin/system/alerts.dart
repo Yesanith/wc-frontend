@@ -169,8 +169,7 @@ class _AlertsPanelState extends ConsumerState<_AlertsPanel> {
                                 Text(_icon(e.kind), style: const TextStyle(fontSize: 13)),
                                 const SizedBox(width: 8),
                                 Expanded(
-                                    child: Text(e.message,
-                                        style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                                    child: Text(e.message, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                                 const SizedBox(width: 8),
                                 Text(
                                   '${e.at == null ? '' : ago(e.at!, now)}${e.sent ? '' : ' · not sent'}',

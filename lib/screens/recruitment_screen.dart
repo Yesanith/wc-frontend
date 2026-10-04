@@ -192,8 +192,7 @@ class _ListPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(24),
               child: Center(
-                  child: Text(s.t('rec_empty'),
-                      textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted))),
+                  child: Text(s.t('rec_empty'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted))),
             ),
           for (final card in list.rows) _CardTile(card: card),
           if (last && filter.offset + list.rows.length < list.total && list.rows.length >= recruitPageSize)
@@ -298,8 +297,8 @@ class _MyPages extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                      child: Text(s.t('rec_sign_in'),
-                          style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4))),
+                      child:
+                          Text(s.t('rec_sign_in'), style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4))),
                   TextButton(
                     onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.settings,
                     child: Text(s.t('nav_settings')),

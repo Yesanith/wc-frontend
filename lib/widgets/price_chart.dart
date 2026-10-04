@@ -41,8 +41,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
           children: [
             Kicker(s.t('price_history').toUpperCase()),
             const SizedBox(height: 8),
-            Text(s.t('price_history_collecting'),
-                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            Text(s.t('price_history_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           ],
         ),
       );

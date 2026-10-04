@@ -202,8 +202,8 @@ class _OrderBook extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+                  style:
+                      TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
               const SizedBox(height: 6),
               for (final r in rows)
                 Padding(

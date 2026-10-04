@@ -32,8 +32,7 @@ class _BanRow extends ConsumerWidget {
                 children: [
                   Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
                   if (since.length >= 10)
-                    Text('since ${since.substring(0, 10)}',
-                        style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    Text('since ${since.substring(0, 10)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -149,8 +148,7 @@ class _EventCard extends StatelessWidget {
           actions: [
             TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
             TextButton(
-                onPressed: () => Navigator.pop(c, true),
-                child: Text(yes, style: TextStyle(color: AppColors.red))),
+                onPressed: () => Navigator.pop(c, true), child: Text(yes, style: TextStyle(color: AppColors.red))),
           ],
         ),
       );
@@ -188,8 +186,7 @@ class _EventCard extends StatelessWidget {
               Expanded(child: Text('${event['title']}', style: const TextStyle(fontWeight: FontWeight.w700))),
               if (hidden) Text('hidden', style: TextStyle(fontSize: 11, color: AppColors.amber)),
               if (reported)
-                Text('${asInt(event['reports'])} reports',
-                    style: TextStyle(fontSize: 12, color: AppColors.amber)),
+                Text('${asInt(event['reports'])} reports', style: TextStyle(fontSize: 12, color: AppColors.amber)),
             ],
           ),
           const SizedBox(height: 2),
@@ -197,8 +194,7 @@ class _EventCard extends StatelessWidget {
           if (event['reason'] != null)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text('hidden because: ${event['reason']}',
-                  style: TextStyle(fontSize: 12, color: AppColors.amber)),
+              child: Text('hidden because: ${event['reason']}', style: TextStyle(fontSize: 12, color: AppColors.amber)),
             ),
           if (reasons.isNotEmpty)
             Padding(
@@ -209,8 +205,7 @@ class _EventCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text('"$n"',
-                  style:
-                      TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
             ),
           const SizedBox(height: 4),
           Wrap(

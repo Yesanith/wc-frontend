@@ -39,8 +39,7 @@ class _RankCardState extends ConsumerState<_RankCard> {
                 Expanded(
                   child: Text('${widget.rank['id'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w800)),
                 ),
-                Text(s.t('n_members', {'n': widget.members}),
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                Text(s.t('n_members', {'n': widget.members}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 if (permissions.isNotEmpty)
                   Icon(_open ? Icons.expand_less : Icons.expand_more, color: AppColors.chevron),
               ],
@@ -84,8 +83,7 @@ class _SharedGuild extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    Widget note(String key) =>
-        Panel(child: Text(s.t(key), style: TextStyle(color: AppColors.muted, height: 1.5)));
+    Widget note(String key) => Panel(child: Text(s.t(key), style: TextStyle(color: AppColors.muted, height: 1.5)));
 
     return ref.watch(tyriaGuildIdProvider(gw2Id)).when(
           loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),

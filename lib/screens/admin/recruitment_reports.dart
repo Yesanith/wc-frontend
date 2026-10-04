@@ -20,8 +20,7 @@ class AdminRecruitReports extends ConsumerWidget {
       error: (_, __) => Panel(
         child: Row(
           children: [
-            Expanded(
-                child: Text('The recruitment pages could not be read.', style: TextStyle(color: AppColors.muted))),
+            Expanded(child: Text('The recruitment pages could not be read.', style: TextStyle(color: AppColors.muted))),
             TextButton(onPressed: () => ref.invalidate(adminRecruitReportsProvider), child: const Text('Try again')),
           ],
         ),

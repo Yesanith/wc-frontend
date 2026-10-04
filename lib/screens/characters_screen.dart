@@ -165,8 +165,8 @@ class _CharacterCard extends ConsumerWidget {
           Column(
             children: [
               Text(s.t('level_short'),
-                  style: TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
+                  style:
+                      TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
               Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             ],
           ),

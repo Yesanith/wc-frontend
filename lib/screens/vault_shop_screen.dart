@@ -65,8 +65,7 @@ class VaultShopScreen extends ConsumerWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(s.t('astral_acclaim'),
-                              style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                          child: Text(s.t('astral_acclaim'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                         ),
                         Text(fmtInt(balance),
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),

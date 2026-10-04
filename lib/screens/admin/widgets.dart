@@ -94,13 +94,10 @@ class AdminStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label.toUpperCase(),
-              style:
-                  TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.gold)),
           Text(note,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );
@@ -219,12 +216,10 @@ class AdminBars extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(days.isEmpty ? '' : short(days.first.day),
-                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.first.day), style: TextStyle(fontSize: 11, color: AppColors.hint)),
               Text(summary == null ? 'most in a day: $peak' : 'most: $peak',
                   style: TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text(days.isEmpty ? '' : short(days.last.day),
-                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.last.day), style: TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
           ),
         ],
@@ -294,8 +289,7 @@ class AdminVersions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  SizedBox(
-                      width: 70, child: Text(v.platform, style: TextStyle(fontSize: 12, color: AppColors.muted))),
+                  SizedBox(width: 70, child: Text(v.platform, style: TextStyle(fontSize: 12, color: AppColors.muted))),
                   SizedBox(
                       width: 70,
                       child: Text(v.version, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),

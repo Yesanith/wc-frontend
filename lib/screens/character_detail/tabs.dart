@@ -166,9 +166,7 @@ class _SmallItem extends ConsumerWidget {
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 110),
             child: Text(name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 10, color: AppColors.muted)),
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10, color: AppColors.muted)),
           ),
         ],
       ],

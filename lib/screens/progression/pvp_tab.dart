@@ -200,8 +200,7 @@ class _PvpTab extends ConsumerWidget {
                               ),
                               Text(
                                 ratio(entry.value is Map ? Map<String, dynamic>.from(entry.value as Map) : null),
-                                style:
-                                    TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
                               ),
                             ],
                           ),

@@ -161,8 +161,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     Widget label(String text) => Padding(
           padding: const EdgeInsets.only(top: 18, bottom: 6),
           child: Text(text.toUpperCase(),
-              style:
-                  TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
         );
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),

@@ -142,8 +142,8 @@ class LandingScreen extends ConsumerWidget {
                               Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
                               const SizedBox(width: 6),
                               Flexible(
-                                  child: Text(s.t('privacy_note'),
-                                      style: TextStyle(fontSize: 12, color: AppColors.hint))),
+                                  child:
+                                      Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.hint))),
                             ],
                           ),
                           SizedBox(height: width >= 900 ? 84 : 48),
@@ -176,8 +176,7 @@ class LandingScreen extends ConsumerWidget {
                                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                                             const SizedBox(height: 6),
                                             Text(s.t(body),
-                                                style: TextStyle(
-                                                    fontSize: 14, height: 1.45, color: AppColors.muted)),
+                                                style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
                                           ],
                                         ),
                                       ),

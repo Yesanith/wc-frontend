@@ -213,9 +213,8 @@ class _RowCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              subtitle: stamp == null
-                  ? null
-                  : Text(ago(stamp, now), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              subtitle:
+                  stamp == null ? null : Text(ago(stamp, now), style: TextStyle(fontSize: 12, color: AppColors.muted)),
               childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [

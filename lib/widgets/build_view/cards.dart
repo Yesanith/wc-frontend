@@ -41,8 +41,8 @@ class _SpecCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: AppColors.gold),
                   ),
-                  child: Text('ELITE',
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  child:
+                      Text('ELITE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ),
             ],
           ),

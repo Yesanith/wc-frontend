@@ -23,8 +23,7 @@ class _Wallet extends ConsumerWidget {
                 child: Row(
                   children: [
                     Expanded(child: CoinDots(byId[1]?.value ?? 0, size: 22, weight: FontWeight.w800)),
-                    if (byId[1] != null)
-                      Text(byId[1]!.name, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    if (byId[1] != null) Text(byId[1]!.name, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -79,9 +78,7 @@ class _CurrencyTile extends StatelessWidget {
               Text(compact(entry.value),
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, fontFeatures: _tabular)),
               Text(entry.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                  maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
         ],

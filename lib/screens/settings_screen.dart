@@ -244,8 +244,8 @@ class _AdminTile extends ConsumerWidget {
           onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AdminScreen())),
           leading: Icon(Icons.monitor_heart_outlined, color: AppColors.gold),
           title: const Text('Backend dashboard', style: TextStyle(fontWeight: FontWeight.w700)),
-          subtitle: Text('Players, guilds, servers, queues and jobs',
-              style: TextStyle(color: AppColors.muted, fontSize: 12)),
+          subtitle:
+              Text('Players, guilds, servers, queues and jobs', style: TextStyle(color: AppColors.muted, fontSize: 12)),
           trailing: Icon(Icons.chevron_right, color: AppColors.chevron),
         ),
       ),
