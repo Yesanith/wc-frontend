@@ -50,9 +50,7 @@ class _ProfessionCard extends StatelessWidget {
     final color = professionColor(p.id);
     final elites = p.specializations.where((l) => l['elite'] == true).toList();
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => ProfessionDetailScreen(id: p.id)),
-      ),
+      onTap: () => openPanel(context, (_) => ProfessionDetailScreen(id: p.id)),
       padding: const EdgeInsets.all(14),
       radius: AppRadius.card,
       child: Row(

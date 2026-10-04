@@ -165,9 +165,7 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
             const SizedBox(width: 8),
             Expanded(
               child: OutlinedButton.icon(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-                ),
+                onPressed: () => openPanel(context, (_) => TradingItemScreen(itemId: itemId)),
                 icon: const Icon(Icons.storefront_outlined, size: 18),
                 label: Text(s.t('trading_post')),
               ),

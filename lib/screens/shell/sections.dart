@@ -5,7 +5,6 @@ const _readingSections = {
   AppSection.news,
   AppSection.recipes,
   AppSection.progression,
-  AppSection.bosses,
   AppSection.weekly,
   AppSection.guilds,
   AppSection.wvw,

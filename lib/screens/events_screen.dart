@@ -115,39 +115,29 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           ),
         ),
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                for (final k in KindFilter.values) ...[
-                  ChoiceChip(
-                    label: Text(switch (k) {
-                      KindFilter.all => s.t('all'),
-                      KindFilter.bosses => s.t('filter_bosses'),
-                      KindFilter.metas => s.t('filter_metas'),
-                      KindFilter.pinned => s.t('pinned'),
-                    }),
-                    selected: _kind == k,
-                    onSelected: (_) => setState(() => _kind = k),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-                Container(
-                    width: 1, margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 10), color: AppColors.line),
-                for (final e in Expansion.values) ...[
-                  FilterChip(
-                    avatar: CircleAvatar(radius: 4, backgroundColor: e.color),
-                    label: Text(e.code),
-                    tooltip: e.label,
-                    selected: releases.contains(e),
-                    onSelected: (_) => ref.read(releaseFilterProvider.notifier).toggle(e),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-              ],
-            ),
+          child: ChipRow(
+            children: [
+              for (final k in KindFilter.values)
+                ChoiceChip(
+                  label: Text(switch (k) {
+                    KindFilter.all => s.t('all'),
+                    KindFilter.bosses => s.t('filter_bosses'),
+                    KindFilter.metas => s.t('filter_metas'),
+                    KindFilter.pinned => s.t('pinned'),
+                  }),
+                  selected: _kind == k,
+                  onSelected: (_) => setState(() => _kind = k),
+                ),
+              Container(width: 1, height: 24, margin: const EdgeInsets.symmetric(horizontal: 6), color: AppColors.line),
+              for (final e in Expansion.values)
+                FilterChip(
+                  avatar: CircleAvatar(radius: 4, backgroundColor: e.color),
+                  label: Text(e.code),
+                  tooltip: e.label,
+                  selected: releases.contains(e),
+                  onSelected: (_) => ref.read(releaseFilterProvider.notifier).toggle(e),
+                ),
+            ],
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 8)),

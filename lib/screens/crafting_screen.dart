@@ -243,9 +243,7 @@ class _LeafRow extends ConsumerWidget {
     final name = (item?['name'] as String?) ?? s.t('item_n', {'id': itemId});
     final done = have >= need;
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-      ),
+      onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: itemId)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
