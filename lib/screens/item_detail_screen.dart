@@ -96,7 +96,7 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                 children: [
                   Text(name, style: display(21, color: rarity == null ? AppColors.text : rarityColor(rarity))),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  Text(subtitle, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -224,20 +224,20 @@ class ItemFacts extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 7),
           child: Row(
             children: [
-              Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+              Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
               value,
             ],
           ),
         );
     Widget valueText(String v) =>
-        Text(v, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold));
+        Text(v, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (showDescription && description.isNotEmpty) ...[
           const SizedBox(height: 16),
-          Text(description, style: const TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
+          Text(description, style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
         ],
         if (flags.isNotEmpty) ...[
           const SizedBox(height: 12),
@@ -275,12 +275,12 @@ class ItemFacts extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (buff.isNotEmpty)
-                  Text(buff, style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
+                  Text(buff, style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
                 for (var i = 0; i < bonuses.length; i++)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
                     child: Text('(${i + 1}) ${bonuses[i]}',
-                        style: const TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
+                        style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
                   ),
               ],
             ),
@@ -293,7 +293,7 @@ class ItemFacts extends ConsumerWidget {
 
   Widget? _comboText(String? combo) => combo == null
       ? null
-      : Text(combo, style: const TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13));
+      : Text(combo, style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13));
 }
 
 /// label and value pairs for what the api tells about this kind of item

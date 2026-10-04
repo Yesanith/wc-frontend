@@ -9,7 +9,7 @@ import 'coin_text.dart';
 import 'common.dart';
 
 /// colours of the two lines, the sell price is the one people quote
-const sellColor = AppColors.gold;
+final sellColor = AppColors.gold;
 const buyColor = Color(0xFF5BC8E8);
 
 /// an item's recorded trading post prices: sell and buy over the chosen
@@ -42,7 +42,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
             Kicker(s.t('price_history').toUpperCase()),
             const SizedBox(height: 8),
             Text(s.t('price_history_collecting'),
-                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           ],
         ),
       );
@@ -62,7 +62,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
             children: [
               Container(width: 10, height: 3, color: color),
               const SizedBox(width: 6),
-              Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+              Text(label, style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
               const SizedBox(width: 6),
               if (pct != null)
                 Text(
@@ -120,8 +120,8 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(shown.first.day, style: const TextStyle(fontSize: 10, color: AppColors.muted)),
-              Text(shown.last.day, style: const TextStyle(fontSize: 10, color: AppColors.muted)),
+              Text(shown.first.day, style: TextStyle(fontSize: 10, color: AppColors.muted)),
+              Text(shown.last.day, style: TextStyle(fontSize: 10, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 10),
@@ -132,7 +132,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
             ],
           ),
           const SizedBox(height: 8),
-          Text(s.t('price_history_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+          Text(s.t('price_history_note'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
         ],
       ),
     );

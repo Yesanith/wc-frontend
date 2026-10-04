@@ -43,7 +43,7 @@ class WeeklyScreen extends ConsumerWidget {
               tooltip: s.t('vault_shop'),
               visualDensity: VisualDensity.compact,
               onPressed: openShop,
-              icon: const Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+              icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
             ),
             child: AsyncView(
               value: weekly,
@@ -80,7 +80,7 @@ class WeeklyScreen extends ConsumerWidget {
           ],
           FoldSection(
             title: s.t('raids'),
-            leading: const Icon(Icons.shield_outlined, size: 20, color: AppColors.gold),
+            leading: Icon(Icons.shield_outlined, size: 20, color: AppColors.gold),
             summary: raids == null
                 ? null
                 : '${raids.fold<int>(0, (n, w) => n + w.done)}/${raids.fold<int>(0, (n, w) => n + w.encounters.length)}',

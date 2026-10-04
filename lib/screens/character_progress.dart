@@ -33,7 +33,7 @@ class CharacterProgressTab extends ConsumerWidget {
         const SizedBox(height: 22),
         SectionHeader(title: s.t('story_journal')),
         const SizedBox(height: 6),
-        Text(s.t('story_note'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.hint)),
+        Text(s.t('story_note'), style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.hint)),
         const SizedBox(height: 10),
         _Story(name: name),
         const SizedBox(height: 22),
@@ -95,7 +95,7 @@ class _SeasonSheet extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(child: Text(r.name, style: const TextStyle(fontSize: 13))),
                       Text(r.total == 0 ? '–' : '${r.done}/${r.total}',
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -106,7 +106,7 @@ class _SeasonSheet extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
             child: Text(s.t('story_unmatched', {'n': unmatched}),
-                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint)),
+                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint)),
           ),
       ],
     );

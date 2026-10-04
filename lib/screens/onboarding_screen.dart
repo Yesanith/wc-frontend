@@ -132,10 +132,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.translate, size: 18, color: AppColors.gold),
+                            Icon(Icons.translate, size: 18, color: AppColors.gold),
                             const SizedBox(width: 6),
                             Text(lang.nativeName,
-                                style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                                style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
                           ],
                         ),
                       ),
@@ -145,7 +145,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 const SizedBox(height: 28),
                 Text(s.t('welcome_title'), style: display(34).copyWith(height: 1.15)),
                 const SizedBox(height: 12),
-                Text(s.t('welcome_body'), style: const TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
+                Text(s.t('welcome_body'), style: TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
                 const SizedBox(height: 24),
                 _Step(1, s.t('step_create')),
                 Padding(
@@ -193,7 +193,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(error,
-                        style: const TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
+                        style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
                   ),
                 const SizedBox(height: 4),
                 SizedBox(
@@ -206,7 +206,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
                     ),
                     child: _busy
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.onGold),
@@ -227,16 +227,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Text(
                     s.t('guest_note'),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
+                    style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
                   ),
                 ],
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    const Icon(Icons.shield_outlined, size: 16, color: AppColors.hint),
+                    Icon(Icons.shield_outlined, size: 16, color: AppColors.hint),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text(s.t('privacy_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      child: Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ),
                   ],
                 ),
@@ -341,11 +341,11 @@ class _Step extends StatelessWidget {
             border: Border.all(color: AppColors.gold),
           ),
           child:
-              Text('$number', style: const TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800)),
+              Text('$number', style: TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800)),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: Text(text, style: const TextStyle(fontSize: 14, height: 1.45, color: AppColors.textSoft)),
+          child: Text(text, style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.textSoft)),
         ),
       ],
     );

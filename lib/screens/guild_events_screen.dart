@@ -123,12 +123,12 @@ class GuildEventsScreen extends ConsumerWidget {
                 children: [
                   const _GuildLinks(),
                   const SizedBox(height: 48),
-                  const Icon(Icons.event_available_outlined, size: 48, color: AppColors.muted),
+                  Icon(Icons.event_available_outlined, size: 48, color: AppColors.muted),
                   const SizedBox(height: 12),
                   Text(
                     creatable.isEmpty ? s.t('events_none') : s.t('events_none_create'),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: AppColors.muted, height: 1.45),
+                    style: TextStyle(color: AppColors.muted, height: 1.45),
                   ),
                 ],
               );
@@ -162,9 +162,9 @@ class _Blocked extends ConsumerWidget {
       padding: const EdgeInsets.all(24),
       children: [
         const SizedBox(height: 60),
-        const Icon(Icons.groups_2_outlined, size: 48, color: AppColors.muted),
+        Icon(Icons.groups_2_outlined, size: 48, color: AppColors.muted),
         const SizedBox(height: 12),
-        Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.45)),
+        Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.45)),
         if (toSettings) ...[
           const SizedBox(height: 16),
           Center(
@@ -221,7 +221,7 @@ class _EventCard extends ConsumerWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${eventWhen(s, e.startAt)} · ${e.guildTag.isEmpty ? e.guildName : '[${e.guildTag}]'}',
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
                 const SizedBox(height: 6),
                 Wrap(
@@ -239,7 +239,7 @@ class _EventCard extends ConsumerWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

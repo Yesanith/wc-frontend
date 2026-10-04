@@ -21,11 +21,11 @@ class _HeroPoints extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.stars_outlined, color: AppColors.muted),
+                Icon(Icons.stars_outlined, color: AppColors.muted),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(s.t('progress_hero_unavailable'),
-                      style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+                      style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
                 ),
               ],
             ),
@@ -34,12 +34,12 @@ class _HeroPoints extends ConsumerWidget {
         return Panel(
           child: Row(
             children: [
-              const Icon(Icons.stars_outlined, color: AppColors.gold),
+              Icon(Icons.stars_outlined, color: AppColors.gold),
               const SizedBox(width: 12),
               Expanded(
-                  child: Text(s.t('hero_challenges'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft))),
+                  child: Text(s.t('hero_challenges'), style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
               Text(fmtInt(count),
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
             ],
           ),
         );
@@ -75,7 +75,7 @@ class _Training extends ConsumerWidget {
         if (rows.isEmpty) {
           return Panel(
             child: Text(s.t('progress_training_unavailable'),
-                style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+                style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
           );
         }
         final done = rows.where((r) => r['done'] == true).length;
@@ -85,7 +85,7 @@ class _Training extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(s.t('trees_done', {'n': done, 'm': rows.length}),
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
               for (final r in rows)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
@@ -98,7 +98,7 @@ class _Training extends ConsumerWidget {
                         child: Text(trees['${r['id']}'] ?? '#${r['id']}',
                             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ),
-                      Text('${asInt(r['spent'])}', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                      Text('${asInt(r['spent'])}', style: TextStyle(fontSize: 12, color: AppColors.gold)),
                     ],
                   ),
                 ),
@@ -201,8 +201,8 @@ class _Story extends ConsumerWidget {
                                   child: Text('${season['name'] ?? ''}',
                                       style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                                 ),
-                                Text('$done/$total', style: const TextStyle(fontSize: 12, color: AppColors.gold)),
-                                const Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
+                                Text('$done/$total', style: TextStyle(fontSize: 12, color: AppColors.gold)),
+                                Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
                               ],
                             ),
                             const SizedBox(height: 5),
@@ -314,7 +314,7 @@ class _Backstory extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${questions['${answers[id]?['question']}']?['title'] ?? ''}',
-                          style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 11, color: AppColors.muted)),
                       const SizedBox(height: 2),
                       Text('${answers[id]?['title'] ?? id}',
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),

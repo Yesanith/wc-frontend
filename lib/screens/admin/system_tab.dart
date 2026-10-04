@@ -52,7 +52,7 @@ class AdminSystemTab extends ConsumerWidget {
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 'What each function answered to the call the database made to wake it. ${sys.syncCallsKept} calls are kept, for three hours.',
-                style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                style: TextStyle(fontSize: 12, color: AppColors.hint),
               ),
             ),
             const Eyebrow('Trading post'),
@@ -102,7 +102,7 @@ class AdminSystemTab extends ConsumerWidget {
           secondary: [
             const Eyebrow('Scheduled jobs'),
             cron.isEmpty
-                ? const Panel(child: Text('The schedule could not be read.', style: TextStyle(color: AppColors.muted)))
+                ? Panel(child: Text('The schedule could not be read.', style: TextStyle(color: AppColors.muted)))
                 : AdminHealth(cronLines(cron, now)),
             const Eyebrow('Public events'),
             AdminHealth(sys.publicLines()),
@@ -168,7 +168,7 @@ class _Panel extends StatelessWidget {
         children: [
           Text(title.toUpperCase(),
               style:
-                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+                  TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
           const SizedBox(height: 4),
           for (final (label, value) in rows) AdminLine(label, value),
         ],
@@ -190,9 +190,9 @@ class _EdgeFunctions extends ConsumerWidget {
     final now = DateTime.now();
     return logs.when(
       loading: () =>
-          const Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
+          Panel(child: Text('Reading the logs…', style: TextStyle(color: AppColors.hint, fontSize: 13))),
       // an older backend has no logs to give: said, and nothing else is held up by it
-      error: (_, __) => const Panel(
+      error: (_, __) => Panel(
         child: Text('The logs of the functions could not be read. The backend may not have them yet.',
             style: TextStyle(color: AppColors.amber, fontSize: 13)),
       ),
@@ -202,7 +202,7 @@ class _EdgeFunctions extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (page.functions.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Text('Nothing has been said in the last day.',
                     style: TextStyle(color: AppColors.muted, fontSize: 13)),
@@ -240,7 +240,7 @@ class _Tables extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tables.isEmpty) {
-      return const Panel(child: Text('No table was listed.', style: TextStyle(color: AppColors.muted)));
+      return Panel(child: Text('No table was listed.', style: TextStyle(color: AppColors.muted)));
     }
     final rows = tables.fold<int>(0, (sum, t) => sum + t.rows);
     final bytes = tables.fold<int>(0, (sum, t) => sum + t.bytes);
@@ -251,9 +251,9 @@ class _Tables extends StatelessWidget {
         children: [
           Text(
             '${tables.length} tables, ${fmtInt(rows)} rows, ${formatBytes(bytes)}',
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft),
           ),
-          const Text('Tap a table to see its rows.', style: TextStyle(fontSize: 12, color: AppColors.hint)),
+          Text('Tap a table to see its rows.', style: TextStyle(fontSize: 12, color: AppColors.hint)),
           const SizedBox(height: 6),
           for (final t in tables)
             InkWell(
@@ -271,7 +271,7 @@ class _Tables extends StatelessWidget {
                           Text(t.name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                              style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
                           // what is dead takes room: told when there is much of it
                           if (t.dead >= 1000)
                             Text(
@@ -284,19 +284,19 @@ class _Tables extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: Text(fmtInt(t.rows),
-                          textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.gold)),
+                          textAlign: TextAlign.right, style: TextStyle(fontSize: 13, color: AppColors.gold)),
                     ),
                     Expanded(
                       flex: 2,
                       child: Text(formatBytes(t.bytes),
-                          textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          textAlign: TextAlign.right, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ),
                     Expanded(
                       flex: 3,
                       child: Text(
                         t.newest == null ? '' : ago(t.newest!, now),
                         textAlign: TextAlign.right,
-                        style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                        style: TextStyle(fontSize: 12, color: AppColors.hint),
                       ),
                     ),
                   ],

@@ -465,7 +465,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                       ],
                     ),
                     if (accountName != null)
-                      Text(accountName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      Text(accountName, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -517,7 +517,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                 null => IconButton(
                     tooltip: s.t('search_placeholder'),
                     onPressed: _showSearch,
-                    icon: const Icon(Icons.search, color: AppColors.muted),
+                    icon: Icon(Icons.search, color: AppColors.muted),
                   ),
               },
               busy: sync.running || refreshing != 0,
@@ -635,7 +635,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                     child: menu,
                   ),
                 ),
-                const VerticalDivider(width: 1, thickness: 1, color: AppColors.hairline),
+                VerticalDivider(width: 1, thickness: 1, color: AppColors.hairline),
                 Expanded(child: scaffold),
               ],
             )

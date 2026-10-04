@@ -173,7 +173,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
 
     Widget label(String text) => Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 6),
-          child: Text(text, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+          child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
         );
 
     return Scaffold(
@@ -186,7 +186,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             initialValue: guildId,
             dropdownColor: AppColors.surface,
             decoration: fieldDecoration(''),
-            hint: Text(s.t('event_guild_hint'), style: const TextStyle(color: AppColors.muted)),
+            hint: Text(s.t('event_guild_hint'), style: TextStyle(color: AppColors.muted)),
             items: [
               for (final g in guilds)
                 DropdownMenuItem(value: g.id, child: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]')),
@@ -203,7 +203,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           if (editing == null && guildId != null) ...[
             label(s.t('event_account')),
             if (organizers.isEmpty && accounts.hasValue)
-              Text(s.t('event_account_none'), style: const TextStyle(fontSize: 13, color: AppColors.muted))
+              Text(s.t('event_account_none'), style: TextStyle(fontSize: 13, color: AppColors.muted))
             else
               DropdownButtonFormField<String>(
                 // a new field for every guild, its start value is read once
@@ -211,7 +211,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 initialValue: accountId,
                 dropdownColor: AppColors.surface,
                 decoration: fieldDecoration(''),
-                hint: Text(s.t('event_account_hint'), style: const TextStyle(color: AppColors.muted)),
+                hint: Text(s.t('event_account_hint'), style: TextStyle(color: AppColors.muted)),
                 items: [
                   for (final a in organizers)
                     DropdownMenuItem(
@@ -263,7 +263,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
               value: _weekly,
               onChanged: (v) => setState(() => _weekly = v),
               title: Text(s.t('event_repeat_weekly')),
-              subtitle: Text(s.t('event_repeat_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              subtitle: Text(s.t('event_repeat_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ),
           label(s.t('event_duration')),
           Wrap(
@@ -348,7 +348,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(s.t('event_roles_over', {'n': roleTotal, 'max': _max!}),
-                  style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+                  style: TextStyle(fontSize: 12, color: AppColors.gold)),
             ),
           label(s.t('event_description')),
           TextField(
@@ -369,7 +369,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           if (editing?.event.seriesId != null) ...[
             const SizedBox(height: 8),
             Text(s.t('event_edit_one_week'),
-                textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           ],
         ],
       ),

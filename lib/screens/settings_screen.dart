@@ -88,7 +88,7 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                       title: Text(l.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
                       trailing: Text(l.code.toUpperCase(),
-                          style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                          style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
                     ),
                 ],
               ),
@@ -110,6 +110,8 @@ class SettingsScreen extends ConsumerWidget {
         // only for whoever runs the backend
         const _AdminTile(),
         if (kIsWeb) ...[const _UiSizePanel(), const SizedBox(height: 12)],
+        const _LookPanel(),
+        const SizedBox(height: 12),
         Panel(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Column(
@@ -121,19 +123,19 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 onTap: () => _pickLanguage(context, ref),
-                leading: const Icon(Icons.translate, color: AppColors.gold),
+                leading: Icon(Icons.translate, color: AppColors.gold),
                 title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(lang.code.toUpperCase(),
-                        style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
                     const SizedBox(width: 4),
-                    const Icon(Icons.expand_more, color: AppColors.muted),
+                    Icon(Icons.expand_more, color: AppColors.muted),
                   ],
                 ),
               ),
-              const Divider(color: AppColors.track),
+              Divider(color: AppColors.track),
               const SizedBox(height: 4),
               _InfoRow(
                 s.t('data_language'),
@@ -169,7 +171,7 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               Kicker(s.t('backup').toUpperCase()),
               const SizedBox(height: 8),
-              Text(s.t('backup_note'), style: const TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+              Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
               const SizedBox(height: 12),
               Row(
                 children: [
@@ -219,7 +221,7 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Text(label, style: const TextStyle(fontSize: 13, color: AppColors.muted))),
+        Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.muted))),
         Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ],
     );
@@ -240,11 +242,11 @@ class _AdminTile extends ConsumerWidget {
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AdminScreen())),
-          leading: const Icon(Icons.monitor_heart_outlined, color: AppColors.gold),
+          leading: Icon(Icons.monitor_heart_outlined, color: AppColors.gold),
           title: const Text('Backend dashboard', style: TextStyle(fontWeight: FontWeight.w700)),
-          subtitle: const Text('Players, guilds, servers, queues and jobs',
+          subtitle: Text('Players, guilds, servers, queues and jobs',
               style: TextStyle(color: AppColors.muted, fontSize: 12)),
-          trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
+          trailing: Icon(Icons.chevron_right, color: AppColors.chevron),
         ),
       ),
     );
@@ -279,7 +281,53 @@ class _UiSizePanel extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(s.t('ui_scale_hint'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text(s.t('ui_scale_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
+      ),
+    );
+  }
+}
+
+/// light, dark or whichever the phone is set to
+class _LookPanel extends ConsumerWidget {
+  const _LookPanel();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final mode = ref.watch(lookProvider);
+    return Panel(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('look').toUpperCase()),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: SegmentedButton<LookMode>(
+              showSelectedIcon: false,
+              segments: [
+                ButtonSegment(
+                  value: LookMode.system,
+                  icon: const Icon(Icons.brightness_auto_outlined, size: 18),
+                  label: Text(s.t('look_system')),
+                ),
+                ButtonSegment(
+                  value: LookMode.light,
+                  icon: const Icon(Icons.light_mode_outlined, size: 18),
+                  label: Text(s.t('look_light')),
+                ),
+                ButtonSegment(
+                  value: LookMode.dark,
+                  icon: const Icon(Icons.dark_mode_outlined, size: 18),
+                  label: Text(s.t('look_dark')),
+                ),
+              ],
+              selected: {mode},
+              onSelectionChanged: (picked) => ref.read(lookProvider.notifier).set(picked.first),
+            ),
+          ),
         ],
       ),
     );

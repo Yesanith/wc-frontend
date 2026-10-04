@@ -119,7 +119,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
       color: AppColors.navBg,
       child: Container(
         height: height,
-        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.line))),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.line))),
         child: Stack(
           children: [
             Center(
@@ -166,7 +166,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.person_outline, size: 16, color: AppColors.muted),
+                              Icon(Icons.person_outline, size: 16, color: AppColors.muted),
                               const SizedBox(width: 6),
                               Text(account!, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                             ],
@@ -289,10 +289,10 @@ class _SiteNavMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return MenuAnchor(
       style: MenuStyle(
-        backgroundColor: const WidgetStatePropertyAll(AppColors.surface),
+        backgroundColor: WidgetStatePropertyAll(AppColors.surface),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12), side: const BorderSide(color: AppColors.line)),
+              borderRadius: BorderRadius.circular(12), side: BorderSide(color: AppColors.line)),
         ),
       ),
       menuChildren: [
@@ -309,7 +309,7 @@ class _SiteNavMenu extends StatelessWidget {
       builder: (context, controller, _) => SiteNavButton(
         label: label,
         selected: sections.contains(current),
-        trailing: const Icon(Icons.expand_more, size: 18, color: AppColors.muted),
+        trailing: Icon(Icons.expand_more, size: 18, color: AppColors.muted),
         onTap: () => controller.isOpen ? controller.close() : controller.open(),
       ),
     );

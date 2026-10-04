@@ -72,7 +72,7 @@ class _NewsTab extends ConsumerWidget {
           itemBuilder: (context, i) {
             if (i == items.length) {
               return Text(s.t('news_source'),
-                  textAlign: TextAlign.center, style: const TextStyle(fontSize: 11, color: AppColors.hint));
+                  textAlign: TextAlign.center, style: TextStyle(fontSize: 11, color: AppColors.hint));
             }
             return _NewsCard(item: items[i]);
           },
@@ -107,12 +107,12 @@ class _NewsCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_date(item.date), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                Text(_date(item.date), style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 const SizedBox(height: 4),
                 Text(item.title, style: display(17)),
                 if (item.excerpt.isNotEmpty) ...[
                   const SizedBox(height: 6),
-                  Text(item.excerpt, style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
+                  Text(item.excerpt, style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
                 ],
               ],
             ),
@@ -138,7 +138,7 @@ class _PatchNotesTab extends ConsumerWidget {
         builder: (notes) => ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
-            Text(s.t('patch_notes_note'), style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            Text(s.t('patch_notes_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
             const SizedBox(height: 12),
             for (final n in notes)
               Padding(
@@ -147,13 +147,13 @@ class _PatchNotesTab extends ConsumerWidget {
                   onTap: () => openUrl(context, n.url, failMessage: s.t('open_failed')),
                   child: Row(
                     children: [
-                      const Icon(Icons.description_outlined, color: AppColors.gold, size: 20),
+                      Icon(Icons.description_outlined, color: AppColors.gold, size: 20),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(s.t('game_update_on', {'d': _date(n.date)}),
                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                       ),
-                      const Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
+                      Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
                     ],
                   ),
                 ),

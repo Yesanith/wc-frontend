@@ -61,46 +61,46 @@ class _PlatformCardState extends State<_PlatformCard> {
                                     ),
                                     TextSpan(text: line.at == null ? '' : ' · ${ago(line.at!, widget.now)}'),
                                   ]),
-                                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                                 ),
                               ),
                               IconButton(
                                 tooltip: 'Copy',
                                 visualDensity: VisualDensity.compact,
-                                icon: const Icon(Icons.copy, size: 16, color: AppColors.hint),
+                                icon: Icon(Icons.copy, size: 16, color: AppColors.hint),
                                 onPressed: () => Clipboard.setData(ClipboardData(text: _copyText(line, text, attrs))),
                               ),
                             ],
                           ),
                           _open
                               ? SelectableText(text,
-                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
+                                  style: TextStyle(fontSize: 13, color: AppColors.text, height: 1.35))
                               : Text(text,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
+                                  style: TextStyle(fontSize: 13, color: AppColors.text, height: 1.35)),
                           // a request has what the function wrote of it too, as its message
                           if (_open && line.isRequest && line.message.isNotEmpty)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: SelectableText(line.message,
-                                  style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                                  style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                             ),
                           if (_open && line.at != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(line.at!.toIso8601String(),
-                                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
                             ),
                           if (_open && attrs != null)
                             Padding(
                               padding: const EdgeInsets.only(top: 6),
                               child: SelectableText(attrs,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 12, fontFamily: 'monospace', color: AppColors.textSoft)),
                             ),
                           if (!_open && attrs != null)
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 4),
                               child: Text('Tap for what the platform knows',
                                   style: TextStyle(fontSize: 11, color: AppColors.hint)),
@@ -187,9 +187,9 @@ class _PlatformNotice extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w800, color: AppColors.amber)),
+          Text(title, style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.amber)),
           const SizedBox(height: 8),
-          SelectableText(body, style: const TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.45)),
+          SelectableText(body, style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.45)),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -235,7 +235,7 @@ class _KeysDialog extends ConsumerWidget {
         child: keys.when(
           loading: () => const SizedBox(height: 80, child: Center(child: CircularProgressIndicator())),
           error: (e, _) => Text('That could not be read: ${e is PlatformLogsException ? e.problem.name : e}',
-              style: const TextStyle(color: AppColors.amber)),
+              style: TextStyle(color: AppColors.amber)),
           data: (list) => list.isEmpty
               ? const Text('No lines in the last minute.')
               : SingleChildScrollView(

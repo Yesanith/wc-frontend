@@ -47,7 +47,7 @@ class AdminServerTab extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
                 child: Text('${s.section('server')['version']}'.split(' on ').first,
-                    style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                    style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ),
             const Eyebrow('Health'),
             AdminHealth(s.health(now)),
@@ -82,35 +82,35 @@ class _Tables extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (problem != null) return Panel(child: Text(problem!, style: const TextStyle(color: AppColors.amber)));
+    if (problem != null) return Panel(child: Text(problem!, style: TextStyle(color: AppColors.amber)));
     final total = tables.fold<int>(0, (a, t) => a + asInt(t['total_bytes']));
     return Panel(
       child: Column(
         children: [
           AdminLine('${tables.length} tables', formatBytes(total), valueColor: AppColors.gold, bold: true),
-          const Divider(height: 20, color: AppColors.line),
+          Divider(height: 20, color: AppColors.line),
           for (final t in tables)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: Row(
                 children: [
                   Expanded(
-                      child: Text('${t['name']}', style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                      child: Text('${t['name']}', style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                   SizedBox(
                     width: 70,
                     child: Text(fmtInt(asInt(t['rows'])),
-                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                        textAlign: TextAlign.right, style: TextStyle(fontSize: 13, color: AppColors.muted)),
                   ),
                   SizedBox(
                     width: 76,
                     child: Text(formatBytes(asInt(t['total_bytes'])),
-                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                        textAlign: TextAlign.right, style: TextStyle(fontSize: 13, color: AppColors.muted)),
                   ),
                 ],
               ),
             ),
           const SizedBox(height: 6),
-          const Text('rows · size with its indexes', style: TextStyle(fontSize: 11, color: AppColors.hint)),
+          Text('rows · size with its indexes', style: TextStyle(fontSize: 11, color: AppColors.hint)),
         ],
       ),
     );
@@ -127,8 +127,8 @@ class _Queries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (problem != null) return Panel(child: Text(problem!, style: const TextStyle(color: AppColors.amber)));
-    if (queries.isEmpty) return Panel(child: Text(empty, style: const TextStyle(color: AppColors.muted)));
+    if (problem != null) return Panel(child: Text(problem!, style: TextStyle(color: AppColors.amber)));
+    if (queries.isEmpty) return Panel(child: Text(empty, style: TextStyle(color: AppColors.muted)));
     return Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,13 +143,13 @@ class _Queries extends StatelessWidget {
                     slow
                         ? '${fmtInt(asInt(q['calls']))} calls · ${fmtInt(asInt(q['total_ms']))} ms in all · ${q['mean_ms']} ms each · at most ${fmtInt(asInt(q['max_ms']))} ms'
                         : '${q['state']} for ${q['seconds']} s${q['wait'] == null ? '' : ' · waiting on ${q['wait']}'}',
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
                   ),
                   const SizedBox(height: 2),
                   Text('${q['query']}',
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 11.5, color: AppColors.muted, height: 1.35, fontFamily: 'monospace')),
                 ],
               ),
@@ -168,9 +168,9 @@ class _Jobs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (problem != null) return Panel(child: Text(problem!, style: const TextStyle(color: AppColors.amber)));
+    if (problem != null) return Panel(child: Text(problem!, style: TextStyle(color: AppColors.amber)));
     if (runs.isEmpty) {
-      return const Panel(child: Text('The scheduler keeps no log here.', style: TextStyle(color: AppColors.muted)));
+      return Panel(child: Text('The scheduler keeps no log here.', style: TextStyle(color: AppColors.muted)));
     }
     final now = DateTime.now();
     return Panel(
@@ -188,7 +188,7 @@ class _Jobs extends StatelessWidget {
                   Expanded(child: Text('${r['job']}', style: const TextStyle(fontSize: 13))),
                   Text(
                     '${DateTime.tryParse('${r['started_at'] ?? ''}') == null ? '' : ago(DateTime.parse('${r['started_at']}'), now)} · ${r['seconds'] ?? '?'} s',
-                    style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                    style: TextStyle(fontSize: 11, color: AppColors.hint),
                   ),
                 ],
               ),

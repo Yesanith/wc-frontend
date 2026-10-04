@@ -20,7 +20,7 @@ class _StatsTab extends ConsumerWidget {
         builder: (data) => ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
-            Text(s.t('last_90_days'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            Text(s.t('last_90_days'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
             const SizedBox(height: 12),
             Panel(
               child: Column(
@@ -30,7 +30,7 @@ class _StatsTab extends ConsumerWidget {
                   const SizedBox(height: 12),
                   _StatLine(label: s.t('spent_on_buys'), copper: data.boughtValue),
                   const SizedBox(height: 12),
-                  const Divider(color: AppColors.track, height: 1),
+                  Divider(color: AppColors.track, height: 1),
                   const SizedBox(height: 12),
                   _StatLine(label: s.t('net'), copper: data.net, highlight: true),
                 ],

@@ -69,7 +69,7 @@ class RecipeOutputRow extends ConsumerWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );
@@ -118,7 +118,7 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
             child: TextField(
               onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
               decoration:
-                  fieldDecoration(s.t('search_recipes'), prefixIcon: const Icon(Icons.search, color: AppColors.muted)),
+                  fieldDecoration(s.t('search_recipes'), prefixIcon: Icon(Icons.search, color: AppColors.muted)),
             ),
           ),
           if (disciplines.length > 1)
@@ -150,7 +150,7 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(s.t('recipes_count', {'n': fmtInt(rows.length)}),
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ),
           ),
           Expanded(

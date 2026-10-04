@@ -182,7 +182,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
               ),
             ),
             if (markers.isLoading)
-              const Positioned(
+              Positioned(
                 left: 0,
                 right: 0,
                 top: 0,
@@ -425,7 +425,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
               ),
               const SizedBox(height: 6),
               Text('${_kindLabel(s, m.kind)} · ${m.mapName}',
-                  style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 13, color: AppColors.muted)),
               if (m.chatLink.isNotEmpty) ...[
                 const SizedBox(height: 14),
                 OutlinedButton.icon(

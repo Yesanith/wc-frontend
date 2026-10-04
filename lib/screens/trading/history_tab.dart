@@ -19,7 +19,7 @@ class _TxTab extends ConsumerWidget {
           value: value,
           onRetry: () => ref.invalidate(transactionsProvider(kind)),
           builder: (rows) => rows.isEmpty
-              ? Panel(child: Text(s.t(emptyKey), style: const TextStyle(color: AppColors.muted)))
+              ? Panel(child: Text(s.t(emptyKey), style: TextStyle(color: AppColors.muted)))
               : Column(
                   children: [
                     for (final r in rows) Padding(padding: const EdgeInsets.only(bottom: 8), child: _TxRowTile(r)),
@@ -66,7 +66,7 @@ class _TxRowTile extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CoinText(asInt(r.tx['price']), size: 15),
-          Text('x${fmtInt(qty)}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text('x${fmtInt(qty)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );

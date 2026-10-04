@@ -35,7 +35,7 @@ class AdminBotTab extends ConsumerWidget {
             AdminHealth(h.health(now)),
             const Eyebrow('Functions'),
             h.list('functions').isEmpty
-                ? const Panel(
+                ? Panel(
                     child: Text('No function has reported a run yet.', style: TextStyle(color: AppColors.muted)))
                 : AdminHealth(h.functionLines(now)),
             const Eyebrow('Last 30 days'),
@@ -74,7 +74,7 @@ class _Counts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (counts.isEmpty) return Panel(child: Text(empty, style: const TextStyle(color: AppColors.muted)));
+    if (counts.isEmpty) return Panel(child: Text(empty, style: TextStyle(color: AppColors.muted)));
     return Panel(
       child: Column(children: [for (final c in counts) AdminLine(c.key, fmtInt(c.total))]),
     );
@@ -90,7 +90,7 @@ class _ServerStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (servers.isEmpty) {
-      return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
+      return Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
     }
     return Panel(
       child: Column(
@@ -113,7 +113,7 @@ class _ServerStatus extends StatelessWidget {
                         DateTime.tryParse('${s['roles_synced_at'] ?? ''}') == null
                             ? 'roles: never'
                             : 'roles ${ago(DateTime.parse('${s['roles_synced_at']}'), now)}',
-                        style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                        style: TextStyle(fontSize: 11, color: AppColors.hint),
                       ),
                     ],
                   ),
@@ -122,7 +122,7 @@ class _ServerStatus extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 19, top: 2),
                       child: Text(
                         '${s['last_error']}${DateTime.tryParse('${s['last_error_at'] ?? ''}') == null ? '' : ' · ${ago(DateTime.parse('${s['last_error_at']}'), now)}'}',
-                        style: const TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
+                        style: TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
                       ),
                     ),
                 ],

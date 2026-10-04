@@ -76,7 +76,7 @@ class _Servers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (servers.isEmpty) {
-      return const Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
+      return Panel(child: Text('No server is connected.', style: TextStyle(color: AppColors.muted)));
     }
     final now = DateTime.now();
     return Panel(
@@ -99,7 +99,7 @@ class _Servers extends StatelessWidget {
                             if (s['follow_ranks'] == true) 'follows ranks',
                             if (s['use_threads'] == true) 'threads',
                           ].join(' · '),
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],
                     ),
@@ -108,7 +108,7 @@ class _Servers extends StatelessWidget {
                     DateTime.tryParse('${s['roles_synced_at'] ?? ''}') == null
                         ? 'roles: never'
                         : 'roles ${ago(DateTime.parse('${s['roles_synced_at']}'), now)}',
-                    style: const TextStyle(fontSize: 11, color: AppColors.hint),
+                    style: TextStyle(fontSize: 11, color: AppColors.hint),
                   ),
                 ],
               ),
@@ -131,7 +131,7 @@ class _Database extends StatelessWidget {
       child: Column(
         children: [
           AdminLine('Size', formatBytes(d.count('database', 'size_bytes')), valueColor: AppColors.gold, bold: true),
-          const Divider(height: 20, color: AppColors.line),
+          Divider(height: 20, color: AppColors.line),
           for (final t in tables) AdminLine('${t['name']}', fmtInt(asInt(t['rows']))),
         ],
       ),

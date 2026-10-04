@@ -43,7 +43,7 @@ class AdminActivityTab extends ConsumerWidget {
           primary: [
             const Eyebrow('Last 30 days'),
             if (problem != null)
-              Panel(child: Text(problem, style: const TextStyle(color: AppColors.amber)))
+              Panel(child: Text(problem, style: TextStyle(color: AppColors.amber)))
             else ...[
               AdminBars(title: 'Events created', days: s.series('events')),
               const SizedBox(height: 10),
@@ -93,7 +93,7 @@ class AdminActivityTab extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 6),
                       child: Text(
                         '${e['guild']} · ${e['kind']}: ${feedProblemText('${e['error']}')}',
-                        style: const TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
+                        style: TextStyle(fontSize: 12, color: AppColors.amber, height: 1.35),
                       ),
                     ),
                 ],

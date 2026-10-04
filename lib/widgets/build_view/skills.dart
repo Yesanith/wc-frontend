@@ -37,7 +37,7 @@ class SkillRow extends ConsumerWidget {
                     children: [
                       if (slot.isNotEmpty)
                         Text(slot.toUpperCase(),
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                       Text((data['name'] as String?) ?? '-',
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
@@ -45,7 +45,7 @@ class SkillRow extends ConsumerWidget {
                         Text(description,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                            style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
                       if (facts.isNotEmpty) ...[
                         const SizedBox(height: 6),
                         Wrap(
@@ -119,7 +119,7 @@ void showSkillSheet(BuildContext context, Json data) {
             ),
             if (description.isNotEmpty) ...[
               const SizedBox(height: 12),
-              Text(description, style: const TextStyle(fontSize: 13, height: 1.5, color: AppColors.textSoft)),
+              Text(description, style: TextStyle(fontSize: 13, height: 1.5, color: AppColors.textSoft)),
             ],
             if (facts.isNotEmpty) ...[
               const SizedBox(height: 14),

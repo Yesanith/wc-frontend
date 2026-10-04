@@ -27,9 +27,9 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
                 Text(o.event.name, style: display(19)),
                 const SizedBox(height: 4),
                 Text('${o.map.name} · ${localClock(o.start)}–${localClock(o.end)}',
-                    style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 13, color: AppColors.muted)),
                 const SizedBox(height: 2),
-                Text(when, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                Text(when, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold)),
                 const SizedBox(height: 16),
                 Row(
                   children: [

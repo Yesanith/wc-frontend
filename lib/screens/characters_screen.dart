@@ -48,7 +48,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
             children: [
               if (count != null)
                 Text(s.t('n_characters', {'n': count}),
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 14),
@@ -56,7 +56,7 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
             onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
             decoration: fieldDecoration(
               s.t('search_characters'),
-              prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+              prefixIcon: Icon(Icons.search, color: AppColors.muted),
             ),
           ),
           const SizedBox(height: 10),
@@ -156,7 +156,7 @@ class _CharacterCard extends ConsumerWidget {
                 Text(eliteName ?? profName, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
                 const SizedBox(height: 2),
                 Text('$race · ${fmtHours(c['age'], s.t('hours_short'))}',
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 const SizedBox(height: 2),
                 BirthdayLine(created: c['created'] as String?),
               ],
@@ -165,7 +165,7 @@ class _CharacterCard extends ConsumerWidget {
           Column(
             children: [
               Text(s.t('level_short'),
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
               Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             ],

@@ -69,7 +69,7 @@ class WatchRow extends ConsumerWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('${s.t('buy_short')} ', style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+              Text('${s.t('buy_short')} ', style: TextStyle(fontSize: 11, color: AppColors.muted)),
               CoinText(asInt(buys['unit_price']), size: 12),
             ],
           ),

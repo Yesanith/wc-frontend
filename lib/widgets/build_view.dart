@@ -152,18 +152,18 @@ class _ChatCodeRow extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(s.t('chat_code'),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
                 Text(code,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
-                Text(s.t('chat_code_note'), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                Text(s.t('chat_code_note'), style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ],
             ),
           ),
           IconButton(
             tooltip: s.t('copy'),
-            icon: const Icon(Icons.copy, color: AppColors.gold),
+            icon: Icon(Icons.copy, color: AppColors.gold),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: code));
               showToast(context, s.t('copied'));
