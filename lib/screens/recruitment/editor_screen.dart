@@ -67,8 +67,11 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
 
   Future<void> _save() async {
     final s = ref.read(stringsProvider);
-    if (_draft.problems().isNotEmpty) {
-      showToast(context, s.t('rec_err_invalid'));
+    final problems = _draft.problems();
+    if (problems.isNotEmpty) {
+      // too many tags, or a language the forum has no tag for, which a page that chose before may have: said as it is, and not as a text that is too long
+      final tags = problems.contains(RecruitField.tags) || problems.contains(RecruitField.languages);
+      showToast(context, tags ? s.t('rec_f_tags_hint', {'n': _draft.lookingFor.length + _draft.languages.length}) : s.t('rec_err_invalid'));
       return;
     }
     // a page that is shown to everybody stays whole
@@ -146,8 +149,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
 
   Widget _form(S s) {
     final missing = _draft.missingToPublish();
-    final tooManyTags = _draft.lookingFor.length >= recruitTagsMax;
-    final tooManyLanguages = _draft.languages.length >= recruitLanguagesMax;
+    // what it looks for and its languages are the tags of the post in the forum, five between the two: when they are five what is not chosen waits until one is taken off
+    final chosen = _draft.lookingFor.length + _draft.languages.length;
+    final full = chosen >= recruitTagsMax;
     // a language the page has that the app offers no choice for stays a chip, so that it can be taken off
     final languages = [...recruitLanguages, ..._draft.languages.where((l) => !recruitLanguages.contains(l))];
     Widget label(String text) => Padding(
@@ -186,6 +190,15 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           value: _draft.recruiting,
           onChanged: (v) => _set(_draft.copyWith(recruiting: v)),
         ),
+        // five between what it looks for and the languages, said once above both, with how many are chosen: amber when a page that chose more before has to take some off
+        Padding(
+          padding: const EdgeInsets.only(top: 18),
+          child: Text(
+            s.t('rec_f_tags_hint', {'n': chosen}),
+            key: const Key('rec-tags-hint'),
+            style: TextStyle(fontSize: 12, height: 1.4, color: chosen > recruitTagsMax || _draft.problems().contains(RecruitField.languages) ? AppColors.amber : AppColors.hint),
+          ),
+        ),
         label(s.t('rec_page_looking_for')),
         Wrap(
           spacing: 8,
@@ -195,8 +208,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
               FilterChip(
                 label: Text(recruitTagLabel(s, tag)),
                 selected: _draft.lookingFor.contains(tag),
-                // the page keeps eight at the most: what is not chosen waits until one is taken off
-                onSelected: !_draft.lookingFor.contains(tag) && tooManyTags
+                onSelected: !_draft.lookingFor.contains(tag) && full
                     ? null
                     : (on) => _set(_draft.copyWith(lookingFor: _toggled(_draft.lookingFor, tag, on))),
               ),
@@ -211,7 +223,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
               FilterChip(
                 label: Text(recruitLanguageLabel(code)),
                 selected: _draft.languages.contains(code),
-                onSelected: !_draft.languages.contains(code) && tooManyLanguages
+                onSelected: !_draft.languages.contains(code) && full
                     ? null
                     : (on) => _set(_draft.copyWith(languages: _toggled(_draft.languages, code, on))),
               ),
