@@ -4,7 +4,7 @@ part of '../trading_screen.dart';
 class _GemHistoryChart extends ConsumerWidget {
   const _GemHistoryChart();
 
-  static final _buyColor = AppColors.gold;
+  static Color get _buyColor => AppColors.gold;
   static const _sellColor = Color(0xFF6FB7E0);
 
   @override

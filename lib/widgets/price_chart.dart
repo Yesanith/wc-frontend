@@ -9,7 +9,7 @@ import 'coin_text.dart';
 import 'common.dart';
 
 /// colours of the two lines, the sell price is the one people quote
-final sellColor = AppColors.gold;
+Color get sellColor => AppColors.gold;
 const buyColor = Color(0xFF5BC8E8);
 
 /// an item's recorded trading post prices: sell and buy over the chosen
