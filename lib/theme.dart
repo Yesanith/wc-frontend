@@ -370,7 +370,17 @@ const _professionColors = <String, Color>{
   'Revenant': Color(0xFFD16E5A),
 };
 
-Color professionColor(String? p) => _professionColors[p] ?? AppColors.gold;
+/// a bright hue made dark enough to read on paper. in the dark palette it is left as it is
+Color legible(Color c) {
+  if (AppColors.isDark) return c;
+  final hsl = HSLColor.fromColor(c);
+  return hsl.withLightness(hsl.lightness.clamp(0.0, 0.36)).toColor();
+}
+
+Color professionColor(String? p) {
+  final c = _professionColors[p];
+  return c == null ? AppColors.gold : legible(c);
+}
 
 const _rarityColors = <String, Color>{
   'Junk': Color(0xFF8C8577),
@@ -383,4 +393,7 @@ const _rarityColors = <String, Color>{
   'Legendary': Color(0xFFA15CFF),
 };
 
-Color rarityColor(String? r) => _rarityColors[r] ?? AppColors.line;
+Color rarityColor(String? r) {
+  final c = _rarityColors[r];
+  return c == null ? AppColors.line : legible(c);
+}
