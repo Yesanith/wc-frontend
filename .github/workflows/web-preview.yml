@@ -1,0 +1,61 @@
+name: Web preview
+
+# builds the app for the browser from a feature branch and keeps it as a zip, without
+# touching the site. runs only for a push whose message says [web]. to try it:
+# download the artifact, unzip it and run `python -m http.server` in the folder
+on:
+  push:
+    branches: ['feature/**']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: contains(github.event.head_commit.message, '[web]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # the recipe job commits its data to main after a push, take the newest
+      - name: Use the newest recipe data
+        run: |
+          git fetch --depth=1 origin main
+          git checkout FETCH_HEAD -- assets/data assets/tiles
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate the web project
+        run: |
+          flutter create --platforms=web --org com.yesanith --project-name tyria_codex .
+          rm -f test/widget_test.dart
+
+      - name: Set up the web build
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 ci/web.py
+
+      - run: flutter pub get
+
+      # served from the root of a local server, so the base is "/"
+      - name: Build the app for the browser
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          flutter build web --release \
+            --pwa-strategy=none \
+            --base-href "/" \
+            --dart-define=APP_VERSION="preview-web" \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tyria-codex-web-preview
+          path: build/web
