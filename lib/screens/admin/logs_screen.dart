@@ -62,7 +62,6 @@ class _AdminLogsScreenState extends ConsumerState<AdminLogsScreen> {
     final names = {...functions.map((f) => f.fn), if (_fn != null) _fn!}.toList()..sort();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         title: const Text('Function logs'),
         actions: [IconButton(tooltip: 'Refresh', onPressed: _refresh, icon: const Icon(Icons.refresh))],
       ),

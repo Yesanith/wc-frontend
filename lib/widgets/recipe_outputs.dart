@@ -107,9 +107,8 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(widget.title, style: display(20)),
+        title: Text(widget.title, style: display(20, color: AppColors.accent)),
       ),
       body: Column(
         children: [

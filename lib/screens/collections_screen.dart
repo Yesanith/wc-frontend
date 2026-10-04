@@ -107,9 +107,8 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('col_${widget.kind.key}'), style: display(20)),
+        title: Text(s.t('col_${widget.kind.key}'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<CollectionEntry>>(
         value: entries,

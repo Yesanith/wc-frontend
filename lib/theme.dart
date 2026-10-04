@@ -204,6 +204,7 @@ ThemeData buildTheme() {
     onSecondary: AppColors.onGold,
     surface: AppColors.bg,
     onSurface: AppColors.text,
+    onSurfaceVariant: AppColors.textSoft,
     surfaceContainerHighest: AppColors.surface2,
     outline: AppColors.line,
     outlineVariant: AppColors.track,
@@ -277,7 +278,6 @@ ThemeData buildTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(foregroundColor: AppColors.gold, shape: stadium),
     ),
-    iconButtonTheme: IconButtonThemeData(style: IconButton.styleFrom(foregroundColor: AppColors.textSoft)),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: AppColors.gold, linearTrackColor: AppColors.track),
     sliderTheme: SliderThemeData(
       activeTrackColor: AppColors.gold,

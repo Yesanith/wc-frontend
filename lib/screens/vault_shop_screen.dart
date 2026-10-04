@@ -29,9 +29,8 @@ class VaultShopScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('vault_shop'), style: display(20)),
+        title: Text(s.t('vault_shop'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<VaultListing>>(
         value: listings,
