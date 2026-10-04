@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tyria Companion · UI concepts</title>
+<style>
+:root{--bg:#0d0b09;--s:#1c1814;--line:#3a332a;--text:#f6f1e8;--muted:#9e9586;--gold:#dfc295}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.55 system-ui,"Segoe UI",sans-serif;padding:40px 20px 80px}
+main{max-width:1100px;margin:auto}
+h1{font-size:30px;margin-bottom:6px}
+.lead{color:var(--muted);max-width:68ch;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+a.c{display:block;background:var(--s);border:1px solid var(--line);border-radius:14px;overflow:hidden;color:inherit;text-decoration:none;transition:transform .15s,border-color .15s}
+a.c:hover,a.c:focus-visible{transform:translateY(-3px);border-color:var(--gold);outline:0}
+.sw{height:110px;display:flex}
+.sw i{flex:1}
+.b{padding:16px 18px 18px}
+.b small{color:var(--gold);letter-spacing:.14em;text-transform:uppercase;font-weight:700;font-size:11px}
+.b h2{font-size:19px;margin:4px 0 6px}
+.b p{color:var(--muted);font-size:14px}
+.b ul{margin:10px 0 0 18px;color:var(--muted);font-size:13.5px}
+h3{margin:36px 0 10px;font-size:18px}
+.refs{color:var(--muted);font-size:14px;max-width:80ch}
+.refs li{margin:4px 0 4px 18px}
+@media(prefers-reduced-motion:reduce){a.c{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Tyria Companion · UI concepts</h1>
+  <p class="lead">Six directions for the same three screens (Today, Events, Trading) with the same mock data, so only the design differs. Open each in a browser, resize it to phone width, and click the nav. Countdowns are live.</p>
+  <div class="grid">
+    <a class="c" href="01-cinematic.html"><div class="sw"><i style="background:#06080f"></i><i style="background:#243049"></i><i style="background:#e0b04a"></i><i style="background:#c43b3b"></i></div>
+      <div class="b"><small>Concept 1</small><h2>Cinematic</h2><p>Like the official site: a big hero, serif display type, a gold call to action.</p><ul><li>Top navigation, hero banner</li><li>Best for first impressions and the web landing</li></ul></div></a>
+    <a class="c" href="02-ledger.html"><div class="sw"><i style="background:#0e1013"></i><i style="background:#1a1e25"></i><i style="background:#d8b258"></i><i style="background:#58d39a"></i></div>
+      <div class="b"><small>Concept 2</small><h2>Ledger</h2><p>Dense and fast, in the spirit of GW2BLTC and GW2Efficiency: tables, sparklines, a sidebar.</p><ul><li>Most information per screen</li><li>Best for trading and crafting users</li></ul></div></a>
+    <a class="c" href="03-parchment.html"><div class="sw"><i style="background:#f4ecda"></i><i style="background:#2a2017"></i><i style="background:#a8782a"></i><i style="background:#8d1f1f"></i></div>
+      <div class="b"><small>Concept 3</small><h2>Parchment</h2><p>A light theme drawn from the wiki and the in-game journal: paper, ink, crimson and gold rules.</p><ul><li>Light by default, with a dark mode toggle (top right) that remembers your choice</li><li>Most distinct from the current app</li></ul></div></a>
+    <a class="c" href="04-mists-hud.html"><div class="sw"><i style="background:#070913"></i><i style="background:#9b7bff"></i><i style="background:#35e0c4"></i><i style="background:#f2c660"></i></div>
+      <div class="b"><small>Concept 4</small><h2>Mists HUD</h2><p>Glass tiles, progress rings, a hero tile for the next boss. WvW and Mists mood.</p><ul><li>Bento grid, icon rail</li><li>Most modern, most visual</li></ul></div></a>
+    <a class="c" href="05-sidekick-mobile.html"><div class="sw"><i style="background:#0c0a08"></i><i style="background:#2c241d"></i><i style="background:#f0c674"></i><i style="background:#7be0a8"></i></div>
+      <div class="b"><small>Concept 5</small><h2>Sidekick (mobile first)</h2><p>Built for one thumb: one hero card, big targets, a bottom bar and a vertical agenda instead of a sideways timeline.</p><ul><li>Opens in a phone frame on desktop</li><li>Best if most use is on the phone</li></ul></div></a>
+    <a class="c" href="06-refined-gold.html"><div class="sw"><i style="background:#0d0b09"></i><i style="background:#25201b"></i><i style="background:#dfc295"></i><i style="background:#de783d"></i></div>
+      <div class="b"><small>Concept 6</small><h2>Refined Gold</h2><p>The current gold on warm black, with a clearer hierarchy: a left menu, a night-sky hero and an always-on right rail.</p><ul><li>Smallest change, easiest to build</li><li>Keeps the look users know</li></ul></div></a>
+  </div>
+
+  <h3>What these drew from</h3>
+  <ul class="refs">
+    <li><b>guildwars2.com</b>: dark navy, gold buttons, hero art, a multi-level top menu (concept 1).</li>
+    <li><b>GW2BLTC</b>: compact trading tables with buy and sell columns and item icons at the left (concept 2).</li>
+    <li><b>GW2Efficiency</b>: account data in dense dashboards (concept 2, concept 6's right rail).</li>
+    <li><b>The GW2 wiki</b>: light, text-first, easy to scan (concept 3).</li>
+    <li><b>The in-game Wizard's Vault and Hero panel</b>: progress rings and tracks (concept 4).</li>
+  </ul>
+  <p class="refs" style="margin-top:14px">All six use mock data and inline SVG icons; the item art is placeholder. Fonts load from Google Fonts, so they need a connection for the intended look.</p>
+</main>
+</body>
+</html>
