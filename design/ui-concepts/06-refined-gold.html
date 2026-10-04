@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept 6 · Refined Gold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* the app's current palette (lib/theme.dart), same family, tighter hierarchy */
+:root{
+  --bg:#0d0b09; --nav:#151210; --surface:#1c1814; --surface2:#25201b; --surface3:#302a23; --line:#3a332a; --hair:#ffffff0e;
+  --text:#f6f1e8; --soft:#d1c9bd; --muted:#9e9586; --hint:#807767;
+  --gold:#dfc295; --gold2:#f6e3c2; --on:#251c12; --ember:#de783d; --amber:#f0bd57; --blue:#6ba8f5; --green:#75dba8; --red:#ed6b7a;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:14.5px/1.5 "Noto Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.i{width:20px;height:20px;flex:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+
+.app{display:grid;grid-template-columns:240px minmax(0,1fr) 320px;min-height:100vh}
+.side{background:var(--nav);border-right:1px solid var(--hair);position:sticky;top:0;height:100vh;overflow:auto;padding:16px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;gap:10px;align-items:center;padding:6px 10px 16px;font-weight:700}
+.brand b{width:22px;height:22px;transform:rotate(45deg);border:2px solid var(--gold);display:grid;place-items:center}
+.brand b::after{content:"";width:6px;height:6px;background:var(--gold)}
+.g{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);padding:14px 10px 6px;font-weight:600}
+.side button{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;color:var(--soft);text-align:left;width:100%}
+.side button:hover{background:var(--surface)}
+.side button.active{background:#dfc29520;color:var(--gold2);box-shadow:inset 0 0 0 1px #dfc29544}
+.side button .i{color:var(--muted)}.side button.active .i{color:var(--gold)}
+
+.main{padding:24px 28px 70px;min-width:0}
+.page{display:flex;align-items:flex-end;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.page h1{font-size:25px;font-weight:700;line-height:1.1}.page p{color:var(--muted)}
+.page .sp{margin-left:auto;display:flex;gap:8px}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:6px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--soft);font-size:13px}
+
+/* the stage: night sky as in the plugin */
+.stage{border-radius:14px;border:1px solid var(--line);padding:22px;background:linear-gradient(180deg,#141825,#07070a);position:relative;overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr;gap:22px}
+.stage::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1.2px 1.2px at 12% 22%,#fff9,#0000),radial-gradient(1px 1px at 38% 70%,#fff7,#0000),radial-gradient(1.6px 1.6px at 72% 30%,#fff,#0000),radial-gradient(1px 1px at 90% 80%,#fff6,#0000),radial-gradient(1.3px 1.3px at 55% 12%,#fffa,#0000),radial-gradient(1px 1px at 25% 90%,#fff7,#0000)}
+.stage>*{position:relative}
+.k{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.bigtime{font-size:46px;font-weight:700;letter-spacing:-.01em;line-height:1.1;font-variant-numeric:tabular-nums;margin:4px 0}
+.stage h2{font-size:18px;font-weight:600}.stage p{color:var(--muted);font-size:13px}
+.minis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini{background:#ffffff0a;border:1px solid #ffffff14;border-radius:12px;padding:12px}
+.mini small{color:var(--muted);font-size:12px}.mini b{display:block;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums}
+.bar{height:5px;border-radius:9px;background:#ffffff14;margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .9s}
+
+.sh{display:flex;align-items:center;margin:26px 2px 10px}
+.sh h3{font-size:16px;font-weight:600}.sh a{margin-left:auto;color:var(--gold);font-size:13px;font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--hair);min-height:60px}
+.item:first-child{border:0}
+.item:hover{background:var(--surface2)}
+.ico{width:40px;height:40px;border-radius:9px;border:1.5px solid var(--rc);color:var(--rc);display:grid;place-items:center;background:var(--surface2);flex:none}
+.ico .i{width:19px;height:19px}
+.item .n{flex:1;min-width:0}.item .n b{display:block;font-weight:600;font-size:14px}.item .n span{color:var(--muted);font-size:12.5px}
+.tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--soft)}
+.tag.live{color:#ffd0d6;border-color:#ed6b7a77;background:#ed6b7a1e}
+.tag.pin{color:var(--gold2);border-color:#dfc29555;background:#dfc29518}
+.pinbtn{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;color:var(--hint)}.pinbtn[aria-pressed=true]{color:var(--gold)}.pinbtn:hover{background:var(--surface3)}
+.cg{color:#f4d27a}.cs{color:#d4d9e3}.cc{color:#d69b6b}
+.cg,.cs,.cc{margin-left:5px;font-weight:600}[data-coin] i{font-style:normal;font-size:.8em;opacity:.8}
+.right{text-align:right}.up{color:var(--green);font-weight:600;font-size:13px}.dn{color:var(--red);font-weight:600;font-size:13px}
+.spark{color:var(--green)}.spark.dn{color:var(--red)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chips button{padding:7px 15px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--soft);font-weight:500}
+.chips button[aria-pressed=true]{background:#dfc2952e;border-color:var(--gold);color:var(--gold2)}
+
+/* right rail: always-on context */
+.rail{border-left:1px solid var(--hair);background:var(--nav);padding:24px 18px;position:sticky;top:0;height:100vh;overflow:auto}
+.rail h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--hint);margin:0 4px 10px}
+.rc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px}
+.rc .row{display:flex;justify-content:space-between;padding:6px 0;color:var(--soft)}.rc .row b{color:var(--text);font-variant-numeric:tabular-nums}
+.rc .t{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.tl .hd,.tl .rw{display:grid;grid-template-columns:130px 1fr}
+.tl .hd{color:var(--muted);font-size:12px;padding:12px 14px 6px 14px}.tl .hd div{display:grid;grid-template-columns:repeat(8,1fr)}
+.tl .rw{height:54px;align-items:center;border-top:1px solid var(--hair);padding:0 14px}
+.tl .tr{position:relative;height:100%;background:repeating-linear-gradient(90deg,#ffffff08 0 1px,#0000 1px 12.5%)}
+.tl .b{position:absolute;top:9px;height:36px;display:flex;align-items:center;padding:0 12px;border-radius:9px;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;background:#dfc29524;border:1px solid #dfc29577;color:var(--gold2)}
+.tl .b.r2{background:#ed6b7a22;border-color:#ed6b7a88;color:#ffd0d6}.tl .b.b2{background:#6ba8f51f;border-color:#6ba8f588;color:#cfe3ff}
+.tl .now{position:absolute;top:0;bottom:0;left:var(--n);width:2px;background:var(--ember)}
+
+.dock{display:none}
+@media(max-width:1180px){.app{grid-template-columns:240px 1fr}.rail{display:none}}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{display:none}.stage{grid-template-columns:1fr}.main{padding:18px 16px 100px}
+ .dock{display:flex;position:fixed;bottom:0;left:0;right:0;background:#151210f2;backdrop-filter:blur(12px);border-top:1px solid var(--hair);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:30}
+ .dock button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);min-height:48px;padding:6px}.dock button.active{color:var(--gold2)}
+ .card{overflow-x:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<nav class="side" aria-label="Main">
+  <a class="brand" href="index.html"><b></b>Tyria Companion</a>
+  <div class="g">Today</div>
+  <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Home</button>
+  <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Bosses &amp; metas</button>
+  <button><svg class="i"><use href="#i-check"/></svg>Daily</button>
+  <button><svg class="i"><use href="#i-cal"/></svg>Weekly</button>
+  <div class="g">Account</div>
+  <button><svg class="i"><use href="#i-user"/></svg>Characters</button>
+  <button><svg class="i"><use href="#i-wallet"/></svg>Wallet</button>
+  <button><svg class="i"><use href="#i-trophy"/></svg>Progression</button>
+  <button><svg class="i"><use href="#i-users"/></svg>Guilds</button>
+  <div class="g">Economy</div>
+  <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading post</button>
+  <button><svg class="i"><use href="#i-scroll"/></svg>Recipes</button>
+  <div class="g">World</div>
+  <button><svg class="i"><use href="#i-map"/></svg>Map</button>
+  <button><svg class="i"><use href="#i-shield"/></svg>WvW</button>
+  <button><svg class="i"><use href="#i-book"/></svg>Wiki</button>
+</nav>
+
+<main class="main">
+  <section data-view="home">
+    <div class="page"><div><h1>Good evening</h1><p>Yesanith.1234 · synced 2 minutes ago</p></div><div class="sp"><span class="pill" data-clock></span></div></div>
+    <div class="stage">
+      <div><div class="k">Next boss</div><div class="bigtime" data-in="14" data-fmt="hms">00:14:00</div><h2>Tequatl the Sunless</h2><p>Sparkfly Fen · Heart of Maguuma</p></div>
+      <div class="minis">
+        <div class="mini"><small>Daily reset</small><b data-reset="daily"></b><div class="bar"><i data-fill="60"></i></div></div>
+        <div class="mini"><small>Weekly reset</small><b data-reset="weekly" data-fmt="short"></b><div class="bar"><i data-fill="57"></i></div></div>
+        <div class="mini"><small>Gold</small><b data-coin="12843307" style="font-size:16px"></b></div>
+        <div class="mini"><small>Astral acclaim</small><b>1,820</b><div class="bar"><i data-fill="67"></i></div></div>
+      </div>
+    </div>
+    <div class="sh"><h3>Up next</h3><a href="#events" data-view-btn="events">Full timer</a></div>
+    <div class="card">
+      <div class="item"><span class="ico" style="--rc:#dfc295"><svg class="i"><use href="#i-flame"/></svg></span><div class="n"><b>Tequatl the Sunless</b><span>in 14 min · Sparkfly Fen</span></div><span class="tag pin">Pinned</span><button class="pinbtn" data-pin aria-pressed="true" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+      <div class="item"><span class="ico" style="--rc:#ed6b7a"><svg class="i"><use href="#i-swords"/></svg></span><div class="n"><b>Dragonstorm</b><span>until 20:15 · Dragon's End</span></div><span class="tag live">Live</span><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+      <div class="item"><span class="ico" style="--rc:#6ba8f5"><svg class="i"><use href="#i-shield"/></svg></span><div class="n"><b>Shadow Behemoth</b><span>in 45 min · Queensdale</span></div><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+    </div>
+    <div class="sh"><h3>Watchlist</h3><a href="#trading" data-view-btn="trading">Trading post</a></div>
+    <div class="card">
+      <div class="item"><span class="ico" style="--rc:#f0bd57"><svg class="i"><use href="#i-coins"/></svg></span><div class="n"><b>Mystic Coin</b><span>buy <span data-coin="21340"></span></span></div><div class="right"><b data-coin="23100"></b><div class="up">+3.1%</div></div><span class="spark" data-spark="3,4,4,6,5,7,9" data-w="72" data-h="24"></span></div>
+      <div class="item"><span class="ico" style="--rc:#de783d"><svg class="i"><use href="#i-gem"/></svg></span><div class="n"><b>Ectoplasm</b><span>buy <span data-coin="3012"></span></span></div><div class="right"><b data-coin="3190"></b><div class="dn">−1.4%</div></div><span class="spark dn" data-spark="9,8,8,6,7,5,4" data-w="72" data-h="24"></span></div>
+    </div>
+  </section>
+
+  <section data-view="events" hidden>
+    <div class="page"><div><h1>Bosses &amp; metas</h1><p>The next two hours, in your local time</p></div></div>
+    <div class="chips" data-chips><button aria-pressed="true">All</button><button aria-pressed="false">Bosses</button><button aria-pressed="false">Metas</button><button aria-pressed="false">Pinned</button></div>
+    <div class="card tl">
+      <div class="hd"><span></span><div><span>19:00</span><span>19:15</span><span>19:30</span><span>19:45</span><span>20:00</span><span>20:15</span><span>20:30</span><span>20:45</span></div></div>
+      <div class="rw"><span>Sparkfly Fen</span><div class="tr"><div class="now" style="--n:22%"></div><div class="b" style="left:46%;width:22%">Tequatl</div></div></div>
+      <div class="rw"><span>Dragon's End</span><div class="tr"><div class="b r2" style="left:0;width:30%">Dragonstorm · live</div><div class="b r2" style="left:62%;width:30%">Dragonstorm</div></div></div>
+      <div class="rw"><span>Queensdale</span><div class="tr"><div class="b b2" style="left:58%;width:20%">Behemoth</div></div></div>
+      <div class="rw"><span>Tangled Depths</span><div class="tr"><div class="b" style="left:28%;width:18%">Chak Gerent</div><div class="b" style="left:76%;width:20%">Octovine</div></div></div>
+    </div>
+  </section>
+
+  <section data-view="trading" hidden>
+    <div class="page"><div><h1>Trading post</h1><p>Watchlist, orders and history</p></div></div>
+    <div class="chips" data-chips><button aria-pressed="true">Watchlist</button><button aria-pressed="false">Orders</button><button aria-pressed="false">History</button><button aria-pressed="false">Stats</button></div>
+    <div class="card">
+      <div class="item"><span class="ico" style="--rc:#f0bd57"><svg class="i"><use href="#i-coins"/></svg></span><div class="n"><b>Mystic Coin</b><span>buy <span data-coin="21340"></span></span></div><div class="right"><b data-coin="23100"></b><div class="up">+3.1%</div></div><span class="spark" data-spark="3,4,4,6,5,7,9" data-w="72" data-h="24"></span></div>
+      <div class="item"><span class="ico" style="--rc:#de783d"><svg class="i"><use href="#i-gem"/></svg></span><div class="n"><b>Ectoplasm</b><span>buy <span data-coin="3012"></span></span></div><div class="right"><b data-coin="3190"></b><div class="dn">−1.4%</div></div><span class="spark dn" data-spark="9,8,8,6,7,5,4" data-w="72" data-h="24"></span></div>
+      <div class="item"><span class="ico" style="--rc:#6ba8f5"><svg class="i"><use href="#i-scroll"/></svg></span><div class="n"><b>Elonian Leather Square</b><span>buy <span data-coin="1420"></span></span></div><div class="right"><b data-coin="1560"></b><div class="up">+6.4%</div></div><span class="spark" data-spark="2,3,3,4,4,5,6" data-w="72" data-h="24"></span></div>
+      <div class="item"><span class="ico" style="--rc:#75dba8"><svg class="i"><use href="#i-shield"/></svg></span><div class="n"><b>Mithril Ore</b><span>buy <span data-coin="410"></span></span></div><div class="right"><b data-coin="455"></b><div class="up">+0.2%</div></div><span class="spark" data-spark="5,5,4,5,5,4,5" data-w="72" data-h="24" style="color:var(--muted)"></span></div>
+    </div>
+  </section>
+</main>
+
+<aside class="rail" aria-label="At a glance">
+  <h4>Resets</h4>
+  <div class="rc"><div class="row"><span>Daily</span><b data-reset="daily"></b></div><div class="row"><span>Weekly</span><b data-reset="weekly" data-fmt="long"></b></div></div>
+  <h4>Wizard's Vault</h4>
+  <div class="rc"><div class="row"><span>Daily</span><b>6 / 10</b></div><div class="row"><span>Weekly</span><b>4 / 7</b></div><div class="row"><span>Special</span><b>2 / 3</b></div></div>
+  <h4>Wallet</h4>
+  <div class="rc"><div class="row"><span>Karma</span><b>2,341,880</b></div><div class="row"><span>Laurels</span><b>312</b></div><div class="row"><span>Gems</span><b>1,450</b></div></div>
+  <h4>Alerts</h4>
+  <div class="rc"><div class="row"><span>Ectoplasm ≤ 28s</span><span class="tag live">Met</span></div><div class="row"><span>Mystic Coin ≥ 25s</span><span class="tag">Armed</span></div></div>
+</aside>
+</div>
+
+<nav class="dock" aria-label="Main">
+  <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Home</button>
+  <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Bosses</button>
+  <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading</button>
+</nav>
+<script src="shared.js"></script>
+</body>
+</html>

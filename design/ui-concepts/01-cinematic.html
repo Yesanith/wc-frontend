@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept 1 · Cinematic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06080f; --bg2:#0b0f1a; --card:#0f1523; --card2:#141c2e; --line:#243049; --line2:#31405f;
+  --text:#eef1f8; --soft:#c3cbdd; --muted:#8c97b0;
+  --gold:#e0b04a; --gold2:#f6d489; --ongold:#1d1405; --crimson:#c43b3b; --teal:#4fc3b0; --blue:#6aa6ff;
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.i{width:20px;height:20px;flex:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:Cinzel,serif;letter-spacing:.04em;font-weight:700}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(#06080fee,#06080fcc);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1240px;margin:auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:center;gap:10px;font-family:Cinzel,serif;font-weight:700;letter-spacing:.12em;font-size:15px}
+.logo b{width:26px;height:26px;transform:rotate(45deg);border:2px solid var(--gold);display:grid;place-items:center}
+.logo b::after{content:"";width:8px;height:8px;background:var(--gold)}
+.nav{display:flex;gap:4px;flex:1}
+.nav button{padding:8px 14px;border-radius:8px;color:var(--soft);font-weight:500;font-size:14px;letter-spacing:.02em;position:relative}
+.nav button:hover{color:var(--text);background:#ffffff0a}
+.nav button.active{color:var(--gold2)}
+.nav button.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-12px;height:2px;background:var(--gold)}
+.tools{display:flex;align-items:center;gap:10px}
+.clock{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--soft);border:1px solid var(--line)}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold2)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:700;font-size:14px;letter-spacing:.03em}
+.btn.gold{background:linear-gradient(#f6d489,#d9a23c);color:var(--ongold);box-shadow:0 6px 22px #e0b04a33}
+.btn.gold:hover{filter:brightness(1.08)}
+.btn.ghost{border:1px solid var(--line2);color:var(--soft)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold2)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;min-height:430px;border-bottom:1px solid var(--line);
+  background:
+   radial-gradient(900px 380px at 78% 18%, #f0b45944, transparent 60%),
+   radial-gradient(700px 400px at 12% 80%, #3b5fd433, transparent 65%),
+   linear-gradient(180deg,#0b1224 0%,#0a0e1b 55%,#06080f 100%)}
+.hero svg.land{position:absolute;inset:auto 0 0 0;width:100%;height:62%;opacity:.95}
+.sun{position:absolute;right:14%;top:70px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#ffe7b0 0,#f4bd62 38%,#f4bd6200 70%);filter:blur(1px)}
+.hero-in{position:relative;max-width:1240px;margin:auto;padding:70px 20px 90px}
+.kicker{display:inline-flex;gap:8px;align-items:center;color:var(--gold2);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.kicker::before{content:"";width:28px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(34px,5.4vw,60px);line-height:1.08;margin:14px 0 14px;max-width:14ch;text-shadow:0 4px 30px #000a}
+.hero p{max-width:50ch;color:var(--soft);font-size:17px}
+.hero .cta{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+
+/* layout */
+main{max-width:1240px;margin:auto;padding:0 20px 80px}
+.pull{margin-top:-58px;position:relative;z-index:2}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g-main{grid-template-columns:1.6fr 1fr}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{font-size:14px;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.card h3 .i{width:18px;height:18px}
+.sec{margin-top:44px}
+.sec>h2{font-size:22px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.sec>h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+
+/* resets */
+.reset .big{font-family:Cinzel,serif;font-size:40px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1;color:var(--text)}
+.reset small{display:block;color:var(--muted);margin-top:4px}
+.bar{height:6px;border-radius:99px;background:#ffffff12;overflow:hidden;margin-top:14px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:99px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bar.teal i{background:linear-gradient(90deg,#2f9a89,var(--teal))}
+.bar.blue i{background:linear-gradient(90deg,#3e6fd0,var(--blue))}
+
+/* events */
+.ev{display:flex;gap:14px;align-items:center;padding:12px 0;border-top:1px solid #ffffff0d}
+.ev:first-of-type{border-top:0}
+.ev .t{width:68px;text-align:center;font-variant-numeric:tabular-nums}
+.ev .t b{display:block;font-size:17px;color:var(--gold2)}
+.ev .t span{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.ev .nm{flex:1;min-width:0}
+.ev .nm b{display:block;font-weight:600}
+.ev .nm span{color:var(--muted);font-size:13px}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid var(--line2);color:var(--soft)}
+.tag.live{color:#ffd7d7;border-color:#c43b3b88;background:#c43b3b22}
+.tag.pinned{color:var(--gold2);border-color:#e0b04a66;background:#e0b04a14}
+.pinbtn[aria-pressed=true]{color:var(--gold2)}
+.pinbtn{color:var(--muted);width:36px;height:36px;display:grid;place-items:center;border-radius:50%}
+.pinbtn:hover{background:#ffffff0d}
+
+/* wallet */
+.wallet{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.w{background:#ffffff08;border:1px solid #ffffff0d;border-radius:10px;padding:12px}
+.w small{color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.w b{display:block;font-size:19px;margin-top:2px;font-variant-numeric:tabular-nums}
+.cg{color:#f4d27a}.cs{color:#d4d9e3}.cc{color:#d9955c}
+.cg,.cs,.cc{margin-right:6px;font-weight:600}
+[data-coin] i{font-style:normal;font-size:.78em;opacity:.8;margin-left:1px}
+
+/* items */
+.items{width:100%;border-collapse:collapse}
+.items th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:0 10px 10px}
+.items td{padding:11px 10px;border-top:1px solid #ffffff0d;vertical-align:middle}
+.items td.r,.items th.r{text-align:right}
+.item{display:flex;align-items:center;gap:12px;font-weight:600}
+.ico{width:38px;height:38px;border-radius:8px;border:2px solid var(--rc,#888);background:radial-gradient(circle at 30% 25%,#ffffff22,#0000 60%),var(--card2);display:grid;place-items:center;color:var(--rc);flex:none}
+.up{color:#7fe0a6}.dn{color:#f08a8a}
+.spark{color:var(--teal)}.spark.dn{color:#f08a8a}
+
+.news{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.post{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.post .art{height:130px;background:var(--a);position:relative}
+.post .art::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,var(--card))}
+.post div.b{padding:14px 18px 18px}
+.post time{color:var(--gold2);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.post h4{font-size:16px;margin:4px 0 6px}
+.post p{color:var(--muted);font-size:14px}
+
+footer{border-top:1px solid var(--line);color:var(--muted);text-align:center;padding:26px;font-size:13px}
+
+/* timeline */
+.tl{display:grid;grid-template-columns:150px 1fr;gap:0}
+.tl .row{display:contents}
+.tl .lane{padding:14px 10px 14px 0;color:var(--soft);font-weight:600;border-top:1px solid #ffffff0d}
+.tl .track{position:relative;height:56px;border-top:1px solid #ffffff0d;background:repeating-linear-gradient(90deg,#ffffff06 0 1px,#0000 1px calc(100%/8))}
+.blk{position:absolute;top:9px;height:38px;border-radius:8px;padding:0 10px;display:flex;align-items:center;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;background:#e0b04a22;border:1px solid #e0b04a77;color:var(--gold2)}
+.blk.b{background:#6aa6ff1f;border-color:#6aa6ff77;color:#bcd6ff}
+.blk.r{background:#c43b3b22;border-color:#c43b3b88;color:#ffd0d0}
+.now{position:absolute;top:0;bottom:0;left:var(--n);width:2px;background:var(--crimson);z-index:2}
+.hours{display:grid;grid-template-columns:150px repeat(8,1fr);color:var(--muted);font-size:12px;margin-bottom:6px}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filters button{padding:8px 16px;border:1px solid var(--line2);border-radius:99px;color:var(--soft);font-size:14px;font-weight:500}
+.filters button[aria-pressed=true]{background:#e0b04a1c;border-color:var(--gold);color:var(--gold2)}
+
+@media(max-width:960px){
+  .nav{display:none}.g3,.g-main,.news{grid-template-columns:1fr}
+  .top-in{gap:12px}.tools{margin-left:auto}
+  .hero{min-height:380px}.tl{grid-template-columns:90px 1fr}.hours{grid-template-columns:90px repeat(8,1fr)}
+  .mnav{display:flex}
+}
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:#080b14ee;backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:30;padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+.mnav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);padding:6px;min-height:48px}
+.mnav button.active{color:var(--gold2)}
+@media(max-width:960px){main{padding-bottom:110px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" aria-label="All concepts"><b></b>TYRIA COMPANION</a>
+    <nav class="nav" aria-label="Main">
+      <button data-view-btn="home">Today</button>
+      <button data-view-btn="events">Events</button>
+      <button data-view-btn="trading">Trading</button>
+    </nav>
+    <div class="tools">
+      <span class="clock" data-clock></span>
+      <button class="icon-btn" aria-label="Search"><svg class="i"><use href="#i-search"/></svg></button>
+      <button class="icon-btn" aria-label="Alerts"><svg class="i"><use href="#i-bell"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- HOME -->
+<section data-view="home">
+  <div class="hero">
+    <div class="sun"></div>
+    <svg class="land" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 250 L120 190 L220 240 L340 150 L470 235 L600 170 L720 250 L860 140 L980 230 L1100 175 L1240 245 L1340 200 L1440 240 V400 H0Z" fill="#141b33"/>
+      <path d="M0 300 L100 260 L210 300 L330 235 L450 300 L580 250 L700 310 L840 240 L960 305 L1090 255 L1220 310 L1330 270 L1440 305 V400 H0Z" fill="#0d1226"/>
+      <path d="M0 350 L160 320 L300 352 L460 318 L620 354 L800 322 L980 356 L1160 326 L1300 352 L1440 330 V400 H0Z" fill="#070a14"/>
+    </svg>
+    <div class="hero-in">
+      <span class="kicker">Good evening, Yesanith.1234</span>
+      <h1>Your day in Tyria, at a glance</h1>
+      <p>Resets, world bosses, your vault and the trading post — everything that is worth your next hour.</p>
+      <div class="cta">
+        <a class="btn gold" href="#events" data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Next boss in 14 min</a>
+        <a class="btn ghost" href="#trading" data-view-btn="trading">Open trading post</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="grid g3 pull">
+      <div class="card reset"><h3><svg class="i"><use href="#i-clock"/></svg>Daily reset</h3>
+        <div class="big" data-reset="daily"></div><small>Dailies done 6 / 10</small>
+        <div class="bar"><i data-fill="60"></i></div></div>
+      <div class="card reset"><h3><svg class="i"><use href="#i-cal"/></svg>Weekly reset</h3>
+        <div class="big" data-reset="weekly" data-fmt="long"></div><small>Raids cleared 4 / 7 · Vault 5 / 7</small>
+        <div class="bar teal"><i data-fill="62"></i></div></div>
+      <div class="card reset"><h3><svg class="i"><use href="#i-star"/></svg>Wizard's Vault</h3>
+        <div class="big">1,820 <span style="font-size:15px;color:var(--muted);font-family:Inter">astral acclaim</span></div><small>Special track 2 / 3</small>
+        <div class="bar blue"><i data-fill="67"></i></div></div>
+    </div>
+
+    <div class="sec"><h2>Up next</h2>
+      <div class="grid g-main">
+        <div class="card"><h3><svg class="i"><use href="#i-flame"/></svg>World bosses &amp; metas</h3>
+          <div class="ev"><div class="t"><b data-in="14" data-fmt="short">14m</b><span>in</span></div><div class="nm"><b>Tequatl the Sunless</b><span>Sparkfly Fen · Heart of Maguuma</span></div><span class="tag pinned">Pinned</span><button class="pinbtn" data-pin aria-pressed="true" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+          <div class="ev"><div class="t"><b>00:35</b><span>live</span></div><div class="nm"><b>Dragonstorm</b><span>Dragon's End</span></div><span class="tag live">Live now</span><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+          <div class="ev"><div class="t"><b>45m</b><span>in</span></div><div class="nm"><b>Shadow Behemoth</b><span>Queensdale</span></div><span class="tag">Boss</span><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+          <div class="ev"><div class="t"><b>1h 20m</b><span>in</span></div><div class="nm"><b>Auric Basin · Octovine</b><span>Tangled Depths</span></div><span class="tag">Meta</span><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></div>
+        </div>
+        <div class="card"><h3><svg class="i"><use href="#i-wallet"/></svg>Wallet</h3>
+          <div class="wallet">
+            <div class="w"><small>Gold</small><b data-coin="12843307"></b></div>
+            <div class="w"><small>Karma</small><b>2,341,880</b></div>
+            <div class="w"><small>Laurels</small><b>312</b></div>
+            <div class="w"><small>Gems</small><b>1,450</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><h2>From the news</h2>
+      <div class="news">
+        <article class="post"><div class="art" style="--a:linear-gradient(135deg,#3a1d5c,#e0734a)"></div><div class="b"><time>29 Sep</time><h4>Season of the Dragon: the next chapter</h4><p>New metas, rewards and a long awaited rebalance.</p></div></article>
+        <article class="post"><div class="art" style="--a:linear-gradient(135deg,#0f3a52,#4fc3b0)"></div><div class="b"><time>26 Sep</time><h4>WvW alliances: what changes for you</h4><p>Matchups reworked, new rewards track.</p></div></article>
+        <article class="post"><div class="art" style="--a:linear-gradient(135deg,#432d0f,#e0b04a)"></div><div class="b"><time>22 Sep</time><h4>Trading post fees: a look back</h4><p>What the numbers say about the last quarter.</p></div></article>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- EVENTS -->
+<section data-view="events" hidden>
+  <main style="padding-top:36px">
+    <div class="sec" style="margin-top:0"><h2>Event timer</h2>
+      <div class="filters" data-chips><button aria-pressed="true">All</button><button aria-pressed="false">Bosses</button><button aria-pressed="false">Metas</button><button aria-pressed="false">Pinned</button></div>
+      <div class="card">
+        <div class="hours"><span></span><span>19:00</span><span>19:15</span><span>19:30</span><span>19:45</span><span>20:00</span><span>20:15</span><span>20:30</span><span>20:45</span></div>
+        <div class="tl" style="position:relative">
+          <div class="row"><div class="lane">Sparkfly Fen</div><div class="track"><div class="now" style="--n:22%"></div><div class="blk" style="left:46%;width:22%">Tequatl</div></div></div>
+          <div class="row"><div class="lane">Dragon's End</div><div class="track"><div class="blk r" style="left:0;width:30%">Dragonstorm · live</div><div class="blk r" style="left:62%;width:30%">Dragonstorm</div></div></div>
+          <div class="row"><div class="lane">Queensdale</div><div class="track"><div class="blk b" style="left:58%;width:20%">Behemoth</div></div></div>
+          <div class="row"><div class="lane">Tangled Depths</div><div class="track"><div class="blk" style="left:28%;width:18%">Chak Gerent</div><div class="blk" style="left:76%;width:20%">Octovine</div></div></div>
+          <div class="row"><div class="lane">Domain of Vabbi</div><div class="track"><div class="blk b" style="left:12%;width:26%">Serpent's Ire</div></div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- TRADING -->
+<section data-view="trading" hidden>
+  <main style="padding-top:36px">
+    <div class="sec" style="margin-top:0"><h2>Trading post</h2>
+      <div class="grid g-main">
+        <div class="card"><h3><svg class="i"><use href="#i-chart"/></svg>Your watchlist</h3>
+          <table class="items"><thead><tr><th>Item</th><th class="r">Buy</th><th class="r">Sell</th><th class="r">7 days</th></tr></thead><tbody>
+            <tr><td><div class="item"><span class="ico" style="--rc:#e0b04a"><svg class="i"><use href="#i-coins"/></svg></span>Mystic Coin</div></td><td class="r" data-coin="21340"></td><td class="r" data-coin="23100"></td><td class="r"><span class="spark up" data-spark="3,4,4,6,5,7,9"></span></td></tr>
+            <tr><td><div class="item"><span class="ico" style="--rc:#f0bd57"><svg class="i"><use href="#i-gem"/></svg></span>Ecto­plasm</div></td><td class="r" data-coin="3012"></td><td class="r" data-coin="3190"></td><td class="r"><span class="spark dn" data-spark="9,8,8,6,7,5,4"></span></td></tr>
+            <tr><td><div class="item"><span class="ico" style="--rc:#6aa6ff"><svg class="i"><use href="#i-scroll"/></svg></span>Elonian Leather Square</div></td><td class="r" data-coin="1420"></td><td class="r" data-coin="1560"></td><td class="r"><span class="spark up" data-spark="2,3,3,4,4,5,6"></span></td></tr>
+            <tr><td><div class="item"><span class="ico" style="--rc:#9ad28a"><svg class="i"><use href="#i-shield"/></svg></span>Mithril Ore</div></td><td class="r" data-coin="410"></td><td class="r" data-coin="455"></td><td class="r"><span class="spark" data-spark="5,5,4,5,5,4,5"></span></td></tr>
+          </tbody></table>
+        </div>
+        <div class="card"><h3><svg class="i"><use href="#i-bell"/></svg>Price alerts</h3>
+          <div class="ev"><div class="nm"><b>Mystic Coin ≥ 25s</b><span>Not met · 1s 66c to go</span></div><span class="tag">Armed</span></div>
+          <div class="ev"><div class="nm"><b>Ectoplasm ≤ 28s</b><span>Met 12 minutes ago</span></div><span class="tag live">Met</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<footer>Concept 1 · Cinematic — inspired by the official guildwars2.com: deep navy, gold call to action, big artwork, serif display type.</footer>
+
+<nav class="mnav" aria-label="Main">
+  <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Today</button>
+  <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Events</button>
+  <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading</button>
+</nav>
+<script src="shared.js"></script>
+</body>
+</html>
