@@ -41,6 +41,19 @@ class Files(unittest.TestCase):
         for name in set(re.findall(r"R\.id\.(\w+)", kotlin)):
             self.assertIn('@+id/%s"' % name, layout, name)
 
+    def test_the_layout_uses_only_views_a_widget_may_inflate(self):
+        # a widget is drawn by the launcher from RemoteViews, which accepts only these
+        allowed = {
+            "FrameLayout", "LinearLayout", "RelativeLayout", "GridLayout", "AnalogClock", "Button", "Chronometer",
+            "ImageButton", "ImageView", "ProgressBar", "TextClock", "TextView", "ViewFlipper", "ListView",
+            "GridView", "StackView", "AdapterViewFlipper",
+        }
+        import xml.etree.ElementTree as ET
+
+        root = ET.parse(ROOT / "res/layout/tyria_widget.xml").getroot()
+        used = {el.tag for el in root.iter()}
+        self.assertEqual(used - allowed, set())
+
     def test_the_description_points_at_the_layout(self):
         info = (ROOT / "res/xml/tyria_widget_info.xml").read_text(encoding="utf-8")
         self.assertIn("@layout/tyria_widget", info)
