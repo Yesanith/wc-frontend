@@ -643,6 +643,11 @@ const trStrings = <String, String>{
   'goals_shopping': 'Alışveriş listesi',
   'goal_remove': 'Kaldır',
   'goals_complete': 'Hedeflerin için her şeye sahipsin.',
+  'widget_next': 'Sıradaki sabitlenen etkinlik',
+  'widget_next_boss': 'Sıradaki dünya patronu',
+  'widget_daily': 'Günlük sıfırlama',
+  'widget_weekly': 'Haftalık sıfırlama',
+  'widget_open_app': 'Uygulamayı aç',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':

@@ -645,6 +645,11 @@ const ruStrings = <String, String>{
   'goals_shopping': 'Список покупок',
   'goal_remove': 'Убрать',
   'goals_complete': 'У тебя есть всё для твоих целей.',
+  'widget_next': 'Следующее закреплённое событие',
+  'widget_next_boss': 'Следующий мировой босс',
+  'widget_daily': 'Ежедневный сброс',
+  'widget_weekly': 'Еженедельный сброс',
+  'widget_open_app': 'Открой приложение',
   'alert_push_hint': 'Если вы вошли и разрешили уведомления, вы узнаете об этом и при закрытом приложении.',
   'landing_title': 'Ваш помощник по Guild Wars 2',
   'landing_sub':
