@@ -637,6 +637,17 @@ const esStrings = <String, String>{
   'look_system': 'Como el dispositivo',
   'look_light': 'Claro',
   'look_dark': 'Oscuro',
+  'goals': 'Mis objetivos',
+  'goal_add': 'Añadir a mis objetivos',
+  'goal_added': 'Añadido a tus objetivos',
+  'goals_full': 'Tu lista de objetivos está llena',
+  'goals_empty':
+      'Aún no hay nada. Abre una receta y pulsa el botón de lista para añadir lo que quieres fabricar, y los materiales de todos tus objetivos se juntan en una sola lista.',
+  'goals_clear': 'Vaciar objetivos',
+  'goals_clear_ask': '¿Quitar todos los objetivos de la lista?',
+  'goals_shopping': 'Lista de compras',
+  'goal_remove': 'Quitar',
+  'goals_complete': 'Tienes todo para tus objetivos.',
   'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
   'landing_sub':

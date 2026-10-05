@@ -5,6 +5,7 @@ import '../l10n/strings.dart';
 import '../services/recipe_book.dart';
 import '../state/account.dart';
 import '../state/crafting.dart';
+import '../state/goals.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -37,6 +38,21 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20, color: AppColors.accent)),
+        actions: [
+          IconButton(
+            tooltip: s.t('goal_add'),
+            icon: const Icon(Icons.playlist_add),
+            onPressed: () async {
+              final goals = ref.read(goalsProvider.notifier);
+              if (!goals.has(widget.itemId) && ref.read(goalsProvider).length >= maxGoals) {
+                showToast(context, s.t('goals_full'));
+                return;
+              }
+              await goals.add(widget.itemId, _quantity);
+              if (context.mounted) showToast(context, s.t('goal_added'));
+            },
+          ),
+        ],
       ),
       body: AsyncView<CraftNode>(
         value: tree,
@@ -117,7 +133,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: Column(
                   children: [
-                    for (final e in leaves.entries) _LeafRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
+                    for (final e in leaves.entries) MaterialRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
                   ],
                 ),
               ),
@@ -229,8 +245,9 @@ class _CostPanel extends ConsumerWidget {
   }
 }
 
-class _LeafRow extends ConsumerWidget {
-  const _LeafRow({required this.itemId, required this.need, required this.have});
+/// one material with how much of it the account has against how much is needed
+class MaterialRow extends ConsumerWidget {
+  const MaterialRow({super.key, required this.itemId, required this.need, required this.have});
 
   final int itemId;
   final int need;

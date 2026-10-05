@@ -51,9 +51,17 @@ class CraftLine {
 /// so a gift that two branches need is not counted twice. the root itself is
 /// always crafted, that is what the page is for. raw materials keep their
 /// full count, the screen compares those against what the account owns
-CraftLine planWithStock(CraftNode root, int count, Map<int, int> owned) {
-  final stock = {...owned};
+CraftLine planWithStock(CraftNode root, int count, Map<int, int> owned) => _planFrom({...owned}, root, count);
 
+/// the plans of several goals, one after the other from the same stock: what the first takes is no longer
+/// there for the second, so a bank that covers one goal is not counted as covering all of them
+List<CraftLine> planGoals(List<(CraftNode, int)> goals, Map<int, int> owned) {
+  final stock = {...owned};
+  return [for (final (node, count) in goals) _planFrom(stock, node, count)];
+}
+
+/// walks one tree, taking from [stock] and leaving it with what is left
+CraftLine _planFrom(Map<int, int> stock, CraftNode root, int count) {
   CraftLine walk(CraftNode node, int need, bool isRoot) {
     if (node.isLeaf) return CraftLine(node, need, const []);
     var toMake = need;
@@ -211,24 +219,30 @@ Map<int, int> craftLeaves(CraftLine line) {
   return out;
 }
 
-/// sell listing price per unit for every item in the tree, fetched once
-final craftPricesProvider = FutureProvider.autoDispose.family<Map<int, int>, int>((ref, rootId) async {
-  final api = ref.watch(gw2ApiProvider);
-  final root = await ref.watch(craftTreeProvider(rootId).future);
-  final ids = <int>{};
-  void collect(CraftNode n) {
-    ids.add(n.itemId);
-    for (final child in n.children) {
-      collect(child);
-    }
+/// every item id in a tree, its root included
+void collectTreeIds(CraftNode node, Set<int> into) {
+  into.add(node.itemId);
+  for (final child in node.children) {
+    collectTreeIds(child, into);
   }
+}
 
-  collect(root);
+/// the lowest sell listing per unit, for the items that have one
+Future<Map<int, int>> sellPrices(Gw2Api api, Iterable<int> ids) async {
   final prices = await api.prices(ids);
   return {
     for (final e in prices.entries)
       if (e.value['sells'] is Map) e.key: asInt((e.value['sells'] as Map)['unit_price']),
   };
+}
+
+/// sell listing price per unit for every item in the tree, fetched once
+final craftPricesProvider = FutureProvider.autoDispose.family<Map<int, int>, int>((ref, rootId) async {
+  final api = ref.watch(gw2ApiProvider);
+  final root = await ref.watch(craftTreeProvider(rootId).future);
+  final ids = <int>{};
+  collectTreeIds(root, ids);
+  return sellPrices(api, ids);
 });
 
 /// one recipe an item goes into: what it makes and in which discipline
