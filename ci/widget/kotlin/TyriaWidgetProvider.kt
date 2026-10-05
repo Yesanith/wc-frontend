@@ -30,7 +30,7 @@ class TyriaWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences,
     ) {
         val now = System.currentTimeMillis()
-        val starts = nextStarts(widgetData.getString("schedule", "") ?: "", now, 4)
+        val starts = nextStarts(widgetData.getString("schedule", "") ?: "", now, 3)
         val clock = SystemClock.elapsedRealtime()
         val launch = context.packageManager.getLaunchIntentForPackage(context.packageName)
         val tap = launch?.let {
@@ -58,8 +58,22 @@ class TyriaWidgetProvider : HomeWidgetProvider() {
             countDown(views, R.id.daily_timer, nextDailyReset(now) - now, clock)
             countDown(views, R.id.weekly_timer, nextWeeklyReset(now) - now, clock)
 
-            val later = starts.drop(1).joinToString("   ") { format.format(Date(it.at)) + " " + it.name }
-            views.setTextViewText(R.id.later, later)
+            // the events after the first, a line each, left out when there is no such event
+            val after = starts.drop(1)
+            val rows = listOf(
+                Triple(R.id.later_1, R.id.later_1_time, R.id.later_1_name),
+                Triple(R.id.later_2, R.id.later_2_time, R.id.later_2_name),
+            )
+            rows.forEachIndexed { i, (row, time, name) ->
+                val start = after.getOrNull(i)
+                if (start == null) {
+                    views.setViewVisibility(row, View.GONE)
+                } else {
+                    views.setViewVisibility(row, View.VISIBLE)
+                    views.setTextViewText(time, format.format(Date(start.at)))
+                    views.setTextViewText(name, start.name)
+                }
+            }
 
             if (tap != null) views.setOnClickPendingIntent(R.id.root, tap)
             appWidgetManager.updateAppWidget(id, views)
