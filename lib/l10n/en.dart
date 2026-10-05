@@ -647,6 +647,11 @@ const enStrings = <String, String>{
   'goals_shopping': 'Shopping list',
   'goal_remove': 'Remove',
   'goals_complete': 'You have everything for your goals.',
+  'widget_next': 'Next pinned event',
+  'widget_next_boss': 'Next world boss',
+  'widget_daily': 'Daily reset',
+  'widget_weekly': 'Weekly reset',
+  'widget_open_app': 'Open the app',
   'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
   'landing_sub':

@@ -648,6 +648,11 @@ const esStrings = <String, String>{
   'goals_shopping': 'Lista de compras',
   'goal_remove': 'Quitar',
   'goals_complete': 'Tienes todo para tus objetivos.',
+  'widget_next': 'Próximo evento fijado',
+  'widget_next_boss': 'Próximo jefe mundial',
+  'widget_daily': 'Reinicio diario',
+  'widget_weekly': 'Reinicio semanal',
+  'widget_open_app': 'Abre la app',
   'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
   'landing_sub':

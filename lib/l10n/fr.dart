@@ -651,6 +651,11 @@ const frStrings = <String, String>{
   'goals_shopping': 'Liste de courses',
   'goal_remove': 'Retirer',
   'goals_complete': 'Tu as tout pour tes objectifs.',
+  'widget_next': 'Prochain événement épinglé',
+  'widget_next_boss': 'Prochain boss mondial',
+  'widget_daily': 'Réinitialisation quotidienne',
+  'widget_weekly': 'Réinitialisation hebdomadaire',
+  'widget_open_app': 'Ouvre l\'appli',
   'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
   'landing_title': 'Ton compagnon Guild Wars 2',
   'landing_sub':

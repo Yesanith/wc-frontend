@@ -120,6 +120,10 @@ jobs:
       - name: Set up scheduled notifications
         run: python3 ci/notifications.py
 
+      # the home screen widget: its provider, layout and receiver go into the generated android project
+      - name: Set up the home screen widget
+        run: python3 ci/widget.py
+
       - run: flutter pub get
 
       # a release never ships code that fails the checks

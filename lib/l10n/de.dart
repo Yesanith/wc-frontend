@@ -656,6 +656,11 @@ const deStrings = <String, String>{
   'goals_shopping': 'Einkaufsliste',
   'goal_remove': 'Entfernen',
   'goals_complete': 'Du hast alles für deine Ziele.',
+  'widget_next': 'Nächstes angeheftetes Ereignis',
+  'widget_next_boss': 'Nächster Weltboss',
+  'widget_daily': 'Täglicher Reset',
+  'widget_weekly': 'Wöchentlicher Reset',
+  'widget_open_app': 'App öffnen',
   'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':
