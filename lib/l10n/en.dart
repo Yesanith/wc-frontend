@@ -636,6 +636,17 @@ const enStrings = <String, String>{
   'look_system': 'Match phone',
   'look_light': 'Light',
   'look_dark': 'Dark',
+  'goals': 'My goals',
+  'goal_add': 'Add to my goals',
+  'goal_added': 'Added to your goals',
+  'goals_full': 'Your goals list is full',
+  'goals_empty':
+      'Nothing here yet. Open a recipe and tap the list button to add what you want to make, and the materials of all your goals come together in one list.',
+  'goals_clear': 'Clear goals',
+  'goals_clear_ask': 'Remove every goal from the list?',
+  'goals_shopping': 'Shopping list',
+  'goal_remove': 'Remove',
+  'goals_complete': 'You have everything for your goals.',
   'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
   'landing_sub':

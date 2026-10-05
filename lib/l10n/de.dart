@@ -645,6 +645,17 @@ const deStrings = <String, String>{
   'look_system': 'Wie das Gerät',
   'look_light': 'Hell',
   'look_dark': 'Dunkel',
+  'goals': 'Meine Ziele',
+  'goal_add': 'Zu meinen Zielen hinzufügen',
+  'goal_added': 'Zu deinen Zielen hinzugefügt',
+  'goals_full': 'Deine Zielliste ist voll',
+  'goals_empty':
+      'Noch nichts da. Öffne ein Rezept und tippe auf die Listentaste, um hinzuzufügen, was du herstellen willst. Die Materialien aller Ziele erscheinen dann in einer Liste.',
+  'goals_clear': 'Ziele leeren',
+  'goals_clear_ask': 'Alle Ziele aus der Liste entfernen?',
+  'goals_shopping': 'Einkaufsliste',
+  'goal_remove': 'Entfernen',
+  'goals_complete': 'Du hast alles für deine Ziele.',
   'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':

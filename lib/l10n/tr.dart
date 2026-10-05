@@ -632,6 +632,17 @@ const trStrings = <String, String>{
   'look_system': 'Cihazla aynı',
   'look_light': 'Açık',
   'look_dark': 'Koyu',
+  'goals': 'Hedeflerim',
+  'goal_add': 'Hedeflerime ekle',
+  'goal_added': 'Hedeflerine eklendi',
+  'goals_full': 'Hedef listen dolu',
+  'goals_empty':
+      'Henüz bir şey yok. Bir tarif aç ve yapmak istediğini eklemek için liste düğmesine dokun; tüm hedeflerinin malzemeleri tek bir listede toplanır.',
+  'goals_clear': 'Hedefleri temizle',
+  'goals_clear_ask': 'Tüm hedefler listeden kaldırılsın mı?',
+  'goals_shopping': 'Alışveriş listesi',
+  'goal_remove': 'Kaldır',
+  'goals_complete': 'Hedeflerin için her şeye sahipsin.',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':

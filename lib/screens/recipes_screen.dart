@@ -7,12 +7,14 @@ import '../l10n/strings.dart';
 import '../services/item_index.dart';
 import '../services/recipe_book.dart';
 import '../state/account.dart';
+import '../state/goals.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import 'crafting_screen.dart';
+import 'goals_screen.dart';
 
 /// every recipe in one place: regular crafting from the api and mystic
 /// forge recipes pulled from item descriptions. opening one shows the
@@ -108,14 +110,30 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-              child: TextField(
-                controller: _ctrl,
-                onChanged: _onChanged,
-                decoration: fieldDecoration(
-                  s.t('search_recipes'),
-                  prefixIcon: Icon(Icons.search, color: AppColors.muted),
-                ),
+              padding: const EdgeInsets.fromLTRB(20, 8, 12, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _ctrl,
+                      onChanged: _onChanged,
+                      decoration: fieldDecoration(
+                        s.t('search_recipes'),
+                        prefixIcon: Icon(Icons.search, color: AppColors.muted),
+                      ),
+                    ),
+                  ),
+                  // what the player wants made, and everything it takes
+                  Badge.count(
+                    count: ref.watch(goalsProvider).length,
+                    isLabelVisible: ref.watch(goalsProvider).isNotEmpty,
+                    child: IconButton(
+                      tooltip: s.t('goals'),
+                      icon: Icon(Icons.checklist, color: AppColors.gold),
+                      onPressed: () => openPanel(context, (_) => const GoalsScreen()),
+                    ),
+                  ),
+                ],
               ),
             ),
             ChipRow(
