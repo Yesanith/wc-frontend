@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/account.dart';
-import '../state/crafting.dart';
 import '../state/goals.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
