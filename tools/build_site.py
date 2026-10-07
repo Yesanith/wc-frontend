@@ -202,7 +202,8 @@ def social_tags(lang, page, title, root, contents):
     tags = [
         '<meta name="description" content="%s">' % escape(description),
         '<link rel="canonical" href="%s">' % url,
-        '<meta name="theme-color" content="#0D0B09">',
+        '<meta name="theme-color" content="#F4ECDA" media="(prefers-color-scheme: light)">',
+        '<meta name="theme-color" content="#14100B" media="(prefers-color-scheme: dark)">',
         '<link rel="icon" href="%sapp/favicon.png">' % root,
         '<link rel="apple-touch-icon" href="%sapp/icons/Icon-192.png">' % root,
         '<meta property="og:type" content="website">',
@@ -245,7 +246,7 @@ def shell(lang, page, title, body, contents, extra_head="", extra_end="", main_c
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light dark">
   <title>%s</title>
   <link rel="stylesheet" href="%sstyle.css">%s%s%s
 </head>
