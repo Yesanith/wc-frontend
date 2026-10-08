@@ -22,7 +22,8 @@ const _id = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
 Session _session() => Session(
       accessToken: 'token',
       tokenType: 'bearer',
-      user: const User(id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
+      user: const User(
+          id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
     );
 
 RecruitCard _card(String name,
@@ -1125,7 +1126,8 @@ void main() {
     });
 
     testWidgets('takes it back, and the list is without them', (tester) async {
-      final fake = await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
+      final fake =
+          await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();
       expect(fake.revokes, ['u2']);
@@ -1181,7 +1183,8 @@ void main() {
 
     testWidgets('tells why the database refused to allow or to take back', (tester) async {
       final fake = FakeRecruit(
-          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')], fail: const RecruitFailure('not_member'));
+          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
+          fail: const RecruitFailure('not_member'));
       await open(tester, fake);
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();
