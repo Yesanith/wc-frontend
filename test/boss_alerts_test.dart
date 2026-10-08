@@ -131,4 +131,64 @@ void main() {
     expect(isBossAlertPayload('event'), isFalse);
     expect(isBossAlertPayload(null), isFalse);
   });
+
+  group('the reminders of the resets', () {
+    List<BossAlert> plan({bool daily = true, bool weekly = true}) => planResetAlerts(
+          daily: daily,
+          weekly: weekly,
+          dailyTitle: 'daily',
+          dailyBody: 'daily body',
+          weeklyTitle: 'weekly',
+          weeklyBody: 'weekly body',
+        );
+
+    test('come an hour before: 23:00 utc every day, and 06:30 utc on Monday', () {
+      final alerts = plan();
+      expect(alerts, hasLength(2));
+      expect(alerts[0].id, dailyResetAlertId);
+      expect(alerts[0].minuteOfDay, 23 * 60);
+      expect(alerts[0].weekday, isNull);
+      expect(alerts[1].id, weeklyResetAlertId);
+      expect(alerts[1].minuteOfDay, 6 * 60 + 30);
+      expect(alerts[1].weekday, DateTime.monday);
+    });
+
+    test('are only the ones asked for', () {
+      expect(plan(daily: false, weekly: false), isEmpty);
+      expect(plan(weekly: false).single.id, dailyResetAlertId);
+      expect(plan(daily: false).single.id, weeklyResetAlertId);
+    });
+
+    test('have ids apart from each other and from those of the events', () {
+      final events = planBossAlerts(pins: [
+        for (final m in metaMaps)
+          for (final e in m.events) eventKey(m, e)
+      ], lead: 10, body: (_) => '', limit: 100000);
+      final ids = {for (final a in events.alerts) a.id};
+      expect(ids.contains(dailyResetAlertId), isFalse);
+      expect(ids.contains(weeklyResetAlertId), isFalse);
+      expect(dailyResetAlertId, isNot(weeklyResetAlertId));
+    });
+
+    test('a weekly alert is set for the next time that day and time come round', () {
+      // Tuesday 6 October 2026, 12:00 utc: the next Monday is the 12th
+      final tuesday = DateTime.utc(2026, 10, 6, 12);
+      expect(nextAlertAt(tuesday, 6 * 60 + 30, weekday: DateTime.monday), DateTime.utc(2026, 10, 12, 6, 30));
+      // Monday 5 October before the time: that very day
+      expect(nextAlertAt(DateTime.utc(2026, 10, 5, 5), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 5, 6, 30));
+      // Monday after the time: a week on
+      expect(nextAlertAt(DateTime.utc(2026, 10, 5, 7), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 12, 6, 30));
+      // a Sunday evening
+      expect(nextAlertAt(DateTime.utc(2026, 10, 11, 22), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 12, 6, 30));
+    });
+
+    test('change the signature of what is scheduled', () {
+      final a = alertsSignature(plan(), exact: true);
+      expect(alertsSignature(plan(weekly: false), exact: true), isNot(a));
+      expect(alertsSignature(plan(), exact: true), a);
+    });
+  });
 }
