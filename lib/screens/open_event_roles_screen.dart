@@ -30,7 +30,7 @@ class OpenEventRolesScreen extends ConsumerWidget {
             if (info.isLoading)
               const Center(child: CircularProgressIndicator())
             else if (!configured)
-              Text(s.t('oe_roles_none'), style: const TextStyle(color: AppColors.muted))
+              Text(s.t('oe_roles_none'), style: TextStyle(color: AppColors.muted))
             else if (invite != null)
               FilledButton.icon(
                 onPressed: () => openUrl(context, invite, failMessage: s.t('open_failed')),

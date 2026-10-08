@@ -21,9 +21,8 @@ class AchievementGroupsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('achievements'), style: display(20)),
+        title: Text(s.t('achievements'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<AchievementGroup>>(
         value: groups,
@@ -48,12 +47,12 @@ class AchievementGroupsScreen extends ConsumerWidget {
                         const SizedBox(height: 2),
                         Text(
                           '${fmtInt(g.categories.length)} · ${fmtInt(g.achievementCount)}',
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right, color: AppColors.muted),
+                  Icon(Icons.chevron_right, color: AppColors.muted),
                 ],
               ),
             );
@@ -73,9 +72,8 @@ class _CategoriesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(group.name, style: display(20)),
+        title: Text(group.name, style: display(20, color: AppColors.accent)),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -90,7 +88,7 @@ class _CategoriesScreen extends ConsumerWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(builder: (_) => AchievementCategoryScreen(category: c)),
             ),
-            trailing: const Icon(Icons.chevron_right, color: AppColors.muted),
+            trailing: Icon(Icons.chevron_right, color: AppColors.muted),
           );
         },
       ),
@@ -111,16 +109,15 @@ class AchievementCategoryScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(category.name, style: display(20)),
+        title: Text(category.name, style: display(20, color: AppColors.accent)),
         actions: [
           if (done != null)
             Padding(
               padding: const EdgeInsets.only(right: 18),
               child: Center(
                 child: Text('$done / ${category.achievementIds.length}',
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ),
             ),
         ],
@@ -185,7 +182,7 @@ class _AchievementCard extends StatelessWidget {
           ),
           if (description.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(description, style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            Text(description, style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           ],
           if (!row.done && row.max > 0) ...[
             const SizedBox(height: 10),
@@ -194,7 +191,7 @@ class _AchievementCard extends StatelessWidget {
                 Expanded(child: Bar(value: row.ratio)),
                 const SizedBox(width: 10),
                 Text('${fmtInt(row.current)} / ${fmtInt(row.max)}',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
               ],
             ),
           ],

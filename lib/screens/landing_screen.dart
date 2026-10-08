@@ -103,7 +103,7 @@ class LandingScreen extends ConsumerWidget {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Icon(Icons.translate, size: 18, color: AppColors.gold),
+                                      Icon(Icons.translate, size: 18, color: AppColors.gold),
                                       if (!narrow) ...[
                                         const SizedBox(width: 6),
                                         Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -126,7 +126,7 @@ class LandingScreen extends ConsumerWidget {
                             child: Text(
                               s.t('landing_sub'),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 17, height: 1.55, color: AppColors.muted),
+                              style: TextStyle(fontSize: 17, height: 1.55, color: AppColors.muted),
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -139,11 +139,11 @@ class LandingScreen extends ConsumerWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
+                              Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
                               const SizedBox(width: 6),
                               Flexible(
-                                  child: Text(s.t('privacy_note'),
-                                      style: const TextStyle(fontSize: 12, color: AppColors.hint))),
+                                  child:
+                                      Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.hint))),
                             ],
                           ),
                           SizedBox(height: width >= 900 ? 84 : 48),
@@ -176,8 +176,7 @@ class LandingScreen extends ConsumerWidget {
                                                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                                             const SizedBox(height: 6),
                                             Text(s.t(body),
-                                                style: const TextStyle(
-                                                    fontSize: 14, height: 1.45, color: AppColors.muted)),
+                                                style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
                                           ],
                                         ),
                                       ),

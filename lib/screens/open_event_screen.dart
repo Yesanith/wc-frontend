@@ -69,7 +69,7 @@ class OpenEventScreen extends ConsumerWidget {
             value: event!,
             onRetry: () => ref.invalidate(openEventProvider(eventId)),
             builder: (e) => e == null
-                ? Center(child: Text(s.t('oe_err_gone'), style: const TextStyle(color: AppColors.muted)))
+                ? Center(child: Text(s.t('oe_err_gone'), style: TextStyle(color: AppColors.muted)))
                 : ContentFrame(maxWidth: readingMaxWidth, child: _EventBody(event: e)),
           ),
       },
@@ -93,9 +93,9 @@ class _EventNotice extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.public, size: 40, color: AppColors.muted),
+            Icon(Icons.public, size: 40, color: AppColors.muted),
             const SizedBox(height: 12),
-            Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.4)),
+            Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
             if (toSettings) ...[
               const SizedBox(height: 16),
               FilledButton.tonal(
@@ -153,7 +153,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     final eligible = mine.forRegion(e.region);
     if (mine.hasAccount && eligible.isEmpty) {
       return [
-        Text(s.t('oe_err_wrong_region'), style: const TextStyle(color: AppColors.amber, height: 1.4)),
+        Text(s.t('oe_err_wrong_region'), style: TextStyle(color: AppColors.amber, height: 1.4)),
         const SizedBox(height: 8),
       ];
     }
@@ -253,7 +253,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                   Text(e.title, style: display(20)),
                   const SizedBox(height: 2),
                   Text('${eventWhen(s, e.startAt)} · ${openEventDuration(e.durationMinutes)}',
-                      style: const TextStyle(color: AppColors.muted)),
+                      style: TextStyle(color: AppColors.muted)),
                 ],
               ),
             ),
@@ -292,7 +292,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                           style: const TextStyle(fontWeight: FontWeight.w700))),
                   IconButton(
                     tooltip: s.t('oe_copy_name'),
-                    icon: const Icon(Icons.copy, size: 18, color: AppColors.gold),
+                    icon: Icon(Icons.copy, size: 18, color: AppColors.gold),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: e.organizer));
                       if (context.mounted) showToast(context, s.t('oe_copied'));
@@ -301,7 +301,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                 ],
               ),
               if (!e.mine)
-                Text(s.t('oe_find_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+                Text(s.t('oe_find_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
             ],
           ),
         ),
@@ -363,8 +363,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
           if (!e.mine)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child:
-                  Text(s.t('oe_join_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
+              child: Text(s.t('oe_join_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
             ),
         ],
         if (e.mine) ...[
@@ -417,8 +416,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
               onPressed: _busy ? null : _report,
-              icon: const Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
-              label: Text(s.t('oe_report'), style: const TextStyle(color: AppColors.muted)),
+              icon: Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
+              label: Text(s.t('oe_report'), style: TextStyle(color: AppColors.muted)),
             ),
           ),
       ],
@@ -436,17 +435,16 @@ class _Roster extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return ref.watch(openRosterProvider(eventId)).when(
-          loading: () => const Padding(
+          loading: () => Padding(
             padding: EdgeInsets.all(16),
             child: Center(
                 child: SizedBox(
                     width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
           ),
-          error: (e, _) =>
-              Panel(child: Text(s.t(openEventErrorKey(e)), style: const TextStyle(color: AppColors.amber))),
+          error: (e, _) => Panel(child: Text(s.t(openEventErrorKey(e)), style: TextStyle(color: AppColors.amber))),
           data: (people) => Panel(
             child: people.isEmpty
-                ? Text(s.t('oe_roster_none'), style: const TextStyle(color: AppColors.muted))
+                ? Text(s.t('oe_roster_none'), style: TextStyle(color: AppColors.muted))
                 : Column(
                     children: [
                       for (final p in people)
@@ -465,7 +463,7 @@ class _Roster extends ConsumerWidget {
                                           if (p.role != null) s.t('role_${p.role}'),
                                           if (p.profession != null) p.profession!
                                         ].join(' · '),
-                                        style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                                        style: TextStyle(fontSize: 12, color: AppColors.muted),
                                       ),
                                   ],
                                 ),

@@ -21,7 +21,7 @@ class SettingsGroup extends StatelessWidget {
           Text(title, style: display(16)),
           if (cap != null) ...[
             const SizedBox(height: 4),
-            Text(cap, style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            Text(cap, style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           ],
           const SizedBox(height: 8),
           Container(
@@ -69,8 +69,8 @@ class SettingsRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
-                if (n != null) Text(n, style: const TextStyle(fontSize: 12, height: 1.35, color: AppColors.muted)),
+                Text(label, style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                if (n != null) Text(n, style: TextStyle(fontSize: 12, height: 1.35, color: AppColors.muted)),
               ],
             ),
           ),

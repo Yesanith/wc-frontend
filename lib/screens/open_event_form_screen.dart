@@ -239,7 +239,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
       ),
       if (_roles.isNotEmpty) ...[
         const SizedBox(height: 8),
-        Text(s.t('oe_places_roles', {'n': _roleTotal}), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        Text(s.t('oe_places_roles', {'n': _roleTotal}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
         if (!editing) ...[
           const SizedBox(height: 12),
           Kicker(s.t('oe_come_as')),
@@ -323,7 +323,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               mine != null && mine.hasAccount && mine.regions.isEmpty
                   ? s.t('oe_region_unknown')
                   : s.t('oe_region_note'),
-              style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45),
+              style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45),
             ),
             const SizedBox(height: 16),
             Kicker(s.t('oe_language')),
@@ -426,7 +426,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               decoration: fieldDecoration(''),
             ),
             const SizedBox(height: 8),
-            Text(s.t('oe_form_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45)),
+            Text(s.t('oe_form_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.45)),
             const SizedBox(height: 20),
             FilledButton(
               onPressed: _busy ? null : _save,

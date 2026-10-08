@@ -4,7 +4,7 @@ part of '../trading_screen.dart';
 class _GemHistoryChart extends ConsumerWidget {
   const _GemHistoryChart();
 
-  static const _buyColor = AppColors.gold;
+  static Color get _buyColor => AppColors.gold;
   static const _sellColor = Color(0xFF6FB7E0);
 
   @override
@@ -16,7 +16,7 @@ class _GemHistoryChart extends ConsumerWidget {
           children: [
             Container(width: 10, height: 3, color: color),
             const SizedBox(width: 6),
-            Text(label, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+            Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
             const SizedBox(width: 6),
             CoinText(value, size: 12),
           ],
@@ -28,8 +28,7 @@ class _GemHistoryChart extends ConsumerWidget {
           Kicker(s.t('gem_history_title').toUpperCase()),
           const SizedBox(height: 12),
           if (points.length < 2)
-            Text(s.t('gem_history_collecting'),
-                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
+            Text(s.t('gem_history_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted))
           else ...[
             SizedBox(
               height: 120,
@@ -39,9 +38,9 @@ class _GemHistoryChart extends ConsumerWidget {
             const SizedBox(height: 6),
             Row(
               children: [
-                Text(_shortDate(points.first.at), style: const TextStyle(fontSize: 10, color: AppColors.hint)),
+                Text(_shortDate(points.first.at), style: TextStyle(fontSize: 10, color: AppColors.hint)),
                 const Spacer(),
-                Text(_shortDate(points.last.at), style: const TextStyle(fontSize: 10, color: AppColors.hint)),
+                Text(_shortDate(points.last.at), style: TextStyle(fontSize: 10, color: AppColors.hint)),
               ],
             ),
             const SizedBox(height: 10),
@@ -59,7 +58,7 @@ class _GemHistoryChart extends ConsumerWidget {
                 'lo': fmtGold(points.map((p) => p.buy).reduce((a, b) => a < b ? a : b)),
                 'hi': fmtGold(points.map((p) => p.buy).reduce((a, b) => a > b ? a : b)),
               }),
-              style: const TextStyle(fontSize: 11, color: AppColors.hint),
+              style: TextStyle(fontSize: 11, color: AppColors.hint),
             ),
           ],
         ],

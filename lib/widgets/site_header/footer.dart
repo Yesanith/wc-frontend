@@ -22,7 +22,7 @@ class SiteFooter extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '© ${year ?? DateTime.now().year} Tyria Codex',
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted),
         ),
       ],
     );
@@ -41,7 +41,7 @@ class SiteFooter extends StatelessWidget {
       color: AppColors.navBg,
       child: Container(
         constraints: const BoxConstraints(minHeight: height),
-        decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
+        decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
         child: LayoutBuilder(
           builder: (context, box) {
             if (box.maxWidth < 760) {
@@ -53,7 +53,7 @@ class SiteFooter extends StatelessWidget {
                   children: [
                     owner,
                     const SizedBox(height: 6),
-                    Text(note, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                    Text(note, style: TextStyle(fontSize: 12, color: AppColors.hint)),
                     const SizedBox(height: 4),
                     Wrap(children: buttons),
                   ],
@@ -77,7 +77,7 @@ class SiteFooter extends StatelessWidget {
                             note,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                            style: TextStyle(fontSize: 12, color: AppColors.hint),
                           ),
                         ),
                         ...buttons,

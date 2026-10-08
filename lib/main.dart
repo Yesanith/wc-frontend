@@ -67,6 +67,9 @@ class TyriaCodexApp extends ConsumerStatefulWidget {
 
 class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindingObserver {
   final _navigator = GlobalKey<NavigatorState>();
+  late final _brightness = _BrightnessWatcher(() {
+    if (mounted) setState(() {});
+  });
   late final _urlRestorer = UrlRestorer(_restoreUrl);
 
   /// the back button goes between the pages only with a history of more than one place. it is asked for after the first frame: the navigator, as it begins, chooses a history of
@@ -103,6 +106,7 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(_brightness);
     if (kIsWeb) {
       WidgetsBinding.instance.addObserver(this);
       _startHistory();
@@ -113,6 +117,7 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(_brightness);
     if (kIsWeb) WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -158,6 +163,17 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
     final key = ref.watch(apiKeyProvider);
     final guest = ref.watch(guestModeProvider);
     final chosenScale = ref.watch(uiScaleProvider);
+    // the palette is chosen here and read by every widget as it is built. the whole tree is made again
+    // when it changes (the key), since widgets made once as constants would keep the old colours
+    final palette = paletteFor(ref.watch(lookProvider), WidgetsBinding.instance.platformDispatcher.platformBrightness);
+    AppColors.use(palette);
+    return KeyedSubtree(
+      key: ValueKey(palette.dark),
+      child: _app(key, guest, chosenScale),
+    );
+  }
+
+  Widget _app(AsyncValue<String?> key, bool guest, double? chosenScale) {
     return MaterialApp(
       navigatorKey: _navigator,
       navigatorObservers: [_urlRestorer],
@@ -181,4 +197,14 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
       ),
     );
   }
+}
+
+/// tells the app when the phone changes between light and dark
+class _BrightnessWatcher with WidgetsBindingObserver {
+  _BrightnessWatcher(this.onChange);
+
+  final VoidCallback onChange;
+
+  @override
+  void didChangePlatformBrightness() => onChange();
 }

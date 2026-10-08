@@ -15,13 +15,13 @@ class _AlertBanner extends ConsumerWidget {
         onTap: () => ref.read(sectionProvider.notifier).state = AppSection.trading,
         child: Row(
           children: [
-            const Icon(Icons.notifications_active, color: AppColors.green),
+            Icon(Icons.notifications_active, color: AppColors.green),
             const SizedBox(width: 10),
             Expanded(
               child: Text(s.t('alerts_fired', {'n': fired.length}),
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.chevron),
+            Icon(Icons.chevron_right, color: AppColors.chevron),
           ],
         ),
       ),
@@ -65,7 +65,7 @@ class _PinnedAchievements extends ConsumerWidget {
                                 Row(
                                   children: [
                                     if (a.done) ...[
-                                      const Icon(Icons.check_circle, size: 16, color: AppColors.green),
+                                      Icon(Icons.check_circle, size: 16, color: AppColors.green),
                                       const SizedBox(width: 6),
                                     ],
                                     Expanded(
@@ -76,7 +76,7 @@ class _PinnedAchievements extends ConsumerWidget {
                                     ),
                                     if (a.max > 0)
                                       Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
                                   ],
                                 ),
@@ -125,13 +125,13 @@ class _NewsBanner extends ConsumerWidget {
         onTap: () => ref.read(sectionProvider.notifier).state = AppSection.news,
         child: Row(
           children: [
-            const Icon(Icons.newspaper, color: AppColors.gold),
+            Icon(Icons.newspaper, color: AppColors.gold),
             const SizedBox(width: 10),
             Expanded(
               child: Text(s.t('news_new', {'n': count}),
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.chevron),
+            Icon(Icons.chevron_right, color: AppColors.chevron),
           ],
         ),
       ),
@@ -154,13 +154,13 @@ class _GuestCard extends ConsumerWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.vpn_key_outlined, color: AppColors.gold),
+                Icon(Icons.vpn_key_outlined, color: AppColors.gold),
                 const SizedBox(width: 10),
                 Expanded(child: Text(s.t('guest_home_title'), style: display(17))),
               ],
             ),
             const SizedBox(height: 8),
-            Text(s.t('guest_home_body'), style: const TextStyle(fontSize: 13, height: 1.5, color: AppColors.muted)),
+            Text(s.t('guest_home_body'), style: TextStyle(fontSize: 13, height: 1.5, color: AppColors.muted)),
             const SizedBox(height: 12),
             FilledButton.icon(
               onPressed: () => openAddKey(context),

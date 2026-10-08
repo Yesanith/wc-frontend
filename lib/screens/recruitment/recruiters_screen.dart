@@ -37,7 +37,7 @@ class RecruitersScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           children: [
-            Text(s.t('rec_rec_intro'), style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
+            Text(s.t('rec_rec_intro'), style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
             const SizedBox(height: 16),
             AsyncView<List<RecruiterEntry>>(
               value: recruiters,
@@ -48,7 +48,7 @@ class RecruitersScreen extends ConsumerWidget {
                   if (list.isEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Text(s.t('rec_rec_none'), style: const TextStyle(color: AppColors.muted)),
+                      child: Text(s.t('rec_rec_none'), style: TextStyle(color: AppColors.muted)),
                     ),
                   for (final r in list)
                     ListTile(
@@ -93,7 +93,7 @@ class RecruitersScreen extends ConsumerWidget {
           if (candidates.isEmpty)
             Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(s.t('rec_rec_none'), style: const TextStyle(color: AppColors.muted))),
+                child: Text(s.t('rec_rec_none'), style: TextStyle(color: AppColors.muted))),
           for (final m in candidates)
             SimpleDialogOption(onPressed: () => Navigator.of(context).pop(m), child: Text(m.accountName)),
         ],

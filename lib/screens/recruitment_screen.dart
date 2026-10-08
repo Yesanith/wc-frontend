@@ -53,7 +53,7 @@ class _RecruitmentScreenState extends ConsumerState<RecruitmentScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         children: [
-          Text(s.t('rec_intro'), style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
+          Text(s.t('rec_intro'), style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
           const SizedBox(height: 16),
           const _MyPages(),
           TextField(
@@ -156,7 +156,7 @@ class _Notice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
-          child: Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.4)),
+          child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
         ),
       );
 }
@@ -180,7 +180,7 @@ class _ListPage extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text(s.t(recruitErrorKey(e)), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.amber)),
+            Text(s.t(recruitErrorKey(e)), textAlign: TextAlign.center, style: TextStyle(color: AppColors.amber)),
             TextButton(onPressed: () => ref.invalidate(recruitListProvider), child: Text(s.t('retry'))),
           ],
         ),
@@ -192,8 +192,7 @@ class _ListPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(24),
               child: Center(
-                  child: Text(s.t('rec_empty'),
-                      textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted))),
+                  child: Text(s.t('rec_empty'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted))),
             ),
           for (final card in list.rows) _CardTile(card: card),
           if (last && filter.offset + list.rows.length < list.total && list.rows.length >= recruitPageSize)
@@ -244,7 +243,7 @@ class _CardTile extends ConsumerWidget {
                 if (card.headline.isNotEmpty)
                   Padding(
                       padding: const EdgeInsets.only(top: 4),
-                      child: Text(card.headline, style: const TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                      child: Text(card.headline, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 6,
@@ -258,7 +257,7 @@ class _CardTile extends ConsumerWidget {
                 if (card.playTimes.isNotEmpty)
                   Padding(
                       padding: const EdgeInsets.only(top: 6),
-                      child: Text(card.playTimes, style: const TextStyle(fontSize: 12, color: AppColors.hint))),
+                      child: Text(card.playTimes, style: TextStyle(fontSize: 12, color: AppColors.hint))),
               ],
             ),
           ),
@@ -277,7 +276,7 @@ class _Mini extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: AppColors.line)),
-        child: Text(text, style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+        child: Text(text, style: TextStyle(fontSize: 11, color: AppColors.muted)),
       );
 }
 
@@ -298,8 +297,8 @@ class _MyPages extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                      child: Text(s.t('rec_sign_in'),
-                          style: const TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4))),
+                      child:
+                          Text(s.t('rec_sign_in'), style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4))),
                   TextButton(
                     onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.settings,
                     child: Text(s.t('nav_settings')),
@@ -322,7 +321,7 @@ class _MyPages extends ConsumerWidget {
         children: [
           Text(s.t('rec_mine'), style: const TextStyle(fontWeight: FontWeight.w800)),
           const SizedBox(height: 2),
-          Text(s.t('rec_mine_hint'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+          Text(s.t('rec_mine_hint'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
           for (final g in mine) _MyGuild(guild: g),
         ],
       ),

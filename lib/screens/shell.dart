@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/home_widget_sync.dart';
 import '../services/sync.dart';
 import '../state/app_open.dart';
 import '../state/account.dart';
@@ -417,6 +418,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     });
     // keeps the phone's alarms for pinned world events in line, see boss_alerts
     ref.watch(bossAlertsSyncProvider);
+    ref.watch(homeWidgetSyncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
     ref.listen(apiKeyProvider, (previous, next) {
@@ -464,8 +466,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                         const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                       ],
                     ),
-                    if (accountName != null)
-                      Text(accountName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    if (accountName != null) Text(accountName, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -517,16 +518,15 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                 null => IconButton(
                     tooltip: s.t('search_placeholder'),
                     onPressed: _showSearch,
-                    icon: const Icon(Icons.search, color: AppColors.muted),
+                    icon: Icon(Icons.search, color: AppColors.muted),
                   ),
               },
               busy: sync.running || refreshing != 0,
               progress: sync.running ? sync.ratio : null,
             )
           : AppBar(
-              backgroundColor: AppColors.bg,
               surfaceTintColor: Colors.transparent,
-              title: Text(s.t(_titleKeys[section]!), style: display(20)),
+              title: Text(s.t(_titleKeys[section]!), style: display(20, color: AppColors.accent)),
               // a full sync shows real progress, a background refresh only says
               // that something is updating
               bottom: !sync.running && refreshing == 0
@@ -635,7 +635,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                     child: menu,
                   ),
                 ),
-                const VerticalDivider(width: 1, thickness: 1, color: AppColors.hairline),
+                VerticalDivider(width: 1, thickness: 1, color: AppColors.hairline),
                 Expanded(child: scaffold),
               ],
             )

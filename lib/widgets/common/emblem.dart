@@ -4,10 +4,12 @@ import '../../theme.dart';
 
 /// the diamond emblem, drawn on the start screen and the hero card
 class DiamondEmblem extends StatelessWidget {
-  const DiamondEmblem({super.key, required this.size, this.color = AppColors.gold, this.filled = true});
+  const DiamondEmblem({super.key, required this.size, this.color, this.filled = true});
 
   final double size;
-  final Color color;
+
+  /// the gold of the palette when none is given
+  final Color? color;
   final bool filled;
 
   @override
@@ -15,7 +17,7 @@ class DiamondEmblem extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: CustomPaint(painter: _EmblemPainter(color, filled)),
+      child: CustomPaint(painter: _EmblemPainter(color ?? AppColors.gold, filled)),
     );
   }
 }
@@ -69,7 +71,7 @@ class StageHero extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.window),
         border: Border.all(color: AppColors.line),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [AppColors.skyTop, AppColors.skyBottom],

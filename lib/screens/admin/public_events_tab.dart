@@ -32,8 +32,7 @@ class _BanRow extends ConsumerWidget {
                 children: [
                   Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
                   if (since.length >= 10)
-                    Text('since ${since.substring(0, 10)}',
-                        style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    Text('since ${since.substring(0, 10)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -78,7 +77,7 @@ class AdminPublicEventsTab extends ConsumerWidget {
           primary: [
             const Eyebrow('Waiting for a look'),
             if (o.reports.isEmpty)
-              const Panel(
+              Panel(
                   child: Text('No event was reported, or all that were have been looked at.',
                       style: TextStyle(color: AppColors.muted)))
             else
@@ -88,7 +87,7 @@ class AdminPublicEventsTab extends ConsumerWidget {
               ],
             const Eyebrow('Hidden'),
             if (o.hidden.isEmpty)
-              const Panel(child: Text('Nothing is hidden.', style: TextStyle(color: AppColors.muted)))
+              Panel(child: Text('Nothing is hidden.', style: TextStyle(color: AppColors.muted)))
             else
               for (final e in o.hidden) ...[
                 _EventCard({...e, 'hidden': true}, context: context, ref: ref),
@@ -117,7 +116,7 @@ class AdminPublicEventsTab extends ConsumerWidget {
             ],
             const Eyebrow('Made lately'),
             if (o.recent.isEmpty)
-              const Panel(child: Text('No public event has been made yet.', style: TextStyle(color: AppColors.muted)))
+              Panel(child: Text('No public event has been made yet.', style: TextStyle(color: AppColors.muted)))
             else
               for (final e in o.recent) ...[
                 _EventCard(e, context: context, ref: ref, recent: true),
@@ -149,8 +148,7 @@ class _EventCard extends StatelessWidget {
           actions: [
             TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
             TextButton(
-                onPressed: () => Navigator.pop(c, true),
-                child: Text(yes, style: const TextStyle(color: AppColors.red))),
+                onPressed: () => Navigator.pop(c, true), child: Text(yes, style: TextStyle(color: AppColors.red))),
           ],
         ),
       );
@@ -186,31 +184,28 @@ class _EventCard extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text('${event['title']}', style: const TextStyle(fontWeight: FontWeight.w700))),
-              if (hidden) const Text('hidden', style: TextStyle(fontSize: 11, color: AppColors.amber)),
+              if (hidden) Text('hidden', style: TextStyle(fontSize: 11, color: AppColors.amber)),
               if (reported)
-                Text('${asInt(event['reports'])} reports',
-                    style: const TextStyle(fontSize: 12, color: AppColors.amber)),
+                Text('${asInt(event['reports'])} reports', style: TextStyle(fontSize: 12, color: AppColors.amber)),
             ],
           ),
           const SizedBox(height: 2),
-          Text(detail, style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35)),
+          Text(detail, style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35)),
           if (event['reason'] != null)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text('hidden because: ${event['reason']}',
-                  style: const TextStyle(fontSize: 12, color: AppColors.amber)),
+              child: Text('hidden because: ${event['reason']}', style: TextStyle(fontSize: 12, color: AppColors.amber)),
             ),
           if (reasons.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: Text(reasons.join(', '), style: const TextStyle(fontSize: 12, color: AppColors.gold)),
+              child: Text(reasons.join(', '), style: TextStyle(fontSize: 12, color: AppColors.gold)),
             ),
           for (final n in notes)
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text('"$n"',
-                  style:
-                      const TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted, fontStyle: FontStyle.italic, height: 1.35)),
             ),
           const SizedBox(height: 4),
           Wrap(

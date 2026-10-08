@@ -58,7 +58,7 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
           Kicker(s.t('community_account').toUpperCase()),
           const SizedBox(height: 10),
           if (session == null) ...[
-            Text(s.t('community_intro'), style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted)),
+            Text(s.t('community_intro'), style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted)),
             const SizedBox(height: 12),
             FilledButton.icon(
               style: FilledButton.styleFrom(backgroundColor: const Color(0xFF5865F2), foregroundColor: Colors.white),
@@ -73,7 +73,7 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
                   radius: 22,
                   backgroundColor: AppColors.surface2,
                   foregroundImage: profile?.avatarUrl == null ? null : NetworkImage(profile!.avatarUrl!),
-                  child: const Icon(Icons.person_outline, color: AppColors.muted),
+                  child: Icon(Icons.person_outline, color: AppColors.muted),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -81,7 +81,7 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(profile?.displayName ?? '…', style: display(17)),
-                      Text(s.t('community_signed_in'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      Text(s.t('community_signed_in'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -243,21 +243,21 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
         Text(s.t('gw2_accounts_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
         const SizedBox(height: 6),
         if (accounts == null)
-          const LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+          LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
         else if (accounts.isEmpty)
-          Text(s.t('gw2_link_intro'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted))
+          Text(s.t('gw2_link_intro'), style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted))
         else
           for (final a in accounts)
             Row(
               children: [
-                const Icon(Icons.verified_user_outlined, size: 18, color: AppColors.gold),
+                Icon(Icons.verified_user_outlined, size: 18, color: AppColors.gold),
                 const SizedBox(width: 8),
                 Expanded(child: Text(a.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
                 IconButton(
                   tooltip: s.t('gw2_unlink'),
                   visualDensity: VisualDensity.compact,
                   onPressed: _busy ? null : () => _unlink(a),
-                  icon: const Icon(Icons.link_off, size: 18, color: AppColors.muted),
+                  icon: Icon(Icons.link_off, size: 18, color: AppColors.muted),
                 ),
               ],
             ),
@@ -302,12 +302,11 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
           if (!activeLinked)
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Text(s.t('gw2_refresh_other'),
-                  style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+              child: Text(s.t('gw2_refresh_other'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
             ),
         ],
         const SizedBox(height: 4),
-        Text(s.t('gw2_link_note'), style: const TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
+        Text(s.t('gw2_link_note'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.hint)),
       ],
     );
   }
@@ -353,7 +352,7 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
       value: on,
       onChanged: _busy ? null : _set,
       title: Text(s.t('push_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-      subtitle: Text(s.t('push_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+      subtitle: Text(s.t('push_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
     );
   }
 }

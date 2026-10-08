@@ -20,12 +20,12 @@ class WikiScreen extends ConsumerStatefulWidget {
 
 class _WikiScreenState extends ConsumerState<WikiScreen> {
   // key prefix in the strings table, color
-  static const _categories = <(String, Color)>[
-    ('cat_meta', AppColors.gold),
-    ('cat_crafting', Color(0xFF5FC07F)),
-    ('cat_mastery', Color(0xFF72C1D9)),
-    ('cat_fractals', Color(0xFFC08BE0)),
-  ];
+  static List<(String, Color)> get _categories => <(String, Color)>[
+        ('cat_meta', AppColors.gold),
+        ('cat_crafting', Color(0xFF5FC07F)),
+        ('cat_mastery', Color(0xFF72C1D9)),
+        ('cat_fractals', Color(0xFFC08BE0)),
+      ];
 
   final _ctrl = TextEditingController();
   Timer? _debounce;
@@ -118,7 +118,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        Text(Uri.parse(lang.wikiBase).host, style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+        Text(Uri.parse(lang.wikiBase).host, style: TextStyle(fontSize: 13, color: AppColors.muted)),
         const SizedBox(height: 14),
         TextField(
           controller: _ctrl,
@@ -130,11 +130,11 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           textInputAction: TextInputAction.search,
           decoration: fieldDecoration(
             s.t('search_wiki'),
-            prefixIcon: const Icon(Icons.search, color: AppColors.gold),
+            prefixIcon: Icon(Icons.search, color: AppColors.gold),
             suffixIcon: searching
                 ? IconButton(
                     tooltip: s.t('clear'),
-                    icon: const Icon(Icons.close, color: AppColors.muted),
+                    icon: Icon(Icons.close, color: AppColors.muted),
                     onPressed: () {
                       _ctrl.clear();
                       _search('');
@@ -145,12 +145,12 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
         ),
         const SizedBox(height: 16),
         if (searching) ...[
-          if (_loading) const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
+          if (_loading) LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
           if (error != null) ErrorBox(message: error, onRetry: () => _search(_ctrl.text)),
           if (!_loading && error == null && _results.isEmpty)
             Padding(
               padding: const EdgeInsets.all(24),
-              child: Center(child: Text(s.t('no_results'), style: const TextStyle(color: AppColors.muted))),
+              child: Center(child: Text(s.t('no_results'), style: TextStyle(color: AppColors.muted))),
             ),
           if (_results.isNotEmpty)
             Panel(
@@ -160,7 +160,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
                   for (final r in _results)
                     ListTile(
                       title: Text(r.title, style: const TextStyle(fontWeight: FontWeight.w700)),
-                      trailing: const Icon(Icons.chevron_right, color: AppColors.chevron),
+                      trailing: Icon(Icons.chevron_right, color: AppColors.chevron),
                       onTap: () => _open(r.title),
                     ),
                 ],
@@ -186,7 +186,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           SectionHeader(title: s.t('recently_viewed')),
           const SizedBox(height: 10),
           if (_recent.isEmpty)
-            Panel(child: Text(s.t('recent_empty'), style: const TextStyle(color: AppColors.muted)))
+            Panel(child: Text(s.t('recent_empty'), style: TextStyle(color: AppColors.muted)))
           else
             Panel(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -194,7 +194,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
                 children: [
                   for (final t in _recent)
                     ListTile(
-                      leading: const Icon(Icons.history, color: AppColors.muted),
+                      leading: Icon(Icons.history, color: AppColors.muted),
                       title: Text(t, style: const TextStyle(fontWeight: FontWeight.w700)),
                       onTap: () => _open(t),
                     ),
@@ -203,7 +203,7 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
             ),
         ],
         const SizedBox(height: 20),
-        Text(s.t('wiki_attribution'), style: const TextStyle(fontSize: 11, height: 1.5, color: AppColors.hint)),
+        Text(s.t('wiki_attribution'), style: TextStyle(fontSize: 11, height: 1.5, color: AppColors.hint)),
       ],
     );
   }
@@ -223,7 +223,7 @@ class _CategoryCard extends StatelessWidget {
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.card),
-        side: const BorderSide(color: AppColors.line),
+        side: BorderSide(color: AppColors.line),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -258,7 +258,7 @@ class _CategoryCard extends StatelessWidget {
                   Text(subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ),
             ],

@@ -19,9 +19,8 @@ class PvpMatchesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('match_history'), style: display(20)),
+        title: Text(s.t('match_history'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<PvpGame>>(
         permission: 'pvp',
@@ -34,8 +33,7 @@ class PvpMatchesScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             children: [
-              Text(s.t('match_history_note'),
-                  style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+              Text(s.t('match_history_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 14),
               for (final game in list) ...[
                 _MatchCard(game),
@@ -96,7 +94,7 @@ class _MatchCard extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: colour)),
               if (rating != 0)
                 Text(rating > 0 ? '+$rating' : '$rating',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
         ],
@@ -116,9 +114,8 @@ class PvpAmuletsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('amulets'), style: display(20)),
+        title: Text(s.t('amulets'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<PvpAmulet>>(
         value: amulets,
@@ -191,9 +188,8 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('leaderboard'), style: display(20)),
+        title: Text(s.t('leaderboard'), style: display(20, color: AppColors.accent)),
       ),
       body: AsyncView<List<Json>>(
         value: seasons,
@@ -202,7 +198,7 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
           if (all.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(24),
-              child: Text(s.t('no_season'), style: const TextStyle(color: AppColors.muted)),
+              child: Text(s.t('no_season'), style: TextStyle(color: AppColors.muted)),
             );
           }
           // the season the account played last, else the newest one
@@ -275,7 +271,7 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
                     : board == null
                         ? Padding(
                             padding: const EdgeInsets.all(24),
-                            child: Text(s.t('no_leaderboard'), style: const TextStyle(color: AppColors.muted)),
+                            child: Text(s.t('no_leaderboard'), style: TextStyle(color: AppColors.muted)),
                           )
                         : _BoardList(key: ValueKey('$seasonId|$board|$_region'), boardKey: '$seasonId|$board|$_region'),
               ),
@@ -308,7 +304,7 @@ class _BoardList extends ConsumerWidget {
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           itemCount: rows.length,
-          separatorBuilder: (_, __) => const Divider(color: AppColors.track, height: 1),
+          separatorBuilder: (_, __) => Divider(color: AppColors.track, height: 1),
           itemBuilder: (context, i) {
             final r = rows[i];
             final main = r.scores.isEmpty ? null : r.scores.first;
@@ -320,7 +316,7 @@ class _BoardList extends ConsumerWidget {
                   SizedBox(
                     width: 44,
                     child: Text('${r.rank}',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
                   ),
                   Expanded(
                     child: Column(
@@ -335,7 +331,7 @@ class _BoardList extends ConsumerWidget {
                             rest.map((sc) => '${sc.$1} ${fmtInt(sc.$2)}').join(' · '),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                            style: TextStyle(fontSize: 11, color: AppColors.muted),
                           ),
                       ],
                     ),
@@ -344,9 +340,8 @@ class _BoardList extends ConsumerWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(fmtInt(main.$2), style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
-                        if (main.$1.isNotEmpty)
-                          Text(main.$1, style: const TextStyle(fontSize: 10, color: AppColors.muted)),
+                        Text(fmtInt(main.$2), style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                        if (main.$1.isNotEmpty) Text(main.$1, style: TextStyle(fontSize: 10, color: AppColors.muted)),
                       ],
                     ),
                 ],

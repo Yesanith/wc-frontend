@@ -40,7 +40,7 @@ class _TradeNotifyPanelState extends ConsumerState<_TradeNotifyPanel> {
         value: ref.watch(tradeNotifyProvider),
         onChanged: _busy ? null : _set,
         title: Text(s.t('tp_notify_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-        subtitle: Text(s.t('tp_notify_hint'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+        subtitle: Text(s.t('tp_notify_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
       ),
     );
   }
@@ -103,11 +103,11 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
             value: settings.enabled,
             onChanged: _busy ? null : _turnOn,
             title: Text(s.t('boss_alerts_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-            subtitle: Text(s.t('boss_alerts_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            subtitle: Text(s.t('boss_alerts_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
           ),
           if (settings.enabled) ...[
             const SizedBox(height: 8),
-            Text(s.t('boss_alerts_lead'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            Text(s.t('boss_alerts_lead'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
             const SizedBox(height: 6),
             Wrap(
               spacing: 6,
@@ -123,13 +123,13 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
             const SizedBox(height: 10),
             Text(
               pins.isEmpty ? s.t('boss_alert_none') : s.t('boss_alert_scheduled', {'pins': pins.length, 'n': count}),
-              style: const TextStyle(fontSize: 12, color: AppColors.textSoft),
+              style: TextStyle(fontSize: 12, color: AppColors.textSoft),
             ),
             if (plan.skipped.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(
                 s.t('boss_alert_limit', {'n': plan.skipped.length, 'max': maxBossAlerts}),
-                style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.gold),
+                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.gold),
               ),
             ],
             if (status != null && !status.notifications) ...[
@@ -138,8 +138,7 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
             ],
             if (status != null && status.notifications && !status.exact) ...[
               const SizedBox(height: 10),
-              Text(s.t('boss_alert_exact_note'),
-                  style: const TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+              Text(s.t('boss_alert_exact_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 6),
               OutlinedButton(
                 onPressed: () async {

@@ -19,7 +19,9 @@ extension ExpansionLook on Expansion {
         Expansion.voe => 'VoE',
       };
 
-  Color get color => switch (this) {
+  Color get color => legible(_base);
+
+  Color get _base => switch (this) {
         Expansion.core => const Color(0xFFD0503F),
         Expansion.lws => const Color(0xFFD9A441),
         Expansion.hot => const Color(0xFF6DBB4E),

@@ -32,7 +32,7 @@ class AdminLimitBar extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700))),
-              Text('$usedText of $limitText', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text('$usedText of $limitText', style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 10),
@@ -94,13 +94,10 @@ class AdminStat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label.toUpperCase(),
-              style:
-                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
-          Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.hint)),
+          Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.gold)),
           Text(note,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: AppColors.muted)),
         ],
       ),
     );
@@ -174,7 +171,7 @@ class AdminHealth extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(line.label, style: const TextStyle(fontWeight: FontWeight.w700)),
-                        Text(line.detail, style: const TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35)),
+                        Text(line.detail, style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.35)),
                       ],
                     ),
                   ),
@@ -210,7 +207,7 @@ class AdminBars extends StatelessWidget {
             children: [
               Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
               Text(summary?.call(values) ?? '$total in 30 days',
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 12),
@@ -219,12 +216,10 @@ class AdminBars extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(days.isEmpty ? '' : short(days.first.day),
-                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.first.day), style: TextStyle(fontSize: 11, color: AppColors.hint)),
               Text(summary == null ? 'most in a day: $peak' : 'most: $peak',
-                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
-              Text(days.isEmpty ? '' : short(days.last.day),
-                  style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                  style: TextStyle(fontSize: 11, color: AppColors.hint)),
+              Text(days.isEmpty ? '' : short(days.last.day), style: TextStyle(fontSize: 11, color: AppColors.hint)),
             ],
           ),
         ],
@@ -268,10 +263,10 @@ class AdminVersions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final problem = history.problem('app_versions');
-    if (problem != null) return Panel(child: Text(problem, style: const TextStyle(color: AppColors.amber)));
+    if (problem != null) return Panel(child: Text(problem, style: TextStyle(color: AppColors.amber)));
     final rows = history.appVersions.where((v) => v.week > 0).toList();
     if (rows.isEmpty) {
-      return const Panel(
+      return Panel(
         child: Text(
             'No version has been opened since the counting began, a version is counted when the app is opened by a signed in player.',
             style: TextStyle(color: AppColors.muted, height: 1.4)),
@@ -294,8 +289,7 @@ class AdminVersions extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  SizedBox(
-                      width: 70, child: Text(v.platform, style: const TextStyle(fontSize: 12, color: AppColors.muted))),
+                  SizedBox(width: 70, child: Text(v.platform, style: TextStyle(fontSize: 12, color: AppColors.muted))),
                   SizedBox(
                       width: 70,
                       child: Text(v.version, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
@@ -309,7 +303,7 @@ class AdminVersions extends StatelessWidget {
                   SizedBox(
                     width: 52,
                     child: Text(fmtInt(v.week),
-                        textAlign: TextAlign.right, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                        textAlign: TextAlign.right, style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ),
                 ],
               ),
@@ -343,7 +337,7 @@ class AdminTab extends StatelessWidget {
           children: [
             Text(
               updated == null ? '' : 'Updated ${ago(updated!, DateTime.now())}',
-              style: const TextStyle(fontSize: 12, color: AppColors.muted),
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
             ),
             SplitColumns(primary: primary, secondary: secondary),
           ],

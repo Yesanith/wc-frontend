@@ -34,7 +34,7 @@ class _OverviewTab extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(s.t('gems_to_gold'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            Text(s.t('gems_to_gold'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                             const SizedBox(height: 4),
                             CoinText(r.coinsFor100Gems, size: 17),
                           ],
@@ -44,7 +44,7 @@ class _OverviewTab extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(s.t('gold_to_gems'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                            Text(s.t('gold_to_gems'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                             const SizedBox(height: 4),
                             Text(s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
                                 style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
@@ -74,7 +74,7 @@ class _OverviewTab extends ConsumerWidget {
                   onRetry: () => ref.invalidate(deliveryProvider),
                   builder: (d) {
                     if (d.coins == 0 && d.items.isEmpty) {
-                      return Text(s.t('delivery_empty'), style: const TextStyle(color: AppColors.muted));
+                      return Text(s.t('delivery_empty'), style: TextStyle(color: AppColors.muted));
                     }
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +103,7 @@ class _OverviewTab extends ConsumerWidget {
                           ),
                         ],
                         const SizedBox(height: 10),
-                        Text(s.t('pickup_note'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                        Text(s.t('pickup_note'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
                       ],
                     );
                   },
@@ -118,8 +118,7 @@ class _OverviewTab extends ConsumerWidget {
             value: watch,
             onRetry: () => ref.invalidate(watchlistPricesProvider),
             builder: (items) => items.isEmpty
-                ? Panel(
-                    child: Text(s.t('watchlist_empty'), style: const TextStyle(color: AppColors.muted, height: 1.5)))
+                ? Panel(child: Text(s.t('watchlist_empty'), style: TextStyle(color: AppColors.muted, height: 1.5)))
                 : Column(
                     children: [
                       for (final w in items) Padding(padding: const EdgeInsets.only(bottom: 8), child: WatchRow(w)),
@@ -175,11 +174,11 @@ class _ItemSearchFieldState extends ConsumerState<ItemSearchField> {
           onChanged: _search,
           decoration: fieldDecoration(
             s.t('search_items'),
-            prefixIcon: const Icon(Icons.search, color: AppColors.gold),
+            prefixIcon: Icon(Icons.search, color: AppColors.gold),
             suffixIcon: _ctrl.text.isEmpty
                 ? null
                 : IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.muted),
+                    icon: Icon(Icons.close, color: AppColors.muted),
                     onPressed: () {
                       _ctrl.clear();
                       _search('');
@@ -189,11 +188,11 @@ class _ItemSearchFieldState extends ConsumerState<ItemSearchField> {
         ),
         if (index.isLoading) ...[
           const SizedBox(height: 8),
-          const LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
+          LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
         ],
         if (index.valueOrNull?.isEmpty ?? false) ...[
           const SizedBox(height: 8),
-          Text(s.t('no_item_index'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+          Text(s.t('no_item_index'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
         ],
         if (_results.isNotEmpty) ...[
           const SizedBox(height: 8),
@@ -235,7 +234,7 @@ class _SearchResults extends ConsumerWidget {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('${s.t('buy_short')} ', style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                            Text('${s.t('buy_short')} ', style: TextStyle(fontSize: 11, color: AppColors.muted)),
                             CoinText(TpPrice.fromJson(prices[id]!).buy, size: 11),
                           ],
                         ),

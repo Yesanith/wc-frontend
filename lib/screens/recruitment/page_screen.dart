@@ -38,7 +38,7 @@ class RecruitPageScreen extends ConsumerWidget {
             child: Padding(
                 padding: const EdgeInsets.all(32),
                 child: Text(s.t('rec_unavailable'),
-                    textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)))),
+                    textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)))),
       );
     }
     final page = ref.watch(recruitPageProvider(guildId));
@@ -95,7 +95,7 @@ class RecruitPageScreen extends ConsumerWidget {
         value: page,
         onRetry: () => ref.invalidate(recruitPageProvider(guildId)),
         builder: (p) => p == null
-            ? Center(child: Text(s.t('rec_not_found'), style: const TextStyle(color: AppColors.muted)))
+            ? Center(child: Text(s.t('rec_not_found'), style: TextStyle(color: AppColors.muted)))
             : ContentFrame(maxWidth: readingMaxWidth, child: _PageBody(page: p)),
       ),
     );
@@ -172,8 +172,7 @@ class _PageBody extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label.toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
               const SizedBox(height: 6),
               child,
             ],
@@ -193,7 +192,7 @@ class _PageBody extends ConsumerWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.groups, size: 36, color: AppColors.gold),
+            Icon(Icons.groups, size: 36, color: AppColors.gold),
             const SizedBox(width: 12),
             Expanded(child: Text(page.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
           ],
@@ -219,12 +218,12 @@ class _PageBody extends ConsumerWidget {
           Padding(
               padding: const EdgeInsets.only(top: 14),
               child: Text(page.headline,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
         if (page.description.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: SelectableText(page.description,
-                style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
+                style: TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
           ),
         if (page.lookingFor.isNotEmpty)
           fact(
@@ -292,6 +291,6 @@ class _Tag extends StatelessWidget {
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(999),
             border: Border.all(color: AppColors.line)),
-        child: Text(text, style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+        child: Text(text, style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
       );
 }

@@ -39,8 +39,7 @@ class _RankCardState extends ConsumerState<_RankCard> {
                 Expanded(
                   child: Text('${widget.rank['id'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w800)),
                 ),
-                Text(s.t('n_members', {'n': widget.members}),
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                Text(s.t('n_members', {'n': widget.members}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 if (permissions.isNotEmpty)
                   Icon(_open ? Icons.expand_less : Icons.expand_more, color: AppColors.chevron),
               ],
@@ -49,7 +48,7 @@ class _RankCardState extends ConsumerState<_RankCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(s.t('n_permissions', {'n': permissions.length}),
-                    style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 11, color: AppColors.muted)),
               ),
             if (_open)
               for (final p in permissions)
@@ -63,7 +62,7 @@ class _RankCardState extends ConsumerState<_RankCard> {
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                       if ('${catalog[p]?['description'] ?? ''}'.isNotEmpty)
                         Text('${catalog[p]!['description']}',
-                            style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                            style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -84,8 +83,7 @@ class _SharedGuild extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    Widget note(String key) =>
-        Panel(child: Text(s.t(key), style: const TextStyle(color: AppColors.muted, height: 1.5)));
+    Widget note(String key) => Panel(child: Text(s.t(key), style: TextStyle(color: AppColors.muted, height: 1.5)));
 
     return ref.watch(tyriaGuildIdProvider(gw2Id)).when(
           loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
@@ -104,7 +102,7 @@ class _SharedGuild extends ConsumerWidget {
               children: [
                 GuildInfoCard(guildId: guildId, leading: false),
                 const SizedBox(height: 16),
-                Text(s.t('gshared_note'), style: const TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+                Text(s.t('gshared_note'), style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
                 const SizedBox(height: 10),
                 roster.when(
                   loading: () => const Padding(
@@ -137,7 +135,7 @@ class _SharedGuild extends ConsumerWidget {
                                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                               ),
                               Text(m.gw2Rank ?? s.t('guild_role_${m.role}'),
-                                  style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
                             ],
                           ),
                         ),

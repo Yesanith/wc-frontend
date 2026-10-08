@@ -32,7 +32,7 @@ class AdminUsersTab extends ConsumerWidget {
             const SizedBox(height: 10),
             AdminLimitBar(
                 'Users who signed in this month', monthly, freeMonthlyUsers, fmtInt(monthly), fmtInt(freeMonthlyUsers)),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(4, 10, 4, 0),
               child: Text(
                 'Traffic, file storage and function calls are counted by Supabase and shown on its dashboard, not in the database.',
@@ -52,7 +52,7 @@ class AdminUsersTab extends ConsumerWidget {
             Panel(
               child: Column(
                 children: [
-                  if (providers.isEmpty) const Text('None.', style: TextStyle(color: AppColors.muted)),
+                  if (providers.isEmpty) Text('None.', style: TextStyle(color: AppColors.muted)),
                   for (final e in providers.entries) AdminLine(e.key, fmtInt(asInt(e.value))),
                 ],
               ),

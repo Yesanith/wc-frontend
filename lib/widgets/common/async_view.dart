@@ -56,19 +56,19 @@ class ErrorBox extends ConsumerWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.error_outline, color: AppColors.red, size: 20),
+              Icon(Icons.error_outline, color: AppColors.red, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(text, style: const TextStyle(color: AppColors.textSoft, fontSize: 14)),
+                    Text(text, style: TextStyle(color: AppColors.textSoft, fontSize: 14)),
                     if (detail != null) ...[
                       const SizedBox(height: 4),
                       Text(detail,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: AppColors.hint, fontSize: 11)),
+                          style: TextStyle(color: AppColors.hint, fontSize: 11)),
                     ],
                   ],
                 ),
@@ -130,7 +130,7 @@ class AsyncView<T> extends ConsumerWidget {
           final note = hasPermission ? restricted : s.t('needs_permission', {'p': needed});
           if (note != null) {
             return Panel(
-              child: Text(note, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+              child: Text(note, style: TextStyle(color: AppColors.muted, height: 1.5)),
             );
           }
         }
@@ -155,7 +155,7 @@ class EmptyNote extends ConsumerWidget {
     final text = Text(
       message,
       textAlign: center ? TextAlign.center : TextAlign.start,
-      style: const TextStyle(color: AppColors.muted, height: 1.4),
+      style: TextStyle(color: AppColors.muted, height: 1.4),
     );
     if (url == null) return center ? Center(child: text) : text;
     final column = Column(
@@ -183,14 +183,14 @@ class NeedsKeyView extends ConsumerWidget {
       padding: const EdgeInsets.all(28),
       children: [
         const SizedBox(height: 56),
-        const Icon(Icons.vpn_key_outlined, size: 48, color: AppColors.gold),
+        Icon(Icons.vpn_key_outlined, size: 48, color: AppColors.gold),
         const SizedBox(height: 16),
         Text(s.t('needs_key_title'), textAlign: TextAlign.center, style: display(22)),
         const SizedBox(height: 10),
         Text(
           s.t('needs_key_body'),
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 14, height: 1.5, color: AppColors.muted),
+          style: TextStyle(fontSize: 14, height: 1.5, color: AppColors.muted),
         ),
         const SizedBox(height: 22),
         Center(

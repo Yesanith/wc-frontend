@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/gestures.dart' show PointerScrollEvent;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -130,38 +131,46 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
         return Stack(
           children: [
             Positioned.fill(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onScaleStart: (d) {
-                  _gestureZoom = _zoom;
-                  _gestureWorld = _toWorld(info, d.localFocalPoint);
+              // the wheel of a mouse zooms around the pointer, a notch a third of a level
+              child: Listener(
+                onPointerSignal: (event) {
+                  if (event is PointerScrollEvent) {
+                    _zoomAround(info, event.localPosition, _zoom - event.scrollDelta.dy / 300);
+                  }
                 },
-                onScaleUpdate: (d) {
-                  final zoom = (_gestureZoom + math.log(d.scale) / math.ln2)
-                      .clamp(info.minZoom.toDouble(), info.maxZoom + 1.0)
-                      .toDouble();
-                  final sc = math.pow(2, zoom - info.maxZoom).toDouble();
-                  setState(() {
-                    _zoom = zoom;
-                    _center = _clampCenter(
-                      info,
-                      Offset(
-                        _gestureWorld.dx - (d.localFocalPoint.dx - _viewport.width / 2) / sc,
-                        _gestureWorld.dy - (d.localFocalPoint.dy - _viewport.height / 2) / sc,
-                      ),
-                    );
-                  });
-                },
-                onDoubleTapDown: (d) => _doubleTapAt = d.localPosition,
-                onDoubleTap: () => _zoomAround(info, _doubleTapAt ?? _viewport.center(Offset.zero), _zoom + 1),
-                child: ClipRect(
-                  child: Stack(
-                    children: [
-                      Positioned.fill(child: Container(color: const Color(0xFF0C1A22))),
-                      ..._tiles(info),
-                      ..._labels(info, list),
-                      ..._markers(info, list, icons, s),
-                    ],
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onScaleStart: (d) {
+                    _gestureZoom = _zoom;
+                    _gestureWorld = _toWorld(info, d.localFocalPoint);
+                  },
+                  onScaleUpdate: (d) {
+                    final zoom = (_gestureZoom + math.log(d.scale) / math.ln2)
+                        .clamp(info.minZoom.toDouble(), info.maxZoom + 1.0)
+                        .toDouble();
+                    final sc = math.pow(2, zoom - info.maxZoom).toDouble();
+                    setState(() {
+                      _zoom = zoom;
+                      _center = _clampCenter(
+                        info,
+                        Offset(
+                          _gestureWorld.dx - (d.localFocalPoint.dx - _viewport.width / 2) / sc,
+                          _gestureWorld.dy - (d.localFocalPoint.dy - _viewport.height / 2) / sc,
+                        ),
+                      );
+                    });
+                  },
+                  onDoubleTapDown: (d) => _doubleTapAt = d.localPosition,
+                  onDoubleTap: () => _zoomAround(info, _doubleTapAt ?? _viewport.center(Offset.zero), _zoom + 1),
+                  child: ClipRect(
+                    child: Stack(
+                      children: [
+                        Positioned.fill(child: Container(color: const Color(0xFF0C1A22))),
+                        ..._tiles(info),
+                        ..._labels(info, list),
+                        ..._markers(info, list, icons, s),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -182,7 +191,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
               ),
             ),
             if (markers.isLoading)
-              const Positioned(
+              Positioned(
                 left: 0,
                 right: 0,
                 top: 0,
@@ -424,8 +433,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-              Text('${_kindLabel(s, m.kind)} · ${m.mapName}',
-                  style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+              Text('${_kindLabel(s, m.kind)} · ${m.mapName}', style: TextStyle(fontSize: 13, color: AppColors.muted)),
               if (m.chatLink.isNotEmpty) ...[
                 const SizedBox(height: 14),
                 OutlinedButton.icon(

@@ -16,9 +16,8 @@ class BuildDetailScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('build'), style: display(20)),
+        title: Text(s.t('build'), style: display(20, color: AppColors.accent)),
       ),
       body: BuildView(buildData: buildData, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24)),
     );

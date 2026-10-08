@@ -32,7 +32,7 @@ class AdminHistoryTab extends ConsumerWidget {
           primary: [
             const Eyebrow('Players'),
             if (problem != null)
-              Panel(child: Text(problem, style: const TextStyle(color: AppColors.amber)))
+              Panel(child: Text(problem, style: TextStyle(color: AppColors.amber)))
             else ...[
               AdminBars(title: 'Players', days: last30('users'), summary: now),
               const SizedBox(height: 10),
