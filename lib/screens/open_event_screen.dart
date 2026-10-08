@@ -436,7 +436,7 @@ class _Roster extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     return ref.watch(openRosterProvider(eventId)).when(
           loading: () => Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Center(
                 child: SizedBox(
                     width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),

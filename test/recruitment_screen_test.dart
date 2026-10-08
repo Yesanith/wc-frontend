@@ -22,7 +22,7 @@ const _id = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
 Session _session() => Session(
       accessToken: 'token',
       tokenType: 'bearer',
-      user: User(id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
+      user: const User(id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
     );
 
 RecruitCard _card(String name,
@@ -599,7 +599,7 @@ void main() {
     });
 
     testWidgets('leaves out what the guild did not say, and the region when it takes players of any', (tester) async {
-      final p = RecruitPage(
+      const p = RecruitPage(
           guildId: _id,
           gw2GuildId: 'g',
           name: 'Plain',
@@ -831,7 +831,7 @@ void main() {
         'lets a guild choose five tags in all, between what it looks for and its languages, and the others wait until one is taken off',
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      final s = S(AppLang.en);
+      const s = S(AppLang.en);
       Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
       Finder lang(int i) => find.widgetWithText(FilterChip, recruitLanguageLabel(recruitLanguages[i]));
       for (final i in [0, 1, 2]) {
@@ -891,7 +891,7 @@ void main() {
     testWidgets(
         'keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is',
         (tester) async {
-      final old = RecruitPage(
+      const old = RecruitPage(
         guildId: _id,
         gw2GuildId: 'g',
         name: 'M',
@@ -925,7 +925,7 @@ void main() {
     });
 
     testWidgets('keeps a language the app has no choice for, so that it can be taken off', (tester) async {
-      final p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: const ['it'], canEdit: true);
+      const p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: const ['it'], canEdit: true);
       await editor(tester, FakeRecruit(current: p));
       expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'IT')).selected, isTrue);
     });
@@ -1094,10 +1094,10 @@ void main() {
 
   group('who may edit the page', () {
     final roster = [
-      RosterMember('u-leader', 'Leo.1', 'leader'),
-      RosterMember('u2', 'Mira.2', 'member'),
-      RosterMember('u3', 'Kai.3', 'officer'),
-      RosterMember('u4', 'Zed.4', 'member'),
+      const RosterMember('u-leader', 'Leo.1', 'leader'),
+      const RosterMember('u2', 'Mira.2', 'member'),
+      const RosterMember('u3', 'Kai.3', 'officer'),
+      const RosterMember('u4', 'Zed.4', 'member'),
     ];
 
     Future<FakeRecruit> open(WidgetTester tester, FakeRecruit fake) async {
@@ -1118,14 +1118,14 @@ void main() {
 
     testWidgets('lists those who were allowed, by the account they play, each with a way to take it back',
         (tester) async {
-      await open(tester, FakeRecruit(allowed: [RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
+      await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       expect(find.text('Mira.2'), findsOneWidget);
       expect(find.text('Take it back'), findsOneWidget);
       expect(find.text('Nobody besides you.'), findsNothing);
     });
 
     testWidgets('takes it back, and the list is without them', (tester) async {
-      final fake = await open(tester, FakeRecruit(allowed: [RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
+      final fake = await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();
       expect(fake.revokes, ['u2']);
@@ -1134,7 +1134,7 @@ void main() {
     });
 
     testWidgets('offers the members of the guild who are not its leader and were not allowed already', (tester) async {
-      await open(tester, FakeRecruit(allowed: [RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
+      await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       await tester.tap(find.text('Allow a member'));
       await tester.pumpAndSettle();
       expect(find.text('Choose a member'), findsOneWidget);
@@ -1168,9 +1168,9 @@ void main() {
       await open(
           tester,
           FakeRecruit(allowed: [
-            RecruiterEntry(userId: 'u2', accountName: 'Mira.2'),
-            RecruiterEntry(userId: 'u3', accountName: 'Kai.3'),
-            RecruiterEntry(userId: 'u4', accountName: 'Zed.4'),
+            const RecruiterEntry(userId: 'u2', accountName: 'Mira.2'),
+            const RecruiterEntry(userId: 'u3', accountName: 'Kai.3'),
+            const RecruiterEntry(userId: 'u4', accountName: 'Zed.4'),
           ]));
       await tester.tap(find.text('Allow a member'));
       await tester.pumpAndSettle();
@@ -1181,7 +1181,7 @@ void main() {
 
     testWidgets('tells why the database refused to allow or to take back', (tester) async {
       final fake = FakeRecruit(
-          allowed: [RecruiterEntry(userId: 'u2', accountName: 'Mira.2')], fail: const RecruitFailure('not_member'));
+          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')], fail: const RecruitFailure('not_member'));
       await open(tester, fake);
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();

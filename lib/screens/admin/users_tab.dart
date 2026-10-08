@@ -33,7 +33,7 @@ class AdminUsersTab extends ConsumerWidget {
             AdminLimitBar(
                 'Users who signed in this month', monthly, freeMonthlyUsers, fmtInt(monthly), fmtInt(freeMonthlyUsers)),
             Padding(
-              padding: EdgeInsets.fromLTRB(4, 10, 4, 0),
+              padding: const EdgeInsets.fromLTRB(4, 10, 4, 0),
               child: Text(
                 'Traffic, file storage and function calls are counted by Supabase and shown on its dashboard, not in the database.',
                 style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4),

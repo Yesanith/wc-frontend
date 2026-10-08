@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../api/gw2_api.dart';
 import '../../screens/onboarding_screen.dart';
 import '../../services/icon_cache.dart';
 import '../../state/api.dart';

@@ -71,10 +71,10 @@ class StageHero extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.window),
         border: Border.all(color: AppColors.line),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.skyTop, AppColors.skyBottom],
+          colors: const [AppColors.skyTop, AppColors.skyBottom],
         ),
       ),
       clipBehavior: Clip.antiAlias,

@@ -116,7 +116,7 @@ class _Rows extends StatelessWidget {
               const SizedBox(height: 8),
               if (rows.isEmpty)
                 Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Center(child: Text('No row has that.', style: TextStyle(color: AppColors.muted))),
                 ),
               for (final row in rows) _RowCard(columns: columns, row: row, orderedBy: page.orderedBy, now: now),

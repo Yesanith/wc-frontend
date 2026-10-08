@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/gw2_api.dart';
 import '../data/collections.dart';
 import '../services/cache.dart';
 import '../util.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/gw2_api.dart';
 import '../services/recipe_book.dart';
 import '../util.dart';
 import 'api.dart';

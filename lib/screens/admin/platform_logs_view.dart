@@ -198,7 +198,7 @@ class _PlatformPage extends ConsumerWidget {
           children: [
             if (newest && data.rows.isEmpty)
               Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child: Center(
                   child: Text('Nothing was recorded in this window. Try a longer one.',
                       textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),

@@ -18,7 +18,7 @@ const _id = '3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c';
 Session _session() => Session(
       accessToken: 'token',
       tokenType: 'bearer',
-      user: User(id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
+      user: const User(id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
     );
 
 void main() {
@@ -37,7 +37,7 @@ void main() {
     test('waits while the session is being read, and says to sign in when it was read and there is none', () {
       expect(eventAccess(ready: true, session: const AsyncLoading<Object?>()), EventAccess.waiting);
       expect(eventAccess(ready: true, session: const AsyncData<Object?>(null)), EventAccess.signInNeeded);
-      expect(eventAccess(ready: true, session: AsyncError<Object?>('x', StackTrace.empty)), EventAccess.signInNeeded);
+      expect(eventAccess(ready: true, session: const AsyncError<Object?>('x', StackTrace.empty)), EventAccess.signInNeeded);
     });
 
     test('is open while a session is there even if it is being read again', () {

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
 import 'package:tyria_codex/l10n/strings.dart';
 import 'package:tyria_codex/state/api.dart';
 import 'package:tyria_codex/state/settings.dart';
