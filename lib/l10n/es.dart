@@ -648,6 +648,8 @@ const esStrings = <String, String>{
   'goals_shopping': 'Lista de compras',
   'goal_remove': 'Quitar',
   'goals_complete': 'Tienes todo para tus objetivos.',
+  'goals_share': 'Compartir',
+  'goals_share_missing': 'Aún falta',
   'widget_next': 'Próximo evento fijado',
   'widget_next_boss': 'Próximo jefe mundial',
   'widget_daily': 'Reinicio diario',

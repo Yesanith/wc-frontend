@@ -647,6 +647,8 @@ const enStrings = <String, String>{
   'goals_shopping': 'Shopping list',
   'goal_remove': 'Remove',
   'goals_complete': 'You have everything for your goals.',
+  'goals_share': 'Share',
+  'goals_share_missing': 'Still needed',
   'widget_next': 'Next pinned event',
   'widget_next_boss': 'Next world boss',
   'widget_daily': 'Daily reset',

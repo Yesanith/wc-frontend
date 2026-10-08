@@ -605,6 +605,8 @@ const zhStrings = <String, String>{
   'goals_shopping': '购物清单',
   'goal_remove': '移除',
   'goals_complete': '你已备齐所有目标所需的材料。',
+  'goals_share': '分享',
+  'goals_share_missing': '仍需要',
   'widget_next': '下一个已固定的事件',
   'widget_next_boss': '下一个世界首领',
   'widget_daily': '每日重置',

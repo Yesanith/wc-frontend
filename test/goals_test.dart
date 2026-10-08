@@ -133,4 +133,24 @@ void main() {
       expect(done.unpriced, 0);
     });
   });
+
+  group('goalsShareText', () {
+    test('lists the goals and what is still missing', () {
+      final text = goalsShareText(
+        title: 'My goals · Tyria Codex',
+        missingLabel: 'Still needed',
+        goals: const [('Gift of Adventure', 1), ('Gift of Fortune', 2)],
+        missing: const [('Mystic Clover', 48), ('Obsidian Shard', 54)],
+      );
+      expect(
+        text,
+        'My goals · Tyria Codex\n• Gift of Adventure x1\n• Gift of Fortune x2\n\nStill needed\n• Mystic Clover x48\n• Obsidian Shard x54',
+      );
+    });
+
+    test('has no list of missing things when there is nothing missing', () {
+      final text = goalsShareText(title: 'T', missingLabel: 'M', goals: const [('A', 1)], missing: const []);
+      expect(text, 'T\n• A x1');
+    });
+  });
 }

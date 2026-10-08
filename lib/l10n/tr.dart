@@ -643,6 +643,8 @@ const trStrings = <String, String>{
   'goals_shopping': 'Alışveriş listesi',
   'goal_remove': 'Kaldır',
   'goals_complete': 'Hedeflerin için her şeye sahipsin.',
+  'goals_share': 'Paylaş',
+  'goals_share_missing': 'Hâlâ gerekenler',
   'widget_next': 'Sıradaki sabitlenen etkinlik',
   'widget_next_boss': 'Sıradaki dünya patronu',
   'widget_daily': 'Günlük sıfırlama',

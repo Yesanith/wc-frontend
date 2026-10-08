@@ -607,6 +607,8 @@ const jaStrings = <String, String>{
   'goals_shopping': '買い物リスト',
   'goal_remove': '削除',
   'goals_complete': 'ゴールに必要なものはすべて揃っています。',
+  'goals_share': '共有',
+  'goals_share_missing': 'まだ必要なもの',
   'widget_next': '次のピン留めイベント',
   'widget_next_boss': '次のワールドボス',
   'widget_daily': 'デイリーリセット',

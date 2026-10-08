@@ -656,6 +656,8 @@ const deStrings = <String, String>{
   'goals_shopping': 'Einkaufsliste',
   'goal_remove': 'Entfernen',
   'goals_complete': 'Du hast alles für deine Ziele.',
+  'goals_share': 'Teilen',
+  'goals_share_missing': 'Noch nötig',
   'widget_next': 'Nächstes angeheftetes Ereignis',
   'widget_next_boss': 'Nächster Weltboss',
   'widget_daily': 'Täglicher Reset',
