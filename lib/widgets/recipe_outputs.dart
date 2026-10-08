@@ -38,9 +38,7 @@ class RecipeOutputRow extends ConsumerWidget {
     final index = ref.watch(itemIndexProvider).valueOrNull;
     final name = (item?['name'] as String?) ?? index?.nameOf(entry.output) ?? s.t('item_n', {'id': entry.output});
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: entry.output)),
-      ),
+      onTap: () => openPanel(context, (_) => CraftingDetailScreen(itemId: entry.output)),
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [

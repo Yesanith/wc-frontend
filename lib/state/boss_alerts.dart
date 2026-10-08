@@ -12,15 +12,36 @@ const bossAlertLeads = [5, 10, 15, 30];
 const defaultBossAlertLead = 10;
 
 class BossAlertSettings {
-  const BossAlertSettings({this.enabled = true, this.lead = defaultBossAlertLead});
+  const BossAlertSettings({
+    this.enabled = true,
+    this.lead = defaultBossAlertLead,
+    this.resetDaily = false,
+    this.resetWeekly = false,
+  });
 
   final bool enabled;
   final int lead;
+
+  /// a reminder an hour before the daily and the weekly reset, off until the player asks for it
+  final bool resetDaily;
+  final bool resetWeekly;
+
+  BossAlertSettings copyWith({bool? enabled, int? lead, bool? resetDaily, bool? resetWeekly}) => BossAlertSettings(
+        enabled: enabled ?? this.enabled,
+        lead: lead ?? this.lead,
+        resetDaily: resetDaily ?? this.resetDaily,
+        resetWeekly: resetWeekly ?? this.resetWeekly,
+      );
+
+  /// whether any reminder of a reset is wanted
+  bool get anyReset => resetDaily || resetWeekly;
 }
 
 class BossAlertSettingsNotifier extends Notifier<BossAlertSettings> {
   static const _enabledKey = 'boss_alerts_enabled';
   static const _leadKey = 'boss_alerts_lead';
+  static const _resetDailyKey = 'reset_alert_daily';
+  static const _resetWeeklyKey = 'reset_alert_weekly';
 
   @override
   BossAlertSettings build() {
@@ -29,18 +50,30 @@ class BossAlertSettingsNotifier extends Notifier<BossAlertSettings> {
     return BossAlertSettings(
       enabled: prefs.getBool(_enabledKey) ?? true,
       lead: lead != null && bossAlertLeads.contains(lead) ? lead : defaultBossAlertLead,
+      resetDaily: prefs.getBool(_resetDailyKey) ?? false,
+      resetWeekly: prefs.getBool(_resetWeeklyKey) ?? false,
     );
   }
 
   Future<void> setEnabled(bool on) async {
-    state = BossAlertSettings(enabled: on, lead: state.lead);
+    state = state.copyWith(enabled: on);
     await ref.read(prefsProvider).setBool(_enabledKey, on);
   }
 
   Future<void> setLead(int minutes) async {
     if (!bossAlertLeads.contains(minutes)) return;
-    state = BossAlertSettings(enabled: state.enabled, lead: minutes);
+    state = state.copyWith(lead: minutes);
     await ref.read(prefsProvider).setInt(_leadKey, minutes);
+  }
+
+  Future<void> setResetDaily(bool on) async {
+    state = state.copyWith(resetDaily: on);
+    await ref.read(prefsProvider).setBool(_resetDailyKey, on);
+  }
+
+  Future<void> setResetWeekly(bool on) async {
+    state = state.copyWith(resetWeekly: on);
+    await ref.read(prefsProvider).setBool(_resetWeeklyKey, on);
   }
 }
 
@@ -63,6 +96,22 @@ final bossAlertsRecheckProvider = NotifierProvider<BossAlertsRecheck, int>(BossA
 BossAlertPlan alertsFor(Set<String> pins, int lead, S s) =>
     planBossAlerts(pins: pins, lead: lead, body: (map) => s.t('boss_alert_body', {'n': lead, 'map': map.name}));
 
+/// the reminders of the resets the player asked for, in the app's language
+List<BossAlert> resetAlertsFor(BossAlertSettings settings, S s) => planResetAlerts(
+      daily: settings.resetDaily,
+      weekly: settings.resetWeekly,
+      dailyTitle: s.t('reset_notify_daily_title'),
+      dailyBody: s.t('reset_notify_daily_body'),
+      weeklyTitle: s.t('reset_notify_weekly_title'),
+      weeklyBody: s.t('reset_notify_weekly_body'),
+    );
+
+/// everything the phone is to be told of: the pinned events when their alerts are on, and the resets
+List<BossAlert> allAlertsFor(Set<String> pins, BossAlertSettings settings, S s) => [
+      if (settings.enabled) ...alertsFor(pins, settings.lead, s).alerts,
+      ...resetAlertsFor(settings, s),
+    ];
+
 const _sigKey = 'boss_alerts_sig';
 const _onToldKey = 'boss_alerts_on_told';
 const _deniedToldKey = 'boss_alerts_denied_told';
@@ -76,7 +125,7 @@ Future<void> syncBossAlerts({
   required SharedPreferences prefs,
 }) async {
   if (!bossAlertsReady) return;
-  final alerts = settings.enabled ? alertsFor(pins, settings.lead, s).alerts : const <BossAlert>[];
+  final alerts = allAlertsFor(pins, settings, s);
   if (alerts.isEmpty) {
     if (prefs.getString(_sigKey) != null || await pendingBossAlerts() > 0) {
       await cancelBossAlerts();
