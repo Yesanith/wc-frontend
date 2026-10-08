@@ -669,6 +669,16 @@ const deStrings = <String, String>{
   'profit': 'Gewinn',
   'sort_profit': 'Höchster Gewinn',
   'sort_return': 'Beste Rendite',
+  'reset_alerts_title': 'Reset-Erinnerungen',
+  'reset_alerts_note':
+      'Eine Erinnerung eine Stunde vor dem Reset, damit die Magiertresor-Ziele und die Dailys nicht vergessen werden.',
+  'reset_alert_daily': 'Täglicher Reset',
+  'reset_alert_weekly': 'Wöchentlicher Reset',
+  'reset_notify_daily_title': 'Täglicher Reset in einer Stunde',
+  'reset_notify_daily_body': 'Schließe den Magiertresor und deine Tagesziele ab, bevor sie zurückgesetzt werden.',
+  'reset_notify_weekly_title': 'Wöchentlicher Reset in einer Stunde',
+  'reset_notify_weekly_body':
+      'Schließe die wöchentlichen Magiertresor-Ziele und die Raids ab, bevor sie zurückgesetzt werden.',
   'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':

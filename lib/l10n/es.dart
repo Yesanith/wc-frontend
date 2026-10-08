@@ -661,6 +661,15 @@ const esStrings = <String, String>{
   'profit': 'Beneficio',
   'sort_profit': 'Mayor beneficio',
   'sort_return': 'Mejor rentabilidad',
+  'reset_alerts_title': 'Recordatorios de reinicio',
+  'reset_alerts_note': 'Un aviso una hora antes del reinicio, para no olvidar la Cámara del Mago ni las diarias.',
+  'reset_alert_daily': 'Reinicio diario',
+  'reset_alert_weekly': 'Reinicio semanal',
+  'reset_notify_daily_title': 'Reinicio diario en una hora',
+  'reset_notify_daily_body': 'Termina la Cámara del Mago y tus objetivos diarios antes de que se reinicien.',
+  'reset_notify_weekly_title': 'Reinicio semanal en una hora',
+  'reset_notify_weekly_body':
+      'Termina los objetivos semanales de la Cámara del Mago y las incursiones antes de que se reinicien.',
   'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
   'landing_sub':

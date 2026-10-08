@@ -664,6 +664,17 @@ const frStrings = <String, String>{
   'profit': 'Bénéfice',
   'sort_profit': 'Plus gros bénéfice',
   'sort_return': 'Meilleur rendement',
+  'reset_alerts_title': 'Rappels de réinitialisation',
+  'reset_alerts_note':
+      'Un rappel une heure avant la réinitialisation, pour ne pas oublier le Coffre du Magicien ni les quotidiennes.',
+  'reset_alert_daily': 'Réinitialisation quotidienne',
+  'reset_alert_weekly': 'Réinitialisation hebdomadaire',
+  'reset_notify_daily_title': 'Réinitialisation quotidienne dans une heure',
+  'reset_notify_daily_body':
+      'Termine le Coffre du Magicien et tes objectifs quotidiens avant qu\'ils ne se réinitialisent.',
+  'reset_notify_weekly_title': 'Réinitialisation hebdomadaire dans une heure',
+  'reset_notify_weekly_body':
+      'Termine les objectifs hebdomadaires du Coffre du Magicien et les raids avant qu\'ils ne se réinitialisent.',
   'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
   'landing_title': 'Ton compagnon Guild Wars 2',
   'landing_sub':

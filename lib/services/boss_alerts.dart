@@ -11,12 +11,21 @@ import '../data/metas.dart';
 /// every day: the phone's alarm system keeps it going with the app closed
 /// and after a reboot, no server and no need to open the app again.
 class BossAlert {
-  const BossAlert({required this.id, required this.minuteOfDay, required this.title, required this.body});
+  const BossAlert({
+    required this.id,
+    required this.minuteOfDay,
+    required this.title,
+    required this.body,
+    this.weekday,
+  });
 
   final int id;
 
   /// when it fires, minutes after midnight utc
   final int minuteOfDay;
+
+  /// the day of the week it fires on, 1 for Monday to 7 for Sunday in utc, for the alerts that come once a week. null repeats daily
+  final int? weekday;
   final String title;
   final String body;
 }
@@ -102,21 +111,63 @@ BossAlertPlan planBossAlerts({
   return BossAlertPlan(out, skipped);
 }
 
-/// the next moment, utc, this time of day comes round
-DateTime nextAlertAt(DateTime now, int minuteOfDay) {
+/// the next moment, utc, this time of day comes round, on the given day of the week when there is one
+DateTime nextAlertAt(DateTime now, int minuteOfDay, {int? weekday}) {
   final n = now.toUtc();
   var at = DateTime.utc(n.year, n.month, n.day).add(Duration(minutes: minuteOfDay));
   // a few seconds of grace: the plugin refuses a moment that has passed
-  if (!at.isAfter(n.add(const Duration(seconds: 10)))) at = at.add(const Duration(days: 1));
+  final earliest = n.add(const Duration(seconds: 10));
+  if (weekday == null) {
+    if (!at.isAfter(earliest)) at = at.add(const Duration(days: 1));
+    return at;
+  }
+  // the weekdays of DateTime are the same: 1 is Monday
+  at = at.add(Duration(days: (weekday - at.weekday) % 7));
+  if (!at.isAfter(earliest)) at = at.add(const Duration(days: 7));
   return at;
 }
+
+/// the notification ids of the two resets, apart from the ones of the events
+const dailyResetAlertId = 2000000001;
+const weeklyResetAlertId = 2000000002;
+
+/// how long before a reset the reminder comes, in minutes
+const resetAlertLead = 60;
+
+/// the reminders of the resets, which come an hour before them: the daily reset is at midnight utc and the weekly
+/// one at 07:30 utc on Monday. the words are those of the language of the app
+List<BossAlert> planResetAlerts({
+  required bool daily,
+  required bool weekly,
+  required String dailyTitle,
+  required String dailyBody,
+  required String weeklyTitle,
+  required String weeklyBody,
+}) =>
+    [
+      if (daily)
+        BossAlert(
+          id: dailyResetAlertId,
+          minuteOfDay: (0 - resetAlertLead) % 1440,
+          title: dailyTitle,
+          body: dailyBody,
+        ),
+      if (weekly)
+        BossAlert(
+          id: weeklyResetAlertId,
+          minuteOfDay: (7 * 60 + 30 - resetAlertLead) % 1440,
+          weekday: DateTime.monday,
+          title: weeklyTitle,
+          body: weeklyBody,
+        ),
+    ];
 
 /// changes when anything about the scheduled alerts changes, so an
 /// unchanged plan is not scheduled again
 String alertsSignature(List<BossAlert> alerts, {required bool exact}) {
   final text = [
     exact ? 'exact' : 'inexact',
-    for (final a in alerts) '${a.id}:${a.minuteOfDay}:${a.title}:${a.body}',
+    for (final a in alerts) '${a.id}:${a.minuteOfDay}:${a.weekday ?? 0}:${a.title}:${a.body}',
   ].join('\n');
   return _fnv1a(text).toRadixString(16);
 }
@@ -267,7 +318,7 @@ Future<void> scheduleBossAlerts(
   final mode = exact ? AndroidScheduleMode.exactAllowWhileIdle : AndroidScheduleMode.inexactAllowWhileIdle;
   final at = now ?? DateTime.now();
   for (final a in alerts) {
-    final when = nextAlertAt(at, a.minuteOfDay);
+    final when = nextAlertAt(at, a.minuteOfDay, weekday: a.weekday);
     await _plugin.zonedSchedule(
       id: a.id,
       scheduledDate: tz.TZDateTime.utc(when.year, when.month, when.day, when.hour, when.minute),
@@ -276,8 +327,8 @@ Future<void> scheduleBossAlerts(
       title: a.title,
       body: a.body,
       payload: _payload,
-      // the time of day repeats daily, in utc where the schedule lives
-      matchDateTimeComponents: DateTimeComponents.time,
+      // the time of day repeats daily, in utc where the schedule lives, or the day of the week and the time weekly
+      matchDateTimeComponents: a.weekday == null ? DateTimeComponents.time : DateTimeComponents.dayOfWeekAndTime,
     );
   }
 }

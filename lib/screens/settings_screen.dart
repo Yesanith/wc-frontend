@@ -158,6 +158,8 @@ class SettingsScreen extends ConsumerWidget {
         if (bossAlertsReady) ...[
           const SizedBox(height: 16),
           const _BossAlertsPanel(),
+          const SizedBox(height: 16),
+          const _ResetAlertsPanel(),
           // what the trading post did for the player, from the phone: the api key stays on it
           if (!kIsWeb) ...[
             const SizedBox(height: 16),
