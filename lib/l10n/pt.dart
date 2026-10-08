@@ -658,6 +658,7 @@ const ptStrings = <String, String>{
   'craft_profit_note':
       'As receitas que mais rendem no posto de comércio agora. O custo conta os materiais da receita, cada um pela menor oferta, e o resultado é vendido um cobre abaixo da menor oferta, depois das taxas de 15%. Os preços mudam, confira antes de comprar.',
   'craft_profit_empty': 'Nada dá lucro com estes filtros agora.',
+  'craft_profit_age': 'Preços lidos há {n} min',
   'craft_cost': 'Materiais',
   'profit': 'Lucro',
   'sort_profit': 'Maior lucro',

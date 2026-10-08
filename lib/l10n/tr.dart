@@ -654,6 +654,7 @@ const trStrings = <String, String>{
   'craft_profit_note':
       'Şu anda ticaret merkezinde en çok kazandıran tarifler. Maliyet, tarifin malzemelerini en düşük ilan fiyatından sayar; sonuç, %15 ücret düşüldükten sonra en düşük ilanın bir bakır altına satılır. Fiyatlar değişir, almadan önce kontrol et.',
   'craft_profit_empty': 'Bu filtrelerle şu anda kazandıran bir şey yok.',
+  'craft_profit_age': 'Fiyatlar {n} dk önce okundu',
   'craft_cost': 'Malzemeler',
   'profit': 'Kâr',
   'sort_profit': 'En çok kâr',

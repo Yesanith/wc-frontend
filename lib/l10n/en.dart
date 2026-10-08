@@ -658,6 +658,7 @@ const enStrings = <String, String>{
   'craft_profit_note':
       'The recipes that earn the most at the trading post right now. The cost counts the materials of the recipe, each at the lowest listing, and the result is sold a copper under the lowest listing after the 15% fees. Prices move, check them before you buy.',
   'craft_profit_empty': 'Nothing earns anything with these filters right now.',
+  'craft_profit_age': 'Prices read {n} min ago',
   'craft_cost': 'Materials',
   'profit': 'Profit',
   'sort_profit': 'Most profit',

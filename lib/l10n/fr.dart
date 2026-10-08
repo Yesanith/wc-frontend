@@ -662,6 +662,7 @@ const frStrings = <String, String>{
   'craft_profit_note':
       'Les recettes qui rapportent le plus au comptoir de commerce en ce moment. Le coût compte les matériaux de la recette, chacun à l\'offre la plus basse, et le résultat se vend un cuivre sous l\'offre la plus basse après 15 % de frais. Les prix bougent, vérifie-les avant d\'acheter.',
   'craft_profit_empty': 'Rien ne rapporte avec ces filtres en ce moment.',
+  'craft_profit_age': 'Prix lus il y a {n} min',
   'craft_cost': 'Matériaux',
   'profit': 'Bénéfice',
   'sort_profit': 'Plus gros bénéfice',

@@ -667,6 +667,7 @@ const deStrings = <String, String>{
   'craft_profit_note':
       'Die Rezepte, die am Handelsposten gerade am meisten einbringen. Die Kosten zählen die Materialien des Rezepts, jedes zum niedrigsten Angebot, und das Ergebnis wird ein Kupfer unter dem niedrigsten Angebot verkauft, nach 15 % Gebühren. Preise ändern sich, prüfe sie vor dem Kauf.',
   'craft_profit_empty': 'Mit diesen Filtern lohnt sich gerade nichts.',
+  'craft_profit_age': 'Preise vor {n} Min. gelesen',
   'craft_cost': 'Materialien',
   'profit': 'Gewinn',
   'sort_profit': 'Höchster Gewinn',
