@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../state/account.dart';
 import '../state/goals.dart';
@@ -30,6 +31,12 @@ class GoalsScreen extends ConsumerWidget {
         surfaceTintColor: Colors.transparent,
         title: Text(s.t('goals'), style: display(20, color: AppColors.accent)),
         actions: [
+          if (goals.isNotEmpty)
+            IconButton(
+              tooltip: s.t('goals_share'),
+              icon: const Icon(Icons.share_outlined),
+              onPressed: () => _share(ref, s.t('goals'), s.t('goals_share_missing'), goals, list),
+            ),
           if (goals.isNotEmpty)
             IconButton(
               tooltip: s.t('goals_clear'),
@@ -69,6 +76,21 @@ class GoalsScreen extends ConsumerWidget {
               ],
             ),
     );
+  }
+
+  /// the goals and what is still to get, as text for a message or a note
+  Future<void> _share(WidgetRef ref, String title, String missingLabel, List<Goal> goals, ShoppingList list) {
+    String name(int id) => (ref.read(itemProvider(id)).valueOrNull?['name'] as String?) ?? '#$id';
+    final text = goalsShareText(
+      title: '$title · Tyria Codex',
+      missingLabel: missingLabel,
+      goals: [for (final g in goals) (name(g.itemId), g.quantity)],
+      missing: [
+        for (final r in list.rows)
+          if (!r.done) (name(r.itemId), r.missing),
+      ],
+    );
+    return SharePlus.instance.share(ShareParams(text: text));
   }
 
   Future<void> _confirmClear(BuildContext context, WidgetRef ref, String title, String body, String cancel) async {

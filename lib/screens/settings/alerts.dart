@@ -156,3 +156,59 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
     );
   }
 }
+
+/// a reminder an hour before the daily and the weekly reset, for the Wizard's Vault and the dailies that would be forgotten. like the
+/// alerts of the events they come from the alarms of the phone
+class _ResetAlertsPanel extends ConsumerStatefulWidget {
+  const _ResetAlertsPanel();
+
+  @override
+  ConsumerState<_ResetAlertsPanel> createState() => _ResetAlertsPanelState();
+}
+
+class _ResetAlertsPanelState extends ConsumerState<_ResetAlertsPanel> {
+  bool _busy = false;
+
+  Future<void> _set({required bool daily, required bool on}) async {
+    final s = ref.read(stringsProvider);
+    final settings = ref.read(bossAlertSettingsProvider.notifier);
+    setState(() => _busy = true);
+    try {
+      await (daily ? settings.setResetDaily(on) : settings.setResetWeekly(on));
+      if (!on) return;
+      final allowed = await requestBossAlertPermission();
+      ref.read(bossAlertsRecheckProvider.notifier).bump();
+      if (mounted && !allowed) showToast(context, s.t('push_denied'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final settings = ref.watch(bossAlertSettingsProvider);
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Kicker(s.t('reset_alerts_title').toUpperCase()),
+          const SizedBox(height: 4),
+          Text(s.t('reset_alerts_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: settings.resetDaily,
+            onChanged: _busy ? null : (on) => _set(daily: true, on: on),
+            title: Text(s.t('reset_alert_daily'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: settings.resetWeekly,
+            onChanged: _busy ? null : (on) => _set(daily: false, on: on),
+            title: Text(s.t('reset_alert_weekly'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          ),
+        ],
+      ),
+    );
+  }
+}

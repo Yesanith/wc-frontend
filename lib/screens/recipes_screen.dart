@@ -13,6 +13,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'craft_profit_screen.dart';
 import 'crafting_screen.dart';
 import 'goals_screen.dart';
 
@@ -123,6 +124,11 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                       ),
                     ),
                   ),
+                  IconButton(
+                    tooltip: s.t('craft_profit'),
+                    icon: Icon(Icons.trending_up, color: AppColors.gold),
+                    onPressed: () => openPanel(context, (_) => const CraftProfitScreen()),
+                  ),
                   // what the player wants made, and everything it takes
                   Badge.count(
                     count: ref.watch(goalsProvider).length,
@@ -229,9 +235,7 @@ class _RecipeRow extends ConsumerWidget {
     final disciplines = {for (final r in recipes) ...r.disciplines};
     final legendary = recipes.any((r) => r.legendary);
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => CraftingDetailScreen(itemId: id)),
-      ),
+      onTap: () => openPanel(context, (_) => CraftingDetailScreen(itemId: id)),
       padding: const EdgeInsets.all(10),
       child: Row(
         children: [

@@ -165,3 +165,23 @@ final goalPlansProvider = Provider.autoDispose<List<(Goal, CraftLine)>>((ref) {
   final plans = planGoals([for (final (goal, node) in trees) (node, goal.quantity)], owned);
   return [for (var i = 0; i < trees.length; i++) (trees[i].$1, plans[i])];
 });
+
+/// the goals and what is still missing for them as plain text, to send to somebody or keep in a note
+String goalsShareText({
+  required String title,
+  required String missingLabel,
+  required List<(String, int)> goals,
+  required List<(String, int)> missing,
+}) {
+  final out = StringBuffer(title);
+  for (final (name, count) in goals) {
+    out.write('\n• $name x$count');
+  }
+  if (missing.isNotEmpty) {
+    out.write('\n\n$missingLabel');
+    for (final (name, count) in missing) {
+      out.write('\n• $name x$count');
+    }
+  }
+  return out.toString();
+}
