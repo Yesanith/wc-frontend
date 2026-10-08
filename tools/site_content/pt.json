@@ -57,7 +57,7 @@
    ],
    [
     "Criação de itens",
-    "Todas as receitas de criação e da Forja Mística, com uma calculadora que sabe o que sua conta já cobre e se comprar sai mais barato."
+    "Todas as receitas de criação e da Forja Mística, com uma calculadora que sabe o que sua conta já cobre e se comprar sai mais barato. Adicione o que quer fabricar a uma lista de objetivos e receba uma única lista de compras com todos os materiais."
    ],
    [
     "Mundo e WvW",
@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Use onde você joga",
   "android_h": "Android",
-  "android_p": "O app completo, com notificações de eventos do mundo, alertas de preço e itens vendidos, e com os dados do jogo guardados no seu aparelho.",
+  "android_p": "O app completo, com notificações de eventos do mundo, alertas de preço e itens vendidos, e com os dados do jogo guardados no seu aparelho. Um widget na tela inicial faz a contagem até o próximo chefe e os dois reinícios.",
   "discord_h": "Um bot do Discord para sua guilda",
   "discord_p": "Eventos de guilda com inscrições e listas de espera, funções que acompanham os ranks da guilda, feeds de notícias e atualizações, e um fórum no servidor oficial onde as guildas recrutam.",
   "discord_link": "Como adicionar o bot",

@@ -57,7 +57,7 @@
    ],
    [
     "Artisanat",
-    "Toutes les recettes d'artisanat et de la Forge mystique, avec une calculatrice qui sait ce que ton compte couvre déjà et s'il est moins cher d'acheter."
+    "Toutes les recettes d'artisanat et de la Forge mystique, avec une calculatrice qui sait ce que ton compte couvre déjà et s'il est moins cher d'acheter. Ajoute ce que tu veux fabriquer à une liste d'objectifs et obtiens une seule liste de courses avec tous les matériaux."
    ],
    [
     "Monde et WvW",
@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Utilise-le là où tu joues",
   "android_h": "Android",
-  "android_p": "L'app complète, avec des notifications pour les événements du monde, les alertes de prix et les objets vendus, et les données du jeu conservées sur ton appareil.",
+  "android_p": "L'app complète, avec des notifications pour les événements du monde, les alertes de prix et les objets vendus, et les données du jeu conservées sur ton appareil. Un widget d'écran d'accueil décompte jusqu'au prochain boss et aux deux réinitialisations.",
   "discord_h": "Un bot Discord pour ta guilde",
   "discord_p": "Événements de guilde avec inscriptions et listes d'attente, rôles qui suivent les rangs de la guilde, flux d'actualités et de correctifs, et un forum sur le serveur officiel où les guildes recrutent.",
   "discord_link": "Comment ajouter le bot",

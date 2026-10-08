@@ -57,7 +57,7 @@
    ],
    [
     "Crafting",
-    "Every crafting and Mystic Forge recipe, with a calculator that knows what your account already covers and whether buying is cheaper."
+    "Every crafting and Mystic Forge recipe, with a calculator that knows what your account already covers and whether buying is cheaper. Add the things you want to make to a goal list and get one shopping list of every material."
    ],
    [
     "World and WvW",
@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Use it where you play",
   "android_h": "Android",
-  "android_p": "The full app, with notifications for world events, price alerts and sold items, and with the game data kept on your device.",
+  "android_p": "The full app, with notifications for world events, price alerts and sold items, and with the game data kept on your device. A home screen widget counts down to the next boss and both resets.",
   "discord_h": "A Discord bot for your guild",
   "discord_p": "Guild events with sign ups and waiting lists, roles that follow guild ranks, news and patch feeds, and a forum on the official server where guilds recruit.",
   "discord_link": "How to add the bot",

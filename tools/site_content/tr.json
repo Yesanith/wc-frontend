@@ -57,7 +57,7 @@
    ],
    [
     "Zanaat",
-    "Tüm zanaat ve Mistik Ocak tarifleri; hesabının neleri zaten karşıladığını ve satın almanın daha ucuz olup olmadığını bilen bir hesaplayıcıyla."
+    "Tüm zanaat ve Mistik Ocak tarifleri; hesabının neleri zaten karşıladığını ve satın almanın daha ucuz olup olmadığını bilen bir hesaplayıcıyla. Yapmak istediklerini hedef listesine ekle, tüm malzemeler tek bir alışveriş listesinde toplansın."
    ],
    [
     "Dünya ve WvW",
@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Oynadığın yerde kullan",
   "android_h": "Android",
-  "android_p": "Tam uygulama: dünya olayları, fiyat uyarıları ve satılan eşyalar için bildirimler, oyun verisi de cihazında.",
+  "android_p": "Tam uygulama: dünya olayları, fiyat uyarıları ve satılan eşyalar için bildirimler, oyun verisi de cihazında. Ana ekran widget'ı bir sonraki patrona ve iki sıfırlamaya kadar geri sayar.",
   "discord_h": "Loncan için bir Discord botu",
   "discord_p": "Katılımlı ve bekleme listeli lonca etkinlikleri, lonca rütbelerini izleyen roller, haber ve yama akışları ve resmî sunucuda loncaların üye aradığı bir forum.",
   "discord_link": "Bot nasıl eklenir",
