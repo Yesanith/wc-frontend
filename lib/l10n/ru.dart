@@ -645,6 +645,8 @@ const ruStrings = <String, String>{
   'goals_shopping': 'Список покупок',
   'goal_remove': 'Убрать',
   'goals_complete': 'У тебя есть всё для твоих целей.',
+  'goals_share': 'Поделиться',
+  'goals_share_missing': 'Ещё нужно',
   'widget_next': 'Следующее закреплённое событие',
   'widget_next_boss': 'Следующий мировой босс',
   'widget_daily': 'Ежедневный сброс',

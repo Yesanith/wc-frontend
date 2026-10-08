@@ -647,6 +647,8 @@ const ptStrings = <String, String>{
   'goals_shopping': 'Lista de compras',
   'goal_remove': 'Remover',
   'goals_complete': 'Você tem tudo para os seus objetivos.',
+  'goals_share': 'Compartilhar',
+  'goals_share_missing': 'Ainda necessário',
   'widget_next': 'Próximo evento fixado',
   'widget_next_boss': 'Próximo chefe mundial',
   'widget_daily': 'Reinício diário',

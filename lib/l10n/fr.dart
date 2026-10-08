@@ -651,6 +651,8 @@ const frStrings = <String, String>{
   'goals_shopping': 'Liste de courses',
   'goal_remove': 'Retirer',
   'goals_complete': 'Tu as tout pour tes objectifs.',
+  'goals_share': 'Partager',
+  'goals_share_missing': 'Encore nécessaire',
   'widget_next': 'Prochain événement épinglé',
   'widget_next_boss': 'Prochain boss mondial',
   'widget_daily': 'Réinitialisation quotidienne',
