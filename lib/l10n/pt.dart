@@ -652,6 +652,14 @@ const ptStrings = <String, String>{
   'widget_daily': 'Reinício diário',
   'widget_weekly': 'Reinício semanal',
   'widget_open_app': 'Abra o app',
+  'craft_profit': 'Lucro de fabricação',
+  'craft_profit_note':
+      'As receitas que mais rendem no posto de comércio agora. O custo conta os materiais da receita, cada um pela menor oferta, e o resultado é vendido um cobre abaixo da menor oferta, depois das taxas de 15%. Os preços mudam, confira antes de comprar.',
+  'craft_profit_empty': 'Nada dá lucro com estes filtros agora.',
+  'craft_cost': 'Materiais',
+  'profit': 'Lucro',
+  'sort_profit': 'Maior lucro',
+  'sort_return': 'Melhor retorno',
   'alert_push_hint': 'Com login e notificações permitidas, você é avisado também com o app fechado.',
   'landing_title': 'Seu companheiro de Guild Wars 2',
   'landing_sub':
@@ -855,6 +863,7 @@ const ptStrings = <String, String>{
   'all_timers': 'Todos os horários',
   'daily_checklist': 'Lista do dia',
   'objectives_done': '{a} de {b} feitos',
+  'objectives_done_chest': '{a} de {b} feitos, baú em {c}',
   'acclaim_left': 'Faltam {n} de acclaim para ganhar',
   'world_boss_loot': 'Baús de chefes do mundo',
   'copy_chat_link': 'Copiar link de chat',

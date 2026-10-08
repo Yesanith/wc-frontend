@@ -656,6 +656,14 @@ const frStrings = <String, String>{
   'widget_daily': 'Réinitialisation quotidienne',
   'widget_weekly': 'Réinitialisation hebdomadaire',
   'widget_open_app': 'Ouvre l\'appli',
+  'craft_profit': 'Bénéfice d\'artisanat',
+  'craft_profit_note':
+      'Les recettes qui rapportent le plus au comptoir de commerce en ce moment. Le coût compte les matériaux de la recette, chacun à l\'offre la plus basse, et le résultat se vend un cuivre sous l\'offre la plus basse après 15 % de frais. Les prix bougent, vérifie-les avant d\'acheter.',
+  'craft_profit_empty': 'Rien ne rapporte avec ces filtres en ce moment.',
+  'craft_cost': 'Matériaux',
+  'profit': 'Bénéfice',
+  'sort_profit': 'Plus gros bénéfice',
+  'sort_return': 'Meilleur rendement',
   'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
   'landing_title': 'Ton compagnon Guild Wars 2',
   'landing_sub':
@@ -860,6 +868,7 @@ const frStrings = <String, String>{
   'all_timers': 'Tous les horaires',
   'daily_checklist': 'Liste du jour',
   'objectives_done': '{a} sur {b} terminés',
+  'objectives_done_chest': '{a} sur {b} faits, coffre à {c}',
   'acclaim_left': 'Encore {n} d\'acclamation astrale à gagner',
   'world_boss_loot': 'Coffres des boss du monde',
   'copy_chat_link': 'Copier le lien de discussion',

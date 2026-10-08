@@ -648,6 +648,14 @@ const trStrings = <String, String>{
   'widget_daily': 'Günlük sıfırlama',
   'widget_weekly': 'Haftalık sıfırlama',
   'widget_open_app': 'Uygulamayı aç',
+  'craft_profit': 'Üretim kârı',
+  'craft_profit_note':
+      'Şu anda ticaret merkezinde en çok kazandıran tarifler. Maliyet, tarifin malzemelerini en düşük ilan fiyatından sayar; sonuç, %15 ücret düşüldükten sonra en düşük ilanın bir bakır altına satılır. Fiyatlar değişir, almadan önce kontrol et.',
+  'craft_profit_empty': 'Bu filtrelerle şu anda kazandıran bir şey yok.',
+  'craft_cost': 'Malzemeler',
+  'profit': 'Kâr',
+  'sort_profit': 'En çok kâr',
+  'sort_return': 'En iyi getiri',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':
@@ -850,6 +858,7 @@ const trStrings = <String, String>{
   'all_timers': 'Tüm zamanlayıcılar',
   'daily_checklist': 'Günlük liste',
   'objectives_done': '{b} görevden {a} tamam',
+  'objectives_done_chest': '{a} / {b} tamamlandı, sandık {c} için',
   'acclaim_left': 'Kazanılacak {n} acclaim kaldı',
   'world_boss_loot': 'Dünya boss sandıkları',
   'copy_chat_link': 'Sohbet bağlantısını kopyala',

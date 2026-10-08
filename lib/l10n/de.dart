@@ -661,6 +661,14 @@ const deStrings = <String, String>{
   'widget_daily': 'Täglicher Reset',
   'widget_weekly': 'Wöchentlicher Reset',
   'widget_open_app': 'App öffnen',
+  'craft_profit': 'Handwerksgewinn',
+  'craft_profit_note':
+      'Die Rezepte, die am Handelsposten gerade am meisten einbringen. Die Kosten zählen die Materialien des Rezepts, jedes zum niedrigsten Angebot, und das Ergebnis wird ein Kupfer unter dem niedrigsten Angebot verkauft, nach 15 % Gebühren. Preise ändern sich, prüfe sie vor dem Kauf.',
+  'craft_profit_empty': 'Mit diesen Filtern lohnt sich gerade nichts.',
+  'craft_cost': 'Materialien',
+  'profit': 'Gewinn',
+  'sort_profit': 'Höchster Gewinn',
+  'sort_return': 'Beste Rendite',
   'alert_push_hint': 'Mit Anmeldung und erlaubten Benachrichtigungen erfährst du es auch bei geschlossener App.',
   'landing_title': 'Dein Guild-Wars-2-Begleiter',
   'landing_sub':
@@ -864,6 +872,7 @@ const deStrings = <String, String>{
   'all_timers': 'Alle Timer',
   'daily_checklist': 'Tägliche Liste',
   'objectives_done': '{a} von {b} erledigt',
+  'objectives_done_chest': '{a} von {b} erledigt, Truhe bei {c}',
   'acclaim_left': 'Noch {n} Astralruhm zu verdienen',
   'world_boss_loot': 'Weltboss-Truhen',
   'copy_chat_link': 'Chatcode kopieren',
