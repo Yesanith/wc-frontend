@@ -288,7 +288,7 @@ ThemeData buildTheme() {
       color: AppColors.surface2,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(AppRadius.card)),
+        borderRadius: const BorderRadius.all(Radius.circular(AppRadius.card)),
         side: BorderSide(color: AppColors.line),
       ),
     ),
@@ -300,7 +300,7 @@ ThemeData buildTheme() {
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: AppColors.surface,
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.window))),
+      shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.vertical(top: const Radius.circular(AppRadius.window))),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: AppColors.surface2,
@@ -311,7 +311,7 @@ ThemeData buildTheme() {
     tooltipTheme: TooltipThemeData(
       decoration: BoxDecoration(
         color: AppColors.surface3,
-        borderRadius: BorderRadius.all(Radius.circular(AppRadius.frame)),
+        borderRadius: const BorderRadius.all(Radius.circular(AppRadius.frame)),
       ),
       textStyle: TextStyle(color: AppColors.text, fontSize: 12),
     ),

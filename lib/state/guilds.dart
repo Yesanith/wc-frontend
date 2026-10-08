@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../api/gw2_api.dart';
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';

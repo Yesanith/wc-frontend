@@ -100,7 +100,7 @@ class _PlatformCardState extends State<_PlatformCard> {
                             ),
                           if (!_open && attrs != null)
                             Padding(
-                              padding: EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child: Text('Tap for what the platform knows',
                                   style: TextStyle(fontSize: 11, color: AppColors.hint)),
                             ),

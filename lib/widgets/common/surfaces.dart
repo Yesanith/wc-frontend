@@ -108,7 +108,7 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
       indicatorSize: TabBarIndicatorSize.label,
       indicator: UnderlineTabIndicator(
         borderSide: BorderSide(color: AppColors.gold, width: 2.5),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(2)),
+        borderRadius: const BorderRadius.vertical(top: const Radius.circular(2)),
       ),
       labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
       unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),

@@ -197,7 +197,7 @@ class _LogPage extends ConsumerWidget {
           children: [
             if (newest && data.rows.isEmpty)
               Padding(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child:
                     Center(child: Text('Nothing like that has been said.', style: TextStyle(color: AppColors.muted))),
               ),
@@ -303,7 +303,7 @@ class _LogCardState extends State<_LogCard> {
                             ),
                           if (!_open && detail != null)
                             Padding(
-                              padding: EdgeInsets.only(top: 4),
+                              padding: const EdgeInsets.only(top: 4),
                               child:
                                   Text('Tap for what it knew', style: TextStyle(fontSize: 11, color: AppColors.hint)),
                             ),

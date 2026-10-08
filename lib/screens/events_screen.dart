@@ -257,7 +257,7 @@ class MetaRow extends ConsumerWidget {
                             : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
                         maxLines: 1,
                         style: TextStyle(
-                            fontSize: 11, color: AppColors.muted, fontFeatures: [FontFeature.tabularFigures()]),
+                            fontSize: 11, color: AppColors.muted, fontFeatures: const [FontFeature.tabularFigures()]),
                       ),
                     ],
                   ),

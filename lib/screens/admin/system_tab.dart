@@ -201,7 +201,7 @@ class _EdgeFunctions extends ConsumerWidget {
           children: [
             if (page.functions.isEmpty)
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text('Nothing has been said in the last day.',
                     style: TextStyle(color: AppColors.muted, fontSize: 13)),
               ),

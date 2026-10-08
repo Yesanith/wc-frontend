@@ -339,10 +339,10 @@ void main() {
         'plays in the languages that the forum has a tag for, and a language of another kind is a problem to be taken off',
         () {
       expect(recruitLanguages, ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru']);
-      expect(RecruitDraft(languages: {'ja'}).problems(), [RecruitField.languages], reason: 'Japanese is no tag');
-      expect(RecruitDraft(languages: {'zh'}).problems(), [RecruitField.languages]);
-      expect(RecruitDraft(languages: {'it'}).problems(), [RecruitField.languages]);
-      expect(RecruitDraft(languages: {'en', 'ja'}).problems(), [RecruitField.languages]);
+      expect(const RecruitDraft(languages: {'ja'}).problems(), [RecruitField.languages], reason: 'Japanese is no tag');
+      expect(const RecruitDraft(languages: {'zh'}).problems(), [RecruitField.languages]);
+      expect(const RecruitDraft(languages: {'it'}).problems(), [RecruitField.languages]);
+      expect(const RecruitDraft(languages: {'en', 'ja'}).problems(), [RecruitField.languages]);
       expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet(), languages: {'ja'}).problems(),
           [RecruitField.tags, RecruitField.languages],
           reason: 'both');
@@ -416,7 +416,7 @@ void main() {
           expect(name, isNot(recruitTags[i]), reason: '${recruitTags[i]} has a word in ${lang.code}');
         }
       }
-      expect(recruitTagLabel(S(AppLang.en), 'something new'), 'something new',
+      expect(recruitTagLabel(const S(AppLang.en), 'something new'), 'something new',
           reason: 'what is not known is shown as it is');
     });
 
@@ -430,7 +430,7 @@ void main() {
     });
 
     test('are a region in the language of the app', () {
-      final s = S(AppLang.en);
+      const s = S(AppLang.en);
       expect(recruitRegionLabel(s, RecruitRegion.eu), 'Europe');
       expect(recruitRegionLabel(s, RecruitRegion.na), 'North America');
       expect(recruitRegionLabel(s, RecruitRegion.any), 'Any region');

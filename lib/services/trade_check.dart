@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../api/gw2_api.dart';
 import '../l10n/strings.dart';
 import '../state/api.dart';
 import '../state/trade_alerts.dart';
