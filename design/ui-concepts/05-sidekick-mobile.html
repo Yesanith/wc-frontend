@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Concept 5 · Sidekick (mobile first)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0a08; --s1:#171310; --s2:#211b16; --s3:#2c241d; --line:#3a3027;
+  --text:#f7f1e6; --soft:#d6cbb8; --muted:#a09481; --gold:#f0c674; --gold2:#ffe2a6; --on:#2a1c05;
+  --green:#7be0a8; --red:#ff7b86; --blue:#7db5ff; --violet:#b69cff;
+}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:#050403;color:var(--text);font:15px/1.5 "Plus Jakarta Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;display:grid;place-items:center;min-height:100vh}
+.i{width:22px;height:22px;flex:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;border-radius:10px}
+
+/* phone frame on desktop, full screen on a phone */
+.phone{width:100%;max-width:410px;height:min(860px,100vh);background:var(--bg);position:relative;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:520px){.phone{border-radius:44px;border:10px solid #1b1b1d;box-shadow:0 0 0 2px #333,0 40px 90px #000c}}
+.hint{position:fixed;left:16px;bottom:16px;color:#7b7366;font-size:12px;max-width:240px}
+@media(max-width:520px){.hint{display:none}}
+
+.scroll{flex:1;overflow-y:auto;padding:0 16px 24px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.status{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:var(--soft);font-size:13px;font-weight:600;flex:none}
+.top{display:flex;align-items:center;gap:12px;padding:8px 0 14px}
+.top h1{font-size:23px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.top p{color:var(--muted);font-size:13px}
+.av{margin-left:auto;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),#a8782a);color:var(--on);display:grid;place-items:center;font-weight:800}
+
+/* hero: the one thing that matters now */
+.hero{border-radius:26px;padding:20px;background:
+  radial-gradient(260px 160px at 100% 0,#f0c67440,transparent 70%),
+  linear-gradient(160deg,#2a2118,#171310);border:1px solid #4a3b28;position:relative;overflow:hidden}
+.hero .k{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.hero .big{font-size:50px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.hero h2{font-size:19px;font-weight:700}
+.hero p{color:var(--muted);font-size:13px}
+.act{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;min-height:48px;border-radius:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn.p{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--on)}
+.btn.g{background:#ffffff10;border:1px solid var(--line);color:var(--soft)}
+.btn:active{transform:scale(.97)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.tile{background:var(--s1);border:1px solid var(--line);border-radius:22px;padding:14px 16px}
+.tile small{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:12px;font-weight:600}
+.tile small .i{width:16px;height:16px;color:var(--gold)}
+.tile b{display:block;font-size:24px;font-weight:800;letter-spacing:-.01em;margin-top:2px;font-variant-numeric:tabular-nums}
+.meter{height:6px;background:#ffffff14;border-radius:9px;margin-top:10px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--gold);border-radius:9px;transition:width .9s}
+.meter.g i{background:var(--violet)}
+
+.sech{display:flex;align-items:baseline;justify-content:space-between;margin:22px 2px 10px}
+.sech h3{font-size:17px;font-weight:800}.sech a{color:var(--gold);font-size:13px;font-weight:700}
+
+/* horizontal chips of the next bosses: thumb scrollable */
+.hs{display:flex;gap:10px;overflow-x:auto;margin:0 -16px;padding:2px 16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hs::-webkit-scrollbar{display:none}
+.bc{scroll-snap-align:start;flex:0 0 152px;background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.bc .t{font-size:22px;font-weight:800;color:var(--gold2)}
+.bc b{font-size:14px}.bc span{color:var(--muted);font-size:12px}
+.bc.live{border-color:#ff7b8688;background:linear-gradient(160deg,#3a1c20,#171310)}
+.bc.live .t{color:var(--red)}
+
+.list{background:var(--s1);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.li{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:60px;border-top:1px solid var(--line)}
+.li:first-child{border:0}
+.li .n{flex:1;min-width:0}.li .n b{display:block;font-weight:700;font-size:14.5px}.li .n span{color:var(--muted);font-size:12.5px}
+.ico{width:42px;height:42px;border-radius:13px;border:2px solid var(--rc);color:var(--rc);display:grid;place-items:center;background:var(--s2)}
+.ico .i{width:20px;height:20px}
+.cg{color:var(--gold2)}.cs{color:#d4d9e3}.cc{color:#e0a06d}
+.cg,.cs,.cc{margin-left:5px;font-weight:700;font-size:14px}[data-coin] i{font-style:normal;font-size:.8em;opacity:.8}
+.right{text-align:right}
+.up{color:var(--green);font-weight:700;font-size:13px}.dn{color:var(--red);font-weight:700;font-size:13px}
+.spark{color:var(--green);display:block}.spark.dn{color:var(--red)}
+
+.seg{display:flex;background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:4px;gap:4px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.seg button{flex:1;min-height:42px;padding:0 14px;border-radius:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed=true]{background:var(--s3);color:var(--gold2)}
+.pinbtn{width:44px;height:44px;display:grid;place-items:center;color:var(--muted);border-radius:50%}
+.pinbtn[aria-pressed=true]{color:var(--gold)}
+
+/* timeline as a vertical agenda: no sideways scrolling on a phone */
+.ag{position:relative;padding-left:22px}
+.ag::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.ag .e{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:10px}
+.ag .e::before{content:"";position:absolute;left:-21px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--gold)}
+.ag .e.live::before{background:var(--red);border-color:var(--red);box-shadow:0 0 0 4px #ff7b8633}
+.ag .e small{color:var(--gold);font-weight:700;font-size:12px}
+.ag .e b{display:block;font-size:15px}.ag .e span{color:var(--muted);font-size:13px}
+
+/* bottom nav in the thumb zone */
+.tabs{flex:none;display:grid;grid-template-columns:repeat(5,1fr);background:#120f0cf2;backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:6px 6px calc(8px + env(safe-area-inset-bottom))}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:56px;justify-content:center;font-size:11px;font-weight:600;color:var(--muted);border-radius:16px}
+.tabs button.active{color:var(--gold2)}
+.tabs button.active .i{filter:drop-shadow(0 0 8px #f0c67466)}
+.tabs .fab{position:relative;top:-14px}
+.tabs .fab span{width:52px;height:52px;border-radius:50%;background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--on);display:grid;place-items:center;box-shadow:0 8px 22px #f0c67444}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"><span>19:46</span><span>●●● 5G ▮</span></div>
+  <div class="scroll">
+
+  <section data-view="home">
+    <div class="top"><div><h1>Evening, Yesanith</h1><p>Daily resets in <b data-reset="daily" data-fmt="short" style="color:var(--gold2)"></b></p></div><a class="av" href="index.html" aria-label="All concepts">Y</a></div>
+    <div class="hero"><div class="k">Next world boss</div><div class="big" data-in="14" data-fmt="hms">00:14:00</div>
+      <h2>Tequatl the Sunless</h2><p>Sparkfly Fen · Heart of Maguuma</p>
+      <div class="act"><button class="btn p"><svg class="i"><use href="#i-bell"/></svg>Remind me</button><button class="btn g" data-view-btn="events"><svg class="i"><use href="#i-clock"/></svg>Timer</button></div></div>
+    <div class="row2">
+      <div class="tile"><small><svg class="i"><use href="#i-check"/></svg>Dailies</small><b>6 / 10</b><div class="meter"><i data-fill="60"></i></div></div>
+      <div class="tile"><small><svg class="i"><use href="#i-star"/></svg>Vault</small><b>1,820</b><div class="meter g"><i data-fill="67"></i></div></div>
+      <div class="tile"><small><svg class="i"><use href="#i-coins"/></svg>Gold</small><b data-coin="12843307" style="font-size:19px"></b></div>
+      <div class="tile"><small><svg class="i"><use href="#i-cal"/></svg>Weekly reset</small><b data-reset="weekly" data-fmt="short"></b></div>
+    </div>
+    <div class="sech"><h3>Coming up</h3><a href="#events" data-view-btn="events">All</a></div>
+    <div class="hs">
+      <div class="bc live"><span class="t">LIVE</span><b>Dragonstorm</b><span>Dragon's End</span></div>
+      <div class="bc"><span class="t">45m</span><b>Shadow Behemoth</b><span>Queensdale</span></div>
+      <div class="bc"><span class="t">1h 20</span><b>Octovine</b><span>Auric Basin</span></div>
+      <div class="bc"><span class="t">2h 05</span><b>Fire Elemental</b><span>Metrica Province</span></div>
+    </div>
+    <div class="sech"><h3>Watchlist</h3><a href="#trading" data-view-btn="trading">Trading</a></div>
+    <div class="list">
+      <div class="li"><span class="ico" style="--rc:#f0c674"><svg class="i"><use href="#i-coins"/></svg></span><div class="n"><b>Mystic Coin</b><span data-coin="21340"></span></div><div class="right"><span class="up">+3.1%</span><span class="spark" data-spark="3,4,4,6,5,7,9" data-w="64" data-h="20"></span></div></div>
+      <div class="li"><span class="ico" style="--rc:#ffb05a"><svg class="i"><use href="#i-gem"/></svg></span><div class="n"><b>Ectoplasm</b><span data-coin="3012"></span></div><div class="right"><span class="dn">−1.4%</span><span class="spark dn" data-spark="9,8,8,6,7,5,4" data-w="64" data-h="20"></span></div></div>
+    </div>
+  </section>
+
+  <section data-view="events" hidden>
+    <div class="top"><div><h1>Events</h1><p>Next two hours · local time</p></div></div>
+    <div class="seg" data-chips><button aria-pressed="true">All</button><button aria-pressed="false">Bosses</button><button aria-pressed="false">Metas</button><button aria-pressed="false">Pinned</button></div>
+    <div class="ag">
+      <div class="e live"><small>NOW · until 20:15</small><b>Dragonstorm</b><span>Dragon's End</span></div>
+      <div class="e"><small>20:00 · in <span data-in="14" data-fmt="short" style="color:inherit">14m</span></small><b>Tequatl the Sunless</b><span>Sparkfly Fen</span></div>
+      <div class="e"><small>20:30 · in 44m</small><b>Shadow Behemoth</b><span>Queensdale</span></div>
+      <div class="e"><small>21:05 · in 1h 19m</small><b>Octovine</b><span>Auric Basin</span></div>
+    </div>
+  </section>
+
+  <section data-view="trading" hidden>
+    <div class="top"><div><h1>Trading</h1><p>4 items watched</p></div></div>
+    <div class="seg" data-chips><button aria-pressed="true">Watchlist</button><button aria-pressed="false">Orders</button><button aria-pressed="false">History</button></div>
+    <div class="list">
+      <div class="li"><span class="ico" style="--rc:#f0c674"><svg class="i"><use href="#i-coins"/></svg></span><div class="n"><b>Mystic Coin</b><span>Buy <span data-coin="21340"></span></span></div><div class="right"><b data-coin="23100"></b><span class="up">+3.1%</span></div></div>
+      <div class="li"><span class="ico" style="--rc:#ffb05a"><svg class="i"><use href="#i-gem"/></svg></span><div class="n"><b>Ectoplasm</b><span>Buy <span data-coin="3012"></span></span></div><div class="right"><b data-coin="3190"></b><span class="dn">−1.4%</span></div></div>
+      <div class="li"><span class="ico" style="--rc:#7db5ff"><svg class="i"><use href="#i-scroll"/></svg></span><div class="n"><b>Elonian Leather Square</b><span>Buy <span data-coin="1420"></span></span></div><div class="right"><b data-coin="1560"></b><span class="up">+6.4%</span></div></div>
+      <div class="li"><span class="ico" style="--rc:#7be0a8"><svg class="i"><use href="#i-shield"/></svg></span><div class="n"><b>Mithril Ore</b><span>Buy <span data-coin="410"></span></span></div><div class="right"><b data-coin="455"></b><span class="up">+0.2%</span></div></div>
+    </div>
+  </section>
+
+  </div>
+  <nav class="tabs" aria-label="Main">
+    <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Today</button>
+    <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Events</button>
+    <button class="fab" aria-label="Search"><span><svg class="i"><use href="#i-search"/></svg></span></button>
+    <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading</button>
+    <button><svg class="i"><use href="#i-menu"/></svg>More</button>
+  </nav>
+</div>
+<p class="hint">Concept 5 · designed for the phone first. On a desktop it sits in a frame.</p>
+<script src="shared.js"></script>
+</body>
+</html>

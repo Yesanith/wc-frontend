@@ -41,7 +41,6 @@ class _AdminTableScreenState extends ConsumerState<AdminTableScreen> {
     final page = ref.watch(adminTableProvider(query));
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         title: Text(widget.table),
         actions: [
           IconButton(
@@ -116,7 +115,7 @@ class _Rows extends StatelessWidget {
               _Columns(columns, orderedBy: page.orderedBy),
               const SizedBox(height: 8),
               if (rows.isEmpty)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(24),
                   child: Center(child: Text('No row has that.', style: TextStyle(color: AppColors.muted))),
                 ),
@@ -125,7 +124,7 @@ class _Rows extends StatelessWidget {
           ),
         ),
         Container(
-          decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -162,7 +161,7 @@ class _Columns extends StatelessWidget {
             title: Text('${columns.length} columns', style: const TextStyle(fontWeight: FontWeight.w700)),
             subtitle: Text(
               orderedBy == null ? 'In no order that is known' : 'Newest first, by $orderedBy',
-              style: const TextStyle(fontSize: 12, color: AppColors.muted),
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
             ),
             childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +175,7 @@ class _Columns extends StatelessWidget {
                           size: c.key || c.hidden ? 14 : 5, color: AppColors.gold),
                       const SizedBox(width: 8),
                       Expanded(child: Text(c.name, style: const TextStyle(fontSize: 13))),
-                      Text(c.type, style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+                      Text(c.type, style: TextStyle(fontSize: 12, color: AppColors.hint)),
                     ],
                   ),
                 ),
@@ -213,9 +212,8 @@ class _RowCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-              subtitle: stamp == null
-                  ? null
-                  : Text(ago(stamp, now), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              subtitle:
+                  stamp == null ? null : Text(ago(stamp, now), style: TextStyle(fontSize: 12, color: AppColors.muted)),
               childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -225,7 +223,7 @@ class _RowCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(c.name, style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                        Text(c.name, style: TextStyle(fontSize: 11, color: AppColors.hint)),
                         SelectableText(cellText(row[c.name]), style: const TextStyle(fontSize: 13)),
                       ],
                     ),

@@ -161,8 +161,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     Widget label(String text) => Padding(
           padding: const EdgeInsets.only(top: 18, bottom: 6),
           child: Text(text.toUpperCase(),
-              style:
-                  const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
         );
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
@@ -190,7 +189,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           contentPadding: EdgeInsets.zero,
           title: Text(s.t('rec_f_recruiting')),
           // the post of the page in the forum of the official server is locked while it is off: it is this switch that does it, and nothing else
-          subtitle: Text(s.t('rec_f_recruiting_hint'), style: const TextStyle(color: AppColors.hint, fontSize: 12)),
+          subtitle: Text(s.t('rec_f_recruiting_hint'), style: TextStyle(color: AppColors.hint, fontSize: 12)),
           value: _draft.recruiting,
           onChanged: (v) => _set(_draft.copyWith(recruiting: v)),
         ),
@@ -293,8 +292,8 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           title: Text(s.t('rec_f_published')),
           // what it takes, until it has it, and then where it is shown besides the app: the page is also read in a server that everybody is in
           subtitle: missing.isNotEmpty && !_published
-              ? Text(s.t('rec_publish_needs'), style: const TextStyle(color: AppColors.amber, fontSize: 12))
-              : Text(s.t('rec_f_published_hint'), style: const TextStyle(color: AppColors.hint, fontSize: 12)),
+              ? Text(s.t('rec_publish_needs'), style: TextStyle(color: AppColors.amber, fontSize: 12))
+              : Text(s.t('rec_f_published_hint'), style: TextStyle(color: AppColors.hint, fontSize: 12)),
           value: _published,
           // it can be shown once it has what it takes, and always taken back
           onChanged: _published || missing.isEmpty ? (v) => setState(() => _published = v) : null,
@@ -302,14 +301,14 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
         if (_page?.hidden == true)
           Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Text(s.t('rec_hidden_note'), style: const TextStyle(color: AppColors.ember, fontSize: 12)),
+            child: Text(s.t('rec_hidden_note'), style: TextStyle(color: AppColors.ember, fontSize: 12)),
           ),
         const SizedBox(height: 12),
         FilledButton(onPressed: _busy ? null : _save, child: Text(s.t('rec_save'))),
         // saving is what keeps the page in the list: a page that is not saved for sixty days leaves it, and there is no other button for it
         Padding(
           padding: const EdgeInsets.only(top: 6),
-          child: Text(s.t('rec_save_hint'), style: const TextStyle(fontSize: 12, color: AppColors.hint)),
+          child: Text(s.t('rec_save_hint'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
         ),
         if (_page != null && widget.guild.isLeader) ...[
           const SizedBox(height: 16),

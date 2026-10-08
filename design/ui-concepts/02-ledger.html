@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Concept 2 · Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1013; --panel:#14171c; --panel2:#1a1e25; --line:#262b34; --line2:#343b47;
+  --text:#e8eaee; --soft:#bcc2cd; --muted:#7f8896;
+  --acc:#d8b258; --accd:#d8b25820; --up:#58d39a; --dn:#f0717b; --info:#6aa9ff; --warn:#f0bd57;
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:14px/1.45 "IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.mono,[data-coin],time,.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.i{width:18px;height:18px;flex:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:1px;border-radius:4px}
+
+.app{display:grid;grid-template-columns:216px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);background:var(--panel);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:14px 10px}
+.brand{display:flex;gap:10px;align-items:center;padding:6px 10px 18px;font-weight:700;letter-spacing:.04em}
+.brand b{width:22px;height:22px;border:2px solid var(--acc);transform:rotate(45deg)}
+.group{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:14px 10px 6px}
+aside nav button{width:100%;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:7px;color:var(--soft);text-align:left;position:relative}
+aside nav button:hover{background:#ffffff08;color:var(--text)}
+aside nav button.active{background:var(--accd);color:var(--acc)}
+aside nav button .n{margin-left:auto;font-size:11px;color:var(--muted)}
+.me{margin-top:auto;display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px}
+.me .av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#d8b258,#8a6d2b);display:grid;place-items:center;color:#241a05;font-weight:700}
+.me small{display:block;color:var(--muted);font-size:12px}
+
+.main{min-width:0}
+.bar{position:sticky;top:0;z-index:10;background:#0e1013ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 22px}
+.search{flex:1;max-width:460px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px;color:var(--muted)}
+.search kbd{margin-left:auto;font:11px "IBM Plex Mono";border:1px solid var(--line2);border-radius:4px;padding:1px 5px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border:1px solid var(--line);border-radius:99px;color:var(--soft);font-size:12px}
+.pill .d{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 0 3px #58d39a22}
+.bar .right{margin-left:auto;display:flex;gap:8px}
+.content{padding:20px 22px 60px;max-width:1380px}
+h1{font-size:20px;font-weight:600;margin-bottom:2px}
+.sub{color:var(--muted);margin-bottom:18px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi small{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:6px}
+.kpi b{display:block;font:600 22px/1.25 "IBM Plex Mono";margin-top:4px}
+.kpi .d{font:12px "IBM Plex Mono";color:var(--muted)}
+.up{color:var(--up)}.dn{color:var(--dn)}
+.meter{height:4px;background:#ffffff12;border-radius:9px;margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--acc);transition:width .9s ease}
+
+.cols{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:14px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow-x:auto;margin-bottom:14px}
+.panel>header{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:600}
+.panel>header .i{color:var(--acc)}
+.panel>header .sp{margin-left:auto;color:var(--muted);font-weight:400;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:500;padding:8px 14px;background:#ffffff04;border-bottom:1px solid var(--line)}
+td{padding:7px 14px;border-bottom:1px solid #ffffff08;white-space:nowrap}
+tr:hover td{background:#ffffff05}
+tr:last-child td{border-bottom:0}
+.r{text-align:right}
+.it{display:flex;align-items:center;gap:10px}
+.ico{width:28px;height:28px;border-radius:5px;border:1.5px solid var(--rc);color:var(--rc);display:grid;place-items:center;background:var(--panel2)}
+.ico .i{width:15px;height:15px}
+.tag{font:600 11px "IBM Plex Mono";padding:2px 7px;border-radius:5px;border:1px solid var(--line2);color:var(--soft)}
+.tag.live{color:var(--dn);border-color:#f0717b55;background:#f0717b14}
+.tag.ok{color:var(--up);border-color:#58d39a55;background:#58d39a12}
+.tag.w{color:var(--warn);border-color:#f0bd5755;background:#f0bd5712}
+.cg{color:#f4d27a}.cs{color:#cfd5df}.cc{color:#d9955c}
+.cg,.cs,.cc{margin-left:6px}[data-coin] i{font-style:normal;opacity:.7;font-size:.85em}
+.spark{color:var(--up)}.spark.dn{color:var(--dn)}
+.chips{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.chips button{padding:4px 11px;border:1px solid var(--line);border-radius:6px;color:var(--soft);font-size:12.5px}
+.chips button[aria-pressed=true]{background:var(--accd);border-color:#d8b25866;color:var(--acc)}
+.pinbtn{color:var(--muted)}.pinbtn[aria-pressed=true]{color:var(--acc)}
+.list li{list-style:none;display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #ffffff08}
+.list li:last-child{border:0}
+.list .t{width:58px;color:var(--acc);font:600 13px "IBM Plex Mono"}
+.list .g{flex:1;min-width:0}
+.list .g span{display:block;color:var(--muted);font-size:12px}
+.ach{padding:10px 14px;border-bottom:1px solid #ffffff08}
+.ach:last-child{border:0}
+.ach div{display:flex;justify-content:space-between;margin-bottom:6px}
+.ach span{color:var(--muted);font:12px "IBM Plex Mono"}
+.tl{padding:12px 14px}
+.tl .row{display:grid;grid-template-columns:120px 1fr;align-items:center;border-top:1px solid #ffffff08;height:40px}
+.tl .row:first-child{border:0}
+.tl .lane{color:var(--soft);font-size:13px}
+.tl .tr{position:relative;height:100%;background:repeating-linear-gradient(90deg,#ffffff07 0 1px,#0000 1px 12.5%)}
+.tl .b{position:absolute;top:7px;height:26px;border-radius:5px;background:#d8b25826;border:1px solid #d8b25877;color:var(--acc);font:500 12px "IBM Plex Mono";padding:0 8px;display:flex;align-items:center;overflow:hidden;white-space:nowrap}
+.tl .b.r2{background:#f0717b22;border-color:#f0717b77;color:#ffc9ce}
+.tl .b.i2{background:#6aa9ff1f;border-color:#6aa9ff77;color:#c6dcff}
+.tl .now{position:absolute;top:-4px;bottom:-4px;left:var(--n);width:2px;background:var(--dn)}
+.tl .hdr{display:grid;grid-template-columns:120px repeat(8,1fr);font:11px "IBM Plex Mono";color:var(--muted);padding-bottom:6px}
+@media(max-width:1000px){.app{grid-template-columns:1fr}aside{display:none}.kpis{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}.mtabs{display:flex}.content{padding-bottom:90px}.search kbd{display:none}.panel{overflow-x:auto}}
+.mtabs{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:30}
+.mtabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);min-height:48px;padding:6px}
+.mtabs button.active{color:var(--acc)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <a class="brand" href="index.html"><b></b>Tyria Companion</a>
+  <nav aria-label="Main">
+    <div class="group">Today</div>
+    <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Overview</button>
+    <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Events<span class="n">4</span></button>
+    <div class="group">Economy</div>
+    <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading post</button>
+    <button><svg class="i"><use href="#i-wallet"/></svg>Wallet &amp; wealth</button>
+    <button><svg class="i"><use href="#i-scroll"/></svg>Recipes</button>
+    <div class="group">Account</div>
+    <button><svg class="i"><use href="#i-user"/></svg>Characters</button>
+    <button><svg class="i"><use href="#i-trophy"/></svg>Progression</button>
+    <button><svg class="i"><use href="#i-users"/></svg>Guilds</button>
+    <div class="group">World</div>
+    <button><svg class="i"><use href="#i-map"/></svg>Map</button>
+    <button><svg class="i"><use href="#i-shield"/></svg>WvW</button>
+  </nav>
+  <div class="me"><span class="av">Y</span><div><b>Yesanith.1234</b><small>Key valid · 9 perms</small></div></div>
+</aside>
+
+<div class="main">
+  <div class="bar">
+    <label class="search"><svg class="i"><use href="#i-search"/></svg><span>Search items, recipes, achievements…</span><kbd>/</kbd></label>
+    <div class="right"><span class="pill"><span class="d"></span>API live · synced 2 min ago</span><span class="pill mono" data-clock></span></div>
+  </div>
+
+  <div class="content">
+  <!-- HOME -->
+  <section data-view="home">
+    <h1>Overview</h1><p class="sub">Everything that changed since you last looked.</p>
+    <div class="kpis">
+      <div class="kpi"><small><svg class="i"><use href="#i-clock"/></svg>Daily reset</small><b data-reset="daily"></b><div class="meter"><i data-fill="60"></i></div><div class="d">6 / 10 done</div></div>
+      <div class="kpi"><small><svg class="i"><use href="#i-cal"/></svg>Weekly reset</small><b data-reset="weekly" data-fmt="long"></b><div class="meter"><i data-fill="62"></i></div><div class="d">raids 4 / 7</div></div>
+      <div class="kpi"><small><svg class="i"><use href="#i-coins"/></svg>Gold</small><b data-coin="12843307"></b><div class="d up">▲ 4g 12s today</div></div>
+      <div class="kpi"><small><svg class="i"><use href="#i-star"/></svg>Astral acclaim</small><b>1,820</b><div class="meter"><i data-fill="67"></i></div><div class="d">vault 2 / 3 special</div></div>
+    </div>
+    <div class="cols">
+      <div>
+        <div class="panel"><header><svg class="i"><use href="#i-chart"/></svg>Watchlist<span class="sp">trading post · 4 items</span></header>
+          <table><thead><tr><th>Item</th><th class="r">Buy</th><th class="r">Sell</th><th class="r">Margin</th><th class="r">7d</th></tr></thead><tbody>
+            <tr><td><div class="it"><span class="ico" style="--rc:#e0b04a"><svg class="i"><use href="#i-coins"/></svg></span>Mystic Coin</div></td><td class="r" data-coin="21340"></td><td class="r" data-coin="23100"></td><td class="r up">+3.1%</td><td class="r"><span class="spark" data-spark="3,4,4,6,5,7,9" data-w="70" data-h="22"></span></td></tr>
+            <tr><td><div class="it"><span class="ico" style="--rc:#f0bd57"><svg class="i"><use href="#i-gem"/></svg></span>Ectoplasm</div></td><td class="r" data-coin="3012"></td><td class="r" data-coin="3190"></td><td class="r dn">−1.4%</td><td class="r"><span class="spark dn" data-spark="9,8,8,6,7,5,4" data-w="70" data-h="22"></span></td></tr>
+            <tr><td><div class="it"><span class="ico" style="--rc:#6aa9ff"><svg class="i"><use href="#i-scroll"/></svg></span>Elonian Leather Square</div></td><td class="r" data-coin="1420"></td><td class="r" data-coin="1560"></td><td class="r up">+6.4%</td><td class="r"><span class="spark" data-spark="2,3,3,4,4,5,6" data-w="70" data-h="22"></span></td></tr>
+            <tr><td><div class="it"><span class="ico" style="--rc:#9ad28a"><svg class="i"><use href="#i-shield"/></svg></span>Mithril Ore</div></td><td class="r" data-coin="410"></td><td class="r" data-coin="455"></td><td class="r">+0.2%</td><td class="r"><span class="spark" data-spark="5,5,4,5,5,4,5" data-w="70" data-h="22" style="color:var(--muted)"></span></td></tr>
+          </tbody></table>
+        </div>
+        <div class="panel"><header><svg class="i"><use href="#i-trophy"/></svg>Pinned achievements</header>
+          <div class="ach"><div><b>Dragon's End Explorer</b><span>41 / 60</span></div><div class="meter"><i data-fill="68"></i></div></div>
+          <div class="ach"><div><b>Fractal Master · tier 3</b><span>7 / 10</span></div><div class="meter"><i data-fill="70"></i></div></div>
+          <div class="ach"><div><b>Collector of Ancient Wonders</b><span>18 / 40</span></div><div class="meter"><i data-fill="45"></i></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel"><header><svg class="i"><use href="#i-flame"/></svg>Up next<span class="sp">pins first</span></header>
+          <ul class="list">
+            <li><span class="t" data-in="14" data-fmt="short">14m</span><div class="g"><b>Tequatl the Sunless</b><span>Sparkfly Fen</span></div><button class="pinbtn" data-pin aria-pressed="true" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></li>
+            <li><span class="t">live</span><div class="g"><b>Dragonstorm</b><span>Dragon's End</span></div><span class="tag live">LIVE</span></li>
+            <li><span class="t">45m</span><div class="g"><b>Shadow Behemoth</b><span>Queensdale</span></div><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></li>
+            <li><span class="t">1h20</span><div class="g"><b>Octovine</b><span>Auric Basin</span></div><button class="pinbtn" data-pin aria-pressed="false" aria-label="Pin"><svg class="i"><use href="#i-pin"/></svg></button></li>
+          </ul></div>
+        <div class="panel"><header><svg class="i"><use href="#i-bell"/></svg>Alerts</header>
+          <ul class="list"><li><div class="g"><b>Ectoplasm ≤ 28s</b><span>met 12 min ago</span></div><span class="tag ok">MET</span></li>
+          <li><div class="g"><b>Mystic Coin ≥ 25s</b><span>1s 66c to go</span></div><span class="tag w">ARMED</span></li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section data-view="events" hidden>
+    <h1>Events</h1><p class="sub">Bosses and metas over the next two hours, in your time.</p>
+    <div class="panel"><div class="chips" data-chips><button aria-pressed="true">All</button><button aria-pressed="false">Bosses</button><button aria-pressed="false">Metas</button><button aria-pressed="false">Pinned</button><button aria-pressed="false">Heart of Thorns</button><button aria-pressed="false">Path of Fire</button><button aria-pressed="false">End of Dragons</button></div>
+      <div class="tl">
+        <div class="hdr"><span></span><span>19:00</span><span>19:15</span><span>19:30</span><span>19:45</span><span>20:00</span><span>20:15</span><span>20:30</span><span>20:45</span></div>
+        <div class="row"><span class="lane">Sparkfly Fen</span><div class="tr"><div class="now" style="--n:22%"></div><div class="b" style="left:46%;width:22%">Tequatl</div></div></div>
+        <div class="row"><span class="lane">Dragon's End</span><div class="tr"><div class="b r2" style="left:0;width:30%">Dragonstorm · live</div><div class="b r2" style="left:62%;width:30%">Dragonstorm</div></div></div>
+        <div class="row"><span class="lane">Queensdale</span><div class="tr"><div class="b i2" style="left:58%;width:20%">Behemoth</div></div></div>
+        <div class="row"><span class="lane">Tangled Depths</span><div class="tr"><div class="b" style="left:28%;width:18%">Chak Gerent</div><div class="b" style="left:76%;width:20%">Octovine</div></div></div>
+        <div class="row"><span class="lane">Domain of Vabbi</span><div class="tr"><div class="b i2" style="left:12%;width:26%">Serpent's Ire</div></div></div>
+      </div></div>
+  </section>
+
+  <!-- TRADING -->
+  <section data-view="trading" hidden>
+    <h1>Trading post</h1><p class="sub">Orders, deliveries and the market, one table at a time.</p>
+    <div class="panel"><div class="chips" data-chips><button aria-pressed="true">Watchlist</button><button aria-pressed="false">Buying</button><button aria-pressed="false">Selling</button><button aria-pressed="false">History</button><button aria-pressed="false">Stats</button></div>
+      <table><thead><tr><th>Item</th><th class="r">Buy</th><th class="r">Sell</th><th class="r">Supply</th><th class="r">Demand</th><th class="r">Profit</th><th class="r">7d</th></tr></thead><tbody>
+        <tr><td><div class="it"><span class="ico" style="--rc:#e0b04a"><svg class="i"><use href="#i-coins"/></svg></span>Mystic Coin</div></td><td class="r" data-coin="21340"></td><td class="r" data-coin="23100"></td><td class="r num">18,204</td><td class="r num">23,110</td><td class="r up num" data-coin="318"></td><td class="r"><span class="spark" data-spark="3,4,4,6,5,7,9" data-w="70" data-h="22"></span></td></tr>
+        <tr><td><div class="it"><span class="ico" style="--rc:#f0bd57"><svg class="i"><use href="#i-gem"/></svg></span>Ectoplasm</div></td><td class="r" data-coin="3012"></td><td class="r" data-coin="3190"></td><td class="r num">96,311</td><td class="r num">54,220</td><td class="r dn num" data-coin="22"></td><td class="r"><span class="spark dn" data-spark="9,8,8,6,7,5,4" data-w="70" data-h="22"></span></td></tr>
+        <tr><td><div class="it"><span class="ico" style="--rc:#6aa9ff"><svg class="i"><use href="#i-scroll"/></svg></span>Elonian Leather Square</div></td><td class="r" data-coin="1420"></td><td class="r" data-coin="1560"></td><td class="r num">41,052</td><td class="r num">12,700</td><td class="r up num" data-coin="63"></td><td class="r"><span class="spark" data-spark="2,3,3,4,4,5,6" data-w="70" data-h="22"></span></td></tr>
+        <tr><td><div class="it"><span class="ico" style="--rc:#9ad28a"><svg class="i"><use href="#i-shield"/></svg></span>Mithril Ore</div></td><td class="r" data-coin="410"></td><td class="r" data-coin="455"></td><td class="r num">212,980</td><td class="r num">88,415</td><td class="r up num" data-coin="2"></td><td class="r"><span class="spark" data-spark="5,5,4,5,5,4,5" data-w="70" data-h="22" style="color:var(--muted)"></span></td></tr>
+      </tbody></table></div>
+  </section>
+  </div>
+</div>
+</div>
+
+<nav class="mtabs" aria-label="Main">
+  <button data-view-btn="home"><svg class="i"><use href="#i-home"/></svg>Overview</button>
+  <button data-view-btn="events"><svg class="i"><use href="#i-swords"/></svg>Events</button>
+  <button data-view-btn="trading"><svg class="i"><use href="#i-chart"/></svg>Trading</button>
+</nav>
+<script src="shared.js"></script>
+</body>
+</html>

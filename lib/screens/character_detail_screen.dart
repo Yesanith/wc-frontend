@@ -85,7 +85,7 @@ class CharacterDetailScreen extends ConsumerWidget {
         child: ErrorBox(error: chars.error, onRetry: () => ref.invalidate(charactersProvider)),
       );
     } else if (list != null) {
-      body = Center(child: Text(s.t('character_not_found'), style: const TextStyle(color: AppColors.muted)));
+      body = Center(child: Text(s.t('character_not_found'), style: TextStyle(color: AppColors.muted)));
     } else {
       body = const Center(child: CircularProgressIndicator());
     }
@@ -94,9 +94,8 @@ class CharacterDetailScreen extends ConsumerWidget {
       length: 5,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.bg,
           surfaceTintColor: Colors.transparent,
-          title: Text(name, style: display(20)),
+          title: Text(name, style: display(20, color: AppColors.accent)),
           actions: [
             if (c != null)
               IconButton(
@@ -104,7 +103,7 @@ class CharacterDetailScreen extends ConsumerWidget {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => CompareScreen(first: name)),
                 ),
-                icon: const Icon(Icons.compare_arrows, color: AppColors.gold),
+                icon: Icon(Icons.compare_arrows, color: AppColors.gold),
               ),
             if (c != null)
               IconButton(
@@ -112,7 +111,7 @@ class CharacterDetailScreen extends ConsumerWidget {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => HeroCardScreen(name: name)),
                 ),
-                icon: const Icon(Icons.ios_share, color: AppColors.gold),
+                icon: Icon(Icons.ios_share, color: AppColors.gold),
               ),
           ],
         ),

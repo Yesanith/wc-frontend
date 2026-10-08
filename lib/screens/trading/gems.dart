@@ -59,17 +59,17 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Icon(Icons.arrow_forward, size: 18, color: AppColors.muted),
+              Icon(Icons.arrow_forward, size: 18, color: AppColors.muted),
               const SizedBox(width: 12),
               Expanded(
                 child: coins.when(
                   data: (value) => CoinText(value, size: 16),
-                  loading: () => const SizedBox(
+                  loading: () => SizedBox(
                     width: 14,
                     height: 14,
                     child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
                   ),
-                  error: (_, __) => const Text('-', style: TextStyle(color: AppColors.muted)),
+                  error: (_, __) => Text('-', style: TextStyle(color: AppColors.muted)),
                 ),
               ),
             ],
@@ -89,24 +89,24 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Icon(Icons.arrow_forward, size: 18, color: AppColors.muted),
+              Icon(Icons.arrow_forward, size: 18, color: AppColors.muted),
               const SizedBox(width: 12),
               Expanded(
                 child: gems.when(
                   data: (value) => Text(s.t('n_gems', {'n': fmtInt(value)}),
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                  loading: () => const SizedBox(
+                  loading: () => SizedBox(
                     width: 14,
                     height: 14,
                     child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
                   ),
-                  error: (_, __) => const Text('-', style: TextStyle(color: AppColors.muted)),
+                  error: (_, __) => Text('-', style: TextStyle(color: AppColors.muted)),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(s.t('exchange_note'), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+          Text(s.t('exchange_note'), style: TextStyle(fontSize: 11, color: AppColors.hint)),
         ],
       ),
     );

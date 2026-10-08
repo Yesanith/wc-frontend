@@ -50,9 +50,7 @@ class _ProfessionCard extends StatelessWidget {
     final color = professionColor(p.id);
     final elites = p.specializations.where((l) => l['elite'] == true).toList();
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => ProfessionDetailScreen(id: p.id)),
-      ),
+      onTap: () => openPanel(context, (_) => ProfessionDetailScreen(id: p.id)),
       padding: const EdgeInsets.all(14),
       radius: AppRadius.card,
       child: Row(
@@ -79,7 +77,7 @@ class _ProfessionCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );
@@ -100,7 +98,6 @@ class ProfessionDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
         title: Text(p?.name ?? id, style: display(20, color: color)),
       ),
@@ -177,14 +174,14 @@ class _WeaponRow extends StatelessWidget {
               children: [
                 Text(titleCase(professionWeaponKey(name)),
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                Text(weaponHands(s, weapon), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                Text(weaponHands(s, weapon), style: TextStyle(fontSize: 11, color: AppColors.muted)),
               ],
             ),
           ),
           if (line != null) ...[
             ProfessionIcon(url: line['profession_icon'] as String?, size: 18),
             const SizedBox(width: 6),
-            Text('${line['name'] ?? ''}', style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+            Text('${line['name'] ?? ''}', style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
           ],
         ],
       ),
@@ -265,7 +262,7 @@ class _Traits extends ConsumerWidget {
             // three tiers, each a minor trait followed by its three majors
             for (var tier = 0; tier < 3; tier++) ...[
               Text(s.t('tier_n', {'n': tier + 1}),
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
               const SizedBox(height: 4),
               for (final id in [
                 if (tier < minors.length) minors[tier],
@@ -322,7 +319,7 @@ class _TraitRow extends StatelessWidget {
                         fontWeight: minor ? FontWeight.w500 : FontWeight.w700,
                         color: minor ? AppColors.textSoft : AppColors.text)),
                 if (description.isNotEmpty)
-                  Text(description, style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                  Text(description, style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
               ],
             ),
           ),

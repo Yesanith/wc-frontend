@@ -48,12 +48,12 @@ class _AchievementsTab extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.list_alt_outlined, size: 20, color: AppColors.gold),
+                Icon(Icons.list_alt_outlined, size: 20, color: AppColors.gold),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(s.t('browse_all'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                 ),
-                const Icon(Icons.chevron_right, color: AppColors.muted),
+                Icon(Icons.chevron_right, color: AppColors.muted),
               ],
             ),
           ),
@@ -88,8 +88,8 @@ class _AchievementsTab extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                    style: const TextStyle(
-                                        fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                    style:
+                                        TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
                                 AchievementPinButton(id: a.id),
                               ],
                             ),

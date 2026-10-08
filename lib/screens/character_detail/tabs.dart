@@ -24,7 +24,7 @@ class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
 
     if (eq.isEmpty && tabs.isEmpty) {
       return Center(
-        child: Text(s.t('no_equipment'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
+        child: Text(s.t('no_equipment'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
 
@@ -96,7 +96,7 @@ class _EquipmentRow extends ConsumerWidget {
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.card),
-        side: const BorderSide(color: AppColors.line),
+        side: BorderSide(color: AppColors.line),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -113,7 +113,7 @@ class _EquipmentRow extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(slotLabel(s, slot).toUpperCase(),
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                     const SizedBox(height: 2),
                     Text(itemName,
@@ -166,9 +166,7 @@ class _SmallItem extends ConsumerWidget {
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 110),
             child: Text(name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 10, color: AppColors.muted)),
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10, color: AppColors.muted)),
           ),
         ],
       ],
@@ -187,7 +185,7 @@ class _BuildTab extends ConsumerWidget {
     final build = activeBuild(c);
     if (build == null) {
       return Center(
-        child: Text(s.t('no_build'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
+        child: Text(s.t('no_build'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
     // the character endpoint leaves the profession out of the build object
@@ -224,7 +222,7 @@ class _InventoryTab extends ConsumerWidget {
     final slots = bagSlots(c);
     if (slots.isEmpty) {
       return Center(
-        child: Text(s.t('no_inventory'), textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted)),
+        child: Text(s.t('no_inventory'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
     final used = slots.where((s) => s != null).length;
@@ -242,10 +240,10 @@ class _InventoryTab extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(s.t('bags'),
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
                   ),
                   Text(s.t('slots_used', {'a': used, 'b': slots.length}),
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ],
               ),
             ),
@@ -299,7 +297,7 @@ class _CraftingTab extends ConsumerWidget {
     final crafting = ((c['crafting'] as List?) ?? const []).whereType<Map>().toList();
     final learned = intList(c['recipes']);
     if (crafting.isEmpty && learned.isEmpty) {
-      return Center(child: Text(s.t('no_crafting'), style: const TextStyle(color: AppColors.muted)));
+      return Center(child: Text(s.t('no_crafting'), style: TextStyle(color: AppColors.muted)));
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -350,7 +348,7 @@ class _CraftingTab extends ConsumerWidget {
               Expanded(child: Bar(value: rating / max)),
               const SizedBox(width: 10),
               Text('$rating / $max',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
         ],
@@ -383,7 +381,7 @@ class _LearnedRecipesCard extends ConsumerWidget {
       radius: AppRadius.card,
       child: Row(
         children: [
-          const Icon(Icons.menu_book_outlined, color: AppColors.gold),
+          Icon(Icons.menu_book_outlined, color: AppColors.gold),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -391,14 +389,14 @@ class _LearnedRecipesCard extends ConsumerWidget {
               children: [
                 Text(s.t('learned_recipes'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                 Text(s.t('recipes_count', {'n': fmtInt(count)}),
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
           ),
           if (recipes.isLoading)
             const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
           else
-            const Icon(Icons.chevron_right, color: AppColors.chevron),
+            Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

@@ -61,7 +61,7 @@ class AboutScreen extends ConsumerWidget {
             SettingsRow(label: s.t('about_credit_data')),
           ],
         ),
-        Text(s.t('disclaimer'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
+        Text(s.t('disclaimer'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
       ],
     );
   }
@@ -109,7 +109,7 @@ class _Hero extends StatelessWidget {
                   children: [VersionPill(version), Pill(by, color: AppColors.goldSoft)],
                 ),
                 const SizedBox(height: 10),
-                Text(summary, style: const TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
+                Text(summary, style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
               ],
             ),
           ),
@@ -127,13 +127,13 @@ class _CommunityTile extends StatelessWidget {
     required this.title,
     required this.body,
     required this.url,
-    this.ink = AppColors.onGold,
+    this.ink,
     this.external = false,
   });
 
   final IconData icon;
   final Color accent;
-  final Color ink;
+  final Color? ink;
   final String title;
   final String body;
   final String url;
@@ -173,7 +173,7 @@ class _CommunityTile extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
-                  child: Icon(icon, size: 20, color: ink),
+                  child: Icon(icon, size: 20, color: ink ?? AppColors.onGold),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -182,7 +182,7 @@ class _CommunityTile extends StatelessWidget {
                     children: [
                       Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                       const SizedBox(height: 2),
-                      Text(body, style: const TextStyle(fontSize: 12, height: 1.35, color: AppColors.muted)),
+                      Text(body, style: TextStyle(fontSize: 12, height: 1.35, color: AppColors.muted)),
                     ],
                   ),
                 ),

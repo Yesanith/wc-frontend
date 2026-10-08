@@ -68,7 +68,7 @@ class _WalletTab extends ConsumerWidget {
                             width: 28,
                             height: 28,
                             child: others[i].icon == null
-                                ? const Icon(Icons.circle_outlined, size: 20, color: AppColors.muted)
+                                ? Icon(Icons.circle_outlined, size: 20, color: AppColors.muted)
                                 : CachedIcon(url: others[i].icon!, fit: BoxFit.contain),
                           ),
                           const SizedBox(width: 12),
@@ -120,7 +120,7 @@ class _BankTab extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
               sliver: SliverToBoxAdapter(
                 child: Text(s.t('slots_used', {'a': used, 'b': slots.length}),
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ),
             ),
             SliverPadding(
@@ -314,7 +314,7 @@ class _BuildsTab extends ConsumerWidget {
               color: AppColors.surface,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.card),
-                side: const BorderSide(color: AppColors.line),
+                side: BorderSide(color: AppColors.line),
               ),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
@@ -345,7 +345,7 @@ class _BuildsTab extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right, color: AppColors.chevron),
+                      Icon(Icons.chevron_right, color: AppColors.chevron),
                     ],
                   ),
                 ),

@@ -158,7 +158,7 @@ class _LogTab extends ConsumerWidget {
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: entries.length,
-          separatorBuilder: (_, __) => const Divider(color: AppColors.track, height: 16),
+          separatorBuilder: (_, __) => Divider(color: AppColors.track, height: 16),
           itemBuilder: (context, i) {
             final entry = entries[i];
             final date = '${entry['time'] ?? ''}';
@@ -168,7 +168,7 @@ class _LogTab extends ConsumerWidget {
                 Text(_logLine(entry), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
                 const SizedBox(height: 2),
                 Text(date.length >= 10 ? date.substring(0, 10) : date,
-                    style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                    style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ],
             );
           },
@@ -251,7 +251,7 @@ class _MembersTab extends ConsumerWidget {
                             'w': asInt((t['aggregate'] as Map?)?['wins']),
                             'l': asInt((t['aggregate'] as Map?)?['losses']),
                           }),
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted),
                         ),
                       ],
                     ),
@@ -270,7 +270,7 @@ class _MembersTab extends ConsumerWidget {
                       width: 22,
                       height: 22,
                       child: rankIcons['${m['rank']}'] == null
-                          ? const Icon(Icons.person_outline, size: 18, color: AppColors.muted)
+                          ? Icon(Icons.person_outline, size: 18, color: AppColors.muted)
                           : CachedIcon(url: rankIcons['${m['rank']}']!, fit: BoxFit.contain),
                     ),
                     const SizedBox(width: 10),
@@ -278,7 +278,7 @@ class _MembersTab extends ConsumerWidget {
                       child:
                           Text('${m['name'] ?? ''}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
-                    Text('${m['rank'] ?? ''}', style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    Text('${m['rank'] ?? ''}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -339,7 +339,7 @@ class _UpgradesTab extends ConsumerWidget {
                     iconSize: 32,
                     titleLines: 1,
                     trailing: Text(fmtInt(u.count),
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
                   ),
                 ),
             ],

@@ -24,7 +24,7 @@ class _SeasonStanding extends ConsumerWidget {
           Text(title, style: display(16)),
           if (standing.seasonName.isNotEmpty && standing.divisionName.isNotEmpty) ...[
             const SizedBox(height: 2),
-            Text(standing.seasonName, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+            Text(standing.seasonName, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           ],
           const SizedBox(height: 12),
           Row(
@@ -119,7 +119,7 @@ class _PvpTab extends ConsumerWidget {
                                 children: [
                                   Text(tier.name, style: display(18)),
                                   Text(s.t('rank_n', {'n': asInt(data['pvp_rank'])}),
-                                      style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
                             ),
@@ -200,8 +200,7 @@ class _PvpTab extends ConsumerWidget {
                               ),
                               Text(
                                 ratio(entry.value is Map ? Map<String, dynamic>.from(entry.value as Map) : null),
-                                style:
-                                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
                               ),
                             ],
                           ),
@@ -220,10 +219,10 @@ class _PvpTab extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(s.t('wvw_rank'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                child: Text(s.t('wvw_rank'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               Text(wvwRank > 0 ? fmtInt(wvwRank) : '-',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
             ],
           ),
         ),

@@ -63,7 +63,7 @@ class _MatchupTab extends ConsumerWidget {
           if (match == null) {
             return ListView(
               padding: const EdgeInsets.all(24),
-              children: [Text(s.t('no_wvw_match'), style: const TextStyle(color: AppColors.muted))],
+              children: [Text(s.t('no_wvw_match'), style: TextStyle(color: AppColors.muted))],
             );
           }
           final mine = wvwColorOf(match, team);
@@ -113,14 +113,14 @@ class _MatchupTab extends ConsumerWidget {
                               ),
                               Text(
                                 s.t('kd_line', {'k': fmtInt(kills[c]!), 'd': fmtInt(deaths[c]!)}),
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted),
                               ),
                               if (worldNames[c]!.isNotEmpty)
                                 Text(
                                   worldNames[c]!.join(', '),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 11, color: AppColors.textSoft),
+                                  style: TextStyle(fontSize: 11, color: AppColors.textSoft),
                                 ),
                             ],
                           ),
@@ -131,7 +131,7 @@ class _MatchupTab extends ConsumerWidget {
                             Text(fmtInt(victory[c]!),
                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _teamColors[c])),
                             Text(s.t('score_n', {'n': fmtInt(scores[c]!)}),
-                                style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                                style: TextStyle(fontSize: 11, color: AppColors.muted)),
                           ],
                         ),
                       ],
@@ -146,10 +146,10 @@ class _MatchupTab extends ConsumerWidget {
                     children: [
                       if (timers.lockout != null)
                         Text(s.t('wvw_lockout', {'d': _dateTime(timers.lockout!)}),
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                       if (timers.teamAssignment != null)
                         Text(s.t('wvw_relink', {'d': _dateTime(timers.teamAssignment!)}),
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                     ],
                   ),
                 ),
@@ -201,7 +201,7 @@ class _MapCard extends ConsumerWidget {
                   Text('${held[c]}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                   const SizedBox(width: 4),
                   Text(scores is Map ? fmtInt(asInt(scores[c])) : '',
-                      style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                      style: TextStyle(fontSize: 11, color: AppColors.muted)),
                   const SizedBox(width: 14),
                 ],
               ],
@@ -239,7 +239,7 @@ class _ObjectivesTab extends ConsumerWidget {
         if (match == null) {
           return Padding(
             padding: const EdgeInsets.all(24),
-            child: Text(s.t('no_wvw_match'), style: const TextStyle(color: AppColors.muted)),
+            child: Text(s.t('no_wvw_match'), style: TextStyle(color: AppColors.muted)),
           );
         }
         final maps = ((match['maps'] as List?) ?? const []).whereType<Map>().toList();
@@ -269,13 +269,13 @@ class _ObjectivesTab extends ConsumerWidget {
                           child: Text('${catalog['${o['id']}']?['name'] ?? o['id']}',
                               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                         ),
-                        Text('${o['type']}', style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+                        Text('${o['type']}', style: TextStyle(fontSize: 11, color: AppColors.muted)),
                         const SizedBox(width: 10),
                         if (catalog['${o['id']}'] != null)
                           Pill(s.t('tier_n', {'n': tier(catalog['${o['id']}']!, asInt(o['yaks_delivered']))})),
                         if (o['claimed_by'] != null) ...[
                           const SizedBox(width: 6),
-                          const Icon(Icons.flag, size: 14, color: AppColors.gold),
+                          Icon(Icons.flag, size: 14, color: AppColors.gold),
                         ],
                       ],
                     ),
@@ -314,13 +314,12 @@ class _RankTab extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(s.t('wvw_rank'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                      Text(s.t('wvw_rank'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                       if (title != null && title.isNotEmpty) Text(title, style: display(18)),
                     ],
                   ),
                 ),
-                Text(fmtInt(rank),
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                Text(fmtInt(rank), style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ],
             ),
           ),
@@ -337,7 +336,7 @@ class _RankTab extends ConsumerWidget {
                 subtitle: '${a['description'] ?? ''}',
                 iconSize: 36,
                 trailing: Text('${((a['ranks'] as List?) ?? const []).length}',
-                    style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ),
             ),
         ],

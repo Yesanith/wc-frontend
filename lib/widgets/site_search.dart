@@ -147,15 +147,15 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
             isDense: true,
             filled: true,
             fillColor: AppColors.surface,
-            prefixIcon: const Icon(Icons.search, size: 18, color: AppColors.muted),
+            prefixIcon: Icon(Icons.search, size: 18, color: AppColors.muted),
             prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 36),
             contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
+                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.line)),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.line)),
+                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.line)),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: const BorderSide(color: AppColors.gold)),
+                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.gold)),
           ),
         ),
         optionsViewBuilder: (context, onSelected, options) => Align(
@@ -166,7 +166,7 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
               color: AppColors.surface,
               elevation: 8,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14), side: const BorderSide(color: AppColors.line)),
+                  borderRadius: BorderRadius.circular(14), side: BorderSide(color: AppColors.line)),
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: widget.width + 140, maxHeight: 420),
@@ -183,7 +183,7 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
                           selectedTileColor: AppColors.surface2,
                           leading: Icon(_icon(hit), size: 20, color: highlighted ? AppColors.gold : AppColors.muted),
                           title: Text(hit.label, maxLines: 1, overflow: TextOverflow.ellipsis),
-                          subtitle: Text(_kind(hit), style: const TextStyle(fontSize: 11, color: AppColors.hint)),
+                          subtitle: Text(_kind(hit), style: TextStyle(fontSize: 11, color: AppColors.hint)),
                           onTap: () => onSelected(hit),
                         );
                       }),

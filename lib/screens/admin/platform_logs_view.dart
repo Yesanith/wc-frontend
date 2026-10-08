@@ -197,7 +197,7 @@ class _PlatformPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (newest && data.rows.isEmpty)
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(24),
                 child: Center(
                   child: Text('Nothing was recorded in this window. Try a longer one.',

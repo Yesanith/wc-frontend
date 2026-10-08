@@ -5,6 +5,7 @@ import '../l10n/strings.dart';
 import '../services/recipe_book.dart';
 import '../state/account.dart';
 import '../state/crafting.dart';
+import '../state/goals.dart';
 import '../state/items.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -35,9 +36,23 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20)),
+        title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20, color: AppColors.accent)),
+        actions: [
+          IconButton(
+            tooltip: s.t('goal_add'),
+            icon: const Icon(Icons.playlist_add),
+            onPressed: () async {
+              final goals = ref.read(goalsProvider.notifier);
+              if (!goals.has(widget.itemId) && ref.read(goalsProvider).length >= maxGoals) {
+                showToast(context, s.t('goals_full'));
+                return;
+              }
+              await goals.add(widget.itemId, _quantity);
+              if (context.mounted) showToast(context, s.t('goal_added'));
+            },
+          ),
+        ],
       ),
       body: AsyncView<CraftNode>(
         value: tree,
@@ -48,7 +63,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
               padding: const EdgeInsets.all(24),
               child: Center(
                 child: Text(s.t('no_recipe'),
-                    textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.5)),
+                    textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.5)),
               ),
             );
           }
@@ -77,16 +92,16 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(s.t('quantity'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                      child: Text(s.t('quantity'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                     ),
                     IconButton(
                       onPressed: _quantity <= 1 ? null : () => setState(() => _quantity--),
-                      icon: const Icon(Icons.remove_circle_outline, color: AppColors.gold),
+                      icon: Icon(Icons.remove_circle_outline, color: AppColors.gold),
                     ),
                     Text('$_quantity', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                     IconButton(
                       onPressed: () => setState(() => _quantity++),
-                      icon: const Icon(Icons.add_circle_outline, color: AppColors.gold),
+                      icon: Icon(Icons.add_circle_outline, color: AppColors.gold),
                     ),
                   ],
                 ),
@@ -118,7 +133,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: Column(
                   children: [
-                    for (final e in leaves.entries) _LeafRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
+                    for (final e in leaves.entries) MaterialRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
                   ],
                 ),
               ),
@@ -174,8 +189,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('missing_materials_cost'),
-                    style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                child: Text(s.t('missing_materials_cost'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               CoinText(missingCost, size: 16),
             ],
@@ -184,7 +198,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('already_owned_value'), style: const TextStyle(fontSize: 13, color: AppColors.muted)),
+                child: Text(s.t('already_owned_value'), style: TextStyle(fontSize: 13, color: AppColors.muted)),
               ),
               CoinText(ownedValue, size: 13),
             ],
@@ -193,7 +207,7 @@ class _CostPanel extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('material_value'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                child: Text(s.t('material_value'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
               CoinText(materialValue, size: 16),
             ],
@@ -201,16 +215,16 @@ class _CostPanel extends ConsumerWidget {
           if (unpriced > 0) ...[
             const SizedBox(height: 6),
             Text(s.t('unpriced_materials', {'n': unpriced}),
-                style: const TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
+                style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
           ],
           if (buyInstead > 0) ...[
             const SizedBox(height: 10),
-            const Divider(color: AppColors.track, height: 1),
+            Divider(color: AppColors.track, height: 1),
             const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
-                  child: Text(s.t('buy_instead'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                  child: Text(s.t('buy_instead'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                 ),
                 CoinText(buyInstead, size: 16),
               ],
@@ -231,8 +245,9 @@ class _CostPanel extends ConsumerWidget {
   }
 }
 
-class _LeafRow extends ConsumerWidget {
-  const _LeafRow({required this.itemId, required this.need, required this.have});
+/// one material with how much of it the account has against how much is needed
+class MaterialRow extends ConsumerWidget {
+  const MaterialRow({super.key, required this.itemId, required this.need, required this.have});
 
   final int itemId;
   final int need;
@@ -245,9 +260,7 @@ class _LeafRow extends ConsumerWidget {
     final name = (item?['name'] as String?) ?? s.t('item_n', {'id': itemId});
     final done = have >= need;
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => TradingItemScreen(itemId: itemId)),
-      ),
+      onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: itemId)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(

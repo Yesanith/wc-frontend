@@ -46,7 +46,20 @@ def patch_index(html: str) -> str:
     #loading .bar::after {{ content: ""; display: block; width: 40%; height: 100%; background: {GOLD};
       animation: slide 1.1s ease-in-out infinite; }}
     @keyframes slide {{ from {{ margin-left: -40%; }} to {{ margin-left: 100%; }} }}
+    /* the light look: paper while it loads, so the page does not flash dark before the app draws */
+    html.day, html.day body {{ background: #F4ECDA; }}
+    html.day #loading {{ color: #8A5F14; }}
+    html.day #loading .bar {{ background: #E0D3B4; }}
+    html.day #loading .bar::after {{ background: #8A5F14; }}
   </style>
+  <script>
+    // the look the player chose (the app keeps it in local storage), else the one of the browser
+    try {{
+      var look = JSON.parse(localStorage.getItem('flutter.look') || 'null');
+      var night = look === 'dark' || (look !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.className = night ? 'night' : 'day';
+    }} catch (e) {{}}
+  </script>
 """
     if 'name="theme-color"' not in html:
         # the template writes some of these itself, with values of its own: ours replace them

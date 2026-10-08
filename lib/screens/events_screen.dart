@@ -102,7 +102,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(s.t('timer_note'), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                  child: Text(s.t('timer_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ),
                 IconButton(
                   tooltip: listView ? s.t('timeline_view') : s.t('list_view'),
@@ -115,39 +115,29 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           ),
         ),
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                for (final k in KindFilter.values) ...[
-                  ChoiceChip(
-                    label: Text(switch (k) {
-                      KindFilter.all => s.t('all'),
-                      KindFilter.bosses => s.t('filter_bosses'),
-                      KindFilter.metas => s.t('filter_metas'),
-                      KindFilter.pinned => s.t('pinned'),
-                    }),
-                    selected: _kind == k,
-                    onSelected: (_) => setState(() => _kind = k),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-                Container(
-                    width: 1, margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 10), color: AppColors.line),
-                for (final e in Expansion.values) ...[
-                  FilterChip(
-                    avatar: CircleAvatar(radius: 4, backgroundColor: e.color),
-                    label: Text(e.code),
-                    tooltip: e.label,
-                    selected: releases.contains(e),
-                    onSelected: (_) => ref.read(releaseFilterProvider.notifier).toggle(e),
-                  ),
-                  const SizedBox(width: 6),
-                ],
-              ],
-            ),
+          child: ChipRow(
+            children: [
+              for (final k in KindFilter.values)
+                ChoiceChip(
+                  label: Text(switch (k) {
+                    KindFilter.all => s.t('all'),
+                    KindFilter.bosses => s.t('filter_bosses'),
+                    KindFilter.metas => s.t('filter_metas'),
+                    KindFilter.pinned => s.t('pinned'),
+                  }),
+                  selected: _kind == k,
+                  onSelected: (_) => setState(() => _kind = k),
+                ),
+              Container(width: 1, height: 24, margin: const EdgeInsets.symmetric(horizontal: 6), color: AppColors.line),
+              for (final e in Expansion.values)
+                FilterChip(
+                  avatar: CircleAvatar(radius: 4, backgroundColor: e.color),
+                  label: Text(e.code),
+                  tooltip: e.label,
+                  selected: releases.contains(e),
+                  onSelected: (_) => ref.read(releaseFilterProvider.notifier).toggle(e),
+                ),
+            ],
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 8)),
@@ -169,9 +159,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     if (widget.embedded) return refreshable;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('world_bosses'), style: display(20)),
+        title: Text(s.t('world_bosses'), style: display(20, color: AppColors.accent)),
       ),
       body: refreshable,
     );
@@ -208,7 +197,7 @@ class _AgendaList extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(24, 16, 20, 4),
                     child: Text(
                       '${pad2(o.start.toLocal().hour)}:00',
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
                     ),
                   ),
@@ -267,7 +256,7 @@ class MetaRow extends ConsumerWidget {
                             ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
                             : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
                         maxLines: 1,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 11, color: AppColors.muted, fontFeatures: [FontFeature.tabularFigures()]),
                       ),
                     ],
@@ -286,7 +275,7 @@ class MetaRow extends ConsumerWidget {
                       Row(
                         children: [
                           if (o.event.kind == MetaKind.hardBoss) ...[
-                            const Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
+                            Icon(Icons.local_fire_department_rounded, size: 15, color: AppColors.red),
                             const SizedBox(width: 3),
                           ],
                           Flexible(
@@ -308,7 +297,7 @@ class MetaRow extends ConsumerWidget {
                       Text(o.map.name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -318,10 +307,10 @@ class MetaRow extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                     decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(999)),
                     child: Text(s.t('now'),
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
                   )
                 else if (looted)
-                  const Icon(Icons.check_rounded, size: 18, color: AppColors.green)
+                  Icon(Icons.check_rounded, size: 18, color: AppColors.green)
                 else
                   ExpansionBadge(o.map.release, size: 30),
                 if (pinnable)

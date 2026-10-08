@@ -17,9 +17,8 @@ class TradingItemScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.bg,
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('trading_post'), style: display(20)),
+        title: Text(s.t('trading_post'), style: display(20, color: AppColors.accent)),
         actions: [
           IconButton(
             tooltip: s.t('price_alert'),
@@ -63,7 +62,7 @@ class TradingItemScreen extends ConsumerWidget {
               value: price,
               onRetry: () => ref.invalidate(priceProvider(itemId)),
               builder: (p) => p == null
-                  ? Panel(child: Text(s.t('not_tradeable'), style: const TextStyle(color: AppColors.muted)))
+                  ? Panel(child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)))
                   : _PricePanel(p),
             ),
             const SizedBox(height: 12),
@@ -78,11 +77,11 @@ class TradingItemScreen extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(s.t('you_own'), style: const TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                    child: Text(s.t('you_own'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                   ),
                   totals.when(
                     data: (t) => Text(fmtInt(t[itemId] ?? 0),
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
                     loading: () =>
                         const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
                     error: (_, __) => const Text('-'),
@@ -111,7 +110,7 @@ class TradingItemScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 14),
-            Text(s.t('tp_note'), style: const TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
+            Text(s.t('tp_note'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
           ],
         ),
       ),
@@ -138,11 +137,11 @@ class _PricePanel extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
               const SizedBox(height: 4),
               CoinText(value, size: 20),
               const SizedBox(height: 2),
-              Text(s.t('n_listed', {'n': fmtInt(qty)}), style: const TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text(s.t('n_listed', {'n': fmtInt(qty)}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
             ],
           ),
         );
@@ -158,12 +157,12 @@ class _PricePanel extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 14),
-          const Divider(color: AppColors.track, height: 1),
+          Divider(color: AppColors.track, height: 1),
           const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
-                child: Text(s.t('flip_profit'), style: const TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                child: Text(s.t('flip_profit'), style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
               ),
               CoinText(profit, size: 15),
             ],
@@ -202,8 +201,8 @@ class _OrderBook extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title.toUpperCase(),
-                  style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+                  style:
+                      TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
               const SizedBox(height: 6),
               for (final r in rows)
                 Padding(
@@ -269,9 +268,9 @@ Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemI
             decoration: fieldDecoration(s.t('alert_buy_above')),
           ),
           const SizedBox(height: 8),
-          Text(s.t('alert_in_gold'), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+          Text(s.t('alert_in_gold'), style: TextStyle(fontSize: 11, color: AppColors.muted)),
           const SizedBox(height: 6),
-          Text(s.t('alert_push_hint'), style: const TextStyle(fontSize: 11, color: AppColors.muted)),
+          Text(s.t('alert_push_hint'), style: TextStyle(fontSize: 11, color: AppColors.muted)),
         ],
       ),
       actions: [

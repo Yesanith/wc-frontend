@@ -69,9 +69,9 @@ class _Blocked extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.public, size: 40, color: AppColors.muted),
+            Icon(Icons.public, size: 40, color: AppColors.muted),
             const SizedBox(height: 12),
-            Text(text, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.muted, height: 1.4)),
+            Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
             if (toSettings) ...[
               const SizedBox(height: 16),
               FilledButton.tonal(
@@ -270,7 +270,7 @@ class _OpenEventCard extends ConsumerWidget {
                   '${eventWhen(s, e.startAt)} · ${e.organizer}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 12, color: AppColors.muted),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
                 ),
                 const SizedBox(height: 6),
                 Wrap(
@@ -293,7 +293,7 @@ class _OpenEventCard extends ConsumerWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.chevron),
+          Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );
