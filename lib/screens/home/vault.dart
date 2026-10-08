@@ -77,7 +77,12 @@ class _VaultState extends ConsumerState<_Vault> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(s.t('objectives_done', {'a': finished, 'b': objectives.length}),
+                            Text(
+                                // the ring is the track of the chest, which is not all of the objectives
+                                metaGoal > 0 && metaGoal != objectives.length
+                                    ? s.t(
+                                        'objectives_done_chest', {'a': finished, 'b': objectives.length, 'c': metaGoal})
+                                    : s.t('objectives_done', {'a': finished, 'b': objectives.length}),
                                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 4),
                             Text(s.t('acclaim_left', {'n': fmtInt(left)}),

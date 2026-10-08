@@ -652,6 +652,14 @@ const enStrings = <String, String>{
   'widget_daily': 'Daily reset',
   'widget_weekly': 'Weekly reset',
   'widget_open_app': 'Open the app',
+  'craft_profit': 'Crafting profit',
+  'craft_profit_note':
+      'The recipes that earn the most at the trading post right now. The cost counts the materials of the recipe, each at the lowest listing, and the result is sold a copper under the lowest listing after the 15% fees. Prices move, check them before you buy.',
+  'craft_profit_empty': 'Nothing earns anything with these filters right now.',
+  'craft_cost': 'Materials',
+  'profit': 'Profit',
+  'sort_profit': 'Most profit',
+  'sort_return': 'Best return',
   'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
   'landing_sub':
@@ -855,6 +863,7 @@ const enStrings = <String, String>{
   'all_timers': 'All timers',
   'daily_checklist': 'Daily checklist',
   'objectives_done': '{a} of {b} done',
+  'objectives_done_chest': '{a} of {b} done, chest at {c}',
   'acclaim_left': '{n} acclaim left to earn',
   'world_boss_loot': 'World boss chests',
   'copy_chat_link': 'Copy chat link',
