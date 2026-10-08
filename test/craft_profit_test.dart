@@ -124,4 +124,70 @@ void main() {
       expect(rankCrafts(many, prices, limit: 3), hasLength(3));
     });
   });
+
+  group('parseCraftProfit', () {
+    Map<String, dynamic> row({
+      int recipe = 100,
+      int item = 10,
+      int count = 1,
+      List<String> disciplines = const ['Weaponsmith'],
+      int cost = 250,
+      int revenue = 850,
+    }) =>
+        {
+          'recipe_id': recipe,
+          'item_id': item,
+          'count': count,
+          'disciplines': disciplines,
+          'cost': cost,
+          'revenue': revenue,
+          'demand': 100,
+          'supply': 50,
+        };
+
+    test('reads the rows of the server, in its order, with when it read the prices', () {
+      final answer = parseCraftProfit({
+        'updated_at': '2026-10-08T06:00:00+00:00',
+        'rows': [row(recipe: 200, item: 20, count: 5), row()],
+      })!;
+      expect(answer.rows.map((r) => r.itemId), [20, 10]);
+      expect(answer.rows.first.count, 5);
+      expect(answer.rows.last.profit, 600);
+      expect(answer.rows.last.disciplines, ['Weaponsmith']);
+      expect(answer.rows.last.recipeId, 100);
+      expect(answer.updatedAt, DateTime.utc(2026, 10, 8, 6));
+    });
+
+    test('is nothing when it is not an answer, or has nothing to rank yet', () {
+      expect(parseCraftProfit(null), isNull);
+      expect(parseCraftProfit('x'), isNull);
+      expect(parseCraftProfit(<String, dynamic>{'rows': <dynamic>[]}), isNull);
+      expect(parseCraftProfit(<String, dynamic>{'rows': 'x'}), isNull);
+      expect(
+        parseCraftProfit({
+          'rows': [
+            'nope',
+            {'item_id': 0}
+          ]
+        }),
+        isNull,
+      );
+    });
+
+    test('leaves out a row that is not one and keeps the others', () {
+      final answer = parseCraftProfit({
+        'updated_at': null,
+        'rows': ['nope', row(item: 0), row(item: 30)],
+      })!;
+      expect(answer.rows.map((r) => r.itemId), [30]);
+      expect(answer.updatedAt, isNull);
+    });
+
+    test('a count of nothing is one', () {
+      final answer = parseCraftProfit({
+        'rows': [row(count: 0)]
+      })!;
+      expect(answer.rows.single.count, 1);
+    });
+  });
 }

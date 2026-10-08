@@ -615,6 +615,7 @@ const zhStrings = <String, String>{
   'craft_profit': '制作利润',
   'craft_profit_note': '此刻在交易所里收益最高的配方。成本按配方材料各自的最低挂牌价计算，成品按比最低挂牌价低1铜币出售并扣除15%的手续费。价格会变动，购买前请再确认。',
   'craft_profit_empty': '按当前筛选，现在没有能赚钱的配方。',
+  'craft_profit_age': '价格读取于 {n} 分钟前',
   'craft_cost': '材料',
   'profit': '利润',
   'sort_profit': '利润最高',

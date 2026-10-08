@@ -618,6 +618,7 @@ const jaStrings = <String, String>{
   'craft_profit_note':
       '今、トレーディングポストで最も利益が出るレシピです。費用はレシピの素材を最安の出品価格で数え、結果は手数料15%を引いたうえで最安の出品より1銅貨安く売る前提です。価格は変動するので、買う前に確認してください。',
   'craft_profit_empty': 'この条件では今は利益の出るものがありません。',
+  'craft_profit_age': '{n} 分前に価格を取得',
   'craft_cost': '素材',
   'profit': '利益',
   'sort_profit': '利益が大きい順',

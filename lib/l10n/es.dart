@@ -659,6 +659,7 @@ const esStrings = <String, String>{
   'craft_profit_note':
       'Las recetas que más ganan ahora en el bazar. El coste cuenta los materiales de la receta, cada uno al precio de venta más bajo, y el resultado se vende un cobre por debajo del precio más bajo, tras las tasas del 15 %. Los precios cambian, compruébalos antes de comprar.',
   'craft_profit_empty': 'Con estos filtros nada da beneficio ahora mismo.',
+  'craft_profit_age': 'Precios leídos hace {n} min',
   'craft_cost': 'Materiales',
   'profit': 'Beneficio',
   'sort_profit': 'Mayor beneficio',
