@@ -69,7 +69,7 @@ RecruitPage _thePage({
       requirements: 'Level 80',
       playTimes: 'EU evenings',
       lookingFor: const ['raids', 'fractals'],
-      languages: const ['en', 'de'],
+      languages: const ['en'],
       region: region,
       discordInvite: invite,
       contact: contact,
@@ -325,7 +325,7 @@ void main() {
           tag: 'MIST',
           headline: 'Raids on Thursdays',
           looking: const ['raids', 'fractals'],
-          languages: const ['en', 'de'],
+          languages: const ['en'],
           region: RecruitRegion.eu,
           playTimes: 'EU evenings',
           id: _id),
@@ -370,7 +370,7 @@ void main() {
       await show(tester, FakeRecruit(cards: two), home: const RecruitmentScreen());
       Finder inCard(String title, String text) => find.descendant(
           of: find.ancestor(of: find.text(title), matching: find.byType(InkWell)), matching: find.text(text));
-      for (final t in ['Raids', 'Fractals', 'English', 'Deutsch', 'Europe']) {
+      for (final t in ['Raids', 'Fractals', 'English', 'Europe']) {
         expect(inCard('Mistwalkers [MIST]', t), findsOneWidget, reason: t);
       }
       expect(inCard('Dawnbreakers [DAWN]', 'Casual'), findsOneWidget);
@@ -573,7 +573,7 @@ void main() {
       expect(find.text('A friendly raiding guild that plays in the evenings.'), findsOneWidget);
       expect(find.text('Recruiting'), findsOneWidget);
       expect(find.text('RAIDS'), findsNothing);
-      for (final t in ['Raids', 'Fractals', 'English', 'Deutsch']) {
+      for (final t in ['Raids', 'Fractals', 'English']) {
         expect(find.text(t), findsOneWidget, reason: t);
       }
       expect(find.text('Level 80'), findsOneWidget);
@@ -773,7 +773,8 @@ void main() {
       expect(tester.widget<SwitchListTile>(find.byKey(const Key('rec-published'))).value, isTrue);
       expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'Raids')).selected, isTrue);
       expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'Social')).selected, isFalse);
-      expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'Deutsch')).selected, isTrue);
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'English')).selected, isTrue);
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'Deutsch')).selected, isFalse);
     });
 
     testWidgets('saves the page as it is on the screen, and says so', (tester) async {
@@ -784,7 +785,7 @@ void main() {
       await tester.enterText(find.byKey(const Key('rec-discord')), 'https://discord.gg/abc123');
       await tapOn(tester, find.widgetWithText(FilterChip, 'Raids'));
       await tapOn(tester, find.widgetWithText(FilterChip, 'Social'));
-      await tapOn(tester, find.widgetWithText(FilterChip, 'Türkçe'));
+      await tapOn(tester, find.widgetWithText(ChoiceChip, 'Türkçe'));
       await tapOn(tester, find.text('Europe'));
       await tapOn(tester, find.byKey(const Key('rec-recruiting')));
       await tapOn(tester, find.text('Save'));
@@ -829,51 +830,50 @@ void main() {
     });
 
     testWidgets(
-        'lets a guild choose five tags in all, between what it looks for and its languages, and the others wait until one is taken off',
+        'lets a guild look for four things and play in one language, and the fifth thing waits until one is taken off',
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       const s = S(AppLang.en);
       Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
-      Finder lang(int i) => find.widgetWithText(FilterChip, recruitLanguageLabel(recruitLanguages[i]));
-      for (final i in [0, 1, 2]) {
+      Finder lang(int i) => find.widgetWithText(ChoiceChip, recruitLanguageLabel(recruitLanguages[i]));
+      for (final i in [0, 1, 2, 3]) {
         await tapOn(tester, tag(i));
       }
-      for (final i in [0, 1]) {
-        await tapOn(tester, lang(i));
+      // four things looked for: no other can be chosen, but the language still can, for it has its place
+      for (final i in [4, 12]) {
+        await tester.ensureVisible(tag(i));
+        expect(tester.widget<FilterChip>(tag(i)).onSelected, isNull);
       }
-      // five: nothing else can be chosen, of either kind
-      for (final chip in [tag(3), tag(12), lang(2), lang(6)]) {
-        await tester.ensureVisible(chip);
-        expect(tester.widget<FilterChip>(chip).onSelected, isNull);
-      }
-      // and what is chosen can be taken off, which gives the place to either kind
       await tapOn(tester, lang(0));
-      for (final chip in [tag(3), lang(2)]) {
-        expect(tester.widget<FilterChip>(chip).onSelected, isNotNull);
-      }
+      expect(tester.widget<ChoiceChip>(lang(0)).selected, isTrue);
+      // one language: another takes the first off
+      await tapOn(tester, lang(1));
+      expect(tester.widget<ChoiceChip>(lang(0)).selected, isFalse);
+      expect(tester.widget<ChoiceChip>(lang(1)).selected, isTrue);
+      // and what is taken off gives the place back
       await tapOn(tester, tag(3));
-      expect(tester.widget<FilterChip>(lang(3)).onSelected, isNull, reason: 'five again');
+      expect(tester.widget<FilterChip>(tag(4)).onSelected, isNotNull);
     });
 
-    testWidgets('lets a guild say five languages and nothing looked for, and five things looked for and no language',
-        (tester) async {
-      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      for (final code in recruitLanguages.take(5)) {
-        await tapOn(tester, find.widgetWithText(FilterChip, recruitLanguageLabel(code)));
-      }
-      final sixth = find.widgetWithText(FilterChip, recruitLanguageLabel(recruitLanguages[5]));
-      await tester.ensureVisible(sixth);
-      expect(tester.widget<FilterChip>(sixth).onSelected, isNull);
+    testWidgets('lets the language be taken off again, which is no language', (tester) async {
+      final fake = await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      await fill(tester);
+      await tapOn(tester, find.widgetWithText(ChoiceChip, 'English'));
+      await tapOn(tester, find.widgetWithText(ChoiceChip, 'English'));
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'English')).selected, isFalse);
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves.single.languages, isEmpty);
+      await settle(tester);
     });
 
     testWidgets('says how many tags are chosen of the five, and what they are for', (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       String hint(int n) =>
-          'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. $n of 5 chosen.';
+          'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. $n of 5 chosen.';
       expect(find.text(hint(0)), findsOneWidget);
       await tapOn(tester, find.widgetWithText(FilterChip, 'Raids'));
       expect(find.text(hint(1)), findsOneWidget);
-      await tapOn(tester, find.widgetWithText(FilterChip, 'English'));
+      await tapOn(tester, find.widgetWithText(ChoiceChip, 'English'));
       expect(find.text(hint(2)), findsOneWidget);
       await tapOn(tester, find.widgetWithText(FilterChip, 'Raids'));
       expect(find.text(hint(1)), findsOneWidget, reason: 'it counts what is taken off');
@@ -883,10 +883,10 @@ void main() {
         'has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags',
         (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      expect(find.widgetWithText(FilterChip, '日本語'), findsNothing);
-      expect(find.widgetWithText(FilterChip, '中文'), findsNothing);
-      expect(find.widgetWithText(FilterChip, 'Русский'), findsOneWidget, reason: 'the last of the seven');
-      expect(find.widgetWithText(FilterChip, 'English'), findsOneWidget);
+      expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, 'Русский'), findsOneWidget, reason: 'the last of the seven');
+      expect(find.widgetWithText(ChoiceChip, 'English'), findsOneWidget);
     });
 
     testWidgets(
@@ -905,22 +905,22 @@ void main() {
         canEdit: true,
       );
       final fake = await editor(tester, FakeRecruit(current: old));
-      expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, '日本語')).selected, isTrue);
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '日本語')).selected, isTrue);
       await tapOn(tester, find.text('Save'));
       expect(fake.saves, isEmpty, reason: 'ten tags and a language that is no tag');
       expect(
           find.text(
-              'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. 10 of 5 chosen.'),
+              'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. 10 of 5 chosen.'),
           findsWidgets);
       await settle(tester);
-      // taken off: the language, and enough of what it looks for
-      await tapOn(tester, find.widgetWithText(FilterChip, '日本語'));
-      for (final tag in ['Dungeons', 'WvW', 'PvP', 'Farming', 'Casual']) {
+      // taken off: the language that is no tag, and enough of what it looks for
+      await tapOn(tester, find.widgetWithText(ChoiceChip, '日本語'));
+      for (final tag in ['Dungeons', 'WvW', 'PvP', 'Farming']) {
         await tapOn(tester, find.widgetWithText(FilterChip, tag));
       }
       await tapOn(tester, find.text('Save'));
       expect(fake.saves.length, 1);
-      expect(fake.saves.single.lookingFor, {'raids', 'fractals', 'strikes'});
+      expect(fake.saves.single.lookingFor, {'raids', 'fractals', 'strikes', 'casual'});
       expect(fake.saves.single.languages, {'en'});
       await settle(tester);
     });
@@ -928,7 +928,7 @@ void main() {
     testWidgets('keeps a language the app has no choice for, so that it can be taken off', (tester) async {
       const p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: const ['it'], canEdit: true);
       await editor(tester, FakeRecruit(current: p));
-      expect(tester.widget<FilterChip>(find.widgetWithText(FilterChip, 'IT')).selected, isTrue);
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'IT')).selected, isTrue);
     });
 
     testWidgets(

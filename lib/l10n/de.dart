@@ -518,9 +518,9 @@ const deStrings = <String, String>{
   'rec_f_play_times': 'Spielzeiten (optional)',
   'rec_f_discord': 'Discord-Einladung (https://discord.gg/…)',
   'rec_f_contact': 'Name zum Anflüstern im Spiel (optional)',
-  'rec_f_languages': 'Sprachen',
+  'rec_f_languages': 'Sprache',
   'rec_f_tags_hint':
-      'Die Seite wird im Forum des offiziellen Discord-Servers mit diesen als Tags veröffentlicht, und ein Beitrag hat höchstens 5: Wähle 5 zwischen dem, was ihr sucht, und den Sprachen. {n} von 5 gewählt.',
+      'Die Seite wird im Forum des offiziellen Discord-Servers mit diesen als Tags veröffentlicht, und ein Beitrag hat höchstens 5: Wähle eine Sprache und bis zu 4 Dinge, die ihr sucht. {n} von 5 gewählt.',
   'rec_f_recruiting': 'Wir suchen gerade Spieler',
   'rec_f_recruiting_hint':
       'Wenn du es ausschaltest, wird der Beitrag dieser Seite im Forum des offiziellen Discord-Servers gesperrt: Niemand kann darauf antworten.',

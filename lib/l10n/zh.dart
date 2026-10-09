@@ -476,7 +476,7 @@ const zhStrings = <String, String>{
   'rec_f_discord': 'Discord 邀请链接 (https://discord.gg/…)',
   'rec_f_contact': '游戏内私聊名称（可选）',
   'rec_f_languages': '语言',
-  'rec_f_tags_hint': '此页面会以这些作为标签发布到官方 Discord 服务器的论坛，每个帖子最多5个标签：请在招募方向和语言之间共选5个。已选 {n}/5。',
+  'rec_f_tags_hint': '此页面会以这些作为标签发布到官方 Discord 服务器的论坛，每个帖子最多5个标签：请选择一种语言，并最多选4个招募方向。已选 {n}/5。',
   'rec_f_recruiting': '目前正在招募',
   'rec_f_recruiting_hint': '关闭后，此页面在官方 Discord 服务器论坛中的帖子会被锁定，任何人都无法回复。',
   'rec_f_published': '向所有人公开此页面',
