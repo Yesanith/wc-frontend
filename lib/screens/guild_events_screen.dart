@@ -193,7 +193,7 @@ class _EventCard extends ConsumerWidget {
     final capacity = e.maxParticipants == null ? '${summary.going}' : '${summary.going}/${e.maxParticipants}';
     return AppCard(
       onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(builder: (_) => GuildEventScreen(eventId: e.id)));
+        await openPanel(context, (_) => GuildEventScreen(eventId: e.id));
         ref.invalidate(upcomingEventsProvider);
       },
       child: Row(
