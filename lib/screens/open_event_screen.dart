@@ -94,7 +94,14 @@ class _EventNotice extends ConsumerWidget {
           children: [
             Icon(Icons.public, size: 40, color: AppColors.muted),
             const SizedBox(height: 12),
-            Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
+            // said to a screen reader as a thing of its own: in a panel the text beside a button was left out of what the browser is told
+            Semantics(
+              container: true,
+              label: text,
+              child: ExcludeSemantics(
+                child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
+              ),
+            ),
             if (toSettings) ...[
               const SizedBox(height: 16),
               FilledButton.tonal(
