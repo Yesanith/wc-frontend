@@ -19,9 +19,8 @@ import 'open_event_labels.dart';
 /// [announce] is false for a link that was followed or that the app was opened with
 Future<void> showOpenEvent(BuildContext context, String eventId, {bool announce = true}) {
   final closed = linkOpened(ProviderScope.containerOf(context, listen: false), EventLink(eventId), announce: announce);
-  return Navigator.of(context)
-      .push(MaterialPageRoute<void>(builder: (_) => OpenEventScreen(eventId: eventId)))
-      .whenComplete(closed);
+  // a panel over the page on a computer, a screen of its own on a phone
+  return openPanel(context, (_) => OpenEventScreen(eventId: eventId)).whenComplete(closed);
 }
 
 /// whether the page of a public event can be shown to whoever opened it: the community account is what the events are read with, so a link that somebody was sent is
