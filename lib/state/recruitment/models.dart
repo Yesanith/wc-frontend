@@ -386,8 +386,10 @@ class RecruitDraft {
         if (playTimes.trim().length > recruitPlayTimesMax) RecruitField.playTimes,
         if (contact.trim().length > recruitContactMax) RecruitField.contact,
         if (discordInvite.trim().isNotEmpty && !isDiscordInvite(discordInvite.trim())) RecruitField.discordInvite,
-        if (lookingFor.length + languages.length > recruitTagsMax) RecruitField.tags,
-        if (languages.any((l) => !recruitLanguages.contains(l))) RecruitField.languages,
+        if (lookingFor.length > recruitLookingForMax || lookingFor.length + languages.length > recruitTagsMax)
+          RecruitField.tags,
+        if (languages.length > recruitLanguagesMax || languages.any((l) => !recruitLanguages.contains(l)))
+          RecruitField.languages,
       ];
 
   /// what it takes to be shown to everybody: a headline, a description and a way to be reached

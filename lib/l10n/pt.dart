@@ -510,9 +510,9 @@ const ptStrings = <String, String>{
   'rec_f_play_times': 'Quando vocês jogam (opcional)',
   'rec_f_discord': 'Convite do Discord (https://discord.gg/…)',
   'rec_f_contact': 'Nome para sussurrar no jogo (opcional)',
-  'rec_f_languages': 'Idiomas',
+  'rec_f_languages': 'Idioma',
   'rec_f_tags_hint':
-      'A página é publicada no fórum do servidor oficial do Discord com estas como tags, e uma publicação tem no máximo 5: escolha 5 entre o que procuram e os idiomas. {n} de 5 escolhidas.',
+      'A página é publicada no fórum do servidor oficial do Discord com estas como tags, e uma publicação tem no máximo 5: escolha um idioma e até 4 coisas que procuram. {n} de 5 escolhidas.',
   'rec_f_recruiting': 'Recrutando agora',
   'rec_f_recruiting_hint':
       'Se você desativar, a publicação desta página no fórum do servidor oficial do Discord é bloqueada: ninguém pode respondê-la.',

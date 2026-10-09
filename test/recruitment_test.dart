@@ -315,24 +315,23 @@ void main() {
     });
 
     test(
-        'chooses five tags at the most, between what it looks for and its languages, which are the tags of its post in the forum',
+        'plays in one language and looks for four things at the most, which are the five tags of its post in the forum',
         () {
       expect(recruitTagsMax, 5);
-      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), isEmpty,
-          reason: 'five things looked for');
-      expect(RecruitDraft(languages: recruitLanguages.take(5).toSet()).problems(), isEmpty, reason: 'five languages');
-      expect(
-          RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(2).toSet()).problems(),
-          isEmpty,
-          reason: 'three and two');
-      expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
-      expect(RecruitDraft(languages: recruitLanguages.take(6).toSet()).problems(), [RecruitField.tags]);
-      expect(
-          RecruitDraft(lookingFor: recruitTags.take(3).toSet(), languages: recruitLanguages.take(3).toSet()).problems(),
-          [RecruitField.tags],
-          reason: 'three and three');
+      expect(recruitLanguagesMax, 1);
+      expect(recruitLookingForMax, 4);
+      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet()).problems(), isEmpty,
+          reason: 'four things looked for');
+      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), [RecruitField.tags],
+          reason: 'five leave no place for the language');
+      expect(RecruitDraft(languages: {'en'}).problems(), isEmpty, reason: 'one language');
+      expect(RecruitDraft(languages: {'en', 'de'}).problems(), [RecruitField.languages], reason: 'two languages');
       expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(), isEmpty,
           reason: 'four and one');
+      expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
+      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en', 'de'}).problems(),
+          [RecruitField.tags, RecruitField.languages],
+          reason: 'six in all, and two languages');
     });
 
     test(
