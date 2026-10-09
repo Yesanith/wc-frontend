@@ -153,9 +153,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
 
   Widget _form(S s) {
     final missing = _draft.missingToPublish();
-    // what it looks for and its languages are the tags of the post in the forum, five between the two: when they are five what is not chosen waits until one is taken off
+    // a page plays in one language and looks for four things at the most: they are the five tags of its post in the forum. when four are chosen what is not waits until one is taken off
     final chosen = _draft.lookingFor.length + _draft.languages.length;
-    final full = chosen >= recruitTagsMax;
+    final full = _draft.lookingFor.length >= recruitLookingForMax;
     // a language the page has that the app offers no choice for stays a chip, so that it can be taken off
     final languages = [...recruitLanguages, ..._draft.languages.where((l) => !recruitLanguages.contains(l))];
     Widget label(String text) => Padding(
@@ -202,7 +202,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
             style: TextStyle(
                 fontSize: 12,
                 height: 1.4,
-                color: chosen > recruitTagsMax || _draft.problems().contains(RecruitField.languages)
+                color: chosen > recruitTagsMax ||
+                        _draft.lookingFor.length > recruitLookingForMax ||
+                        _draft.problems().contains(RecruitField.languages)
                     ? AppColors.amber
                     : AppColors.hint),
           ),
@@ -227,13 +229,14 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
           spacing: 8,
           runSpacing: 4,
           children: [
+            // one language: choosing another takes the first off, and choosing the one that is on takes it off
             for (final code in languages)
-              FilterChip(
+              ChoiceChip(
+                key: Key('rec-lang-$code'),
                 label: Text(recruitLanguageLabel(code)),
                 selected: _draft.languages.contains(code),
-                onSelected: !_draft.languages.contains(code) && full
-                    ? null
-                    : (on) => _set(_draft.copyWith(languages: _toggled(_draft.languages, code, on))),
+                onSelected: (on) =>
+                    _set(_draft.copyWith(languages: on ? {code} : _toggled(_draft.languages, code, false))),
               ),
           ],
         ),

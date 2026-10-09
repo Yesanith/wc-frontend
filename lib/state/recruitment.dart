@@ -58,6 +58,10 @@ const recruitContactMax = 120;
 
 /// what a page looks for and its languages are the tags of its post in the forum, which carries five at the most: five between the two
 const recruitTagsMax = 5;
+
+/// a page plays in one language and looks for four things at the most: the language and the four are the five tags of the post, whatever is chosen
+const recruitLanguagesMax = 1;
+const recruitLookingForMax = recruitTagsMax - recruitLanguagesMax;
 const recruitDescriptionMin = 20;
 
 /// how many guilds a page of the list holds

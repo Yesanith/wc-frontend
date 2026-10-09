@@ -509,9 +509,9 @@ const enStrings = <String, String>{
   'rec_f_play_times': 'When you play (optional)',
   'rec_f_discord': 'Discord invite (https://discord.gg/…)',
   'rec_f_contact': 'Name to whisper in the game (optional)',
-  'rec_f_languages': 'Languages',
+  'rec_f_languages': 'Language',
   'rec_f_tags_hint':
-      'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose 5 between what you look for and the languages. {n} of 5 chosen.',
+      'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. {n} of 5 chosen.',
   'rec_f_recruiting': 'Recruiting right now',
   'rec_f_recruiting_hint':
       'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.',
