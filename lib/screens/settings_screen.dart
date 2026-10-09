@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
@@ -15,6 +16,7 @@ import '../state/boss_alerts.dart';
 import '../state/admin.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
+import '../state/module_link.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
 import '../state/trade_notify.dart';
@@ -28,6 +30,7 @@ import 'onboarding_screen.dart';
 part 'settings/sync.dart';
 part 'settings/accounts.dart';
 part 'settings/community.dart';
+part 'settings/module.dart';
 part 'settings/alerts.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -150,6 +153,11 @@ class SettingsScreen extends ConsumerWidget {
         if (communityReady) ...[
           const SizedBox(height: 16),
           const _CommunityPanel(),
+          // signed in, the account can be linked to the overlay of the game
+          if (ref.watch(sessionProvider).valueOrNull != null) ...[
+            const SizedBox(height: 16),
+            const _ModuleLinkPanel(),
+          ],
         ],
         const SizedBox(height: 16),
         const _AccountsPanel(),
