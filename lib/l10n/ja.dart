@@ -478,7 +478,7 @@ const jaStrings = <String, String>{
   'rec_f_discord': 'Discord招待リンク（https://discord.gg/…）',
   'rec_f_contact': 'ゲーム内で囁く名前（任意）',
   'rec_f_languages': '言語',
-  'rec_f_tags_hint': 'このページは公式Discordサーバーのフォーラムにこれらをタグとして投稿され、1つの投稿には最大5つまでです。募集内容と言語を合わせて5つまで選んでください。{n}/5 選択中。',
+  'rec_f_tags_hint': 'このページは公式Discordサーバーのフォーラムにこれらをタグとして投稿され、1つの投稿には最大5つまでです。言語を1つと、募集内容を4つまで選んでください。{n}/5 選択中。',
   'rec_f_recruiting': '現在募集中',
   'rec_f_recruiting_hint': 'オフにすると、公式Discordサーバーのフォーラムにあるこのページの投稿はロックされ、誰も返信できなくなります。',
   'rec_f_published': 'このページを全員に公開',
