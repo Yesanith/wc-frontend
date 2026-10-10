@@ -133,13 +133,25 @@ jobs:
       - name: Test
         run: flutter test
 
+      # the signing key is a secret of the repository, never a file in it: a public repository would give it to everybody, and with it
+      # the means to sign an app that Android takes for an update of this one
+      - name: Signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::The secret RELEASE_KEYSTORE_BASE64 is not set. See the Signing part of the README."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+
       - name: Build APK
         env:
           VERSION: ${{ steps.version.outputs.value }}
-          KEYSTORE_PATH: ${{ github.workspace }}/ci/release.keystore
-          KEYSTORE_PASSWORD: ***REMOVED***
-          KEY_ALIAS: tyriacodex
-          KEY_PASSWORD: ***REMOVED***
+          KEYSTORE_PATH: ${{ runner.temp }}/release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
           # the community backend: an address and a key meant to be public,
           # access is enforced by row level security on the server
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

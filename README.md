@@ -112,10 +112,13 @@ git config rebase.autoStash true
 
 ## Signing
 
-Release builds are signed with `ci/release.keystore`, checked into the repo together with its
-password so every build has the same signature and APKs install over each other. It is not a
-security boundary, anyone can build an apk with the same signature. If the app ever goes to a
-store, move the key into repository secrets and rotate it.
+Release builds are signed with a key that lives only in the repository's secrets, so every build has
+the same signature and APKs install over each other, and nobody who reads the code can sign an app as
+this one. The secrets are `RELEASE_KEYSTORE_BASE64` (the keystore file, base64), `RELEASE_KEYSTORE_PASSWORD`,
+`RELEASE_KEY_ALIAS` and `RELEASE_KEY_PASSWORD`. A fork has none of them and cannot build a release.
+To make a new key: `keytool -genkeypair -v -keystore release.keystore -alias tyriacodex -keyalg RSA -keysize 4096 -validity 10000`,
+then `base64 -w0 release.keystore | gh secret set RELEASE_KEYSTORE_BASE64`. A phone that has the app
+signed with an older key has to uninstall it once before it takes the new one.
 
 `ci/sign.py` rewires the generated gradle project to use that key, because the flutter
 template signs release builds with the public android debug key, which scanners flag.
