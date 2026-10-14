@@ -900,8 +900,8 @@ void main() {
         headline: 'H',
         description: 'A description that is long enough to be one.',
         contact: 'Whisper me',
-        lookingFor: const ['raids', 'fractals', 'strikes', 'dungeons', 'wvw', 'pvp', 'farming', 'casual'],
-        languages: const ['en', 'ja'],
+        lookingFor: ['raids', 'fractals', 'strikes', 'dungeons', 'wvw', 'pvp', 'farming', 'casual'],
+        languages: ['en', 'ja'],
         canEdit: true,
       );
       final fake = await editor(tester, FakeRecruit(current: old));
@@ -926,7 +926,7 @@ void main() {
     });
 
     testWidgets('keeps a language the app has no choice for, so that it can be taken off', (tester) async {
-      const p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: const ['it'], canEdit: true);
+      const p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: ['it'], canEdit: true);
       await editor(tester, FakeRecruit(current: p));
       expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'IT')).selected, isTrue);
     });

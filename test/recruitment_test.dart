@@ -324,8 +324,8 @@ void main() {
           reason: 'four things looked for');
       expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), [RecruitField.tags],
           reason: 'five leave no place for the language');
-      expect(RecruitDraft(languages: {'en'}).problems(), isEmpty, reason: 'one language');
-      expect(RecruitDraft(languages: {'en', 'de'}).problems(), [RecruitField.languages], reason: 'two languages');
+      expect(const RecruitDraft(languages: {'en'}).problems(), isEmpty, reason: 'one language');
+      expect(const RecruitDraft(languages: {'en', 'de'}).problems(), [RecruitField.languages], reason: 'two languages');
       expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(), isEmpty,
           reason: 'four and one');
       expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
