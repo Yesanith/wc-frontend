@@ -74,7 +74,7 @@ class StageHero extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: const [AppColors.skyTop, AppColors.skyBottom],
+          colors: [AppColors.skyTop, AppColors.skyBottom],
         ),
       ),
       clipBehavior: Clip.antiAlias,
