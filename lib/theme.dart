@@ -301,7 +301,7 @@ ThemeData buildTheme() {
       backgroundColor: AppColors.surface,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
-          borderRadius: const BorderRadius.vertical(top: const Radius.circular(AppRadius.window))),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.window))),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: AppColors.surface2,

@@ -5,57 +5,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+
+
+
+
+import '../services/boss_alerts.dart';
 import '../services/home_widget_sync.dart';
+import '../services/push.dart';
 import '../services/sync.dart';
-import '../state/app_open.dart';
+import '../services/trade_check.dart';
+import '../services/update_check.dart';
 import '../state/account.dart';
 import '../state/api.dart';
+import '../state/app_open.dart';
+import '../state/boss_alerts.dart';
+import '../state/community.dart';
+import '../state/link_refresh.dart';
 import '../state/navigation.dart';
-import '../state/server_price_alerts.dart';
+import '../state/period_refresh.dart';
 import '../state/reference.dart';
+import '../state/server_price_alerts.dart';
 import '../state/settings.dart';
+import '../state/trade_notify.dart';
 import '../state/trading.dart';
+import '../state/wealth.dart';
 import '../theme.dart';
+import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
 import '../widgets/site_search.dart';
-import 'item_detail_screen.dart' show showItemDetails;
-import 'open_link.dart';
-import 'recruitment_screen.dart';
 import '../widgets/swipe_open.dart';
-import '../state/wealth.dart';
-import '../state/period_refresh.dart';
-import '../util.dart';
-import '../services/update_check.dart';
-import '../services/push.dart';
-import '../state/community.dart';
-import '../state/link_refresh.dart';
-import '../services/boss_alerts.dart';
-import '../services/trade_check.dart';
-import '../state/trade_notify.dart';
-import '../state/boss_alerts.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
 import 'collections_screen.dart';
+import 'daily_screen.dart';
 import 'events_screen.dart';
+import 'guild_events_screen.dart';
 import 'guild_roster_screen.dart' show SharingReviewScreen;
 import 'guilds_screen.dart';
 import 'home_screen.dart';
+import 'item_detail_screen.dart' show showItemDetails;
+import 'news_screen.dart';
+import 'open_events_screen.dart';
+import 'open_link.dart';
 import 'professions_screen.dart';
 import 'progression_screen.dart';
 import 'recipes_screen.dart';
+import 'recruitment_screen.dart';
 import 'settings_screen.dart';
 import 'trading_screen.dart';
-import 'wiki_screen.dart';
-import 'wvw_screen.dart';
-import 'daily_screen.dart';
 import 'weekly_screen.dart';
+import 'wiki_screen.dart';
 import 'world_map_screen.dart';
-import 'news_screen.dart';
-import 'guild_events_screen.dart';
-import 'open_events_screen.dart';
+import 'wvw_screen.dart';
 
 part 'shell/sections.dart';
 
@@ -175,53 +179,63 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   @override
   void initState() {
     super.initState();
-    // this device takes the player's event notifications once they are
-    // signed in, unless switched off in settings
+    WidgetsBinding.instance.addObserver(this);
+    _listenForSession();
+    _listenForTaps();
+    _listenForPushWhileOpen();
+    _startBackgroundWork();
+  }
+
+  /// this device takes the player's event notifications once they are signed in, unless switched off in settings; the link with the community
+  /// account is refreshed quietly, and a guild leader's app brings the guild's details each time it is opened
+  void _listenForSession() {
     ref.listenManual(sessionProvider, (previous, next) {
       if (previous?.valueOrNull == null && next.valueOrNull != null) {
         _startPush();
-        // the link with the community account is refreshed quietly, and a
-        // guild leader's app brings the guild's details each time it is opened
         WidgetsBinding.instance.addPostFrameCallback((_) => _refreshAndReview());
       }
     }, fireImmediately: true);
-    // a tap on a world event alert opens the events, also when it started the app
+  }
+
+  /// a tap on a world event alert or on a notification opens what it is about, also when it started the app; and so does a link the app was
+  /// opened with
+  void _listenForTaps() {
     _alertTaps = bossAlertTaps.stream.listen(_openFromAlert);
     if (bossAlertLaunchPayload != null) {
       final payload = bossAlertLaunchPayload;
       bossAlertLaunchPayload = null;
       WidgetsBinding.instance.addPostFrameCallback((_) => _openFromAlert(payload));
     }
-    // a notification that was tapped opens what it is about, also when it started the app; and so does a link the app was opened with
     _pushTaps = pushTapped.stream.listen(_openFromPush);
     final started = linkFromPushData(initialPushData);
     initialPushData = null;
     if (started != null) ref.read(pendingLinkProvider.notifier).state = started;
     WidgetsBinding.instance.addPostFrameCallback((_) => _openPending());
+  }
+
+  void _listenForPushWhileOpen() {
     _pushWhileOpen = pushWhileOpen.stream.listen((message) {
       final n = message.notification;
       if (n == null || !mounted) return;
       showToast(context, n.body == null ? '${n.title}' : '${n.title} · ${n.body}',
           duration: const Duration(seconds: 6));
     });
-    WidgetsBinding.instance.addObserver(this);
-    // what the trading post did for the player is looked at every few minutes while the app is open, and once now. while it is closed Android does it every quarter of an hour
+  }
+
+  /// what is done once the first frame is up
+  void _startBackgroundWork() {
+    // what the trading post did for the player is looked at every few minutes while the app is open, and once now. while it is closed Android
+    // does it every quarter of an hour
     if (!kIsWeb) {
       _tradeTimer = Timer.periodic(const Duration(minutes: 5), (_) => _checkTrades());
       WidgetsBinding.instance.addPostFrameCallback((_) => _checkTrades());
     }
-    // after a game patch the static data cache is cleared once
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // after a game patch the static data cache is cleared once
       ref.read(patchCheckProvider.future).catchError((_) => false);
-    });
-    // pull the whole account to disk once on launch, so opening a section
-    // reads from the cache instead of waiting on the api
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // pull the whole account to disk once on launch, so opening a section reads from the cache instead of waiting on the api
       ref.read(syncProvider.notifier).run();
-    });
-    // the watchlist's prices once per launch, so the price history gains a
-    // point every day the app is opened, not only when the tp is
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // the watchlist's prices once per launch, so the price history gains a point every day the app is opened, not only when the tp is
       ref.read(watchlistPricesProvider.future).catchError((_) => const <WatchedItem>[]);
     });
   }
