@@ -1,5 +1,8 @@
 name: Clean artifacts
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'   
 permissions:
   actions: write
 jobs:
