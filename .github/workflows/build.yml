@@ -210,6 +210,7 @@ jobs:
         with:
           name: tyria-codex-apk
           path: tyria-codex.apk
+          retention-days: 7
 
       # a tag push always publishes, a manual run only when the box was ticked.
       # the release creates the tag itself, and because this runs with the
