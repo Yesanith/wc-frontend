@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: ['feature/**']
+    paths: ['lib/**', 'test/**']
 
 permissions:
   contents: write
@@ -19,7 +20,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter pub get
+          cache: true
+      # the formatter reads the files and needs no packages
       - run: dart format --line-length 120 lib test
       - name: Commit if anything changed
         run: |

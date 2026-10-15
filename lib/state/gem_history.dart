@@ -20,7 +20,7 @@ class GemPoint {
   final int sell;
 }
 
-/// written every three hours by the gem history workflow on its own branch
+/// written every six hours by the gem history workflow on its own branch
 const gemHistoryUrl = 'https://raw.githubusercontent.com/Yesanith/tyria-companion/gem-history/gems.json';
 
 /// what the chart spans
