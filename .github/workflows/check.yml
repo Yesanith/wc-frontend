@@ -1,10 +1,15 @@
 name: Analyze and test
 
+# a push to a branch is checked once; a pull request of that branch is not checked again, since it is the same commit
 on:
   push:
     branches: ['**']
-  pull_request:
   workflow_dispatch:
+
+# a newer push to the same branch makes the run of the older one pointless
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
 
 # the check only reads, except for the branch of logs a failed test writes
 permissions:

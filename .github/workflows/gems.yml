@@ -1,12 +1,12 @@
 name: Gem history
 
-# the api has no gem exchange history. this records the rate every three
+# the api has no gem exchange history. this records the rate every six
 # hours on its own branch, which the app reads to draw the monthly chart.
 # pushes made with the workflow token start no other workflow, so the
 # branch never runs the code checks
 on:
   schedule:
-    - cron: '17 */3 * * *'
+    - cron: '17 */6 * * *'
   workflow_dispatch:
   push:
     branches: [main]
