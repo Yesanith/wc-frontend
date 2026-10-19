@@ -659,11 +659,6 @@ const trStrings = <String, String>{
   'goals_complete': 'Hedeflerin için her şeye sahipsin.',
   'goals_share': 'Paylaş',
   'goals_share_missing': 'Hâlâ gerekenler',
-  'widget_next': 'Sıradaki sabitlenen etkinlik',
-  'widget_next_boss': 'Sıradaki dünya patronu',
-  'widget_daily': 'Günlük sıfırlama',
-  'widget_weekly': 'Haftalık sıfırlama',
-  'widget_open_app': 'Uygulamayı aç',
   'craft_profit': 'Üretim kârı',
   'craft_profit_note':
       'Şu anda ticaret merkezinde en çok kazandıran tarifler. Maliyet, tarifin malzemelerini en düşük ilan fiyatından sayar; sonuç, %15 ücret düşüldükten sonra en düşük ilanın bir bakır altına satılır. Fiyatlar değişir, almadan önce kontrol et.',

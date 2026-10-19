@@ -45,7 +45,7 @@ what is kept, where and for how long, and the account can be deleted from Settin
   daily checklist (time gated crafts, map chests, world bosses) and the wallet
 - World boss and meta timers on a timeline with a line for now, or as a list, in your local time, with
   pinning, release filters and a mark for the bosses already looted today
-- Reminders for pinned events that keep working with the app closed, and an Android home screen widget
+- Reminders for pinned events that keep working with the app closed
 - Daily and weekly sections, and the news of guildwars2.com with the wiki's game update notes
 
 **Your account**
@@ -148,7 +148,7 @@ test/         unit tests for the logic that runs without a device
 tools/        scripts run by CI: the recipe, world map and site builders, the gem recorder, the icon maker
 tools/site_content/   the texts of the website, one file per language
 site/         the website's stylesheet and static files
-ci/           release helpers: launcher icons, the Android widget, the signing key
+ci/           release helpers: launcher icons, the signing key
 e2e/          end to end checks of the browser build
 design/       static UI concept mock-ups, not shipped
 assets/       bundled map tiles and data

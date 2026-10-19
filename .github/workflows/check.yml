@@ -48,11 +48,6 @@ jobs:
           set -o pipefail
           flutter analyze --no-fatal-infos 2>&1 | tee "$RUNNER_TEMP/3-analyze.log"
 
-      # the files of the home screen widget and the patch that puts it in the android project
-      - name: Check the widget setup
-        run: python3 -m unittest test_widget
-        working-directory: ci
-
       - name: Test
         run: |
           set -o pipefail

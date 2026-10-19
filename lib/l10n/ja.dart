@@ -624,11 +624,6 @@ const jaStrings = <String, String>{
   'goals_complete': 'ゴールに必要なものはすべて揃っています。',
   'goals_share': '共有',
   'goals_share_missing': 'まだ必要なもの',
-  'widget_next': '次のピン留めイベント',
-  'widget_next_boss': '次のワールドボス',
-  'widget_daily': 'デイリーリセット',
-  'widget_weekly': 'ウィークリーリセット',
-  'widget_open_app': 'アプリを開く',
   'craft_profit': 'クラフト利益',
   'craft_profit_note':
       '今、トレーディングポストで最も利益が出るレシピです。費用はレシピの素材を最安の出品価格で数え、結果は手数料15%を引いたうえで最安の出品より1銅貨安く売る前提です。価格は変動するので、買う前に確認してください。',

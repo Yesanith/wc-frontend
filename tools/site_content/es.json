@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Úsalo donde juegas",
   "android_h": "Android",
-  "android_p": "La app completa, con avisos de eventos del mundo, alertas de precio y objetos vendidos, y con los datos del juego guardados en tu dispositivo. Un widget de la pantalla de inicio cuenta atrás hasta el próximo jefe y los dos reinicios.",
+  "android_p": "La app completa, con avisos de eventos del mundo, alertas de precio y objetos vendidos, y con los datos del juego guardados en tu dispositivo.",
   "discord_h": "Un bot de Discord para tu gremio",
   "discord_p": "Eventos de gremio con inscripciones y listas de espera, roles que siguen los rangos del gremio, feeds de noticias y parches, y un foro en el servidor oficial donde los gremios reclutan.",
   "discord_link": "Cómo añadir el bot",

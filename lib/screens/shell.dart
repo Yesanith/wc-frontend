@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/boss_alerts.dart';
-import '../services/home_widget_sync.dart';
 import '../services/push.dart';
 import '../services/sync.dart';
 import '../services/trade_check.dart';
@@ -428,7 +427,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     });
     // keeps the phone's alarms for pinned world events in line, see boss_alerts
     ref.watch(bossAlertsSyncProvider);
-    ref.watch(homeWidgetSyncProvider);
     final refreshing = ref.watch(backgroundRefreshProvider);
     // a different account has its own cache, so fill it too
     ref.listen(apiKeyProvider, (previous, next) {

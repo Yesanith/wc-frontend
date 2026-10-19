@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Use onde você joga",
   "android_h": "Android",
-  "android_p": "O app completo, com notificações de eventos do mundo, alertas de preço e itens vendidos, e com os dados do jogo guardados no seu aparelho. Um widget na tela inicial faz a contagem até o próximo chefe e os dois reinícios.",
+  "android_p": "O app completo, com notificações de eventos do mundo, alertas de preço e itens vendidos, e com os dados do jogo guardados no seu aparelho.",
   "discord_h": "Um bot do Discord para sua guilda",
   "discord_p": "Eventos de guilda com inscrições e listas de espera, funções que acompanham os ranks da guilda, feeds de notícias e atualizações, e um fórum no servidor oficial onde as guildas recrutam.",
   "discord_link": "Como adicionar o bot",

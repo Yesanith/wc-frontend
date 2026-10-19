@@ -78,7 +78,7 @@
   ],
   "platforms_h": "Nutze es, wo du spielst",
   "android_h": "Android",
-  "android_p": "Die volle App, mit Benachrichtigungen für Weltereignisse, Preisalarmen und verkauften Items, und mit den Spieldaten auf deinem Gerät. Ein Startbildschirm-Widget zählt bis zum nächsten Boss und zu beiden Resets herunter.",
+  "android_p": "Die volle App, mit Benachrichtigungen für Weltereignisse, Preisalarmen und verkauften Items, und mit den Spieldaten auf deinem Gerät.",
   "discord_h": "Ein Discord-Bot für deine Gilde",
   "discord_p": "Gildenevents mit Anmeldungen und Wartelisten, Rollen, die den Gildenrängen folgen, News- und Patch-Feeds und ein Forum auf dem offiziellen Server, in dem Gilden Mitglieder suchen.",
   "discord_link": "So fügst du den Bot hinzu",

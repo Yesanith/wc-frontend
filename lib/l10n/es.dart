@@ -664,11 +664,6 @@ const esStrings = <String, String>{
   'goals_complete': 'Tienes todo para tus objetivos.',
   'goals_share': 'Compartir',
   'goals_share_missing': 'Aún falta',
-  'widget_next': 'Próximo evento fijado',
-  'widget_next_boss': 'Próximo jefe mundial',
-  'widget_daily': 'Reinicio diario',
-  'widget_weekly': 'Reinicio semanal',
-  'widget_open_app': 'Abre la app',
   'craft_profit': 'Beneficio de fabricación',
   'craft_profit_note':
       'Las recetas que más ganan ahora en el bazar. El coste cuenta los materiales de la receta, cada uno al precio de venta más bajo, y el resultado se vende un cobre por debajo del precio más bajo, tras las tasas del 15 %. Los precios cambian, compruébalos antes de comprar.',

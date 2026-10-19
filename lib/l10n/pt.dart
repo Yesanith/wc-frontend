@@ -663,11 +663,6 @@ const ptStrings = <String, String>{
   'goals_complete': 'Você tem tudo para os seus objetivos.',
   'goals_share': 'Compartilhar',
   'goals_share_missing': 'Ainda necessário',
-  'widget_next': 'Próximo evento fixado',
-  'widget_next_boss': 'Próximo chefe mundial',
-  'widget_daily': 'Reinício diário',
-  'widget_weekly': 'Reinício semanal',
-  'widget_open_app': 'Abra o app',
   'craft_profit': 'Lucro de fabricação',
   'craft_profit_note':
       'As receitas que mais rendem no posto de comércio agora. O custo conta os materiais da receita, cada um pela menor oferta, e o resultado é vendido um cobre abaixo da menor oferta, depois das taxas de 15%. Os preços mudam, confira antes de comprar.',

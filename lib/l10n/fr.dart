@@ -667,11 +667,6 @@ const frStrings = <String, String>{
   'goals_complete': 'Tu as tout pour tes objectifs.',
   'goals_share': 'Partager',
   'goals_share_missing': 'Encore nécessaire',
-  'widget_next': 'Prochain événement épinglé',
-  'widget_next_boss': 'Prochain boss mondial',
-  'widget_daily': 'Réinitialisation quotidienne',
-  'widget_weekly': 'Réinitialisation hebdomadaire',
-  'widget_open_app': 'Ouvre l\'appli',
   'craft_profit': 'Bénéfice d\'artisanat',
   'craft_profit_note':
       'Les recettes qui rapportent le plus au comptoir de commerce en ce moment. Le coût compte les matériaux de la recette, chacun à l\'offre la plus basse, et le résultat se vend un cuivre sous l\'offre la plus basse après 15 % de frais. Les prix bougent, vérifie-les avant d\'acheter.',

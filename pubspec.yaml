@@ -26,7 +26,6 @@ dependencies:
   path_provider: ^2.1.4
   # unpacks the bundled gzip data in a browser, where dart:io has no gzip
   archive: ^4.0.7
-  home_widget: ^0.10.0
 
 dev_dependencies:
   flutter_test:

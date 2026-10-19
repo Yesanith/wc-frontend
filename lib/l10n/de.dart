@@ -672,11 +672,6 @@ const deStrings = <String, String>{
   'goals_complete': 'Du hast alles für deine Ziele.',
   'goals_share': 'Teilen',
   'goals_share_missing': 'Noch nötig',
-  'widget_next': 'Nächstes angeheftetes Ereignis',
-  'widget_next_boss': 'Nächster Weltboss',
-  'widget_daily': 'Täglicher Reset',
-  'widget_weekly': 'Wöchentlicher Reset',
-  'widget_open_app': 'App öffnen',
   'craft_profit': 'Handwerksgewinn',
   'craft_profit_note':
       'Die Rezepte, die am Handelsposten gerade am meisten einbringen. Die Kosten zählen die Materialien des Rezepts, jedes zum niedrigsten Angebot, und das Ergebnis wird ein Kupfer unter dem niedrigsten Angebot verkauft, nach 15 % Gebühren. Preise ändern sich, prüfe sie vor dem Kauf.',
