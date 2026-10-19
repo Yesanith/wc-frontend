@@ -92,6 +92,9 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
   String? _type;
   String? _subtype;
 
+  // homestead decorations only: one of their categories
+  String? _group;
+
   String _typeLabel(S s, String type) => switch (type) {
         'Armor' => s.t('skin_armor'),
         'Weapon' => s.t('skin_weapon'),
@@ -124,11 +127,16 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
               if (_type != null && e.type == _type && e.subtype != null) e.subtype!.split(' · ').first,
           }.toList()
             ..sort();
+          final groups = <String>{
+            for (final e in all) ...e.groups,
+          }.toList()
+            ..sort();
           final list = all.where((e) {
             if (_filter == 1 && !e.unlocked) return false;
             if (_filter == 2 && e.unlocked) return false;
             if (_type != null && e.type != _type) return false;
             if (_subtype != null && e.subtype?.split(' · ').first != _subtype) return false;
+            if (_group != null && !e.groups.contains(_group)) return false;
             if (_query.isNotEmpty && !e.name.toLowerCase().contains(_query)) return false;
             return true;
           }).toList();
@@ -177,6 +185,14 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                         labels: [s.t('all'), ...subtypes],
                         selected: _subtype == null ? 0 : subtypes.indexOf(_subtype!) + 1,
                         onSelected: (i) => setState(() => _subtype = i == 0 ? null : subtypes[i - 1]),
+                      ),
+                    ],
+                    if (groups.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      _ChipRow(
+                        labels: [s.t('all'), ...groups],
+                        selected: _group == null ? 0 : groups.indexOf(_group!) + 1,
+                        onSelected: (i) => setState(() => _group = i == 0 ? null : groups[i - 1]),
                       ),
                     ],
                     const SizedBox(height: 8),

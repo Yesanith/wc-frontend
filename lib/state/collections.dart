@@ -55,7 +55,8 @@ final collectionProgressProvider = FutureProvider.autoDispose.family<CollectionP
 });
 
 class CollectionEntry {
-  const CollectionEntry(this.id, this.name, this.icon, this.unlocked, {this.rarity, this.type, this.subtype});
+  const CollectionEntry(this.id, this.name, this.icon, this.unlocked,
+      {this.rarity, this.type, this.subtype, this.groups = const []});
   final String id;
   final String name;
   final String? icon;
@@ -69,6 +70,10 @@ class CollectionEntry {
   /// wardrobe skins only: the slot or weapon, such as Helm or Greatsword,
   /// with the weight class for armour ("Helm · Heavy")
   final String? subtype;
+
+  /// homestead decorations only: the categories it is sorted under, in the
+  /// app's language. one decoration can be in several
+  final List<String> groups;
 }
 
 /// the few fields a wardrobe skin needs. there are well over ten thousand,
@@ -167,6 +172,21 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
       // the keys still group the skins, only less nicely named
     }
   }
+  // homestead decorations name their categories by id, the categories
+  // have the names
+  var categoryNames = const <String, String>{};
+  if (kind.key == 'homestead_decorations') {
+    try {
+      final categories = await cachedList(
+          cache, 'collection_homestead_categories_${lang.apiLang}', 'rows', () => api.allOf(homesteadCategoriesPath));
+      categoryNames = {
+        for (final c in categories.whereType<Map>())
+          if ('${c['name'] ?? ''}'.isNotEmpty) '${c['id']}': '${c['name']}',
+      };
+    } catch (_) {
+      // the decorations are still listed, only without their categories
+    }
+  }
   final entries = <CollectionEntry>[];
   for (final id in ids) {
     var name = (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id);
@@ -184,6 +204,7 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
         _ => null,
       },
       subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
+      groups: kind.key == 'homestead_decorations' ? decorationGroups(row, categoryNames) : const [],
     ));
   }
   // unnamed entries go last instead of bunching up at the top
@@ -202,4 +223,18 @@ String? mountOf(Json? row, Map<String, String> names) {
   final key = row?['mount'];
   if (key == null) return null;
   return names['$key'] ?? titleCase('$key');
+}
+
+/// where the game lists the categories of the homestead decorations
+const homesteadCategoriesPath = '/homestead/decorations/categories';
+
+/// the names of the categories a decoration is in, in the order the game
+/// lists them. a category without a name is left out
+List<String> decorationGroups(Json? row, Map<String, String> names) {
+  final ids = row?['categories'];
+  if (ids is! List) return const [];
+  return [
+    for (final id in ids)
+      if (names['$id'] != null) names['$id']!,
+  ];
 }
