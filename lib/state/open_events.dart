@@ -18,9 +18,6 @@ const openEventRegions = ['eu', 'na', 'all'];
 /// what an event can be tagged with, up to three
 const openEventTags = ['meta', 'casual', 'achievement', 'training', 'speedrun', 'new_players'];
 
-/// the kinds a player can ask to be told of in the official Discord server
-const openEventRoleKinds = ['fractal', 'raid', 'strike', 'worldboss', 'meta', 'pvp', 'wvw'];
-
 /// the languages an event can be run in, and any
 const openEventLanguages = ['any', 'en', 'de', 'es', 'fr', 'tr', 'pt', 'ru', 'ja', 'zh'];
 

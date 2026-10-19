@@ -1,7 +1,7 @@
 """Render the Android launcher icon from the app's emblem.
 
 The icon is the DiamondEmblem the menu header draws next to the app name
-(lib/widgets/common.dart): two nested diamond outlines and a small filled
+(lib/widgets/common/emblem.dart): two nested diamond outlines and a small filled
 diamond, in the theme's gold, here on the theme's dark background.
 
 Writes into ci/launcher/res, which the release job copies over the default

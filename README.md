@@ -136,7 +136,13 @@ lib/
   state/      Riverpod providers, one file per domain, and persisted settings
   widgets/    shared widgets
 test/         unit tests for the logic that runs without a device
-tools/        scripts run by CI, currently the recipe extractor
+tools/        scripts run by CI: the recipe, world map and site builders, the gem recorder, the icon maker
+tools/site_content/   the texts of the website, one file per language
+site/         the website's stylesheet and static files
+ci/           release helpers: launcher icons, the Android widget, the signing key
+e2e/          end to end checks of the browser build
+design/       static UI concept mock-ups, not shipped
+assets/       bundled map tiles and data
 ```
 
 `state/` is split by domain rather than by layer: each file holds the providers
