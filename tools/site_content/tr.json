@@ -37,7 +37,7 @@
   "chips": [
    "Ücretsiz",
    "Reklamsız",
-   "Analitiksiz",
+   "Takipsiz",
    "Açık kaynak"
   ],
   "features_h": "Oyunun sana söylemediği her şey",
@@ -83,14 +83,14 @@
   "discord_p": "Katılımlı ve bekleme listeli lonca etkinlikleri, lonca rütbelerini izleyen roller, haber ve yama akışları ve resmî sunucuda loncaların üye aradığı bir forum.",
   "discord_link": "Bot nasıl eklenir",
   "privacy_h": "API key'in senin kalır",
-  "privacy_p": "Cihazında ya da tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gider. Reklam yok, analitik yok; isteğe bağlı hesabı istediğin zaman silebilirsin.",
+  "privacy_p": "Cihazında ya da tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gider. Reklam yok, takip yok; isteğe bağlı hesabı istediğin zaman silebilirsin.",
   "privacy_link": "Gizlilik politikasını oku",
   "cta_h": "Göz at, kayıt gerekmez",
   "cta_p": "Tyria Codex'i misafir olarak aç, kendi hesabını görmek istediğinde bir API key ekle."
  },
  "delete": {
   "title": "Hesabını sil",
-  "intro": "Bu işlem Tyria Companion hesabını kalıcı olarak siler: profilin, bağlı Guild Wars 2 hesapların, lonca üyeliklerin, etkinlik katılımların, oluşturduğun etkinlikler ve bildirim cihazların. Guild Wars 2 hesabına, Discord hesabına ve uygulamanın telefonunda tuttuğu hiçbir şeye dokunmaz.",
+  "intro": "Bu işlem Tyria Codex hesabını kalıcı olarak siler: profilin, bağlı Guild Wars 2 hesapların, lonca üyeliklerin, etkinlik katılımların, oluşturduğun etkinlikler ve bildirim cihazların. Guild Wars 2 hesabına, Discord hesabına ve uygulamanın telefonunda tuttuğu hiçbir şeye dokunmaz.",
   "signin_p": "Uygulamada kullandığın Discord hesabıyla giriş yap.",
   "signin_btn": "Discord ile giriş yap",
   "signed_prefix": "Giriş yapılan hesap: ",
@@ -124,7 +124,7 @@
     "Key'in cihazında (tarayıcı sürümünde tarayıcında) kalır ve yalnızca Guild Wars 2 sunucularına gönderilir, bizimkilere asla. <a href='privacy.html'>Gizlilik politikasına</a> bak. Key yalnızca okuyabilir ve account.arena.net'ten istediğin zaman silebilirsin."
    ],
    [
-    "Tyria Companion hesabı gerekli mi?",
+    "Tyria Codex hesabı gerekli mi?",
     "Hayır, isteğe bağlı. Lonca etkinlikleri, lonca bilgileri ve Discord botu için gerekir. Discord ile giriş yaparak açarsın, Ayarlar'dan veya <a href='delete-account.html'>hesap silme sayfasından</a> istediğin zaman silebilirsin."
    ],
    [
@@ -133,7 +133,7 @@
    ],
    [
     "Loncamın hazinesini, deposunu, günlüğünü neden göremiyorum?",
-    "Oyun bunları yalnızca loncanın lideriyle paylaşır. Üyeler bunları, lideri Tyria Companion kullanıyorsa ve izin verirse burada görür. Lider uygulamayı bir kez açar, bu loncanın verilerini getirir, sonra üyelerin neleri göreceğini seçer: her bölüm gizlenebilir. Kimin ne aldığını gösteren hazine, depo ve günlük, lider seçimleri onaylayana kadar gizli kalır."
+    "Oyun bunları yalnızca loncanın lideriyle paylaşır. Üyeler bunları, lideri Tyria Codex kullanıyorsa ve izin verirse burada görür. Lider uygulamayı bir kez açar, bu loncanın verilerini getirir, sonra üyelerin neleri göreceğini seçer: her bölüm gizlenebilir. Kimin ne aldığını gösteren hazine, depo ve günlük, lider seçimleri onaylayana kadar gizli kalır."
    ],
    [
     "Lider bunu henüz paylaşmadı yazıyor.",
@@ -178,29 +178,29 @@
  },
  "privacy": {
   "title": "Gizlilik politikası",
-  "updated": "Son güncelleme 4 Ekim 2026",
+  "updated": "Son güncelleme 18 Ekim 2026",
   "blocks": [
-   "Tyria Codex resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam ve analiz aracı içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
+   "Tyria Codex resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
    "GW2 API key'lerin, onlarla indirilen oyun verileri, ayarların, favorilerin, takip listen ve fiyat geçmişin sadece cihazında (tarayıcı sürümünde tarayıcında) tutulur. Uygulama doğrudan resmi Guild Wars 2 API'siyle konuşur. API key'lerin hiçbir zaman sunucularımıza gönderilmez. Telefonda key, ArenaNet'e istek başlığında gider. Tarayıcı bunu oyunun API'siyle yapamaz, bu yüzden orada isteğin adresinde, yalnızca ArenaNet'e gider. Tarayıcıda key o tarayıcının depolamasında durur, sitenin verilerini temizlemek onu siler.",
-   "İsteğe bağlı Tyria Companion hesabı",
+   "İsteğe bağlı Tyria Codex hesabı",
    "Lonca etkinlikleri, lonca bilgileri ve Discord botu için Discord ile giriş yaparak hesap açarsın. Aşağıdakiler yalnızca bunu yaparsan geçerlidir.",
    [
     "<strong>Discord'dan:</strong> kullanıcı kimliğin, adın, profil resmin ve Discord veriyorsa e-posta adresin.",
     "<strong>GW2 hesabın:</strong> bağlamak için 10 dakika geçerli, yalnızca hesabını ve loncalarını okuyabilen bir token üretilir ve sadece o gönderilir. Hesap adın ve kimliğin, loncalarının adı ve etiketi, oradaki rolün ve oyunun sana verdiği rütbe kaydedilir. Token bu birkaç istek için kullanılır ve saklanmaz.",
-    "<strong>Bir loncanın lideriysen:</strong> aynı 10 dakikalık tokenla sunucularımız oyunun yalnızca lidere gösterdiği verileri de okur ve lonca için saklar: seviyesi, günün mesajı, üye sayısı, her üyenin hesap adı, rütbesi ve katılma tarihiyle üye listesi, rütbeler ve her rütbenin yapabilecekleri, hazine, depo, lonca deposu, kimin ne yaptığını gösteren günlük, yapılmış yükseltmeler ve PvP takımları. Üye listesi, oyunun listelediği gibi Tyria Companion kullanmayan kişileri de içerir. Bu, uygulaman her açıldığında, en fazla yarım saatte bir yapılır.",
+    "<strong>Bir loncanın lideriysen:</strong> aynı 10 dakikalık tokenla sunucularımız oyunun yalnızca lidere gösterdiği verileri de okur ve lonca için saklar: seviyesi, günün mesajı, üye sayısı, her üyenin hesap adı, rütbesi ve katılma tarihiyle üye listesi, rütbeler ve her rütbenin yapabilecekleri, hazine, depo, lonca deposu, kimin ne yaptığını gösteren günlük, yapılmış yükseltmeler ve PvP takımları. Üye listesi, oyunun listelediği gibi Tyria Codex kullanmayan kişileri de içerir. Bu, uygulaman her açıldığında, en fazla yarım saatte bir yapılır.",
     "<strong>Lonca etkinlikleri:</strong> oluşturduğun (haftalık olanlar dahil) etkinlikler, katılımların, rolün, sınıfın ve sunduğun diğer roller, seçtiğin GW2 hesabı, etkinliğin açık olduğu Discord rolleri ve üyelerin eklediği Arcdps rapor bağlantıları (dps.report) ile dps.report'un onlar için verdiği boss, sonuç, oyuncu sayısı ve süre.",
     "<strong>Bildirimler:</strong> izin verirsen cihazının bildirim token'ı ve uygulama dili.",
-    "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber, günlük başarım ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
+    "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
     "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır.",
     "<strong>Fiyat alarmları:</strong> giriş yapmışken bir alarm kurarsan uygulama onu sunucularımızda da tutar: eşya, adı, fiyatların ve sana en son ne zaman bildirim gönderildiği. Böylece trading post bu fiyatlara ulaşınca bildirim gönderebiliriz. Alarmı kaldırdığında ya da hesabını sildiğinde silinir."
    ],
    "Kimler görür",
    [
-    "Loncalarındaki Tyria Companion kullanıcıları GW2 hesap adını, rütbeni ve loncanın etkinliklerine katılımını görür.",
+    "Loncalarındaki Tyria Codex kullanıcıları GW2 hesap adını, rütbeni ve loncanın etkinliklerine katılımını görür.",
     "Liderin uygulamasının getirdiği lonca verilerini de lider seçtiği kadarıyla görür: lider her bölümü gizleyebilir, kimin ne aldığını gösteren hazine, depo ve günlük, lider seçimlere bakıp onaylayana kadar gizli kalır. Lider her zaman her şeyi görür.",
     "Loncan bir Discord sunucusu bağladıysa o kanaldaki herkes etkinlik mesajlarını katılımcı adlarıyla görür.",
-    "Loncaların dışındaki kimse bunları göremez. Tyria Companion kullanmayan kişiler, aynı loncada olmayan kimseye gösterilmez.",
+    "Loncaların dışındaki kimse bunları göremez. Tyria Codex kullanmayan kişiler, aynı loncada olmayan kimseye gösterilmez.",
     "Giriş yapmış her oyuncu herkese açık etkinlikleri, organizatörlerinin Guild Wars 2 hesap adıyla birlikte görür. Bir etkinliğe kimlerin katıldığını yalnızca o etkinliğin organizatörü görür. Aşağıdaki “Herkese açık etkinlikler” bölümüne bak."
    ],
    "Herkese açık etkinlikler",
@@ -212,7 +212,7 @@
     "Düzeni korumak için aynı anda beş yaklaşan herkese açık etkinliğin olabilir, günde on tane oluşturabilir ve en fazla üç ay sonrasına kurabilirsin. Bunu uygulamak için oluşturduklarının sayısını iki gün saklarız.",
     "Hesabını silmek, oluşturduğun herkese açık etkinlikleri, başkalarının herkese açık etkinliklerine yaptığın katılımları ve gönderdiğin şikâyetleri siler; bir organizatörün daha fazla etkinlik oluşturmasını engelleyen kayıt da hesapla birlikte gider.",
     "Bağladığın her Guild Wars 2 hesabının bir bölgesi vardır: Avrupa veya Kuzey Amerika. Bunu, hesabı bağlarken oyunun hesabın hangi dünyada olduğunu söylemesinden okuruz ve hesabı kaldırana ya da hesabını silene kadar hesapla birlikte saklarız. Hangi herkese açık etkinlikleri oluşturabileceğini ve hangilerine katılabileceğini bu belirler.",
-    "Herkese açık etkinlikler ayrıca resmi Tyria Companion Discord sunucusunda, bölgelerinin kanalında paylaşılır: başlık, açıklama, saat, tür, etiketler, kaç kişinin katılacağı ve organizatörün Guild Wars 2 hesap adı o kanaldaki herkese görünür. Kimin katıldığı asla paylaşılmaz, yalnızca kaç kişi olduğu paylaşılır. Etkinlik gizlenir ya da silinirse veya hesabını silersen paylaşım kaldırılır.",
+    "Herkese açık etkinlikler ayrıca resmi Tyria Codex Discord sunucusunda, bölgelerinin kanalında paylaşılır: başlık, açıklama, saat, tür, etiketler, kaç kişinin katılacağı ve organizatörün Guild Wars 2 hesap adı o kanaldaki herkese görünür. Kimin katıldığı asla paylaşılmaz, yalnızca kaç kişi olduğu paylaşılır. Etkinlik gizlenir ya da silinirse veya hesabını silersen paylaşım kaldırılır.",
     "Resmi sunucudaysan bot, hesabın olan her bölgenin rolünü sana verir. Seni girişteki Discord kullanıcı kimliğinle bulur ve hesabını silersen rolü geri alır.",
     "Katıldığın bir herkese açık etkinlik başladığında bot, resmi sunucuda yalnızca organizatörün ve katılanların (geliyorum ya da belki) görebildiği bir metin ve bir ses kanalı açar ve onları Discord kullanıcıları olarak anar. Kanallar etkinlikten sonra silinir.",
     "Discord botuyla herkese açık bir etkinlik oluşturursan, ona verdiğin saat dilimi (örneğin Europe/Istanbul) her seferinde söylememen için Discord kullanıcı kimliğinle birlikte saklanır ve hesabını sildiğinde silinir."
@@ -252,7 +252,7 @@
  },
  "terms": {
   "title": "Kullanım şartları",
-  "updated": "Son güncelleme 1 Ekim 2026",
+  "updated": "Son güncelleme 18 Ekim 2026",
   "blocks": [
    "Bu şartlar, seninle Tyria Codex'i (Android uygulaması, bu sitede tarayıcıda çalışan sürüm ve Discord botu) işleten kişi arasındadır. Kullanarak bu şartları kabul edersin. Kabul etmiyorsan kullanma.",
    "Nedir",
@@ -261,7 +261,7 @@
    "En az 13 yaşında olmalı ve yaşadığın yerde bu şartları kabul edecek yaşta olmalısın. Guild Wars 2'nin, Discord'un ve birlikte kullandığın diğer hizmetlerin şartlarına uymalısın.",
    "Hesabın ve API key'in",
    [
-    "Tyria Companion hesabı isteğe bağlıdır ve Discord ile girişle açılır. Onun üzerinden olanlardan sen sorumlusun.",
+    "Tyria Codex hesabı isteğe bağlıdır ve Discord ile girişle açılır. Onun üzerinden olanlardan sen sorumlusun.",
     "API key'in senindir. Kendine sakla, yalnızca vermek istediğin izinlere sahip key'ler kullan, sızdığını düşünürsen account.arena.net'ten iptal et. Senden key'ini asla istemeyiz.",
     "Yalnızca kendi Guild Wars 2 hesaplarını bağlayabilirsin."
    ],
