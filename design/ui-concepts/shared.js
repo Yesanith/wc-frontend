@@ -1,4 +1,4 @@
-/* shared helpers for the Tyria Companion UI concepts. no framework, no network. */
+/* shared helpers for the Tyria Codex UI concepts. no framework, no network. */
 (function () {
   const pad = (n) => String(n).padStart(2, '0');
 

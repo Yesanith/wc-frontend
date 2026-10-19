@@ -37,7 +37,7 @@
   "chips": [
    "Gratis",
    "Sin anuncios",
-   "Sin analíticas",
+   "Sin rastreo",
    "Código abierto"
   ],
   "features_h": "Todo lo que el juego no te cuenta",
@@ -83,14 +83,14 @@
   "discord_p": "Eventos de gremio con inscripciones y listas de espera, roles que siguen los rangos del gremio, feeds de noticias y parches, y un foro en el servidor oficial donde los gremios reclutan.",
   "discord_link": "Cómo añadir el bot",
   "privacy_h": "Tu clave de API sigue siendo tuya",
-  "privacy_p": "Se queda en tu dispositivo o en tu navegador y solo viaja a los servidores de Guild Wars 2. Sin anuncios, sin analíticas, y puedes borrar la cuenta opcional cuando quieras.",
+  "privacy_p": "Se queda en tu dispositivo o en tu navegador y solo viaja a los servidores de Guild Wars 2. Sin anuncios, sin rastreo, y puedes borrar la cuenta opcional cuando quieras.",
   "privacy_link": "Leer la política de privacidad",
   "cta_h": "Echa un vistazo, sin registrarte",
   "cta_p": "Abre Tyria Codex como invitado y añade una clave de API cuando quieras ver tu propia cuenta."
  },
  "delete": {
   "title": "Eliminar tu cuenta",
-  "intro": "Esto elimina tu cuenta de Tyria Companion de forma definitiva: tu perfil, las cuentas de Guild Wars 2 vinculadas, las pertenencias a gremios, las inscripciones a eventos, los eventos que creaste y tus dispositivos de notificación. No afecta a tu cuenta de Guild Wars 2, a tu cuenta de Discord ni a nada que la app guarde en tu teléfono.",
+  "intro": "Esto elimina tu cuenta de Tyria Codex de forma definitiva: tu perfil, las cuentas de Guild Wars 2 vinculadas, las pertenencias a gremios, las inscripciones a eventos, los eventos que creaste y tus dispositivos de notificación. No afecta a tu cuenta de Guild Wars 2, a tu cuenta de Discord ni a nada que la app guarde en tu teléfono.",
   "signin_p": "Inicia sesión con la cuenta de Discord que usas en la app.",
   "signin_btn": "Iniciar sesión con Discord",
   "signed_prefix": "Sesión iniciada como ",
@@ -124,7 +124,7 @@
     "Tu clave se queda en tu dispositivo, o en tu navegador en la versión web, y solo se envía a los servidores de Guild Wars 2. Nunca se envía a los nuestros. Consulta la <a href='privacy.html'>política de privacidad</a>. Una clave solo puede leer, y puedes eliminarla en cualquier momento en account.arena.net."
    ],
    [
-    "¿Necesito la cuenta de Tyria Companion?",
+    "¿Necesito la cuenta de Tyria Codex?",
     "No, es opcional. La necesitas para los eventos de gremio, la información del gremio y el bot de Discord. La creas iniciando sesión con Discord y puedes eliminarla en cualquier momento desde Ajustes o desde la <a href='delete-account.html'>página para eliminar la cuenta</a>."
    ],
    [
@@ -133,7 +133,7 @@
    ],
    [
     "¿Por qué no veo la tesorería, el alijo o el registro de mi gremio?",
-    "El juego solo se los muestra al líder del gremio. Los miembros los ven aquí cuando su líder usa Tyria Companion y lo permite. El líder abre la app una vez, lo que trae los datos del gremio, y elige qué ven los miembros: cualquier parte puede ocultarse. La tesorería, el alijo y el registro, que muestran quién tomó qué, siguen ocultos hasta que el líder confirme la selección."
+    "El juego solo se los muestra al líder del gremio. Los miembros los ven aquí cuando su líder usa Tyria Codex y lo permite. El líder abre la app una vez, lo que trae los datos del gremio, y elige qué ven los miembros: cualquier parte puede ocultarse. La tesorería, el alijo y el registro, que muestran quién tomó qué, siguen ocultos hasta que el líder confirme la selección."
    ],
    [
     "Dice que el líder aún no ha compartido esto.",
@@ -178,29 +178,29 @@
  },
  "privacy": {
   "title": "Política de privacidad",
-  "updated": "Última actualización: 4 de octubre de 2026",
+  "updated": "Última actualización: 18 de octubre de 2026",
   "blocks": [
-   "Tyria Codex es un acompañante no oficial de Guild Wars 2. No tiene anuncios ni analíticas, no te rastrea y no vende ni comparte tus datos con fines publicitarios. Esta página explica qué trata, dónde, quién puede verlo y durante cuánto tiempo. Cubre la app de Android, la versión que funciona en el navegador en este sitio y el bot de Discord.",
+   "Tyria Codex es un acompañante no oficial de Guild Wars 2. No tiene anuncios, no te rastrea y no vende ni comparte tus datos con fines publicitarios. Esta página explica qué trata, dónde, quién puede verlo y durante cuánto tiempo. Cubre la app de Android, la versión que funciona en el navegador en este sitio y el bot de Discord.",
    "Lo que se queda en tu dispositivo",
    "Tus claves de API de Guild Wars 2, los datos del juego que la app descarga con ellas, tus ajustes, favoritos, lista de seguimiento e historial de precios se guardan solo en tu dispositivo, o en tu navegador en la versión web. La app habla directamente con la API oficial de Guild Wars 2. Tus claves de API nunca se envían a nuestros servidores. En un teléfono la clave viaja a ArenaNet en una cabecera de la petición. Un navegador no puede hacerlo con la API del juego, así que allí viaja en la dirección de la petición, solo a ArenaNet. En un navegador la clave se guarda en el almacenamiento de ese navegador; borrar los datos del sitio la elimina.",
-   "La cuenta opcional de Tyria Companion",
+   "La cuenta opcional de Tyria Codex",
    "Los eventos de gremio, la información del gremio y el bot de Discord necesitan una cuenta, que creas iniciando sesión con Discord. Todo lo que sigue se aplica solo si lo haces.",
    [
     "<strong>De Discord:</strong> tu id de usuario de Discord, nombre, avatar y, si Discord la proporciona, tu dirección de correo electrónico.",
     "<strong>Tu cuenta de Guild Wars 2:</strong> para vincularla, la app crea un token válido durante diez minutos que solo puede leer tu cuenta y tus gremios, y envía solo ese token. Guardamos el nombre y el id de tu cuenta, los nombres y etiquetas de tus gremios, tu rol en ellos y el rango que te da el juego. El token se usa para estas pocas peticiones y no se guarda.",
-    "<strong>Si diriges un gremio:</strong> con el mismo token de diez minutos nuestros servidores también leen lo que el juego muestra solo al líder de un gremio y lo guardan para el gremio: su nivel, mensaje del día y número de miembros, su lista de miembros con el nombre de cuenta, el rango y la fecha de ingreso de cada uno, sus rangos y lo que puede hacer cada rango, la tesorería, el alijo, el almacén del gremio, el registro de quién hizo qué, las mejoras construidas y los equipos de PvP. La lista de miembros también nombra a personas que no usan Tyria Companion, tal como las lista el juego. Esto se hace cada vez que se abre tu app, como máximo cada media hora.",
+    "<strong>Si diriges un gremio:</strong> con el mismo token de diez minutos nuestros servidores también leen lo que el juego muestra solo al líder de un gremio y lo guardan para el gremio: su nivel, mensaje del día y número de miembros, su lista de miembros con el nombre de cuenta, el rango y la fecha de ingreso de cada uno, sus rangos y lo que puede hacer cada rango, la tesorería, el alijo, el almacén del gremio, el registro de quién hizo qué, las mejoras construidas y los equipos de PvP. La lista de miembros también nombra a personas que no usan Tyria Codex, tal como las lista el juego. Esto se hace cada vez que se abre tu app, como máximo cada media hora.",
     "<strong>Eventos de gremio:</strong> los eventos que creas, incluidos los semanales, tus respuestas, el rol, la profesión y otros roles que ofreces, la cuenta de Guild Wars 2 que eliges, los roles de Discord para los que está abierto un evento y los enlaces de informes de Arcdps (dps.report) que añaden los miembros, con el jefe, el resultado, el número de jugadores y la duración que dps.report da para ellos.",
     "<strong>Notificaciones:</strong> si las permites, el token de notificaciones de tu dispositivo y el idioma de la app, para enviar recordatorios de eventos.",
-    "<strong>Servidores de Discord:</strong> si diriges un gremio y conectas un servidor de Discord: el id del servidor y el canal donde se publican los eventos, sus ajustes (zona horaria, idioma, hilos, eventos programados, recordatorios), los canales y el rol opcional para noticias, logros diarios y actualizaciones del juego, los roles de Discord asociados a rangos del gremio y qué roles dio el bot a qué usuario de Discord para poder retirar solo esos. El bot no puede leer mensajes. Recibe los comandos y botones que usa la gente y, al pulsar un botón, Discord envía el id de la persona y sus roles en ese servidor, que se usan en ese momento y no se guardan.",
+    "<strong>Servidores de Discord:</strong> si diriges un gremio y conectas un servidor de Discord: el id del servidor y el canal donde se publican los eventos, sus ajustes (zona horaria, idioma, hilos, eventos programados, recordatorios), los canales y el rol opcional para noticias y actualizaciones del juego, los roles de Discord asociados a rangos del gremio y qué roles dio el bot a qué usuario de Discord para poder retirar solo esos. El bot no puede leer mensajes. Recibe los comandos y botones que usa la gente y, al pulsar un botón, Discord envía el id de la persona y sus roles en ese servidor, que se usan en ese momento y no se guardan.",
     "<strong>Recuentos sin nombre:</strong> para ver que todo funciona y qué versiones se usan, nuestros servidores cuentan, por día y sin nada que diga quién fue, cuántas veces abre cada versión de la app un jugador con sesión iniciada y en qué se ejecuta (Android o el navegador), qué hacen los comandos del bot de Discord y cuántas solicitudes tienen éxito o fallan. Son solo números.",
     "<strong>Alertas de precio:</strong> si creas una con la sesión iniciada, la app también la guarda en nuestros servidores: el objeto, su nombre, tus precios y cuándo te avisó por última vez, para poder enviarte una notificación cuando el banco de comercio los alcance. Se elimina al quitarla o al borrar tu cuenta."
    ],
    "Quién lo ve",
    [
-    "Los miembros de tus gremios que también usan Tyria Companion ven el nombre de tu cuenta de Guild Wars 2, tu rango y tus respuestas a los eventos del gremio.",
+    "Los miembros de tus gremios que también usan Tyria Codex ven el nombre de tu cuenta de Guild Wars 2, tu rango y tus respuestas a los eventos del gremio.",
     "También ven lo que la app del líder trajo del gremio, según lo que el líder elija: el líder puede ocultar cualquier parte, y la tesorería, el alijo y el registro, que muestran quién tomó qué, siguen ocultos hasta que el líder revise las opciones y las confirme. El líder siempre lo ve todo.",
     "Si tu gremio ha conectado un servidor de Discord, todos los del canal ven los mensajes de los eventos con los nombres de los inscritos.",
-    "Nadie fuera de tus gremios ve nada de esto. Las personas que no usan Tyria Companion nunca se muestran a nadie que no esté en el mismo gremio.",
+    "Nadie fuera de tus gremios ve nada de esto. Las personas que no usan Tyria Codex nunca se muestran a nadie que no esté en el mismo gremio.",
     "Todo jugador con sesión iniciada ve los eventos públicos, con el nombre de la cuenta de Guild Wars 2 de su organizador. Solo el organizador de un evento ve quién se ha apuntado. Consulta «Eventos públicos» más abajo."
    ],
    "Eventos públicos",
@@ -212,7 +212,7 @@
     "Para mantener el orden, puedes tener cinco eventos públicos por venir, crear diez al día y programarlos con hasta tres meses de antelación. Para aplicarlo guardamos durante dos días la cuenta de lo que creas.",
     "Al borrar tu cuenta se borran los eventos públicos que creaste, tus inscripciones a los eventos públicos de otros y las denuncias que enviaste, y con ella se va el registro que impide a un organizador crear más.",
     "Cada cuenta de Guild Wars 2 que vinculas tiene una región, Europa o Norteamérica. La leemos del mundo en el que el juego dice que está la cuenta al vincularla y la guardamos con la cuenta hasta que la desvincules o borres tu cuenta. Decide para qué eventos públicos puedes crear o apuntarte.",
-    "Los eventos públicos también se publican en el servidor oficial de Discord de Tyria Companion, en el canal de su región: título, descripción, hora, tipo, etiquetas, cuántos van y el nombre de cuenta de Guild Wars 2 del organizador, visibles para todos en ese canal. Quién se apuntó nunca se publica, solo cuántos. La publicación se elimina si el evento se oculta o se borra, o si borras tu cuenta.",
+    "Los eventos públicos también se publican en el servidor oficial de Discord de Tyria Codex, en el canal de su región: título, descripción, hora, tipo, etiquetas, cuántos van y el nombre de cuenta de Guild Wars 2 del organizador, visibles para todos en ese canal. Quién se apuntó nunca se publica, solo cuántos. La publicación se elimina si el evento se oculta o se borra, o si borras tu cuenta.",
     "Si estás en el servidor oficial, el bot te da el rol de cada región en la que tienes una cuenta. Te encuentra con tu ID de usuario de Discord del inicio de sesión y te quita el rol si borras tu cuenta.",
     "Cuando empieza un evento público al que te apuntaste, el bot abre en el servidor oficial un canal de texto y uno de voz que solo ven su organizador y quienes se apuntaron (van o quizá), y los menciona con su usuario de Discord. Los canales se borran después del evento.",
     "Si creas un evento público con el bot de Discord, la zona horaria que le das (por ejemplo Europe/Istanbul) se guarda con tu ID de usuario de Discord para que no tengas que repetirla, y se borra cuando borras tu cuenta."
@@ -252,7 +252,7 @@
  },
  "terms": {
   "title": "Términos del servicio",
-  "updated": "Última actualización: 1 de octubre de 2026",
+  "updated": "Última actualización: 18 de octubre de 2026",
   "blocks": [
    "Estos términos son entre tú y la persona que gestiona Tyria Codex, la app de Android, la versión que funciona en el navegador en este sitio y el bot de Discord. Al usarlos aceptas estos términos. Si no, no los uses.",
    "Qué es",
@@ -261,7 +261,7 @@
    "Debes tener al menos 13 años y la edad suficiente para aceptar estos términos donde vives. Debes cumplir los términos de Guild Wars 2, Discord y cualquier otro servicio que uses con él.",
    "Tu cuenta y tu clave de API",
    [
-    "La cuenta de Tyria Companion es opcional y se crea iniciando sesión con Discord. Eres responsable de lo que ocurra a través de ella.",
+    "La cuenta de Tyria Codex es opcional y se crea iniciando sesión con Discord. Eres responsable de lo que ocurra a través de ella.",
     "Tu clave de API es tuya. Guárdala para ti, usa claves que solo tengan los permisos que quieres dar y revócala en account.arena.net si crees que se filtró. Nunca te pedimos tu clave.",
     "Solo puedes vincular cuentas de Guild Wars 2 que sean tuyas."
    ],

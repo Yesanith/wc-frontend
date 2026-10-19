@@ -76,7 +76,7 @@ def make():
     draw.text((x, 326 * scale), sub, font=fitted(REGULAR, sub, 34 * scale, room), fill=GOLD)
     line = "Android  ·  Browser  ·  9 languages"
     draw.text((x, 400 * scale), line, font=fitted(REGULAR, line, 28 * scale, room), fill=SOFT)
-    free = "Free  ·  No ads  ·  No analytics  ·  Open source"
+    free = "Free  ·  No ads  ·  No tracking  ·  Open source"
     draw.text((x, 452 * scale), free, font=fitted(REGULAR, free, 24 * scale, room), fill=MUTED)
 
     # a line of gold along the bottom
