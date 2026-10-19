@@ -100,3 +100,79 @@ List<String> wvwWorldNames(Json match, String color, Map<int, String> worlds) {
   }
   return const [];
 }
+
+/// the id of the account's matchup, such as "2-1"
+final wvwMatchIdProvider = FutureProvider<String?>((ref) async {
+  final match = await ref.watch(wvwMatchProvider.future);
+  final id = match?['id'];
+  return id == null ? null : '$id';
+});
+
+Future<Json?> _matchPart(Ref ref, String part) async {
+  final id = await ref.watch(wvwMatchIdProvider.future);
+  return id == null ? null : ref.watch(gw2ApiProvider).wvwMatchPart(part, id);
+}
+
+/// who fights in the match and when it starts and ends
+final wvwOverviewProvider = FutureProvider<Json?>((ref) => _matchPart(ref, 'overview'));
+
+/// the score of the match and of every skirmish, per map
+final wvwScoresProvider = FutureProvider<Json?>((ref) => _matchPart(ref, 'scores'));
+
+/// kills and deaths of the match, per team and per map
+final wvwStatsProvider = FutureProvider<Json?>((ref) => _matchPart(ref, 'stats'));
+
+/// the best guilds of the account's team, [kind] is kdr or kills
+final wvwTopProvider = FutureProvider.family<List<Json>, String>((ref, kind) async {
+  final id = await ref.watch(wvwMatchIdProvider.future);
+  final team = await ref.watch(wvwTeamProvider.future);
+  if (id == null || team <= 0) return const [];
+  return ref.watch(gw2ApiProvider).wvwTopGuilds(id, team, kind);
+});
+
+/// what one of the account's guilds did in the match, null without data
+final wvwGuildStatsProvider = FutureProvider.family<Json?, String>((ref, guildId) async {
+  final id = await ref.watch(wvwMatchIdProvider.future);
+  return id == null ? null : ref.watch(gw2ApiProvider).wvwGuildStats(id, guildId);
+});
+
+/// kills per death, a team that has not died yet has its kills
+double wvwKdr(int kills, int deaths) => deaths <= 0 ? kills.toDouble() : kills / deaths;
+
+/// one skirmish of the match: its number and each colour's points
+class WvwSkirmish {
+  const WvwSkirmish(this.id, this.scores);
+  final int id;
+  final Map<String, int> scores;
+}
+
+/// the skirmishes of a scores answer, the newest first
+List<WvwSkirmish> wvwSkirmishes(Json? scores) {
+  final raw = scores?['skirmishes'];
+  if (raw is! List) return const [];
+  final list = [
+    for (final s in raw.whereType<Map>())
+      WvwSkirmish(asInt(s['id']), {
+        for (final c in const ['red', 'blue', 'green']) c: s['scores'] is Map ? asInt((s['scores'] as Map)[c]) : 0,
+      }),
+  ]..sort((a, b) => b.id.compareTo(a.id));
+  return list;
+}
+
+/// a row of a top list: a guild with the number the list is ranked by.
+/// the game gives a guild id and, for some lists, its name and tag
+class WvwTopRow {
+  const WvwTopRow(this.guildId, this.name, this.tag, this.value);
+  final String guildId;
+  final String name;
+  final String tag;
+
+  /// kdr or kills, whichever the row carries, null when it carries neither
+  final num? value;
+}
+
+WvwTopRow wvwTopRow(Json row) {
+  final raw = row['kdr'] ?? row['kills'] ?? row['value'];
+  return WvwTopRow(
+      '${row['id'] ?? row['guild_id'] ?? ''}', '${row['name'] ?? ''}', '${row['tag'] ?? ''}', raw is num ? raw : null);
+}
