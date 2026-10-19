@@ -130,8 +130,9 @@ class _PricePanel extends ConsumerWidget {
     final sells = p['sells'] is Map ? p['sells'] as Map : const {};
     final buy = asInt(buys['unit_price']);
     final sell = asInt(sells['unit_price']);
-    // the tp keeps 15% of the sale (5% listing + 10% exchange)
-    final profit = (sell * 0.85).floor() - buy;
+    // the tp keeps 15% of the sale (5% listing + 10% exchange, each rounded up), and a flip undercuts the lowest offer by
+    // one copper: the same sum as the item sheet and the crafting list
+    final profit = buy > 0 && sell > 0 ? afterTradingFees(sell - 1) - buy : 0;
 
     Widget col(String label, int value, int qty) => Expanded(
           child: Column(

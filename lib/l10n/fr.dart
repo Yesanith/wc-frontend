@@ -16,7 +16,7 @@ const frStrings = <String, String>{
       'Ta guilde a été lue depuis le jeu. Choisis ce que les membres de ta guilde peuvent voir dans l\'app. La trésorerie, la réserve et le journal montrent qui a pris quoi, ils restent donc masqués jusqu\'à ta confirmation.',
   'gshare_later': 'Plus tard',
   'roster_note_game':
-      'Membres de cette guilde sur Tyria Companion, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
+      'Membres de cette guilde sur Tyria Codex, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
   'roster_manual': 'défini à la main',
   'roster_follow_game': 'Suivre à nouveau le rang du jeu',
   'roster_auto':
@@ -27,7 +27,7 @@ const frStrings = <String, String>{
   'gshare_note':
       'Choisis ce que voient les membres de la guilde. Tout est partagé tant que tu ne le désactives pas. Ton app apporte tout à l\'ouverture.',
   'gshared_note':
-      'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Tyria Companion, avec le rang que leur donne le jeu.',
+      'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Tyria Codex, avec le rang que leur donne le jeu.',
   'gshared_not_linked': 'Lie ton compte GW2 dans les réglages pour voir ce que le chef de la guilde partage ici.',
   'gw2_link_name': 'Lier {name}',
   'gw2_refreshed': 'Guildes mises à jour.',
@@ -100,14 +100,6 @@ const frStrings = <String, String>{
   'push_note': 'Un rappel 30 minutes avant tes événements, et un message quand tu sors de la liste d\'attente.',
   'push_denied': 'Les notifications sont bloquées pour Tyria Codex, autorise-les dans les réglages du téléphone.',
   'roster_of': 'Membres de {guild}',
-  'roster_note':
-      'Membres de cette guilde sur Tyria Companion. Les officiers peuvent créer et gérer des événements, le chef les nomme.',
-  'roster_note_leader':
-      'Nomme des membres de confiance officiers pour qu\'ils puissent aussi créer et gérer des événements. La direction vient du jeu.',
-  'roster_make_officer': 'Nommer officier',
-  'roster_make_member': 'Remettre membre',
-  'roster_made_officer': '{name} est maintenant officier',
-  'roster_made_member': '{name} est de nouveau membre',
   'roster_missing': 'Seuls les joueurs connectés ayant relié leur compte GW2 sont listés.',
   'event_err_is_leader': 'La direction vient du jeu et ne peut pas être changée ici.',
   'event_err_own_role': 'Tu ne peux pas changer ton propre rôle.',
@@ -201,15 +193,15 @@ const frStrings = <String, String>{
   'gw2_link_note':
       'Seul un jeton de dix minutes pouvant lire ton nom de compte et tes guildes est envoyé. Ta clé API reste sur cet appareil.',
   'gw2_linked': '{name} est relié',
-  'gw2_link_taken': 'Ce compte GW2 est déjà relié à un autre compte Tyria Companion.',
+  'gw2_link_taken': 'Ce compte GW2 est déjà relié à un autre compte Tyria Codex.',
   'gw2_link_key': 'La clé API n\'a pas pu être utilisée. Elle a besoin de l\'autorisation account.',
   'gw2_link_down': 'L\'API GW2 ne répond pas, réessaie plus tard.',
   'gw2_unlink': 'Délier',
-  'gw2_unlink_body': '{name} et ses appartenances de guilde seront retirés de ton compte Tyria Companion.',
+  'gw2_unlink_body': '{name} et ses appartenances de guilde seront retirés de ton compte Tyria Codex.',
   'guild_role_leader': 'Chef',
   'guild_role_officer': 'Officier',
   'guild_role_member': 'Membre',
-  'community_account': 'Compte Tyria Companion',
+  'community_account': 'Compte Tyria Codex',
   'community_intro':
       'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil.',
   'community_sign_in_discord': 'Se connecter avec Discord',
@@ -217,7 +209,7 @@ const frStrings = <String, String>{
   'community_sign_out': 'Se déconnecter',
   'community_delete': 'Supprimer le compte',
   'community_delete_body':
-      'Ton compte Tyria Companion et tout ce qui y est lié seront supprimés définitivement. Tes clés API et les autres données de l\'appli sur cet appareil ne sont pas touchées.',
+      'Ton compte Tyria Codex et tout ce qui y est lié seront supprimés définitivement. Tes clés API et les autres données de l\'appli sur cet appareil ne sont pas touchées.',
   'community_delete_confirm': 'Supprimer définitivement',
   'community_failed': 'Cela n\'a pas marché, réessaie.',
   'module_link_title': 'Blish HUD',
@@ -760,7 +752,7 @@ const frStrings = <String, String>{
   'n_listed': '{n} en vente',
   'flip_profit': 'Bénéfice après 15 % de taxes',
   'tp_note':
-      'Les prix viennent en direct de l\'API officielle. L\'historique n\'y est pas disponible, donc pas encore de graphique.',
+      'Les prix viennent en direct de l\'API officielle. Le graphique montre le dernier prix de chaque jour, conservé par notre serveur.',
   'watchlist': 'Liste de suivi',
   'watchlist_empty': 'Rien pour le moment. Ouvre un objet, touche Comptoir puis Suivre.',
   'buy_short': 'achat',
@@ -1048,7 +1040,7 @@ const frStrings = <String, String>{
   'oe_join_as': 'S\'inscrire en tant que',
   'oe_roles_title': 'Discord officiel',
   'oe_roles_body':
-      'Le serveur Discord officiel de Tyria Companion publie les événements publics dans un salon par région et par type d\'événement. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte. Quand un événement auquel tu t\'es inscrit commence, le bot ouvre pour lui un salon textuel et un salon vocal que seuls les inscrits voient.',
+      'Le serveur Discord officiel de Tyria Codex publie les événements publics dans un salon par région et par type d\'événement. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte. Quand un événement auquel tu t\'es inscrit commence, le bot ouvre pour lui un salon textuel et un salon vocal que seuls les inscrits voient.',
   'oe_roles_join': 'Rejoindre le Discord officiel',
   'oe_err_role_required': 'Choisis un des rôles de l\'événement.',
   'oe_err_profession': 'Choisis la profession avec laquelle tu viens.',

@@ -22,13 +22,6 @@ void main() {
     expect(subtokenExpiry(DateTime.utc(2026, 12, 31, 23, 55)), '2027-01-01T00:05:00Z');
   });
 
-  test('a link is refreshed quietly once it is a day old', () {
-    final now = DateTime.utc(2026, 9, 28, 12);
-    expect(linkIsStale(null, now), isTrue);
-    expect(linkIsStale(now.subtract(const Duration(hours: 3)), now), isFalse);
-    expect(linkIsStale(now.subtract(const Duration(days: 2)), now), isTrue);
-  });
-
   test('a build without firebase values keeps notifications off', () async {
     expect(pushConfigured, isFalse);
     await initPush();

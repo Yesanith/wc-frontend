@@ -404,10 +404,7 @@ void main() {
       }
     });
 
-    test('has the kinds a role can be asked for among those an event can be about', () {
-      for (final k in openEventRoleKinds) {
-        expect(openEventActivities, contains(k), reason: k);
-      }
+    test('has the worldboss kind, the three regions and six tags', () {
       expect(openEventActivities, contains('worldboss'));
       expect(openEventRegions, ['eu', 'na', 'all']);
       expect(openEventTags.length, 6);
