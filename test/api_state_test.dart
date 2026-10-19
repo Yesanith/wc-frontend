@@ -116,6 +116,36 @@ void main() {
       expect(seen.url.toString(), isNot(contains('SECRET')));
     });
 
+    test('an invalid access token is asked once more, a real 401 still fails', () async {
+      final pause = Gw2Api.invalidTokenPause;
+      Gw2Api.invalidTokenPause = Duration.zero;
+      addTearDown(() => Gw2Api.invalidTokenPause = pause);
+
+      var calls = 0;
+      final flaky = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return calls == 1 ? http.Response('{"text":"Invalid access token"}', 401) : http.Response('{"name":"x"}', 200);
+      }));
+      expect(await flaky.get('/account'), {'name': 'x'});
+      expect(calls, 2);
+
+      calls = 0;
+      final wrong = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return http.Response('{"text":"Invalid access token"}', 401);
+      }));
+      await expectLater(wrong.get('/account'), throwsA(isA<Gw2ApiException>()));
+      expect(calls, 2);
+
+      calls = 0;
+      final other = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return http.Response('{"text":"requires scope wvw"}', 403);
+      }));
+      await expectLater(other.get('/account'), throwsA(isA<Gw2ApiException>()));
+      expect(calls, 1);
+    });
+
     test('cachedGet answers from disk and refreshes stale entries behind the scenes', () async {
       var calls = 0;
       var revalidated = 0;

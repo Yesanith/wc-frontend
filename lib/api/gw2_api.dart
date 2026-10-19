@@ -322,6 +322,9 @@ class Gw2Api {
   /// pause instead of failing the page, up to three times
   static const _retryable = {429, 502, 503, 504};
 
+  /// how long to wait before asking again after "Invalid access token"
+  static Duration invalidTokenPause = const Duration(seconds: 1);
+
   /// whether there is an api key. without one the app runs as a guest
   bool get hasKey => (apiKey ?? '').isNotEmpty;
 
@@ -332,8 +335,16 @@ class Gw2Api {
       return Future.error(Gw2ApiException('An API key is needed for this.', null, ApiErrorKind.noKey));
     }
     return _gate.run(() async {
+      var askedAgainForToken = false;
       for (var attempt = 0;; attempt++) {
         final res = await _sendOnce(uri, headers);
+        // the api now and then calls a good key invalid for a moment. one
+        // more try tells that apart from a key that really is wrong
+        if (res.statusCode == 401 && !askedAgainForToken && hasKey && res.body.contains('Invalid access token')) {
+          askedAgainForToken = true;
+          await Future<void>.delayed(invalidTokenPause);
+          continue;
+        }
         if (!_retryable.contains(res.statusCode) || attempt >= 3) return res;
         // the slot stays taken while waiting, which slows the whole app
         // down a little right when the api asks for exactly that

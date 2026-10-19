@@ -26,6 +26,7 @@ world's timers in one place. It is free, has no ads and does not track you.
 | `tradingpost` | your buy and sell orders, the delivery box and trading history |
 | `pvp` | PvP stats and match history |
 | `guilds` | guild treasury, stash, log, members and ranks (the game shows some of it to leaders only) |
+| `wvw` | World vs World ranks, abilities and your guilds' match statistics |
 
 Keys are read only: they cannot spend, trade or change anything in the game. They are stored encrypted on
 the device (in the browser for the browser version), sent only to the official API, and several can be

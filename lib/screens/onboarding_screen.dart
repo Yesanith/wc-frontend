@@ -17,7 +17,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   static const _required = ['account', 'characters', 'inventories', 'wallet'];
-  static const _optional = ['builds', 'progression', 'unlocks', 'tradingpost', 'pvp', 'guilds'];
+  static const _optional = ['builds', 'progression', 'unlocks', 'tradingpost', 'pvp', 'guilds', 'wvw'];
 
   final _ctrl = TextEditingController();
   bool _busy = false;
