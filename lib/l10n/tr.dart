@@ -15,7 +15,7 @@ const trStrings = <String, String>{
       'Loncan oyundan okundu. Lonca üyelerinin uygulamada nelere bakabileceğini seç. Hazine, depo ve günlük kimin ne aldığını gösterir, bu yüzden sen onaylayana kadar gizli kalır.',
   'gshare_later': 'Sonra',
   'roster_note_game':
-      'Bu loncanın Tyria Companion üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
+      'Bu loncanın Tyria Codex üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
   'roster_manual': 'elle atandı',
   'roster_follow_game': 'Yine oyundaki rütbeyi izle',
   'roster_auto':
@@ -26,7 +26,7 @@ const trStrings = <String, String>{
   'gshare_note':
       'Lonca üyelerinin neleri göreceğini seç. Kapatana kadar her şey paylaşılır. Uygulaman açılınca hepsini getirir.',
   'gshared_note':
-      'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Companion kullanan üyeler, oyundaki rütbeleriyle.',
+      'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Codex kullanan üyeler, oyundaki rütbeleriyle.',
   'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
   'gw2_link_name': '{name} hesabını bağla',
   'gw2_refreshed': 'Loncalar yenilendi.',
@@ -97,14 +97,6 @@ const trStrings = <String, String>{
   'push_note': 'Katıldığın etkinliklerden 30 dakika önce hatırlatma, yedek listeden katılımcı olunca haber.',
   'push_denied': 'Tyria Codex için bildirimler engelli, telefonun ayarlarından izin ver.',
   'roster_of': '{guild} üyeleri',
-  'roster_note':
-      'Bu loncanın Tyria Companion\'daki üyeleri. Subaylar etkinlik oluşturup yönetebilir, onları lider atar.',
-  'roster_note_leader':
-      'Güvendiğin üyeleri subay yap, onlar da etkinlik oluşturup yönetebilsin. Liderlik oyundan gelir.',
-  'roster_make_officer': 'Subay yap',
-  'roster_make_member': 'Üye yap',
-  'roster_made_officer': '{name} artık subay',
-  'roster_made_member': '{name} tekrar üye',
   'roster_missing': 'Sadece giriş yapıp GW2 hesabını bağlamış oyuncular listelenir.',
   'event_err_is_leader': 'Liderlik oyundan gelir, burada değiştirilemez.',
   'event_err_own_role': 'Kendi rolünü değiştiremezsin.',
@@ -197,15 +189,15 @@ const trStrings = <String, String>{
   'gw2_link_note':
       'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
   'gw2_linked': '{name} bağlandı',
-  'gw2_link_taken': 'Bu GW2 hesabı başka bir Tyria Companion hesabına bağlı.',
+  'gw2_link_taken': 'Bu GW2 hesabı başka bir Tyria Codex hesabına bağlı.',
   'gw2_link_key': 'API key kullanılamadı. account iznine sahip olması gerekiyor.',
   'gw2_link_down': 'GW2 API\'si cevap vermiyor, sonra tekrar dene.',
   'gw2_unlink': 'Bağlantıyı kaldır',
-  'gw2_unlink_body': '{name} ve lonca üyelikleri Tyria Companion hesabından kaldırılacak.',
+  'gw2_unlink_body': '{name} ve lonca üyelikleri Tyria Codex hesabından kaldırılacak.',
   'guild_role_leader': 'Lider',
   'guild_role_officer': 'Subay',
   'guild_role_member': 'Üye',
-  'community_account': 'Tyria Companion hesabı',
+  'community_account': 'Tyria Codex hesabı',
   'community_intro':
       'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
   'community_sign_in_discord': 'Discord ile giriş yap',
@@ -213,7 +205,7 @@ const trStrings = <String, String>{
   'community_sign_out': 'Çıkış yap',
   'community_delete': 'Hesabı sil',
   'community_delete_body':
-      'Tyria Companion hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
+      'Tyria Codex hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
   'module_link_title': 'Blish HUD',
@@ -681,7 +673,7 @@ const trStrings = <String, String>{
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':
-      'Karakterler, cüzdan, trading post, dünya bossları, üretim, dünya haritası ve guild etkinlikleri, hepsi tek yerde. Ücretsiz ve resmî olmayan.',
+      'Karakterler, cüzdan, ticaret merkezi, dünya bossları, üretim, dünya haritası ve lonca etkinlikleri, hepsi tek yerde. Ücretsiz, resmî olmayan bir uygulama.',
   'landing_start': 'Başla',
   'landing_guest': 'Misafir olarak devam et',
   'landing_f_characters': 'Her karakterin ekipmanı, buildi ve oynama süresi.',
@@ -747,7 +739,7 @@ const trStrings = <String, String>{
   'lowest_sell': 'En iyi satış',
   'n_listed': '{n} adet',
   'flip_profit': '%15 vergi sonrası kâr',
-  'tp_note': 'Fiyatlar resmi API\'den canlı gelir. Fiyat geçmişi resmi API\'de olmadığı için şimdilik grafik yok.',
+  'tp_note': 'Fiyatlar resmi API\'den canlı gelir. Grafik, sunucumuzun sakladığı her günün son fiyatını gösterir.',
   'watchlist': 'Takip listesi',
   'watchlist_empty': 'Henüz boş. Bir item aç, Trading Post ve ardından Takibe al seçeneğine dokun.',
   'buy_short': 'alış',
@@ -1035,7 +1027,7 @@ const trStrings = <String, String>{
   'oe_join_as': 'Şu hesapla katıl',
   'oe_roles_title': 'Resmi Discord',
   'oe_roles_body':
-      'Resmi Tyria Companion Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
+      'Resmi Tyria Codex Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
   'oe_roles_join': 'Resmi Discord\'a katıl',
   'oe_err_role_required': 'Etkinliğin rollerinden birini seç.',
   'oe_err_profession': 'Hangi meslekle geldiğini seç.',

@@ -16,7 +16,7 @@ const enStrings = <String, String>{
       'Your guild has been read from the game. Choose what the members of your guild can see in the app. The treasury, the stash and the log show who took what, so they stay hidden until you confirm.',
   'gshare_later': 'Later',
   'roster_note_game':
-      'Members of this guild on Tyria Companion, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
+      'Members of this guild on Tyria Codex, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
   'roster_manual': 'set by hand',
   'roster_follow_game': 'Follow the game\'s rank again',
   'roster_auto':
@@ -27,7 +27,7 @@ const enStrings = <String, String>{
   'gshare_note':
       'Choose what the guild\'s members see. Everything is shared until you switch it off. Your app brings it all when it is opened.',
   'gshared_note':
-      'The game shows the member list only to the guild\'s leader. These are the guild\'s members who use Tyria Companion, with the rank the game gives them.',
+      'The game shows the member list only to the guild\'s leader. These are the guild\'s members who use Tyria Codex, with the rank the game gives them.',
   'gshared_not_linked': 'Link your GW2 account in Settings to see what the guild\'s leader shares here.',
   'gw2_link_name': 'Link {name}',
   'gw2_refreshed': 'Guilds refreshed.',
@@ -98,14 +98,6 @@ const enStrings = <String, String>{
   'push_note': 'A reminder 30 minutes before events you go to, and news when the waitlist lets you in.',
   'push_denied': 'Notifications are blocked for Tyria Codex, allow them in the phone\'s settings.',
   'roster_of': '{guild} members',
-  'roster_note':
-      'Members of this guild on Tyria Companion. Officers can create and manage events, the leader appoints them.',
-  'roster_note_leader':
-      'Make trusted members officers so they can create and manage events too. Leadership comes from the game.',
-  'roster_make_officer': 'Make officer',
-  'roster_make_member': 'Make member',
-  'roster_made_officer': '{name} is now an officer',
-  'roster_made_member': '{name} is a member again',
   'roster_missing': 'Only players who signed in and linked their GW2 account are listed.',
   'event_err_is_leader': 'Leadership comes from the game and cannot be changed here.',
   'event_err_own_role': 'You cannot change your own role.',
@@ -198,15 +190,15 @@ const enStrings = <String, String>{
   'gw2_link_note':
       'Only a ten minute token that can read your account name and guilds is sent. Your API key stays on this device.',
   'gw2_linked': '{name} is linked',
-  'gw2_link_taken': 'This GW2 account is already linked to another Tyria Companion account.',
+  'gw2_link_taken': 'This GW2 account is already linked to another Tyria Codex account.',
   'gw2_link_key': 'The API key could not be used. It needs the account permission.',
   'gw2_link_down': 'The GW2 API is not answering, try again later.',
   'gw2_unlink': 'Unlink',
-  'gw2_unlink_body': '{name} and its guild memberships will be removed from your Tyria Companion account.',
+  'gw2_unlink_body': '{name} and its guild memberships will be removed from your Tyria Codex account.',
   'guild_role_leader': 'Leader',
   'guild_role_officer': 'Officer',
   'guild_role_member': 'Member',
-  'community_account': 'Tyria Companion account',
+  'community_account': 'Tyria Codex account',
   'community_intro':
       'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device.',
   'community_sign_in_discord': 'Sign in with Discord',
@@ -214,7 +206,7 @@ const enStrings = <String, String>{
   'community_sign_out': 'Sign out',
   'community_delete': 'Delete account',
   'community_delete_body':
-      'Your Tyria Companion account and everything tied to it will be deleted for good. Your API keys and the app\'s other data on this device are not affected.',
+      'Your Tyria Codex account and everything tied to it will be deleted for good. Your API keys and the app\'s other data on this device are not affected.',
   'community_delete_confirm': 'Delete for good',
   'community_failed': 'That did not work, please try again.',
   'module_link_title': 'Blish HUD',
@@ -752,7 +744,7 @@ const enStrings = <String, String>{
   'n_listed': '{n} listed',
   'flip_profit': 'Flip profit after 15% fees',
   'tp_note':
-      'Prices come live from the official API. Price history is not part of the official API, so there is no chart yet.',
+      'Prices come live from the official API. The chart shows the last price of each day, which our server keeps.',
   'watchlist': 'Watchlist',
   'watchlist_empty': 'Nothing here yet. Open any item and tap Trading Post, then Watch.',
   'buy_short': 'buy',
@@ -1039,7 +1031,7 @@ const enStrings = <String, String>{
   'oe_join_as': 'Sign up as',
   'oe_roles_title': 'Official Discord',
   'oe_roles_body':
-      'The official Tyria Companion Discord server posts public events in a channel for each region and kind of event. Join it with the Discord account you signed in with: you get the role of each region you have an account in. When an event you signed up for starts, the bot opens a text and a voice channel for it that only those who signed up can see.',
+      'The official Tyria Codex Discord server posts public events in a channel for each region and kind of event. Join it with the Discord account you signed in with: you get the role of each region you have an account in. When an event you signed up for starts, the bot opens a text and a voice channel for it that only those who signed up can see.',
   'oe_roles_join': 'Join the official Discord',
   'oe_err_role_required': 'Pick one of the event\'s roles.',
   'oe_err_profession': 'Pick the profession you come as.',
