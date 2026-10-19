@@ -62,6 +62,8 @@ jobs:
         if: failure()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # an input is read as data by the script, never pasted into it
+          SITE: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}
         run: |
           test -f "$RUNNER_TEMP/smoke.log" || exit 0
           dir="$(mktemp -d)"
@@ -79,7 +81,7 @@ jobs:
           {
             echo "commit: $GITHUB_SHA"
             echo "run: $GITHUB_RUN_ID"
-            echo "site: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}"
+            echo "site: $SITE"
             echo
             head -n 700 "$RUNNER_TEMP/smoke.log"
           } > smoke-failure.txt

@@ -112,7 +112,8 @@ test.describe('the app in a browser', () => {
     const copy = written(page, 'Copy link to this page');
     await expect(copy).toBeAttached({ timeout: 60_000 });
     await copy.click();
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`${BASE_URL}/app/#/item/19721`);
+    // a copied link is the public address of the app, whichever server the test runs against
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('https://yesanith.github.io/tyria-companion/app/#/item/19721');
     await page.reload();
     await page.waitForSelector('flt-glass-pane', { state: 'attached', timeout: 90_000 });
     await expect(page).toHaveURL(/#\/item\/19721$/);
