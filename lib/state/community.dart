@@ -422,8 +422,3 @@ final myGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) async {
 Future<void> unlinkGw2Account(String id) async {
   await Supabase.instance.client.from('gw2_accounts').delete().eq('id', id);
 }
-
-/// whether a link is old enough to refresh quietly: a day, well within the
-/// thirty days after which the backend stops counting the membership
-bool linkIsStale(DateTime? verifiedAt, DateTime now) =>
-    verifiedAt == null || now.difference(verifiedAt) > const Duration(days: 1);
