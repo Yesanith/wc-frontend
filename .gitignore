@@ -41,3 +41,7 @@ __pycache__/
 /e2e/test-results/
 /e2e/screenshots/
 /e2e/package-lock.json
+
+# signing keys live in the repository secrets, never in it
+*.keystore
+*.jks

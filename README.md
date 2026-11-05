@@ -186,6 +186,12 @@ map (the Path of Fire and Elona maps are on neither floor 0 nor 1), so each open
 read from its own default floor and the results are merged. The `Build recipe data` workflow
 regenerates it with the recipes.
 
+## License
+
+The code is under the [MIT License](LICENSE). Game data, icons, map tiles and names come from
+ArenaNet's Guild Wars 2 API and belong to ArenaNet; wiki text belongs to the Guild Wars 2 Wiki. Neither
+is covered by this license.
+
 ## Disclaimer
 
 Tyria Codex is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,
