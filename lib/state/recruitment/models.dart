@@ -252,54 +252,6 @@ class RecruiterEntry {
   }
 }
 
-/// a page that was reported or is hidden, as the administrator sees it: how many reported it, what the last said, and whether it is hidden
-class RecruitReport {
-  const RecruitReport({
-    required this.guildId,
-    required this.name,
-    required this.tag,
-    required this.headline,
-    required this.reports,
-    required this.reasons,
-    required this.hidden,
-    required this.published,
-    this.hiddenReason,
-    this.lastAt,
-  });
-
-  final String guildId;
-  final String name;
-  final String tag;
-  final String headline;
-  final int reports;
-
-  /// what the last three who reported it said, the latest first
-  final List<String> reasons;
-  final bool hidden;
-  final bool published;
-  final String? hiddenReason;
-  final DateTime? lastAt;
-
-  String get title => tag.isEmpty ? name : '$name [$tag]';
-
-  static RecruitReport? parse(Object? raw) {
-    if (raw is! Map || raw['guild_id'] is! String || raw['name'] is! String) return null;
-    final n = raw['reports'];
-    return RecruitReport(
-      guildId: raw['guild_id'] as String,
-      name: raw['name'] as String,
-      tag: '${raw['tag'] ?? ''}',
-      headline: '${raw['headline'] ?? ''}',
-      reports: n is num ? n.toInt() : 0,
-      reasons: _strings(raw['reasons']),
-      hidden: raw['hidden'] == true,
-      published: raw['published'] == true,
-      hiddenReason: raw['hidden_reason'] is String ? raw['hidden_reason'] as String : null,
-      lastAt: _time(raw['last_at']),
-    );
-  }
-}
-
 /// what a page is being edited into
 class RecruitDraft {
   const RecruitDraft({

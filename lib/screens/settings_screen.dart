@@ -13,7 +13,6 @@ import '../state/api.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
 import '../state/boss_alerts.dart';
-import '../state/admin.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../state/module_link.dart';
@@ -22,7 +21,6 @@ import '../state/settings.dart';
 import '../state/trade_notify.dart';
 import '../theme.dart';
 import '../util.dart';
-import 'admin_screen.dart';
 import '../widgets/common.dart';
 import '../widgets/ui_zoom.dart';
 import 'onboarding_screen.dart';
@@ -110,8 +108,6 @@ class SettingsScreen extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       children: [
-        // only for whoever runs the backend
-        const _AdminTile(),
         if (kIsWeb) ...[const _UiSizePanel(), const SizedBox(height: 12)],
         const _LookPanel(),
         const SizedBox(height: 12),
@@ -234,31 +230,6 @@ class _InfoRow extends StatelessWidget {
         Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.muted))),
         Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ],
-    );
-  }
-}
-
-/// the way to the backend dashboard, there only when the database says the player runs the backend
-class _AdminTile extends ConsumerWidget {
-  const _AdminTile();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (ref.watch(isAdminProvider).valueOrNull != true) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Panel(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AdminScreen())),
-          leading: Icon(Icons.monitor_heart_outlined, color: AppColors.gold),
-          title: const Text('Backend dashboard', style: TextStyle(fontWeight: FontWeight.w700)),
-          subtitle:
-              Text('Players, guilds, servers, queues and jobs', style: TextStyle(color: AppColors.muted, fontSize: 12)),
-          trailing: Icon(Icons.chevron_right, color: AppColors.chevron),
-        ),
-      ),
     );
   }
 }

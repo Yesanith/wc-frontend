@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show Session, User;
 import 'package:wondrous_compass/l10n/strings.dart';
-import 'package:wondrous_compass/screens/admin/recruitment_reports.dart';
 import 'package:wondrous_compass/screens/recruitment/editor_screen.dart';
 import 'package:wondrous_compass/screens/recruitment/page_screen.dart';
 import 'package:wondrous_compass/screens/recruitment/recruiters_screen.dart';
@@ -131,9 +130,6 @@ class FakeRecruit implements RecruitBackend {
   /// what was done to the page, in the order it was done
   final calls = <String>[];
 
-  /// the pages that were reported or are hidden, for the administrator, and what was done to them
-  List<RecruitReport> reported = const [];
-  final hides = <(String, bool, String?)>[];
   var deletes = 0;
   var mineCalls = 0;
 
@@ -221,31 +217,6 @@ class FakeRecruit implements RecruitBackend {
   Future<void> report(String guildId, String reason) async {
     if (fail != null) throw fail!;
     reports.add(reason);
-  }
-
-  @override
-  Future<List<RecruitReport>> adminReports() async => reported;
-
-  @override
-  Future<void> adminSetHidden(String guildId, bool hidden, String? reason) async {
-    if (fail != null) throw fail!;
-    hides.add((guildId, hidden, reason));
-    reported = [
-      for (final r in reported)
-        if (r.guildId == guildId)
-          RecruitReport(
-              guildId: r.guildId,
-              name: r.name,
-              tag: r.tag,
-              headline: r.headline,
-              reports: r.reports,
-              reasons: r.reasons,
-              hidden: hidden,
-              published: r.published,
-              hiddenReason: reason)
-        else
-          r,
-    ];
   }
 }
 
@@ -1193,152 +1164,6 @@ void main() {
       await settle(tester);
     });
   });
-
-  group('the recruitment pages that were reported, for the administrator', () {
-    RecruitReport report(
-            {bool hidden = false,
-            bool published = true,
-            int reports = 2,
-            String? hiddenReason,
-            List<String> reasons = const ['It is spam', 'Rude']}) =>
-        RecruitReport(
-            guildId: _id,
-            name: 'Mistwalkers',
-            tag: 'MIST',
-            headline: 'Raids on Thursdays',
-            reports: reports,
-            reasons: reasons,
-            hidden: hidden,
-            published: published,
-            hiddenReason: hiddenReason);
-
-    Future<FakeRecruit> panel(WidgetTester tester, FakeRecruit fake) async {
-      await show(tester, fake, home: const SingleChildScrollView(child: AdminRecruitReports()));
-      return fake;
-    }
-
-    testWidgets('says so when none was reported and none is hidden', (tester) async {
-      await panel(tester, FakeRecruit());
-      expect(find.text('No recruitment page was reported, and none is hidden.'), findsOneWidget);
-    });
-
-    testWidgets('says calmly that they could not be read, and tries again when asked', (tester) async {
-      final fake = _FailingReports();
-      await panel(tester, fake);
-      expect(find.text('The recruitment pages could not be read.'), findsOneWidget);
-      expect(find.textContaining('RecruitFailure'), findsNothing);
-      final before = fake.askedReports;
-      await tester.tap(find.text('Try again'));
-      await tester.pumpAndSettle();
-      expect(fake.askedReports, greaterThan(before));
-    });
-
-    testWidgets('shows each page with how many reported it and what they said', (tester) async {
-      await panel(
-          tester,
-          FakeRecruit()
-            ..reported = [
-              report(),
-              report(reports: 1, reasons: const ['Spam']).copy(name: 'Other')
-            ]);
-      expect(find.text('Mistwalkers [MIST]'), findsOneWidget);
-      expect(find.text('Raids on Thursdays'), findsNWidgets(2));
-      expect(find.text('Reported by 2 players'), findsOneWidget);
-      expect(find.text('Reported by 1 player'), findsOneWidget);
-      expect(find.text('“It is spam”'), findsOneWidget);
-      expect(find.text('“Rude”'), findsOneWidget);
-      expect(find.text('Shown'), findsNWidgets(2));
-    });
-
-    testWidgets('says that a page is a draft, and that one is hidden, and why', (tester) async {
-      await panel(
-          tester,
-          FakeRecruit()
-            ..reported = [
-              report(published: false, reports: 1),
-              report(hidden: true, hiddenReason: 'Spam', reports: 0, reasons: const [])
-            ]);
-      expect(find.text('Draft'), findsOneWidget);
-      expect(find.text('Hidden'), findsOneWidget);
-      expect(find.text('Hidden because: Spam'), findsOneWidget);
-      expect(find.text('Show again'), findsOneWidget);
-      expect(find.text('Hide'), findsOneWidget, reason: 'only a page that is shown can be hidden');
-    });
-
-    testWidgets('hides a page, with the reason that the guild is shown', (tester) async {
-      final fake = await panel(tester, FakeRecruit()..reported = [report()]);
-      await tester.tap(find.text('Hide'));
-      await tester.pumpAndSettle();
-      expect(find.text('Hide this page'), findsOneWidget);
-      await tester.enterText(find.byKey(const Key('hide-reason')), '  Spam  ');
-      await tester.tap(find.descendant(of: find.byType(AlertDialog), matching: find.text('Hide')));
-      await tester.pumpAndSettle();
-      expect(fake.hides, [(_id, true, 'Spam')]);
-      expect(find.text('Show again'), findsOneWidget, reason: 'the list is asked for again and has it hidden');
-      expect(find.text('Hidden because: Spam'), findsOneWidget);
-      await settle(tester);
-    });
-
-    testWidgets('hides nothing when the dialog is closed', (tester) async {
-      final fake = await panel(tester, FakeRecruit()..reported = [report()]);
-      await tester.tap(find.text('Hide'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Cancel'));
-      await tester.pumpAndSettle();
-      expect(fake.hides, isEmpty);
-    });
-
-    testWidgets('shows a page again, with no reason', (tester) async {
-      final fake = await panel(tester, FakeRecruit()..reported = [report(hidden: true, hiddenReason: 'Spam')]);
-      await tester.tap(find.text('Show again'));
-      await tester.pumpAndSettle();
-      expect(fake.hides, [(_id, false, null)]);
-      expect(find.text('Hide'), findsOneWidget);
-      expect(find.text('Hidden because: Spam'), findsNothing);
-      await settle(tester);
-    });
-
-    testWidgets('says when it did not work', (tester) async {
-      final fake = FakeRecruit(fail: const RecruitFailure('not_admin'))..reported = [report(hidden: true)];
-      await panel(tester, fake);
-      await tester.tap(find.text('Show again'));
-      await tester.pumpAndSettle();
-      expect(find.text('That did not work'), findsOneWidget);
-      await settle(tester);
-    });
-
-    testWidgets('opens the page to look at it', (tester) async {
-      final fake = FakeRecruit(current: _thePage(canEdit: true, hidden: true))..reported = [report(hidden: true)];
-      await panel(tester, fake);
-      await tester.tap(find.text('Look'));
-      await tester.pumpAndSettle();
-      expect(find.text('Join their Discord'), findsOneWidget);
-    });
-  });
-}
-
-extension on RecruitReport {
-  RecruitReport copy({String? name}) => RecruitReport(
-      guildId: guildId,
-      name: name ?? this.name,
-      tag: tag,
-      headline: headline,
-      reports: reports,
-      reasons: reasons,
-      hidden: hidden,
-      published: published,
-      hiddenReason: hiddenReason);
-}
-
-/// a database whose reports cannot be read
-class _FailingReports extends FakeRecruit {
-  int askedReports = 0;
-
-  @override
-  Future<List<RecruitReport>> adminReports() async {
-    askedReports++;
-    throw const RecruitFailure('boom');
-  }
 }
 
 /// a database whose list cannot be asked

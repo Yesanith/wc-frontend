@@ -16,12 +16,6 @@ abstract interface class RecruitBackend {
   Future<void> grant(String guildId, String userId);
   Future<void> revoke(String guildId, String userId);
   Future<void> report(String guildId, String reason);
-
-  /// for an administrator: the pages that were reported or are hidden
-  Future<List<RecruitReport>> adminReports();
-
-  /// for an administrator: hides a page from everybody but those who manage it, or shows it again
-  Future<void> adminSetHidden(String guildId, bool hidden, String? reason);
 }
 
 class SupabaseRecruitBackend implements RecruitBackend {
@@ -101,21 +95,6 @@ class SupabaseRecruitBackend implements RecruitBackend {
   Future<void> report(String guildId, String reason) async {
     await _rpc('report_recruitment', {'p_guild': guildId, 'p_reason': reason});
   }
-
-  @override
-  Future<List<RecruitReport>> adminReports() async {
-    final raw = await _rpc('admin_recruitment_reports');
-    return [
-      if (raw is List)
-        for (final r in raw)
-          if (RecruitReport.parse(r) case final report?) report,
-    ];
-  }
-
-  @override
-  Future<void> adminSetHidden(String guildId, bool hidden, String? reason) async {
-    await _rpc('admin_set_recruitment_hidden', {'p_guild': guildId, 'p_hidden': hidden, 'p_reason': reason});
-  }
 }
 
 final recruitBackendProvider = Provider<RecruitBackend>((ref) => const SupabaseRecruitBackend());
@@ -139,7 +118,3 @@ final myRecruitProvider = FutureProvider.autoDispose<List<MyRecruitGuild>>((ref)
 /// who the leader allowed to edit the page of a guild
 final recruitersProvider = FutureProvider.autoDispose
     .family<List<RecruiterEntry>, String>((ref, guildId) => ref.watch(recruitBackendProvider).recruiters(guildId));
-
-/// for an administrator: the pages that were reported or are hidden
-final adminRecruitReportsProvider =
-    FutureProvider.autoDispose<List<RecruitReport>>((ref) => ref.watch(recruitBackendProvider).adminReports());
