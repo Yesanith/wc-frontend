@@ -1,83 +1,92 @@
 # Tyria Codex
 
-An unofficial Guild Wars 2 companion app for Android, built with Flutter.
+An unofficial Guild Wars 2 companion for Android and the browser, built with Flutter. It reads your
+account through the official Guild Wars 2 API and puts the day, your characters, the trading post and the
+world's timers in one place. It is free, has no ads and does not track you.
+
+> Tyria Codex is a fan project. It is not made, endorsed or supported by ArenaNet or NCSOFT.
+
+- **Android:** `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest)
+- **Browser:** [yesanith.github.io/tyria-companion/app](https://yesanith.github.io/tyria-companion/app/)
+- **Site, FAQ and privacy policy:** [yesanith.github.io/tyria-companion](https://yesanith.github.io/tyria-companion/)
+
+## Getting started
+
+1. Install the APK (Android asks once to allow installs from your browser or file manager), or open the
+   browser version.
+2. Create an API key at [account.arena.net/applications](https://account.arena.net/applications) and paste
+   it into the app. The app checks the key and shows what it may read before saving it.
+
+| Permission | Needed for |
+| --- | --- |
+| `account`, `characters`, `inventories`, `wallet` | required: the account, characters, bags, bank, materials and wallet |
+| `progression` | achievements, masteries, raids, dungeons, the Wizard's Vault and daily progress |
+| `unlocks` | collections, the wardrobe and learned recipes |
+| `builds` | equipment and build templates |
+| `tradingpost` | your buy and sell orders, the delivery box and trading history |
+| `pvp` | PvP stats and match history |
+| `guilds` | guild treasury, stash, log, members and ranks (the game shows some of it to leaders only) |
+
+Keys are read only: they cannot spend, trade or change anything in the game. They are stored encrypted on
+the device (in the browser for the browser version), sent only to the official API, and several can be
+kept and switched for alt accounts.
+
+Signing in with Discord is optional. It is only needed for guild events, public events, guild recruitment
+pages and price alerts sent by the server, and even then the app sends a ten minute read only token, never
+your API key. The [privacy policy](https://yesanith.github.io/tyria-companion/privacy.html) lists exactly
+what is kept, where and for how long, and the account can be deleted from Settings or the
+[delete account page](https://yesanith.github.io/tyria-companion/delete-account.html).
 
 ## Features
 
-- Side drawer navigation across every section
-- A home page for the day: reset countdowns, Wizard's Vault objectives, the metas you can still join, the daily checklist and the wallet
-- Progression: achievements in progress, mastery tracks and points, raid wings and dungeon
-  paths with this week's and today's clears, PvP record per profession and WvW rank
-- Trading stats: 90 days of profit and loss with the best selling items
-- Guilds: treasury progress, stash tabs and the guild log
-- Home instance cats and nodes alongside the other collections
-- Legendary armory and saved build templates, with full build details: the whole trait grid,
-  skill facts, underwater skills, pets, revenant legends, toolbelt and chained skills,
-  weapon skill bars and a generated chat code
-- Daily craft and map chest progress next to the boss timers
-- Collections: mounts, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
-  titles, emotes and wardrobe progress, with unlocked/missing filters
-- Account overview with wallet, bank and material storage
-- Wizard's Vault daily, weekly and special objectives
-- Gem calculator in both directions, and a month of the gem exchange rate as a chart
-- Character list with sorting and favourites
-- Character list and details: equipment templates with runes, sigils and infusions, the full
-  build, bags and crafting
-- Item pages with attributes, upgrades, what you own and the current trading post price
-- World boss and meta timers on a scrollable timeline with a line for now, or as a list, in your local time, with pinning, release filters and a marker for the bosses already looted today
-- Trading Post section: gem rate, delivery box, watchlist, open orders, 90 days of history and a
-  list of every tradable item with filters
-- News: the official guildwars2.com news and the wiki's game update notes, with a note on the home
-  page when something new is out
-- Side by side character comparison
-- Recipes: every crafting and Mystic Forge recipe in one place, filterable by discipline,
-  with a calculator that shows the tree, what your account already covers, the cost of the
-  missing materials and whether buying is cheaper
-- Shareable hero cards for your characters
-- Maps drawn from the official tile service, with a pin on every waypoint and
-  landmark, and chat codes ready to copy
-- Wiki search in the official Guild Wars 2 Wiki, opened in an in-app browser
-- Backup: export and import the watchlist, price history, pinned bosses and achievements and
-  language as json
-- Game data (items, colors, collection entries) is cached on disk for a month
-- English, German, Spanish, French, Turkish, Portuguese, Russian, Japanese and Chinese UI. Item names and the wiki follow the
-  selected language where the API and wiki support it. Chinese item names come from the API, Turkish,
-  Portuguese, Russian and Japanese fall back to English data
+**The day**
+- A home page with the reset countdowns, the Wizard's Vault objectives, the metas you can still join, the
+  daily checklist (time gated crafts, map chests, world bosses) and the wallet
+- World boss and meta timers on a timeline with a line for now, or as a list, in your local time, with
+  pinning, release filters and a mark for the bosses already looted today
+- Reminders for pinned events that keep working with the app closed, and an Android home screen widget
+- Daily and weekly sections, and the news of guildwars2.com with the wiki's game update notes
 
-- World vs World: live matchup scores, objectives per map with owner and upgrade tier, rank and abilities
-- Wizard's Vault reward shop with the season, your Astral Acclaim and what you already bought
-- Character progress: hero challenges, training trees, story journal per season, Super Adventure Box and biography
-- Guild members, ranks, teams, built upgrades, hall storage and rendered guild emblems
-- More collections: mount skins, homestead decorations and glyphs, jade bots, skiffs and PvP heroes
-- Stat combination names on gear, material storage by category, trading post order book,
-  learned recipe markers, luck and fractal augmentations
-- PvP leaderboards for every season, board (ladder, legendary, guild) and region
-- Professions: every class with its specializations, traits and weapons, and class icons
-  (the elite specialization's when one is slotted) on the character pages
-- Wardrobe with every skin's name and icon, filterable by armour, weapon, back and slot
-- "Used in" on item pages, and each character's learned recipes
-- Guild rank permissions, world names in WvW and translated race names
-- Trading post price history: the app records one buy and sell price per day for watched items
-  and every item page opened, with a chart and the change over 7, 30 and 90 days
-- Pinned achievements on the home screen, pinned from any achievement list
-## Updating
+**Your account**
+- Characters with sorting and favourites, equipment templates with runes, sigils and infusions, full builds
+  (traits, skills, pets, legends, chat codes), bags, crafting, birthdays and a side by side comparison
+- Character progress: hero challenges, training, the story journal, Super Adventure Box and biography
+- Wallet, bank, material storage by category, the legendary armory and shareable hero cards
+- Progression: achievements (with pins on the home page), masteries, raids and dungeons, luck and fractal
+  augmentations
+- Collections: mounts and their skins, gliders, minis, dyes, outfits, novelties, finishers, mail carriers,
+  titles, emotes, homestead decorations and glyphs, jade bots, skiffs, PvP heroes and the whole wardrobe
+- Guilds: treasury, stash, log, members, ranks and permissions, built upgrades, hall storage and emblems
+- PvP and WvW: stats per profession, leaderboards, live matchups with objectives, ranks and abilities
 
-Settings shows the installed version and checks the GitHub releases for a newer one. When
-there is one it links straight to the apk, which installs over the current version since
-every build is signed with the same key.
+**Trading and crafting**
+- Item pages with stats, upgrades, where every stack you own is, prices for 1, 10 or 250 with supply,
+  demand and the flip profit after fees, what the item is used in, and a price history
+- A list of every tradable item with filters and sorting, a watchlist with price alerts, your orders, the
+  delivery box and 90 days of trading history and profit
+- The gem exchange with a calculator and a month of the rate as a chart
+- Every crafting and Mystic Forge recipe, a calculator that shows the tree, what your account already
+  covers and whether buying is cheaper, crafting goals, and recipes ranked by profit
 
-## Download
+**Together** (with the optional account)
+- Guild events with sign ups and roles, posted to the guild's Discord server by the bot
+- Public events any player can make and join, per region, with their own channels on the official server
+- Guild recruitment pages
 
-Grab `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest).
-The `Build APK` workflow can also be run by hand for a test build, which leaves an APK under
-the run's artifacts.
+**Everywhere**
+- The world map from the official tiles with every waypoint and landmark and their chat codes
+- Professions with every specialization, trait and weapon
+- Wiki search in the official Guild Wars 2 Wiki
+- English, German, Spanish, French, Turkish, Portuguese, Russian, Japanese and Chinese. Item names follow
+  the language where the API has it (Chinese does, Turkish, Portuguese, Russian and Japanese use English)
+- Backup of the watchlist, price history, pins and settings as json, never the API key
+- Game data cached on disk, and updates checked against the GitHub releases from Settings
 
-Several API keys can be stored and switched from settings, so alt accounts work too.
+## Support
 
-You need a Guild Wars 2 API key from [account.arena.net/applications](https://account.arena.net/applications)
-with at least `account`, `characters`, `inventories` and `wallet`. `builds`, `progression`,
-`unlocks` and `tradingpost` are optional but unlock more screens. The key is stored encrypted on the device and
-is only sent to the official API.
+Tyria Codex is free and has no ads. If it helps you, you can
+[buy me a coffee](https://buymeacoffee.com/yesanith). Questions, bugs and ideas go to the
+[issues](https://github.com/Yesanith/tyria-companion/issues).
 
 ## Building locally
 
@@ -118,8 +127,8 @@ Two ways to cut a build:
 - Push a tag starting with `v` (for example `v0.21.0`). The workflow builds that version and
   attaches the APK to a GitHub release.
 - Run `Build APK` by hand from the Actions tab. It asks for the version and for whether to
-  publish it. Left unticked you get an APK under the run's artifacts; ticked, the workflow
-  creates the `v` tag and the release itself.
+  publish it. Ticked, the workflow creates the `v` tag and the release with the APK. Left unticked it only
+  builds and checks; an APK is kept under the run's artifacts only when a later step fails.
 
 Either way the version comes from the tag or the prompt, never from `pubspec.yaml`, so the
 version there is not worth keeping in step.
@@ -174,11 +183,6 @@ map (the Path of Fire and Elona maps are on neither floor 0 nor 1), so each open
 read from its own default floor and the results are merged. The `Build recipe data` workflow
 regenerates it with the recipes.
 
-## Support
-
-Tyria Codex is free and has no ads. If it helps you, you can
-[buy me a coffee](https://buymeacoffee.com/yesanith). The link is also under Settings in the app.
-
 ## Disclaimer
 
 Tyria Codex is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,
@@ -204,5 +208,5 @@ is not part of this.
 
 `e2e/` has tests that open the site in a real browser (Playwright): that a link to it shows its name and picture, that a visitor is shown what the app is, that a guest gets the app with the bar of a site, that
 the pages have addresses and the back button goes between them, that the search finds a page, and that the page throws no error. Flutter draws on a canvas, so the tests switch its accessibility tree on to read it.
-They run in the workflow Smoke, which is not part of the deploy: after the site has been deployed, every morning and on request (`BASE_URL` takes the address of a build served anywhere else). What the browser saw is kept as
-screenshots for two weeks.
+They run in the workflow Smoke, which is not part of the deploy: after the site has been deployed, every morning and on request (`BASE_URL` takes the address of a build served anywhere else). When a test fails, what the browser
+saw is kept as screenshots for three days.

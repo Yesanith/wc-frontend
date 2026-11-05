@@ -89,9 +89,9 @@ jobs:
           git commit -q -m "The smoke failure of $GITHUB_SHA"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-smoke
 
-      # what the browser saw, to look at when something is wrong and when it is not
+      # what the browser saw, kept only when something went wrong
       - name: Keep what was seen
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: smoke
@@ -100,4 +100,4 @@ jobs:
             e2e/playwright-report
             e2e/test-results
           if-no-files-found: ignore
-          retention-days: 14
+          retention-days: 3

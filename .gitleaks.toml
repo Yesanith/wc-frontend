@@ -1,0 +1,13 @@
+# secret scanning with gitleaks:
+#   gitleaks git --log-opts="--all" .
+# the default rules apply, with these exceptions for values that only look like secrets
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "made up values in tests"
+regexes = [
+  # the shape of a gw2 api key, used to check that an account id is derived from it and never contains it
+  '''A1B2C3D4-E5F6-1234-5678-ABCDEF012345ABCDEF012345-ABCD-1234-ABCD-1234567890AB''',
+]
