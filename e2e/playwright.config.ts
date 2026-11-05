@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // the site as it is served: the pages of github, or what BASE_URL says (a build served on this computer, for one)
-export const BASE_URL = process.env.BASE_URL ?? 'https://yesanith.github.io/tyria-companion';
+export const BASE_URL = process.env.BASE_URL ?? 'https://yesanith.github.io/wc-frontend';
 
 export default defineConfig({
   testDir: './tests',

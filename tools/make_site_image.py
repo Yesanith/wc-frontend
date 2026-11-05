@@ -71,7 +71,7 @@ def make():
 
     # what it says, as wide as the place for it and no wider
     x, room = 560 * scale, 580 * scale
-    draw.text((x, 200 * scale), "Tyria Codex", font=fitted(FONTS, "Tyria Codex", 96 * scale, room), fill=(239, 232, 220))
+    draw.text((x, 200 * scale), "Wondrous Compass", font=fitted(FONTS, "Wondrous Compass", 96 * scale, room), fill=(239, 232, 220))
     sub = "Unofficial Guild Wars 2 companion"
     draw.text((x, 326 * scale), sub, font=fitted(REGULAR, sub, 34 * scale, room), fill=GOLD)
     line = "Android  ·  Browser  ·  9 languages"

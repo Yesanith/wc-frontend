@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/chat_code.dart';
-import 'package:tyria_codex/util.dart';
+import 'package:wondrous_compass/services/chat_code.dart';
+import 'package:wondrous_compass/util.dart';
 
 /// palette pairs come back as [paletteId, skillId]
 Json professionWith(Map<int, int> paletteBySkill) => {

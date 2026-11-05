@@ -78,7 +78,7 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
       return;
     }
     await showBossAlertTest(
-      title: 'Tyria Codex',
+      title: 'Wondrous Compass',
       body: s.t('boss_alert_test_body'),
       channelName: s.t('boss_alerts_title'),
       channelDescription: s.t('boss_alerts_note'),

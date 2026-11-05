@@ -10,7 +10,7 @@ TEMPLATE = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="description" content="A new Flutter project.">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>tyria_codex</title>
+  <title>wondrous_compass</title>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
@@ -23,16 +23,16 @@ class WebTest(unittest.TestCase):
     patched = web.patch_index(TEMPLATE)
 
     def test_the_page_has_the_name_and_what_it_is(self):
-        self.assertIn("<title>Tyria Codex</title>", self.patched)
+        self.assertIn("<title>Wondrous Compass</title>", self.patched)
         self.assertIn(web.DESCRIPTION, self.patched.split("og:description")[0])
         self.assertNotIn("A new Flutter project", self.patched)
 
     def test_a_link_to_the_page_shows_its_name_what_it_is_and_the_picture_of_the_app(self):
         for needle in (
-            '<meta property="og:title" content="Tyria Codex">',
-            '<meta property="og:url" content="https://yesanith.github.io/tyria-companion/app/">',
-            '<meta property="og:image" content="https://yesanith.github.io/tyria-companion/app/icons/Icon-512.png">',
-            '<link rel="canonical" href="https://yesanith.github.io/tyria-companion/app/">',
+            '<meta property="og:title" content="Wondrous Compass">',
+            '<meta property="og:url" content="https://yesanith.github.io/wc-frontend/app/">',
+            '<meta property="og:image" content="https://yesanith.github.io/wc-frontend/app/icons/Icon-512.png">',
+            '<link rel="canonical" href="https://yesanith.github.io/wc-frontend/app/">',
             '<meta name="twitter:card" content="summary">',
             '<meta property="og:type" content="website">',
         ):
@@ -55,7 +55,7 @@ class WebTest(unittest.TestCase):
 
     def test_the_manifest_is_the_apps(self):
         manifest = web.patch_manifest(json.loads('{"name": "x", "short_name": "x"}'))
-        self.assertEqual(manifest["name"], "Tyria Codex")
+        self.assertEqual(manifest["name"], "Wondrous Compass")
         self.assertEqual(manifest["display"], "standalone")
         self.assertEqual(manifest["description"], web.DESCRIPTION)
 

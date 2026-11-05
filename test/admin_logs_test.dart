@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/screens/admin/logs_screen.dart';
-import 'package:tyria_codex/screens/admin/widgets.dart' show AdminLine;
-import 'package:tyria_codex/screens/admin/system_tab.dart';
-import 'package:tyria_codex/state/admin.dart';
-import 'package:tyria_codex/state/admin_actions.dart';
-import 'package:tyria_codex/state/admin_logs.dart';
-import 'package:tyria_codex/state/admin_system.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/theme.dart';
+import 'package:wondrous_compass/screens/admin/logs_screen.dart';
+import 'package:wondrous_compass/screens/admin/widgets.dart' show AdminLine;
+import 'package:wondrous_compass/screens/admin/system_tab.dart';
+import 'package:wondrous_compass/state/admin.dart';
+import 'package:wondrous_compass/state/admin_actions.dart';
+import 'package:wondrous_compass/state/admin_logs.dart';
+import 'package:wondrous_compass/state/admin_system.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/theme.dart';
 
 import 'admin_actions_test.dart' show FakeBackend;
 

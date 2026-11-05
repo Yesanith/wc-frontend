@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/screens/guild_events_screen.dart';
-import 'package:tyria_codex/state/community.dart';
-import 'package:tyria_codex/state/guild_events.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/screens/guild_events_screen.dart';
+import 'package:wondrous_compass/state/community.dart';
+import 'package:wondrous_compass/state/guild_events.dart';
 
 GuildEvent _event({String creator = 'someone', String guild = 'g1'}) => GuildEvent.fromRow({
       'id': 'e1',

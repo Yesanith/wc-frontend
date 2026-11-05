@@ -54,7 +54,7 @@ jobs:
           npx playwright test 2>&1 | tee "$RUNNER_TEMP/smoke.log"
         working-directory: e2e
         env:
-          BASE_URL: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}
+          BASE_URL: ${{ inputs.base_url || 'https://yesanith.github.io/wc-frontend' }}
 
       # what went wrong, on a branch of its own, so that it can be read without opening the run: what the tests said, and for each that failed what the page
       # had in it when it did (the tree the browser reads the page by, which says what is there and what it is called)
@@ -63,7 +63,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # an input is read as data by the script, never pasted into it
-          SITE: ${{ inputs.base_url || 'https://yesanith.github.io/tyria-companion' }}
+          SITE: ${{ inputs.base_url || 'https://yesanith.github.io/wc-frontend' }}
         run: |
           test -f "$RUNNER_TEMP/smoke.log" || exit 0
           dir="$(mktemp -d)"

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/alerts.dart';
-import 'package:tyria_codex/state/periodic.dart';
-import 'package:tyria_codex/state/wealth.dart';
+import 'package:wondrous_compass/state/alerts.dart';
+import 'package:wondrous_compass/state/periodic.dart';
+import 'package:wondrous_compass/state/wealth.dart';
 
 void main() {
   group('resets', () {

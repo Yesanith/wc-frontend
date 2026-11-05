@@ -164,7 +164,7 @@ String linkPath(AppLink link) => switch (link) {
     };
 
 /// where the app is on the web. a link to it is this, and the address of the link after the #
-const appBase = 'https://yesanith.github.io/tyria-companion/app/';
+const appBase = 'https://yesanith.github.io/wc-frontend/app/';
 
 /// the link as it is shared: the whole address, which opens the app at it
 String linkUrl(AppLink link) => '$appBase#${linkPath(link)}';

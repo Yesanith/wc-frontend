@@ -53,19 +53,19 @@ Future<void> main() async {
         diskCacheProvider.overrideWithValue(cache),
         iconCacheProvider.overrideWithValue(icons),
       ],
-      child: const TyriaCodexApp(),
+      child: const WondrousCompassApp(),
     ),
   );
 }
 
-class TyriaCodexApp extends ConsumerStatefulWidget {
-  const TyriaCodexApp({super.key});
+class WondrousCompassApp extends ConsumerStatefulWidget {
+  const WondrousCompassApp({super.key});
 
   @override
-  ConsumerState<TyriaCodexApp> createState() => _TyriaCodexAppState();
+  ConsumerState<WondrousCompassApp> createState() => _WondrousCompassAppState();
 }
 
-class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindingObserver {
+class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with WidgetsBindingObserver {
   final _navigator = GlobalKey<NavigatorState>();
   late final _brightness = _BrightnessWatcher(() {
     if (mounted) setState(() {});
@@ -179,7 +179,7 @@ class _TyriaCodexAppState extends ConsumerState<TyriaCodexApp> with WidgetsBindi
       navigatorObservers: [_urlRestorer],
       // the address in the browser is the page, which the shell reads, not a route of the navigator
       initialRoute: '/',
-      title: 'Tyria Codex',
+      title: 'Wondrous Compass',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
       // on the web a wide screen shows everything larger, so a 2K monitor is not a phone's layout in the middle of it

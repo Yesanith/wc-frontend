@@ -32,7 +32,7 @@ jobs:
 
       - name: Generate the web project
         run: |
-          flutter create --platforms=web --org com.yesanith --project-name tyria_codex .
+          flutter create --platforms=web --org com.yesanith --project-name wondrous_compass .
           rm -f test/widget_test.dart
 
       - name: Set up the web build
@@ -57,6 +57,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: tyria-codex-web-preview
+          name: wondrous-compass-web-preview
           path: build/web
           retention-days: 3

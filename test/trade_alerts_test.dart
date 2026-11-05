@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/state/api.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/state/trade_alerts.dart';
-import 'package:tyria_codex/state/trade_notify.dart';
-import 'package:tyria_codex/util.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/state/api.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/state/trade_alerts.dart';
+import 'package:wondrous_compass/state/trade_notify.dart';
+import 'package:wondrous_compass/util.dart';
 
 Json _row(int id, int item, int price, int quantity) => {
       'id': id,

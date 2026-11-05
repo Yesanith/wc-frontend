@@ -35,15 +35,15 @@ Future<void> shareBackup(WidgetRef ref) async {
     // a browser has no temporary directory, the file is made from the bytes
     final bytes = Uint8List.fromList(utf8.encode(text));
     await SharePlus.instance.share(ShareParams(
-      files: [XFile.fromData(bytes, mimeType: 'application/json', name: 'tyria-codex-backup.json')],
-      text: 'Tyria Codex backup',
+      files: [XFile.fromData(bytes, mimeType: 'application/json', name: 'wondrous-compass-backup.json')],
+      text: 'Wondrous Compass backup',
     ));
     return;
   }
   final dir = await getTemporaryDirectory();
-  final file = File('${dir.path}/tyria-codex-backup.json');
+  final file = File('${dir.path}/wondrous-compass-backup.json');
   await file.writeAsString(text);
-  await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: 'Tyria Codex backup'));
+  await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: 'Wondrous Compass backup'));
 }
 
 /// throws when the text is not a backup we understand

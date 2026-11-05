@@ -4,7 +4,7 @@
   "html_lang": "en"
  },
  "ui": {
-  "nav_home": "Tyria Codex",
+  "nav_home": "Wondrous Compass",
   "nav_faq": "FAQ",
   "nav_privacy": "Privacy policy",
   "nav_terms": "Terms of service",
@@ -28,10 +28,10 @@
   "download": "Download the latest version",
   "browser_h": "In your browser",
   "browser_p": "There is no iPhone app yet. The whole app also runs in the browser, on any phone or computer.",
-  "open_button": "Open Tyria Codex",
+  "open_button": "Open Wondrous Compass",
   "iphone": "<strong>iPhone:</strong> open it in Safari, tap the share button and choose <em>Add to Home Screen</em>. It then opens on its own, like an app.",
   "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers.",
-  "fan": "Tyria Codex is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation.",
+  "fan": "Wondrous Compass is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation.",
   "eyebrow": "Unofficial Guild Wars 2 companion",
   "hero_h": "Your Tyria, <em>at a glance</em>.",
   "chips": [
@@ -86,11 +86,11 @@
   "privacy_p": "It stays on your device, or in your browser, and goes only to the Guild Wars 2 servers. No ads, no tracking, and you can delete the optional account at any time.",
   "privacy_link": "Read the privacy policy",
   "cta_h": "Look around, no sign up needed",
-  "cta_p": "Open Tyria Codex as a guest, and add an API key when you want to see your own account."
+  "cta_p": "Open Wondrous Compass as a guest, and add an API key when you want to see your own account."
  },
  "delete": {
   "title": "Delete your account",
-  "intro": "This deletes your Tyria Codex account for good: your profile, linked Guild Wars 2 accounts, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.",
+  "intro": "This deletes your Wondrous Compass account for good: your profile, linked Guild Wars 2 accounts, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.",
   "signin_p": "Sign in with the Discord account you use in the app.",
   "signin_btn": "Sign in with Discord",
   "signed_prefix": "Signed in as ",
@@ -108,7 +108,7 @@
   "title": "Frequently asked questions",
   "items": [
    [
-    "What is Tyria Codex?",
+    "What is Wondrous Compass?",
     "An unofficial Guild Wars 2 companion: your characters, wallet, trading post, crafting, world bosses, the Wizard's Vault and a world map, plus guild events with sign ups and a Discord bot. It is a fan project, free, with no ads."
    ],
    [
@@ -124,7 +124,7 @@
     "Your key stays on your device, or in your browser for the browser version, and is sent only to the Guild Wars 2 servers. It is never sent to ours. See the <a href='privacy.html'>privacy policy</a>. A key can only read, and you can delete it any time on account.arena.net."
    ],
    [
-    "Do I need the Tyria Codex account?",
+    "Do I need the Wondrous Compass account?",
     "No, it is optional. You need it for guild events, the guild information and the Discord bot. You create it by signing in with Discord, and you can delete it any time from Settings or the <a href='delete-account.html'>delete account page</a>."
    ],
    [
@@ -133,7 +133,7 @@
    ],
    [
     "Why can't I see my guild's treasury, stash or log?",
-    "The game shows them only to the guild's leader. Members see them here when their leader uses Tyria Codex and lets them. The leader opens the app once, which brings the guild's data, and chooses what members see: any part can be hidden. The treasury, the stash and the log, which show who took what, stay hidden until the leader has confirmed the choices."
+    "The game shows them only to the guild's leader. Members see them here when their leader uses Wondrous Compass and lets them. The leader opens the app once, which brings the guild's data, and chooses what members see: any part can be hidden. The treasury, the stash and the log, which show who took what, stay hidden until the leader has confirmed the choices."
    ],
    [
     "It says the leader has not shared this yet.",
@@ -169,7 +169,7 @@
    ],
    [
     "Something is wrong. Where do I report it?",
-    "<a href='https://github.com/Yesanith/tyria-companion/issues'>Open an issue on GitHub</a> and say what you did and what you saw. A screenshot helps. Never post your API key."
+    "<a href='https://github.com/Yesanith/wc-frontend/issues'>Open an issue on GitHub</a> and say what you did and what you saw. A screenshot helps. Never post your API key."
    ]
   ],
   "lead": "Short answers to the questions we hear most.",
@@ -182,7 +182,7 @@
   "blocks": [
    [
     "p",
-    "Tyria Codex is an unofficial Guild Wars 2 companion. It has no ads, does not track you and does not sell or share your data for advertising. This page says what it handles, where, who can see it and for how long. It covers the Android app, the version that runs in a browser on this site, and the Discord bot."
+    "Wondrous Compass is an unofficial Guild Wars 2 companion. It has no ads, does not track you and does not sell or share your data for advertising. This page says what it handles, where, who can see it and for how long. It covers the Android app, the version that runs in a browser on this site, and the Discord bot."
    ],
    [
     "h2",
@@ -194,7 +194,7 @@
    ],
    [
     "h2",
-    "The optional Tyria Codex account"
+    "The optional Wondrous Compass account"
    ],
    [
     "p",
@@ -205,7 +205,7 @@
     [
      "<strong>From Discord:</strong> your Discord user id, name, avatar and, if Discord provides it, your email address.",
      "<strong>Your Guild Wars 2 account:</strong> to link it, the app creates a token that is valid for ten minutes and can only read your account and your guilds, and sends only that token. We record your account name and id, your guilds' names and tags, your role in them and the rank the game gives you. The token is used for these few requests and is not stored.",
-     "<strong>If you lead a guild:</strong> with the same ten minute token our servers also read what the game shows only to a guild's leader, and keep it for the guild: its level, message of the day and member count, its member list with each member's account name, rank and join date, its ranks and what each rank may do, the treasury, the stash, the guild storage, the log of who did what, the built upgrades and the PvP teams. The member list also names people who do not use Tyria Codex, as the game lists them. This is done each time your app is opened, at most every half hour.",
+     "<strong>If you lead a guild:</strong> with the same ten minute token our servers also read what the game shows only to a guild's leader, and keep it for the guild: its level, message of the day and member count, its member list with each member's account name, rank and join date, its ranks and what each rank may do, the treasury, the stash, the guild storage, the log of who did what, the built upgrades and the PvP teams. The member list also names people who do not use Wondrous Compass, as the game lists them. This is done each time your app is opened, at most every half hour.",
      "<strong>Guild events:</strong> events you create, including weekly ones, your answers, the role, profession and other roles you offer, the Guild Wars 2 account you choose, the Discord roles an event is open to, and the Arcdps report links (dps.report) members add with the boss, the result, the number of players and the duration that dps.report gives for them.",
      "<strong>Notifications:</strong> if you allow them, your device's notification token and the app's language, to send event reminders.",
      "<strong>Discord servers:</strong> if you lead a guild and connect a Discord server: the server's id and the channel events are posted to, its settings (time zone, language, threads, scheduled events, reminders), the channels and the optional role for news and game updates, the Discord roles matched to guild ranks, and which roles the bot gave to which Discord user so that it can take back only those. The bot cannot read messages. It receives the commands and buttons people use, and with a button press Discord sends the person's id and their roles in that server, which are used for that moment and not stored.",
@@ -220,10 +220,10 @@
    [
     "ul",
     [
-     "Members of your guilds who also use Tyria Codex see your Guild Wars 2 account name, your rank and your answers to the guild's events.",
+     "Members of your guilds who also use Wondrous Compass see your Guild Wars 2 account name, your rank and your answers to the guild's events.",
      "They also see what the leader's app brought of the guild, as the leader chooses: the leader can hide any part, and the treasury, the stash and the log, which show who took what, stay hidden until the leader has looked at the choices and confirmed them. The leader always sees everything.",
      "If your guild has connected a Discord server, everyone in the channel sees the event messages with the names of those signed up.",
-     "Nobody outside your guilds sees any of it. People who do not use Tyria Codex are never shown to anybody who is not in the same guild.",
+     "Nobody outside your guilds sees any of it. People who do not use Wondrous Compass are never shown to anybody who is not in the same guild.",
      "Every signed in player sees the public events, with the Guild Wars 2 account name of their organizer. Only the organizer of an event sees who signed up for it. See Public events below."
     ]
    ],
@@ -241,7 +241,7 @@
      "To keep them in order, you can have five public events to come, make ten in a day and set them up to three months ahead. To apply that we keep a count of what you make for two days.",
      "Deleting your account deletes the public events you made, your sign ups for other people's public events and the reports you sent, and the record that keeps an organizer from making more goes with it.",
      "Each Guild Wars 2 account you link has a region, Europe or North America. We read it from the world the game says the account is on when you link it, and keep it with the account until you unlink it or delete your account. It decides which public events you can make and sign up for.",
-     "Public events are also posted in the official Tyria Codex Discord server, in the channel of their region: title, description, time, kind, tags, how many are going and the Guild Wars 2 account name of the organizer, visible to everyone in that channel. Who signed up is never posted, only how many. The post is removed when the event is hidden or deleted, or when you delete your account.",
+     "Public events are also posted in the official Wondrous Compass Discord server, in the channel of their region: title, description, time, kind, tags, how many are going and the Guild Wars 2 account name of the organizer, visible to everyone in that channel. Who signed up is never posted, only how many. The post is removed when the event is hidden or deleted, or when you delete your account.",
      "If you are in the official server, the bot gives you the role of each region you have an account in. It finds you with your Discord user ID from your sign-in, and takes the role back if you delete your account.",
      "When a public event you signed up for starts, the bot opens a text channel and a voice channel for it in the official server that only its organizer and those who signed up (going or maybe) can see, and mentions them by their Discord user. The channels are deleted after the event.",
      "If you make a public event with the Discord bot, the time zone you give it, for example Europe/Istanbul, is kept with your Discord user ID so that you do not have to say it again, and is deleted when you delete your account."
@@ -255,7 +255,7 @@
     "ul",
     [
      "A guild leader, or a member the leader has allowed, can make a recruitment page for the guild. Its headline, description, requirements, play times, languages, region, Discord invite and the name to whisper in the game are written by them and shown to everybody once the page is shown, including visitors who are not signed in, with the guild's name and tag. The page does not say who made it. Do not write anything you would not want everyone to read.",
-     "A page that is shown is also posted, with the same content, in a forum of the official Tyria Codex Discord server, where everyone in that server can read it. Taking a page back to a draft or deleting it takes the post down. A moderator can hide a page that breaks the terms.",
+     "A page that is shown is also posted, with the same content, in a forum of the official Wondrous Compass Discord server, where everyone in that server can read it. Taking a page back to a draft or deleting it takes the post down. A moderator can hide a page that breaks the terms.",
      "Any signed in player can report a page. We keep who reported it and what they wrote, only administrators see it, and it is deleted with the page, or with your account.",
      "We keep which members the leader has allowed to edit the page, until the leader takes it back or the member leaves the guild."
     ]
@@ -304,7 +304,7 @@
    ],
    [
     "p",
-    "Tyria Codex is not directed at children under 13."
+    "Wondrous Compass is not directed at children under 13."
    ],
    [
     "h2",
@@ -312,7 +312,7 @@
    ],
    [
     "p",
-    "Questions or requests: <a href='https://github.com/Yesanith/tyria-companion/issues'>open an issue on GitHub</a>. Changes to this policy are published on this page with a new date."
+    "Questions or requests: <a href='https://github.com/Yesanith/wc-frontend/issues'>open an issue on GitHub</a>. Changes to this policy are published on this page with a new date."
    ]
   ]
  },
@@ -322,7 +322,7 @@
   "blocks": [
    [
     "p",
-    "These terms are between you and the person who runs Tyria Codex, the Android app, the version that runs in a browser on this site and the Discord bot. By using them you agree to these terms. If you do not, do not use them."
+    "These terms are between you and the person who runs Wondrous Compass, the Android app, the version that runs in a browser on this site and the Discord bot. By using them you agree to these terms. If you do not, do not use them."
    ],
    [
     "h2",
@@ -330,7 +330,7 @@
    ],
    [
     "p",
-    "Tyria Codex is an unofficial, free fan project for Guild Wars 2. It is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation. Game data and images come from ArenaNet's public Guild Wars 2 API and are used as its terms allow. Using Tyria Codex does not change your rights or duties towards ArenaNet, Discord or anybody else."
+    "Wondrous Compass is an unofficial, free fan project for Guild Wars 2. It is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation. Game data and images come from ArenaNet's public Guild Wars 2 API and are used as its terms allow. Using Wondrous Compass does not change your rights or duties towards ArenaNet, Discord or anybody else."
    ],
    [
     "h2",
@@ -347,7 +347,7 @@
    [
     "ul",
     [
-     "The Tyria Codex account is optional and made by signing in with Discord. You are responsible for what happens through it.",
+     "The Wondrous Compass account is optional and made by signing in with Discord. You are responsible for what happens through it.",
      "Your API key is yours. Keep it to yourself, use keys that only have the permissions you want to give, and revoke it on account.arena.net if you think it leaked. We never ask for your key.",
      "You may only link Guild Wars 2 accounts that are yours."
     ]
@@ -415,7 +415,7 @@
    ],
    [
     "p",
-    "Questions or problems: <a href='https://github.com/Yesanith/tyria-companion/issues'>open an issue on GitHub</a>. See also the <a href='privacy.html'>privacy policy</a> and the <a href='faq.html'>FAQ</a>."
+    "Questions or problems: <a href='https://github.com/Yesanith/wc-frontend/issues'>open an issue on GitHub</a>. See also the <a href='privacy.html'>privacy policy</a> and the <a href='faq.html'>FAQ</a>."
    ]
   ]
  }

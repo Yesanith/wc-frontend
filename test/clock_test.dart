@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/data/metas.dart';
-import 'package:tyria_codex/screens/events_screen.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/widgets/clock.dart';
+import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/screens/events_screen.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/widgets/clock.dart';
 
 void main() {
   test('the next tick is at the start of the next second or minute', () {

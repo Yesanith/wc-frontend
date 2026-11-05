@@ -1,4 +1,4 @@
-name: tyria_codex
+name: wondrous_compass
 description: Guild Wars 2 companion app. Characters, account, trading post, world boss timers and the wiki.
 publish_to: 'none'
 version: 0.33.0+1

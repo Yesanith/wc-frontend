@@ -8,13 +8,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/services/cache.dart';
-import 'package:tyria_codex/services/icon_cache.dart';
-import 'package:tyria_codex/services/item_index.dart';
-import 'package:tyria_codex/state/api.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/state/wealth.dart';
-import 'package:tyria_codex/util.dart';
+import 'package:wondrous_compass/services/cache.dart';
+import 'package:wondrous_compass/services/icon_cache.dart';
+import 'package:wondrous_compass/services/item_index.dart';
+import 'package:wondrous_compass/state/api.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/state/wealth.dart';
+import 'package:wondrous_compass/util.dart';
 
 /// secure storage backed by a map, the plugin needs a device
 class _MemoryStorage implements FlutterSecureStorage {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/util.dart';
+import 'package:wondrous_compass/util.dart';
 
 void main() {
   setUp(() => groupSeparator = ',');

@@ -48,13 +48,14 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
         // a browser has no temporary directory, the picture is shared from its bytes
         await SharePlus.instance.share(ShareParams(
           files: [XFile.fromData(png, mimeType: 'image/png', name: name)],
-          text: '${widget.name} · Tyria Codex',
+          text: '${widget.name} · Wondrous Compass',
         ));
       } else {
         final dir = await getTemporaryDirectory();
         final file = File('${dir.path}/$name');
         await file.writeAsBytes(png);
-        await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Tyria Codex'));
+        await SharePlus.instance
+            .share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Wondrous Compass'));
       }
     } catch (_) {
       if (mounted) {
@@ -196,7 +197,7 @@ class _HeroCard extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'TYRIA CODEX${account?['name'] != null ? ' · ${account!['name']}' : ''}'.toUpperCase(),
+              'WONDROUS COMPASS${account?['name'] != null ? ' · ${account!['name']}' : ''}'.toUpperCase(),
               style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.6, color: muted),
             ),
           ],

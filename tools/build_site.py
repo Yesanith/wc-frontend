@@ -17,11 +17,11 @@ from html import escape
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(HERE, "site_content")
 SITE = os.path.normpath(os.path.join(HERE, "..", "site"))
-SITE_URL = "https://yesanith.github.io/tyria-companion/"
+SITE_URL = "https://yesanith.github.io/wc-frontend/"
 # the picture that a chat shows with a link: made by tools/make_site_image.py
 IMAGE = "og.png"
 IMAGE_SIZE = (1200, 630)
-REPO = "https://github.com/Yesanith/tyria-companion"
+REPO = "https://github.com/Yesanith/wc-frontend"
 ISSUES = REPO + "/issues"
 RELEASES = REPO + "/releases/latest"
 LANGS = ["en", "de", "es", "fr", "tr", "pt", "ru", "ja", "zh"]
@@ -165,8 +165,8 @@ def header(lang, page, contents):
     ui, root = contents[lang]["ui"], root_of(lang)
     current = ' aria-current="page"' if page == "faq" else ""
     return ('<header class="top"><div class="top-in">\n'
-            '  <a class="brand" href="index.html">%s<span>Tyria Codex</span></a>\n'
-            '  <nav aria-label="Tyria Codex"><a href="index.html#features">%s</a><a href="faq.html"%s>%s</a></nav>\n'
+            '  <a class="brand" href="index.html">%s<span>Wondrous Compass</span></a>\n'
+            '  <nav aria-label="Wondrous Compass"><a href="index.html#features">%s</a><a href="faq.html"%s>%s</a></nav>\n'
             '  <div class="top-end">%s<a class="button small" href="%sapp/">%s</a></div>\n'
             '</div></header>') % (BRAND, ui["nav_features"], current, ui["nav_faq"],
                                   picker(lang, page, contents) if page else "", root, ui["nav_app"])
@@ -176,7 +176,7 @@ def footer(lang, contents):
     ui, c, root = contents[lang]["ui"], contents[lang]["index"], root_of(lang)
     return ('<footer class="foot">\n'
             '  <div class="foot-in">\n'
-            '    <div class="foot-brand"><a class="brand" href="index.html">%s<span>Tyria Codex</span></a><p>%s</p></div>\n'
+            '    <div class="foot-brand"><a class="brand" href="index.html">%s<span>Wondrous Compass</span></a><p>%s</p></div>\n'
             '    <div><h2>%s</h2><ul><li><a href="%sapp/">%s</a></li><li><a href="%s">%s</a></li><li><a href="index.html#features">%s</a></li>'
             '<li><a href="faq.html">%s</a></li></ul></div>\n'
             '    <div><h2>%s</h2><ul><li><a href="privacy.html">%s</a></li><li><a href="terms.html">%s</a></li>'
@@ -196,7 +196,7 @@ def social_tags(lang, page, title, root, contents):
     picture to show, in the language of the page"""
     url = SITE_URL + page_file(lang, page)
     name = plain(title)
-    headline = name if "Tyria Codex" in name else "%s · Tyria Codex" % name
+    headline = name if "Wondrous Compass" in name else "%s · Wondrous Compass" % name
     description = plain(contents[lang]["index"]["tagline"])
     image = SITE_URL + IMAGE
     tags = [
@@ -207,14 +207,14 @@ def social_tags(lang, page, title, root, contents):
         '<link rel="icon" href="%sapp/favicon.png">' % root,
         '<link rel="apple-touch-icon" href="%sapp/icons/Icon-192.png">' % root,
         '<meta property="og:type" content="website">',
-        '<meta property="og:site_name" content="Tyria Codex">',
+        '<meta property="og:site_name" content="Wondrous Compass">',
         '<meta property="og:title" content="%s">' % escape(headline),
         '<meta property="og:description" content="%s">' % escape(description),
         '<meta property="og:url" content="%s">' % url,
         '<meta property="og:image" content="%s">' % image,
         '<meta property="og:image:width" content="%d">' % IMAGE_SIZE[0],
         '<meta property="og:image:height" content="%d">' % IMAGE_SIZE[1],
-        '<meta property="og:image:alt" content="Tyria Codex">',
+        '<meta property="og:image:alt" content="Wondrous Compass">',
         '<meta property="og:locale" content="%s">' % contents[lang]["meta"]["html_lang"].replace("-", "_"),
         '<meta name="twitter:card" content="summary_large_image">',
         '<meta name="twitter:image" content="%s">' % image,
@@ -279,7 +279,7 @@ def software_ld(lang, contents):
     return json_ld({
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        "name": "Tyria Codex",
+        "name": "Wondrous Compass",
         "description": plain(c["tagline"]),
         "url": SITE_URL + page_file(lang, "index"),
         "image": SITE_URL + IMAGE,
@@ -333,7 +333,7 @@ def render_index(lang, contents):
   <p>%(cta_p)s</p>
   <div class="cta"><a class="button" href="{ROOT}app/">%(open_button)s</a></div>
 </div></section>""" % dict(c, chips=chips, cards=feature_cards(c), releases=RELEASES, bot=BOT_QUESTION)
-    return shell(lang, "index", "Tyria Codex", body, contents, extra_head=software_ld(lang, contents))
+    return shell(lang, "index", "Wondrous Compass", body, contents, extra_head=software_ld(lang, contents))
 
 
 def render_faq(lang, contents):
@@ -348,7 +348,7 @@ def render_faq(lang, contents):
         "mainEntity": [{"@type": "Question", "name": plain(q),
                         "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in c["items"]],
     })
-    return shell(lang, "faq", "%s · Tyria Codex" % c["title"], body, contents, extra_head=questions, main_class="page")
+    return shell(lang, "faq", "%s · Wondrous Compass" % c["title"], body, contents, extra_head=questions, main_class="page")
 
 
 def render_document(lang, page, contents, english):
@@ -372,7 +372,7 @@ def render_document(lang, page, contents, english):
             out.append('  <h2 id="s%d">%s</h2>' % (heading, value))
         else:
             out.append("  <%s>%s</%s>" % (kind, value, kind))
-    return shell(lang, page, "%s · Tyria Codex" % c["title"], "\n".join(out), contents, main_class="page")
+    return shell(lang, page, "%s · Wondrous Compass" % c["title"], "\n".join(out), contents, main_class="page")
 
 
 def render_delete(lang, contents):
@@ -460,7 +460,7 @@ def render_delete(lang, contents):
 
   <p class="muted" id="status"></p>
   <p class="muted">%(app_note)s</p>""" % c
-    return shell(lang, "delete-account", "%s · Tyria Codex" % c["title"], body, contents,
+    return shell(lang, "delete-account", "%s · Wondrous Compass" % c["title"], body, contents,
                  extra_head="\n  " + SUPABASE_SCRIPT, extra_end=script, main_class="page")
 
 
@@ -470,8 +470,8 @@ def render_404(contents):
     ui = contents["en"]["ui"]
     body = ('  <div class="lost"><h1>404</h1><p>Page not found.</p>'
             '<div class="cta"><a class="button" href="index.html">%s</a><a class="button ghost" href="app/">%s</a></div></div>'
-            % ("Tyria Codex", ui["nav_app"]))
-    return shell("en", "404", "Page not found · Tyria Codex", body, contents, indexable=False)
+            % ("Wondrous Compass", ui["nav_app"]))
+    return shell("en", "404", "Page not found · Wondrous Compass", body, contents, indexable=False)
 
 
 def sitemap(contents):

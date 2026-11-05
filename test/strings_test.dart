@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
 
 /// keys are plain strings, so a typo only shows up at runtime as the raw key.
 /// this reads the sources and the tables and fails the build instead

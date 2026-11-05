@@ -11,10 +11,10 @@ from pathlib import Path
 WEB = Path("web")
 BG = "#0D0B09"   # the app's background, warm black
 GOLD = "#DFC295"  # its accent
-NAME = "Tyria Codex"
+NAME = "Wondrous Compass"
 DESCRIPTION = "An unofficial Guild Wars 2 companion: characters, wallet, trading post, crafting, world bosses, a world map and guild events."
 ICON = Path("ci/launcher/play_store_512.png")
-SITE = "https://yesanith.github.io/tyria-companion/"
+SITE = "https://yesanith.github.io/wc-frontend/"
 
 
 def patch_index(html: str) -> str:

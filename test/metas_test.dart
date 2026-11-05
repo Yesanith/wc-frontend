@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/data/metas.dart';
-import 'package:tyria_codex/screens/events_screen.dart';
-import 'package:tyria_codex/screens/item_detail_screen.dart';
-import 'package:tyria_codex/state/clock.dart';
+import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/screens/events_screen.dart';
+import 'package:wondrous_compass/screens/item_detail_screen.dart';
+import 'package:wondrous_compass/state/clock.dart';
 
 void main() {
   timersAndPrices();

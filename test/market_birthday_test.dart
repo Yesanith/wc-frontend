@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/clock.dart';
-import 'package:tyria_codex/state/market.dart';
+import 'package:wondrous_compass/state/clock.dart';
+import 'package:wondrous_compass/state/market.dart';
 
 void main() {
   group('trading post list', () {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/recipe_book.dart';
-import 'package:tyria_codex/state/crafting.dart';
+import 'package:wondrous_compass/services/recipe_book.dart';
+import 'package:wondrous_compass/state/crafting.dart';
 
 BookRecipe recipe(int output, List<(int, int)> ingredients,
         {int count = 1, List<String> disciplines = const ['Weaponsmith']}) =>

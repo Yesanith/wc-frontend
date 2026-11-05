@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/recipe_book.dart';
-import 'package:tyria_codex/state/craft_profit.dart';
-import 'package:tyria_codex/state/market.dart';
+import 'package:wondrous_compass/services/recipe_book.dart';
+import 'package:wondrous_compass/state/craft_profit.dart';
+import 'package:wondrous_compass/state/market.dart';
 
 BookRecipe recipe(
   int id,

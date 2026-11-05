@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/reference.dart';
-import 'package:tyria_codex/state/vault.dart';
-import 'package:tyria_codex/state/wvw.dart';
+import 'package:wondrous_compass/state/reference.dart';
+import 'package:wondrous_compass/state/vault.dart';
+import 'package:wondrous_compass/state/wvw.dart';
 
 VaultListing listing(String type, int cost) => VaultListing(
       itemId: cost,

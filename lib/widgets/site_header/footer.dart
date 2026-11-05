@@ -21,7 +21,7 @@ class SiteFooter extends StatelessWidget {
         const DiamondEmblem(size: 18),
         const SizedBox(width: 8),
         Text(
-          '© ${year ?? DateTime.now().year} Tyria Codex',
+          '© ${year ?? DateTime.now().year} Wondrous Compass',
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted),
         ),
       ],

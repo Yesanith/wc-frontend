@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/widgets/responsive.dart';
+import 'package:wondrous_compass/widgets/responsive.dart';
 
 /// counts how many times it is made, to see a page that was started over
 class _Probe extends StatefulWidget {

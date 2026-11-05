@@ -104,7 +104,7 @@ jobs:
       # web/ is not committed, generate it from the flutter template
       - name: Generate the web project
         run: |
-          flutter create --platforms=web --org com.yesanith --project-name tyria_codex .
+          flutter create --platforms=web --org com.yesanith --project-name wondrous_compass .
           # the template adds a counter app test for a MyApp we do not have
           rm -f test/widget_test.dart
 

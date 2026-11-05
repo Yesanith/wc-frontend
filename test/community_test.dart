@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/push.dart';
-import 'package:tyria_codex/state/community.dart';
+import 'package:wondrous_compass/services/push.dart';
+import 'package:wondrous_compass/state/community.dart';
 
 void main() {
   test('a build without the backend values keeps the community account off', () async {

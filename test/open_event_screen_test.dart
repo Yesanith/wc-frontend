@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show Session, User;
-import 'package:tyria_codex/screens/open_event_screen.dart';
-import 'package:tyria_codex/state/community.dart';
-import 'package:tyria_codex/state/navigation.dart';
-import 'package:tyria_codex/state/open_events.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/theme.dart';
+import 'package:wondrous_compass/screens/open_event_screen.dart';
+import 'package:wondrous_compass/state/community.dart';
+import 'package:wondrous_compass/state/navigation.dart';
+import 'package:wondrous_compass/state/open_events.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/theme.dart';
 
 const _id = '3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c';
 
@@ -164,7 +164,7 @@ void main() {
           reason: 'also for a guest: the address is what is shared');
       await tester.tap(find.byTooltip('Copy link to this page'));
       await tester.pump();
-      expect(copied, ['https://yesanith.github.io/tyria-companion/app/#/event/$_id']);
+      expect(copied, ['https://yesanith.github.io/wc-frontend/app/#/event/$_id']);
       // the notice that it was copied goes away by itself after a few seconds: let it, a timer that is pending is a test that did not end
       await tester.pump(const Duration(seconds: 4));
       await tester.pumpAndSettle();

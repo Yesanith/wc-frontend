@@ -118,7 +118,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   children: [
                     const DiamondEmblem(size: 34),
                     const SizedBox(width: 12),
-                    Expanded(child: Text('Tyria Codex', style: display(19))),
+                    Expanded(child: Text('Wondrous Compass', style: display(19))),
                     PopupMenuButton<AppLang>(
                       tooltip: s.t('language'),
                       initialValue: lang,

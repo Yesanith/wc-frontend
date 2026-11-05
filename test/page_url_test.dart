@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/navigation.dart';
-import 'package:tyria_codex/widgets/site_header.dart' show siteGroupIndex;
+import 'package:wondrous_compass/state/navigation.dart';
+import 'package:wondrous_compass/widgets/site_header.dart' show siteGroupIndex;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -240,11 +240,10 @@ void main() {
     });
 
     test('is a whole address when it is shared, which opens the app at it', () {
-      expect(linkUrl(const ItemLink(19721)), 'https://yesanith.github.io/tyria-companion/app/#/item/19721');
-      expect(linkUrl(const EventLink(eventId)), 'https://yesanith.github.io/tyria-companion/app/#/event/$eventId');
-      expect(
-          linkUrl(const SectionLink(AppSection.trading)), 'https://yesanith.github.io/tyria-companion/app/#/trading');
-      expect(linkUrl(const SectionLink(AppSection.home)), 'https://yesanith.github.io/tyria-companion/app/#/');
+      expect(linkUrl(const ItemLink(19721)), 'https://yesanith.github.io/wc-frontend/app/#/item/19721');
+      expect(linkUrl(const EventLink(eventId)), 'https://yesanith.github.io/wc-frontend/app/#/event/$eventId');
+      expect(linkUrl(const SectionLink(AppSection.trading)), 'https://yesanith.github.io/wc-frontend/app/#/trading');
+      expect(linkUrl(const SectionLink(AppSection.home)), 'https://yesanith.github.io/wc-frontend/app/#/');
       expect(appBase.endsWith('/app/'), isTrue);
     });
 
@@ -500,7 +499,7 @@ void main() {
       expect(linkPath(const RecruitLink(guildId)), '/recruit/$guildId');
       expect(linkPath(RecruitLink(guildId.toUpperCase())), '/recruit/$guildId');
       expect(linkFromPath(linkPath(const RecruitLink(guildId))), const RecruitLink(guildId));
-      expect(linkUrl(const RecruitLink(guildId)), 'https://yesanith.github.io/tyria-companion/app/#/recruit/$guildId');
+      expect(linkUrl(const RecruitLink(guildId)), 'https://yesanith.github.io/wc-frontend/app/#/recruit/$guildId');
     });
 
     test('is a link of its own, not equal to an event with the same number', () {

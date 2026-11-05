@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/state/news.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/state/news.dart';
 
 const _feed = '''<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">

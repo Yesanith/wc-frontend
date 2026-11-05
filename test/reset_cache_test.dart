@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
-import 'package:tyria_codex/util.dart';
+import 'package:wondrous_compass/api/gw2_api.dart';
+import 'package:wondrous_compass/util.dart';
 
 void main() {
   test('the daily reset is midnight utc', () {

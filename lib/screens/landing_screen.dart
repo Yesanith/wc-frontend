@@ -85,12 +85,21 @@ class LandingScreen extends ConsumerWidget {
                             children: [
                               const DiamondEmblem(size: 34),
                               const SizedBox(width: 12),
-                              Text('Tyria Codex', style: display(20)),
-                              if (!narrow) ...[
-                                const SizedBox(width: 8),
-                                const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
-                              ],
-                              const Spacer(),
+                              // the name takes what room is left, and is cut short rather than push the language button off a narrow phone
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text('Wondrous Compass',
+                                          maxLines: 1, overflow: TextOverflow.ellipsis, style: display(20)),
+                                    ),
+                                    if (!narrow) ...[
+                                      const SizedBox(width: 8),
+                                      const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                                    ],
+                                  ],
+                                ),
+                              ),
                               PopupMenuButton<AppLang>(
                                 tooltip: s.t('language'),
                                 initialValue: lang,

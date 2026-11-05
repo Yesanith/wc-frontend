@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
-import 'package:tyria_codex/state/market.dart';
+import 'package:wondrous_compass/api/gw2_api.dart';
+import 'package:wondrous_compass/state/market.dart';
 
 void main() {
   group('retry delay', () {

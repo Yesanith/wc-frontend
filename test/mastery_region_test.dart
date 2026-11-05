@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/progression.dart';
+import 'package:wondrous_compass/state/progression.dart';
 
 /// The api names a mastery region after the part of the world it covers, but
 /// the hero panel groups the same tracks by release. These pairings were read

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show TargetPlatform, debugDefaultTargetPlatformOverride;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/data/metas.dart';
-import 'package:tyria_codex/services/home_widget_sync.dart';
+import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/services/home_widget_sync.dart';
 
 const _maps = [
   MetaMap('a', 'Map A', Expansion.core, [

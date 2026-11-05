@@ -1,4 +1,4 @@
-package com.yesanith.tyria_codex
+package com.yesanith.wondrous_compass
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager

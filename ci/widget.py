@@ -12,10 +12,10 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 MANIFEST = Path("android/app/src/main/AndroidManifest.xml")
 RES = Path("android/app/src/main/res")
-KOTLIN = Path("android/app/src/main/kotlin/com/yesanith/tyria_codex")
+KOTLIN = Path("android/app/src/main/kotlin/com/yesanith/wondrous_compass")
 PROVIDER = "TyriaWidgetProvider"
 
-RECEIVER = """    <receiver android:name=".%s" android:exported="true" android:label="Tyria Codex">
+RECEIVER = """    <receiver android:name=".%s" android:exported="true" android:label="Wondrous Compass">
         <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
         </intent-filter>

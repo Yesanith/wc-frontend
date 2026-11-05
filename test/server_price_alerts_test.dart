@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/alerts.dart';
-import 'package:tyria_codex/state/server_price_alerts.dart';
+import 'package:wondrous_compass/state/alerts.dart';
+import 'package:wondrous_compass/state/server_price_alerts.dart';
 
 class FakeAlerts implements PriceAlertBackend {
   FakeAlerts({this.remote = const [], this.failFetch = false, this.failSend = false});

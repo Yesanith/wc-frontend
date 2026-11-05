@@ -8,7 +8,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 
 const _author = 'Yesanith';
-const repositoryUrl = 'https://github.com/Yesanith/tyria-companion';
+const repositoryUrl = 'https://github.com/Yesanith/wc-frontend';
 const issuesUrl = '$repositoryUrl/issues';
 
 /// where people who like the app can chip in
@@ -101,7 +101,7 @@ class _Hero extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Tyria Codex', style: display(24)),
+                Text('Wondrous Compass', style: display(24)),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 8,

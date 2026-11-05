@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/update_check.dart' show compareVersions;
-import 'package:tyria_codex/state/admin.dart';
+import 'package:wondrous_compass/services/update_check.dart' show compareVersions;
+import 'package:wondrous_compass/state/admin.dart';
 
 AdminDashboard dash({
   int discordWaiting = 0,

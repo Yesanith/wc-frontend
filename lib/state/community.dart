@@ -18,7 +18,7 @@ bool get communityConfigured => supabaseUrl.isNotEmpty && supabasePublishableKey
 /// where the browser sends the player back after signing in with discord.
 /// the same address is registered in the android manifest and in the
 /// supabase dashboard's redirect urls
-const _appRedirect = 'tyriacodex://login-callback';
+const _appRedirect = 'wondrouscompass://login-callback';
 
 /// where the app is served when it runs in a browser, set by the site build.
 /// without it, the address the page was opened at

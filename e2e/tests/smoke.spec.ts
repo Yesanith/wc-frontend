@@ -40,7 +40,7 @@ test.describe('what a link to the site shows', () => {
   for (const path of ['/', '/app/', '/tr/privacy.html', '/privacy.html']) {
     test(`${path} has its name, what it is and a picture`, async ({ request }) => {
       const html = await (await request.get(`${BASE_URL}${path}`)).text();
-      expect(html).toMatch(/<meta property="og:title" content="[^"]*Tyria Codex[^"]*">/);
+      expect(html).toMatch(/<meta property="og:title" content="[^"]*Wondrous Compass[^"]*">/);
       expect(html).toMatch(/<meta property="og:description" content="[^"]+">/);
       expect(html).toMatch(/<meta property="og:image" content="https:\/\/[^"]+\.png">/);
       expect(html).toMatch(/<link rel="canonical" href="https:\/\/[^"]+">/);
@@ -58,7 +58,7 @@ test.describe('what a link to the site shows', () => {
 test.describe('the app in a browser', () => {
   test('a visitor is shown what the app is, and how to begin', async ({ page }) => {
     const errors = await open(page);
-    await expect(page).toHaveTitle(/Tyria Codex/);
+    await expect(page).toHaveTitle(/Wondrous Compass/);
     await expect(written(page, 'Your Guild Wars 2 companion')).toBeAttached();
     await expect(page.getByRole('button', { name: 'Get started' }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continue as guest' }).first()).toBeVisible();
@@ -74,7 +74,7 @@ test.describe('the app in a browser', () => {
     // a page that stands alone
     await written(page, /^Daily$/).click();
     await expect(page).toHaveURL(/#\/daily$/);
-    await expect(page).toHaveTitle(/ · Tyria Codex$/);
+    await expect(page).toHaveTitle(/ · Wondrous Compass$/);
 
     // a page of a group, which opens under its name
     await written(page, /^Economy$/).click();
@@ -95,7 +95,7 @@ test.describe('the app in a browser', () => {
     const errors = await open(page, '#/wiki');
     await asGuest(page);
     await expect(page).toHaveURL(/#\/wiki$/);
-    await expect(page).toHaveTitle(/ · Tyria Codex$/);
+    await expect(page).toHaveTitle(/ · Wondrous Compass$/);
     await page.reload();
     await page.waitForSelector('flt-glass-pane', { state: 'attached', timeout: 90_000 });
     await expect(page).toHaveURL(/#\/wiki$/);
@@ -113,7 +113,7 @@ test.describe('the app in a browser', () => {
     await expect(copy).toBeAttached({ timeout: 60_000 });
     await copy.click();
     // a copied link is the public address of the app, whichever server the test runs against
-    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('https://yesanith.github.io/tyria-companion/app/#/item/19721');
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('https://yesanith.github.io/wc-frontend/app/#/item/19721');
     await page.reload();
     await page.waitForSelector('flt-glass-pane', { state: 'attached', timeout: 90_000 });
     await expect(page).toHaveURL(/#\/item\/19721$/);

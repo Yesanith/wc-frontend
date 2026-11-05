@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
-import 'package:tyria_codex/state/price_history.dart';
-import 'package:tyria_codex/state/server_prices.dart';
+import 'package:wondrous_compass/api/gw2_api.dart';
+import 'package:wondrous_compass/state/price_history.dart';
+import 'package:wondrous_compass/state/server_prices.dart';
 
 Map<String, dynamic> row(int id, {String? readAt, int buy = 90, int sell = 110}) => {
       'id': id,

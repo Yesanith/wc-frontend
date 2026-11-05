@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/collections.dart';
-import 'package:tyria_codex/state/gem_history.dart';
+import 'package:wondrous_compass/state/collections.dart';
+import 'package:wondrous_compass/state/gem_history.dart';
 
 void main() {
   group('gem history', () {

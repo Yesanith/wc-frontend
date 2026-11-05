@@ -30,8 +30,8 @@ class WikiApi {
       // a browser may read the answer of the wiki only when it is asked for this
       if (kIsWeb) 'origin': '*',
     });
-    final res = await http.get(uri,
-        headers: {'User-Agent': 'TyriaCodex/0.1 (Flutter GW2 companion app)'}).timeout(const Duration(seconds: 15));
+    final res = await http.get(uri, headers: {'User-Agent': 'WondrousCompass/0.1 (Flutter GW2 companion app)'}).timeout(
+        const Duration(seconds: 15));
     if (res.statusCode != 200) {
       throw Exception('Wiki error (${res.statusCode})');
     }

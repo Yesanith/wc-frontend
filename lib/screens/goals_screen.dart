@@ -82,7 +82,7 @@ class GoalsScreen extends ConsumerWidget {
   Future<void> _share(WidgetRef ref, String title, String missingLabel, List<Goal> goals, ShoppingList list) {
     String name(int id) => (ref.read(itemProvider(id)).valueOrNull?['name'] as String?) ?? '#$id';
     final text = goalsShareText(
-      title: '$title · Tyria Codex',
+      title: '$title · Wondrous Compass',
       missingLabel: missingLabel,
       goals: [for (final g in goals) (name(g.itemId), g.quantity)],
       missing: [

@@ -15,7 +15,7 @@ const trStrings = <String, String>{
       'Loncan oyundan okundu. Lonca üyelerinin uygulamada nelere bakabileceğini seç. Hazine, depo ve günlük kimin ne aldığını gösterir, bu yüzden sen onaylayana kadar gizli kalır.',
   'gshare_later': 'Sonra',
   'roster_note_game':
-      'Bu loncanın Tyria Codex üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
+      'Bu loncanın Wondrous Compass üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
   'roster_manual': 'elle atandı',
   'roster_follow_game': 'Yine oyundaki rütbeyi izle',
   'roster_auto':
@@ -26,7 +26,7 @@ const trStrings = <String, String>{
   'gshare_note':
       'Lonca üyelerinin neleri göreceğini seç. Kapatana kadar her şey paylaşılır. Uygulaman açılınca hepsini getirir.',
   'gshared_note':
-      'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Tyria Codex kullanan üyeler, oyundaki rütbeleriyle.',
+      'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Wondrous Compass kullanan üyeler, oyundaki rütbeleriyle.',
   'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
   'gw2_link_name': '{name} hesabını bağla',
   'gw2_refreshed': 'Loncalar yenilendi.',
@@ -95,7 +95,7 @@ const trStrings = <String, String>{
       'Bildirimler çalışıyor. Başlamadan önce haber almak için Dünya boss\'larından etkinlik sabitle.',
   'push_title': 'Etkinlik bildirimleri',
   'push_note': 'Katıldığın etkinliklerden 30 dakika önce hatırlatma, yedek listeden katılımcı olunca haber.',
-  'push_denied': 'Tyria Codex için bildirimler engelli, telefonun ayarlarından izin ver.',
+  'push_denied': 'Wondrous Compass için bildirimler engelli, telefonun ayarlarından izin ver.',
   'roster_of': '{guild} üyeleri',
   'roster_missing': 'Sadece giriş yapıp GW2 hesabını bağlamış oyuncular listelenir.',
   'event_err_is_leader': 'Liderlik oyundan gelir, burada değiştirilemez.',
@@ -189,15 +189,15 @@ const trStrings = <String, String>{
   'gw2_link_note':
       'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
   'gw2_linked': '{name} bağlandı',
-  'gw2_link_taken': 'Bu GW2 hesabı başka bir Tyria Codex hesabına bağlı.',
+  'gw2_link_taken': 'Bu GW2 hesabı başka bir Wondrous Compass hesabına bağlı.',
   'gw2_link_key': 'API key kullanılamadı. account iznine sahip olması gerekiyor.',
   'gw2_link_down': 'GW2 API\'si cevap vermiyor, sonra tekrar dene.',
   'gw2_unlink': 'Bağlantıyı kaldır',
-  'gw2_unlink_body': '{name} ve lonca üyelikleri Tyria Codex hesabından kaldırılacak.',
+  'gw2_unlink_body': '{name} ve lonca üyelikleri Wondrous Compass hesabından kaldırılacak.',
   'guild_role_leader': 'Lider',
   'guild_role_officer': 'Subay',
   'guild_role_member': 'Üye',
-  'community_account': 'Tyria Codex hesabı',
+  'community_account': 'Wondrous Compass hesabı',
   'community_intro':
       'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
   'community_sign_in_discord': 'Discord ile giriş yap',
@@ -205,7 +205,7 @@ const trStrings = <String, String>{
   'community_sign_out': 'Çıkış yap',
   'community_delete': 'Hesabı sil',
   'community_delete_body':
-      'Tyria Codex hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
+      'Wondrous Compass hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
   'module_link_title': 'Blish HUD',
@@ -785,7 +785,7 @@ const trStrings = <String, String>{
   'remove_key': 'Key\'i kaldır',
   'remove_key_body': 'API key bu cihazdan silinecek ve giriş ekranına döneceksin.',
   'disclaimer':
-      'Tyria Codex resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
+      'Wondrous Compass resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
   'slot_Helm': 'Kask',
   'slot_Shoulders': 'Omuz',
   'slot_Coat': 'Göğüs',
@@ -832,7 +832,7 @@ const trStrings = <String, String>{
   'learned_recipes': 'Öğrenilen tarifler',
   'learned_recipes_of': '{name} tarifleri',
   'professions': 'Meslekler',
-  'support_note': 'Tyria Codex ücretsiz ve reklamsız. İşine yarıyorsa bana bir kahve ısmarlayabilirsin.',
+  'support_note': 'Wondrous Compass ücretsiz ve reklamsız. İşine yarıyorsa bana bir kahve ısmarlayabilirsin.',
   'buy_coffee': 'Bana bir kahve ısmarla',
   'price_history': 'Fiyat geçmişi',
   'price_history_collecting':
@@ -1027,7 +1027,7 @@ const trStrings = <String, String>{
   'oe_join_as': 'Şu hesapla katıl',
   'oe_roles_title': 'Resmi Discord',
   'oe_roles_body':
-      'Resmi Tyria Codex Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
+      'Resmi Wondrous Compass Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
   'oe_roles_join': 'Resmi Discord\'a katıl',
   'oe_err_role_required': 'Etkinliğin rollerinden birini seç.',
   'oe_err_profession': 'Hangi meslekle geldiğini seç.',

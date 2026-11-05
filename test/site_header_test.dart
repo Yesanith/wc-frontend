@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/state/navigation.dart';
-import 'package:tyria_codex/theme.dart';
-import 'package:tyria_codex/widgets/site_header.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/state/navigation.dart';
+import 'package:wondrous_compass/theme.dart';
+import 'package:wondrous_compass/widgets/site_header.dart';
 
 void main() {
   group('the bar of the site', () {
@@ -84,8 +84,8 @@ void main() {
     });
 
     test('the tab says the page and the site, the site alone for the home page', () {
-      expect(sitePageTitle(AppSection.home, 'Home'), 'Tyria Codex');
-      expect(sitePageTitle(AppSection.trading, 'Trading post'), 'Trading post · Tyria Codex');
+      expect(sitePageTitle(AppSection.home, 'Home'), 'Wondrous Compass');
+      expect(sitePageTitle(AppSection.trading, 'Trading post'), 'Trading post · Wondrous Compass');
     });
 
     testWidgets('the heading has the group above the name, and none above a page that stands alone', (tester) async {
@@ -107,9 +107,9 @@ void main() {
 
   group('the address of a page of the static site', () {
     test('is at the root in English and in a folder of its own in the other languages', () {
-      expect(sitePageUrl(AppLang.en, 'privacy'), 'https://yesanith.github.io/tyria-companion/privacy.html');
-      expect(sitePageUrl(AppLang.tr, 'privacy'), 'https://yesanith.github.io/tyria-companion/tr/privacy.html');
-      expect(sitePageUrl(AppLang.de, 'terms'), 'https://yesanith.github.io/tyria-companion/de/terms.html');
+      expect(sitePageUrl(AppLang.en, 'privacy'), 'https://yesanith.github.io/wc-frontend/privacy.html');
+      expect(sitePageUrl(AppLang.tr, 'privacy'), 'https://yesanith.github.io/wc-frontend/tr/privacy.html');
+      expect(sitePageUrl(AppLang.de, 'terms'), 'https://yesanith.github.io/wc-frontend/de/terms.html');
     });
 
     test('is one for every language the app has, so no page is left without', () {
@@ -153,7 +153,7 @@ void main() {
     testWidgets('has the name, the sections that stand alone, the groups, the account and the settings',
         (tester) async {
       await show(tester, current: AppSection.home, onSelect: (_) {});
-      expect(find.text('Tyria Codex'), findsOneWidget);
+      expect(find.text('Wondrous Compass'), findsOneWidget);
       for (final sec in siteNavSingles) {
         expect(find.text('S-${sec.name}'), findsOneWidget, reason: sec.name);
       }
@@ -239,7 +239,7 @@ void main() {
       await tester.tap(find.text('S-daily'));
       await tester.tap(find.byTooltip('S-settings'));
       await tester.tap(find.byTooltip('S-about'));
-      await tester.tap(find.text('Tyria Codex'));
+      await tester.tap(find.text('Wondrous Compass'));
       expect(chosen, [AppSection.daily, AppSection.settings, AppSection.about, AppSection.home]);
     });
 
@@ -299,7 +299,7 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(tester.getSize(find.byType(SiteFooter)).height, SiteFooter.height + 1,
           reason: 'a line, and the rule above it');
-      final owner = tester.getTopLeft(find.text('© 2026 Tyria Codex')).dy;
+      final owner = tester.getTopLeft(find.text('© 2026 Wondrous Compass')).dy;
       final link = tester.getTopLeft(find.text('Privacy')).dy;
       expect((owner - link).abs() < 12, isTrue, reason: 'on one line');
     });
@@ -324,9 +324,9 @@ void main() {
         ),
       ));
       expect(tester.takeException(), isNull);
-      expect(find.text('© 2026 Tyria Codex'), findsOneWidget);
+      expect(find.text('© 2026 Wondrous Compass'), findsOneWidget);
       expect(find.text('Source code'), findsOneWidget);
-      final owner = tester.getTopLeft(find.text('© 2026 Tyria Codex')).dy;
+      final owner = tester.getTopLeft(find.text('© 2026 Wondrous Compass')).dy;
       final note = tester.getTopLeft(find.textContaining('An unofficial')).dy;
       final link = tester.getTopLeft(find.text('Privacy')).dy;
       expect(owner < note && note < link, isTrue, reason: 'one under another');
@@ -337,12 +337,12 @@ void main() {
         theme: buildTheme(),
         home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [], year: 2031)),
       ));
-      expect(find.text('© 2031 Tyria Codex'), findsOneWidget);
+      expect(find.text('© 2031 Wondrous Compass'), findsOneWidget);
       await tester.pumpWidget(MaterialApp(
         theme: buildTheme(),
         home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [])),
       ));
-      expect(find.text('© ${DateTime.now().year} Tyria Codex'), findsOneWidget);
+      expect(find.text('© ${DateTime.now().year} Wondrous Compass'), findsOneWidget);
     });
 
     testWidgets('has the note and the links, which are followed', (tester) async {

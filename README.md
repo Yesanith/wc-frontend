@@ -1,14 +1,14 @@
-# Tyria Codex
+# Wondrous Compass
 
 An unofficial Guild Wars 2 companion for Android and the browser, built with Flutter. It reads your
 account through the official Guild Wars 2 API and puts the day, your characters, the trading post and the
 world's timers in one place. It is free, has no ads and does not track you.
 
-> Tyria Codex is a fan project. It is not made, endorsed or supported by ArenaNet or NCSOFT.
+> Wondrous Compass is a fan project. It is not made, endorsed or supported by ArenaNet or NCSOFT.
 
-- **Android:** `tyria-codex.apk` from the [latest release](https://github.com/Yesanith/tyria-companion/releases/latest)
-- **Browser:** [yesanith.github.io/tyria-companion/app](https://yesanith.github.io/tyria-companion/app/)
-- **Site, FAQ and privacy policy:** [yesanith.github.io/tyria-companion](https://yesanith.github.io/tyria-companion/)
+- **Android:** `wondrous-compass.apk` from the [latest release](https://github.com/Yesanith/wc-frontend/releases/latest)
+- **Browser:** [yesanith.github.io/wc-frontend/app](https://yesanith.github.io/wc-frontend/app/)
+- **Site, FAQ and privacy policy:** [yesanith.github.io/wc-frontend](https://yesanith.github.io/wc-frontend/)
 
 ## Getting started
 
@@ -33,9 +33,9 @@ kept and switched for alt accounts.
 
 Signing in with Discord is optional. It is only needed for guild events, public events, guild recruitment
 pages and price alerts sent by the server, and even then the app sends a ten minute read only token, never
-your API key. The [privacy policy](https://yesanith.github.io/tyria-companion/privacy.html) lists exactly
+your API key. The [privacy policy](https://yesanith.github.io/wc-frontend/privacy.html) lists exactly
 what is kept, where and for how long, and the account can be deleted from Settings or the
-[delete account page](https://yesanith.github.io/tyria-companion/delete-account.html).
+[delete account page](https://yesanith.github.io/wc-frontend/delete-account.html).
 
 ## Features
 
@@ -84,16 +84,16 @@ what is kept, where and for how long, and the account can be deleted from Settin
 
 ## Support
 
-Tyria Codex is free and has no ads. If it helps you, you can
+Wondrous Compass is free and has no ads. If it helps you, you can
 [buy me a coffee](https://buymeacoffee.com/yesanith). Questions, bugs and ideas go to the
-[issues](https://github.com/Yesanith/tyria-companion/issues).
+[issues](https://github.com/Yesanith/wc-frontend/issues).
 
 ## Building locally
 
 The `android/` folder is generated rather than committed:
 
 ```sh
-flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+flutter create --platforms=android --org com.yesanith --project-name wondrous_compass .
 flutter pub get
 flutter build apk --release
 ```
@@ -116,7 +116,7 @@ Release builds are signed with a key that lives only in the repository's secrets
 the same signature and APKs install over each other, and nobody who reads the code can sign an app as
 this one. The secrets are `RELEASE_KEYSTORE_BASE64` (the keystore file, base64), `RELEASE_KEYSTORE_PASSWORD`,
 `RELEASE_KEY_ALIAS` and `RELEASE_KEY_PASSWORD`. A fork has none of them and cannot build a release.
-To make a new key: `keytool -genkeypair -v -keystore release.keystore -alias tyriacodex -keyalg RSA -keysize 4096 -validity 10000`,
+To make a new key: `keytool -genkeypair -v -keystore release.keystore -alias wondrouscompass -keyalg RSA -keysize 4096 -validity 10000`,
 then `base64 -w0 release.keystore | gh secret set RELEASE_KEYSTORE_BASE64`. A phone that has the app
 signed with an older key has to uninstall it once before it takes the new one.
 
@@ -191,7 +191,7 @@ is covered by this license.
 
 ## Disclaimer
 
-Tyria Codex is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,
+Wondrous Compass is a fan project and is not affiliated with ArenaNet or NCSOFT. Guild Wars 2,
 ArenaNet and NCSOFT are trademarks of their respective owners. Wiki content belongs to the
 Guild Wars 2 Wiki and is used under its license.
 

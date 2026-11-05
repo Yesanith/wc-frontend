@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/data/metas.dart';
-import 'package:tyria_codex/services/boss_alerts.dart';
+import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/services/boss_alerts.dart';
 
 const _maps = <MetaMap>[
   MetaMap('m1', 'Sunken Coast', Expansion.core, [

@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/screens/character_detail_screen.dart';
-import 'package:tyria_codex/services/recipe_book.dart';
-import 'package:tyria_codex/state/collections.dart';
-import 'package:tyria_codex/state/crafting.dart';
-import 'package:tyria_codex/state/professions.dart';
-import 'package:tyria_codex/state/pvp.dart';
-import 'package:tyria_codex/state/wvw.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/screens/character_detail_screen.dart';
+import 'package:wondrous_compass/services/recipe_book.dart';
+import 'package:wondrous_compass/state/collections.dart';
+import 'package:wondrous_compass/state/crafting.dart';
+import 'package:wondrous_compass/state/professions.dart';
+import 'package:wondrous_compass/state/pvp.dart';
+import 'package:wondrous_compass/state/wvw.dart';
 
 void main() {
   group('leaderboards', () {

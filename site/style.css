@@ -1,4 +1,4 @@
-/* Tyria Codex site. One stylesheet for every page and every language: system fonts only, nothing is loaded from elsewhere. */
+/* Wondrous Compass site. One stylesheet for every page and every language: system fonts only, nothing is loaded from elsewhere. */
 :root {
   color-scheme: light dark;
   /* the parchment of the app, by day. the same page by candlelight follows when the reader's device is dark */

@@ -79,7 +79,7 @@ jobs:
       # android/ is not committed, generate it from the flutter template
       - name: Generate Android project
         run: |
-          flutter create --platforms=android --org com.yesanith --project-name tyria_codex .
+          flutter create --platforms=android --org com.yesanith --project-name wondrous_compass .
           # the template adds a counter app test for a MyApp we do not have
           rm -f test/widget_test.dart
 
@@ -102,11 +102,11 @@ jobs:
           M=android/app/src/main/AndroidManifest.xml
           grep -q 'android.permission.INTERNET' "$M" || \
             sed -i 's#<application#<uses-permission android:name="android.permission.INTERNET"/>\n    <application#' "$M"
-          sed -i 's#android:label="[^"]*"#android:label="Tyria Codex"#' "$M"
+          sed -i 's#android:label="[^"]*"#android:label="Wondrous Compass"#' "$M"
           # signing in with discord ends in the browser, which sends the player
-          # back to the app through tyriacodex://login-callback
-          grep -q 'tyriacodex' "$M" || sed -i 's#</activity>#    <intent-filter>\n                <action android:name="android.intent.action.VIEW"/>\n                <category android:name="android.intent.category.DEFAULT"/>\n                <category android:name="android.intent.category.BROWSABLE"/>\n                <data android:scheme="tyriacodex" android:host="login-callback"/>\n            </intent-filter>\n        </activity>#' "$M"
-          grep -c 'tyriacodex' "$M"
+          # back to the app through wondrouscompass://login-callback
+          grep -q 'wondrouscompass' "$M" || sed -i 's#</activity>#    <intent-filter>\n                <action android:name="android.intent.action.VIEW"/>\n                <category android:name="android.intent.category.DEFAULT"/>\n                <category android:name="android.intent.category.BROWSABLE"/>\n                <data android:scheme="wondrouscompass" android:host="login-callback"/>\n            </intent-filter>\n        </activity>#' "$M"
+          grep -c 'wondrouscompass' "$M"
           # notifications use the one colour emblem, a full colour icon would be
           # a white square in the status bar
           grep -q 'default_notification_icon' "$M" || sed -i 's#<application#<application#; 0,/<activity/s#<activity#<meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_tyria"/>\n        <activity#' "$M"
@@ -214,14 +214,14 @@ jobs:
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-build
 
       - name: Rename APK
-        run: cp build/app/outputs/flutter-apk/app-release.apk tyria-codex.apk
+        run: cp build/app/outputs/flutter-apk/app-release.apk wondrous-compass.apk
 
       # kept only when the build failed after making the apk. a published release already holds it
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: tyria-codex-apk
-          path: tyria-codex.apk
+          name: wondrous-compass-apk
+          path: wondrous-compass.apk
           if-no-files-found: ignore
           retention-days: 3
 
@@ -232,7 +232,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.value }}
-          files: tyria-codex.apk
+          files: wondrous-compass.apk
           generate_release_notes: true
           make_latest: true
           fail_on_unmatched_files: true

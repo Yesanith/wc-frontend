@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/screens/goals_screen.dart';
-import 'package:tyria_codex/state/account.dart';
-import 'package:tyria_codex/state/crafting.dart';
-import 'package:tyria_codex/state/goals.dart';
-import 'package:tyria_codex/state/items.dart';
-import 'package:tyria_codex/state/reference.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/theme.dart';
+import 'package:wondrous_compass/screens/goals_screen.dart';
+import 'package:wondrous_compass/state/account.dart';
+import 'package:wondrous_compass/state/crafting.dart';
+import 'package:wondrous_compass/state/goals.dart';
+import 'package:wondrous_compass/state/items.dart';
+import 'package:wondrous_compass/state/reference.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/theme.dart';
 
 CraftNode node(int id, {int perRun = 1, List<CraftNode> children = const []}) => CraftNode(
       itemId: id,

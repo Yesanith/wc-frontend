@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
-import 'package:tyria_codex/services/gunzip.dart';
-import 'package:tyria_codex/state/community.dart';
+import 'package:wondrous_compass/api/gw2_api.dart';
+import 'package:wondrous_compass/services/gunzip.dart';
+import 'package:wondrous_compass/state/community.dart';
 
 void main() {
   group('the game\'s api in a browser', () {
@@ -57,8 +57,8 @@ void main() {
 
   group('signing in from a browser', () {
     test('the page the player comes back to is the app\'s address as configured', () {
-      expect(webAuthRedirect('https://yesanith.github.io/tyria-companion/app/', Uri.parse('http://localhost:8080/')),
-          'https://yesanith.github.io/tyria-companion/app/');
+      expect(webAuthRedirect('https://yesanith.github.io/wc-frontend/app/', Uri.parse('http://localhost:8080/')),
+          'https://yesanith.github.io/wc-frontend/app/');
     });
 
     test('without one, the address of the page, with no query, fragment or index file', () {
@@ -68,7 +68,7 @@ void main() {
     });
 
     test('the phone\'s app keeps its own address', () {
-      expect(authRedirect, 'tyriacodex://login-callback');
+      expect(authRedirect, 'wondrouscompass://login-callback');
     });
   });
 }

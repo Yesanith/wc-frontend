@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/api/gw2_api.dart';
-import 'package:tyria_codex/state/navigation.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/widgets/common.dart';
+import 'package:wondrous_compass/api/gw2_api.dart';
+import 'package:wondrous_compass/state/navigation.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/widgets/common.dart';
 
 const _guild = '4BBB52AA-D768-4FC6-8EDE-C299F2822F0F';
 

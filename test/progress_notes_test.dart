@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/screens/character_progress.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/screens/character_progress.dart';
 
 void main() {
   test('the notes on the progress tab exist in every language', () {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/module_link.dart';
+import 'package:wondrous_compass/state/module_link.dart';
 
 void main() {
   test('links are read, the ones that are not links are left out', () {

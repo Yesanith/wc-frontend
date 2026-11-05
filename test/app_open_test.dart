@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/app_open.dart';
+import 'package:wondrous_compass/state/app_open.dart';
 
 void main() {
   group('the version that is counted', () {

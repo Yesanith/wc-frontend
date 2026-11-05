@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/admin.dart';
+import 'package:wondrous_compass/state/admin.dart';
 
 void main() {
   group('what a feed\'s last failure means', () {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/services/item_index.dart';
-import 'package:tyria_codex/state/navigation.dart';
-import 'package:tyria_codex/theme.dart';
-import 'package:tyria_codex/widgets/site_search.dart';
+import 'package:wondrous_compass/services/item_index.dart';
+import 'package:wondrous_compass/state/navigation.dart';
+import 'package:wondrous_compass/theme.dart';
+import 'package:wondrous_compass/widgets/site_search.dart';
 
 void main() {
   final index = ItemIndex([

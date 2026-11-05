@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/crafting.dart';
+import 'package:wondrous_compass/state/crafting.dart';
 
 CraftNode node(
   int id, {

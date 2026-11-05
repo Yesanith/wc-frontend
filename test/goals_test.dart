@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tyria_codex/state/crafting.dart';
-import 'package:tyria_codex/state/goals.dart';
-import 'package:tyria_codex/state/settings.dart';
+import 'package:wondrous_compass/state/crafting.dart';
+import 'package:wondrous_compass/state/goals.dart';
+import 'package:wondrous_compass/state/settings.dart';
 
 CraftNode node(int id, {int perRun = 1, int outputCount = 1, List<CraftNode> children = const []}) => CraftNode(
       itemId: id,
@@ -137,14 +137,14 @@ void main() {
   group('goalsShareText', () {
     test('lists the goals and what is still missing', () {
       final text = goalsShareText(
-        title: 'My goals · Tyria Codex',
+        title: 'My goals · Wondrous Compass',
         missingLabel: 'Still needed',
         goals: const [('Gift of Adventure', 1), ('Gift of Fortune', 2)],
         missing: const [('Mystic Clover', 48), ('Obsidian Shard', 54)],
       );
       expect(
         text,
-        'My goals · Tyria Codex\n• Gift of Adventure x1\n• Gift of Fortune x2\n\nStill needed\n• Mystic Clover x48\n• Obsidian Shard x54',
+        'My goals · Wondrous Compass\n• Gift of Adventure x1\n• Gift of Fortune x2\n\nStill needed\n• Mystic Clover x48\n• Obsidian Shard x54',
       );
     });
 

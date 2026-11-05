@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 /// version this apk was built with, set by the release workflow
 const appVersion = String.fromEnvironment('APP_VERSION', defaultValue: 'dev');
 
-const _releasesApi = 'https://api.github.com/repos/Yesanith/tyria-companion/releases/latest';
+const _releasesApi = 'https://api.github.com/repos/Yesanith/wc-frontend/releases/latest';
 
 class UpdateInfo {
   const UpdateInfo(this.version, this.apkUrl, this.pageUrl, this.notes);

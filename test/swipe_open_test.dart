@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/widgets/swipe_open.dart';
+import 'package:wondrous_compass/widgets/swipe_open.dart';
 
 void main() {
   Future<List<int>> pump(WidgetTester tester) async {

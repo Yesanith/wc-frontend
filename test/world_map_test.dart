@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/world_map.dart';
+import 'package:wondrous_compass/state/world_map.dart';
 
 void main() {
   final floor = jsonEncode({

@@ -136,16 +136,16 @@ class SiteTest(unittest.TestCase):
                            'property="og:description"', 'property="og:url"', 'property="og:image"', 'name="twitter:card"',
                            'name="theme-color"', '<link rel="icon"'):
                 self.assertIn(needle, html, "%s lacks %s" % (path, needle))
-            self.assertIn('og:image" content="https://yesanith.github.io/tyria-companion/og.png"', html, path)
+            self.assertIn('og:image" content="https://yesanith.github.io/wc-frontend/og.png"', html, path)
             self.assertIn('twitter:card" content="summary_large_image"', html, path)
 
     def test_a_page_is_its_own_canonical_address_and_says_it_in_its_language(self):
         privacy = self.pages["tr/privacy.html"]
-        self.assertIn('<link rel="canonical" href="https://yesanith.github.io/tyria-companion/tr/privacy.html">', privacy)
-        self.assertIn('property="og:url" content="https://yesanith.github.io/tyria-companion/tr/privacy.html"', privacy)
+        self.assertIn('<link rel="canonical" href="https://yesanith.github.io/wc-frontend/tr/privacy.html">', privacy)
+        self.assertIn('property="og:url" content="https://yesanith.github.io/wc-frontend/tr/privacy.html"', privacy)
         self.assertIn('property="og:locale" content="tr"', privacy)
         self.assertIn("Android, iPhone ve tarayıcı için", privacy, "the description is in the language of the page")
-        self.assertIn('content="https://yesanith.github.io/tyria-companion/privacy.html"', self.pages["privacy.html"])
+        self.assertIn('content="https://yesanith.github.io/wc-frontend/privacy.html"', self.pages["privacy.html"])
         # the icon is the app's, found from a folder of a language too
         self.assertIn('<link rel="icon" href="../app/favicon.png">', privacy)
         self.assertIn('<link rel="icon" href="app/favicon.png">', self.pages["privacy.html"])
@@ -155,14 +155,14 @@ class SiteTest(unittest.TestCase):
             if not path.endswith(".html"):
                 continue
             title = re.search(r'property="og:title" content="([^"]*)"', html).group(1)
-            self.assertIn("Tyria Codex", title, path)
+            self.assertIn("Wondrous Compass", title, path)
             self.assertNotIn("<", title, path)
             self.assertNotIn("&lt;", title, path)
 
     def test_what_is_put_in_a_tag_cannot_end_it(self):
         contents = {lang: site.load(lang) for lang in site.LANGS}
         tags = site.social_tags("en", "index", 'A "quoted" <b>title</b>', "", contents)
-        self.assertIn('content="A &quot;quoted&quot; title · Tyria Codex"', tags)
+        self.assertIn('content="A &quot;quoted&quot; title · Wondrous Compass"', tags)
         self.assertNotIn('"quoted"', tags)
 
     def test_the_page_says_its_language_and_offers_the_others_to_search_engines(self):
@@ -281,7 +281,7 @@ class FrameTest(unittest.TestCase):
             html = self.pages[site.page_file(lang, "index")]
             data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
             self.assertEqual(data["@type"], "SoftwareApplication")
-            self.assertEqual(data["name"], "Tyria Codex")
+            self.assertEqual(data["name"], "Wondrous Compass")
             self.assertEqual(data["url"], site.SITE_URL + site.page_file(lang, "index"))
             self.assertEqual(data["offers"]["price"], "0")
             self.assertEqual(data["inLanguage"], [site.load(l)["meta"]["html_lang"] for l in site.LANGS])

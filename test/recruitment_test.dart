@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/state/recruitment.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/state/recruitment.dart';
 
 const _id = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
 

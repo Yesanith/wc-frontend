@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/market.dart';
+import 'package:wondrous_compass/state/market.dart';
 
 void main() {
   final now = DateTime.utc(2026, 10, 2, 12);

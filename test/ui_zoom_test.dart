@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/settings.dart';
-import 'package:tyria_codex/widgets/ui_zoom.dart';
+import 'package:wondrous_compass/state/settings.dart';
+import 'package:wondrous_compass/widgets/ui_zoom.dart';
 
 void main() {
   group('how much larger everything is on a wide screen', () {

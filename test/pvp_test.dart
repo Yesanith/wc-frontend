@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/state/pvp.dart';
+import 'package:wondrous_compass/state/pvp.dart';
 
 /// the nine tiers exactly as /v2/pvp/ranks returns them
 const _tiers = [

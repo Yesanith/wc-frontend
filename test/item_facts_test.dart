@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/screens/item_detail_screen.dart';
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/screens/item_detail_screen.dart';
 
 void main() {
   const s = S(AppLang.en);

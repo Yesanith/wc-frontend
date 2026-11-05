@@ -12,7 +12,7 @@ import '../state/settings.dart';
 bool get homeWidgetReady => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 /// the class of the widget in the android project, which ci/widget.py puts there
-const homeWidgetProvider = 'com.yesanith.tyria_codex.TyriaWidgetProvider';
+const homeWidgetProvider = 'com.yesanith.wondrous_compass.TyriaWidgetProvider';
 
 /// the start times the widget counts down to, one line for each: the minute of the day (UTC) the event
 /// starts, its name and its map, apart by tabs. the events that are pinned, and when none is, the

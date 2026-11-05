@@ -16,7 +16,7 @@ const ptStrings = <String, String>{
       'Sua guilda foi lida do jogo. Escolha o que os membros da sua guilda podem ver no app. A tesouraria, o depósito e o registro mostram quem pegou o quê, então ficam ocultos até você confirmar.',
   'gshare_later': 'Depois',
   'roster_note_game':
-      'Membros desta guilda no Tyria Codex, com o posto que o jogo lhes dá. Postos que podem convidar, promover ou expulsar, ou editar postos, podem criar e gerenciar eventos.',
+      'Membros desta guilda no Wondrous Compass, com o posto que o jogo lhes dá. Postos que podem convidar, promover ou expulsar, ou editar postos, podem criar e gerenciar eventos.',
   'roster_manual': 'definido à mão',
   'roster_follow_game': 'Voltar a seguir o posto do jogo',
   'roster_auto':
@@ -27,7 +27,7 @@ const ptStrings = <String, String>{
   'gshare_note':
       'Escolha o que os membros da guilda veem. Tudo é compartilhado até você desligar. Seu app traz tudo ao abrir.',
   'gshared_note':
-      'O jogo mostra a lista de membros só ao líder da guilda. Estes são os membros que usam o Tyria Codex, com o posto que o jogo lhes dá.',
+      'O jogo mostra a lista de membros só ao líder da guilda. Estes são os membros que usam o Wondrous Compass, com o posto que o jogo lhes dá.',
   'gshared_not_linked': 'Vincule sua conta GW2 nas configurações para ver o que o líder da guilda compartilha aqui.',
   'gw2_link_name': 'Vincular {name}',
   'gw2_refreshed': 'Guildas atualizadas.',
@@ -97,7 +97,7 @@ const ptStrings = <String, String>{
   'boss_alert_test_body': 'Os avisos funcionam. Fixe eventos em Chefes do mundo para receber um antes de começarem.',
   'push_title': 'Notificações de eventos',
   'push_note': 'Um lembrete 30 minutos antes dos seus eventos e um aviso quando você sai da espera.',
-  'push_denied': 'As notificações estão bloqueadas para o Tyria Codex, permita nas configurações do celular.',
+  'push_denied': 'As notificações estão bloqueadas para o Wondrous Compass, permita nas configurações do celular.',
   'roster_of': 'Membros de {guild}',
   'roster_missing': 'Só aparecem jogadores que entraram e vincularam a conta de GW2.',
   'event_err_is_leader': 'A liderança vem do jogo e não pode ser alterada aqui.',
@@ -191,15 +191,15 @@ const ptStrings = <String, String>{
   'gw2_link_note':
       'Só é enviado um token de dez minutos que lê o nome da conta e as guildas. Sua chave de API fica neste dispositivo.',
   'gw2_linked': '{name} foi vinculada',
-  'gw2_link_taken': 'Esta conta de GW2 já está vinculada a outra conta Tyria Codex.',
+  'gw2_link_taken': 'Esta conta de GW2 já está vinculada a outra conta Wondrous Compass.',
   'gw2_link_key': 'Não foi possível usar a chave de API. Ela precisa da permissão account.',
   'gw2_link_down': 'A API de GW2 não está respondendo, tente mais tarde.',
   'gw2_unlink': 'Desvincular',
-  'gw2_unlink_body': '{name} e suas participações em guildas serão removidas da sua conta Tyria Codex.',
+  'gw2_unlink_body': '{name} e suas participações em guildas serão removidas da sua conta Wondrous Compass.',
   'guild_role_leader': 'Líder',
   'guild_role_officer': 'Oficial',
   'guild_role_member': 'Membro',
-  'community_account': 'Conta Tyria Codex',
+  'community_account': 'Conta Wondrous Compass',
   'community_intro':
       'Entre para participar de eventos da guilda, encontrar amigos e conectar o Discord da sua guilda. Suas chaves de API ficam neste dispositivo.',
   'community_sign_in_discord': 'Entrar com Discord',
@@ -207,7 +207,7 @@ const ptStrings = <String, String>{
   'community_sign_out': 'Sair',
   'community_delete': 'Excluir conta',
   'community_delete_body':
-      'Sua conta Tyria Codex e tudo ligado a ela serão excluídos para sempre. Suas chaves de API e os outros dados do app neste dispositivo não são afetados.',
+      'Sua conta Wondrous Compass e tudo ligado a ela serão excluídos para sempre. Suas chaves de API e os outros dados do app neste dispositivo não são afetados.',
   'community_delete_confirm': 'Excluir para sempre',
   'community_failed': 'Não deu certo, tente de novo.',
   'module_link_title': 'Blish HUD',
@@ -790,7 +790,7 @@ const ptStrings = <String, String>{
   'remove_key': 'Remover chave',
   'remove_key_body': 'A chave de API será apagada deste aparelho e você voltará à tela inicial.',
   'disclaimer':
-      'Tyria Codex é um app de fã não oficial. Guild Wars 2, ArenaNet e NCSOFT são marcas de seus respectivos donos. Os dados vêm da API oficial do GW2 e da Guild Wars 2 Wiki.',
+      'Wondrous Compass é um app de fã não oficial. Guild Wars 2, ArenaNet e NCSOFT são marcas de seus respectivos donos. Os dados vêm da API oficial do GW2 e da Guild Wars 2 Wiki.',
   'slot_Helm': 'Elmo',
   'slot_Shoulders': 'Ombros',
   'slot_Coat': 'Peitoral',
@@ -837,7 +837,7 @@ const ptStrings = <String, String>{
   'learned_recipes': 'Receitas aprendidas',
   'learned_recipes_of': 'Receitas de {name}',
   'professions': 'Profissões',
-  'support_note': 'O Tyria Codex é gratuito e sem anúncios. Se ele te ajuda, você pode me pagar um café.',
+  'support_note': 'O Wondrous Compass é gratuito e sem anúncios. Se ele te ajuda, você pode me pagar um café.',
   'buy_coffee': 'Me pague um café',
   'price_history': 'Histórico de preços',
   'price_history_collecting':
@@ -1032,7 +1032,7 @@ const ptStrings = <String, String>{
   'oe_join_as': 'Inscrever-se como',
   'oe_roles_title': 'Discord oficial',
   'oe_roles_body':
-      'O servidor oficial do Tyria Codex no Discord publica os eventos públicos em um canal para cada região e tipo de evento. Entre com a conta do Discord com a qual você fez login: você recebe o cargo de cada região em que tem uma conta. Quando começa um evento em que você se inscreveu, o bot abre para ele um canal de texto e um de voz que só os inscritos veem.',
+      'O servidor oficial do Wondrous Compass no Discord publica os eventos públicos em um canal para cada região e tipo de evento. Entre com a conta do Discord com a qual você fez login: você recebe o cargo de cada região em que tem uma conta. Quando começa um evento em que você se inscreveu, o bot abre para ele um canal de texto e um de voz que só os inscritos veem.',
   'oe_roles_join': 'Entrar no Discord oficial',
   'oe_err_role_required': 'Escolha um dos papéis do evento.',
   'oe_err_profession': 'Escolha a profissão com a qual você vem.',

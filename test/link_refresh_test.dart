@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tyria_codex/l10n/strings.dart';
-import 'package:tyria_codex/state/community.dart';
-import 'package:tyria_codex/state/guild_events.dart';
-import 'package:tyria_codex/state/link_refresh.dart';
-import 'package:tyria_codex/state/news.dart';
-import 'package:tyria_codex/state/open_events.dart' show MyRegions;
+import 'package:wondrous_compass/l10n/strings.dart';
+import 'package:wondrous_compass/state/community.dart';
+import 'package:wondrous_compass/state/guild_events.dart';
+import 'package:wondrous_compass/state/link_refresh.dart';
+import 'package:wondrous_compass/state/news.dart';
+import 'package:wondrous_compass/state/open_events.dart' show MyRegions;
 
 void main() {
   group('when the link is refreshed', () {

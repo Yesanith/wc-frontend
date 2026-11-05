@@ -11,7 +11,7 @@ part 'site_header/footer.dart';
 
 /// the page address of the static site, where the privacy policy and the terms are, in the language of the app: English at the root,
 /// the others in a folder of their own
-const siteBase = 'https://yesanith.github.io/tyria-companion/';
+const siteBase = 'https://yesanith.github.io/wc-frontend/';
 
 String sitePageUrl(AppLang lang, String page) =>
     lang == AppLang.en ? '$siteBase$page.html' : '$siteBase${lang.code}/$page.html';
@@ -61,7 +61,7 @@ int? siteGroupIndex(AppSection section) {
 
 /// what the tab of the browser says: the name of the page and of the site, the site alone for its home page
 String sitePageTitle(AppSection section, String name) =>
-    section == AppSection.home ? 'Tyria Codex' : '$name · Tyria Codex';
+    section == AppSection.home ? 'Wondrous Compass' : '$name · Wondrous Compass';
 
 /// the bar at the top of the page on a wide screen in a browser: the name, the sections along it, the groups opening under their heading,
 /// the account and the settings at the end. it is what a site has in place of the menu beside the page that an app has
@@ -138,7 +138,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                             children: [
                               const DiamondEmblem(size: 30),
                               const SizedBox(width: 10),
-                              Text('Tyria Codex', style: display(20)),
+                              Text('Wondrous Compass', style: display(20)),
                               const SizedBox(width: 8),
                               const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                             ],
