@@ -55,8 +55,13 @@ jobs:
             --dart-define=SUPABASE_URL="$SUPABASE_URL" \
             --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: wondrous-compass-web-preview
-          path: build/web
-          retention-days: 3
+      # the build is kept in the bucket of Supabase (ci/keep.sh), not as an artifact: download it from Storage, unpack it and serve
+      # build/web from the root of a local server
+      - name: Keep the preview
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_S3_KEY_ID: ${{ secrets.SUPABASE_S3_KEY_ID }}
+          SUPABASE_S3_SECRET: ${{ secrets.SUPABASE_S3_SECRET }}
+          SUPABASE_S3_REGION: ${{ secrets.SUPABASE_S3_REGION }}
+        run: bash ci/keep.sh preview build/web

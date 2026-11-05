@@ -127,8 +127,7 @@ template signs release builds with the public android debug key, which scanners 
 
 Builds are made by hand: run `Build APK` from the Actions tab. It asks for the version and for whether
 to publish it. Ticked, the workflow creates the `v` tag and the release with the APK. Left unticked it only
-builds and checks; an APK is kept under the run's artifacts only when a later step fails. Pushing a tag
-starts nothing.
+builds and checks; the APK of an unticked run is not kept. Pushing a tag starts nothing.
 
 The version comes from the prompt, never from `pubspec.yaml`, so the version there is not worth keeping
 in step.
@@ -215,4 +214,17 @@ is not part of this.
 `e2e/` has tests that open the site in a real browser (Playwright): that a link to it shows its name and picture, that a visitor is shown what the app is, that a guest gets the app with the bar of a site, that
 the pages have addresses and the back button goes between them, that the search finds a page, and that the page throws no error. Flutter draws on a canvas, so the tests switch its accessibility tree on to read it.
 They run in the workflow Smoke, which is not part of the deploy: after the site has been deployed, every morning and on request (`BASE_URL` takes the address of a build served anywhere else). When a test fails, what the browser
-saw is kept as screenshots for three days.
+saw is kept in Supabase, as the next section says.
+
+## What a run keeps
+
+No workflow keeps anything as an artifact of GitHub, whose small storage fills and then stops every run that uploads
+one. What is worth keeping goes to the private bucket `ci` of the Supabase project through `ci/keep.sh`, the newest ten
+of each kind: what a failed check (`check/`), build (`build/`) or smoke test (`smoke/`, with the screenshots) said, and
+the browser build of a feature branch (`preview/`). The run's summary names the file; it is under Storage in the
+Supabase dashboard. The data jobs hand their files on through the cache of the run, and the site's artifact, which
+GitHub Pages cannot do without, is deleted as soon as the site is deployed.
+
+It needs an S3 access key of the project (Supabase dashboard, Storage, S3 configuration), which opens storage and not
+the database, in these repository secrets: `SUPABASE_S3_KEY_ID`, `SUPABASE_S3_SECRET` and `SUPABASE_S3_REGION`, next
+to the `SUPABASE_URL` the app has. Without them a run still runs, and only keeps nothing.

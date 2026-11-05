@@ -11,9 +11,9 @@ concurrency:
   group: check-${{ github.ref }}
   cancel-in-progress: true
 
-# the check only reads, except for the branch of logs a failed test writes
+# the check only reads
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   check:
@@ -58,21 +58,19 @@ jobs:
           set -o pipefail
           flutter test 2>&1 | tee "$RUNNER_TEMP/4-test.log"
 
-      # when it fails, what each step said goes to a branch of its own, one commit that is replaced each
-      # time, so the failure can be read without opening the run: the packages, the format, the analysis
-      # and the tests (without the list of those that passed)
+      # when it fails, what each step said is kept in the bucket of Supabase (ci/keep.sh), so the failure can be read without
+      # opening the run: the packages, the format, the analysis and the tests (without the list of those that passed)
       - name: Keep the failure where it can be read
         if: failure() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+        continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_S3_KEY_ID: ${{ secrets.SUPABASE_S3_KEY_ID }}
+          SUPABASE_S3_SECRET: ${{ secrets.SUPABASE_S3_SECRET }}
+          SUPABASE_S3_REGION: ${{ secrets.SUPABASE_S3_REGION }}
         run: |
           ls "$RUNNER_TEMP"/*.log >/dev/null 2>&1 || exit 0
-          dir="$(mktemp -d)"
-          cd "$dir"
-          git init -q
-          git config user.name "ci"
-          git config user.email "ci@users.noreply.github.com"
-          git checkout -q -b ci-logs
+          out="$RUNNER_TEMP/check-failure.txt"
           {
             echo "commit: $GITHUB_SHA"
             echo "run: $GITHUB_RUN_ID"
@@ -81,7 +79,5 @@ jobs:
               echo "=================== $(basename "$f")"
               grep -v '^✅' "$f" | grep -vE '^[[:space:]]*(#[0-9]+[[:space:]]|package:|dart:|\(elided)' | head -n 700
             done
-          } > check-failure.txt
-          git add check-failure.txt
-          git commit -q -m "The failure of the check of $GITHUB_SHA"
-          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs
+          } > "$out"
+          bash ci/keep.sh check "$out"

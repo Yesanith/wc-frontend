@@ -31,6 +31,8 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  # to drop the site's artifact once it is deployed
+  actions: write
 
 concurrency:
   group: pages
@@ -156,3 +158,16 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
+
+      # github pages is deployed from an artifact and nothing else. once the site is out it is of no use, and it is dropped at
+      # once rather than left to fill the small storage of artifacts, whatever the deployment did
+      - name: Drop the site's artifact
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NAME: github-pages-${{ github.run_attempt }}
+        run: |
+          for id in $(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[] | select(.name == env.NAME) | .id'); do
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$id" --silent && echo "dropped artifact $id"
+          done

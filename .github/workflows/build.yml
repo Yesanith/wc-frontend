@@ -186,19 +186,18 @@ jobs:
           done
           exit 1
 
-      # when the build fails, what it said goes to a branch of its own, replaced each time, so that it can be read without opening the run
+      # when the build fails, what it said is kept in the bucket of Supabase (ci/keep.sh), so that it can be read without opening the run
       - name: Keep the failure where it can be read
         if: failure()
+        continue-on-error: true
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_S3_KEY_ID: ${{ secrets.SUPABASE_S3_KEY_ID }}
+          SUPABASE_S3_SECRET: ${{ secrets.SUPABASE_S3_SECRET }}
+          SUPABASE_S3_REGION: ${{ secrets.SUPABASE_S3_REGION }}
         run: |
           test -f "$RUNNER_TEMP/build.log" || exit 0
-          dir="$(mktemp -d)"
-          cd "$dir"
-          git init -q
-          git config user.name "ci"
-          git config user.email "ci@users.noreply.github.com"
-          git checkout -q -b ci-logs-build
+          out="$RUNNER_TEMP/build-failure.txt"
           {
             echo "commit: $GITHUB_SHA"
             echo "run: $GITHUB_RUN_ID"
@@ -208,22 +207,12 @@ jobs:
             echo
             echo "=================== the end"
             tail -n 120 "$RUNNER_TEMP/build.log"
-          } > build-failure.txt
-          git add build-failure.txt
-          git commit -q -m "The failure of the build of $GITHUB_SHA"
-          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci-logs-build
+          } > "$out"
+          bash ci/keep.sh build "$out"
 
+      # the apk is kept only by the release, never as an artifact
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk wondrous-compass.apk
-
-      # kept only when the build failed after making the apk. a published release already holds it
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: wondrous-compass-apk
-          path: wondrous-compass.apk
-          if-no-files-found: ignore
-          retention-days: 3
 
       # published only when the box was ticked. the release creates the tag
       # itself

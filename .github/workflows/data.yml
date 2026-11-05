@@ -14,7 +14,9 @@ permissions:
 
 # every part runs as its own job side by side, on its own runner and so
 # with its own share of the api's rate limit. each hands its files to the
-# commit job at the end, which commits them together or not at all
+# commit job at the end, which commits them together or not at all. they are
+# handed on through the cache under a key of this run, not as artifacts, whose
+# small storage fills and then stops every run that uploads one
 jobs:
   # the builders' logic is checked offline first, a broken build must not
   # replace the data the app ships with
@@ -43,11 +45,10 @@ jobs:
         run: |
           mkdir -p out/assets/data
           cp assets/data/recipe_book.json.gz assets/data/item_index_en.txt.gz assets/data/market_index.txt.gz out/assets/data/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/cache/save@v4
         with:
-          name: data-book
+          key: data-book-${{ github.run_id }}
           path: out/
-          retention-days: 1
 
   # one search index per language the api translates. turkish, portuguese,
   # russian and japanese are absent on purpose: the api has none of them, so
@@ -68,11 +69,10 @@ jobs:
         run: |
           mkdir -p out/assets/data
           cp assets/data/item_index_${{ matrix.lang }}.txt.gz out/assets/data/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/cache/save@v4
         with:
-          name: data-index-${{ matrix.lang }}
+          key: data-index-${{ matrix.lang }}-${{ github.run_id }}
           path: out/
-          retention-days: 1
 
   worldmap:
     needs: test
@@ -89,11 +89,10 @@ jobs:
           mkdir -p out/assets/data
           cp assets/data/worldmap_1_*.json.gz out/assets/data/
           cp -r assets/tiles out/assets/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/cache/save@v4
         with:
-          name: data-worldmap
+          key: data-worldmap-${{ github.run_id }}
           path: out/
-          retention-days: 1
 
   commit:
     needs: [book, index, worldmap]
@@ -102,11 +101,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      # each part was saved to out/ under its own key; restored one after another they add up in out/
+      - uses: actions/cache/restore@v4
         with:
-          pattern: data-*
-          merge-multiple: true
-          path: out
+          key: data-book-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: data-index-de-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: data-index-es-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: data-index-fr-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: data-index-zh-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
+      - uses: actions/cache/restore@v4
+        with:
+          key: data-worldmap-${{ github.run_id }}
+          path: out/
+          fail-on-cache-miss: true
       - name: Commit if changed
         run: |
           cp -r out/assets/. assets/
