@@ -47,13 +47,25 @@ jobs:
         run: npx playwright install --with-deps chromium
         working-directory: e2e
 
+      # the address the site is at: the one asked for, or the pages of this repository under the name it has now, so that a
+      # rename of the repository needs nothing here. an input is read as data by the script, never pasted into it
+      - name: Where the site is
+        env:
+          ASKED: ${{ inputs.base_url }}
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          site="${ASKED:-https://$owner.github.io/$repo}"
+          echo "SITE=${site%/}" >> "$GITHUB_ENV"
+          echo "looking at ${site%/}"
+
       - name: Look at the site
         run: |
           set -o pipefail
           npx playwright test 2>&1 | tee "$RUNNER_TEMP/smoke.log"
         working-directory: e2e
         env:
-          BASE_URL: ${{ inputs.base_url || 'https://yesanith.github.io/wc-frontend' }}
+          BASE_URL: ${{ env.SITE }}
 
       # what went wrong, kept in the bucket of Supabase (ci/keep.sh), so that it can be read without opening the run: what the tests said, and for each
       # that failed what the page had in it when it did (the tree the browser reads the page by, which says what is there and what it is called), with
@@ -62,8 +74,6 @@ jobs:
         if: failure()
         continue-on-error: true
         env:
-          # an input is read as data by the script, never pasted into it
-          SITE: ${{ inputs.base_url || 'https://yesanith.github.io/wc-frontend' }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_S3_KEY_ID: ${{ secrets.SUPABASE_S3_KEY_ID }}
           SUPABASE_S3_SECRET: ${{ secrets.SUPABASE_S3_SECRET }}
