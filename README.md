@@ -125,16 +125,13 @@ template signs release builds with the public android debug key, which scanners 
 
 ## Releases
 
-Two ways to cut a build:
+Builds are made by hand: run `Build APK` from the Actions tab. It asks for the version and for whether
+to publish it. Ticked, the workflow creates the `v` tag and the release with the APK. Left unticked it only
+builds and checks; an APK is kept under the run's artifacts only when a later step fails. Pushing a tag
+starts nothing.
 
-- Push a tag starting with `v` (for example `v0.21.0`). The workflow builds that version and
-  attaches the APK to a GitHub release.
-- Run `Build APK` by hand from the Actions tab. It asks for the version and for whether to
-  publish it. Ticked, the workflow creates the `v` tag and the release with the APK. Left unticked it only
-  builds and checks; an APK is kept under the run's artifacts only when a later step fails.
-
-Either way the version comes from the tag or the prompt, never from `pubspec.yaml`, so the
-version there is not worth keeping in step.
+The version comes from the prompt, never from `pubspec.yaml`, so the version there is not worth keeping
+in step.
 
 ## Project layout
 

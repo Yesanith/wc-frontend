@@ -1,9 +1,7 @@
 name: Build APK
 
+# built by hand only, from the actions tab. a tag push starts nothing
 on:
-  # only tags, so a release is built once instead of twice per push
-  push:
-    tags: ['v*']
   workflow_dispatch:
     inputs:
       version:
@@ -39,12 +37,12 @@ jobs:
             echo "recipe job still running, waiting ($i)"
             sleep 30
           done
-          echo "::warning::gave up waiting for the recipe job, building with the data in the tag"
+          echo "::warning::gave up waiting for the recipe job, building with the data of this commit"
 
       - uses: actions/checkout@v4
 
-      # the tag fixes the code, but the recipe job commits its data to main
-      # afterwards. take the newest data from main so the release includes it
+      # the recipe job commits its data to main after the code it was started
+      # by. take the newest data from main so the release includes it
       - name: Use the newest recipe data
         run: |
           git fetch --depth=1 origin main
@@ -61,15 +59,15 @@ jobs:
           channel: stable
           cache: true
 
-      # a tag carries the version, a manual run is asked for one. the input
-      # travels through the environment rather than being pasted into the
-      # script, so a stray character cannot run as shell
+      # the run is asked for the version. the input travels through the
+      # environment rather than being pasted into the script, so a stray
+      # character cannot run as shell
       - name: Work out the version
         id: version
         env:
           INPUT_VERSION: ${{ inputs.version }}
         run: |
-          VERSION="${INPUT_VERSION:-$GITHUB_REF_NAME}"
+          VERSION="$INPUT_VERSION"
           VERSION="${VERSION#v}"
           case "$VERSION" in
             [0-9]*.[0-9]*.[0-9]*) ;;
@@ -227,11 +225,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 3
 
-      # a tag push always publishes, a manual run only when the box was ticked.
-      # the release creates the tag itself, and because this runs with the
-      # workflow's own token it does not trigger a second build
+      # published only when the box was ticked. the release creates the tag
+      # itself
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v') || inputs.release
+        if: inputs.release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.value }}
