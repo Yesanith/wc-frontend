@@ -133,6 +133,18 @@ builds and checks; the APK of an unticked run is not kept. Pushing a tag starts 
 The version comes from the prompt, never from `pubspec.yaml`, so the version there is not worth keeping
 in step.
 
+## Google Play
+
+Tick `play` in `Build APK` to also build the bundle (`.aab`) for the Play Console. It is kept for three days as
+an artifact of the run, never in a release, and is signed with the same key as the APK. The bundle differs from
+the APK in two ways: it is built with `PLAY_BUILD`, so Settings does not offer the APK of a newer release (the store
+updates it), and its manifest does not ask for `SCHEDULE_EXACT_ALARM`, which Google Play lets only alarm clock and
+calendar apps declare. World boss alerts then arrive up to a few minutes loose. The run fails if the finished
+bundle still asks for it.
+
+The first upload decides which key signs the app for good (Play App Signing). Upload the key of the APKs as the app
+signing key in the Play Console, or phones that have the APK cannot update from Play without uninstalling.
+
 ## Project layout
 
 ```

@@ -11,6 +11,10 @@ on:
         description: Also publish it as a GitHub release
         type: boolean
         default: false
+      play:
+        description: Also build the bundle (aab) for Google Play, kept for three days as an artifact of this run
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -156,31 +160,49 @@ jobs:
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          BUILD_PLAY: ${{ inputs.play }}
         run: |
           # maven central sometimes answers 429 to shared runners, and the network sometimes drops: those are tried again after a wait. a build that fails
           # for any other reason (the code does not compile) fails again the same way, and waiting for it is minutes of nothing
-          for attempt in 1 2 3; do
-            flutter build apk --release \
-              --build-name="$VERSION" \
-              --build-number="$GITHUB_RUN_NUMBER" \
-              --dart-define=APP_VERSION="$VERSION" \
-              --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-              --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" \
-              --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
-              --dart-define=FIREBASE_APP_ID="$FIREBASE_APP_ID" \
-              --dart-define=FIREBASE_SENDER_ID="$FIREBASE_SENDER_ID" \
-              --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" 2>&1 | tee "$RUNNER_TEMP/build-attempt.log"
-            # the result of the build, not of tee
-            if [ "${PIPESTATUS[0]}" = "0" ]; then exit 0; fi
-            cp "$RUNNER_TEMP/build-attempt.log" "$RUNNER_TEMP/build.log"
-            if ! grep -qiE '(\b429\b|too many requests|timed out|connection (reset|refused)|could not (get|resolve|download)|received status code 5[0-9][0-9]|unexpected end of stream|temporary failure)' "$RUNNER_TEMP/build-attempt.log"; then
-              echo "build attempt $attempt failed, and not for a reason that waiting helps with"
-              exit 1
-            fi
-            echo "build attempt $attempt failed on the network, retrying in 60s"
-            sleep 60
-          done
-          exit 1
+          # $1 is what to build (apk or appbundle), the rest are flags for that build only
+          build() {
+            kind="$1"
+            shift
+            for attempt in 1 2 3; do
+              flutter build "$kind" --release \
+                --build-name="$VERSION" \
+                --build-number="$GITHUB_RUN_NUMBER" \
+                --dart-define=APP_VERSION="$VERSION" \
+                --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+                --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" \
+                --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
+                --dart-define=FIREBASE_APP_ID="$FIREBASE_APP_ID" \
+                --dart-define=FIREBASE_SENDER_ID="$FIREBASE_SENDER_ID" \
+                --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+                "$@" 2>&1 | tee "$RUNNER_TEMP/build-attempt.log"
+              # the result of the build, not of tee
+              if [ "${PIPESTATUS[0]}" = "0" ]; then return 0; fi
+              cp "$RUNNER_TEMP/build-attempt.log" "$RUNNER_TEMP/build.log"
+              if ! grep -qiE '(\b429\b|too many requests|timed out|connection (reset|refused)|could not (get|resolve|download)|received status code 5[0-9][0-9]|unexpected end of stream|temporary failure)' "$RUNNER_TEMP/build-attempt.log"; then
+                echo "build attempt $attempt failed, and not for a reason that waiting helps with"
+                return 1
+              fi
+              echo "build attempt $attempt failed on the network, retrying in 60s"
+              sleep 60
+            done
+            return 1
+          }
+
+          build apk || exit 1
+          # the bundle for Google Play: the store updates it, so PLAY_BUILD hides the update from GitHub in Settings
+          if [ "$BUILD_PLAY" = "true" ]; then
+            # Google Play wants a declaration for exact alarms, which an app for world boss reminders does not qualify for.
+            # the app schedules those alerts a few minutes loose without the permission
+            M=android/app/src/main/AndroidManifest.xml
+            sed -i '/android.permission.SCHEDULE_EXACT_ALARM/d' "$M"
+            if grep -q 'SCHEDULE_EXACT_ALARM' "$M"; then echo "::error::the manifest still asks for exact alarms"; exit 1; fi
+            build appbundle --dart-define=PLAY_BUILD=true || exit 1
+          fi
 
       # when the build fails, what it said is kept in the bucket of Supabase (ci/keep.sh), so that it can be read without opening the run
       - name: Keep the failure where it can be read
@@ -209,6 +231,26 @@ jobs:
       # the apk is kept only by the release, never as an artifact
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk wondrous-compass.apk
+
+      # the manifests of libraries are merged into the app's: check the finished bundle, not only the file above
+      - name: Check the bundle asks for no exact alarms
+        if: inputs.play
+        run: |
+          if unzip -p build/app/outputs/bundle/release/app-release.aab base/manifest/AndroidManifest.xml | grep -aq 'SCHEDULE_EXACT_ALARM'; then
+            echo "::error::the bundle still asks for SCHEDULE_EXACT_ALARM"
+            exit 1
+          fi
+
+      # the bundle is for uploading to the Play Console by hand: three days is long enough for that, and a bundle is
+      # never part of a release (the repository is public)
+      - name: Keep the Play bundle
+        if: inputs.play
+        uses: actions/upload-artifact@v4
+        with:
+          name: wondrous-compass-play-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 3
+          if-no-files-found: error
 
       # published only when the box was ticked. the release creates the tag
       # itself
