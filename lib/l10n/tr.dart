@@ -1045,4 +1045,9 @@ const trStrings = <String, String>{
   'oe_role_full': 'Dolu',
   'oe_roles_none': 'Henüz resmi bir Discord sunucusu yok.',
   'oe_map_pill': 'Harita {id}',
+  'signin_terms': 'Giriş yaparak koşulları ve gizlilik politikasını kabul etmiş olursun:',
+  'oe_hide_organizer': 'Bu organizatörün etkinliklerini gizle',
+  'oe_organizer_hidden': '{name} adlı organizatörün etkinlikleri gizlendi. Etkinlik listesinden tekrar gösterebilirsin.',
+  'oe_hidden_manage': 'Gizlenen organizatörler ({n})',
+  'oe_show_again': 'Tekrar göster',
 };

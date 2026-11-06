@@ -136,7 +136,8 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
               const SizedBox(height: 10),
               FilledButton(onPressed: _busy ? null : () => _turnOn(true), child: Text(s.t('boss_alert_allow'))),
             ],
-            if (status != null && status.notifications && !status.exact) ...[
+            // the build for Google Play does not ask for exact alarms, so there is nothing to allow
+            if (status != null && status.notifications && !status.exact && !playBuild) ...[
               const SizedBox(height: 10),
               Text(s.t('boss_alert_exact_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 6),

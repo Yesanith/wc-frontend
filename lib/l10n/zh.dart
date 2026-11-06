@@ -996,4 +996,9 @@ const zhStrings = <String, String>{
   'oe_role_full': '已满',
   'oe_roles_none': '目前还没有官方 Discord 服务器。',
   'oe_map_pill': '地图 {id}',
+  'signin_terms': '登录即表示你接受条款和隐私政策:',
+  'oe_hide_organizer': '隐藏此组织者的活动',
+  'oe_organizer_hidden': '已隐藏 {name} 的活动。你可以在活动列表中重新显示。',
+  'oe_hidden_manage': '已隐藏的组织者 ({n})',
+  'oe_show_again': '重新显示',
 };

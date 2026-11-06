@@ -66,6 +66,22 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
               icon: const Icon(Icons.login),
               label: Text(s.t('community_sign_in_discord')),
             ),
+            const SizedBox(height: 6),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(s.t('signin_terms'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                for (final (page, label) in [('terms', 'site_terms'), ('privacy', 'site_privacy')])
+                  TextButton(
+                    onPressed: () => openUrl(
+                      context,
+                      sitePageUrl(ref.read(langProvider), page),
+                      failMessage: s.t('open_failed'),
+                    ),
+                    child: Text(s.t(label)),
+                  ),
+              ],
+            ),
           ] else ...[
             Row(
               children: [

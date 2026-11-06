@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../util.dart';
 import 'guild_events.dart' show eventRoleKeys;
+import 'settings.dart' show prefsProvider;
 
 part 'open_events/actions.dart';
 part 'open_events/models.dart';
@@ -23,6 +24,26 @@ const openEventLanguages = ['any', 'en', 'de', 'es', 'fr', 'tr', 'pt', 'ru', 'ja
 
 /// how long an event can last, in minutes
 const openEventDurations = [30, 60, 90, 120, 180, 240, 360];
+
+/// the organizers the player chose not to see events from, kept on the phone. a report goes to the administrators and
+/// takes time, this works at once
+class HiddenOrganizersNotifier extends Notifier<Set<String>> {
+  static const _key = 'oe_hidden_organizers';
+
+  @override
+  Set<String> build() => (ref.watch(prefsProvider).getStringList(_key) ?? const <String>[]).toSet();
+
+  void hide(String organizer) => _set({...state, organizer});
+
+  void show(String organizer) => _set({...state}..remove(organizer));
+
+  void _set(Set<String> next) {
+    state = next;
+    ref.read(prefsProvider).setStringList(_key, next.toList()..sort());
+  }
+}
+
+final hiddenOrganizersProvider = NotifierProvider<HiddenOrganizersNotifier, Set<String>>(HiddenOrganizersNotifier.new);
 
 final openEventsFilterProvider = StateProvider<OpenEventsFilter>((ref) => const OpenEventsFilter());
 

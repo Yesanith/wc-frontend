@@ -56,6 +56,18 @@ class _UpdatePanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
+    if (playBuild) {
+      return Panel(
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(s.t('version'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+            ),
+            Text(appVersion, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+          ],
+        ),
+      );
+    }
     final update = ref.watch(updateProvider);
     final latest = update.valueOrNull;
     final hasUpdate = latest != null && latest.isNewerThan;

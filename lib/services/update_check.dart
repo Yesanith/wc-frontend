@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 /// version this apk was built with, set by the release workflow
 const appVersion = String.fromEnvironment('APP_VERSION', defaultValue: 'dev');
 
+/// set by the build made for Google Play, which the store updates: it never looks for an apk on GitHub
+const playBuild = bool.fromEnvironment('PLAY_BUILD');
+
 const _releasesApi = 'https://api.github.com/repos/Yesanith/wc-frontend/releases/latest';
 
 class UpdateInfo {

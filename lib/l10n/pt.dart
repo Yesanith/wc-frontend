@@ -1050,4 +1050,9 @@ const ptStrings = <String, String>{
   'oe_role_full': 'Cheio',
   'oe_roles_none': 'Ainda não há um servidor de Discord oficial.',
   'oe_map_pill': 'Mapa {id}',
+  'signin_terms': 'Ao entrar, você aceita os termos e a política de privacidade:',
+  'oe_hide_organizer': 'Ocultar eventos deste organizador',
+  'oe_organizer_hidden': 'Os eventos de {name} estão ocultos. Você pode mostrá-los de novo na lista de eventos.',
+  'oe_hidden_manage': 'Organizadores ocultos ({n})',
+  'oe_show_again': 'Mostrar de novo',
 };
