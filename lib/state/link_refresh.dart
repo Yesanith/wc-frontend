@@ -91,6 +91,8 @@ String guildSyncMessage(S s, LinkOutcome? outcome) {
   const order = ['failed', 'unavailable', 'too_soon', 'synced'];
   final worst = [...outcome.synced]..sort((a, b) => order.indexOf(a.result).compareTo(order.indexOf(b.result)));
   final r = worst.first;
+  // the backend refused the call itself, nothing was read or saved
+  if (r.result == 'failed' && r.detail == 'call:rate_limited') return s.t('err_rate_limited');
   final text = s.t('ginfo_result_${r.result}', {'detail': r.detail ?? '-'});
   // a guild that synced can still lack something, the member list say
   final missing = r.result == 'synced' && r.detail != null ? ' (${r.detail})' : '';

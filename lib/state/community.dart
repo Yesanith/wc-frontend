@@ -172,6 +172,17 @@ class LinkFailure implements Exception {
   String toString() => detail == null ? code : '$code: $detail';
 }
 
+/// the text to show for a [LinkFailure] code
+String linkFailureKey(String code) => switch (code) {
+      'account_taken' => 'gw2_link_taken',
+      'invalid_token' || 'missing_permission' => 'gw2_link_key',
+      'gw2_unavailable' => 'gw2_link_down',
+      'subtoken_failed' => 'gw2_link_key',
+      // the backend allows a few calls a minute per player
+      'rate_limited' => 'err_rate_limited',
+      _ => 'community_failed',
+    };
+
 /// how one guild the account leads went when the backend read it from the
 /// game: synced, too_soon, unavailable or failed, and when something was
 /// missing what, like guild:403
