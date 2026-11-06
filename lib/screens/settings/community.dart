@@ -1,6 +1,6 @@
 part of '../settings_screen.dart';
 
-/// the tyria companion account: separate from the gw2 api keys above, it
+/// the wondrous compass account: separate from the gw2 api keys above, it
 /// is what guild events, friends and the discord bot will hang on
 class _CommunityPanel extends ConsumerStatefulWidget {
   const _CommunityPanel();

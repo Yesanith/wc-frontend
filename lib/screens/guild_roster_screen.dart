@@ -9,7 +9,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import 'guild_events_screen.dart' show eventWhen;
 
-/// a guild's tyria companion members with their roles. the leader appoints
+/// a guild's wondrous compass members with their roles. the leader appoints
 /// officers here, who may then create and manage events
 class GuildRosterScreen extends ConsumerStatefulWidget {
   const GuildRosterScreen({super.key, required this.guild});

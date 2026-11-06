@@ -29,7 +29,7 @@ class RosterMember {
   final bool manual;
 }
 
-/// a guild's tyria companion members, leader first, then officers
+/// a guild's wondrous compass members, leader first, then officers
 final guildRosterProvider = FutureProvider.autoDispose.family<List<RosterMember>, String>((ref, guildId) async {
   final session = await ref.watch(sessionProvider.future);
   if (session == null) return const [];
