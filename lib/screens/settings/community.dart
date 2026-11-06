@@ -145,7 +145,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
     } on LinkFailure catch (e) {
       // the code travels with the message so a report tells which step failed
       if (!quiet && mounted) {
-        showToast(context, '${s.t(_failureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
+        showToast(context, '${s.t(linkFailureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
       }
     } catch (e) {
       if (!quiet && mounted) {
@@ -177,7 +177,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
       );
     } on LinkFailure catch (e) {
       if (mounted) {
-        showToast(context, '${s.t(_failureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
+        showToast(context, '${s.t(linkFailureKey(e.code))} (${e.code})', duration: const Duration(seconds: 6));
       }
     } catch (e) {
       if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));
@@ -190,14 +190,6 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
       }
     }
   }
-
-  String _failureKey(String code) => switch (code) {
-        'account_taken' => 'gw2_link_taken',
-        'invalid_token' || 'missing_permission' => 'gw2_link_key',
-        'gw2_unavailable' => 'gw2_link_down',
-        'subtoken_failed' => 'gw2_link_key',
-        _ => 'community_failed',
-      };
 
   Future<void> _unlink(LinkedAccount account) async {
     final s = ref.read(stringsProvider);

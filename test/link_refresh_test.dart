@@ -152,6 +152,12 @@ void main() {
           'Guild details updated. (members:403)');
     });
 
+    test('a guild sync the backend refused for too many calls says to wait', () {
+      const s = S(AppLang.en);
+      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('failed', 'call:rate_limited')])),
+          s.t('err_rate_limited'));
+    });
+
     test('nothing to sync and nothing to refresh are told apart', () {
       const s = S(AppLang.en);
       expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [])), contains('guilds permission'));
@@ -357,5 +363,23 @@ void main() {
       }
       expect(s.t('ginfo_updated', {'when': 'X'}), contains('X'), reason: lang.code);
     }
+  });
+
+  group('why linking failed', () {
+    test('too many calls says to wait, in every language', () {
+      expect(linkFailureKey('rate_limited'), 'err_rate_limited');
+      for (final lang in AppLang.values) {
+        expect(S(lang).t(linkFailureKey('rate_limited')), isNot('err_rate_limited'), reason: lang.code);
+      }
+    });
+
+    test('the known codes keep their texts, anything else is the general one', () {
+      expect(linkFailureKey('account_taken'), 'gw2_link_taken');
+      expect(linkFailureKey('invalid_token'), 'gw2_link_key');
+      expect(linkFailureKey('missing_permission'), 'gw2_link_key');
+      expect(linkFailureKey('subtoken_failed'), 'gw2_link_key');
+      expect(linkFailureKey('gw2_unavailable'), 'gw2_link_down');
+      expect(linkFailureKey('http_500'), 'community_failed');
+    });
   });
 }
