@@ -85,9 +85,7 @@ class CharacterDetailScreen extends ConsumerWidget {
         child: ErrorBox(error: chars.error, onRetry: () => ref.invalidate(charactersProvider)),
       );
     } else if (list != null) {
-      body = Center(
-        child: Text(s.t('character_not_found'), style: TextStyle(color: AppColors.muted)),
-      );
+      body = Center(child: Text(s.t('character_not_found'), style: TextStyle(color: AppColors.muted)));
     } else {
       body = const Center(child: CircularProgressIndicator());
     }
@@ -102,15 +100,17 @@ class CharacterDetailScreen extends ConsumerWidget {
             if (c != null)
               IconButton(
                 tooltip: s.t('compare'),
-                onPressed: () =>
-                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => CompareScreen(first: name))),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => CompareScreen(first: name)),
+                ),
                 icon: Icon(Icons.compare_arrows, color: AppColors.gold),
               ),
             if (c != null)
               IconButton(
                 tooltip: s.t('hero_card'),
-                onPressed: () =>
-                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => HeroCardScreen(name: name))),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => HeroCardScreen(name: name)),
+                ),
                 icon: Icon(Icons.ios_share, color: AppColors.gold),
               ),
           ],
@@ -139,20 +139,14 @@ class _Hero extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
       child: Row(
         children: [
-          ClassIcon(
-            character: c,
-            size: 72,
-            fallback: Icon(Icons.shield_outlined, color: color, size: 38),
-          ),
+          ClassIcon(character: c, size: 72, fallback: Icon(Icons.shield_outlined, color: color, size: 38)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  elite == null ? profName : '$elite · $profName',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color),
-                ),
+                Text(elite == null ? profName : '$elite · $profName',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color)),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,

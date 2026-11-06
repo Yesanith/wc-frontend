@@ -41,22 +41,14 @@ class Gw2ApiException implements Exception {
 /// game's api answers no CORS preflight, so there it goes in the address as the
 /// api documents for browsers. everywhere else it stays out of the address, so
 /// it never ends up in a proxy log or a crash report that records the request
-Uri gw2Uri(
-  String base,
-  String path, {
-  Map<String, String>? query,
-  required String lang,
-  String? key,
-  bool web = false,
-}) {
-  return Uri.parse('$base$path').replace(
-    queryParameters: {
-      ...?query,
-      'v': 'latest',
-      'lang': lang,
-      if (web && key != null && key.isNotEmpty) 'access_token': key,
-    },
-  );
+Uri gw2Uri(String base, String path,
+    {Map<String, String>? query, required String lang, String? key, bool web = false}) {
+  return Uri.parse('$base$path').replace(queryParameters: {
+    ...?query,
+    'v': 'latest',
+    'lang': lang,
+    if (web && key != null && key.isNotEmpty) 'access_token': key,
+  });
 }
 
 /// the headers of a request, the key in one unless it is in the address
@@ -344,7 +336,7 @@ class Gw2Api {
     }
     return _gate.run(() async {
       var askedAgainForToken = false;
-      for (var attempt = 0; ; attempt++) {
+      for (var attempt = 0;; attempt++) {
         final res = await _sendOnce(uri, headers);
         // the api now and then calls a good key invalid for a moment. one
         // more try tells that apart from a key that really is wrong
@@ -436,7 +428,9 @@ bool pathNeedsKey(String path) {
   if (p == '/tokeninfo' || p.startsWith('/createsubtoken')) return true;
   if (p.startsWith('/commerce/transactions') || p.startsWith('/commerce/delivery')) return true;
   if (p.startsWith('/pvp/stats') || p.startsWith('/pvp/games') || p.startsWith('/pvp/standings')) return true;
-  return RegExp(r'^/guild/[0-9A-Fa-f-]{36}/(log|members|ranks|stash|storage|teams|treasury|upgrades)').hasMatch(p);
+  return RegExp(
+    r'^/guild/[0-9A-Fa-f-]{36}/(log|members|ranks|stash|storage|teams|treasury|upgrades)',
+  ).hasMatch(p);
 }
 
 /// how old a price of the server may be, and still be taken for the price now: it reads every ten minutes

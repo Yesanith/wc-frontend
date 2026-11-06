@@ -26,59 +26,21 @@ void main() {
     });
 
     test('filters combine', () {
-      expect(
-        filterMarket(
-          entries,
-          const MarketFilter(type: 'Weapon'),
-          nameOf: nameOf,
-          prices: prices,
-        ),
-        [2, 1],
-      );
-      expect(
-        filterMarket(
-          entries,
-          const MarketFilter(rarities: {'Exotic'}, sort: MarketSort.name),
-          nameOf: nameOf,
-        ),
-        [4, 1],
-      );
+      expect(filterMarket(entries, const MarketFilter(type: 'Weapon'), nameOf: nameOf, prices: prices), [2, 1]);
+      expect(filterMarket(entries, const MarketFilter(rarities: {'Exotic'}, sort: MarketSort.name), nameOf: nameOf),
+          [4, 1]);
       expect(filterMarket(entries, const MarketFilter(minLevel: 41), nameOf: nameOf, prices: prices), [1, 4]);
-      expect(
-        filterMarket(
-          entries,
-          const MarketFilter(query: 'sword'),
-          nameOf: nameOf,
-          prices: prices,
-        ),
-        [2],
-      );
+      expect(filterMarket(entries, const MarketFilter(query: 'sword'), nameOf: nameOf, prices: prices), [2]);
     });
 
     test('price sorts keep unpriced items last either way', () {
-      expect(
-        filterMarket(
-          entries,
-          const MarketFilter(sort: MarketSort.sellHigh),
-          nameOf: nameOf,
-          prices: prices,
-        ),
-        [1, 3, 2, 4],
-      );
-      expect(
-        filterMarket(
-          entries,
-          const MarketFilter(sort: MarketSort.sellLow),
-          nameOf: nameOf,
-          prices: prices,
-        ),
-        [2, 3, 1, 4],
-      );
+      expect(filterMarket(entries, const MarketFilter(sort: MarketSort.sellHigh), nameOf: nameOf, prices: prices),
+          [1, 3, 2, 4]);
+      expect(filterMarket(entries, const MarketFilter(sort: MarketSort.sellLow), nameOf: nameOf, prices: prices),
+          [2, 3, 1, 4]);
       // listed only drops what nobody sells
-      expect(
-        filterMarket(entries, const MarketFilter(minSupply: 1), nameOf: nameOf, prices: prices),
-        unorderedEquals([1, 2, 3]),
-      );
+      expect(filterMarket(entries, const MarketFilter(minSupply: 1), nameOf: nameOf, prices: prices),
+          unorderedEquals([1, 2, 3]));
     });
 
     test('without prices the list falls back to names', () {

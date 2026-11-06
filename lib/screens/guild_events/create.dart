@@ -164,21 +164,17 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
     // no guild is preselected: choosing it is part of creating the event
     final guildId = _guildId;
     final accounts = ref.watch(myGuildAccountsProvider);
-    final organizers = guildId == null
-        ? const <GuildAccount>[]
-        : organizersFor(accounts.valueOrNull ?? const [], guildId);
+    final organizers =
+        guildId == null ? const <GuildAccount>[] : organizersFor(accounts.valueOrNull ?? const [], guildId);
     final accountId = _effectiveAccount(accounts.valueOrNull ?? const []);
     final durations = {30, 60, 90, 120, 180, 240, _duration}.toList()..sort();
     final sizes = <int?>{5, 10, 20, 50, _max}.whereType<int>().toList()..sort();
     final roleTotal = _roles.values.fold<int>(0, (a, b) => a + b);
 
     Widget label(String text) => Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 6),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted),
-      ),
-    );
+          padding: const EdgeInsets.only(top: 16, bottom: 6),
+          child: Text(text, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+        );
 
     return Scaffold(
       appBar: AppBar(title: Text(editing == null ? s.t('event_create') : s.t('event_edit'))),
@@ -199,9 +195,9 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             onChanged: editing != null
                 ? null
                 : (v) => setState(() {
-                    _guildId = v;
-                    _accountId = null;
-                  }),
+                      _guildId = v;
+                      _accountId = null;
+                    }),
           ),
           // which of the player's accounts creates it: roles are per account
           if (editing == null && guildId != null) ...[
@@ -219,9 +215,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 items: [
                   for (final a in organizers)
                     DropdownMenuItem(
-                      value: a.accountId,
-                      child: Text('${a.accountName} · ${rankLabel(s, a.role, a.gw2Rank)}'),
-                    ),
+                        value: a.accountId, child: Text('${a.accountName} · ${rankLabel(s, a.role, a.gw2Rank)}')),
                 ],
                 onChanged: (v) => setState(() => _accountId = v),
               ),
@@ -249,9 +243,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                 child: OutlinedButton.icon(
                   onPressed: _pickDate,
                   icon: const Icon(Icons.calendar_today_outlined, size: 18),
-                  label: Text(
-                    '${s.t('wd_${_start.weekday}')} ${pad2(_start.day)}.${pad2(_start.month)}.${_start.year}',
-                  ),
+                  label:
+                      Text('${s.t('wd_${_start.weekday}')} ${pad2(_start.day)}.${pad2(_start.month)}.${_start.year}'),
                 ),
               ),
               const SizedBox(width: 8),
@@ -331,18 +324,15 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
                         onPressed: (_roles[key] ?? 0) == 0
                             ? null
                             : () => setState(() {
-                                final n = (_roles[key] ?? 0) - 1;
-                                n == 0 ? _roles.remove(key) : _roles[key] = n;
-                              }),
+                                  final n = (_roles[key] ?? 0) - 1;
+                                  n == 0 ? _roles.remove(key) : _roles[key] = n;
+                                }),
                         icon: const Icon(Icons.remove_circle_outline, size: 20),
                       ),
                       SizedBox(
                         width: 24,
-                        child: Text(
-                          '${_roles[key] ?? 0}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontWeight: FontWeight.w800),
-                        ),
+                        child: Text('${_roles[key] ?? 0}',
+                            textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800)),
                       ),
                       IconButton(
                         visualDensity: VisualDensity.compact,
@@ -357,10 +347,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           if (_max != null && roleTotal > _max!)
             Padding(
               padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                s.t('event_roles_over', {'n': roleTotal, 'max': _max!}),
-                style: TextStyle(fontSize: 12, color: AppColors.gold),
-              ),
+              child: Text(s.t('event_roles_over', {'n': roleTotal, 'max': _max!}),
+                  style: TextStyle(fontSize: 12, color: AppColors.gold)),
             ),
           label(s.t('event_description')),
           TextField(
@@ -380,11 +368,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
           ),
           if (editing?.event.seriesId != null) ...[
             const SizedBox(height: 8),
-            Text(
-              s.t('event_edit_one_week'),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: AppColors.muted),
-            ),
+            Text(s.t('event_edit_one_week'),
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: AppColors.muted)),
           ],
         ],
       ),

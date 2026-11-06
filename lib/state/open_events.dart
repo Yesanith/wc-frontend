@@ -40,16 +40,14 @@ Future<dynamic> _rpc(String fn, Map<String, dynamic> params) =>
 /// the events to come that everybody who is signed in may see
 final openEventsFeedProvider = FutureProvider.autoDispose<List<OpenEvent>>((ref) async {
   final filter = ref.watch(openEventsFilterProvider);
-  return parseOpenEvents(
-    await _rpc('open_events_feed', {
-      'p_activity': filter.activity,
-      'p_language': filter.language,
-      'p_region': filter.region,
-      'p_tag': filter.tag,
-      'p_limit': 100,
-      'p_offset': 0,
-    }),
-  );
+  return parseOpenEvents(await _rpc('open_events_feed', {
+    'p_activity': filter.activity,
+    'p_language': filter.language,
+    'p_region': filter.region,
+    'p_tag': filter.tag,
+    'p_limit': 100,
+    'p_offset': 0,
+  }));
 });
 
 /// the player's own: what they organize and what they signed up for
@@ -78,9 +76,9 @@ final openRosterProvider = FutureProvider.autoDispose.family<List<OpenRosterEntr
 
 /// the roles as the database takes them, in the order they are listed, the ones with no place left out
 List<Map<String, Object>> _rolesJson(Map<String, int> roles) => [
-  for (final k in eventRoleKeys)
-    if ((roles[k] ?? 0) > 0) {'role': k, 'slots': roles[k]!},
-];
+      for (final k in eventRoleKeys)
+        if ((roles[k] ?? 0) > 0) {'role': k, 'slots': roles[k]!}
+    ];
 
 String _utc(DateTime t) => t.toUtc().toIso8601String();
 
@@ -94,38 +92,35 @@ class MyRegions {
   factory MyRegions.fromJson(dynamic j) {
     if (j is! Map) return const MyRegions();
     final rows = j['accounts'];
-    return MyRegions(
-      accounts: [
-        if (rows is List)
-          for (final r in rows)
-            if (r is Map)
-              (id: '${r['id']}', name: '${r['name']}', region: r['region'] == null ? null : '${r['region']}'),
-      ],
-    );
+    return MyRegions(accounts: [
+      if (rows is List)
+        for (final r in rows)
+          if (r is Map) (id: '${r['id']}', name: '${r['name']}', region: r['region'] == null ? null : '${r['region']}')
+    ]);
   }
 
   final List<OpenAccount> accounts;
 
   /// eu and na, those of the accounts the game has placed
   Set<String> get regions => {
-    for (final a in accounts)
-      if (a.region != null) a.region!,
-  };
+        for (final a in accounts)
+          if (a.region != null) a.region!
+      };
 
   bool get hasAccount => accounts.isNotEmpty;
 
   /// accounts that may take part in an event of [region]: any for all, else those of it
   List<OpenAccount> forRegion(String region) => [
-    for (final a in accounts)
-      if (region == 'all' || a.region == region) a,
-  ];
+        for (final a in accounts)
+          if (region == 'all' || a.region == region) a
+      ];
 
   /// the regions an event can be made for: all, and each region the player has an account in
   List<String> get makeable => [
-    'all',
-    for (final r in ['eu', 'na'])
-      if (regions.contains(r)) r,
-  ];
+        'all',
+        for (final r in ['eu', 'na'])
+          if (regions.contains(r)) r
+      ];
 }
 
 final myRegionsProvider = FutureProvider.autoDispose<MyRegions>((ref) async {

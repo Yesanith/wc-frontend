@@ -13,7 +13,9 @@ void main() {
     for (final lang in AppLang.values) {
       final file = File('lib/l10n/${lang.code}.dart');
       expect(file.existsSync(), isTrue, reason: 'no table for ${lang.code}');
-      out[lang.code] = {for (final m in key.allMatches(file.readAsStringSync())) m.group(1)!};
+      out[lang.code] = {
+        for (final m in key.allMatches(file.readAsStringSync())) m.group(1)!,
+      };
     }
     return out;
   }

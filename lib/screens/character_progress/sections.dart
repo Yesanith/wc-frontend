@@ -24,10 +24,8 @@ class _HeroPoints extends ConsumerWidget {
                 Icon(Icons.stars_outlined, color: AppColors.muted),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(
-                    s.t('progress_hero_unavailable'),
-                    style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
-                  ),
+                  child: Text(s.t('progress_hero_unavailable'),
+                      style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
                 ),
               ],
             ),
@@ -38,13 +36,8 @@ class _HeroPoints extends ConsumerWidget {
             children: [
               Icon(Icons.stars_outlined, color: AppColors.gold),
               const SizedBox(width: 12),
-              Expanded(
-                child: Text(s.t('hero_challenges'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
-              ),
-              Text(
-                fmtInt(count),
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold),
-              ),
+              Expanded(child: Text(s.t('hero_challenges'), style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
+              Text(fmtInt(count), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
             ],
           ),
         );
@@ -79,10 +72,8 @@ class _Training extends ConsumerWidget {
         // the game's api returns nothing for the training of characters, which is not a character without any
         if (rows.isEmpty) {
           return Panel(
-            child: Text(
-              s.t('progress_training_unavailable'),
-              style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
-            ),
+            child: Text(s.t('progress_training_unavailable'),
+                style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
           );
         }
         final done = rows.where((r) => r['done'] == true).length;
@@ -91,26 +82,19 @@ class _Training extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                s.t('trees_done', {'n': done, 'm': rows.length}),
-                style: TextStyle(fontSize: 12, color: AppColors.muted),
-              ),
+              Text(s.t('trees_done', {'n': done, 'm': rows.length}),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
               for (final r in rows)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Row(
                     children: [
-                      Icon(
-                        r['done'] == true ? Icons.check_circle : Icons.radio_button_unchecked,
-                        size: 16,
-                        color: r['done'] == true ? AppColors.green : AppColors.muted,
-                      ),
+                      Icon(r['done'] == true ? Icons.check_circle : Icons.radio_button_unchecked,
+                          size: 16, color: r['done'] == true ? AppColors.green : AppColors.muted),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Text(
-                          trees['${r['id']}'] ?? '#${r['id']}',
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                        ),
+                        child: Text(trees['${r['id']}'] ?? '#${r['id']}',
+                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                       ),
                       Text('${asInt(r['spent'])}', style: TextStyle(fontSize: 12, color: AppColors.gold)),
                     ],
@@ -130,19 +114,14 @@ typedef StoryRow = ({String name, int done, int total});
 /// the stories of one season, in the order the game lists them. a story with no quest
 /// in the game's quest list has a total of nought: the game never gave one to compare with
 List<StoryRow> seasonStories(
-  String seasonId,
-  Map<String, Json> quests,
-  Map<String, Json> stories,
-  Set<String> completed,
-) {
-  final mine =
-      [
-        for (final e in stories.entries)
-          if ('${e.value['season']}' == seasonId) e,
-      ]..sort((a, b) {
-        final byOrder = asInt(a.value['order']).compareTo(asInt(b.value['order']));
-        return byOrder != 0 ? byOrder : asInt(a.key).compareTo(asInt(b.key));
-      });
+    String seasonId, Map<String, Json> quests, Map<String, Json> stories, Set<String> completed) {
+  final mine = [
+    for (final e in stories.entries)
+      if ('${e.value['season']}' == seasonId) e,
+  ]..sort((a, b) {
+      final byOrder = asInt(a.value['order']).compareTo(asInt(b.value['order']));
+      return byOrder != 0 ? byOrder : asInt(a.key).compareTo(asInt(b.key));
+    });
   return [
     for (final e in mine)
       (
@@ -176,9 +155,7 @@ class _Story extends ConsumerWidget {
       onRetry: () => ref.invalidate(characterPartProvider('$name|quests')),
       builder: (raw) {
         if (quests == null || stories == null || seasons == null) {
-          return const Center(
-            child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()),
-          );
+          return const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()));
         }
         final completed = {for (final q in (raw as List?) ?? const []) '$q'};
         // season id -> (done, total)
@@ -211,33 +188,28 @@ class _Story extends ConsumerWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 7),
-                      child: Builder(
-                        builder: (_) {
-                          final (done, total) = perSeason['${season['id']}']!;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      '${season['name'] ?? ''}',
-                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
-                                  Text('$done/$total', style: TextStyle(fontSize: 12, color: AppColors.gold)),
-                                  Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
-                                ],
-                              ),
-                              const SizedBox(height: 5),
-                              Bar(
+                      child: Builder(builder: (_) {
+                        final (done, total) = perSeason['${season['id']}']!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text('${season['name'] ?? ''}',
+                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                                ),
+                                Text('$done/$total', style: TextStyle(fontSize: 12, color: AppColors.gold)),
+                                Icon(Icons.chevron_right, size: 16, color: AppColors.muted),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Bar(
                                 value: total == 0 ? 0 : done / total,
-                                color: done >= total ? AppColors.green : AppColors.gold,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                                color: done >= total ? AppColors.green : AppColors.gold),
+                          ],
+                        );
+                      }),
                     ),
                   ),
               if (perSeason.isEmpty) EmptyNote(s.t('nothing_here'), center: false),
@@ -265,9 +237,9 @@ class _Sab extends ConsumerWidget {
         final data = raw is Map ? raw : const {};
         final zones = ((data['zones'] as List?) ?? const []).whereType<Map>().toList();
         List<String> names(String key) => [
-          for (final u in (data[key] as List?) ?? const [])
-            if (u is Map) titleCase('${u['name'] ?? u['id']}'.replaceAll('_', ' ')),
-        ];
+              for (final u in (data[key] as List?) ?? const [])
+                if (u is Map) titleCase('${u['name'] ?? u['id']}'.replaceAll('_', ' ')),
+            ];
         final unlocks = names('unlocks');
         final songs = names('songs');
         final modes = <String, int>{};
@@ -282,16 +254,12 @@ class _Sab extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                s.t('sab_zones', {'n': zones.length}),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-              ),
+              Text(s.t('sab_zones', {'n': zones.length}),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
               const SizedBox(height: 6),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [for (final e in modes.entries) Pill('${titleCase(e.key)} · ${e.value}')],
-              ),
+              Wrap(spacing: 6, runSpacing: 6, children: [
+                for (final e in modes.entries) Pill('${titleCase(e.key)} · ${e.value}'),
+              ]),
               if (unlocks.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Kicker(s.t('sab_unlocks').toUpperCase()),
@@ -343,15 +311,11 @@ class _Backstory extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${questions['${answers[id]?['question']}']?['title'] ?? ''}',
-                        style: TextStyle(fontSize: 11, color: AppColors.muted),
-                      ),
+                      Text('${questions['${answers[id]?['question']}']?['title'] ?? ''}',
+                          style: TextStyle(fontSize: 11, color: AppColors.muted)),
                       const SizedBox(height: 2),
-                      Text(
-                        '${answers[id]?['title'] ?? id}',
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                      ),
+                      Text('${answers[id]?['title'] ?? id}',
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                     ],
                   ),
                 ),

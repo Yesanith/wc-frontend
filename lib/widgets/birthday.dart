@@ -31,7 +31,7 @@ class BirthdayLine extends ConsumerWidget {
         ? s.t('birthday_today', {'n': age})
         : s.t('birthday_in', {
             't': left.inDays > 0 ? s.t('n_days', {'n': left.inDays}) : countdown(left),
-            'n': age,
+            'n': age
           });
     final row = Row(
       mainAxisSize: MainAxisSize.min,
@@ -39,12 +39,10 @@ class BirthdayLine extends ConsumerWidget {
         Icon(Icons.cake_outlined, size: 14, color: color),
         const SizedBox(width: 4),
         Flexible(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12, color: color, fontWeight: soon ? FontWeight.w700 : FontWeight.w400),
-          ),
+          child: Text(text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12, color: color, fontWeight: soon ? FontWeight.w700 : FontWeight.w400)),
         ),
       ],
     );

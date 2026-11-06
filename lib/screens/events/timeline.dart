@@ -39,21 +39,14 @@ class _TimelineState extends ConsumerState<Timeline> {
       builder: (context, now) {
         // the window moves in five minute steps
         final origin = now.subtract(Timeline.before);
-        final start = DateTime.utc(
-          origin.year,
-          origin.month,
-          origin.day,
-          origin.hour,
-          origin.minute - origin.minute % 5,
-        );
+        final start =
+            DateTime.utc(origin.year, origin.month, origin.day, origin.hour, origin.minute - origin.minute % 5);
         final end = start.add(Timeline.span);
         double x(DateTime t) => t.difference(start).inSeconds / 60 * Timeline.pxPerMinute;
         final width = x(end);
-        final all = occurrences(
-          start,
-          end,
-          maps: widget.maps,
-        ).where((o) => _matches(o.map, o.event, widget.kind, widget.pins)).toList();
+        final all = occurrences(start, end, maps: widget.maps)
+            .where((o) => _matches(o.map, o.event, widget.kind, widget.pins))
+            .toList();
         const g = Timeline.gutter;
 
         return SizedBox(
@@ -66,11 +59,9 @@ class _TimelineState extends ConsumerState<Timeline> {
               child: Stack(
                 children: [
                   // hour and half hour ticks
-                  for (
-                    var t = DateTime.utc(start.year, start.month, start.day, start.hour);
-                    t.isBefore(end);
-                    t = t.add(const Duration(minutes: 30))
-                  )
+                  for (var t = DateTime.utc(start.year, start.month, start.day, start.hour);
+                      t.isBefore(end);
+                      t = t.add(const Duration(minutes: 30)))
                     if (!t.isBefore(start))
                       Positioned(
                         left: g + x(t),
@@ -107,7 +98,7 @@ class _TimelineState extends ConsumerState<Timeline> {
                         map: widget.maps[i],
                         runs: [
                           for (final o in all)
-                            if (o.map == widget.maps[i]) o,
+                            if (o.map == widget.maps[i]) o
                         ],
                         x: x,
                         now: now,
@@ -150,10 +141,7 @@ class _NowLine extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                   decoration: BoxDecoration(color: AppColors.red, borderRadius: BorderRadius.circular(4)),
-                  child: Text(
-                    label,
-                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg),
-                  ),
+                  child: Text(label, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: AppColors.bg)),
                 ),
                 Expanded(child: Container(width: 2, color: AppColors.red)),
               ],
@@ -250,10 +238,7 @@ class _Block extends ConsumerWidget {
         decoration: BoxDecoration(
           color: tint.withValues(alpha: dim ? 0.08 : (active ? 0.34 : 0.18)),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)),
-            width: active ? 1.5 : 1,
-          ),
+          border: Border.all(color: tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)), width: active ? 1.5 : 1),
         ),
         // narrow blocks cut their label instead of overflowing
         child: ClipRect(
@@ -263,8 +248,14 @@ class _Block extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (pinned) ...[Icon(Icons.push_pin, size: 11, color: AppColors.gold), const SizedBox(width: 3)],
-                if (looted) ...[Icon(Icons.check_rounded, size: 12, color: AppColors.green), const SizedBox(width: 3)],
+                if (pinned) ...[
+                  Icon(Icons.push_pin, size: 11, color: AppColors.gold),
+                  const SizedBox(width: 3),
+                ],
+                if (looted) ...[
+                  Icon(Icons.check_rounded, size: 12, color: AppColors.green),
+                  const SizedBox(width: 3),
+                ],
                 if (o.event.kind == MetaKind.hardBoss) ...[
                   Icon(Icons.local_fire_department_rounded, size: 12, color: AppColors.red),
                   const SizedBox(width: 2),

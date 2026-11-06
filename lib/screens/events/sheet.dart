@@ -15,8 +15,8 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
         final when = o.activeAt(now)
             ? s.t('event_running')
             : o.start.isAfter(now)
-            ? s.t('event_starts_in', {'t': countdown(o.start.difference(now))})
-            : s.t('event_ended');
+                ? s.t('event_starts_in', {'t': countdown(o.start.difference(now))})
+                : s.t('event_ended');
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
@@ -26,15 +26,10 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
               children: [
                 Text(o.event.name, style: display(19)),
                 const SizedBox(height: 4),
-                Text(
-                  '${o.map.name} · ${localClock(o.start)}–${localClock(o.end)}',
-                  style: TextStyle(fontSize: 13, color: AppColors.muted),
-                ),
+                Text('${o.map.name} · ${localClock(o.start)}–${localClock(o.end)}',
+                    style: TextStyle(fontSize: 13, color: AppColors.muted)),
                 const SizedBox(height: 2),
-                Text(
-                  when,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold),
-                ),
+                Text(when, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold)),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -84,9 +79,13 @@ Future<void> togglePin(BuildContext context, WidgetRef ref, String key) async {
     pinFitted: !plan.skipped.contains(key),
   );
   if (!context.mounted || feedback == PinFeedback.none) return;
-  showToast(context, switch (feedback) {
-    PinFeedback.alertsOn => s.t('boss_alert_on', {'n': settings.lead}),
-    PinFeedback.noRoom => s.t('boss_alert_limit', {'n': plan.skipped.length, 'max': maxBossAlerts}),
-    _ => s.t('push_denied'),
-  }, duration: const Duration(seconds: 5));
+  showToast(
+    context,
+    switch (feedback) {
+      PinFeedback.alertsOn => s.t('boss_alert_on', {'n': settings.lead}),
+      PinFeedback.noRoom => s.t('boss_alert_limit', {'n': plan.skipped.length, 'max': maxBossAlerts}),
+      _ => s.t('push_denied'),
+    },
+    duration: const Duration(seconds: 5),
+  );
 }

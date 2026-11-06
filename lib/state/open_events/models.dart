@@ -48,7 +48,7 @@ typedef OpenRole = ({String role, int slots, int taken});
 List<OpenRole> parseOpenRoles(dynamic rows) => rows is List
     ? [
         for (final r in rows)
-          if (r is Map) (role: '${r['role']}', slots: asInt(r['slots']), taken: asInt(r['taken'])),
+          if (r is Map) (role: '${r['role']}', slots: asInt(r['slots']), taken: asInt(r['taken']))
       ]
     : const [];
 
@@ -78,28 +78,28 @@ class OpenEvent {
   });
 
   factory OpenEvent.fromJson(Map<String, dynamic> j) => OpenEvent(
-    id: '${j['id']}',
-    title: '${j['title'] ?? ''}',
-    description: '${j['description'] ?? ''}',
-    activity: '${j['activity'] ?? 'other'}',
-    language: '${j['language'] ?? 'any'}',
-    region: '${j['region'] ?? 'all'}',
-    tags: j['tags'] is List ? [for (final t in j['tags'] as List) '$t'] : const [],
-    mapId: j['map_id'] == null ? null : asInt(j['map_id']),
-    startAt: DateTime.tryParse('${j['start_at'] ?? ''}')?.toLocal() ?? DateTime.fromMillisecondsSinceEpoch(0),
-    durationMinutes: asInt(j['duration_minutes']),
-    maxParticipants: j['max_participants'] == null ? null : asInt(j['max_participants']),
-    organizer: '${j['organizer'] ?? ''}',
-    mine: j['mine'] == true,
-    going: asInt(j['going']),
-    maybe: asInt(j['maybe']),
-    myStatus: j['my_status'] == null ? null : '${j['my_status']}',
-    status: '${j['status'] ?? 'scheduled'}',
-    hidden: j['hidden'] == true,
-    roles: parseOpenRoles(j['roles']),
-    myRole: j['my_role'] == null ? null : '${j['my_role']}',
-    myProfession: j['my_profession'] == null ? null : '${j['my_profession']}',
-  );
+        id: '${j['id']}',
+        title: '${j['title'] ?? ''}',
+        description: '${j['description'] ?? ''}',
+        activity: '${j['activity'] ?? 'other'}',
+        language: '${j['language'] ?? 'any'}',
+        region: '${j['region'] ?? 'all'}',
+        tags: j['tags'] is List ? [for (final t in j['tags'] as List) '$t'] : const [],
+        mapId: j['map_id'] == null ? null : asInt(j['map_id']),
+        startAt: DateTime.tryParse('${j['start_at'] ?? ''}')?.toLocal() ?? DateTime.fromMillisecondsSinceEpoch(0),
+        durationMinutes: asInt(j['duration_minutes']),
+        maxParticipants: j['max_participants'] == null ? null : asInt(j['max_participants']),
+        organizer: '${j['organizer'] ?? ''}',
+        mine: j['mine'] == true,
+        going: asInt(j['going']),
+        maybe: asInt(j['maybe']),
+        myStatus: j['my_status'] == null ? null : '${j['my_status']}',
+        status: '${j['status'] ?? 'scheduled'}',
+        hidden: j['hidden'] == true,
+        roles: parseOpenRoles(j['roles']),
+        myRole: j['my_role'] == null ? null : '${j['my_role']}',
+        myProfession: j['my_profession'] == null ? null : '${j['my_profession']}',
+      );
 
   final String id;
   final String title;
@@ -159,7 +159,7 @@ class OpenEvent {
 List<OpenEvent> parseOpenEvents(dynamic rows) => rows is List
     ? [
         for (final r in rows)
-          if (r is Map) OpenEvent.fromJson(Map<String, dynamic>.from(r)),
+          if (r is Map) OpenEvent.fromJson(Map<String, dynamic>.from(r))
       ]
     : const [];
 
@@ -175,7 +175,7 @@ List<OpenRosterEntry> parseOpenRoster(dynamic rows) => rows is List
               status: '${r['status']}',
               role: r['role'] == null ? null : '${r['role']}',
               profession: r['profession'] == null ? null : '${r['profession']}',
-            ),
+            )
       ]
     : const [];
 

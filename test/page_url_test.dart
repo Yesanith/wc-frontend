@@ -78,7 +78,9 @@ void main() {
       expect(sectionFromBrowser, isNull);
     });
 
-    test('say it is dealt with for an address that is no page, so that it is not taken for a page of the navigator to push', () {
+    test(
+        'say it is dealt with for an address that is no page, so that it is not taken for a page of the navigator to push',
+        () {
       final shown = <AppSection>[];
       expect(followBrowser(Uri.parse('/access_token=abc'), AppSection.home, shown.add), isTrue);
       expect(shown, isEmpty);
@@ -90,20 +92,16 @@ void main() {
 
     setUp(() {
       calls.clear();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        (call) async {
-          if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
-          return null;
-        },
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
+        return null;
+      });
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        null,
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
       sectionFromBrowser = null;
     });
 
@@ -137,31 +135,25 @@ void main() {
 
     setUp(() {
       calls.clear();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        (call) async {
-          if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
-          return null;
-        },
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
+        return null;
+      });
     });
 
     tearDown(() {
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        null,
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
     });
 
     test('has a history of the pages, which the back and forward buttons go between', () async {
       final methods = <String>[];
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        (call) async {
-          methods.add(call.method);
-          return null;
-        },
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        methods.add(call.method);
+        return null;
+      });
       await keepHistoryOfPages();
       expect(methods, ['selectMultiEntryHistory']);
     });
@@ -175,20 +167,18 @@ void main() {
       expect(calls.last['replace'], true);
     });
 
-    test(
-      'is asked for whenever a route is pushed, taken off, removed or replaced, by the observer of the navigator',
-      () {
-        var asked = 0;
-        final observer = UrlRestorer(() => asked++);
-        final a = MaterialPageRoute<void>(builder: (_) => const SizedBox());
-        final b = MaterialPageRoute<void>(builder: (_) => const SizedBox());
-        observer.didPush(a, null);
-        observer.didPop(a, null);
-        observer.didRemove(a, b);
-        observer.didReplace(newRoute: b, oldRoute: a);
-        expect(asked, 4);
-      },
-    );
+    test('is asked for whenever a route is pushed, taken off, removed or replaced, by the observer of the navigator',
+        () {
+      var asked = 0;
+      final observer = UrlRestorer(() => asked++);
+      final a = MaterialPageRoute<void>(builder: (_) => const SizedBox());
+      final b = MaterialPageRoute<void>(builder: (_) => const SizedBox());
+      observer.didPush(a, null);
+      observer.didPop(a, null);
+      observer.didRemove(a, b);
+      observer.didReplace(newRoute: b, oldRoute: a);
+      expect(asked, 4);
+    });
   });
 
   const eventId = '3f2a9c1e-5b7d-4e8a-9c6b-0d1e2f3a4b5c';
@@ -208,11 +198,8 @@ void main() {
       expect(linkFromPath('item/19721'), const ItemLink(19721), reason: 'the slash at the front is not needed');
       expect(linkFromPath('/item/19721?lang=de'), const ItemLink(19721));
       expect(linkFromPath('/item/19721#top'), const ItemLink(19721));
-      expect(
-        linkFromPath('/event/${eventId.toUpperCase()}'),
-        const EventLink(eventId),
-        reason: 'a number is kept in small letters',
-      );
+      expect(linkFromPath('/event/${eventId.toUpperCase()}'), const EventLink(eventId),
+          reason: 'a number is kept in small letters');
     });
 
     test('is none when it is not an item or an event, so that nothing is made up of what is not one', () {
@@ -308,25 +295,17 @@ void main() {
   group('what a notification opens', () {
     test('is the public event it is about, or the item', () {
       expect(linkFromPushData({'open_event_id': eventId, 'kind': 'open_reminder'}), const EventLink(eventId));
-      expect(
-        linkFromPushData({'open_event_id': eventId.toUpperCase(), 'kind': 'open_cancelled'}),
-        const EventLink(eventId),
-      );
-      expect(
-        linkFromPushData({'item_id': '19721', 'kind': 'price'}),
-        const ItemLink(19721),
-        reason: 'a notification carries text only',
-      );
+      expect(linkFromPushData({'open_event_id': eventId.toUpperCase(), 'kind': 'open_cancelled'}),
+          const EventLink(eventId));
+      expect(linkFromPushData({'item_id': '19721', 'kind': 'price'}), const ItemLink(19721),
+          reason: 'a notification carries text only');
       expect(linkFromPushData({'item_id': 19721}), const ItemLink(19721));
     });
 
     test('is the event when it carries both, and nothing when it carries neither', () {
       expect(linkFromPushData({'open_event_id': eventId, 'item_id': '5'}), const EventLink(eventId));
-      expect(
-        linkFromPushData({'event_id': eventId, 'kind': 'reminder'}),
-        isNull,
-        reason: 'a guild\'s event is not a public one',
-      );
+      expect(linkFromPushData({'event_id': eventId, 'kind': 'reminder'}), isNull,
+          reason: 'a guild\'s event is not a public one');
       expect(linkFromPushData({'kind': 'promoted'}), isNull);
       expect(linkFromPushData({}), isNull);
       expect(linkFromPushData(null), isNull);
@@ -339,11 +318,8 @@ void main() {
       expect(linkFromPushData({'item_id': '0'}), isNull);
       expect(linkFromPushData({'item_id': '-3'}), isNull);
       expect(linkFromPushData({'item_id': 'x'}), isNull);
-      expect(
-        linkFromPushData({'open_event_id': 'abc', 'item_id': '7'}),
-        const ItemLink(7),
-        reason: 'what is good is used',
-      );
+      expect(linkFromPushData({'open_event_id': 'abc', 'item_id': '7'}), const ItemLink(7),
+          reason: 'what is good is used');
     });
   });
 
@@ -366,21 +342,17 @@ void main() {
     setUp(() {
       calls.clear();
       container = ProviderContainer();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        (call) async {
-          if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
-          return null;
-        },
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, (call) async {
+        if (call.method == 'routeInformationUpdated') calls.add(call.arguments as Map);
+        return null;
+      });
     });
 
     tearDown(() {
       container.dispose();
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.navigation,
-        null,
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.navigation, null);
     });
 
     test('is the open one while it is, and its address is a new place in the history', () {
@@ -474,9 +446,8 @@ void main() {
       var closed = 0;
       final shown = <AppSection>[];
       expect(
-        followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++),
-        isTrue,
-      );
+          followBrowser(Uri.parse('/trading'), AppSection.trading, shown.add, linkIsOpen: true, close: () => closed++),
+          isTrue);
       expect(closed, 1);
       expect(shown, isEmpty, reason: 'it is the page that is shown already');
     });
@@ -512,11 +483,8 @@ void main() {
       expect(linkFromPath('/RECRUIT/$guildId/'), const RecruitLink(guildId));
       expect(linkFromPath('recruit/$guildId'), const RecruitLink(guildId));
       expect(linkFromPath('/recruit/$guildId?x=1#top'), const RecruitLink(guildId));
-      expect(
-        linkFromPath('/recruit/${guildId.toUpperCase()}'),
-        const RecruitLink(guildId),
-        reason: 'a number is kept in small letters',
-      );
+      expect(linkFromPath('/recruit/${guildId.toUpperCase()}'), const RecruitLink(guildId),
+          reason: 'a number is kept in small letters');
     });
 
     test('is none when what follows is not the number of a guild', () {

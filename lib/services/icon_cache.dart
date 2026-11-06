@@ -11,8 +11,8 @@ import 'package:path_provider/path_provider.dart';
 /// file never goes stale
 class IconCache {
   IconCache(this.dir, [Set<String>? known, http.Client? client])
-    : _known = known ?? <String>{},
-      _client = client ?? http.Client();
+      : _known = known ?? <String>{},
+        _client = client ?? http.Client();
 
   final Directory dir;
 
@@ -140,12 +140,10 @@ class _CachedIconState extends ConsumerState<CachedIcon> {
     if (ref.read(iconCacheProvider) == null) {
       // in a browser an image from another site is read through an html element when its
       // server sends no CORS headers
-      return Image.network(
-        widget.url,
-        fit: widget.fit,
-        webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
-        errorBuilder: (context, error, stack) => const SizedBox.shrink(),
-      );
+      return Image.network(widget.url,
+          fit: widget.fit,
+          webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
+          errorBuilder: (context, error, stack) => const SizedBox.shrink());
     }
     return const SizedBox.shrink();
   }

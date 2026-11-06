@@ -24,9 +24,9 @@ class _ProbeState extends State<_Probe> {
 }
 
 Widget _frame({double maxWidth = contentMaxWidth}) => Directionality(
-  textDirection: TextDirection.ltr,
-  child: ContentFrame(maxWidth: maxWidth, child: const _Probe()),
-);
+      textDirection: TextDirection.ltr,
+      child: ContentFrame(maxWidth: maxWidth, child: const _Probe()),
+    );
 
 void main() {
   group('the menu that stays open', () {
@@ -108,16 +108,14 @@ void main() {
       addTearDown(() => tester.binding.setSurfaceSize(null));
       Future<List<double>> widths(double window) async {
         await tester.binding.setSurfaceSize(Size(window, 800));
-        await tester.pumpWidget(
-          Directionality(
-            textDirection: TextDirection.ltr,
-            child: GridView(
-              gridDelegate: const AdaptiveGridDelegate(minColumns: 3, maxTile: 120),
-              // few enough to fit the window: a grid builds only the tiles that are on the screen
-              children: [for (var i = 0; i < 12; i++) SizedBox(key: Key('t$i'))],
-            ),
+        await tester.pumpWidget(Directionality(
+          textDirection: TextDirection.ltr,
+          child: GridView(
+            gridDelegate: const AdaptiveGridDelegate(minColumns: 3, maxTile: 120),
+            // few enough to fit the window: a grid builds only the tiles that are on the screen
+            children: [for (var i = 0; i < 12; i++) SizedBox(key: Key('t$i'))],
           ),
-        );
+        ));
         return [for (var i = 0; i < 12; i++) tester.getSize(find.byKey(Key('t$i'))).width];
       }
 
@@ -130,11 +128,9 @@ void main() {
 
   group('the parts of a page in columns', () {
     Widget page(List<Widget> primary, List<Widget> secondary) => Directionality(
-      textDirection: TextDirection.ltr,
-      child: SingleChildScrollView(
-        child: SplitColumns(primary: primary, secondary: secondary),
-      ),
-    );
+          textDirection: TextDirection.ltr,
+          child: SingleChildScrollView(child: SplitColumns(primary: primary, secondary: secondary)),
+        );
     const a = SizedBox(key: Key('a'), height: 50);
     const b = SizedBox(key: Key('b'), height: 50);
 
@@ -144,9 +140,7 @@ void main() {
       await tester.pumpWidget(page([a], [b]));
       expect(tester.getTopLeft(find.byKey(const Key('a'))).dx, tester.getTopLeft(find.byKey(const Key('b'))).dx);
       expect(
-        tester.getTopLeft(find.byKey(const Key('a'))).dy,
-        lessThan(tester.getTopLeft(find.byKey(const Key('b'))).dy),
-      );
+          tester.getTopLeft(find.byKey(const Key('a'))).dy, lessThan(tester.getTopLeft(find.byKey(const Key('b'))).dy));
       expect(tester.getSize(find.byKey(const Key('a'))).width, 600);
     });
 
@@ -184,14 +178,12 @@ void main() {
     testWidgets('stand one under the other while narrow, with a gap, each as wide as the window', (tester) async {
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.binding.setSurfaceSize(const Size(400, 800));
-      await tester.pumpWidget(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: SingleChildScrollView(
-            child: CardWrap(children: [for (var i = 0; i < 3; i++) SizedBox(key: Key('c$i'), height: 60)]),
-          ),
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: SingleChildScrollView(
+          child: CardWrap(children: [for (var i = 0; i < 3; i++) SizedBox(key: Key('c$i'), height: 60)]),
         ),
-      );
+      ));
       final rects = [for (var i = 0; i < 3; i++) tester.getRect(find.byKey(Key('c$i')))];
       expect(rects.map((r) => r.width), everyElement(400));
       expect(rects[1].top - rects[0].bottom, 10);
@@ -201,14 +193,12 @@ void main() {
     testWidgets('stand in rows when there is room, the same width, a gap between them', (tester) async {
       addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.binding.setSurfaceSize(const Size(1300, 800));
-      await tester.pumpWidget(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: SingleChildScrollView(
-            child: CardWrap(children: [for (var i = 0; i < 4; i++) SizedBox(key: Key('c$i'), height: 60)]),
-          ),
+      await tester.pumpWidget(Directionality(
+        textDirection: TextDirection.ltr,
+        child: SingleChildScrollView(
+          child: CardWrap(children: [for (var i = 0; i < 4; i++) SizedBox(key: Key('c$i'), height: 60)]),
         ),
-      );
+      ));
       final rects = [for (var i = 0; i < 4; i++) tester.getRect(find.byKey(Key('c$i')))];
       expect(rects[0].top, rects[1].top);
       expect(rects[1].top, rects[2].top);

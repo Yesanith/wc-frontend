@@ -33,9 +33,7 @@ class _SpecCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              Expanded(
-                child: Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-              ),
+              Expanded(child: Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800))),
               if (elite)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -43,10 +41,8 @@ class _SpecCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                     border: Border.all(color: AppColors.gold),
                   ),
-                  child: Text(
-                    'ELITE',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.gold),
-                  ),
+                  child:
+                      Text('ELITE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ),
             ],
           ),
@@ -87,12 +83,10 @@ class _MinorTrait extends StatelessWidget {
         ItemIcon(url: trait?['icon'] as String?, rarity: 'Rare', size: 22),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            (trait?['name'] as String?) ?? '-',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppColors.muted),
-          ),
+          child: Text((trait?['name'] as String?) ?? '-',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppColors.muted)),
         ),
       ],
     );
@@ -124,17 +118,12 @@ class _MajorTrait extends StatelessWidget {
             children: [
               ItemIcon(url: data?['icon'] as String?, rarity: selected ? 'Exotic' : null, size: 30),
               const SizedBox(height: 5),
-              Text(
-                name,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: selected ? AppColors.text : AppColors.muted,
-                ),
-              ),
+              Text(name,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 10, fontWeight: FontWeight.w700, color: selected ? AppColors.text : AppColors.muted)),
             ],
           ),
         ),
@@ -163,8 +152,8 @@ class _SkillList extends ConsumerWidget {
               slot: i == 0
                   ? s.t('heal_skill')
                   : i == ids.length - 1
-                  ? s.t('elite_skill')
-                  : s.t('utility_skill'),
+                      ? s.t('elite_skill')
+                      : s.t('utility_skill'),
             ),
         ],
       ),
@@ -197,9 +186,7 @@ class _LegendCard extends StatelessWidget {
             children: [
               ItemIcon(url: swap?['icon'] as String?, rarity: 'Exotic', size: 30),
               const SizedBox(width: 10),
-              Expanded(
-                child: Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-              ),
+              Expanded(child: Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800))),
             ],
           ),
           for (final id in ids) SkillRow(skill: detail.skills[id], detail: detail, slot: ''),
@@ -227,19 +214,11 @@ class _PetRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.6,
-                    color: AppColors.muted,
-                  ),
-                ),
-                Text(
-                  (pet?['name'] as String?) ?? '-',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                ),
+                Text(label,
+                    style: TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+                Text((pet?['name'] as String?) ?? '-',
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
               ],
             ),
           ),
@@ -279,7 +258,11 @@ class _WeaponSkills extends StatelessWidget {
                 children: [
                   for (final entry in ((weapons[weapon] as Map)['skills'] as List?) ?? const [])
                     if (entry is Map)
-                      _WeaponSkillRow(id: asInt(entry['id']), slot: '${entry['slot'] ?? ''}', detail: detail),
+                      _WeaponSkillRow(
+                        id: asInt(entry['id']),
+                        slot: '${entry['slot'] ?? ''}',
+                        detail: detail,
+                      ),
                 ],
               ),
             ),

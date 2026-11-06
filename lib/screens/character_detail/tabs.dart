@@ -24,11 +24,7 @@ class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
 
     if (eq.isEmpty && tabs.isEmpty) {
       return Center(
-        child: Text(
-          s.t('no_equipment'),
-          textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.muted),
-        ),
+        child: Text(s.t('no_equipment'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
 
@@ -46,11 +42,9 @@ class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
                 children: [
                   for (final tab in tabs) ...[
                     ChoiceChip(
-                      label: Text(
-                        '${tab['name'] ?? ''}'.trim().isEmpty
-                            ? s.t('template_n', {'n': asInt(tab['tab'])})
-                            : '${tab['name']}',
-                      ),
+                      label: Text('${tab['name'] ?? ''}'.trim().isEmpty
+                          ? s.t('template_n', {'n': asInt(tab['tab'])})
+                          : '${tab['name']}'),
                       selected: (_tab ?? asInt(c['active_equipment_tab'])) == asInt(tab['tab']),
                       onSelected: (_) => setState(() => _tab = asInt(tab['tab'])),
                     ),
@@ -61,7 +55,10 @@ class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
             ),
             const SizedBox(height: 12),
           ],
-          for (final e in eq) ...[_EquipmentRow(entry: e, items: map), const SizedBox(height: 8)],
+          for (final e in eq) ...[
+            _EquipmentRow(entry: e, items: map),
+            const SizedBox(height: 8),
+          ],
         ],
       ),
     );
@@ -90,8 +87,7 @@ class _EquipmentRow extends ConsumerWidget {
     // no ?[ inside the ternary, the parser reads that as a second condition
     final statNames = ref.watch(itemStatsProvider).valueOrNull ?? const <int, String>{};
     final comboName = stats is Map ? statNames[asInt(stats['id'])] : null;
-    final statName =
-        comboName ??
+    final statName = comboName ??
         (stats is Map && stats['attributes'] is Map
             ? (stats['attributes'] as Map).keys.take(2).map((k) => attributeName('$k')).join(', ')
             : '');
@@ -116,27 +112,17 @@ class _EquipmentRow extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      slotLabel(s, slot).toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.6,
-                        color: AppColors.muted,
-                      ),
-                    ),
+                    Text(slotLabel(s, slot).toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                     const SizedBox(height: 2),
-                    Text(
-                      itemName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                    ),
+                    Text(itemName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
                     if (rarity != null || statName.isNotEmpty)
-                      Text(
-                        [if (rarity != null) rarity, if (statName.isNotEmpty) statName].join(' · '),
-                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
-                      ),
+                      Text([if (rarity != null) rarity, if (statName.isNotEmpty) statName].join(' · '),
+                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: rarityColor(rarity))),
                     // two sigils and a few infusions do not fit on one line, so
                     // they wrap instead of running off the card
                     if (upgrades.isNotEmpty || infusions.isNotEmpty) ...[
@@ -179,12 +165,8 @@ class _SmallItem extends ConsumerWidget {
           const SizedBox(width: 4),
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 110),
-            child: Text(
-              name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 10, color: AppColors.muted),
-            ),
+            child: Text(name,
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10, color: AppColors.muted)),
           ),
         ],
       ],
@@ -203,11 +185,7 @@ class _BuildTab extends ConsumerWidget {
     final build = activeBuild(c);
     if (build == null) {
       return Center(
-        child: Text(
-          s.t('no_build'),
-          textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.muted),
-        ),
+        child: Text(s.t('no_build'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
     // the character endpoint leaves the profession out of the build object
@@ -244,11 +222,7 @@ class _InventoryTab extends ConsumerWidget {
     final slots = bagSlots(c);
     if (slots.isEmpty) {
       return Center(
-        child: Text(
-          s.t('no_inventory'),
-          textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.muted),
-        ),
+        child: Text(s.t('no_inventory'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
     final used = slots.where((s) => s != null).length;
@@ -265,15 +239,11 @@ class _InventoryTab extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      s.t('bags'),
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted),
-                    ),
+                    child: Text(s.t('bags'),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
                   ),
-                  Text(
-                    s.t('slots_used', {'a': used, 'b': slots.length}),
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
-                  ),
+                  Text(s.t('slots_used', {'a': used, 'b': slots.length}),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
                 ],
               ),
             ),
@@ -281,34 +251,33 @@ class _InventoryTab extends ConsumerWidget {
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             sliver: SliverGrid(
-              gridDelegate: const AdaptiveGridDelegate(
-                minColumns: 8,
-                maxTile: 60,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
+              gridDelegate:
+                  const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
+              delegate: SliverChildBuilderDelegate(
+                (context, i) {
+                  final slot = slots[i];
+                  if (slot == null) return const ItemIcon(empty: true);
+                  final item = map[asInt(slot['id'])];
+                  final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': slot['id']});
+                  return GestureDetector(
+                    onTap: () => showItemSheet(
+                      context,
+                      id: asInt(slot['id']),
+                      name: itemName,
+                      icon: item?['icon'] as String?,
+                      rarity: item?['rarity'] as String?,
+                      type: item?['type'] as String?,
+                      count: asInt(slot['count']),
+                    ),
+                    child: ItemIcon(
+                      url: item?['icon'] as String?,
+                      rarity: item?['rarity'] as String?,
+                      count: asInt(slot['count']),
+                    ),
+                  );
+                },
+                childCount: slots.length,
               ),
-              delegate: SliverChildBuilderDelegate((context, i) {
-                final slot = slots[i];
-                if (slot == null) return const ItemIcon(empty: true);
-                final item = map[asInt(slot['id'])];
-                final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': slot['id']});
-                return GestureDetector(
-                  onTap: () => showItemSheet(
-                    context,
-                    id: asInt(slot['id']),
-                    name: itemName,
-                    icon: item?['icon'] as String?,
-                    rarity: item?['rarity'] as String?,
-                    type: item?['type'] as String?,
-                    count: asInt(slot['count']),
-                  ),
-                  child: ItemIcon(
-                    url: item?['icon'] as String?,
-                    rarity: item?['rarity'] as String?,
-                    count: asInt(slot['count']),
-                  ),
-                );
-              }, childCount: slots.length),
             ),
           ),
         ],
@@ -328,9 +297,7 @@ class _CraftingTab extends ConsumerWidget {
     final crafting = ((c['crafting'] as List?) ?? const []).whereType<Map>().toList();
     final learned = intList(c['recipes']);
     if (crafting.isEmpty && learned.isEmpty) {
-      return Center(
-        child: Text(s.t('no_crafting'), style: TextStyle(color: AppColors.muted)),
-      );
+      return Center(child: Text(s.t('no_crafting'), style: TextStyle(color: AppColors.muted)));
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -343,7 +310,9 @@ class _CraftingTab extends ConsumerWidget {
           Panel(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Column(
-              children: [for (var i = 0; i < crafting.length; i++) _craftRow(s, crafting[i], i == crafting.length - 1)],
+              children: [
+                for (var i = 0; i < crafting.length; i++) _craftRow(s, crafting[i], i == crafting.length - 1),
+              ],
             ),
           ),
       ],
@@ -368,14 +337,9 @@ class _CraftingTab extends ConsumerWidget {
               Expanded(
                 child: Text(discipline, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
               ),
-              Text(
-                active ? s.t('active') : s.t('inactive'),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: active ? AppColors.green : AppColors.hint,
-                ),
-              ),
+              Text(active ? s.t('active') : s.t('inactive'),
+                  style: TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.w800, color: active ? AppColors.green : AppColors.hint)),
             ],
           ),
           const SizedBox(height: 8),
@@ -383,10 +347,8 @@ class _CraftingTab extends ConsumerWidget {
             children: [
               Expanded(child: Bar(value: rating / max)),
               const SizedBox(width: 10),
-              Text(
-                '$rating / $max',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted),
-              ),
+              Text('$rating / $max',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
         ],
@@ -411,10 +373,10 @@ class _LearnedRecipesCard extends ConsumerWidget {
       onTap: list == null
           ? null
           : () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => RecipeOutputsScreen(title: s.t('learned_recipes_of', {'name': name}), entries: list),
+                MaterialPageRoute<void>(
+                  builder: (_) => RecipeOutputsScreen(title: s.t('learned_recipes_of', {'name': name}), entries: list),
+                ),
               ),
-            ),
       padding: const EdgeInsets.all(16),
       radius: AppRadius.card,
       child: Row(
@@ -426,10 +388,8 @@ class _LearnedRecipesCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(s.t('learned_recipes'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                Text(
-                  s.t('recipes_count', {'n': fmtInt(count)}),
-                  style: TextStyle(fontSize: 12, color: AppColors.muted),
-                ),
+                Text(s.t('recipes_count', {'n': fmtInt(count)}),
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
           ),

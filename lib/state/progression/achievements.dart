@@ -42,7 +42,13 @@ final achievementsProvider = FutureProvider<List<AchievementRow>>((ref) async {
   final details = await api.achievements(top.map((r) => asInt(r['id'])));
   return [
     for (final r in top)
-      AchievementRow(asInt(r['id']), details[asInt(r['id'])], asInt(r['current']), asInt(r['max']), r['done'] == true),
+      AchievementRow(
+        asInt(r['id']),
+        details[asInt(r['id'])],
+        asInt(r['current']),
+        asInt(r['max']),
+        r['done'] == true,
+      ),
   ];
 });
 
@@ -117,7 +123,9 @@ final achievementCatalogueProvider = FutureProvider<List<AchievementGroup>>((ref
       '${c['name'] ?? ''}',
       c['icon'] as String?,
       // entries are {"id": n} objects, not bare ids
-      [for (final a in (c['achievements'] as List?) ?? const []) asInt(a is Map ? a['id'] : a)],
+      [
+        for (final a in (c['achievements'] as List?) ?? const []) asInt(a is Map ? a['id'] : a),
+      ],
     );
   }
 

@@ -35,21 +35,27 @@ final guildRosterProvider = FutureProvider.autoDispose.family<List<RosterMember>
   if (session == null) return const [];
   final rows = await Supabase.instance.client.rpc('guild_roster', params: {'p_guild': guildId}) as List<dynamic>;
   const rank = {'leader': 0, 'officer': 1, 'member': 2};
-  return [for (final r in rows.whereType<Map<String, dynamic>>()) RosterMember.fromRow(r)]..sort((a, b) {
-    final byRole = (rank[a.role] ?? 3).compareTo(rank[b.role] ?? 3);
-    return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
-  });
+  return [
+    for (final r in rows.whereType<Map<String, dynamic>>()) RosterMember.fromRow(r),
+  ]..sort((a, b) {
+      final byRole = (rank[a.role] ?? 3).compareTo(rank[b.role] ?? 3);
+      return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
+    });
 });
 
 /// the leader hands a role appointed by hand back to the game, it follows the rank again
 Future<void> resetGuildRole(String guildId, String userId) => _call(() async {
-  await Supabase.instance.client.rpc('reset_guild_role', params: {'p_guild': guildId, 'p_user': userId});
-});
+      await Supabase.instance.client.rpc('reset_guild_role', params: {'p_guild': guildId, 'p_user': userId});
+    });
 
 /// the leader makes a member an officer, or an officer a member again
 Future<void> setGuildRole(String guildId, String userId, String role) => _call(() async {
-  await Supabase.instance.client.rpc('set_guild_role', params: {'p_guild': guildId, 'p_user': userId, 'p_role': role});
-});
+      await Supabase.instance.client.rpc('set_guild_role', params: {
+        'p_guild': guildId,
+        'p_user': userId,
+        'p_role': role,
+      });
+    });
 
 // ---------------------------------------------------------------------------
 // the account an event is created with
@@ -84,13 +90,9 @@ final myGuildAccountsProvider = FutureProvider.autoDispose<List<GuildAccount>>((
   return [
     for (final r in rows)
       if (r['gw2_accounts'] case final Map account)
-        GuildAccount(
-          '${r['guild_id']}',
-          '${r['gw2_account_id']}',
-          '${account['account_name'] ?? '?'}',
-          '${r['role'] ?? 'member'}',
-          gw2Rank: nonEmpty(r['gw2_rank']),
-        ),
+        GuildAccount('${r['guild_id']}', '${r['gw2_account_id']}', '${account['account_name'] ?? '?'}',
+            '${r['role'] ?? 'member'}',
+            gw2Rank: nonEmpty(r['gw2_rank'])),
   ];
 });
 
@@ -102,7 +104,7 @@ List<GuildAccount> accountsIn(List<GuildAccount> all, String guildId) {
     for (final a in all)
       if (a.guildId == guildId) a,
   ]..sort((a, b) {
-    final byRole = (rank[a.role] ?? 2).compareTo(rank[b.role] ?? 2);
-    return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
-  });
+      final byRole = (rank[a.role] ?? 2).compareTo(rank[b.role] ?? 2);
+      return byRole != 0 ? byRole : a.accountName.toLowerCase().compareTo(b.accountName.toLowerCase());
+    });
 }

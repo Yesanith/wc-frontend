@@ -51,10 +51,10 @@ final lookProvider = NotifierProvider<LookNotifier, LookMode>(LookNotifier.new);
 
 /// the palette for a choice, which for "system" is read from the phone's own brightness
 AppPalette paletteFor(LookMode mode, Brightness system) => switch (mode) {
-  LookMode.light => AppPalette.light,
-  LookMode.dark => AppPalette.night,
-  LookMode.system => system == Brightness.dark ? AppPalette.night : AppPalette.light,
-};
+      LookMode.light => AppPalette.light,
+      LookMode.dark => AppPalette.night,
+      LookMode.system => system == Brightness.dark ? AppPalette.night : AppPalette.light,
+    };
 
 final stringsProvider = Provider<S>((ref) => S(ref.watch(langProvider)));
 
@@ -133,9 +133,8 @@ class FavoriteCharactersNotifier extends Notifier<Set<String>> {
   }
 }
 
-final favoriteCharactersProvider = NotifierProvider<FavoriteCharactersNotifier, Set<String>>(
-  FavoriteCharactersNotifier.new,
-);
+final favoriteCharactersProvider =
+    NotifierProvider<FavoriteCharactersNotifier, Set<String>>(FavoriteCharactersNotifier.new);
 
 /// how the character list is ordered
 enum CharacterSort { lastPlayed, name, level, playtime }
@@ -184,9 +183,9 @@ class CollapsedMaterialsNotifier extends Notifier<Set<int>> {
 
   @override
   Set<int> build() => {
-    for (final e in ref.read(prefsProvider).getStringList(_key) ?? const <String>[])
-      if (int.tryParse(e) != null) int.parse(e),
-  };
+        for (final e in ref.read(prefsProvider).getStringList(_key) ?? const <String>[])
+          if (int.tryParse(e) != null) int.parse(e),
+      };
 
   Future<void> toggle(int id) async {
     final next = {...state};
@@ -200,6 +199,5 @@ class CollapsedMaterialsNotifier extends Notifier<Set<int>> {
   }
 }
 
-final collapsedMaterialsProvider = NotifierProvider<CollapsedMaterialsNotifier, Set<int>>(
-  CollapsedMaterialsNotifier.new,
-);
+final collapsedMaterialsProvider =
+    NotifierProvider<CollapsedMaterialsNotifier, Set<int>>(CollapsedMaterialsNotifier.new);

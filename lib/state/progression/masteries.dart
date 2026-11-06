@@ -41,9 +41,9 @@ class MasteryRow {
   String get region => masteryRegionName(regionKey);
   String get requirement => (detail?['requirement'] as String?) ?? '';
   List<Json> get levels => [
-    for (final l in (detail?['levels'] as List?) ?? const [])
-      if (l is Map) Map<String, dynamic>.from(l),
-  ];
+        for (final l in (detail?['levels'] as List?) ?? const [])
+          if (l is Map) Map<String, dynamic>.from(l),
+      ];
   int get total => levels.length;
   bool get started => level > 0;
 }
@@ -64,7 +64,9 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
     // no progression permission: the catalogue is still worth showing
   }
 
-  final rows = [for (final id in ids) MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0)];
+  final rows = [
+    for (final id in ids) MasteryRow(asInt(id), details[asInt(id)], owned[asInt(id)] ?? 0),
+  ];
   rows.sort((a, b) {
     final byRelease = masteryRegionRank(a.regionKey).compareTo(masteryRegionRank(b.regionKey));
     if (byRelease != 0) return byRelease;
@@ -75,17 +77,17 @@ final masteriesProvider = FutureProvider<List<MasteryRow>>((ref) async {
 
 /// mastery levels finished against the levels in the tracks you own
 extension MasteryProgress on List<MasteryRow> {
-  ({int done, int total}) get tally =>
-      (done: fold<int>(0, (n, m) => n + m.level), total: fold<int>(0, (n, m) => n + m.total));
+  ({int done, int total}) get tally => (
+        done: fold<int>(0, (n, m) => n + m.level),
+        total: fold<int>(0, (n, m) => n + m.total),
+      );
 }
 
 /// spent and earned points per release, in the same order as the tracks
 final masteryPointsProvider = FutureProvider<List<Json>>((ref) async {
   final raw = await accountApi(ref).masteryPoints();
-  final totals = ((raw['totals'] as List?) ?? const [])
-      .whereType<Map>()
-      .map((e) => Map<String, dynamic>.from(e))
-      .toList();
+  final totals =
+      ((raw['totals'] as List?) ?? const []).whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
   totals.sort((a, b) => masteryRegionRank('${a['region']}').compareTo(masteryRegionRank('${b['region']}')));
   return totals;
 });

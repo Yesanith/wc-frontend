@@ -30,24 +30,24 @@ String eventWhen(S s, DateTime local) =>
 String _clock(DateTime local) => '${pad2(local.hour)}:${pad2(local.minute)}';
 
 IconData activityIcon(String activity) => switch (activity) {
-  'raid' => Icons.shield_outlined,
-  'strike' => Icons.flash_on_outlined,
-  'fractal' => Icons.blur_on,
-  'worldboss' => Icons.whatshot_outlined,
-  'meta' => Icons.public,
-  'wvw' => Icons.castle_outlined,
-  'pvp' => Icons.sports_kabaddi_outlined,
-  'dungeon' => Icons.door_front_door_outlined,
-  _ => Icons.event_outlined,
-};
+      'raid' => Icons.shield_outlined,
+      'strike' => Icons.flash_on_outlined,
+      'fractal' => Icons.blur_on,
+      'worldboss' => Icons.whatshot_outlined,
+      'meta' => Icons.public,
+      'wvw' => Icons.castle_outlined,
+      'pvp' => Icons.sports_kabaddi_outlined,
+      'dungeon' => Icons.door_front_door_outlined,
+      _ => Icons.event_outlined,
+    };
 
 Color statusColor(String? status) => switch (status) {
-  'going' => AppColors.green,
-  'maybe' => AppColors.gold,
-  'waitlist' => AppColors.blue,
-  'declined' => AppColors.muted,
-  _ => AppColors.muted,
-};
+      'going' => AppColors.green,
+      'maybe' => AppColors.gold,
+      'waitlist' => AppColors.blue,
+      'declined' => AppColors.muted,
+      _ => AppColors.muted,
+    };
 
 String eventFailureText(S s, Object e) {
   final code = e is EventFailure ? e.code : 'event_failed';
@@ -99,8 +99,9 @@ class GuildEventsScreen extends ConsumerWidget {
               backgroundColor: AppColors.gold,
               foregroundColor: AppColors.bg,
               onPressed: () async {
-                final created = await Navigator.of(context)
-                    .push<bool>(MaterialPageRoute(builder: (_) => const CreateGuildEventScreen()));
+                final created = await Navigator.of(context).push<bool>(
+                  MaterialPageRoute(builder: (_) => const CreateGuildEventScreen()),
+                );
                 if (created == true) ref.invalidate(upcomingEventsProvider);
               },
               icon: const Icon(Icons.add),
@@ -163,11 +164,7 @@ class _Blocked extends ConsumerWidget {
         const SizedBox(height: 60),
         Icon(Icons.groups_2_outlined, size: 48, color: AppColors.muted),
         const SizedBox(height: 12),
-        Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.muted, height: 1.45),
-        ),
+        Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.45)),
         if (toSettings) ...[
           const SizedBox(height: 16),
           Center(
@@ -266,7 +263,9 @@ class _GuildLinks extends ConsumerWidget {
           ActionChip(
             avatar: const Icon(Icons.groups_outlined, size: 16),
             label: Text(s.t('roster_of', {'guild': g.tag.isEmpty ? g.name : g.tag})),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g))),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
+            ),
           ),
       ],
     );

@@ -47,10 +47,8 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (count != null)
-                Text(
-                  s.t('n_characters', {'n': count}),
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted),
-                ),
+                Text(s.t('n_characters', {'n': count}),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
             ],
           ),
           const SizedBox(height: 14),
@@ -103,7 +101,10 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
                 }
               });
               if (filtered.isEmpty) {
-                return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('no_match')));
+                return Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: EmptyNote(s.t('no_match')),
+                );
               }
               // one under the other on a phone, side by side where there is room
               return CardWrap(children: [for (final c in filtered) _CharacterCard(c)]);
@@ -134,38 +135,28 @@ class _CharacterCard extends ConsumerWidget {
     final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
 
     return AppCard(
-      onTap: () =>
-          Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name))),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       radius: AppRadius.card,
       child: Row(
         children: [
-          ClassIcon(
-            character: c,
-            size: 50,
-            fallback: Text(initial, style: display(22, color: color)),
-          ),
+          ClassIcon(character: c, size: 50, fallback: Text(initial, style: display(22, color: color))),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                ),
+                Text(name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 2),
-                Text(
-                  eliteName ?? profName,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color),
-                ),
+                Text(eliteName ?? profName, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
                 const SizedBox(height: 2),
-                Text(
-                  '$race · ${fmtHours(c['age'], s.t('hours_short'))}',
-                  style: TextStyle(fontSize: 12, color: AppColors.muted),
-                ),
+                Text('$race · ${fmtHours(c['age'], s.t('hours_short'))}',
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 const SizedBox(height: 2),
                 BirthdayLine(created: c['created'] as String?),
               ],
@@ -173,10 +164,9 @@ class _CharacterCard extends ConsumerWidget {
           ),
           Column(
             children: [
-              Text(
-                s.t('level_short'),
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted),
-              ),
+              Text(s.t('level_short'),
+                  style:
+                      TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.muted)),
               Text('${asInt(c['level'])}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             ],
           ),

@@ -116,7 +116,9 @@ class RecipeBook {
   static Future<RecipeBook> load() async {
     try {
       final bytes = await rootBundle.load('assets/data/recipe_book.json.gz');
-      final raw = jsonDecode(utf8.decode(gunzip(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes))));
+      final raw = jsonDecode(
+        utf8.decode(gunzip(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes))),
+      );
       if (raw is! Map) return empty;
       final byOutput = <int, List<BookRecipe>>{};
       for (final row in (raw['recipes'] as List?) ?? const []) {

@@ -347,14 +347,10 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
           onRetry: () => ref.invalidate(eventDetailProvider(widget.eventId)),
           builder: (d) {
             if (d == null) {
-              return ListView(
-                children: [
-                  const SizedBox(height: 80),
-                  Center(
-                    child: Text(s.t('event_gone'), style: TextStyle(color: AppColors.muted)),
-                  ),
-                ],
-              );
+              return ListView(children: [
+                const SizedBox(height: 80),
+                Center(child: Text(s.t('event_gone'), style: TextStyle(color: AppColors.muted))),
+              ]);
             }
             final e = d.event;
             final mine = d.participants.where((p) => p.userId == me).firstOrNull;
@@ -367,10 +363,8 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   children: [
                     Icon(activityIcon(e.activity), color: AppColors.gold),
                     const SizedBox(width: 8),
-                    Text(
-                      s.t('activity_${e.activity}').toUpperCase(),
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.gold),
-                    ),
+                    Text(s.t('activity_${e.activity}').toUpperCase(),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.gold)),
                     const Spacer(),
                     if (e.seriesId != null) Pill(s.t('event_weekly')),
                   ],
@@ -378,20 +372,17 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                 const SizedBox(height: 8),
                 Text(e.title, style: display(24)),
                 const SizedBox(height: 6),
-                Text(
-                  '${eventWhen(s, e.startAt)} – ${_clock(e.endAt)}',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  e.guildTag.isEmpty ? e.guildName : '${e.guildName} [${e.guildTag}]',
-                  style: TextStyle(fontSize: 13, color: AppColors.muted),
-                ),
+                Text('${eventWhen(s, e.startAt)} – ${_clock(e.endAt)}',
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(e.guildTag.isEmpty ? e.guildName : '${e.guildName} [${e.guildTag}]',
+                    style: TextStyle(fontSize: 13, color: AppColors.muted)),
                 if (e.organizer != null)
-                  Text(
-                    '${s.t('event_organizer')}: ${e.organizer}',
-                    style: TextStyle(fontSize: 13, color: AppColors.muted),
-                  ),
-                if (e.cancelled) ...[const SizedBox(height: 10), Pill(s.t('event_cancelled'), color: AppColors.red)],
+                  Text('${s.t('event_organizer')}: ${e.organizer}',
+                      style: TextStyle(fontSize: 13, color: AppColors.muted)),
+                if (e.cancelled) ...[
+                  const SizedBox(height: 10),
+                  Pill(s.t('event_cancelled'), color: AppColors.red),
+                ],
                 if (e.description.isNotEmpty) ...[
                   const SizedBox(height: 14),
                   Text(e.description, style: TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
@@ -405,8 +396,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                     onAnswer: (status) => _answer(d, status),
                     // only with several accounts in the guild is there anything to change,
                     // and a Discord only event is signed up for in Discord
-                    onChangeAccount:
-                        !e.discordOnly &&
+                    onChangeAccount: !e.discordOnly &&
                             mine != null &&
                             mine.status != 'declined' &&
                             accountsIn(myAccounts, e.guildId).length >= 2
@@ -474,17 +464,16 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                 if (d.withStatus('declined').isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 14),
-                    child: Text(
-                      '${s.t('rsvp_declined')} · ${d.withStatus('declined').length}',
-                      style: TextStyle(fontSize: 12, color: AppColors.muted),
-                    ),
+                    child: Text('${s.t('rsvp_declined')} · ${d.withStatus('declined').length}',
+                        style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ),
                 if (!e.cancelled && !over && canManageEvent(e, me, myGuilds)) ...[
                   const SizedBox(height: 24),
                   OutlinedButton.icon(
                     onPressed: () async {
-                      final saved = await Navigator.of(context)
-                          .push<bool>(MaterialPageRoute(builder: (_) => CreateGuildEventScreen(editing: d)));
+                      final saved = await Navigator.of(context).push<bool>(
+                        MaterialPageRoute(builder: (_) => CreateGuildEventScreen(editing: d)),
+                      );
                       if (saved == true) ref.invalidate(eventDetailProvider(widget.eventId));
                     },
                     icon: const Icon(Icons.edit_outlined),

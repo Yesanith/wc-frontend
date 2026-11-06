@@ -19,39 +19,33 @@ import 'package:wondrous_compass/theme.dart';
 const _id = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
 
 Session _session() => Session(
-  accessToken: 'token',
-  tokenType: 'bearer',
-  user: const User(
-    id: 'u1',
-    appMetadata: {},
-    userMetadata: {},
-    aud: 'authenticated',
-    createdAt: '2026-10-03T00:00:00Z',
-  ),
-);
+      accessToken: 'token',
+      tokenType: 'bearer',
+      user: const User(
+          id: 'u1', appMetadata: {}, userMetadata: {}, aud: 'authenticated', createdAt: '2026-10-03T00:00:00Z'),
+    );
 
-RecruitCard _card(
-  String name, {
-  String tag = '',
-  bool recruiting = true,
-  String headline = '',
-  List<String> looking = const [],
-  List<String> languages = const [],
-  RecruitRegion region = RecruitRegion.any,
-  String playTimes = '',
-  String? id,
-}) => RecruitCard(
-  guildId: id ?? '00000000-0000-0000-0000-${name.hashCode.abs().toString().padLeft(12, '0').substring(0, 12)}',
-  gw2GuildId: 'g',
-  name: name,
-  tag: tag,
-  headline: headline,
-  lookingFor: looking,
-  languages: languages,
-  region: region,
-  recruiting: recruiting,
-  playTimes: playTimes,
-);
+RecruitCard _card(String name,
+        {String tag = '',
+        bool recruiting = true,
+        String headline = '',
+        List<String> looking = const [],
+        List<String> languages = const [],
+        RecruitRegion region = RecruitRegion.any,
+        String playTimes = '',
+        String? id}) =>
+    RecruitCard(
+      guildId: id ?? '00000000-0000-0000-0000-${name.hashCode.abs().toString().padLeft(12, '0').substring(0, 12)}',
+      gw2GuildId: 'g',
+      name: name,
+      tag: tag,
+      headline: headline,
+      lookingFor: looking,
+      languages: languages,
+      region: region,
+      recruiting: recruiting,
+      playTimes: playTimes,
+    );
 
 RecruitPage _thePage({
   bool canEdit = false,
@@ -63,59 +57,53 @@ RecruitPage _thePage({
   String contact = 'Whisper Leo.1',
   String? hiddenReason,
   RecruitRegion region = RecruitRegion.eu,
-}) => RecruitPage(
-  guildId: _id,
-  gw2GuildId: 'g',
-  name: 'Mistwalkers',
-  tag: 'MIST',
-  headline: 'Raids on Thursdays',
-  description: 'A friendly raiding guild that plays in the evenings.',
-  requirements: 'Level 80',
-  playTimes: 'EU evenings',
-  lookingFor: const ['raids', 'fractals'],
-  languages: const ['en'],
-  region: region,
-  discordInvite: invite,
-  contact: contact,
-  canEdit: canEdit,
-  isLeader: isLeader,
-  published: published,
-  hidden: hidden,
-  stale: stale,
-  hiddenReason: hiddenReason,
-);
+}) =>
+    RecruitPage(
+      guildId: _id,
+      gw2GuildId: 'g',
+      name: 'Mistwalkers',
+      tag: 'MIST',
+      headline: 'Raids on Thursdays',
+      description: 'A friendly raiding guild that plays in the evenings.',
+      requirements: 'Level 80',
+      playTimes: 'EU evenings',
+      lookingFor: const ['raids', 'fractals'],
+      languages: const ['en'],
+      region: region,
+      discordInvite: invite,
+      contact: contact,
+      canEdit: canEdit,
+      isLeader: isLeader,
+      published: published,
+      hidden: hidden,
+      stale: stale,
+      hiddenReason: hiddenReason,
+    );
 
-MyRecruitGuild _mine({
-  bool leader = true,
-  bool hasPage = true,
-  bool published = true,
-  bool hidden = false,
-  bool stale = false,
-  String id = _id,
-  String name = 'Mistwalkers',
-  String tag = 'MIST',
-}) => MyRecruitGuild(
-  guildId: id,
-  gw2GuildId: 'g',
-  name: name,
-  tag: tag,
-  isLeader: leader,
-  hasPage: hasPage,
-  published: published,
-  hidden: hidden,
-  stale: stale,
-);
+MyRecruitGuild _mine(
+        {bool leader = true,
+        bool hasPage = true,
+        bool published = true,
+        bool hidden = false,
+        bool stale = false,
+        String id = _id,
+        String name = 'Mistwalkers',
+        String tag = 'MIST'}) =>
+    MyRecruitGuild(
+        guildId: id,
+        gw2GuildId: 'g',
+        name: name,
+        tag: tag,
+        isLeader: leader,
+        hasPage: hasPage,
+        published: published,
+        hidden: hidden,
+        stale: stale);
 
 /// the database, pretending: what it has, and what it was asked
 class FakeRecruit implements RecruitBackend {
-  FakeRecruit({
-    this.cards = const [],
-    this.total,
-    this.current,
-    this.myGuilds = const [],
-    this.allowed = const [],
-    this.fail,
-  });
+  FakeRecruit(
+      {this.cards = const [], this.total, this.current, this.myGuilds = const [], this.allowed = const [], this.fail});
 
   List<RecruitCard> cards;
   int? total;
@@ -161,24 +149,24 @@ class FakeRecruit implements RecruitBackend {
   }
 
   RecruitPage _with(RecruitPage? p, RecruitDraft d, {required bool published}) => RecruitPage(
-    guildId: _id,
-    gw2GuildId: 'g',
-    name: 'Mistwalkers',
-    tag: 'MIST',
-    headline: d.headline.trim(),
-    description: d.description.trim(),
-    requirements: d.requirements.trim(),
-    playTimes: d.playTimes.trim(),
-    lookingFor: d.lookingFor.toList(),
-    languages: d.languages.toList(),
-    region: d.region,
-    recruiting: d.recruiting,
-    discordInvite: d.discordInvite.trim().isEmpty ? null : d.discordInvite.trim(),
-    contact: d.contact.trim(),
-    canEdit: true,
-    isLeader: true,
-    published: published,
-  );
+        guildId: _id,
+        gw2GuildId: 'g',
+        name: 'Mistwalkers',
+        tag: 'MIST',
+        headline: d.headline.trim(),
+        description: d.description.trim(),
+        requirements: d.requirements.trim(),
+        playTimes: d.playTimes.trim(),
+        lookingFor: d.lookingFor.toList(),
+        languages: d.languages.toList(),
+        region: d.region,
+        recruiting: d.recruiting,
+        discordInvite: d.discordInvite.trim().isEmpty ? null : d.discordInvite.trim(),
+        contact: d.contact.trim(),
+        canEdit: true,
+        isLeader: true,
+        published: published,
+      );
 
   @override
   Future<RecruitPage?> save(String guildId, RecruitDraft draft) async {
@@ -274,35 +262,27 @@ void main() {
     addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null));
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final container = ProviderContainer(
-      overrides: [
-        prefsProvider.overrideWithValue(prefs),
-        sessionProvider.overrideWith((ref) => session ?? Stream.value(_session())),
-        recruitBackendProvider.overrideWithValue(fake),
-        guildRosterProvider.overrideWith((ref, id) async => roster),
-      ],
-    );
+    final container = ProviderContainer(overrides: [
+      prefsProvider.overrideWithValue(prefs),
+      sessionProvider.overrideWith((ref) => session ?? Stream.value(_session())),
+      recruitBackendProvider.overrideWithValue(fake),
+      guildRosterProvider.overrideWith((ref, id) async => roster),
+    ]);
     addTearDown(container.dispose);
-    await tester.pumpWidget(
-      UncontrolledProviderScope(
-        container: container,
-        child: MaterialApp(
-          theme: buildTheme(),
-          home: Scaffold(body: home),
-        ),
-      ),
-    );
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: container,
+      child: MaterialApp(theme: buildTheme(), home: Scaffold(body: home)),
+    ));
     await tester.pumpAndSettle();
     return Shown(container, fake);
   }
 
   /// a screen that is opened over another, as the app does, so that it can be closed
   Widget opening(Widget Function(BuildContext) screen) => Builder(
-    builder: (context) => TextButton(
-      onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: screen)),
-      child: const Text('go'),
-    ),
-  );
+        builder: (context) => TextButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: screen)),
+            child: const Text('go')),
+      );
 
   Future<void> tapOn(WidgetTester tester, Finder finder) async {
     await tester.ensureVisible(finder);
@@ -312,29 +292,24 @@ void main() {
 
   group('the list of guilds that are recruiting', () {
     final two = [
-      _card(
-        'Mistwalkers',
-        tag: 'MIST',
-        headline: 'Raids on Thursdays',
-        looking: const ['raids', 'fractals'],
-        languages: const ['en'],
-        region: RecruitRegion.eu,
-        playTimes: 'EU evenings',
-        id: _id,
-      ),
-      _card(
-        'Dawnbreakers',
-        tag: 'DAWN',
-        recruiting: false,
-        headline: 'Casual fractals',
-        looking: const ['casual'],
-        languages: const ['en'],
-      ),
+      _card('Mistwalkers',
+          tag: 'MIST',
+          headline: 'Raids on Thursdays',
+          looking: const ['raids', 'fractals'],
+          languages: const ['en'],
+          region: RecruitRegion.eu,
+          playTimes: 'EU evenings',
+          id: _id),
+      _card('Dawnbreakers',
+          tag: 'DAWN',
+          recruiting: false,
+          headline: 'Casual fractals',
+          looking: const ['casual'],
+          languages: const ['en']),
     ];
 
-    testWidgets('says it is not in this build when the community backend is not there, and asks the database nothing', (
-      tester,
-    ) async {
+    testWidgets('says it is not in this build when the community backend is not there, and asks the database nothing',
+        (tester) async {
       debugSetCommunityReady(false);
       final fake = FakeRecruit(cards: two);
       await show(tester, fake, home: const RecruitmentScreen());
@@ -343,45 +318,37 @@ void main() {
     });
 
     testWidgets(
-      'asks for the first page with no filter, and shows the guilds with their name, headline and when they play',
-      (tester) async {
-        final fake = FakeRecruit(cards: two);
-        await show(tester, fake, home: const RecruitmentScreen());
-        expect(fake.filters.first, noRecruitFilter);
-        expect(find.text('Mistwalkers [MIST]'), findsOneWidget);
-        expect(find.text('Raids on Thursdays'), findsOneWidget);
-        expect(find.text('EU evenings'), findsOneWidget);
-        expect(find.text('Dawnbreakers [DAWN]'), findsOneWidget);
-      },
-    );
+        'asks for the first page with no filter, and shows the guilds with their name, headline and when they play',
+        (tester) async {
+      final fake = FakeRecruit(cards: two);
+      await show(tester, fake, home: const RecruitmentScreen());
+      expect(fake.filters.first, noRecruitFilter);
+      expect(find.text('Mistwalkers [MIST]'), findsOneWidget);
+      expect(find.text('Raids on Thursdays'), findsOneWidget);
+      expect(find.text('EU evenings'), findsOneWidget);
+      expect(find.text('Dawnbreakers [DAWN]'), findsOneWidget);
+    });
 
     testWidgets('says of each whether it is recruiting, and keeps the order the database gave', (tester) async {
       await show(tester, FakeRecruit(cards: two), home: const RecruitmentScreen());
       expect(find.text('Recruiting'), findsOneWidget);
       expect(find.text('Not recruiting now'), findsOneWidget);
-      expect(
-        tester.getTopLeft(find.text('Mistwalkers [MIST]')).dy,
-        lessThan(tester.getTopLeft(find.text('Dawnbreakers [DAWN]')).dy),
-      );
+      expect(tester.getTopLeft(find.text('Mistwalkers [MIST]')).dy,
+          lessThan(tester.getTopLeft(find.text('Dawnbreakers [DAWN]')).dy));
     });
 
     testWidgets('shows what each looks for, the languages and the region, in its own card', (tester) async {
       await show(tester, FakeRecruit(cards: two), home: const RecruitmentScreen());
       Finder inCard(String title, String text) => find.descendant(
-        of: find.ancestor(of: find.text(title), matching: find.byType(InkWell)),
-        matching: find.text(text),
-      );
+          of: find.ancestor(of: find.text(title), matching: find.byType(InkWell)), matching: find.text(text));
       for (final t in ['Raids', 'Fractals', 'English', 'Europe']) {
         expect(inCard('Mistwalkers [MIST]', t), findsOneWidget, reason: t);
       }
       expect(inCard('Dawnbreakers [DAWN]', 'Casual'), findsOneWidget);
       expect(inCard('Dawnbreakers [DAWN]', 'English'), findsOneWidget);
       expect(inCard('Dawnbreakers [DAWN]', 'Raids'), findsNothing, reason: 'what the other looks for');
-      expect(
-        inCard('Dawnbreakers [DAWN]', 'Europe'),
-        findsNothing,
-        reason: 'a guild of any region has no region to show',
-      );
+      expect(inCard('Dawnbreakers [DAWN]', 'Europe'), findsNothing,
+          reason: 'a guild of any region has no region to show');
     });
 
     testWidgets('says so when no guild matches', (tester) async {
@@ -390,16 +357,15 @@ void main() {
     });
 
     testWidgets(
-      'has a chip for each of the seven languages that the forum has a tag for, and none for Japanese or Chinese',
-      (tester) async {
-        await show(tester, FakeRecruit(), home: const RecruitmentScreen());
-        for (final code in recruitLanguages) {
-          expect(find.widgetWithText(ChoiceChip, recruitLanguageLabel(code)), findsOneWidget, reason: code);
-        }
-        expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
-        expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
-      },
-    );
+        'has a chip for each of the seven languages that the forum has a tag for, and none for Japanese or Chinese',
+        (tester) async {
+      await show(tester, FakeRecruit(), home: const RecruitmentScreen());
+      for (final code in recruitLanguages) {
+        expect(find.widgetWithText(ChoiceChip, recruitLanguageLabel(code)), findsOneWidget, reason: code);
+      }
+      expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
+    });
 
     testWidgets('asks again for each filter that is chosen, and for the first page', (tester) async {
       final fake = FakeRecruit();
@@ -444,35 +410,30 @@ void main() {
     });
 
     testWidgets(
-      'has a button for the next page when the page is full and there are more, and the next page is added under it',
-      (tester) async {
-        final many = [
-          for (var i = 0; i < 45; i++) _card('G$i', id: '00000000-0000-0000-0000-${i.toString().padLeft(12, '0')}'),
-        ];
-        final fake = FakeRecruit(cards: many);
-        await show(tester, fake, home: const RecruitmentScreen(), height: 9000);
-        expect(find.text('G0'), findsOneWidget);
-        expect(find.text('G29'), findsOneWidget);
-        expect(find.text('G30'), findsNothing);
-        await tapOn(tester, find.text('Show more'));
-        expect(fake.filters.last.offset, 30);
-        expect(find.text('G44'), findsOneWidget);
-        expect(find.text('G0'), findsOneWidget, reason: 'the first page is still there');
-        expect(find.text('Show more'), findsNothing, reason: 'there are no more');
-        // a filter begins again at the first page
-        await tapOn(tester, find.widgetWithText(ChoiceChip, 'Deutsch'));
-        expect(find.text('G44'), findsNothing);
-        expect(fake.filters.last.offset, 0);
-      },
-    );
+        'has a button for the next page when the page is full and there are more, and the next page is added under it',
+        (tester) async {
+      final many = [
+        for (var i = 0; i < 45; i++) _card('G$i', id: '00000000-0000-0000-0000-${i.toString().padLeft(12, '0')}')
+      ];
+      final fake = FakeRecruit(cards: many);
+      await show(tester, fake, home: const RecruitmentScreen(), height: 9000);
+      expect(find.text('G0'), findsOneWidget);
+      expect(find.text('G29'), findsOneWidget);
+      expect(find.text('G30'), findsNothing);
+      await tapOn(tester, find.text('Show more'));
+      expect(fake.filters.last.offset, 30);
+      expect(find.text('G44'), findsOneWidget);
+      expect(find.text('G0'), findsOneWidget, reason: 'the first page is still there');
+      expect(find.text('Show more'), findsNothing, reason: 'there are no more');
+      // a filter begins again at the first page
+      await tapOn(tester, find.widgetWithText(ChoiceChip, 'Deutsch'));
+      expect(find.text('G44'), findsNothing);
+      expect(fake.filters.last.offset, 0);
+    });
 
     testWidgets('has no button for more when everything is in the page', (tester) async {
-      await show(
-        tester,
-        FakeRecruit(cards: [for (var i = 0; i < 30; i++) _card('G$i')], total: 30),
-        home: const RecruitmentScreen(),
-        height: 9000,
-      );
+      await show(tester, FakeRecruit(cards: [for (var i = 0; i < 30; i++) _card('G$i')], total: 30),
+          home: const RecruitmentScreen(), height: 9000);
       expect(find.text('Show more'), findsNothing);
     });
 
@@ -498,9 +459,8 @@ void main() {
   });
 
   group('the pages of the guilds the player may manage, above the list', () {
-    testWidgets('are not there for a visitor, who is told once how to sign in, with the way to the settings', (
-      tester,
-    ) async {
+    testWidgets('are not there for a visitor, who is told once how to sign in, with the way to the settings',
+        (tester) async {
       final fake = FakeRecruit(myGuilds: [_mine()]);
       final shown = await show(tester, fake, home: const RecruitmentScreen(), session: Stream.value(null));
       expect(find.text("Sign in with Discord in Settings to make or edit your guild's page."), findsOneWidget);
@@ -520,18 +480,15 @@ void main() {
       expect(find.text('Mistwalkers [MIST]'), findsOneWidget);
     });
 
-    testWidgets('say where each page is, and have the buttons that fit: only the leader says who else may edit', (
-      tester,
-    ) async {
-      final fake = FakeRecruit(
-        myGuilds: [
-          _mine(id: 'a', name: 'None', tag: 'N', hasPage: false, published: false),
-          _mine(id: 'b', name: 'Draft', tag: 'D', published: false, leader: false),
-          _mine(id: 'c', name: 'Live', tag: 'L'),
-          _mine(id: 'd', name: 'Old', tag: 'O', stale: true),
-          _mine(id: 'e', name: 'Hidden', tag: 'H', hidden: true),
-        ],
-      );
+    testWidgets('say where each page is, and have the buttons that fit: only the leader says who else may edit',
+        (tester) async {
+      final fake = FakeRecruit(myGuilds: [
+        _mine(id: 'a', name: 'None', tag: 'N', hasPage: false, published: false),
+        _mine(id: 'b', name: 'Draft', tag: 'D', published: false, leader: false),
+        _mine(id: 'c', name: 'Live', tag: 'L'),
+        _mine(id: 'd', name: 'Old', tag: 'O', stale: true),
+        _mine(id: 'e', name: 'Hidden', tag: 'H', hidden: true),
+      ]);
       await show(tester, fake, home: const RecruitmentScreen());
       expect(find.text("Your guilds' pages"), findsOneWidget);
       expect(find.text('No page yet'), findsOneWidget);
@@ -571,12 +528,8 @@ void main() {
     });
   });
   group('the page of a guild', () {
-    Future<Shown> page(WidgetTester tester, FakeRecruit fake, {Stream<Session?>? session, String id = _id}) => show(
-      tester,
-      fake,
-      home: RecruitPageScreen(guildId: id),
-      session: session,
-    );
+    Future<Shown> page(WidgetTester tester, FakeRecruit fake, {Stream<Session?>? session, String id = _id}) =>
+        show(tester, fake, home: RecruitPageScreen(guildId: id), session: session);
 
     testWidgets('says it is not in this build when the community backend is not there', (tester) async {
       debugSetCommunityReady(false);
@@ -605,29 +558,27 @@ void main() {
     testWidgets('says a guild is not recruiting when it says it is not', (tester) async {
       final p = _thePage();
       final closed = RecruitPage(
-        guildId: p.guildId,
-        gw2GuildId: p.gw2GuildId,
-        name: p.name,
-        tag: p.tag,
-        headline: p.headline,
-        description: p.description,
-        recruiting: false,
-        contact: 'x',
-      );
+          guildId: p.guildId,
+          gw2GuildId: p.gw2GuildId,
+          name: p.name,
+          tag: p.tag,
+          headline: p.headline,
+          description: p.description,
+          recruiting: false,
+          contact: 'x');
       await page(tester, FakeRecruit(current: closed));
       expect(find.text('Not recruiting now'), findsOneWidget);
     });
 
     testWidgets('leaves out what the guild did not say, and the region when it takes players of any', (tester) async {
       const p = RecruitPage(
-        guildId: _id,
-        gw2GuildId: 'g',
-        name: 'Plain',
-        tag: '',
-        headline: 'Hi',
-        description: 'A description that is long enough.',
-        contact: 'Whisper me',
-      );
+          guildId: _id,
+          gw2GuildId: 'g',
+          name: 'Plain',
+          tag: '',
+          headline: 'Hi',
+          description: 'A description that is long enough.',
+          contact: 'Whisper me');
       await page(tester, FakeRecruit(current: p));
       expect(find.text('LOOKING FOR'), findsNothing);
       expect(find.text('REQUIREMENTS'), findsNothing);
@@ -646,12 +597,7 @@ void main() {
     });
 
     testWidgets('does not make a button of an invite that is not Discord\'s', (tester) async {
-      await page(
-        tester,
-        FakeRecruit(
-          current: _thePage(invite: 'https://example.com/evil', contact: ''),
-        ),
-      );
+      await page(tester, FakeRecruit(current: _thePage(invite: 'https://example.com/evil', contact: '')));
       expect(find.text('Join their Discord'), findsNothing);
     });
 
@@ -665,16 +611,12 @@ void main() {
 
     testWidgets('says that it was not updated for a while, only when it is shown to everybody', (tester) async {
       await page(tester, FakeRecruit(current: _thePage(stale: true)));
-      expect(
-        find.text('This page has not been updated for a while. The guild may not be recruiting any more.'),
-        findsOneWidget,
-      );
+      expect(find.text('This page has not been updated for a while. The guild may not be recruiting any more.'),
+          findsOneWidget);
       await tester.pumpWidget(const SizedBox());
       await page(tester, FakeRecruit(current: _thePage(stale: true, published: false)));
-      expect(
-        find.text('This page has not been updated for a while. The guild may not be recruiting any more.'),
-        findsNothing,
-      );
+      expect(find.text('This page has not been updated for a while. The guild may not be recruiting any more.'),
+          findsNothing);
       expect(find.text('This is a draft. Only those who manage it can see it.'), findsOneWidget);
     });
 
@@ -703,9 +645,8 @@ void main() {
       expect(find.byTooltip('Copy link to this page'), findsNothing);
     });
 
-    testWidgets('can be reported by a player who is signed in and who does not manage it, who says why', (
-      tester,
-    ) async {
+    testWidgets('can be reported by a player who is signed in and who does not manage it, who says why',
+        (tester) async {
       final fake = FakeRecruit(current: _thePage());
       await page(tester, fake);
       expect(find.byTooltip('Edit'), findsNothing);
@@ -772,21 +713,18 @@ void main() {
 
     String text(WidgetTester tester, String key) => tester.widget<TextField>(find.byKey(Key(key))).controller!.text;
 
-    Future<void> fill(
-      WidgetTester tester, {
-      String headline = 'Mistwalkers want you',
-      String description = 'A friendly raiding guild that plays in the evenings.',
-      String contact = 'Whisper Leo.1',
-    }) async {
+    Future<void> fill(WidgetTester tester,
+        {String headline = 'Mistwalkers want you',
+        String description = 'A friendly raiding guild that plays in the evenings.',
+        String contact = 'Whisper Leo.1'}) async {
       await tester.enterText(find.byKey(const Key('rec-headline')), headline);
       await tester.enterText(find.byKey(const Key('rec-description')), description);
       await tester.enterText(find.byKey(const Key('rec-contact')), contact);
       await tester.pump();
     }
 
-    testWidgets('begins empty for a guild that has no page, with recruiting on, and nothing to delete or keep', (
-      tester,
-    ) async {
+    testWidgets('begins empty for a guild that has no page, with recruiting on, and nothing to delete or keep',
+        (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       expect(text(tester, 'rec-headline'), '');
       expect(text(tester, 'rec-description'), '');
@@ -838,9 +776,8 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('does not send a page that is not valid, and says why: an invite that is not Discord\'s', (
-      tester,
-    ) async {
+    testWidgets('does not send a page that is not valid, and says why: an invite that is not Discord\'s',
+        (tester) async {
       final fake = await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
       await tester.enterText(find.byKey(const Key('rec-discord')), 'https://example.com/x');
       await tester.pump();
@@ -864,31 +801,30 @@ void main() {
     });
 
     testWidgets(
-      'lets a guild look for four things and play in one language, and the fifth thing waits until one is taken off',
-      (tester) async {
-        await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-        const s = S(AppLang.en);
-        Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
-        Finder lang(int i) => find.widgetWithText(ChoiceChip, recruitLanguageLabel(recruitLanguages[i]));
-        for (final i in [0, 1, 2, 3]) {
-          await tapOn(tester, tag(i));
-        }
-        // four things looked for: no other can be chosen, but the language still can, for it has its place
-        for (final i in [4, 12]) {
-          await tester.ensureVisible(tag(i));
-          expect(tester.widget<FilterChip>(tag(i)).onSelected, isNull);
-        }
-        await tapOn(tester, lang(0));
-        expect(tester.widget<ChoiceChip>(lang(0)).selected, isTrue);
-        // one language: another takes the first off
-        await tapOn(tester, lang(1));
-        expect(tester.widget<ChoiceChip>(lang(0)).selected, isFalse);
-        expect(tester.widget<ChoiceChip>(lang(1)).selected, isTrue);
-        // and what is taken off gives the place back
-        await tapOn(tester, tag(3));
-        expect(tester.widget<FilterChip>(tag(4)).onSelected, isNotNull);
-      },
-    );
+        'lets a guild look for four things and play in one language, and the fifth thing waits until one is taken off',
+        (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      const s = S(AppLang.en);
+      Finder tag(int i) => find.widgetWithText(FilterChip, recruitTagLabel(s, recruitTags[i]));
+      Finder lang(int i) => find.widgetWithText(ChoiceChip, recruitLanguageLabel(recruitLanguages[i]));
+      for (final i in [0, 1, 2, 3]) {
+        await tapOn(tester, tag(i));
+      }
+      // four things looked for: no other can be chosen, but the language still can, for it has its place
+      for (final i in [4, 12]) {
+        await tester.ensureVisible(tag(i));
+        expect(tester.widget<FilterChip>(tag(i)).onSelected, isNull);
+      }
+      await tapOn(tester, lang(0));
+      expect(tester.widget<ChoiceChip>(lang(0)).selected, isTrue);
+      // one language: another takes the first off
+      await tapOn(tester, lang(1));
+      expect(tester.widget<ChoiceChip>(lang(0)).selected, isFalse);
+      expect(tester.widget<ChoiceChip>(lang(1)).selected, isTrue);
+      // and what is taken off gives the place back
+      await tapOn(tester, tag(3));
+      expect(tester.widget<FilterChip>(tag(4)).onSelected, isNotNull);
+    });
 
     testWidgets('lets the language be taken off again, which is no language', (tester) async {
       final fake = await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
@@ -915,54 +851,50 @@ void main() {
     });
 
     testWidgets(
-      'has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags',
-      (tester) async {
-        await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-        expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
-        expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
-        expect(find.widgetWithText(ChoiceChip, 'Русский'), findsOneWidget, reason: 'the last of the seven');
-        expect(find.widgetWithText(ChoiceChip, 'English'), findsOneWidget);
-      },
-    );
+        'has no choice of Japanese or Chinese, which the forum has no tag for, and the languages are the seven of its tags',
+        (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      expect(find.widgetWithText(ChoiceChip, '日本語'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, '中文'), findsNothing);
+      expect(find.widgetWithText(ChoiceChip, 'Русский'), findsOneWidget, reason: 'the last of the seven');
+      expect(find.widgetWithText(ChoiceChip, 'English'), findsOneWidget);
+    });
 
     testWidgets(
-      'keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is',
-      (tester) async {
-        const old = RecruitPage(
-          guildId: _id,
-          gw2GuildId: 'g',
-          name: 'M',
-          tag: 'M',
-          headline: 'H',
-          description: 'A description that is long enough to be one.',
-          contact: 'Whisper me',
-          lookingFor: ['raids', 'fractals', 'strikes', 'dungeons', 'wvw', 'pvp', 'farming', 'casual'],
-          languages: ['en', 'ja'],
-          canEdit: true,
-        );
-        final fake = await editor(tester, FakeRecruit(current: old));
-        expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '日本語')).selected, isTrue);
-        await tapOn(tester, find.text('Save'));
-        expect(fake.saves, isEmpty, reason: 'ten tags and a language that is no tag');
-        expect(
+        'keeps what a page chose before: Japanese is a chip that is on, to be taken off, and the page is not sent until it is',
+        (tester) async {
+      const old = RecruitPage(
+        guildId: _id,
+        gw2GuildId: 'g',
+        name: 'M',
+        tag: 'M',
+        headline: 'H',
+        description: 'A description that is long enough to be one.',
+        contact: 'Whisper me',
+        lookingFor: ['raids', 'fractals', 'strikes', 'dungeons', 'wvw', 'pvp', 'farming', 'casual'],
+        languages: ['en', 'ja'],
+        canEdit: true,
+      );
+      final fake = await editor(tester, FakeRecruit(current: old));
+      expect(tester.widget<ChoiceChip>(find.widgetWithText(ChoiceChip, '日本語')).selected, isTrue);
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves, isEmpty, reason: 'ten tags and a language that is no tag');
+      expect(
           find.text(
-            'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. 10 of 5 chosen.',
-          ),
-          findsWidgets,
-        );
-        await settle(tester);
-        // taken off: the language that is no tag, and enough of what it looks for
-        await tapOn(tester, find.widgetWithText(ChoiceChip, '日本語'));
-        for (final tag in ['Dungeons', 'WvW', 'PvP', 'Farming']) {
-          await tapOn(tester, find.widgetWithText(FilterChip, tag));
-        }
-        await tapOn(tester, find.text('Save'));
-        expect(fake.saves.length, 1);
-        expect(fake.saves.single.lookingFor, {'raids', 'fractals', 'strikes', 'casual'});
-        expect(fake.saves.single.languages, {'en'});
-        await settle(tester);
-      },
-    );
+              'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. 10 of 5 chosen.'),
+          findsWidgets);
+      await settle(tester);
+      // taken off: the language that is no tag, and enough of what it looks for
+      await tapOn(tester, find.widgetWithText(ChoiceChip, '日本語'));
+      for (final tag in ['Dungeons', 'WvW', 'PvP', 'Farming']) {
+        await tapOn(tester, find.widgetWithText(FilterChip, tag));
+      }
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves.length, 1);
+      expect(fake.saves.single.lookingFor, {'raids', 'fractals', 'strikes', 'casual'});
+      expect(fake.saves.single.languages, {'en'});
+      await settle(tester);
+    });
 
     testWidgets('keeps a language the app has no choice for, so that it can be taken off', (tester) async {
       const p = RecruitPage(guildId: _id, gw2GuildId: 'g', name: 'M', tag: 'M', languages: ['it'], canEdit: true);
@@ -971,61 +903,50 @@ void main() {
     });
 
     testWidgets(
-      'cannot be shown to everybody until it has a headline, a description and a way to be reached, and says what it takes',
-      (tester) async {
-        await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-        final published = find.byKey(const Key('rec-published'));
-        expect(tester.widget<SwitchListTile>(published).onChanged, isNull);
-        expect(
+        'cannot be shown to everybody until it has a headline, a description and a way to be reached, and says what it takes',
+        (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      final published = find.byKey(const Key('rec-published'));
+      expect(tester.widget<SwitchListTile>(published).onChanged, isNull);
+      expect(
           find.text(
-            'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.',
-          ),
-          findsOneWidget,
-        );
-        await fill(tester, description: 'too short');
-        expect(tester.widget<SwitchListTile>(published).onChanged, isNull);
-        await fill(tester);
-        expect(tester.widget<SwitchListTile>(published).onChanged, isNotNull);
-        expect(find.textContaining('To show it to everybody'), findsNothing, reason: 'nothing more is asked of it');
-      },
-    );
+              'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.'),
+          findsOneWidget);
+      await fill(tester, description: 'too short');
+      expect(tester.widget<SwitchListTile>(published).onChanged, isNull);
+      await fill(tester);
+      expect(tester.widget<SwitchListTile>(published).onChanged, isNotNull);
+      expect(find.textContaining('To show it to everybody'), findsNothing, reason: 'nothing more is asked of it');
+    });
 
     testWidgets(
-      'says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes',
-      (tester) async {
-        await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-        const hint =
-            'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.';
-        expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
-        await fill(tester);
-        expect(find.text(hint), findsOneWidget);
-        await tester.pumpWidget(const SizedBox());
-        await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
-        expect(find.text(hint), findsOneWidget, reason: 'and for a page that is shown already');
-      },
-    );
+        'says that a page that is shown to everybody is also posted in the forum of the official server, and not while it still lacks what it takes',
+        (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      const hint =
+          'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.';
+      expect(find.text(hint), findsNothing, reason: 'what it takes comes first');
+      await fill(tester);
+      expect(find.text(hint), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+      await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
+      expect(find.text(hint), findsOneWidget, reason: 'and for a page that is shown already');
+    });
 
     testWidgets(
-      'says that the post in the forum is locked while the guild is not recruiting, which is what that switch does and the one that shows the page does not',
-      (tester) async {
-        await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-        const lock =
-            'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.';
-        expect(
-          find.text(lock),
-          findsOneWidget,
-          reason: 'under the switch of recruiting, always: it is there before the page is whole',
-        );
-        final recruiting = find.byKey(const Key('rec-recruiting'));
-        expect(
-          find.descendant(of: recruiting, matching: find.text(lock)),
-          findsOneWidget,
-          reason: 'and it is under that switch and not under the other',
-        );
-        final published = find.byKey(const Key('rec-published'));
-        expect(find.descendant(of: published, matching: find.text(lock)), findsNothing);
-      },
-    );
+        'says that the post in the forum is locked while the guild is not recruiting, which is what that switch does and the one that shows the page does not',
+        (tester) async {
+      await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
+      const lock =
+          'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.';
+      expect(find.text(lock), findsOneWidget,
+          reason: 'under the switch of recruiting, always: it is there before the page is whole');
+      final recruiting = find.byKey(const Key('rec-recruiting'));
+      expect(find.descendant(of: recruiting, matching: find.text(lock)), findsOneWidget,
+          reason: 'and it is under that switch and not under the other');
+      final published = find.byKey(const Key('rec-published'));
+      expect(find.descendant(of: published, matching: find.text(lock)), findsNothing);
+    });
 
     testWidgets('is shown to everybody when the switch is on and it is saved', (tester) async {
       final fake = await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
@@ -1042,36 +963,27 @@ void main() {
     testWidgets('is taken back to a draft when the switch is turned off, which can always be done', (tester) async {
       final fake = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
       await fill(tester, headline: '');
-      expect(
-        tester.widget<SwitchListTile>(find.byKey(const Key('rec-published'))).onChanged,
-        isNotNull,
-        reason: 'though it is not whole',
-      );
+      expect(tester.widget<SwitchListTile>(find.byKey(const Key('rec-published'))).onChanged, isNotNull,
+          reason: 'though it is not whole');
       await tapOn(tester, find.byKey(const Key('rec-published')));
       await tapOn(tester, find.text('Save'));
       expect(fake.publishes, [false]);
       expect(fake.saves.length, 1);
-      expect(
-        fake.calls,
-        ['publish:false', 'save'],
-        reason:
-            'taken back first: the database refuses to save a page that is shown to everybody with a headline missing',
-      );
+      expect(fake.calls, ['publish:false', 'save'],
+          reason:
+              'taken back first: the database refuses to save a page that is shown to everybody with a headline missing');
       await settle(tester);
     });
 
-    testWidgets('is saved without being shown again or taken back when it stays as it was, shown or not', (
-      tester,
-    ) async {
+    testWidgets('is saved without being shown again or taken back when it stays as it was, shown or not',
+        (tester) async {
       final shown = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
       await tapOn(tester, find.text('Save'));
       expect(shown.calls, ['save']);
       await settle(tester);
       await tester.pumpWidget(const SizedBox());
-      final draft = await editor(
-        tester,
-        FakeRecruit(current: _thePage(canEdit: true, isLeader: true, published: false)),
-      );
+      final draft =
+          await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true, published: false)));
       await tapOn(tester, find.text('Save'));
       expect(draft.calls, ['save']);
       await settle(tester);
@@ -1083,20 +995,15 @@ void main() {
       await tapOn(tester, find.text('Save'));
       expect(fake.saves, isEmpty);
       expect(
-        find.text(
-          'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.',
-        ),
-        findsOneWidget,
-      );
+          find.text(
+              'To show it to everybody it needs a headline, a description of at least 20 characters and a way to reach you.'),
+          findsOneWidget);
       await settle(tester);
     });
 
     testWidgets('tells why the database refused it', (tester) async {
-      final fake = await editor(
-        tester,
-        FakeRecruit(fail: const RecruitFailure('not_allowed')),
-        guild: _mine(hasPage: false, published: false),
-      );
+      final fake = await editor(tester, FakeRecruit(fail: const RecruitFailure('not_allowed')),
+          guild: _mine(hasPage: false, published: false));
       await fill(tester);
       await tapOn(tester, find.text('Save'));
       expect(find.text('You may not do that for this guild.'), findsOneWidget);
@@ -1105,27 +1012,22 @@ void main() {
     });
 
     testWidgets(
-      'has no button of its own to say that the guild is still looking: saving is what keeps the page in the list',
-      (tester) async {
-        final fake = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
-        expect(find.text('Still looking'), findsNothing);
-        expect(
-          find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
-          findsOneWidget,
-        );
-        await tapOn(tester, find.text('Save'));
-        expect(fake.saves.length, 1, reason: 'a page that is saved as it is is saved, which is what renews it');
-        expect(find.text('Saved.'), findsOneWidget);
-        await settle(tester);
-      },
-    );
+        'has no button of its own to say that the guild is still looking: saving is what keeps the page in the list',
+        (tester) async {
+      final fake = await editor(tester, FakeRecruit(current: _thePage(canEdit: true, isLeader: true)));
+      expect(find.text('Still looking'), findsNothing);
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
+          findsOneWidget);
+      await tapOn(tester, find.text('Save'));
+      expect(fake.saves.length, 1, reason: 'a page that is saved as it is is saved, which is what renews it');
+      expect(find.text('Saved.'), findsOneWidget);
+      await settle(tester);
+    });
 
     testWidgets('says how a page is kept in the list, for a page that has not been made yet too', (tester) async {
       await editor(tester, FakeRecruit(), guild: _mine(hasPage: false, published: false));
-      expect(
-        find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
-        findsOneWidget,
-      );
+      expect(find.text('Saving keeps the page in the list. It leaves the list after 60 days without being saved.'),
+          findsOneWidget);
     });
 
     testWidgets('is deleted by the leader, who is asked first', (tester) async {
@@ -1171,12 +1073,7 @@ void main() {
     ];
 
     Future<FakeRecruit> open(WidgetTester tester, FakeRecruit fake) async {
-      await show(
-        tester,
-        fake,
-        home: RecruitersScreen(guild: _mine()),
-        roster: roster,
-      );
+      await show(tester, fake, home: RecruitersScreen(guild: _mine()), roster: roster);
       return fake;
     }
 
@@ -1191,27 +1088,17 @@ void main() {
       expect(find.text('Nobody besides you.'), findsOneWidget);
     });
 
-    testWidgets('lists those who were allowed, by the account they play, each with a way to take it back', (
-      tester,
-    ) async {
-      await open(
-        tester,
-        FakeRecruit(
-          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
-        ),
-      );
+    testWidgets('lists those who were allowed, by the account they play, each with a way to take it back',
+        (tester) async {
+      await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       expect(find.text('Mira.2'), findsOneWidget);
       expect(find.text('Take it back'), findsOneWidget);
       expect(find.text('Nobody besides you.'), findsNothing);
     });
 
     testWidgets('takes it back, and the list is without them', (tester) async {
-      final fake = await open(
-        tester,
-        FakeRecruit(
-          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
-        ),
-      );
+      final fake =
+          await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();
       expect(fake.revokes, ['u2']);
@@ -1220,20 +1107,12 @@ void main() {
     });
 
     testWidgets('offers the members of the guild who are not its leader and were not allowed already', (tester) async {
-      await open(
-        tester,
-        FakeRecruit(
-          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
-        ),
-      );
+      await open(tester, FakeRecruit(allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')]));
       await tester.tap(find.text('Allow a member'));
       await tester.pumpAndSettle();
       expect(find.text('Choose a member'), findsOneWidget);
-      expect(
-        find.widgetWithText(SimpleDialogOption, 'Kai.3'),
-        findsOneWidget,
-        reason: 'an officer may be allowed too: it is another permission',
-      );
+      expect(find.widgetWithText(SimpleDialogOption, 'Kai.3'), findsOneWidget,
+          reason: 'an officer may be allowed too: it is another permission');
       expect(find.widgetWithText(SimpleDialogOption, 'Zed.4'), findsOneWidget);
       expect(find.widgetWithText(SimpleDialogOption, 'Leo.1'), findsNothing, reason: 'the leader needs no allowing');
       expect(find.widgetWithText(SimpleDialogOption, 'Mira.2'), findsNothing, reason: 'nor one who is allowed');
@@ -1260,29 +1139,23 @@ void main() {
 
     testWidgets('says that nobody is left to be allowed when everybody is, or is the leader', (tester) async {
       await open(
-        tester,
-        FakeRecruit(
-          allowed: [
+          tester,
+          FakeRecruit(allowed: [
             const RecruiterEntry(userId: 'u2', accountName: 'Mira.2'),
             const RecruiterEntry(userId: 'u3', accountName: 'Kai.3'),
             const RecruiterEntry(userId: 'u4', accountName: 'Zed.4'),
-          ],
-        ),
-      );
+          ]));
       await tester.tap(find.text('Allow a member'));
       await tester.pumpAndSettle();
       expect(find.widgetWithText(SimpleDialogOption, 'Leo.1'), findsNothing);
       expect(
-        find.descendant(of: find.byType(SimpleDialog), matching: find.text('Nobody besides you.')),
-        findsOneWidget,
-      );
+          find.descendant(of: find.byType(SimpleDialog), matching: find.text('Nobody besides you.')), findsOneWidget);
     });
 
     testWidgets('tells why the database refused to allow or to take back', (tester) async {
       final fake = FakeRecruit(
-        allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
-        fail: const RecruitFailure('not_member'),
-      );
+          allowed: [const RecruiterEntry(userId: 'u2', accountName: 'Mira.2')],
+          fail: const RecruitFailure('not_member'));
       await open(tester, fake);
       await tester.tap(find.text('Take it back'));
       await tester.pumpAndSettle();

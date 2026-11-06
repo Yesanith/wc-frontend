@@ -44,12 +44,10 @@ class _MemoryStorage implements FlutterSecureStorage {
 
 Future<ProviderContainer> _container({Map<String, Object> prefs = const {}, _MemoryStorage? storage}) async {
   SharedPreferences.setMockInitialValues(prefs);
-  final container = ProviderContainer(
-    overrides: [
-      prefsProvider.overrideWithValue(await SharedPreferences.getInstance()),
-      storageProvider.overrideWithValue(storage ?? _MemoryStorage()),
-    ],
-  );
+  final container = ProviderContainer(overrides: [
+    prefsProvider.overrideWithValue(await SharedPreferences.getInstance()),
+    storageProvider.overrideWithValue(storage ?? _MemoryStorage()),
+  ]);
   addTearDown(container.dispose);
   return container;
 }
@@ -109,13 +107,10 @@ void main() {
 
     test('the key goes in a header, never in the url', () async {
       late http.Request seen;
-      final api = Gw2Api(
-        'SECRET',
-        client: MockClient((req) async {
-          seen = req;
-          return http.Response('{"name":"x"}', 200);
-        }),
-      );
+      final api = Gw2Api('SECRET', client: MockClient((req) async {
+        seen = req;
+        return http.Response('{"name":"x"}', 200);
+      }));
       await api.get('/account');
       expect(seen.headers['Authorization'], 'Bearer SECRET');
       expect(seen.url.toString(), isNot(contains('SECRET')));
@@ -127,37 +122,26 @@ void main() {
       addTearDown(() => Gw2Api.invalidTokenPause = pause);
 
       var calls = 0;
-      final flaky = Gw2Api(
-        'key',
-        client: MockClient((req) async {
-          calls++;
-          return calls == 1
-              ? http.Response('{"text":"Invalid access token"}', 401)
-              : http.Response('{"name":"x"}', 200);
-        }),
-      );
+      final flaky = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return calls == 1 ? http.Response('{"text":"Invalid access token"}', 401) : http.Response('{"name":"x"}', 200);
+      }));
       expect(await flaky.get('/account'), {'name': 'x'});
       expect(calls, 2);
 
       calls = 0;
-      final wrong = Gw2Api(
-        'key',
-        client: MockClient((req) async {
-          calls++;
-          return http.Response('{"text":"Invalid access token"}', 401);
-        }),
-      );
+      final wrong = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return http.Response('{"text":"Invalid access token"}', 401);
+      }));
       await expectLater(wrong.get('/account'), throwsA(isA<Gw2ApiException>()));
       expect(calls, 2);
 
       calls = 0;
-      final other = Gw2Api(
-        'key',
-        client: MockClient((req) async {
-          calls++;
-          return http.Response('{"text":"requires scope wvw"}', 403);
-        }),
-      );
+      final other = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return http.Response('{"text":"requires scope wvw"}', 403);
+      }));
       await expectLater(other.get('/account'), throwsA(isA<Gw2ApiException>()));
       expect(calls, 1);
     });
@@ -198,18 +182,14 @@ void main() {
 
     test('clearStaticCaches makes the next lookup ask the api again', () async {
       var calls = 0;
-      final api = Gw2Api(
-        'key',
-        client: MockClient((req) async {
-          calls++;
-          return http.Response(
+      final api = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        return http.Response(
             jsonEncode([
               {'id': 1, 'name': 'Name $calls'},
             ]),
-            200,
-          );
-        }),
-      );
+            200);
+      }));
       expect((await api.items([1]))[1]?['name'], 'Name 1');
       expect((await api.items([1]))[1]?['name'], 'Name 1');
       expect(calls, 1);
@@ -227,9 +207,11 @@ void main() {
       final day = DateTime(2026, 9, 27, 10);
       await notifier.record('Acc.1234', const [WalletEntry(1, 100, 'Coin', null, 0)], now: day);
       await notifier.record('Acc.1234', const [WalletEntry(1, 250, 'Coin', null, 0)], now: day);
-      await notifier.record('Acc.1234', const [
-        WalletEntry(1, 300, 'Coin', null, 0),
-      ], now: day.add(const Duration(days: 1)));
+      await notifier.record(
+        'Acc.1234',
+        const [WalletEntry(1, 300, 'Coin', null, 0)],
+        now: day.add(const Duration(days: 1)),
+      );
       final points = c.read(wealthProvider)['Acc.1234']!;
       expect(points.map((p) => p.coins), [250, 300]);
     });

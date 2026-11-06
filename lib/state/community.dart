@@ -80,10 +80,10 @@ class CommunityProfile {
   final String? avatarUrl;
 
   static CommunityProfile fromRow(Map<String, dynamic> row) => CommunityProfile(
-    id: '${row['id']}',
-    displayName: '${row['display_name'] ?? ''}',
-    avatarUrl: row['avatar_url'] as String?,
-  );
+        id: '${row['id']}',
+        displayName: '${row['display_name'] ?? ''}',
+        avatarUrl: row['avatar_url'] as String?,
+      );
 }
 
 /// the signed in player's own profile row
@@ -212,10 +212,8 @@ Future<LinkOutcome> linkGw2AccountOutcome(Gw2Api api, List<String> keyPermission
   final Object? linked;
   try {
     // linking alone, quick: the guilds the account leads are read in a call of their own
-    final res = await Supabase.instance.client.functions.invoke(
-      'gw2-link',
-      body: {'subtoken': subtoken, 'sync': false},
-    );
+    final res =
+        await Supabase.instance.client.functions.invoke('gw2-link', body: {'subtoken': subtoken, 'sync': false});
     linked = res.data;
   } on FunctionException catch (e) {
     final details = e.details;
@@ -238,8 +236,7 @@ bool leadsAGuild(Object? linked) {
 Future<List<GuildSyncResult>> _syncLedGuilds(String subtoken) async {
   try {
     final res = await Supabase.instance.client.functions
-        .invoke('gw2-link', body: {'subtoken': subtoken, 'action': 'guilds'})
-        .timeout(const Duration(seconds: 45));
+        .invoke('gw2-link', body: {'subtoken': subtoken, 'action': 'guilds'}).timeout(const Duration(seconds: 45));
     return parseSynced(res.data);
   } on TimeoutException {
     return const [GuildSyncResult('failed', 'call:timeout')];
@@ -281,10 +278,8 @@ String rankLabel(S s, String role, String? gw2Rank) =>
 final linkedAccountsProvider = FutureProvider.autoDispose<List<LinkedAccount>>((ref) async {
   final session = await ref.watch(sessionProvider.future);
   if (session == null) return const [];
-  final rows = await Supabase.instance.client
-      .from('gw2_accounts')
-      .select('id, account_name, verified_at')
-      .order('account_name');
+  final rows =
+      await Supabase.instance.client.from('gw2_accounts').select('id, account_name, verified_at').order('account_name');
   return [
     for (final r in rows)
       LinkedAccount('${r['id']}', '${r['account_name'] ?? ''}', DateTime.tryParse('${r['verified_at'] ?? ''}')),
@@ -330,14 +325,14 @@ class GuildDetails {
   bool shares(String part) => !hidden.contains(part);
 
   factory GuildDetails.fromRow(Map<String, dynamic> r) => GuildDetails(
-    level: _asInt(r['level']),
-    motd: '${r['motd'] ?? ''}',
-    memberCount: _asInt(r['member_count']),
-    memberCapacity: _asInt(r['member_capacity']),
-    syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
-    hidden: _textSet(r['hidden_parts']),
-    reviewedAt: DateTime.tryParse('${r['sharing_reviewed_at'] ?? ''}'),
-  );
+        level: _asInt(r['level']),
+        motd: '${r['motd'] ?? ''}',
+        memberCount: _asInt(r['member_count']),
+        memberCapacity: _asInt(r['member_capacity']),
+        syncedAt: DateTime.tryParse('${r['details_synced_at'] ?? ''}'),
+        hidden: _textSet(r['hidden_parts']),
+        reviewedAt: DateTime.tryParse('${r['sharing_reviewed_at'] ?? ''}'),
+      );
 }
 
 int? _asInt(Object? v) => v is num ? v.toInt() : null;
@@ -356,10 +351,8 @@ List<dynamic>? parseSharedPart(Object? answer) {
 /// what the guild's leader shared of [part], null when nothing
 Future<List<dynamic>?> sharedGuildPart(String gw2GuildId, String part) async {
   try {
-    final answer = await Supabase.instance.client.rpc(
-      'guild_shared_part',
-      params: {'p_gw2_guild': gw2GuildId, 'p_part': part},
-    );
+    final answer =
+        await Supabase.instance.client.rpc('guild_shared_part', params: {'p_gw2_guild': gw2GuildId, 'p_part': part});
     return parseSharedPart(answer);
   } catch (_) {
     return null;
@@ -374,10 +367,8 @@ Future<void> confirmGuildSharing(String guildId) async {
 
 /// the leader shows or hides one part of the guild to the members
 Future<void> setGuildPartShared(String guildId, String part, bool shared) async {
-  await Supabase.instance.client.rpc(
-    'set_guild_part_shared',
-    params: {'p_guild': guildId, 'p_part': part, 'p_shared': shared},
-  );
+  await Supabase.instance.client
+      .rpc('set_guild_part_shared', params: {'p_guild': guildId, 'p_part': part, 'p_shared': shared});
 }
 
 /// the community guild that belongs to a game guild, null until the player has
@@ -414,15 +405,8 @@ final myGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) async {
     final g = r['guilds'];
     if (g is! Map) continue;
     final rank = '${r['gw2_rank'] ?? ''}';
-    out.add(
-      MyGuild(
-        '${g['id']}',
-        '${g['name'] ?? ''}',
-        '${g['tag'] ?? ''}',
-        '${r['role'] ?? 'member'}',
-        gw2Rank: rank.isEmpty ? null : rank,
-      ),
-    );
+    out.add(MyGuild('${g['id']}', '${g['name'] ?? ''}', '${g['tag'] ?? ''}', '${r['role'] ?? 'member'}',
+        gw2Rank: rank.isEmpty ? null : rank));
   }
   // a player with several accounts in one guild sees it once, highest role
   const rank = {'leader': 0, 'officer': 1, 'member': 2};

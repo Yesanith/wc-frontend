@@ -46,19 +46,16 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
       final name = 'hero_card_${DateTime.now().millisecondsSinceEpoch}.png';
       if (kIsWeb) {
         // a browser has no temporary directory, the picture is shared from its bytes
-        await SharePlus.instance.share(
-          ShareParams(
-            files: [XFile.fromData(png, mimeType: 'image/png', name: name)],
-            text: '${widget.name} · Wondrous Compass',
-          ),
-        );
+        await SharePlus.instance.share(ShareParams(
+          files: [XFile.fromData(png, mimeType: 'image/png', name: name)],
+          text: '${widget.name} · Wondrous Compass',
+        ));
       } else {
         final dir = await getTemporaryDirectory();
         final file = File('${dir.path}/$name');
         await file.writeAsBytes(png);
-        await SharePlus.instance.share(
-          ShareParams(files: [XFile(file.path)], text: '${widget.name} · Wondrous Compass'),
-        );
+        await SharePlus.instance
+            .share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Wondrous Compass'));
       }
     } catch (_) {
       if (mounted) {
@@ -160,20 +157,14 @@ class _HeroCard extends ConsumerWidget {
     }
 
     Widget stat(String label, String value) => Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: fg),
+          child: Column(
+            children: [
+              Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: fg)),
+              const SizedBox(height: 2),
+              Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: muted)),
+            ],
           ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: muted),
-          ),
-        ],
-      ),
-    );
+        );
 
     return AspectRatio(
       aspectRatio: 3 / 4,
@@ -187,18 +178,13 @@ class _HeroCard extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
-              child: Center(child: DiamondEmblem(size: 120, color: accent)),
+              child: Center(
+                child: DiamondEmblem(size: 120, color: accent),
+              ),
             ),
-            Text(
-              '${c['name'] ?? ''}',
-              textAlign: TextAlign.center,
-              style: display(28, color: fg),
-            ),
+            Text('${c['name'] ?? ''}', textAlign: TextAlign.center, style: display(28, color: fg)),
             const SizedBox(height: 4),
-            Text(
-              '$profName · $race',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: accent),
-            ),
+            Text('$profName · $race', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: accent)),
             const SizedBox(height: 16),
             Divider(color: muted.withAlpha(90), height: 1),
             const SizedBox(height: 14),

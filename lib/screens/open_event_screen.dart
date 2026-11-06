@@ -47,36 +47,30 @@ class OpenEventScreen extends ConsumerWidget {
     final event = access == EventAccess.open ? ref.watch(openEventProvider(eventId)) : null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(event?.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis),
-        actions: [
-          // the address of this event, which opens the app at it
-          if (isEventId(eventId))
-            IconButton(
-              tooltip: s.t('copy_page_link'),
-              icon: const Icon(Icons.share_outlined),
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: linkUrl(EventLink(eventId))));
-                showToast(context, s.t('copied'));
-              },
-            ),
-        ],
-      ),
+          title: Text(event?.valueOrNull?.title ?? s.t('public_events'), maxLines: 1, overflow: TextOverflow.ellipsis),
+          actions: [
+            // the address of this event, which opens the app at it
+            if (isEventId(eventId))
+              IconButton(
+                tooltip: s.t('copy_page_link'),
+                icon: const Icon(Icons.share_outlined),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: linkUrl(EventLink(eventId))));
+                  showToast(context, s.t('copied'));
+                },
+              ),
+          ]),
       body: switch (access) {
         EventAccess.unavailable => _EventNotice(text: s.t('oe_unavailable')),
         EventAccess.waiting => const Center(child: CircularProgressIndicator()),
         EventAccess.signInNeeded => _EventNotice(text: s.t('oe_sign_in'), toSettings: true),
         EventAccess.open => AsyncView<OpenEvent?>(
-          value: event!,
-          onRetry: () => ref.invalidate(openEventProvider(eventId)),
-          builder: (e) => e == null
-              ? Center(
-                  child: Text(s.t('oe_err_gone'), style: TextStyle(color: AppColors.muted)),
-                )
-              : ContentFrame(
-                  maxWidth: readingMaxWidth,
-                  child: _EventBody(event: e),
-                ),
-        ),
+            value: event!,
+            onRetry: () => ref.invalidate(openEventProvider(eventId)),
+            builder: (e) => e == null
+                ? Center(child: Text(s.t('oe_err_gone'), style: TextStyle(color: AppColors.muted)))
+                : ContentFrame(maxWidth: readingMaxWidth, child: _EventBody(event: e)),
+          ),
       },
     );
   }
@@ -105,11 +99,7 @@ class _EventNotice extends ConsumerWidget {
               container: true,
               label: text,
               child: ExcludeSemantics(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.muted, height: 1.4),
-                ),
+                child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
               ),
             ),
             if (toSettings) ...[
@@ -268,10 +258,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                 children: [
                   Text(e.title, style: display(20)),
                   const SizedBox(height: 2),
-                  Text(
-                    '${eventWhen(s, e.startAt)} · ${openEventDuration(e.durationMinutes)}',
-                    style: TextStyle(color: AppColors.muted),
-                  ),
+                  Text('${eventWhen(s, e.startAt)} · ${openEventDuration(e.durationMinutes)}',
+                      style: TextStyle(color: AppColors.muted)),
                 ],
               ),
             ),
@@ -306,11 +294,8 @@ class _EventBodyState extends ConsumerState<_EventBody> {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      s.t('oe_by', {'name': e.organizer}),
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ),
+                      child: Text(s.t('oe_by', {'name': e.organizer}),
+                          style: const TextStyle(fontWeight: FontWeight.w700))),
                   IconButton(
                     tooltip: s.t('oe_copy_name'),
                     icon: Icon(Icons.copy, size: 18, color: AppColors.gold),
@@ -365,11 +350,9 @@ class _EventBodyState extends ConsumerState<_EventBody> {
               Expanded(
                 child: FilledButton(
                   onPressed: _busy || (e.isFull && e.myStatus != 'going') ? null : () => _join(e, 'going'),
-                  child: Text(
-                    e.isFull && e.myStatus != 'going'
-                        ? s.t('oe_full')
-                        : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join')),
-                  ),
+                  child: Text(e.isFull && e.myStatus != 'going'
+                      ? s.t('oe_full')
+                      : (e.myStatus == 'going' ? s.t('oe_you_going') : s.t('oe_join'))),
                 ),
               ),
               const SizedBox(width: 8),
@@ -457,22 +440,14 @@ class _Roster extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    return ref
-        .watch(openRosterProvider(eventId))
-        .when(
+    return ref.watch(openRosterProvider(eventId)).when(
           loading: () => Padding(
             padding: const EdgeInsets.all(16),
             child: Center(
-              child: SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold),
-              ),
-            ),
+                child: SizedBox(
+                    width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold))),
           ),
-          error: (e, _) => Panel(
-            child: Text(s.t(openEventErrorKey(e)), style: TextStyle(color: AppColors.amber)),
-          ),
+          error: (e, _) => Panel(child: Text(s.t(openEventErrorKey(e)), style: TextStyle(color: AppColors.amber))),
           data: (people) => Panel(
             child: people.isEmpty
                 ? Text(s.t('oe_roster_none'), style: TextStyle(color: AppColors.muted))
@@ -492,7 +467,7 @@ class _Roster extends ConsumerWidget {
                                       Text(
                                         [
                                           if (p.role != null) s.t('role_${p.role}'),
-                                          if (p.profession != null) p.profession!,
+                                          if (p.profession != null) p.profession!
                                         ].join(' · '),
                                         style: TextStyle(fontSize: 12, color: AppColors.muted),
                                       ),

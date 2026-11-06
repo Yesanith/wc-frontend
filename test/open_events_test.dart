@@ -12,22 +12,23 @@ Map<String, dynamic> row({
   String start = '2026-10-01T18:00:00+00:00',
   int minutes = 120,
   String? mine,
-}) => {
-  'id': id,
-  'title': 'Wing 1 to 3',
-  'description': 'Bring food.',
-  'activity': 'raid',
-  'language': 'en',
-  'start_at': start,
-  'duration_minutes': minutes,
-  'max_participants': max,
-  'organizer': 'Leo.1234',
-  'mine': mine == 'yes',
-  'going': going,
-  'maybe': 1,
-  'my_status': mine == 'going' ? 'going' : null,
-  'status': status,
-};
+}) =>
+    {
+      'id': id,
+      'title': 'Wing 1 to 3',
+      'description': 'Bring food.',
+      'activity': 'raid',
+      'language': 'en',
+      'start_at': start,
+      'duration_minutes': minutes,
+      'max_participants': max,
+      'organizer': 'Leo.1234',
+      'mine': mine == 'yes',
+      'going': going,
+      'maybe': 1,
+      'my_status': mine == 'going' ? 'going' : null,
+      'status': status,
+    };
 
 void main() {
   group('an event', () {
@@ -160,10 +161,8 @@ void main() {
     });
 
     test('is equal to another of the same, so a list is not asked for again for nothing', () {
-      expect(
-        const OpenEventsFilter(activity: 'raid', language: 'de'),
-        const OpenEventsFilter(activity: 'raid', language: 'de'),
-      );
+      expect(const OpenEventsFilter(activity: 'raid', language: 'de'),
+          const OpenEventsFilter(activity: 'raid', language: 'de'));
       expect(const OpenEventsFilter(activity: 'raid').hashCode, const OpenEventsFilter(activity: 'raid').hashCode);
       expect(const OpenEventsFilter(activity: 'raid') == const OpenEventsFilter(activity: 'pvp'), isFalse);
     });
@@ -190,11 +189,8 @@ void main() {
       };
       reasons.forEach((hint, key) {
         expect(openEventErrorKey(OpenEventFailure(hint)), key, reason: hint);
-        expect(
-          openEventErrorKey(PostgrestException(message: 'x', hint: hint)),
-          key,
-          reason: 'straight from the database: $hint',
-        );
+        expect(openEventErrorKey(PostgrestException(message: 'x', hint: hint)), key,
+            reason: 'straight from the database: $hint');
       });
     });
 
@@ -259,11 +255,8 @@ void main() {
 
     test('are in the languages an event can be run in, each with a name of its own', () {
       expect(openEventLanguages.first, 'any');
-      expect(
-        openEventLanguages.skip(1),
-        AppLang.values.map((l) => l.code),
-        reason: 'one for each language of the app, in its order',
-      );
+      expect(openEventLanguages.skip(1), AppLang.values.map((l) => l.code),
+          reason: 'one for each language of the app, in its order');
     });
   });
 
@@ -289,7 +282,7 @@ void main() {
         ...row(),
         'region': 'na',
         'tags': ['meta', 'casual'],
-        'map_id': 1209,
+        'map_id': 1209
       });
       expect(e.region, 'na');
       expect(e.tags, ['meta', 'casual']);
@@ -340,11 +333,8 @@ void main() {
       expect(both.regions, {'eu', 'na'}, reason: 'an account with no region is in none');
       expect(both.makeable, ['all', 'eu', 'na']);
       expect(both.forRegion('eu').map((a) => a.name), ['Leo.1']);
-      expect(both.forRegion('all').map((a) => a.name), [
-        'Leo.1',
-        'Leo.NA',
-        'Leo.3',
-      ], reason: 'any takes part in one for all');
+      expect(both.forRegion('all').map((a) => a.name), ['Leo.1', 'Leo.NA', 'Leo.3'],
+          reason: 'any takes part in one for all');
       expect(both.forRegion('na').single.id, 'a2');
 
       final unplaced = MyRegions.fromJson({
@@ -361,7 +351,7 @@ void main() {
         null,
         'x',
         <String, dynamic>{},
-        {'accounts': 'x'},
+        {'accounts': 'x'}
       ]) {
         final none = MyRegions.fromJson(nothing);
         expect(none.hasAccount, isFalse);

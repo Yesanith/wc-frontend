@@ -40,8 +40,9 @@ class _CollectionTile extends ConsumerWidget {
 
     return AppCard(
       onTap: kind.hasDetails
-          ? () =>
-                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)))
+          ? () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)),
+              )
           : null,
       padding: const EdgeInsets.all(16),
       radius: AppRadius.card,
@@ -52,10 +53,8 @@ class _CollectionTile extends ConsumerWidget {
             children: [
               Expanded(child: Text(s.t('col_${kind.key}'), style: display(18))),
               if (p != null)
-                Text(
-                  '${(p.ratio * 100).round()}%',
-                  style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold),
-                ),
+                Text('${(p.ratio * 100).round()}%',
+                    style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold)),
               if (kind.hasDetails) Icon(Icons.chevron_right, color: AppColors.chevron),
             ],
           ),
@@ -97,12 +96,12 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
   String? _group;
 
   String _typeLabel(S s, String type) => switch (type) {
-    'Armor' => s.t('skin_armor'),
-    'Weapon' => s.t('skin_weapon'),
-    'Back' => s.t('skin_back'),
-    'Gathering' => s.t('skin_gathering'),
-    _ => titleCase(type),
-  };
+        'Armor' => s.t('skin_armor'),
+        'Weapon' => s.t('skin_weapon'),
+        'Back' => s.t('skin_back'),
+        'Gathering' => s.t('skin_gathering'),
+        _ => titleCase(type),
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +120,17 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
           final types = {
             for (final e in all)
               if (e.type != null) e.type!,
-          }.toList()..sort();
+          }.toList()
+            ..sort();
           final subtypes = <String>{
             for (final e in all)
               if (_type != null && e.type == _type && e.subtype != null) e.subtype!.split(' · ').first,
-          }.toList()..sort();
-          final groups = <String>{for (final e in all) ...e.groups}.toList()..sort();
+          }.toList()
+            ..sort();
+          final groups = <String>{
+            for (final e in all) ...e.groups,
+          }.toList()
+            ..sort();
           final list = all.where((e) {
             if (_filter == 1 && !e.unlocked) return false;
             if (_filter == 2 && e.unlocked) return false;

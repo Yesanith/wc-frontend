@@ -99,10 +99,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       _zoom = zoom;
       _center = _clampCenter(
         info,
-        Offset(
-          world.dx - (screenPoint.dx - _viewport.width / 2) / s,
-          world.dy - (screenPoint.dy - _viewport.height / 2) / s,
-        ),
+        Offset(world.dx - (screenPoint.dx - _viewport.width / 2) / s,
+            world.dy - (screenPoint.dy - _viewport.height / 2) / s),
       );
     });
   }
@@ -197,11 +195,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 left: 0,
                 right: 0,
                 top: 0,
-                child: LinearProgressIndicator(
-                  minHeight: 2,
-                  color: AppColors.gold,
-                  backgroundColor: Colors.transparent,
-                ),
+                child:
+                    LinearProgressIndicator(minHeight: 2, color: AppColors.gold, backgroundColor: Colors.transparent),
               ),
             // without markers the map would just look empty, say why
             if (markers.hasError && list.isEmpty)
@@ -209,7 +204,10 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 left: 12,
                 right: 12,
                 bottom: 64,
-                child: ErrorBox(error: markers.error, onRetry: () => ref.invalidate(worldMarkersProvider(_floor))),
+                child: ErrorBox(
+                  error: markers.error,
+                  onRetry: () => ref.invalidate(worldMarkersProvider(_floor)),
+                ),
               ),
             Positioned(
               left: 12,
@@ -302,30 +300,25 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       if (m.name.isEmpty) continue;
       final p = _toScreen(info, m.x, m.y);
       if (!_onScreen(p, 100)) continue;
-      out.add(
-        Positioned(
-          left: p.dx - 90,
-          top: p.dy - 12,
-          width: 180,
-          child: IgnorePointer(
-            child: Text(
-              m.name,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: TextStyle(
-                fontSize: size,
-                fontWeight: kind == 'sector' ? FontWeight.w500 : FontWeight.w800,
-                fontStyle: kind == 'sector' ? FontStyle.italic : FontStyle.normal,
-                color: kind == 'region' ? AppColors.gold : Colors.white,
-                shadows: const [
-                  Shadow(blurRadius: 4, color: Colors.black),
-                  Shadow(blurRadius: 2, color: Colors.black),
-                ],
-              ),
+      out.add(Positioned(
+        left: p.dx - 90,
+        top: p.dy - 12,
+        width: 180,
+        child: IgnorePointer(
+          child: Text(
+            m.name,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: size,
+              fontWeight: kind == 'sector' ? FontWeight.w500 : FontWeight.w800,
+              fontStyle: kind == 'sector' ? FontStyle.italic : FontStyle.normal,
+              color: kind == 'region' ? AppColors.gold : Colors.white,
+              shadows: const [Shadow(blurRadius: 4, color: Colors.black), Shadow(blurRadius: 2, color: Colors.black)],
             ),
           ),
         ),
-      );
+      ));
     }
     return out;
   }
@@ -372,10 +365,8 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
       if (hits.length >= 30) break;
     }
     // maps and regions first, they are the likelier target
-    hits.sort(
-      (a, b) =>
-          (a.kind == 'map' || a.kind == 'region' ? 0 : 1).compareTo(b.kind == 'map' || b.kind == 'region' ? 0 : 1),
-    );
+    hits.sort((a, b) =>
+        (a.kind == 'map' || a.kind == 'region' ? 0 : 1).compareTo(b.kind == 'map' || b.kind == 'region' ? 0 : 1));
     return hits;
   }
 
@@ -436,7 +427,9 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                     child: _MarkerIcon(kind: m.kind, icon: ref.read(markerIconsProvider).valueOrNull?[m.kind]),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(child: Text(m.name.isEmpty ? _kindLabel(s, m.kind) : m.name, style: display(18))),
+                  Expanded(
+                    child: Text(m.name.isEmpty ? _kindLabel(s, m.kind) : m.name, style: display(18)),
+                  ),
                 ],
               ),
               const SizedBox(height: 6),

@@ -24,14 +24,12 @@ List<ModuleLink> parseModuleLinks(dynamic raw) {
     if (id.isEmpty || created == null) continue;
     final used = row['last_used_at'] == null ? null : DateTime.tryParse('${row['last_used_at']}');
     final label = '${row['label'] ?? ''}'.trim();
-    out.add(
-      ModuleLink(
-        id: id,
-        label: label.isEmpty ? 'Blish HUD' : label,
-        createdAt: created.toLocal(),
-        lastUsedAt: used?.toLocal(),
-      ),
-    );
+    out.add(ModuleLink(
+      id: id,
+      label: label.isEmpty ? 'Blish HUD' : label,
+      createdAt: created.toLocal(),
+      lastUsedAt: used?.toLocal(),
+    ));
   }
   return out;
 }

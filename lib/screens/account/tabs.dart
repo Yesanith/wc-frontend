@@ -73,15 +73,11 @@ class _WalletTab extends ConsumerWidget {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              others[i].name,
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                            ),
+                            child:
+                                Text(others[i].name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                           ),
-                          Text(
-                            fmtInt(others[i].value),
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
-                          ),
+                          Text(fmtInt(others[i].value),
+                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                         ],
                       ),
                     ),
@@ -98,14 +94,8 @@ class _WalletTab extends ConsumerWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(
-            text: value,
-            style: TextStyle(fontSize: size, fontWeight: FontWeight.w800),
-          ),
-          TextSpan(
-            text: ' $unit',
-            style: TextStyle(fontSize: size * 0.55, fontWeight: FontWeight.w800, color: color),
-          ),
+          TextSpan(text: value, style: TextStyle(fontSize: size, fontWeight: FontWeight.w800)),
+          TextSpan(text: ' $unit', style: TextStyle(fontSize: size * 0.55, fontWeight: FontWeight.w800, color: color)),
         ],
       ),
     );
@@ -129,37 +119,34 @@ class _BankTab extends ConsumerWidget {
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
               sliver: SliverToBoxAdapter(
-                child: Text(
-                  s.t('slots_used', {'a': used, 'b': slots.length}),
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
-                ),
+                child: Text(s.t('slots_used', {'a': used, 'b': slots.length}),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
               ),
             ),
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
               sliver: SliverGrid(
-                gridDelegate: const AdaptiveGridDelegate(
-                  minColumns: 8,
-                  maxTile: 60,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
+                gridDelegate:
+                    const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
+                delegate: SliverChildBuilderDelegate(
+                  (context, i) {
+                    final slot = slots[i];
+                    if (slot == null) return const ItemIcon(empty: true);
+                    return GestureDetector(
+                      onTap: () => showItemSheet(
+                        context,
+                        id: slot.id,
+                        name: slot.name,
+                        icon: slot.icon,
+                        rarity: slot.rarity,
+                        type: slot.type,
+                        count: slot.count,
+                      ),
+                      child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
+                    );
+                  },
+                  childCount: slots.length,
                 ),
-                delegate: SliverChildBuilderDelegate((context, i) {
-                  final slot = slots[i];
-                  if (slot == null) return const ItemIcon(empty: true);
-                  return GestureDetector(
-                    onTap: () => showItemSheet(
-                      context,
-                      id: slot.id,
-                      name: slot.name,
-                      icon: slot.icon,
-                      rarity: slot.rarity,
-                      type: slot.type,
-                      count: slot.count,
-                    ),
-                    child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
-                  );
-                }, childCount: slots.length),
               ),
             ),
           ],
@@ -207,10 +194,8 @@ class _MaterialsTab extends ConsumerWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: SectionHeader(
-                          title: g.name == '?' ? s.t('other') : g.name,
-                          trailing: '${g.slots.length}',
-                        ),
+                        child:
+                            SectionHeader(title: g.name == '?' ? s.t('other') : g.name, trailing: '${g.slots.length}'),
                       ),
                       const SizedBox(width: 6),
                       Icon(collapsed.contains(g.id) ? Icons.expand_more : Icons.expand_less, color: AppColors.muted),
@@ -223,12 +208,8 @@ class _MaterialsTab extends ConsumerWidget {
               else ...[
                 const SizedBox(height: 6),
                 GridView(
-                  gridDelegate: const AdaptiveGridDelegate(
-                    minColumns: 6,
-                    maxTile: 60,
-                    mainAxisSpacing: 6,
-                    crossAxisSpacing: 6,
-                  ),
+                  gridDelegate:
+                      const AdaptiveGridDelegate(minColumns: 6, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
@@ -337,9 +318,9 @@ class _BuildsTab extends ConsumerWidget {
               ),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
-                onTap: () =>
-                    Navigator.of(context)
-                        .push(MaterialPageRoute<void>(builder: (_) => BuildDetailScreen(buildData: build))),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => BuildDetailScreen(buildData: build)),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(14),
                   child: Row(
@@ -357,14 +338,10 @@ class _BuildsTab extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              name.isEmpty ? s.t('unnamed_build') : name,
-                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
-                            ),
-                            Text(
-                              '$profession · ${s.t('n_specializations', {'n': specs})}',
-                              style: TextStyle(fontSize: 12, color: professionColor(profession)),
-                            ),
+                            Text(name.isEmpty ? s.t('unnamed_build') : name,
+                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                            Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                                style: TextStyle(fontSize: 12, color: professionColor(profession))),
                           ],
                         ),
                       ),

@@ -1,6 +1,11 @@
 /// unlock collections that the api exposes as "all ids" + "ids this account has"
 class CollectionKind {
-  const CollectionKind(this.key, this.accountPath, this.staticPath, {this.hasDetails = true});
+  const CollectionKind(
+    this.key,
+    this.accountPath,
+    this.staticPath, {
+    this.hasDetails = true,
+  });
 
   /// also the strings key for the display name
   final String key;

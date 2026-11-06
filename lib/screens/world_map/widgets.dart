@@ -20,12 +20,7 @@ class _MarkerIcon extends StatelessWidget {
       'mastery' => (Icons.military_tech, const Color(0xFFB07CE8)),
       _ => (Icons.location_on, AppColors.gold),
     };
-    return Icon(
-      glyph,
-      color: color,
-      size: 22,
-      shadows: const [Shadow(blurRadius: 3, color: Colors.black)],
-    );
+    return Icon(glyph, color: color, size: 22, shadows: const [Shadow(blurRadius: 3, color: Colors.black)]);
   }
 }
 
@@ -43,7 +38,9 @@ class _FloorButton extends StatelessWidget {
       initialValue: floor,
       color: AppColors.surface,
       onSelected: onPick,
-      itemBuilder: (context) => [for (final f in worldFloors) PopupMenuItem(value: f, child: Text(levelLabel(f)))],
+      itemBuilder: (context) => [
+        for (final f in worldFloors) PopupMenuItem(value: f, child: Text(levelLabel(f))),
+      ],
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(

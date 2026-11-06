@@ -42,7 +42,7 @@ void main() {
     final plan = planBossAlerts(
       pins: {
         for (var m = 0; m < _maps.length; m++)
-          for (var e = 0; e < _maps[m].events.length; e++) _key(m, e),
+          for (var e = 0; e < _maps[m].events.length; e++) _key(m, e)
       },
       lead: 10,
       body: _body,
@@ -67,13 +67,8 @@ void main() {
     expect(plan.alerts.length, 4);
     expect(plan.skipped, [_key(1, 0)]);
     // pinned in another order, another event is the one left out
-    final other = planBossAlerts(
-      pins: [_key(1, 0), _key(0, 0), _key(0, 1)],
-      lead: 10,
-      body: _body,
-      maps: _maps,
-      limit: 4,
-    );
+    final other =
+        planBossAlerts(pins: [_key(1, 0), _key(0, 0), _key(0, 1)], lead: 10, body: _body, maps: _maps, limit: 4);
     expect(other.skipped, [_key(0, 0)]);
     expect(other.alerts.map((a) => a.title).toSet(), {'Night bell', 'Other'});
     // never a part of an event
@@ -139,13 +134,13 @@ void main() {
 
   group('the reminders of the resets', () {
     List<BossAlert> plan({bool daily = true, bool weekly = true}) => planResetAlerts(
-      daily: daily,
-      weekly: weekly,
-      dailyTitle: 'daily',
-      dailyBody: 'daily body',
-      weeklyTitle: 'weekly',
-      weeklyBody: 'weekly body',
-    );
+          daily: daily,
+          weekly: weekly,
+          dailyTitle: 'daily',
+          dailyBody: 'daily body',
+          weeklyTitle: 'weekly',
+          weeklyBody: 'weekly body',
+        );
 
     test('come an hour before: 23:00 utc every day, and 06:30 utc on Monday', () {
       final alerts = plan();
@@ -165,15 +160,10 @@ void main() {
     });
 
     test('have ids apart from each other and from those of the events', () {
-      final events = planBossAlerts(
-        pins: [
-          for (final m in metaMaps)
-            for (final e in m.events) eventKey(m, e),
-        ],
-        lead: 10,
-        body: (_) => '',
-        limit: 100000,
-      );
+      final events = planBossAlerts(pins: [
+        for (final m in metaMaps)
+          for (final e in m.events) eventKey(m, e)
+      ], lead: 10, body: (_) => '', limit: 100000);
       final ids = {for (final a in events.alerts) a.id};
       expect(ids.contains(dailyResetAlertId), isFalse);
       expect(ids.contains(weeklyResetAlertId), isFalse);
@@ -185,20 +175,14 @@ void main() {
       final tuesday = DateTime.utc(2026, 10, 6, 12);
       expect(nextAlertAt(tuesday, 6 * 60 + 30, weekday: DateTime.monday), DateTime.utc(2026, 10, 12, 6, 30));
       // Monday 5 October before the time: that very day
-      expect(
-        nextAlertAt(DateTime.utc(2026, 10, 5, 5), 6 * 60 + 30, weekday: DateTime.monday),
-        DateTime.utc(2026, 10, 5, 6, 30),
-      );
+      expect(nextAlertAt(DateTime.utc(2026, 10, 5, 5), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 5, 6, 30));
       // Monday after the time: a week on
-      expect(
-        nextAlertAt(DateTime.utc(2026, 10, 5, 7), 6 * 60 + 30, weekday: DateTime.monday),
-        DateTime.utc(2026, 10, 12, 6, 30),
-      );
+      expect(nextAlertAt(DateTime.utc(2026, 10, 5, 7), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 12, 6, 30));
       // a Sunday evening
-      expect(
-        nextAlertAt(DateTime.utc(2026, 10, 11, 22), 6 * 60 + 30, weekday: DateTime.monday),
-        DateTime.utc(2026, 10, 12, 6, 30),
-      );
+      expect(nextAlertAt(DateTime.utc(2026, 10, 11, 22), 6 * 60 + 30, weekday: DateTime.monday),
+          DateTime.utc(2026, 10, 12, 6, 30));
     });
 
     test('change the signature of what is scheduled', () {

@@ -19,9 +19,9 @@ Future<List<Json>> fetchServerPrices(List<int> ids) async {
 
 /// the rows of the server's answer that are prices
 List<Json> parseServerPrices(dynamic raw) => [
-  for (final e in (raw is List ? raw : const []))
-    if (e is Map && e['id'] != null) Map<String, dynamic>.from(e),
-];
+      for (final e in (raw is List ? raw : const []))
+        if (e is Map && e['id'] != null) Map<String, dynamic>.from(e),
+    ];
 
 /// the history the server keeps of an item, one point a day, oldest first. none when nobody is signed in or the server cannot be reached
 Future<List<PricePoint>> fetchServerHistory(int itemId, {int days = 180}) async {

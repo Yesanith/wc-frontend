@@ -64,12 +64,10 @@ class ErrorBox extends ConsumerWidget {
                     Text(text, style: TextStyle(color: AppColors.textSoft, fontSize: 14)),
                     if (detail != null) ...[
                       const SizedBox(height: 4),
-                      Text(
-                        detail,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: AppColors.hint, fontSize: 11),
-                      ),
+                      Text(detail,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: AppColors.hint, fontSize: 11)),
                     ],
                   ],
                 ),
@@ -163,11 +161,7 @@ class EmptyNote extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 96,
-          height: 96,
-          child: CachedIcon(url: url, fit: BoxFit.contain),
-        ),
+        SizedBox(width: 96, height: 96, child: CachedIcon(url: url, fit: BoxFit.contain)),
         const SizedBox(height: 8),
         text,
       ],
@@ -213,12 +207,12 @@ class NeedsKeyView extends ConsumerWidget {
 /// the sections that are about the player's own account. the others, from
 /// the world map to recipes, work without a key
 bool sectionNeedsKey(AppSection section) => const {
-  AppSection.daily,
-  AppSection.weekly,
-  AppSection.characters,
-  AppSection.collections,
-  AppSection.progression,
-  AppSection.wvw,
-  AppSection.account,
-  AppSection.guilds,
-}.contains(section);
+      AppSection.daily,
+      AppSection.weekly,
+      AppSection.characters,
+      AppSection.collections,
+      AppSection.progression,
+      AppSection.wvw,
+      AppSection.account,
+      AppSection.guilds,
+    }.contains(section);

@@ -25,11 +25,11 @@ String localClock(DateTime t) {
 enum KindFilter { all, bosses, metas, pinned }
 
 bool _matches(MetaMap map, MetaEvent e, KindFilter kind, Set<String> pins) => switch (kind) {
-  KindFilter.all => true,
-  KindFilter.bosses => e.kind != MetaKind.meta,
-  KindFilter.metas => e.kind == MetaKind.meta,
-  KindFilter.pinned => pins.contains(eventKey(map, e)),
-};
+      KindFilter.all => true,
+      KindFilter.bosses => e.kind != MetaKind.meta,
+      KindFilter.metas => e.kind == MetaKind.meta,
+      KindFilter.pinned => pins.contains(eventKey(map, e)),
+    };
 
 /// the looted list is for today only, a run after the reset is fresh again
 bool lootedRun(Occurrence o, Set<String> looted, DateTime now) =>
@@ -44,7 +44,7 @@ class ReleaseFilterNotifier extends Notifier<Set<Expansion>> {
     final saved = ref.watch(prefsProvider).getStringList(_key) ?? const <String>[];
     return {
       for (final e in Expansion.values)
-        if (saved.contains(e.name)) e,
+        if (saved.contains(e.name)) e
     };
   }
 
@@ -91,7 +91,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final looted = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
     final maps = [
       for (final m in metaMaps)
-        if ((releases.isEmpty || releases.contains(m.release)) && m.events.any((e) => _matches(m, e, _kind, pins))) m,
+        if ((releases.isEmpty || releases.contains(m.release)) && m.events.any((e) => _matches(m, e, _kind, pins))) m
     ];
 
     final body = CustomScrollView(
@@ -107,10 +107,8 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
                 IconButton(
                   tooltip: listView ? s.t('timeline_view') : s.t('list_view'),
                   onPressed: () => ref.read(timerListViewProvider.notifier).toggle(),
-                  icon: Icon(
-                    listView ? Icons.view_timeline_outlined : Icons.view_agenda_outlined,
-                    color: AppColors.gold,
-                  ),
+                  icon:
+                      Icon(listView ? Icons.view_timeline_outlined : Icons.view_agenda_outlined, color: AppColors.gold),
                 ),
               ],
             ),
@@ -148,9 +146,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         else if (listView)
           _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted)
         else
-          SliverToBoxAdapter(
-            child: Timeline(maps: maps, kind: _kind, pins: pins, looted: looted),
-          ),
+          SliverToBoxAdapter(child: Timeline(maps: maps, kind: _kind, pins: pins, looted: looted)),
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
       ],
     );
@@ -185,11 +181,9 @@ class _AgendaList extends ConsumerWidget {
     return ClockBuilder(
       step: ClockStep.minute,
       builder: (context, now) {
-        final list = occurrences(
-          now,
-          now.add(const Duration(hours: 6)),
-          maps: maps,
-        ).where((o) => _matches(o.map, o.event, kind, pins)).toList();
+        final list = occurrences(now, now.add(const Duration(hours: 6)), maps: maps)
+            .where((o) => _matches(o.map, o.event, kind, pins))
+            .toList();
         return SliverList.builder(
           itemCount: list.length,
           itemBuilder: (context, i) {
@@ -204,11 +198,7 @@ class _AgendaList extends ConsumerWidget {
                     child: Text(
                       '${pad2(o.start.toLocal().hour)}:00',
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.1,
-                        color: AppColors.hint,
-                      ),
+                          fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
                     ),
                   ),
                 MetaRow(occurrence: o, looted: lootedRun(o, looted, now), pinnable: true),
@@ -267,20 +257,16 @@ class MetaRow extends ConsumerWidget {
                             : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
                         maxLines: 1,
                         style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.muted,
-                          fontFeatures: const [FontFeature.tabularFigures()],
-                        ),
+                            fontSize: 11, color: AppColors.muted, fontFeatures: const [FontFeature.tabularFigures()]),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 10),
                 Container(
-                  width: 3,
-                  height: 34,
-                  decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(2)),
-                ),
+                    width: 3,
+                    height: 34,
+                    decoration: BoxDecoration(color: tint, borderRadius: BorderRadius.circular(2))),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -308,12 +294,10 @@ class MetaRow extends ConsumerWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        o.map.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 12, color: AppColors.muted),
-                      ),
+                      Text(o.map.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
                     ],
                   ),
                 ),
@@ -322,10 +306,8 @@ class MetaRow extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                     decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(999)),
-                    child: Text(
-                      s.t('now'),
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold),
-                    ),
+                    child: Text(s.t('now'),
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.onGold)),
                   )
                 else if (looted)
                   Icon(Icons.check_rounded, size: 18, color: AppColors.green)
@@ -335,11 +317,8 @@ class MetaRow extends ConsumerWidget {
                   IconButton(
                     tooltip: pinned ? s.t('unpin') : s.t('pin'),
                     onPressed: () => togglePin(context, ref, key),
-                    icon: Icon(
-                      pinned ? Icons.push_pin : Icons.push_pin_outlined,
-                      size: 20,
-                      color: pinned ? AppColors.gold : AppColors.chevron,
-                    ),
+                    icon: Icon(pinned ? Icons.push_pin : Icons.push_pin_outlined,
+                        size: 20, color: pinned ? AppColors.gold : AppColors.chevron),
                   )
                 else
                   const SizedBox(width: 12),

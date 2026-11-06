@@ -1,27 +1,38 @@
 /// french ui strings. `{name}` placeholders are filled by S.t
 const frStrings = <String, String>{
-  'story_unmatched': '{n} quêtes enregistrées par le jeu pour ce personnage ne figurent pas dans sa liste de quêtes d\'histoire, elles ne sont donc pas comptées ci-dessus.',
-  'progress_hero_unavailable': 'L\'API du jeu ne renvoie rien pour les défis de héros (un problème connu côté ArenaNet), ils ne peuvent donc pas être affichés ici.',
-  'progress_training_unavailable': 'L\'API du jeu ne renvoie rien pour l\'entraînement des personnages (un problème connu côté ArenaNet), il ne peut donc pas être affiché ici.',
-  'story_note': 'Compte les quêtes que le jeu a enregistrées pour ce personnage. Le total inclut chaque embranchement, race et ordre, une barre se remplit donc rarement. L\'histoire faite avec un autre personnage, ou recommencée, ne compte pas ici.',
-  'gshare_unreviewed': 'Tu ne l\'as pas encore confirmé. D\'ici là, la trésorerie, la réserve et le journal restent masqués à tes membres.',
+  'story_unmatched':
+      '{n} quêtes enregistrées par le jeu pour ce personnage ne figurent pas dans sa liste de quêtes d\'histoire, elles ne sont donc pas comptées ci-dessus.',
+  'progress_hero_unavailable':
+      'L\'API du jeu ne renvoie rien pour les défis de héros (un problème connu côté ArenaNet), ils ne peuvent donc pas être affichés ici.',
+  'progress_training_unavailable':
+      'L\'API du jeu ne renvoie rien pour l\'entraînement des personnages (un problème connu côté ArenaNet), il ne peut donc pas être affiché ici.',
+  'story_note':
+      'Compte les quêtes que le jeu a enregistrées pour ce personnage. Le total inclut chaque embranchement, race et ordre, une barre se remplit donc rarement. L\'histoire faite avec un autre personnage, ou recommencée, ne compte pas ici.',
+  'gshare_unreviewed':
+      'Tu ne l\'as pas encore confirmé. D\'ici là, la trésorerie, la réserve et le journal restent masqués à tes membres.',
   'gshare_confirm': 'Confirmer ce que voient les membres',
   'gshare_review_title': 'Que peuvent voir tes membres ?',
-  'gshare_review_intro': 'Ta guilde a été lue depuis le jeu. Choisis ce que les membres de ta guilde peuvent voir dans l\'app. La trésorerie, la réserve et le journal montrent qui a pris quoi, ils restent donc masqués jusqu\'à ta confirmation.',
+  'gshare_review_intro':
+      'Ta guilde a été lue depuis le jeu. Choisis ce que les membres de ta guilde peuvent voir dans l\'app. La trésorerie, la réserve et le journal montrent qui a pris quoi, ils restent donc masqués jusqu\'à ta confirmation.',
   'gshare_later': 'Plus tard',
-  'roster_note_game': 'Membres de cette guilde sur Wondrous Compass, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
+  'roster_note_game':
+      'Membres de cette guilde sur Wondrous Compass, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
   'roster_manual': 'défini à la main',
   'roster_follow_game': 'Suivre à nouveau le rang du jeu',
-  'roster_auto': 'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
+  'roster_auto':
+      'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
   'gshare_on': 'Les membres le voient',
   'gshare_off': 'Masqué aux membres',
   'gshare_title': 'Partagé avec les membres de la guilde',
-  'gshare_note': 'Choisis ce que voient les membres de la guilde. Tout est partagé tant que tu ne le désactives pas. Ton app apporte tout à l\'ouverture.',
-  'gshared_note': 'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Wondrous Compass, avec le rang que leur donne le jeu.',
+  'gshare_note':
+      'Choisis ce que voient les membres de la guilde. Tout est partagé tant que tu ne le désactives pas. Ton app apporte tout à l\'ouverture.',
+  'gshared_note':
+      'Le jeu ne montre la liste des membres qu\'au chef de la guilde. Voici les membres qui utilisent Wondrous Compass, avec le rang que leur donne le jeu.',
   'gshared_not_linked': 'Lie ton compte GW2 dans les réglages pour voir ce que le chef de la guilde partage ici.',
   'gw2_link_name': 'Lier {name}',
   'gw2_refreshed': 'Guildes mises à jour.',
-  'gw2_refresh_other': 'La clé API active appartient à un compte non lié. Lie-le ci-dessus ou passe à la clé d\'un compte lié pour mettre à jour ses guildes.',
+  'gw2_refresh_other':
+      'La clé API active appartient à un compte non lié. Lie-le ci-dessus ou passe à la clé d\'un compte lié pour mettre à jour ses guildes.',
   'ginfo_result_synced': 'Données de la guilde mises à jour.',
   'ginfo_result_too_soon': 'Mis à jour à l\'instant, réessaie dans quelques minutes.',
   'ginfo_result_unavailable': 'Le jeu n\'a pas donné les données de la guilde ({detail}).',
@@ -32,10 +43,12 @@ const frStrings = <String, String>{
   'ginfo_level': 'Niveau',
   'ginfo_members': 'Membres',
   'ginfo_updated': 'Mis à jour {when}',
-  'ginfo_pending': 'Le niveau, le message du jour et le nombre de membres de la guilde apparaîtront ici dès que son chef aura ouvert l\'app.',
+  'ginfo_pending':
+      'Le niveau, le message du jour et le nombre de membres de la guilde apparaîtront ici dès que son chef aura ouvert l\'app.',
   'ginfo_pending_leader':
       'Tire vers le bas pour récupérer du jeu le niveau, le message du jour et le nombre de membres de la guilde.',
-  'event_discord_only': 'On s\'inscrit à cet événement dans Discord, avec son message là-bas. Ici, tu peux seulement dire que tu ne viens pas.',
+  'event_discord_only':
+      'On s\'inscrit à cet événement dans Discord, avec son message là-bas. Ici, tu peux seulement dire que tu ne viens pas.',
   'event_flex': 'Pourrait aussi jouer',
   'event_err_discord_only': 'Inscris-toi à cet événement dans Discord.',
   'event_err_role_restricted': 'Cet événement est réservé à certains rôles Discord.',
@@ -56,13 +69,17 @@ const frStrings = <String, String>{
   'err_no_key': 'Cela nécessite une clé API GW2.',
   'add_api_key': 'Ajouter une clé API',
   'guest_continue': 'Continuer sans clé API',
-  'guest_note': 'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',
+  'guest_note':
+      'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',
   'guest': 'Invité',
   'guest_home_title': 'Tu explores en invité',
-  'guest_home_body': 'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans clé. Ajoute une clé API pour voir tes personnages, ta bourse, la Chambre forte du sorcier et ta progression.',
+  'guest_home_body':
+      'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans clé. Ajoute une clé API pour voir tes personnages, ta bourse, la Chambre forte du sorcier et ta progression.',
   'needs_key_title': 'Cela nécessite une clé API',
-  'needs_key_body': 'Cette section montre ton propre compte : personnages, progression, collections et guildes. Ajoute une clé API en lecture seule d\'ArenaNet pour la voir. Tout le reste fonctionne sans.',
-  'boss_alert_limit': '{n} événements épinglés n\'ont pas d\'alerte : le téléphone garde au plus {max} alertes programmées. Retires-en, les événements horaires en consomment le plus.',
+  'needs_key_body':
+      'Cette section montre ton propre compte : personnages, progression, collections et guildes. Ajoute une clé API en lecture seule d\'ArenaNet pour la voir. Tout le reste fonctionne sans.',
+  'boss_alert_limit':
+      '{n} événements épinglés n\'ont pas d\'alerte : le téléphone garde au plus {max} alertes programmées. Retires-en, les événements horaires en consomment le plus.',
   'boss_alerts_title': 'Alertes d\'événements du monde',
   'boss_alerts_note':
       'Une notification peu avant chaque début des événements épinglés, tous les jours, même app fermée.',
@@ -73,7 +90,8 @@ const frStrings = <String, String>{
   'boss_alert_none': 'Rien d\'épinglé. Épingle des événements dans Boss mondiaux.',
   'boss_alert_scheduled': '{pins} épinglés, {n} alertes par jour',
   'boss_alert_allow': 'Autoriser les notifications',
-  'boss_alert_exact_note': 'Android peut retarder les alertes de quelques minutes. Pour une heure exacte, autorise les alarmes et rappels pour cette appli.',
+  'boss_alert_exact_note':
+      'Android peut retarder les alertes de quelques minutes. Pour une heure exacte, autorise les alarmes et rappels pour cette appli.',
   'boss_alert_exact_button': 'Autoriser l\'heure exacte',
   'boss_alert_test': 'Envoyer une alerte de test',
   'boss_alert_test_body':
@@ -87,8 +105,10 @@ const frStrings = <String, String>{
   'event_err_own_role': 'Tu ne peux pas changer ton propre rôle.',
   'event_err_not_member': 'Ce joueur n\'est plus dans la guilde.',
   'event_delete': 'Supprimer l\'événement',
-  'event_delete_body': 'Pour un événement créé par erreur : il disparaît pour tout le monde, avec toutes les inscriptions et son message Discord. Pour qu\'il reste visible comme annulé, annule-le plutôt.',
-  'event_delete_weekly_body': 'C\'est une semaine d\'un événement hebdomadaire. Supprime seulement cette semaine, ou toute la série avec ses semaines à venir.',
+  'event_delete_body':
+      'Pour un événement créé par erreur : il disparaît pour tout le monde, avec toutes les inscriptions et son message Discord. Pour qu\'il reste visible comme annulé, annule-le plutôt.',
+  'event_delete_weekly_body':
+      'C\'est une semaine d\'un événement hebdomadaire. Supprime seulement cette semaine, ou toute la série avec ses semaines à venir.',
   'event_delete_week': 'Cette semaine seulement',
   'event_delete_series': 'Toute la série',
   'event_deleted': 'Événement supprimé',
@@ -170,7 +190,8 @@ const frStrings = <String, String>{
   'gw2_link_intro': 'Relie le compte GW2 de ta clé API active pour rejoindre tes guildes ici.',
   'gw2_link': 'Relier le compte GW2',
   'gw2_refresh': 'Actualiser les guildes',
-  'gw2_link_note': 'Seul un jeton de dix minutes pouvant lire ton nom de compte et tes guildes est envoyé. Ta clé API reste sur cet appareil.',
+  'gw2_link_note':
+      'Seul un jeton de dix minutes pouvant lire ton nom de compte et tes guildes est envoyé. Ta clé API reste sur cet appareil.',
   'gw2_linked': '{name} est relié',
   'gw2_link_taken': 'Ce compte GW2 est déjà relié à un autre compte Wondrous Compass.',
   'gw2_link_key': 'La clé API n\'a pas pu être utilisée. Elle a besoin de l\'autorisation account.',
@@ -181,16 +202,19 @@ const frStrings = <String, String>{
   'guild_role_officer': 'Officier',
   'guild_role_member': 'Membre',
   'community_account': 'Compte Wondrous Compass',
-  'community_intro': 'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil.',
+  'community_intro':
+      'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil.',
   'community_sign_in_discord': 'Se connecter avec Discord',
   'community_signed_in': 'Connecté avec Discord',
   'community_sign_out': 'Se déconnecter',
   'community_delete': 'Supprimer le compte',
-  'community_delete_body': 'Ton compte Wondrous Compass et tout ce qui y est lié seront supprimés définitivement. Tes clés API et les autres données de l\'appli sur cet appareil ne sont pas touchées.',
+  'community_delete_body':
+      'Ton compte Wondrous Compass et tout ce qui y est lié seront supprimés définitivement. Tes clés API et les autres données de l\'appli sur cet appareil ne sont pas touchées.',
   'community_delete_confirm': 'Supprimer définitivement',
   'community_failed': 'Cela n\'a pas marché, réessaie.',
   'module_link_title': 'Blish HUD',
-  'module_link_note': 'Relie le module Blish HUD pour voir et créer des événements dans le jeu. Obtiens un code ici et saisis-le dans le module. Il sert une fois, pendant dix minutes.',
+  'module_link_note':
+      'Relie le module Blish HUD pour voir et créer des événements dans le jeu. Obtiens un code ici et saisis-le dans le module. Il sert une fois, pendant dix minutes.',
   'module_link_get': 'Obtenir un code',
   'module_link_expires': 'Le code sert une fois, pendant dix minutes.',
   'module_link_copy': 'Copier le code',
@@ -220,7 +244,8 @@ const frStrings = <String, String>{
   'event_starts_in': 'Commence dans {t}',
   'event_ended': 'Déjà terminé',
   'gem_history_title': '100 gemmes · 30 derniers jours',
-  'gem_history_collecting': 'L\'historique est en cours de collecte, le graphique apparaîtra après les prochains relevés. Le taux est enregistré toutes les quelques heures.',
+  'gem_history_collecting':
+      'L\'historique est en cours de collecte, le graphique apparaîtra après les prochains relevés. Le taux est enregistré toutes les quelques heures.',
   'gem_buy_100': 'Achat',
   'gem_sell_100': 'Vente',
   'gem_range': '100 gemmes ont coûté entre {lo} et {hi} or',
@@ -257,7 +282,8 @@ const frStrings = <String, String>{
   'save_alert': 'Enregistrer',
   'alerts_fired': '{n} alertes de prix atteintes',
   'wealth_history': 'Historique de l\'or',
-  'wealth_collecting': 'Ton historique d\'or commence aujourd\'hui. L\'appli enregistre un relevé par jour, le graphique apparaît dès le deuxième jour.',
+  'wealth_collecting':
+      'Ton historique d\'or commence aujourd\'hui. L\'appli enregistre un relevé par jour, le graphique apparaît dès le deuxième jour.',
   'last_7_days': '7 derniers jours',
   'last_30_days': '30 derniers jours',
   'wins_losses': '{w}V · {l}D',
@@ -356,7 +382,8 @@ const frStrings = <String, String>{
   'add_account': 'Ajouter un autre compte',
   'guilds': 'Guildes',
   'guild': 'Guilde',
-  'guilds_note': 'Les données de guilde nécessitent l\'autorisation guilds, et le coffre et le journal ne sont visibles que par les membres ayant le rang adéquat.',
+  'guilds_note':
+      'Les données de guilde nécessitent l\'autorisation guilds, et le coffre et le journal ne sont visibles que par les membres ayant le rang adéquat.',
   'no_guilds': 'Ce compte n\'est dans aucune guilde.',
   'treasury': 'Trésorerie',
   'stash': 'Coffre',
@@ -392,11 +419,14 @@ const frStrings = <String, String>{
   'update_available': 'La version {v} est disponible.',
   'download_update': 'Télécharger',
   'release_notes': 'Notes',
-  'install_note': 'L\'apk est téléchargé par le navigateur, ouvre-le depuis la notification pour l\'installer par dessus la version actuelle.',
+  'install_note':
+      'L\'apk est téléchargé par le navigateur, ouvre-le depuis la notification pour l\'installer par dessus la version actuelle.',
   'unnamed_entry': 'Non sorti (#{id})',
   'version': 'Version',
-  'needs_permission': 'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
-  'guild_rank_needed': 'Ta clé API est correcte. Le jeu n\'ouvre ceci qu\'aux chefs de guilde. Cela apparaît ici quand l\'app du chef l\'a partagé : pas encore, ou le chef a désactivé le partage.',
+  'needs_permission':
+      'Ta clé API n\'a pas l\'autorisation {p}. Crée une nouvelle clé avec cette autorisation et remplace-la dans les paramètres.',
+  'guild_rank_needed':
+      'Ta clé API est correcte. Le jeu n\'ouvre ceci qu\'aux chefs de guilde. Cela apparaît ici quand l\'app du chef l\'a partagé : pas encore, ou le chef a désactivé le partage.',
   'browse_all': 'Parcourir tous les succès',
   'instances': 'Instances',
   'raids': 'Raids',
@@ -440,7 +470,8 @@ const frStrings = <String, String>{
   'copied': 'Copié.',
   'copy_page_link': 'Copier le lien de cette page',
   'recruitment': 'Recrutement',
-  'rec_intro': 'Guildes qui recherchent des joueurs. Tout le monde peut lire ces pages. Contacte une guilde avec les informations qu\'elle donne.',
+  'rec_intro':
+      'Guildes qui recherchent des joueurs. Tout le monde peut lire ces pages. Contacte une guilde avec les informations qu\'elle donne.',
   'rec_unavailable': 'Les pages de recrutement ne sont pas disponibles dans cette version.',
   'rec_search': 'Chercher par nom, tag ou titre',
   'rec_region_any': 'Toute région',
@@ -486,19 +517,24 @@ const frStrings = <String, String>{
   'rec_f_discord': 'Invitation Discord (https://discord.gg/…)',
   'rec_f_contact': 'Nom à chuchoter en jeu (facultatif)',
   'rec_f_languages': 'Langue',
-  'rec_f_tags_hint': 'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis une langue et jusqu à 4 choses que vous cherchez. {n} sur 5 choisis.',
+  'rec_f_tags_hint':
+      'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis une langue et jusqu à 4 choses que vous cherchez. {n} sur 5 choisis.',
   'rec_f_recruiting': 'Nous recrutons en ce moment',
-  'rec_f_recruiting_hint': 'Si tu le désactives, la publication de cette page dans le forum du serveur Discord officiel est verrouillée : personne ne peut y répondre.',
+  'rec_f_recruiting_hint':
+      'Si tu le désactives, la publication de cette page dans le forum du serveur Discord officiel est verrouillée : personne ne peut y répondre.',
   'rec_f_published': 'Montrer cette page à tout le monde',
-  'rec_f_published_hint': 'Elle est aussi publiée dans le forum guild-recruitment du serveur Discord officiel. Si tu la désactives, la publication y est supprimée.',
+  'rec_f_published_hint':
+      'Elle est aussi publiée dans le forum guild-recruitment du serveur Discord officiel. Si tu la désactives, la publication y est supprimée.',
   'rec_save_hint': 'Enregistrer garde la page dans la liste. Elle en sort après 60 jours sans enregistrement.',
   'rec_save': 'Enregistrer',
   'rec_saved': 'Enregistré.',
-  'rec_publish_needs': 'Pour la montrer à tout le monde, il faut un titre, une description d\'au moins 20 caractères et un moyen de vous joindre.',
+  'rec_publish_needs':
+      'Pour la montrer à tout le monde, il faut un titre, une description d\'au moins 20 caractères et un moyen de vous joindre.',
   'rec_delete': 'Supprimer la page',
   'rec_delete_ask': 'Supprimer la page de recrutement de cette guilde ?',
   'rec_rec_title': 'Qui peut modifier la page',
-  'rec_rec_intro': 'Tu diriges cette guilde, c\'est donc toi qui décides qui peut créer et modifier sa page de recrutement. Ce n\'est pas la même chose qu\'être officier.',
+  'rec_rec_intro':
+      'Tu diriges cette guilde, c\'est donc toi qui décides qui peut créer et modifier sa page de recrutement. Ce n\'est pas la même chose qu\'être officier.',
   'rec_rec_none': 'Personne d\'autre que toi.',
   'rec_rec_add': 'Autoriser un membre',
   'rec_rec_remove': 'Retirer',
@@ -515,7 +551,8 @@ const frStrings = <String, String>{
   'rec_err_own_guild': 'C\'est la page de ta propre guilde.',
   'rec_err_generic': 'Un problème est survenu. Réessaie dans un instant.',
   'tp_notify_title': 'Notifications de l\'Hôtel des ventes',
-  'tp_notify_hint': 'Te prévient quand un objet que tu as mis en vente est vendu ou qu\'un ordre d\'achat est exécuté, même quand l\'appli est fermée (toutes les 15 minutes au plus). Nécessite une clé API avec la permission de l\'Hôtel des ventes.',
+  'tp_notify_hint':
+      'Te prévient quand un objet que tu as mis en vente est vendu ou qu\'un ordre d\'achat est exécuté, même quand l\'appli est fermée (toutes les 15 minutes au plus). Nécessite une clé API avec la permission de l\'Hôtel des ventes.',
   'tp_notify_needs_key': 'Ajoute d\'abord une clé API avec la permission de l\'Hôtel des ventes.',
   'tp_sold': 'Hôtel des ventes : vendu',
   'tp_bought': 'Hôtel des ventes : acheté',
@@ -621,7 +658,8 @@ const frStrings = <String, String>{
   'goal_add': 'Ajouter à mes objectifs',
   'goal_added': 'Ajouté à tes objectifs',
   'goals_full': 'Ta liste d\'objectifs est pleine',
-  'goals_empty': 'Rien ici pour l\'instant. Ouvre une recette et touche le bouton de liste pour ajouter ce que tu veux fabriquer, et les matériaux de tous tes objectifs sont réunis en une seule liste.',
+  'goals_empty':
+      'Rien ici pour l\'instant. Ouvre une recette et touche le bouton de liste pour ajouter ce que tu veux fabriquer, et les matériaux de tous tes objectifs sont réunis en une seule liste.',
   'goals_clear': 'Vider les objectifs',
   'goals_clear_ask': 'Retirer tous les objectifs de la liste ?',
   'goals_shopping': 'Liste de courses',
@@ -630,7 +668,8 @@ const frStrings = <String, String>{
   'goals_share': 'Partager',
   'goals_share_missing': 'Encore nécessaire',
   'craft_profit': 'Bénéfice d\'artisanat',
-  'craft_profit_note': 'Les recettes qui rapportent le plus au comptoir de commerce en ce moment. Le coût compte les matériaux de la recette, chacun à l\'offre la plus basse, et le résultat se vend un cuivre sous l\'offre la plus basse après 15 % de frais. Les prix bougent, vérifie-les avant d\'acheter.',
+  'craft_profit_note':
+      'Les recettes qui rapportent le plus au comptoir de commerce en ce moment. Le coût compte les matériaux de la recette, chacun à l\'offre la plus basse, et le résultat se vend un cuivre sous l\'offre la plus basse après 15 % de frais. Les prix bougent, vérifie-les avant d\'acheter.',
   'craft_profit_empty': 'Rien ne rapporte avec ces filtres en ce moment.',
   'craft_profit_age': 'Prix lus il y a {n} min',
   'craft_cost': 'Matériaux',
@@ -650,7 +689,8 @@ const frStrings = <String, String>{
       'Termine les objectifs hebdomadaires du Coffre du Magicien et les raids avant qu\'ils ne se réinitialisent.',
   'alert_push_hint': 'Connecté et avec les notifications autorisées, tu es prévenu aussi quand l\'app est fermée.',
   'landing_title': 'Ton compagnon Guild Wars 2',
-  'landing_sub': 'Personnages, portefeuille, comptoir commercial, boss mondiaux, artisanat, carte du monde et événements de guilde, tout au même endroit. Gratuit et non officiel.',
+  'landing_sub':
+      'Personnages, portefeuille, comptoir commercial, boss mondiaux, artisanat, carte du monde et événements de guilde, tout au même endroit. Gratuit et non officiel.',
   'landing_start': 'Commencer',
   'landing_guest': 'Continuer en invité',
   'landing_f_characters': 'Équipement, builds et temps de jeu de chaque personnage.',
@@ -717,14 +757,16 @@ const frStrings = <String, String>{
   'lowest_sell': 'Meilleure offre de vente',
   'n_listed': '{n} en vente',
   'flip_profit': 'Bénéfice après 15 % de taxes',
-  'tp_note': 'Les prix viennent en direct de l\'API officielle. Le graphique montre le dernier prix de chaque jour, conservé par notre serveur.',
+  'tp_note':
+      'Les prix viennent en direct de l\'API officielle. Le graphique montre le dernier prix de chaque jour, conservé par notre serveur.',
   'watchlist': 'Liste de suivi',
   'watchlist_empty': 'Rien pour le moment. Ouvre un objet, touche Comptoir puis Suivre.',
   'buy_short': 'achat',
   'world_bosses': 'Événements du monde',
   'sync_now': 'Synchroniser',
   'syncing': 'Synchronisation',
-  'sync_note': 'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
+  'sync_note':
+      'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
   'pinned': 'Épinglés',
   'pin': 'Épingler',
   'unpin': 'Désépingler',
@@ -761,7 +803,8 @@ const frStrings = <String, String>{
   'wiki_source': 'Source du wiki',
   'remove_key': 'Retirer la clé',
   'remove_key_body': 'La clé API sera supprimée de cet appareil et tu reviendras à l\'écran de départ.',
-  'disclaimer': 'Wondrous Compass est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
+  'disclaimer':
+      'Wondrous Compass est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
   'slot_Helm': 'Tête',
   'slot_Shoulders': 'Épaules',
   'slot_Coat': 'Torse',
@@ -812,12 +855,15 @@ const frStrings = <String, String>{
       'Wondrous Compass est gratuit et sans publicité. S\'il vous est utile, vous pouvez m\'offrir un café.',
   'buy_coffee': 'Offrez-moi un café',
   'price_history': 'Historique des prix',
-  'price_history_collecting': 'Le comptoir ne garde aucun historique, l\'app note donc un prix par jour quand elle tourne. Suivez l\'objet et son graphique se construit à partir d\'aujourd\'hui.',
-  'price_history_note': 'Enregistré sur ce téléphone, un point par jour où l\'app a vu le prix. Les objets suivis sont mis à jour à chaque lancement.',
+  'price_history_collecting':
+      'Le comptoir ne garde aucun historique, l\'app note donc un prix par jour quand elle tourne. Suivez l\'objet et son graphique se construit à partir d\'aujourd\'hui.',
+  'price_history_note':
+      'Enregistré sur ce téléphone, un point par jour où l\'app a vu le prix. Les objets suivis sont mis à jour à chaque lancement.',
   'pinned_achievements': 'Succès épinglés',
   'about': 'À propos',
   'about_by': 'par {name}',
-  'about_summary': 'Un compagnon non officiel pour Guild Wars 2 : vos personnages, votre compte, le comptoir, les succès et la carte du monde, directement depuis l\'API officielle.',
+  'about_summary':
+      'Un compagnon non officiel pour Guild Wars 2 : vos personnages, votre compte, le comptoir, les succès et la carte du monde, directement depuis l\'API officielle.',
   'about_community': 'Communauté',
   'about_github': 'GitHub',
   'about_github_note': 'Le code source, les versions et chaque apk.',
@@ -826,7 +872,8 @@ const frStrings = <String, String>{
   'about_credits': 'Crédits',
   'about_credit_dev': 'Développé par {name}',
   'about_credit_data': 'Données du jeu, icônes et tuiles de carte issues de l\'API officielle de Guild Wars 2',
-  'account_progress_note': 'Bonus du compte : la chance augmente la découverte magique, les augmentations fractales sont les améliorations achetées à l\'Observatoire de Brumeverrou.',
+  'account_progress_note':
+      'Bonus du compte : la chance augmente la découverte magique, les augmentations fractales sont les améliorations achetées à l\'Observatoire de Brumeverrou.',
   'expand_all': 'Tout déplier',
   'collapse_all': 'Tout replier',
   'slot_PowerCore': 'Noyau de robot de jade',
@@ -857,7 +904,8 @@ const frStrings = <String, String>{
   'demand': 'Demande',
   'supply': 'Offre',
   'welcome_title': 'Votre Tyrie,\nen un coup d\'œil.',
-  'welcome_body': 'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que vous possédez, au même endroit. Connectez-vous avec une clé API en lecture seule d\'ArenaNet.',
+  'welcome_body':
+      'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que vous possédez, au même endroit. Connectez-vous avec une clé API en lecture seule d\'ArenaNet.',
   'step_create': 'Créez une clé sur account.arena.net avec les autorisations que vous voulez partager.',
   'step_paste': 'Collez-la ici. Elle reste chiffrée sur cet appareil.',
   'continue': 'Continuer',
@@ -953,7 +1001,8 @@ const frStrings = <String, String>{
   'oe_form_edit': 'Modifier l\'événement',
   'oe_language': 'LANGUE',
   'oe_places_field': 'PLACES (VIDE = SANS LIMITE)',
-  'oe_form_note': 'Tous les joueurs connectés voient cet événement, avec le nom de ton compte de jeu comme organisateur. Toi seul vois les noms des inscrits.',
+  'oe_form_note':
+      'Tous les joueurs connectés voient cet événement, avec le nom de ton compte de jeu comme organisateur. Toi seul vois les noms des inscrits.',
   'oe_save': 'Enregistrer',
   'oe_created': 'Événement créé',
   'oe_saved': 'Enregistré',
@@ -978,8 +1027,10 @@ const frStrings = <String, String>{
   'oe_region_eu': 'Europe',
   'oe_region_na': 'Amérique du Nord',
   'oe_region_all': 'Toutes les régions',
-  'oe_region_note': 'Un événement d\'une région est destiné aux joueurs ayant un compte de jeu sur un monde de cette région. La région de ton compte est lue depuis son monde lors de la liaison ou de l\'actualisation.',
-  'oe_region_unknown': 'La région de ton compte n\'est pas encore connue, tu ne peux donc créer et rejoindre que des événements pour toutes les régions. Ouvre ta liaison Guild Wars 2 dans les réglages et actualise-la.',
+  'oe_region_note':
+      'Un événement d\'une région est destiné aux joueurs ayant un compte de jeu sur un monde de cette région. La région de ton compte est lue depuis son monde lors de la liaison ou de l\'actualisation.',
+  'oe_region_unknown':
+      'La région de ton compte n\'est pas encore connue, tu ne peux donc créer et rejoindre que des événements pour toutes les régions. Ouvre ta liaison Guild Wars 2 dans les réglages et actualise-la.',
   'oe_tags': 'Étiquettes (3 max.)',
   'oe_tag_any': 'Toute étiquette',
   'oe_tag_meta': 'Méta',
@@ -995,7 +1046,8 @@ const frStrings = <String, String>{
   'oe_err_tags': 'Choisis jusqu\'à trois étiquettes dans la liste.',
   'oe_join_as': 'S\'inscrire en tant que',
   'oe_roles_title': 'Discord officiel',
-  'oe_roles_body': 'Le serveur Discord officiel de Wondrous Compass publie les événements publics dans un salon par région et par type d\'événement. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte. Quand un événement auquel tu t\'es inscrit commence, le bot ouvre pour lui un salon textuel et un salon vocal que seuls les inscrits voient.',
+  'oe_roles_body':
+      'Le serveur Discord officiel de Wondrous Compass publie les événements publics dans un salon par région et par type d\'événement. Rejoins-le avec le compte Discord avec lequel tu t\'es connecté : tu reçois le rôle de chaque région où tu as un compte. Quand un événement auquel tu t\'es inscrit commence, le bot ouvre pour lui un salon textuel et un salon vocal que seuls les inscrits voient.',
   'oe_roles_join': 'Rejoindre le Discord officiel',
   'oe_err_role_required': 'Choisis un des rôles de l\'événement.',
   'oe_err_profession': 'Choisis la profession avec laquelle tu viens.',

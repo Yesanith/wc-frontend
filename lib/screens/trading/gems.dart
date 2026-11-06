@@ -93,10 +93,8 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
               const SizedBox(width: 12),
               Expanded(
                 child: gems.when(
-                  data: (value) => Text(
-                    s.t('n_gems', {'n': fmtInt(value)}),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                  ),
+                  data: (value) => Text(s.t('n_gems', {'n': fmtInt(value)}),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                   loading: () => SizedBox(
                     width: 14,
                     height: 14,

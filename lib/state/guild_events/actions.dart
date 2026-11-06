@@ -23,29 +23,26 @@ Future<T> _call<T>(Future<T> Function() action) async {
 /// a full event comes back as waitlist
 Future<String> rsvp(String eventId, String status, {String? role, String? profession, String? accountId}) =>
     _call(() async {
-      final res = await Supabase.instance.client.rpc(
-        'rsvp',
-        params: {
-          'p_event': eventId,
-          'p_status': status,
-          'p_role': role,
-          'p_profession': profession,
-          'p_account': accountId,
-        },
-      );
+      final res = await Supabase.instance.client.rpc('rsvp', params: {
+        'p_event': eventId,
+        'p_status': status,
+        'p_role': role,
+        'p_profession': profession,
+        'p_account': accountId,
+      });
       return '$res';
     });
 
 /// names the roles the player could also play, besides the one they signed up in.
 /// an empty list clears them
 Future<void> setFlexRoles(String eventId, List<String> roles) => _call(() async {
-  await Supabase.instance.client.rpc('set_flex_roles', params: {'p_event': eventId, 'p_roles': roles});
-});
+      await Supabase.instance.client.rpc('set_flex_roles', params: {'p_event': eventId, 'p_roles': roles});
+    });
 
 List<Map<String, dynamic>> _rolesJson(Map<String, int> roles) => [
-  for (final e in roles.entries)
-    if (e.value > 0) {'role': e.key, 'slots': e.value},
-];
+      for (final e in roles.entries)
+        if (e.value > 0) {'role': e.key, 'slots': e.value},
+    ];
 
 Future<String> createEvent({
   required String guildId,
@@ -57,23 +54,21 @@ Future<String> createEvent({
   required String activity,
   required int? maxParticipants,
   required Map<String, int> roles,
-}) => _call(() async {
-  final res = await Supabase.instance.client.rpc(
-    'create_event',
-    params: {
-      'p_guild': guildId,
-      'p_title': title,
-      'p_start_at': startAt.toUtc().toIso8601String(),
-      'p_duration_minutes': durationMinutes,
-      'p_description': description,
-      'p_activity': activity,
-      'p_max_participants': maxParticipants,
-      'p_roles': _rolesJson(roles),
-      'p_account': accountId,
-    },
-  );
-  return '$res';
-});
+}) =>
+    _call(() async {
+      final res = await Supabase.instance.client.rpc('create_event', params: {
+        'p_guild': guildId,
+        'p_title': title,
+        'p_start_at': startAt.toUtc().toIso8601String(),
+        'p_duration_minutes': durationMinutes,
+        'p_description': description,
+        'p_activity': activity,
+        'p_max_participants': maxParticipants,
+        'p_roles': _rolesJson(roles),
+        'p_account': accountId,
+      });
+      return '$res';
+    });
 
 /// a weekly event at the local time of the device's time zone, so it keeps
 /// its local time across daylight saving changes. without a zone name the
@@ -88,27 +83,25 @@ Future<String> createWeeklyEvent({
   required String activity,
   required int? maxParticipants,
   required Map<String, int> roles,
-}) => _call(() async {
-  final zone = await deviceTimeZone();
-  final at = zone == null ? firstStart.toUtc() : firstStart.toLocal();
-  final res = await Supabase.instance.client.rpc(
-    'create_event_series',
-    params: {
-      'p_guild': guildId,
-      'p_title': title,
-      'p_weekday': at.weekday,
-      'p_time_of_day': '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}',
-      'p_timezone': zone ?? 'UTC',
-      'p_duration_minutes': durationMinutes,
-      'p_description': description,
-      'p_activity': activity,
-      'p_max_participants': maxParticipants,
-      'p_roles': _rolesJson(roles),
-      'p_account': accountId,
-    },
-  );
-  return '$res';
-});
+}) =>
+    _call(() async {
+      final zone = await deviceTimeZone();
+      final at = zone == null ? firstStart.toUtc() : firstStart.toLocal();
+      final res = await Supabase.instance.client.rpc('create_event_series', params: {
+        'p_guild': guildId,
+        'p_title': title,
+        'p_weekday': at.weekday,
+        'p_time_of_day': '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}',
+        'p_timezone': zone ?? 'UTC',
+        'p_duration_minutes': durationMinutes,
+        'p_description': description,
+        'p_activity': activity,
+        'p_max_participants': maxParticipants,
+        'p_roles': _rolesJson(roles),
+        'p_account': accountId,
+      });
+      return '$res';
+    });
 
 /// the device's iana time zone, e.g. Europe/Istanbul, null when unknown
 Future<String?> deviceTimeZone() async {
@@ -135,31 +128,29 @@ Future<int> updateEvent({
   required String activity,
   required int? maxParticipants,
   required Map<String, int> roles,
-}) => _call(() async {
-  final res = await Supabase.instance.client.rpc(
-    'update_event',
-    params: {
-      'p_event': eventId,
-      'p_version': version,
-      'p_title': title,
-      'p_start_at': startAt.toUtc().toIso8601String(),
-      'p_duration_minutes': durationMinutes,
-      'p_description': description,
-      'p_activity': activity,
-      'p_max_participants': maxParticipants,
-      'p_roles': _rolesJson(roles),
-    },
-  );
-  return (res as num).toInt();
-});
+}) =>
+    _call(() async {
+      final res = await Supabase.instance.client.rpc('update_event', params: {
+        'p_event': eventId,
+        'p_version': version,
+        'p_title': title,
+        'p_start_at': startAt.toUtc().toIso8601String(),
+        'p_duration_minutes': durationMinutes,
+        'p_description': description,
+        'p_activity': activity,
+        'p_max_participants': maxParticipants,
+        'p_roles': _rolesJson(roles),
+      });
+      return (res as num).toInt();
+    });
 
 /// removes an event opened by mistake, with its sign ups and its discord
 /// messages. on a week of a weekly event, [wholeSeries] also stops the series
 /// and removes its coming weeks
 Future<void> deleteEvent(String eventId, {bool wholeSeries = false}) => _call(() async {
-  await Supabase.instance.client.rpc('delete_event', params: {'p_event': eventId, 'p_whole_series': wholeSeries});
-});
+      await Supabase.instance.client.rpc('delete_event', params: {'p_event': eventId, 'p_whole_series': wholeSeries});
+    });
 
 Future<void> cancelEvent(String eventId) => _call(() async {
-  await Supabase.instance.client.rpc('cancel_event', params: {'p_event': eventId});
-});
+      await Supabase.instance.client.rpc('cancel_event', params: {'p_event': eventId});
+    });

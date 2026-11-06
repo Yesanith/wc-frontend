@@ -29,7 +29,7 @@ enum AppSection {
   wiki,
   news,
   settings,
-  about,
+  about
 }
 
 /// the address of each page in a browser, after the #: the page is where /trading is. the same ones are the links people share
@@ -157,11 +157,11 @@ AppLink? linkFromPath(String? path) {
 
 /// the address of a link, after the #
 String linkPath(AppLink link) => switch (link) {
-  SectionLink(:final section) => sectionPath(section),
-  ItemLink(:final itemId) => '/item/$itemId',
-  EventLink(:final eventId) => '/event/${eventId.toLowerCase()}',
-  RecruitLink(:final guildId) => '/recruit/${guildId.toLowerCase()}',
-};
+      SectionLink(:final section) => sectionPath(section),
+      ItemLink(:final itemId) => '/item/$itemId',
+      EventLink(:final eventId) => '/event/${eventId.toLowerCase()}',
+      RecruitLink(:final guildId) => '/recruit/${guildId.toLowerCase()}',
+    };
 
 /// where the app is on the web. a link to it is this, and the address of the link after the #
 const appBase = 'https://yesanith.github.io/wc-frontend/app/';
@@ -181,11 +181,11 @@ AppLink? linkFromPushData(Map<String, dynamic>? data) {
 
 /// the page that is behind a link, which is where back goes to when it is closed: a page is itself, an item is among the trading post's, a public event among the events
 AppSection sectionForLink(AppLink link) => switch (link) {
-  SectionLink(:final section) => section,
-  ItemLink() => AppSection.trading,
-  EventLink() => AppSection.publicEvents,
-  RecruitLink() => AppSection.recruitment,
-};
+      SectionLink(:final section) => section,
+      ItemLink() => AppSection.trading,
+      EventLink() => AppSection.publicEvents,
+      RecruitLink() => AppSection.recruitment,
+    };
 
 /// what the app was opened at: the address in the browser, nothing anywhere else and when it is not an address of the app
 AppLink? initialLink({String? route}) =>
@@ -267,9 +267,10 @@ void linkClosed(ProviderContainer container, AppLink link, {bool web = kIsWeb}) 
   if (container.read(openLinkProvider) != link) return;
   container.read(openLinkProvider.notifier).state = null;
   if (!web) return;
-  restoreAddress(
-    currentAddress(section: container.read(sectionProvider), pending: container.read(pendingLinkProvider)),
-  );
+  restoreAddress(currentAddress(
+    section: container.read(sectionProvider),
+    pending: container.read(pendingLinkProvider),
+  ));
 }
 
 /// the browser went to an address (its back or forward button, or a link): the page it is is shown, without a new place in the history, and what is open over the page is closed

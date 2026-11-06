@@ -7,26 +7,23 @@ void main() {
 
     test('a decoration is in every category it lists, by name', () {
       expect(
-        decorationGroups({
-          'categories': [6, 15],
-        }, names),
-        ['Planters and Topiaries', 'Crafted'],
-      );
+          decorationGroups({
+            'categories': [6, 15]
+          }, names),
+          ['Planters and Topiaries', 'Crafted']);
       expect(
-        decorationGroups({
-          'categories': [14],
-        }, names),
-        ['Other'],
-      );
+          decorationGroups({
+            'categories': [14]
+          }, names),
+          ['Other']);
     });
 
     test('a category the game gave no name is left out, no categories is none', () {
       expect(
-        decorationGroups({
-          'categories': [99, 14],
-        }, names),
-        ['Other'],
-      );
+          decorationGroups({
+            'categories': [99, 14]
+          }, names),
+          ['Other']);
       expect(decorationGroups({'name': 'x'}, names), isEmpty);
       expect(decorationGroups(null, names), isEmpty);
     });

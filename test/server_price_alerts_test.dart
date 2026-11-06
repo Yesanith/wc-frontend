@@ -61,13 +61,8 @@ void main() {
 
   group('an alert of the server', () {
     test('is read from what the server says, with none of the prices when it has none', () {
-      final a = ServerAlert.parse({
-        'item_id': 19721,
-        'name': 'Greatsword',
-        'sell_below': 12000,
-        'buy_above': null,
-        'armed': true,
-      })!;
+      final a = ServerAlert.parse(
+          {'item_id': 19721, 'name': 'Greatsword', 'sell_below': 12000, 'buy_above': null, 'armed': true})!;
       expect([a.itemId, a.name, a.sellBelow, a.buyAbove], [19721, 'Greatsword', 12000, null]);
       expect(ServerAlert.parse({'item_id': 5})!.name, '');
       expect(ServerAlert.parse({'name': 'no item'}), isNull);

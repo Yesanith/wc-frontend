@@ -59,7 +59,10 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
               GuildInfoCard(guildId: g.id, leading: leading),
               const SizedBox(height: 12),
               if (leading) ...[GuildSharingPanel(guildId: g.id), const SizedBox(height: 12)],
-              Text(s.t('roster_note_game'), style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
+              Text(
+                s.t('roster_note_game'),
+                style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
+              ),
               const SizedBox(height: 12),
               Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -74,8 +77,8 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                               m.role == 'leader'
                                   ? Icons.workspace_premium
                                   : m.role == 'officer'
-                                  ? Icons.military_tech_outlined
-                                  : Icons.person_outline,
+                                      ? Icons.military_tech_outlined
+                                      : Icons.person_outline,
                               size: 20,
                               color: m.role == 'member' ? AppColors.muted : AppColors.gold,
                             ),
@@ -88,10 +91,8 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                                     m.accountName,
                                     style: TextStyle(fontWeight: m.userId == me ? FontWeight.w800 : FontWeight.w600),
                                   ),
-                                  Text(
-                                    rankLabel(s, m.role, m.gw2Rank),
-                                    style: TextStyle(fontSize: 12, color: AppColors.muted),
-                                  ),
+                                  Text(rankLabel(s, m.role, m.gw2Rank),
+                                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
                             ),
@@ -131,12 +132,12 @@ class GuildInfoCard extends ConsumerWidget {
     }
 
     Widget fact(String label, String value) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-        Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-      ],
-    );
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+            Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+          ],
+        );
 
     final count = d.memberCount;
     final capacity = d.memberCapacity;
@@ -240,16 +241,16 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
     }
 
     Widget row(String label, bool value, ValueChanged<bool> onChanged) => SwitchListTile(
-      dense: true,
-      contentPadding: EdgeInsets.zero,
-      value: value,
-      onChanged: _busy ? null : onChanged,
-      title: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-      subtitle: Text(
-        s.t(value ? 'gshare_on' : 'gshare_off'),
-        style: TextStyle(fontSize: 11, color: value ? AppColors.gold : AppColors.hint),
-      ),
-    );
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          value: value,
+          onChanged: _busy ? null : onChanged,
+          title: Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          subtitle: Text(
+            s.t(value ? 'gshare_on' : 'gshare_off'),
+            style: TextStyle(fontSize: 11, color: value ? AppColors.gold : AppColors.hint),
+          ),
+        );
 
     return Panel(
       child: Column(
@@ -294,9 +295,7 @@ class SharingReviewScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           GuildSharingPanel(guildId: guildId, onConfirmed: () => Navigator.of(context).pop()),
           const SizedBox(height: 8),
-          Center(
-            child: TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('gshare_later'))),
-          ),
+          Center(child: TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('gshare_later')))),
         ],
       ),
     );

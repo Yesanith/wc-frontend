@@ -192,12 +192,12 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
   }
 
   String _failureKey(String code) => switch (code) {
-    'account_taken' => 'gw2_link_taken',
-    'invalid_token' || 'missing_permission' => 'gw2_link_key',
-    'gw2_unavailable' => 'gw2_link_down',
-    'subtoken_failed' => 'gw2_link_key',
-    _ => 'community_failed',
-  };
+        'account_taken' => 'gw2_link_taken',
+        'invalid_token' || 'missing_permission' => 'gw2_link_key',
+        'gw2_unavailable' => 'gw2_link_down',
+        'subtoken_failed' => 'gw2_link_key',
+        _ => 'community_failed',
+      };
 
   Future<void> _unlink(LinkedAccount account) async {
     final s = ref.read(stringsProvider);
@@ -232,8 +232,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
     // the account of the active API key, and whether it is one of the linked ones
     final activeName = '${ref.watch(accountProvider).valueOrNull?['name'] ?? ''}';
     final hasAccounts = accounts != null && accounts.isNotEmpty;
-    final activeLinked =
-        accounts != null &&
+    final activeLinked = accounts != null &&
         activeName.isNotEmpty &&
         accounts.any((a) => a.name.toLowerCase() == activeName.toLowerCase());
     const spinner = SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2));
@@ -253,9 +252,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
               children: [
                 Icon(Icons.verified_user_outlined, size: 18, color: AppColors.gold),
                 const SizedBox(width: 8),
-                Expanded(
-                  child: Text(a.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                ),
+                Expanded(child: Text(a.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
                 IconButton(
                   tooltip: s.t('gw2_unlink'),
                   visualDensity: VisualDensity.compact,
@@ -273,8 +270,9 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
               for (final g in guilds)
                 // tapping a guild shows its members, where leaders appoint officers
                 GestureDetector(
-                  onTap: () =>
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g))),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
+                  ),
                   child: Pill(
                     g.tag.isEmpty
                         ? '${g.name} · ${rankLabel(s, g.role, g.gw2Rank)} ›'

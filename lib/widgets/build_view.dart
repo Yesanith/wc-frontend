@@ -58,7 +58,10 @@ class BuildView extends ConsumerWidget {
                 Container(
                   width: 8,
                   height: 34,
-                  decoration: BoxDecoration(color: professionColor(profession), borderRadius: BorderRadius.circular(4)),
+                  decoration: BoxDecoration(
+                    color: professionColor(profession),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -66,16 +69,18 @@ class BuildView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name.isEmpty ? s.t('unnamed_build') : name, style: display(20)),
-                      Text(
-                        profession,
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: professionColor(profession)),
-                      ),
+                      Text(profession,
+                          style:
+                              TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: professionColor(profession))),
                     ],
                   ),
                 ),
               ],
             ),
-            if (code != null) ...[const SizedBox(height: 14), _ChatCodeRow(code: code)],
+            if (code != null) ...[
+              const SizedBox(height: 14),
+              _ChatCodeRow(code: code),
+            ],
             const SizedBox(height: 18),
             SectionHeader(title: s.t('specializations')),
             const SizedBox(height: 10),
@@ -98,7 +103,10 @@ class BuildView extends ConsumerWidget {
               const SizedBox(height: 14),
               SectionHeader(title: s.t('legends')),
               const SizedBox(height: 10),
-              for (final legend in d.legends) ...[_LegendCard(legend: legend, detail: d), const SizedBox(height: 8)],
+              for (final legend in d.legends) ...[
+                _LegendCard(legend: legend, detail: d),
+                const SizedBox(height: 8),
+              ],
             ],
             if (landPets.isNotEmpty || waterPets.isNotEmpty) ...[
               const SizedBox(height: 14),
@@ -143,16 +151,12 @@ class _ChatCodeRow extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  s.t('chat_code'),
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted),
-                ),
-                Text(
-                  code,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
-                ),
+                Text(s.t('chat_code'),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                Text(code,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
                 Text(s.t('chat_code_note'), style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ],
             ),

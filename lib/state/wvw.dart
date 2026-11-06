@@ -174,9 +174,5 @@ class WvwTopRow {
 WvwTopRow wvwTopRow(Json row) {
   final raw = row['kdr'] ?? row['kills'] ?? row['value'];
   return WvwTopRow(
-    '${row['id'] ?? row['guild_id'] ?? ''}',
-    '${row['name'] ?? ''}',
-    '${row['tag'] ?? ''}',
-    raw is num ? raw : null,
-  );
+      '${row['id'] ?? row['guild_id'] ?? ''}', '${row['name'] ?? ''}', '${row['tag'] ?? ''}', raw is num ? raw : null);
 }

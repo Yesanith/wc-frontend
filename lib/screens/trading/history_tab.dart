@@ -15,19 +15,17 @@ class _TxTab extends ConsumerWidget {
     final b = ref.watch(transactionsProvider(second));
 
     Widget list(AsyncValue<List<TxRow>> value, String kind, String emptyKey) => AsyncView<List<TxRow>>(
-      permission: 'tradingpost',
-      value: value,
-      onRetry: () => ref.invalidate(transactionsProvider(kind)),
-      builder: (rows) => rows.isEmpty
-          ? Panel(
-              child: Text(s.t(emptyKey), style: TextStyle(color: AppColors.muted)),
-            )
-          : Column(
-              children: [
-                for (final r in rows) Padding(padding: const EdgeInsets.only(bottom: 8), child: _TxRowTile(r)),
-              ],
-            ),
-    );
+          permission: 'tradingpost',
+          value: value,
+          onRetry: () => ref.invalidate(transactionsProvider(kind)),
+          builder: (rows) => rows.isEmpty
+              ? Panel(child: Text(s.t(emptyKey), style: TextStyle(color: AppColors.muted)))
+              : Column(
+                  children: [
+                    for (final r in rows) Padding(padding: const EdgeInsets.only(bottom: 8), child: _TxRowTile(r)),
+                  ],
+                ),
+        );
 
     return RefreshIndicator(
       color: AppColors.gold,

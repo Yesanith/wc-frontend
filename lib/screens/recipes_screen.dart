@@ -161,7 +161,7 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                     for (final (value, key) in const [
                       (null, 'all'),
                       (true, 'recipe_learned'),
-                      (false, 'recipe_not_learned'),
+                      (false, 'recipe_not_learned')
                     ]) ...[
                       ChoiceChip(
                         label: Text(s.t(key)),
@@ -245,22 +245,27 @@ class _RecipeRow extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: legendary ? rarityColor('Legendary') : AppColors.text,
-                  ),
-                ),
+                Text(name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: legendary ? rarityColor('Legendary') : AppColors.text,
+                    )),
                 const SizedBox(height: 4),
-                Wrap(spacing: 4, runSpacing: 4, children: [for (final d in disciplines) Pill(label(d))]),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: [for (final d in disciplines) Pill(label(d))],
+                ),
               ],
             ),
           ),
-          if (learned) ...[Icon(Icons.check_circle, size: 18, color: AppColors.green), const SizedBox(width: 4)],
+          if (learned) ...[
+            Icon(Icons.check_circle, size: 18, color: AppColors.green),
+            const SizedBox(width: 4),
+          ],
           Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),

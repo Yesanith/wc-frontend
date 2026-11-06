@@ -63,7 +63,10 @@ class _RingPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
         ..strokeCap = StrokeCap.round
-        ..shader = SweepGradient(colors: colors, transform: const GradientRotation(-math.pi / 2)).createShader(rect),
+        ..shader = SweepGradient(
+          colors: colors,
+          transform: const GradientRotation(-math.pi / 2),
+        ).createShader(rect),
     );
   }
 

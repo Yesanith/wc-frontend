@@ -17,7 +17,11 @@ Future<void> openPanel(BuildContext context, WidgetBuilder builder) {
         borderRadius: BorderRadius.circular(AppRadius.window),
         side: BorderSide(color: AppColors.line),
       ),
-      child: SizedBox(width: 680, height: (size.height - 48).clamp(320.0, 780.0), child: builder(dialog)),
+      child: SizedBox(
+        width: 680,
+        height: (size.height - 48).clamp(320.0, 780.0),
+        child: builder(dialog),
+      ),
     ),
   );
 }

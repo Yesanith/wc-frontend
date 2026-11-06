@@ -29,13 +29,8 @@ class _SeasonStanding extends ConsumerWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              if (standing.rating > 0)
-                Expanded(
-                  child: StatTile(label: s.t('rating'), value: fmtInt(standing.rating)),
-                ),
-              Expanded(
-                child: StatTile(label: s.t('pips'), value: fmtInt(standing.points)),
-              ),
+              if (standing.rating > 0) Expanded(child: StatTile(label: s.t('rating'), value: fmtInt(standing.rating))),
+              Expanded(child: StatTile(label: s.t('pips'), value: fmtInt(standing.points))),
             ],
           ),
         ],
@@ -60,12 +55,10 @@ class _PvpLink extends StatelessWidget {
           Icon(icon, size: 18, color: AppColors.gold),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-            ),
+            child: Text(label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           ),
         ],
       ),
@@ -100,13 +93,15 @@ class _PvpTab extends ConsumerWidget {
           value: stats,
           onRetry: () => ref.invalidate(pvpStatsProvider),
           builder: (data) {
-            final aggregate = data['aggregate'] is Map
-                ? Map<String, dynamic>.from(data['aggregate'] as Map)
-                : <String, dynamic>{};
+            final aggregate =
+                data['aggregate'] is Map ? Map<String, dynamic>.from(data['aggregate'] as Map) : <String, dynamic>{};
             final professions = data['professions'] is Map
                 ? Map<String, dynamic>.from(data['professions'] as Map)
                 : <String, dynamic>{};
-            final tier = rankTierFor(ref.watch(pvpRanksProvider).valueOrNull ?? const [], asInt(data['pvp_rank']));
+            final tier = rankTierFor(
+              ref.watch(pvpRanksProvider).valueOrNull ?? const [],
+              asInt(data['pvp_rank']),
+            );
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -123,10 +118,8 @@ class _PvpTab extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(tier.name, style: display(18)),
-                                  Text(
-                                    s.t('rank_n', {'n': asInt(data['pvp_rank'])}),
-                                    style: TextStyle(fontSize: 12, color: AppColors.muted),
-                                  ),
+                                  Text(s.t('rank_n', {'n': asInt(data['pvp_rank'])}),
+                                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
                             ),
@@ -136,20 +129,14 @@ class _PvpTab extends ConsumerWidget {
                       ],
                       Row(
                         children: [
-                          Expanded(
-                            child: StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}'),
-                          ),
-                          Expanded(
-                            child: StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
-                          ),
+                          Expanded(child: StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}')),
+                          Expanded(child: StatTile(label: s.t('win_rate'), value: ratio(aggregate))),
                         ],
                       ),
                       const SizedBox(height: 14),
                       Row(
                         children: [
-                          Expanded(
-                            child: StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins']))),
-                          ),
+                          Expanded(child: StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins'])))),
                           Expanded(
                             child: StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
                           ),
@@ -208,10 +195,8 @@ class _PvpTab extends ConsumerWidget {
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(
-                                  titleCase(entry.key),
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                                ),
+                                child: Text(titleCase(entry.key),
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
                               Text(
                                 ratio(entry.value is Map ? Map<String, dynamic>.from(entry.value as Map) : null),
@@ -236,10 +221,8 @@ class _PvpTab extends ConsumerWidget {
               Expanded(
                 child: Text(s.t('wvw_rank'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
-              Text(
-                wvwRank > 0 ? fmtInt(wvwRank) : '-',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold),
-              ),
+              Text(wvwRank > 0 ? fmtInt(wvwRank) : '-',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
             ],
           ),
         ),

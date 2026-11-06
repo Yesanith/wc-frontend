@@ -38,7 +38,9 @@ Future<List<int>> _upgradesOrShared(String id, Future<List<int>> Function() dire
 /// guild ids the account belongs to, plus the ones it leads
 final guildIdsProvider = FutureProvider<List<String>>((ref) async {
   final account = await ref.watch(accountProvider.future);
-  return [for (final g in (account['guilds'] as List?) ?? const []) '$g'];
+  return [
+    for (final g in (account['guilds'] as List?) ?? const []) '$g',
+  ];
 });
 
 final guildProvider = FutureProvider.autoDispose.family<Json, String>((ref, id) => accountApi(ref).guild(id));
@@ -124,8 +126,7 @@ final guildRanksProvider = FutureProvider.autoDispose.family<List<Json>, String>
 });
 
 final guildTeamsProvider = FutureProvider.autoDispose.family<List<Json>, String>(
-  (ref, id) => _leaderOrShared(id, 'teams', () => accountApi(ref).guildPart(id, 'teams')),
-);
+    (ref, id) => _leaderOrShared(id, 'teams', () => accountApi(ref).guildPart(id, 'teams')));
 
 class GuildUpgradeRow {
   const GuildUpgradeRow(this.id, this.count, this.detail);

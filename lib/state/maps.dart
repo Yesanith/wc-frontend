@@ -7,15 +7,7 @@ import 'settings.dart';
 
 class GameMap {
   const GameMap(
-    this.id,
-    this.name,
-    this.region,
-    this.continent,
-    this.floors,
-    this.regionId,
-    this.minLevel,
-    this.maxLevel,
-  );
+      this.id, this.name, this.region, this.continent, this.floors, this.regionId, this.minLevel, this.maxLevel);
   final int id;
   final String name;
   final String region;
@@ -47,18 +39,16 @@ final mapsProvider = FutureProvider<List<GameMap>>((ref) async {
     final regionName = '${row['region_name'] ?? ''}';
     if (regionName.isEmpty || row['type'] != 'Public') continue;
     final defaultFloor = asInt(row['default_floor']);
-    maps.add(
-      GameMap(
-        asInt(row['id']),
-        '${row['name'] ?? ''}',
-        regionName,
-        asInt(row['continent_id']),
-        [defaultFloor, ...intList(row['floors']).where((f) => f != defaultFloor)],
-        asInt(row['region_id']),
-        asInt(row['min_level']),
-        asInt(row['max_level']),
-      ),
-    );
+    maps.add(GameMap(
+      asInt(row['id']),
+      '${row['name'] ?? ''}',
+      regionName,
+      asInt(row['continent_id']),
+      [defaultFloor, ...intList(row['floors']).where((f) => f != defaultFloor)],
+      asInt(row['region_id']),
+      asInt(row['min_level']),
+      asInt(row['max_level']),
+    ));
   }
   maps.sort((a, b) => a.region == b.region ? a.name.compareTo(b.name) : a.region.compareTo(b.region));
   return maps;

@@ -38,10 +38,7 @@ class SettingsScreen extends ConsumerWidget {
     final s = ref.read(stringsProvider);
     // the dialog owns its text field's controller: disposing it here, as soon
     // as the dialog returned, broke the field while the dialog animated out
-    final text = await showDialog<String>(
-      context: context,
-      builder: (_) => _ImportDialog(s: s),
-    );
+    final text = await showDialog<String>(context: context, builder: (_) => _ImportDialog(s: s));
     if (text == null || text.trim().isEmpty) return;
     var message = s.t('imported');
     try {
@@ -91,10 +88,8 @@ class SettingsScreen extends ConsumerWidget {
                         color: l == current ? AppColors.gold : AppColors.muted,
                       ),
                       title: Text(l.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                      trailing: Text(
-                        l.code.toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted),
-                      ),
+                      trailing: Text(l.code.toUpperCase(),
+                          style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
                     ),
                 ],
               ),
@@ -132,10 +127,8 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      lang.code.toUpperCase(),
-                      style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted),
-                    ),
+                    Text(lang.code.toUpperCase(),
+                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
                     const SizedBox(width: 4),
                     Icon(Icons.expand_more, color: AppColors.muted),
                   ],
@@ -143,7 +136,10 @@ class SettingsScreen extends ConsumerWidget {
               ),
               Divider(color: AppColors.track),
               const SizedBox(height: 4),
-              _InfoRow(s.t('data_language'), lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback')),
+              _InfoRow(
+                s.t('data_language'),
+                lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
+              ),
               const SizedBox(height: 6),
               _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
             ],
@@ -154,7 +150,10 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           const _CommunityPanel(),
           // signed in, the account can be linked to the overlay of the game
-          if (ref.watch(sessionProvider).valueOrNull != null) ...[const SizedBox(height: 16), const _ModuleLinkPanel()],
+          if (ref.watch(sessionProvider).valueOrNull != null) ...[
+            const SizedBox(height: 16),
+            const _ModuleLinkPanel(),
+          ],
         ],
         const SizedBox(height: 16),
         const _AccountsPanel(),
@@ -166,7 +165,10 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           const _ResetAlertsPanel(),
           // what the trading post did for the player, from the phone: the api key stays on it
-          if (!kIsWeb) ...[const SizedBox(height: 16), const _TradeNotifyPanel()],
+          if (!kIsWeb) ...[
+            const SizedBox(height: 16),
+            const _TradeNotifyPanel(),
+          ],
         ],
         const SizedBox(height: 16),
         Panel(
@@ -206,7 +208,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
         // an apk cannot be installed from a browser
-        if (!kIsWeb) ...[const SizedBox(height: 22), const _UpdatePanel()],
+        if (!kIsWeb) ...[
+          const SizedBox(height: 22),
+          const _UpdatePanel(),
+        ],
       ],
     );
   }
@@ -222,9 +227,7 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
-          child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.muted)),
-        ),
+        Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.muted))),
         Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ],
     );

@@ -6,30 +6,30 @@ import 'package:wondrous_compass/util.dart';
 
 /// palette pairs come back as [paletteId, skillId]
 Json professionWith(Map<int, int> paletteBySkill) => {
-  'skills_by_palette': [
-    for (final e in paletteBySkill.entries) [e.value, e.key],
-  ],
-};
+      'skills_by_palette': [
+        for (final e in paletteBySkill.entries) [e.value, e.key],
+      ],
+    };
 
 Json guardianBuild() => {
-  'profession': 'Guardian',
-  'specializations': [
-    {
-      'id': 42,
-      'traits': [1, 5, 9],
-    },
-  ],
-  'skills': {
-    'heal': 100,
-    'utilities': [101, 102, 103],
-    'elite': 104,
-  },
-  'aquatic_skills': {
-    'heal': 200,
-    'utilities': [201, 202, 203],
-    'elite': 204,
-  },
-};
+      'profession': 'Guardian',
+      'specializations': [
+        {
+          'id': 42,
+          'traits': [1, 5, 9]
+        },
+      ],
+      'skills': {
+        'heal': 100,
+        'utilities': [101, 102, 103],
+        'elite': 104,
+      },
+      'aquatic_skills': {
+        'heal': 200,
+        'utilities': [201, 202, 203],
+        'elite': 204,
+      },
+    };
 
 const _palette = {100: 1000, 200: 2000};
 

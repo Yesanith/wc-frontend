@@ -84,18 +84,16 @@ List<CraftProfit> rankCrafts(
         cost += ingredient.sell * count;
       }
       if (!priced || cost <= 0) continue;
-      out.add(
-        CraftProfit(
-          recipeId: recipe.id,
-          itemId: recipe.output,
-          count: recipe.outputCount,
-          disciplines: recipe.disciplines,
-          cost: cost,
-          revenue: afterFees(result.sell - 1) * recipe.outputCount,
-          demand: result.demand,
-          supply: result.supply,
-        ),
-      );
+      out.add(CraftProfit(
+        recipeId: recipe.id,
+        itemId: recipe.output,
+        count: recipe.outputCount,
+        disciplines: recipe.disciplines,
+        cost: cost,
+        revenue: afterFees(result.sell - 1) * recipe.outputCount,
+        demand: result.demand,
+        supply: result.supply,
+      ));
     }
   }
   out.removeWhere((c) => c.profit <= 0);
@@ -130,18 +128,16 @@ ServerCraftProfit? parseCraftProfit(dynamic raw) {
     if (row is! Map) continue;
     final item = asInt(row['item_id']);
     if (item <= 0) continue;
-    out.add(
-      CraftProfit(
-        recipeId: asInt(row['recipe_id']),
-        itemId: item,
-        count: math.max(1, asInt(row['count'])),
-        disciplines: [for (final d in (row['disciplines'] as List?) ?? const []) '$d'],
-        cost: asInt(row['cost']),
-        revenue: asInt(row['revenue']),
-        demand: asInt(row['demand']),
-        supply: asInt(row['supply']),
-      ),
-    );
+    out.add(CraftProfit(
+      recipeId: asInt(row['recipe_id']),
+      itemId: item,
+      count: math.max(1, asInt(row['count'])),
+      disciplines: [for (final d in (row['disciplines'] as List?) ?? const []) '$d'],
+      cost: asInt(row['cost']),
+      revenue: asInt(row['revenue']),
+      demand: asInt(row['demand']),
+      supply: asInt(row['supply']),
+    ));
   }
   if (out.isEmpty) return null;
   return ServerCraftProfit(out, DateTime.tryParse('${raw['updated_at']}'));
@@ -152,10 +148,11 @@ ServerCraftProfit? parseCraftProfit(dynamic raw) {
 Future<ServerCraftProfit?> fetchServerCraftProfit({String? discipline, bool byReturn = false, int limit = 200}) async {
   if (!communityReady) return null;
   try {
-    final raw = await Supabase.instance.client.rpc(
-      'craft_profit',
-      params: {'p_discipline': discipline, 'p_by_return': byReturn, 'p_limit': limit},
-    );
+    final raw = await Supabase.instance.client.rpc('craft_profit', params: {
+      'p_discipline': discipline,
+      'p_by_return': byReturn,
+      'p_limit': limit,
+    });
     return parseCraftProfit(raw);
   } catch (_) {
     return null;

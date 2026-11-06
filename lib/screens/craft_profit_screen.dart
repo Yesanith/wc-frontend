@@ -52,23 +52,20 @@ class _CraftProfitScreenState extends ConsumerState<CraftProfitScreen> {
         onRetry: () => ref.invalidate(recipeBookProvider),
         builder: (b) {
           Widget page(List<CraftProfit> rows, DateTime? readAt) => _Page(
-            book: b,
-            rows: rows,
-            readAt: readAt,
-            discipline: _discipline,
-            byReturn: _byReturn,
-            onlyLearned: _onlyLearned,
-            canFilterLearned: learned != null,
-            onDiscipline: (d) => setState(() => _discipline = d),
-            onByReturn: (v) => setState(() => _byReturn = v),
-            onOnlyLearned: (v) => setState(() => _onlyLearned = v),
-          );
+                book: b,
+                rows: rows,
+                readAt: readAt,
+                discipline: _discipline,
+                byReturn: _byReturn,
+                onlyLearned: _onlyLearned,
+                canFilterLearned: learned != null,
+                onDiscipline: (d) => setState(() => _discipline = d),
+                onByReturn: (v) => setState(() => _byReturn = v),
+                onOnlyLearned: (v) => setState(() => _onlyLearned = v),
+              );
 
           if (server.isLoading) {
-            return const Padding(
-              padding: EdgeInsets.all(24),
-              child: Center(child: CircularProgressIndicator()),
-            );
+            return const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator()));
           }
           final answer = server.valueOrNull;
           if (answer != null) {
@@ -234,12 +231,10 @@ class _ProfitRow extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                ),
+                Text(name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Wrap(
                   spacing: 4,

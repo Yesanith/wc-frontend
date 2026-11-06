@@ -32,7 +32,9 @@ class ProgressionScreen extends ConsumerWidget {
             labels: [s.t('achievements'), s.t('masteries'), s.t('instances'), s.t('pvp_wvw')],
           ),
           const Expanded(
-            child: TabBarView(children: [_AchievementsTab(), _MasteriesTab(), _InstancesTab(), _PvpTab()]),
+            child: TabBarView(
+              children: [_AchievementsTab(), _MasteriesTab(), _InstancesTab(), _PvpTab()],
+            ),
           ),
         ],
       ),

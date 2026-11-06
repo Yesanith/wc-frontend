@@ -46,24 +46,15 @@ class DailyScreen extends ConsumerWidget {
           _ChecklistGrid(
             tiles: [
               _Tile(Icons.schedule, s.t('world_bosses'), bosses == null ? null : '${bosses.length}', false),
+              _Tile(Icons.construction, s.t('daily_crafts'), crafts == null ? null : '${crafts.done}/${crafts.total}',
+                  crafts != null && crafts.total > 0 && crafts.done >= crafts.total),
               _Tile(
-                Icons.construction,
-                s.t('daily_crafts'),
-                crafts == null ? null : '${crafts.done}/${crafts.total}',
-                crafts != null && crafts.total > 0 && crafts.done >= crafts.total,
-              ),
-              _Tile(
-                Icons.inventory_2_outlined,
-                s.t('map_chests'),
-                chests == null ? null : '${chests.done}/${chests.total}',
-                chests != null && chests.total > 0 && chests.done >= chests.total,
-              ),
-              _Tile(
-                Icons.castle_outlined,
-                s.t('dungeon_paths'),
-                dungeons == null ? null : '${dungeons.fold<int>(0, (n, d) => n + d.done)}',
-                false,
-              ),
+                  Icons.inventory_2_outlined,
+                  s.t('map_chests'),
+                  chests == null ? null : '${chests.done}/${chests.total}',
+                  chests != null && chests.total > 0 && chests.done >= chests.total),
+              _Tile(Icons.castle_outlined, s.t('dungeon_paths'),
+                  dungeons == null ? null : '${dungeons.fold<int>(0, (n, d) => n + d.done)}', false),
             ],
           ),
           const SizedBox(height: 12),
@@ -154,23 +145,18 @@ class _ChecklistGrid extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               children: [
-                Icon(
-                  t.complete ? Icons.check_circle : t.icon,
-                  size: 18,
-                  color: t.complete ? AppColors.green : AppColors.gold,
-                ),
+                Icon(t.complete ? Icons.check_circle : t.icon,
+                    size: 18, color: t.complete ? AppColors.green : AppColors.gold),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        t.label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 11, color: AppColors.muted),
-                      ),
+                      Text(t.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 11, color: AppColors.muted)),
                       Text(t.value ?? '…', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
                     ],
                   ),
@@ -223,16 +209,11 @@ class FoldSection extends StatelessWidget {
             children: [
               if (lead != null) ...[
                 SizedBox(width: 26, height: 26, child: Center(child: lead)),
-                const SizedBox(width: 10),
+                const SizedBox(width: 10)
               ],
-              Expanded(
-                child: Text(title, style: display(16), maxLines: 1, overflow: TextOverflow.ellipsis),
-              ),
+              Expanded(child: Text(title, style: display(16), maxLines: 1, overflow: TextOverflow.ellipsis)),
               if (note != null)
-                Text(
-                  note,
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
-                ),
+                Text(note, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
               if (extra != null) extra,
             ],
           ),
@@ -283,14 +264,12 @@ class PeriodicCategoryList extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    r.name,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: r.done ? AppColors.muted : AppColors.text,
-                    ),
-                  ),
+                  child: Text(r.name,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: r.done ? AppColors.muted : AppColors.text,
+                      )),
                 ),
                 if (!r.done && r.max > 0 && r.current > 0)
                   Text('${r.current}/${r.max}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
@@ -316,13 +295,8 @@ class ResetBanner extends StatelessWidget {
         children: [
           Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 20),
           const SizedBox(width: 10),
-          Expanded(
-            child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
-          ),
-          Text(
-            timeUntil(at),
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
-          ),
+          Expanded(child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
+          Text(timeUntil(at), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
         ],
       ),
     );
@@ -346,13 +320,8 @@ class ChecklistRow extends StatelessWidget {
         children: [
           Icon(complete ? Icons.check_circle : icon, size: 18, color: complete ? AppColors.green : AppColors.gold),
           const SizedBox(width: 10),
-          Expanded(
-            child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
-          ),
-          Text(
-            value ?? '…',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted),
-          ),
+          Expanded(child: Text(label, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+          Text(value ?? '…', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.muted)),
         ],
       ),
     );
@@ -369,10 +338,7 @@ class _GameIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final u = url;
     if (u == null || u.isEmpty) return Icon(Icons.emoji_events_outlined, size: 20, color: AppColors.gold);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: CachedIcon(url: u, fit: BoxFit.contain),
-    );
+    return ClipRRect(borderRadius: BorderRadius.circular(4), child: CachedIcon(url: u, fit: BoxFit.contain));
   }
 }
 

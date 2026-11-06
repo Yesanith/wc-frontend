@@ -60,17 +60,13 @@ void main() {
     testWidgets('lays the interface out as a smaller screen and fills the real one', (tester) async {
       await screen(tester, const Size(2400, 1200));
       Size? seen;
-      await tester.pumpWidget(
-        MaterialApp(
-          builder: (context, child) => UiZoom(scale: 1.5, child: child!),
-          home: Builder(
-            builder: (context) {
-              seen = MediaQuery.sizeOf(context);
-              return const Scaffold(body: Center(child: Text('middle')));
-            },
-          ),
-        ),
-      );
+      await tester.pumpWidget(MaterialApp(
+        builder: (context, child) => UiZoom(scale: 1.5, child: child!),
+        home: Builder(builder: (context) {
+          seen = MediaQuery.sizeOf(context);
+          return const Scaffold(body: Center(child: Text('middle')));
+        }),
+      ));
       expect(seen, const Size(1600, 800));
       // what is in the middle of the smaller screen is in the middle of the real one
       expect(tester.getCenter(find.text('middle')).dx, closeTo(1200, 1));
@@ -84,13 +80,9 @@ void main() {
       await screen(tester, const Size(2400, 1200));
       var pressed = 0;
       Widget app(double scale) => MaterialApp(
-        builder: (context, child) => UiZoom(scale: scale, child: child!),
-        home: Scaffold(
-          body: Center(
-            child: ElevatedButton(onPressed: () => pressed++, child: const Text('go')),
-          ),
-        ),
-      );
+            builder: (context, child) => UiZoom(scale: scale, child: child!),
+            home: Scaffold(body: Center(child: ElevatedButton(onPressed: () => pressed++, child: const Text('go')))),
+          );
       await tester.pumpWidget(app(1.5));
       await tester.tapAt(tester.getCenter(find.text('go')));
       await tester.pump();

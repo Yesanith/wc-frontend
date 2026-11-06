@@ -5,20 +5,20 @@ import 'package:wondrous_compass/state/community.dart';
 import 'package:wondrous_compass/state/guild_events.dart';
 
 GuildEvent _event({String creator = 'someone', String guild = 'g1'}) => GuildEvent.fromRow({
-  'id': 'e1',
-  'guild_id': guild,
-  'creator_id': creator,
-  'series_id': null,
-  'title': 'Raid night',
-  'description': '',
-  'activity': 'raid',
-  'start_at': '2026-10-01T18:00:00+00:00',
-  'duration_minutes': 90,
-  'max_participants': 10,
-  'status': 'scheduled',
-  'version': 3,
-  'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
-});
+      'id': 'e1',
+      'guild_id': guild,
+      'creator_id': creator,
+      'series_id': null,
+      'title': 'Raid night',
+      'description': '',
+      'activity': 'raid',
+      'start_at': '2026-10-01T18:00:00+00:00',
+      'duration_minutes': 90,
+      'max_participants': 10,
+      'status': 'scheduled',
+      'version': 3,
+      'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
+    });
 
 void main() {
   test('an event row reads with its guild and end time', () {
@@ -71,7 +71,7 @@ void main() {
       'America/Argentina/Buenos_Aires',
       'UTC',
       'Etc/GMT-3',
-      'America/Port-au-Prince',
+      'America/Port-au-Prince'
     ]) {
       expect(isIanaZone(ok), isTrue, reason: ok);
     }
@@ -167,14 +167,14 @@ void main() {
 
   group('discord only events and flex roles', () {
     Map<String, dynamic> row(Map<String, dynamic> extra) => {
-      'id': 'e1',
-      'guild_id': 'g1',
-      'creator_id': 'someone',
-      'title': 'Raid',
-      'start_at': '2026-10-01T18:00:00+00:00',
-      'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
-      ...extra,
-    };
+          'id': 'e1',
+          'guild_id': 'g1',
+          'creator_id': 'someone',
+          'title': 'Raid',
+          'start_at': '2026-10-01T18:00:00+00:00',
+          'guilds': {'name': 'Mistwalkers', 'tag': 'MIST'},
+          ...extra,
+        };
 
     test('an event is open to the app unless the server says it is for Discord', () {
       expect(GuildEvent.fromRow(row({})).discordOnly, isFalse, reason: 'older rows have no such column');

@@ -34,12 +34,10 @@ Future<void> shareBackup(WidgetRef ref) async {
   if (kIsWeb) {
     // a browser has no temporary directory, the file is made from the bytes
     final bytes = Uint8List.fromList(utf8.encode(text));
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile.fromData(bytes, mimeType: 'application/json', name: 'wondrous-compass-backup.json')],
-        text: 'Wondrous Compass backup',
-      ),
-    );
+    await SharePlus.instance.share(ShareParams(
+      files: [XFile.fromData(bytes, mimeType: 'application/json', name: 'wondrous-compass-backup.json')],
+      text: 'Wondrous Compass backup',
+    ));
     return;
   }
   final dir = await getTemporaryDirectory();
@@ -58,9 +56,9 @@ Future<void> restoreBackup(WidgetRef ref, String text) async {
 
   final watchlist = raw['watchlist'];
   if (watchlist is List) {
-    await ref
-        .read(watchlistProvider.notifier)
-        .replaceAll(watchlist.map((e) => int.tryParse('$e') ?? 0).where((e) => e > 0).toList());
+    await ref.read(watchlistProvider.notifier).replaceAll(
+          watchlist.map((e) => int.tryParse('$e') ?? 0).where((e) => e > 0).toList(),
+        );
   }
 
   final pinned = raw['pinned_events'];
@@ -70,9 +68,9 @@ Future<void> restoreBackup(WidgetRef ref, String text) async {
 
   final achievements = raw['pinned_achievements'];
   if (achievements is List) {
-    await ref
-        .read(pinnedAchievementsProvider.notifier)
-        .replaceAll(achievements.map((e) => int.tryParse('$e') ?? 0).where((e) => e > 0).toList());
+    await ref.read(pinnedAchievementsProvider.notifier).replaceAll(
+          achievements.map((e) => int.tryParse('$e') ?? 0).where((e) => e > 0).toList(),
+        );
   }
 
   final history = raw['price_history'];

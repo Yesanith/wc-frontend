@@ -20,20 +20,20 @@ class NewsItem {
   final String? image;
 
   Map<String, dynamic> toJson() => {
-    't': title,
-    'l': link,
-    if (date != null) 'd': date!.toIso8601String(),
-    'e': excerpt,
-    if (image != null) 'i': image,
-  };
+        't': title,
+        'l': link,
+        if (date != null) 'd': date!.toIso8601String(),
+        'e': excerpt,
+        if (image != null) 'i': image,
+      };
 
   static NewsItem fromJson(Map<String, dynamic> j) => NewsItem(
-    title: '${j['t'] ?? ''}',
-    link: '${j['l'] ?? ''}',
-    date: DateTime.tryParse('${j['d'] ?? ''}'),
-    excerpt: '${j['e'] ?? ''}',
-    image: j['i'] as String?,
-  );
+        title: '${j['t'] ?? ''}',
+        link: '${j['l'] ?? ''}',
+        date: DateTime.tryParse('${j['d'] ?? ''}'),
+        excerpt: '${j['e'] ?? ''}',
+        image: j['i'] as String?,
+      );
 }
 
 /// the site publishes in these languages, everything else reads english
@@ -71,14 +71,8 @@ DateTime? parseRssDate(String raw) {
   if (m == null) return null;
   final month = _months[m.group(2)!.toLowerCase()];
   if (month == null) return null;
-  var at = DateTime.utc(
-    int.parse(m.group(3)!),
-    month,
-    int.parse(m.group(1)!),
-    int.parse(m.group(4)!),
-    int.parse(m.group(5)!),
-    int.parse(m.group(6) ?? '0'),
-  );
+  var at = DateTime.utc(int.parse(m.group(3)!), month, int.parse(m.group(1)!), int.parse(m.group(4)!),
+      int.parse(m.group(5)!), int.parse(m.group(6) ?? '0'));
   final zone = m.group(7);
   if (zone != null && (zone.startsWith('+') || zone.startsWith('-'))) {
     final sign = zone.startsWith('-') ? -1 : 1;
@@ -99,7 +93,7 @@ String decodeEntities(String text) {
     'nbsp': ' ',
     'hellip': '…',
     'ndash': '–',
-    'mdash': '—',
+    'mdash': '—'
   };
   return text.replaceAllMapped(RegExp(r'&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);'), (m) {
     final code = m.group(1)!;
@@ -141,15 +135,13 @@ List<NewsItem> parseRss(String xml) {
       RegExp(r'<p class="more">.*?</p>', dotAll: true),
       '',
     );
-    out.add(
-      NewsItem(
-        title: title,
-        link: link,
-        date: parseRssDate(_tag(block, 'pubDate') ?? ''),
-        excerpt: plainExcerpt(description.trim().isNotEmpty ? description : content),
-        image: articleImage(block, content, description),
-      ),
-    );
+    out.add(NewsItem(
+      title: title,
+      link: link,
+      date: parseRssDate(_tag(block, 'pubDate') ?? ''),
+      excerpt: plainExcerpt(description.trim().isNotEmpty ? description : content),
+      image: articleImage(block, content, description),
+    ));
   }
   out.sort((a, b) => (b.date ?? DateTime(0)).compareTo(a.date ?? DateTime(0)));
   return out;
@@ -173,8 +165,7 @@ String cleanLink(String raw) {
 /// stands in. prefers the 768 pixel variant the site generates for each
 /// screenshot, the full size is 1920 wide
 String? articleImage(String block, String content, String description) {
-  String? found =
-      RegExp(r'<media:(?:content|thumbnail)[^>]+url="([^"]+)"').firstMatch(block)?.group(1) ??
+  String? found = RegExp(r'<media:(?:content|thumbnail)[^>]+url="([^"]+)"').firstMatch(block)?.group(1) ??
       RegExp(r'<enclosure[^>]+url="([^"]+)"').firstMatch(block)?.group(1);
   if (found == null) {
     final img = RegExp(r'<img\b[^>]*>').firstMatch(content) ?? RegExp(r'<img\b[^>]*>').firstMatch(description);
@@ -219,7 +210,7 @@ final newsProvider = FutureProvider<List<NewsItem>>((ref) async {
     if (rows is List && rows.isNotEmpty) {
       return [
         for (final r in rows)
-          if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r)),
+          if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r))
       ];
     }
     // guildwars2.com sends no CORS headers, so a browser cannot read its feed
@@ -248,21 +239,19 @@ DateTime? patchDate(String title) {
 /// come first when listed in reverse
 final patchNotesProvider = FutureProvider<List<PatchNote>>((ref) async {
   final cache = ref.watch(diskCacheProvider);
-  final uri = Uri.parse('https://wiki.guildwars2.com/api.php').replace(
-    queryParameters: {
-      'action': 'query',
-      'list': 'allpages',
-      'apprefix': 'Game updates/',
-      'apnamespace': '0',
-      'apdir': 'descending',
-      // titles with words after the slash sort above the dates and used to
-      // fill the whole page, start just above the last possible date instead
-      'apfrom': 'Game updates/9999',
-      'aplimit': '40',
-      'format': 'json',
-      if (kIsWeb) 'origin': '*',
-    },
-  );
+  final uri = Uri.parse('https://wiki.guildwars2.com/api.php').replace(queryParameters: {
+    'action': 'query',
+    'list': 'allpages',
+    'apprefix': 'Game updates/',
+    'apnamespace': '0',
+    'apdir': 'descending',
+    // titles with words after the slash sort above the dates and used to
+    // fill the whole page, start just above the last possible date instead
+    'apfrom': 'Game updates/9999',
+    'aplimit': '40',
+    'format': 'json',
+    if (kIsWeb) 'origin': '*',
+  });
   try {
     final res = await _client.get(uri).timeout(const Duration(seconds: 20));
     if (res.statusCode != 200) throw Exception('wiki answered ${res.statusCode}');

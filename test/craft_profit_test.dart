@@ -10,15 +10,16 @@ BookRecipe recipe(
   int outputCount = 1,
   List<String> disciplines = const ['Weaponsmith'],
   bool legendary = false,
-}) => BookRecipe(
-  id: id,
-  output: output,
-  outputCount: outputCount,
-  disciplines: disciplines,
-  minRating: 0,
-  ingredients: ingredients,
-  legendary: legendary,
-);
+}) =>
+    BookRecipe(
+      id: id,
+      output: output,
+      outputCount: outputCount,
+      disciplines: disciplines,
+      minRating: 0,
+      ingredients: ingredients,
+      legendary: legendary,
+    );
 
 RecipeBook book(List<BookRecipe> recipes) {
   final byOutput = <int, List<BookRecipe>>{};
@@ -117,7 +118,7 @@ void main() {
 
     test('keeps no more than the limit', () {
       final many = book([
-        for (var i = 0; i < 10; i++) recipe(100 + i, 10 + i, [(1, 1)]),
+        for (var i = 0; i < 10; i++) recipe(100 + i, 10 + i, [(1, 1)])
       ]);
       final prices = {1: price(10), for (var i = 0; i < 10; i++) 10 + i: price(1001)};
       expect(rankCrafts(many, prices, limit: 3), hasLength(3));
@@ -132,16 +133,17 @@ void main() {
       List<String> disciplines = const ['Weaponsmith'],
       int cost = 250,
       int revenue = 850,
-    }) => {
-      'recipe_id': recipe,
-      'item_id': item,
-      'count': count,
-      'disciplines': disciplines,
-      'cost': cost,
-      'revenue': revenue,
-      'demand': 100,
-      'supply': 50,
-    };
+    }) =>
+        {
+          'recipe_id': recipe,
+          'item_id': item,
+          'count': count,
+          'disciplines': disciplines,
+          'cost': cost,
+          'revenue': revenue,
+          'demand': 100,
+          'supply': 50,
+        };
 
     test('reads the rows of the server, in its order, with when it read the prices', () {
       final answer = parseCraftProfit({
@@ -165,8 +167,8 @@ void main() {
         parseCraftProfit({
           'rows': [
             'nope',
-            {'item_id': 0},
-          ],
+            {'item_id': 0}
+          ]
         }),
         isNull,
       );
@@ -183,7 +185,7 @@ void main() {
 
     test('a count of nothing is one', () {
       final answer = parseCraftProfit({
-        'rows': [row(count: 0)],
+        'rows': [row(count: 0)]
       })!;
       expect(answer.rows.single.count, 1);
     });

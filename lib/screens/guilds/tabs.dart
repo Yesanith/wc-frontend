@@ -17,7 +17,10 @@ class _TreasuryTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(guildTreasuryProvider(id)),
       builder: (rows) {
         if (rows.isEmpty) {
-          return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('nothing_here')));
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: EmptyNote(s.t('nothing_here')),
+          );
         }
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -41,26 +44,19 @@ class _TreasuryTab extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          row.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                        ),
+                        Text(row.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                         const SizedBox(height: 6),
                         Bar(value: row.ratio, color: done ? AppColors.green : AppColors.gold),
                       ],
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Text(
-                    row.needed > 0 ? '${fmtInt(row.count)} / ${fmtInt(row.needed)}' : fmtInt(row.count),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: done ? AppColors.green : AppColors.gold,
-                    ),
-                  ),
+                  Text(row.needed > 0 ? '${fmtInt(row.count)} / ${fmtInt(row.needed)}' : fmtInt(row.count),
+                      style: TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w800, color: done ? AppColors.green : AppColors.gold)),
                 ],
               ),
             );
@@ -88,7 +84,10 @@ class _StashTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(guildStashProvider(id)),
       builder: (tabs) {
         if (tabs.isEmpty) {
-          return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('nothing_here')));
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: EmptyNote(s.t('nothing_here')),
+          );
         }
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -102,12 +101,8 @@ class _StashTab extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               GridView(
-                gridDelegate: const AdaptiveGridDelegate(
-                  minColumns: 8,
-                  maxTile: 60,
-                  mainAxisSpacing: 6,
-                  crossAxisSpacing: 6,
-                ),
+                gridDelegate:
+                    const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
@@ -155,7 +150,10 @@ class _LogTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(guildLogProvider(id)),
       builder: (entries) {
         if (entries.isEmpty) {
-          return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('nothing_here')));
+          return Padding(
+            padding: const EdgeInsets.all(24),
+            child: EmptyNote(s.t('nothing_here')),
+          );
         }
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -169,10 +167,8 @@ class _LogTab extends ConsumerWidget {
               children: [
                 Text(_logLine(entry), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
                 const SizedBox(height: 2),
-                Text(
-                  date.length >= 10 ? date.substring(0, 10) : date,
-                  style: TextStyle(fontSize: 11, color: AppColors.hint),
-                ),
+                Text(date.length >= 10 ? date.substring(0, 10) : date,
+                    style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ],
             );
           },
@@ -249,8 +245,7 @@ class _MembersTab extends ConsumerWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text('${t['name'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w700)),
-                        ),
+                            child: Text('${t['name'] ?? ''}', style: const TextStyle(fontWeight: FontWeight.w700))),
                         Text(
                           s.t('wins_losses', {
                             'w': asInt((t['aggregate'] as Map?)?['wins']),
@@ -280,10 +275,8 @@ class _MembersTab extends ConsumerWidget {
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: Text(
-                        '${m['name'] ?? ''}',
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                      ),
+                      child:
+                          Text('${m['name'] ?? ''}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                     ),
                     Text('${m['rank'] ?? ''}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
                   ],
@@ -345,10 +338,8 @@ class _UpgradesTab extends ConsumerWidget {
                     title: u.name,
                     iconSize: 32,
                     titleLines: 1,
-                    trailing: Text(
-                      fmtInt(u.count),
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
-                    ),
+                    trailing: Text(fmtInt(u.count),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
                   ),
                 ),
             ],

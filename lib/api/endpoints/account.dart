@@ -23,18 +23,16 @@ extension Gw2AccountApi on Gw2Api {
   }
 
   /// daily, weekly or special objectives of the wizard's vault
-  Future<Json> vault(String track) async => _object(
-    await cachedGet(
-      '/account/wizardsvault/$track',
-      // the api itself refreshes about every five minutes, shorter is pointless
-      ttl: const Duration(minutes: 5),
-      notBefore: switch (track) {
-        'daily' => lastDailyReset(),
-        'weekly' => lastWeeklyReset(),
-        _ => null,
-      },
-    ),
-  );
+  Future<Json> vault(String track) async => _object(await cachedGet(
+        '/account/wizardsvault/$track',
+        // the api itself refreshes about every five minutes, shorter is pointless
+        ttl: const Duration(minutes: 5),
+        notBefore: switch (track) {
+          'daily' => lastDailyReset(),
+          'weekly' => lastWeeklyReset(),
+          _ => null,
+        },
+      ));
 
   /// raid encounters cleared this week and the wing layout
   Future<List<String>> accountRaids() async =>

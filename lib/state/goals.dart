@@ -65,9 +65,9 @@ class GoalsNotifier extends Notifier<List<Goal>> {
   }
 
   Future<void> remove(int itemId) => _save([
-    for (final g in state)
-      if (g.itemId != itemId) g,
-  ]);
+        for (final g in state)
+          if (g.itemId != itemId) g
+      ]);
 
   Future<void> clear() => _save(const []);
 

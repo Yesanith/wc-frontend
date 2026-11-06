@@ -114,11 +114,11 @@ final periodicAchievementsProvider = FutureProvider<PeriodicAchievements>((ref) 
     final icon = entry.key['icon'] as String?;
     final d = [
       for (final id in entry.value)
-        if (!_isWeekly(details[id])) row(id),
+        if (!_isWeekly(details[id])) row(id)
     ];
     final w = [
       for (final id in entry.value)
-        if (_isWeekly(details[id])) row(id),
+        if (_isWeekly(details[id])) row(id)
     ];
     if (d.isNotEmpty) daily.add(PeriodicCategory(name, icon, d));
     if (w.isNotEmpty) weekly.add(PeriodicCategory(name, icon, w));

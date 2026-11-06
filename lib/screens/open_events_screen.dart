@@ -33,8 +33,8 @@ class OpenEventsScreen extends ConsumerWidget {
           backgroundColor: AppColors.gold,
           foregroundColor: AppColors.bg,
           onPressed: () async {
-            final made = await Navigator.of(context)
-                .push<bool>(MaterialPageRoute(builder: (_) => const OpenEventFormScreen()));
+            final made =
+                await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const OpenEventFormScreen()));
             if (made == true) {
               ref.invalidate(openEventsFeedProvider);
               ref.invalidate(myOpenEventsProvider);
@@ -71,11 +71,7 @@ class _Blocked extends ConsumerWidget {
           children: [
             Icon(Icons.public, size: 40, color: AppColors.muted),
             const SizedBox(height: 12),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.muted, height: 1.4),
-            ),
+            Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
             if (toSettings) ...[
               const SizedBox(height: 16),
               FilledButton.tonal(
@@ -287,11 +283,9 @@ class _OpenEventCard extends ConsumerWidget {
                     Pill(s.t('oe_region_${e.region}')),
                     Pill(openEventLanguageName(s, e.language)),
                     for (final t in e.tags) Pill(s.t('oe_tag_$t')),
-                    Pill(
-                      e.maxParticipants == null
-                          ? s.t('oe_going', {'n': e.going})
-                          : s.t('oe_places', {'n': e.going, 'max': e.maxParticipants}),
-                    ),
+                    Pill(e.maxParticipants == null
+                        ? s.t('oe_going', {'n': e.going})
+                        : s.t('oe_places', {'n': e.going, 'max': e.maxParticipants})),
                     if (e.isFull && !e.mine && e.myStatus != 'going') Pill(s.t('oe_full'), color: AppColors.red),
                     if (e.myStatus != null) Pill(s.t('rsvp_${e.myStatus}'), color: statusColor(e.myStatus)),
                   ],

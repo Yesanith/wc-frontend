@@ -15,10 +15,10 @@ void main() {
       'defense': 0,
       'infusion_slots': [
         {
-          'flags': ['Infusion'],
+          'flags': ['Infusion']
         },
         {
-          'flags': ['Infusion'],
+          'flags': ['Infusion']
         },
       ],
     };
@@ -29,10 +29,10 @@ void main() {
   });
 
   test('armour, bags and consumables show their own facts', () {
-    expect(itemFactRows(s, {'type': 'Armor'}, {'defense': 121, 'weight_class': 'Heavy'}).map((r) => r.$2), [
-      '121',
-      'Heavy',
-    ]);
+    expect(
+      itemFactRows(s, {'type': 'Armor'}, {'defense': 121, 'weight_class': 'Heavy'}).map((r) => r.$2),
+      ['121', 'Heavy'],
+    );
     expect(itemFactRows(s, {'type': 'Bag'}, {'size': 32}).single.$2, '32');
     expect(itemFactRows(s, {'type': 'Consumable'}, {'duration_ms': 3600000}).single.$2, '1 h');
     expect(itemFactRows(s, {'type': 'Consumable'}, {'duration_ms': 1800000}).single.$2, '30 min');
