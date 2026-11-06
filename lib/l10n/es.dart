@@ -1053,4 +1053,9 @@ const esStrings = <String, String>{
   'oe_role_full': 'Lleno',
   'oe_roles_none': 'Todavía no hay un servidor de Discord oficial.',
   'oe_map_pill': 'Mapa {id}',
+  'signin_terms': 'Al iniciar sesión aceptas las condiciones y la política de privacidad:',
+  'oe_hide_organizer': 'Ocultar los eventos de este organizador',
+  'oe_organizer_hidden': 'Los eventos de {name} están ocultos. Puedes volver a mostrarlos desde la lista de eventos.',
+  'oe_hidden_manage': 'Organizadores ocultos ({n})',
+  'oe_show_again': 'Mostrar de nuevo',
 };

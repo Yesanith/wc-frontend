@@ -108,15 +108,33 @@ class _Discover extends ConsumerWidget {
             child: AsyncView<List<OpenEvent>>(
               value: ref.watch(openEventsFeedProvider),
               onRetry: () => ref.invalidate(openEventsFeedProvider),
-              builder: (events) => ListView(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 96),
-                children: [
-                  if (events.isEmpty)
-                    Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('oe_none')))
-                  else
-                    CardWrap(children: [for (final e in events) _OpenEventCard(event: e)]),
-                ],
-              ),
+              builder: (all) {
+                final hidden = ref.watch(hiddenOrganizersProvider);
+                final events = [
+                  for (final e in all)
+                    if (!hidden.contains(e.organizer)) e
+                ];
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 96),
+                  children: [
+                    if (events.isEmpty)
+                      Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('oe_none')))
+                    else
+                      CardWrap(children: [for (final e in events) _OpenEventCard(event: e)]),
+                    if (hidden.isNotEmpty)
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                          onPressed: () => _showHiddenOrganizers(context),
+                          child: Text(
+                            s.t('oe_hidden_manage', {'n': hidden.length}),
+                            style: TextStyle(color: AppColors.muted),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -302,3 +320,30 @@ class _OpenEventCard extends ConsumerWidget {
 
 // ---------------------------------------------------------------------------
 // one event
+
+/// the organizers whose events are hidden, each with a way to show them again
+void _showHiddenOrganizers(BuildContext context) {
+  showDialog<void>(
+    context: context,
+    builder: (ctx) => Consumer(
+      builder: (ctx, ref, _) {
+        final s = ref.watch(stringsProvider);
+        final hidden = ref.watch(hiddenOrganizersProvider).toList()..sort();
+        if (hidden.isEmpty) WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(ctx).maybePop());
+        return SimpleDialog(
+          title: Text(s.t('oe_hidden_manage', {'n': hidden.length})),
+          children: [
+            for (final name in hidden)
+              ListTile(
+                title: Text(name),
+                trailing: TextButton(
+                  onPressed: () => ref.read(hiddenOrganizersProvider.notifier).show(name),
+                  child: Text(s.t('oe_show_again')),
+                ),
+              ),
+          ],
+        );
+      },
+    ),
+  );
+}

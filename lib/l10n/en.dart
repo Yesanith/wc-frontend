@@ -1049,4 +1049,9 @@ const enStrings = <String, String>{
   'oe_role_full': 'Full',
   'oe_roles_none': 'There is no official Discord server yet.',
   'oe_map_pill': 'Map {id}',
+  'signin_terms': 'By signing in you accept the terms and the privacy policy:',
+  'oe_hide_organizer': 'Hide events by this organizer',
+  'oe_organizer_hidden': 'Events by {name} are hidden. You can show them again from the list of events.',
+  'oe_hidden_manage': 'Hidden organizers ({n})',
+  'oe_show_again': 'Show again',
 };

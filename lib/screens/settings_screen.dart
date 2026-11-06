@@ -22,6 +22,7 @@ import '../state/trade_notify.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/site_header.dart' show sitePageUrl;
 import '../widgets/ui_zoom.dart';
 import 'onboarding_screen.dart';
 

@@ -1059,4 +1059,9 @@ const frStrings = <String, String>{
   'oe_role_full': 'Complet',
   'oe_roles_none': 'Il n\'y a pas encore de serveur Discord officiel.',
   'oe_map_pill': 'Carte {id}',
+  'signin_terms': 'En te connectant, tu acceptes les conditions et la politique de confidentialité :',
+  'oe_hide_organizer': 'Masquer les événements de cet organisateur',
+  'oe_organizer_hidden': 'Les événements de {name} sont masqués. Tu peux les réafficher depuis la liste des événements.',
+  'oe_hidden_manage': 'Organisateurs masqués ({n})',
+  'oe_show_again': 'Réafficher',
 };

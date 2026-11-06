@@ -1063,4 +1063,9 @@ const deStrings = <String, String>{
   'oe_role_full': 'Voll',
   'oe_roles_none': 'Es gibt noch keinen offiziellen Discord-Server.',
   'oe_map_pill': 'Karte {id}',
+  'signin_terms': 'Mit der Anmeldung akzeptierst du die Nutzungsbedingungen und die Datenschutzerklärung:',
+  'oe_hide_organizer': 'Events dieses Veranstalters ausblenden',
+  'oe_organizer_hidden': 'Events von {name} sind ausgeblendet. Du kannst sie in der Eventliste wieder einblenden.',
+  'oe_hidden_manage': 'Ausgeblendete Veranstalter ({n})',
+  'oe_show_again': 'Wieder anzeigen',
 };

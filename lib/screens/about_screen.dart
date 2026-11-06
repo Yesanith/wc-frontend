@@ -30,13 +30,15 @@ class AboutScreen extends ConsumerWidget {
         const SizedBox(height: 22),
         Text(s.t('about_community'), style: display(16)),
         const SizedBox(height: 8),
-        _CommunityTile(
-          icon: Icons.code,
-          accent: AppColors.gold,
-          title: s.t('about_github'),
-          body: s.t('about_github_note'),
-          url: repositoryUrl,
-        ),
+        // the build for Google Play leaves out the link to the apks and the donation, which the store has rules about
+        if (!playBuild)
+          _CommunityTile(
+            icon: Icons.code,
+            accent: AppColors.gold,
+            title: s.t('about_github'),
+            body: s.t('about_github_note'),
+            url: repositoryUrl,
+          ),
         _CommunityTile(
           icon: Icons.bug_report_outlined,
           accent: AppColors.red,
@@ -44,15 +46,16 @@ class AboutScreen extends ConsumerWidget {
           body: s.t('about_issue_note'),
           url: issuesUrl,
         ),
-        _CommunityTile(
-          icon: Icons.coffee,
-          accent: AppColors.coffee,
-          ink: AppColors.onCoffee,
-          title: s.t('buy_coffee'),
-          body: s.t('support_note'),
-          url: supportUrl,
-          external: true,
-        ),
+        if (!playBuild)
+          _CommunityTile(
+            icon: Icons.coffee,
+            accent: AppColors.coffee,
+            ink: AppColors.onCoffee,
+            title: s.t('buy_coffee'),
+            body: s.t('support_note'),
+            url: supportUrl,
+            external: true,
+          ),
         const SizedBox(height: 14),
         SettingsGroup(
           title: s.t('about_credits'),

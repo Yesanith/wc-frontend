@@ -233,6 +233,12 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     await _act(() => reportOpenEvent(widget.event.id, reason), done: _s.t('oe_reported'));
   }
 
+  void _hideOrganizer() {
+    ref.read(hiddenOrganizersProvider.notifier).hide(widget.event.organizer);
+    showToast(context, _s.t('oe_organizer_hidden', {'name': widget.event.organizer}));
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -420,10 +426,19 @@ class _EventBodyState extends ConsumerState<_EventBody> {
         ] else
           Align(
             alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              onPressed: _busy ? null : _report,
-              icon: Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
-              label: Text(s.t('oe_report'), style: TextStyle(color: AppColors.muted)),
+            child: Wrap(
+              children: [
+                TextButton.icon(
+                  onPressed: _busy ? null : _report,
+                  icon: Icon(Icons.flag_outlined, size: 18, color: AppColors.muted),
+                  label: Text(s.t('oe_report'), style: TextStyle(color: AppColors.muted)),
+                ),
+                TextButton.icon(
+                  onPressed: _busy ? null : _hideOrganizer,
+                  icon: Icon(Icons.visibility_off_outlined, size: 18, color: AppColors.muted),
+                  label: Text(s.t('oe_hide_organizer'), style: TextStyle(color: AppColors.muted)),
+                ),
+              ],
             ),
           ),
       ],

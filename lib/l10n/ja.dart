@@ -999,4 +999,9 @@ const jaStrings = <String, String>{
   'oe_role_full': '満員',
   'oe_roles_none': '公式Discordサーバーはまだありません。',
   'oe_map_pill': 'マップ {id}',
+  'signin_terms': 'ログインすると、利用規約とプライバシーポリシーに同意したものとみなされます:',
+  'oe_hide_organizer': 'この主催者のイベントを非表示にする',
+  'oe_organizer_hidden': '{name} のイベントを非表示にしました。イベント一覧から再表示できます。',
+  'oe_hidden_manage': '非表示の主催者 ({n})',
+  'oe_show_again': '再表示',
 };
