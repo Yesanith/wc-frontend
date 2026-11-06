@@ -21,7 +21,9 @@ jobs:
         with:
           channel: stable
           cache: true
-      # the formatter reads the files and needs no packages
+      # the formatter takes the style from the language version of the project, which it finds only with the packages.
+      # without them it uses the newest style, which the Check workflow does not accept
+      - run: flutter pub get
       - run: dart format --line-length 120 lib test
       - name: Commit if anything changed
         run: |
