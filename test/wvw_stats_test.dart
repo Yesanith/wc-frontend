@@ -35,11 +35,13 @@ const _scores = {
   ],
 };
 
-Gw2Api _api(http.Response Function(http.Request) answer, [List<Uri>? seen]) =>
-    Gw2Api('key', client: MockClient((req) async {
-      seen?.add(req.url);
-      return answer(req);
-    }));
+Gw2Api _api(http.Response Function(http.Request) answer, [List<Uri>? seen]) => Gw2Api(
+  'key',
+  client: MockClient((req) async {
+    seen?.add(req.url);
+    return answer(req);
+  }),
+);
 
 void main() {
   group('wvw statistics', () {

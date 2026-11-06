@@ -41,11 +41,7 @@ Json? skillSet(Json build, {required bool aquatic}) {
 
 List<int> skillIdsOf(Json? set) {
   if (set == null) return const [];
-  return [
-    asInt(set['heal']),
-    ...intList(set['utilities']),
-    asInt(set['elite']),
-  ].where((id) => id > 0).toList();
+  return [asInt(set['heal']), ...intList(set['utilities']), asInt(set['elite'])].where((id) => id > 0).toList();
 }
 
 final buildDetailProvider = FutureProvider.autoDispose.family<BuildDetail, String>((ref, encoded) async {
@@ -72,10 +68,7 @@ final buildDetailProvider = FutureProvider.autoDispose.family<BuildDetail, Strin
   ];
   final legends = legendIds.isEmpty ? <Json>[] : await api.legends(legendIds);
 
-  final skillIds = <int>{
-    ...skillIdsOf(skillSet(build, aquatic: false)),
-    ...skillIdsOf(skillSet(build, aquatic: true)),
-  };
+  final skillIds = <int>{...skillIdsOf(skillSet(build, aquatic: false)), ...skillIdsOf(skillSet(build, aquatic: true))};
   for (final legend in legends) {
     skillIds.addAll([asInt(legend['swap']), asInt(legend['heal']), asInt(legend['elite'])]);
     skillIds.addAll(intList(legend['utilities']));
@@ -130,9 +123,7 @@ final armoryProvider = FutureProvider<List<ItemSlot>>((ref) async {
   final api = accountApi(ref);
   final rows = await api.legendaryArmory();
   final items = await api.items(rows.map((r) => asInt(r['id'])));
-  final out = [
-    for (final r in rows) ItemSlot(asInt(r['id']), asInt(r['count']), items[asInt(r['id'])]),
-  ];
+  final out = [for (final r in rows) ItemSlot(asInt(r['id']), asInt(r['count']), items[asInt(r['id'])])];
   out.sort((a, b) => a.name.compareTo(b.name));
   return out;
 });

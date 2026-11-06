@@ -45,10 +45,14 @@ class _AccountsPanel extends ConsumerWidget {
                 i == active ? Icons.radio_button_checked : Icons.radio_button_unchecked,
                 color: i == active ? AppColors.gold : AppColors.muted,
               ),
-              title: Text(keys[i].name.isEmpty ? s.t('unnamed_account') : keys[i].name,
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
-              subtitle: Text(_mask(keys[i].key),
-                  style: TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.muted)),
+              title: Text(
+                keys[i].name.isEmpty ? s.t('unnamed_account') : keys[i].name,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Text(
+                _mask(keys[i].key),
+                style: TextStyle(fontFamily: 'monospace', fontSize: 11, color: AppColors.muted),
+              ),
               trailing: IconButton(
                 tooltip: s.t('remove_key'),
                 onPressed: () => _remove(context, ref, i, keys[i].name),
@@ -69,9 +73,8 @@ class _AccountsPanel extends ConsumerWidget {
             ),
           const SizedBox(height: 12),
           OutlinedButton.icon(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const OnboardingScreen()),
-            ),
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const OnboardingScreen())),
             icon: const Icon(Icons.add, size: 18),
             label: Text(keys.isEmpty ? s.t('add_api_key') : s.t('add_account')),
           ),
@@ -106,11 +109,7 @@ class _ImportDialogState extends State<_ImportDialog> {
     final s = widget.s;
     return AlertDialog(
       title: Text(s.t('import_backup')),
-      content: TextField(
-        controller: _ctrl,
-        maxLines: 6,
-        decoration: fieldDecoration(s.t('import_hint')),
-      ),
+      content: TextField(controller: _ctrl, maxLines: 6, decoration: fieldDecoration(s.t('import_hint'))),
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('cancel'))),
         FilledButton(onPressed: () => Navigator.of(context).pop(_ctrl.text), child: Text(s.t('import_backup'))),

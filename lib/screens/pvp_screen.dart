@@ -35,10 +35,7 @@ class PvpMatchesScreen extends ConsumerWidget {
             children: [
               Text(s.t('match_history_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
               const SizedBox(height: 14),
-              for (final game in list) ...[
-                _MatchCard(game),
-                const SizedBox(height: 8),
-              ],
+              for (final game in list) ...[_MatchCard(game), const SizedBox(height: 8)],
             ],
           );
         },
@@ -71,16 +68,15 @@ class _MatchCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(game.mapName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(
+                  game.mapName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: 2),
                 Text(
-                  [
-                    game.profession,
-                    if (game.ratingType.isNotEmpty) game.ratingType,
-                  ].join(' · '),
+                  [game.profession, if (game.ratingType.isNotEmpty) game.ratingType].join(' · '),
                   style: TextStyle(fontSize: 12, color: professionColor(game.profession)),
                 ),
               ],
@@ -90,11 +86,15 @@ class _MatchCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('${game.ownScore} – ${game.otherScore}',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: colour)),
+              Text(
+                '${game.ownScore} – ${game.otherScore}',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: colour),
+              ),
               if (rating != 0)
-                Text(rating > 0 ? '+$rating' : '$rating',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                Text(
+                  rating > 0 ? '+$rating' : '$rating',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.muted),
+                ),
             ],
           ),
         ],
@@ -142,9 +142,7 @@ class PvpAmuletsScreen extends ConsumerWidget {
                         Wrap(
                           spacing: 6,
                           runSpacing: 6,
-                          children: [
-                            for (final e in a.attributes.entries) Pill('${e.key} +${fmtInt(e.value)}'),
-                          ],
+                          children: [for (final e in a.attributes.entries) Pill('${e.key} +${fmtInt(e.value)}')],
                         ),
                       ],
                     ),
@@ -174,11 +172,11 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
   String? _board;
 
   String _boardLabel(S s, String board) => switch (board) {
-        'ladder' => s.t('board_ladder'),
-        'legendary' => s.t('board_legendary'),
-        'guild' => s.t('board_guild'),
-        _ => titleCase(board),
-      };
+    'ladder' => s.t('board_ladder'),
+    'legendary' => s.t('board_legendary'),
+    'guild' => s.t('board_guild'),
+    _ => titleCase(board),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -269,11 +267,11 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
                 child: boards.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : board == null
-                        ? Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Text(s.t('no_leaderboard'), style: TextStyle(color: AppColors.muted)),
-                          )
-                        : _BoardList(key: ValueKey('$seasonId|$board|$_region'), boardKey: '$seasonId|$board|$_region'),
+                    ? Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(s.t('no_leaderboard'), style: TextStyle(color: AppColors.muted)),
+                      )
+                    : _BoardList(key: ValueKey('$seasonId|$board|$_region'), boardKey: '$seasonId|$board|$_region'),
               ),
             ],
           );
@@ -296,10 +294,7 @@ class _BoardList extends ConsumerWidget {
       onRetry: () => ref.invalidate(pvpLeaderboardProvider(boardKey)),
       builder: (rows) {
         if (rows.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: EmptyNote(s.t('no_leaderboard')),
-          );
+          return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('no_leaderboard')));
         }
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
@@ -315,17 +310,21 @@ class _BoardList extends ConsumerWidget {
                 children: [
                   SizedBox(
                     width: 44,
-                    child: Text('${r.rank}',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                    child: Text(
+                      '${r.rank}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
+                    ),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(r.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text(
+                          r.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                        ),
                         if (rest.isNotEmpty)
                           Text(
                             rest.map((sc) => '${sc.$1} ${fmtInt(sc.$2)}').join(' · '),

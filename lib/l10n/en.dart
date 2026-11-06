@@ -1,38 +1,27 @@
 /// english ui strings. `{name}` placeholders are filled by S.t
 const enStrings = <String, String>{
-  'story_unmatched':
-      '{n} quests the game recorded for this character are not in its list of story quests, so they are not counted above.',
-  'progress_hero_unavailable':
-      'The game\'s API returns nothing for hero challenges (a known problem on ArenaNet\'s side), so they cannot be shown here.',
-  'progress_training_unavailable':
-      'The game\'s API returns nothing for character training (a known problem on ArenaNet\'s side), so it cannot be shown here.',
-  'story_note':
-      'Counts the quests the game has recorded for this character. The total includes every branch, race and order, so a bar rarely fills up. Story done on another character, or restarted, does not count here.',
-  'gshare_unreviewed':
-      'You have not confirmed this yet. Until you do, the treasury, the stash and the log stay hidden from your members.',
+  'story_unmatched': '{n} quests the game recorded for this character are not in its list of story quests, so they are not counted above.',
+  'progress_hero_unavailable': 'The game\'s API returns nothing for hero challenges (a known problem on ArenaNet\'s side), so they cannot be shown here.',
+  'progress_training_unavailable': 'The game\'s API returns nothing for character training (a known problem on ArenaNet\'s side), so it cannot be shown here.',
+  'story_note': 'Counts the quests the game has recorded for this character. The total includes every branch, race and order, so a bar rarely fills up. Story done on another character, or restarted, does not count here.',
+  'gshare_unreviewed': 'You have not confirmed this yet. Until you do, the treasury, the stash and the log stay hidden from your members.',
   'gshare_confirm': 'Confirm what members see',
   'gshare_review_title': 'What may your members see?',
-  'gshare_review_intro':
-      'Your guild has been read from the game. Choose what the members of your guild can see in the app. The treasury, the stash and the log show who took what, so they stay hidden until you confirm.',
+  'gshare_review_intro': 'Your guild has been read from the game. Choose what the members of your guild can see in the app. The treasury, the stash and the log show who took what, so they stay hidden until you confirm.',
   'gshare_later': 'Later',
-  'roster_note_game':
-      'Members of this guild on Wondrous Compass, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
+  'roster_note_game': 'Members of this guild on Wondrous Compass, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
   'roster_manual': 'set by hand',
   'roster_follow_game': 'Follow the game\'s rank again',
-  'roster_auto':
-      'Roles follow the game: a rank that may invite, promote or kick, or edit ranks, makes officers. What you appoint by hand stays until you hand it back to the game.',
+  'roster_auto': 'Roles follow the game: a rank that may invite, promote or kick, or edit ranks, makes officers. What you appoint by hand stays until you hand it back to the game.',
   'gshare_on': 'Members can see this',
   'gshare_off': 'Hidden from members',
   'gshare_title': 'Shared with the guild\'s members',
-  'gshare_note':
-      'Choose what the guild\'s members see. Everything is shared until you switch it off. Your app brings it all when it is opened.',
-  'gshared_note':
-      'The game shows the member list only to the guild\'s leader. These are the guild\'s members who use Wondrous Compass, with the rank the game gives them.',
+  'gshare_note': 'Choose what the guild\'s members see. Everything is shared until you switch it off. Your app brings it all when it is opened.',
+  'gshared_note': 'The game shows the member list only to the guild\'s leader. These are the guild\'s members who use Wondrous Compass, with the rank the game gives them.',
   'gshared_not_linked': 'Link your GW2 account in Settings to see what the guild\'s leader shares here.',
   'gw2_link_name': 'Link {name}',
   'gw2_refreshed': 'Guilds refreshed.',
-  'gw2_refresh_other':
-      'The active API key belongs to an account that is not linked. Link it above, or switch to the key of a linked account to refresh its guilds.',
+  'gw2_refresh_other': 'The active API key belongs to an account that is not linked. Link it above, or switch to the key of a linked account to refresh its guilds.',
   'ginfo_result_synced': 'Guild details updated.',
   'ginfo_result_too_soon': 'Updated just now, try again in a few minutes.',
   'ginfo_result_unavailable': 'The game would not give the guild\'s details ({detail}).',
@@ -68,17 +57,13 @@ const enStrings = <String, String>{
   'err_no_key': 'This needs a GW2 API key.',
   'add_api_key': 'Add an API key',
   'guest_continue': 'Continue without an API key',
-  'guest_note':
-      'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',
+  'guest_note': 'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',
   'guest': 'Guest',
   'guest_home_title': 'You are looking around as a guest',
-  'guest_home_body':
-      'World bosses, the map, recipes, trading post prices, the wiki and the news work without a key. Add an API key to see your characters, wallet, Wizard\'s Vault and progress.',
+  'guest_home_body': 'World bosses, the map, recipes, trading post prices, the wiki and the news work without a key. Add an API key to see your characters, wallet, Wizard\'s Vault and progress.',
   'needs_key_title': 'This needs an API key',
-  'needs_key_body':
-      'This section shows your own account: characters, progress, collections and guilds. Add a read-only API key from ArenaNet to see it. Everything else works without one.',
-  'boss_alert_limit':
-      '{n} pinned events have no alerts: the phone holds at most {max} scheduled alerts. Unpin some, hourly events use the most.',
+  'needs_key_body': 'This section shows your own account: characters, progress, collections and guilds. Add a read-only API key from ArenaNet to see it. Everything else works without one.',
+  'boss_alert_limit': '{n} pinned events have no alerts: the phone holds at most {max} scheduled alerts. Unpin some, hourly events use the most.',
   'boss_alerts_title': 'World event alerts',
   'boss_alerts_note':
       'A notification shortly before each start of the events you pinned, every day, also when the app is closed.',
@@ -103,8 +88,7 @@ const enStrings = <String, String>{
   'event_err_own_role': 'You cannot change your own role.',
   'event_err_not_member': 'This player is no longer in the guild.',
   'event_delete': 'Delete event',
-  'event_delete_body':
-      'For an event opened by mistake: it disappears for everybody, with all sign ups and its Discord message. To keep it visible as cancelled, cancel it instead.',
+  'event_delete_body': 'For an event opened by mistake: it disappears for everybody, with all sign ups and its Discord message. To keep it visible as cancelled, cancel it instead.',
   'event_delete_weekly_body':
       'This is a week of a weekly event. Delete only this week, or the whole series with all its coming weeks.',
   'event_delete_week': 'Only this week',
@@ -199,19 +183,16 @@ const enStrings = <String, String>{
   'guild_role_officer': 'Officer',
   'guild_role_member': 'Member',
   'community_account': 'Wondrous Compass account',
-  'community_intro':
-      'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device.',
+  'community_intro': 'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device.',
   'community_sign_in_discord': 'Sign in with Discord',
   'community_signed_in': 'Signed in with Discord',
   'community_sign_out': 'Sign out',
   'community_delete': 'Delete account',
-  'community_delete_body':
-      'Your Wondrous Compass account and everything tied to it will be deleted for good. Your API keys and the app\'s other data on this device are not affected.',
+  'community_delete_body': 'Your Wondrous Compass account and everything tied to it will be deleted for good. Your API keys and the app\'s other data on this device are not affected.',
   'community_delete_confirm': 'Delete for good',
   'community_failed': 'That did not work, please try again.',
   'module_link_title': 'Blish HUD',
-  'module_link_note':
-      'Link the Blish HUD module to see and make events in the game. Get a code here and type it into the module. It works once, for ten minutes.',
+  'module_link_note': 'Link the Blish HUD module to see and make events in the game. Get a code here and type it into the module. It works once, for ten minutes.',
   'module_link_get': 'Get a code',
   'module_link_expires': 'The code works for ten minutes, once.',
   'module_link_copy': 'Copy code',
@@ -279,8 +260,7 @@ const enStrings = <String, String>{
   'save_alert': 'Save',
   'alerts_fired': '{n} price alerts reached',
   'wealth_history': 'Gold history',
-  'wealth_collecting':
-      'Your gold history starts today. The app saves one snapshot per day while you use it, the chart appears from the second day.',
+  'wealth_collecting': 'Your gold history starts today. The app saves one snapshot per day while you use it, the chart appears from the second day.',
   'last_7_days': 'Last 7 days',
   'last_30_days': 'Last 30 days',
   'wins_losses': '{w}W · {l}L',
@@ -379,8 +359,7 @@ const enStrings = <String, String>{
   'add_account': 'Add another account',
   'guilds': 'Guilds',
   'guild': 'Guild',
-  'guilds_note':
-      'Guild data needs the guilds permission, and the stash and log are only visible to members with the right guild rank.',
+  'guilds_note': 'Guild data needs the guilds permission, and the stash and log are only visible to members with the right guild rank.',
   'no_guilds': 'This account is not in a guild.',
   'treasury': 'Treasury',
   'stash': 'Stash',
@@ -421,8 +400,7 @@ const enStrings = <String, String>{
   'unnamed_entry': 'Unreleased (#{id})',
   'version': 'Version',
   'needs_permission': 'Your API key is missing the {p} permission. Create a new key with it and swap it in settings.',
-  'guild_rank_needed':
-      'Your API key is fine. The game opens this only to guild leaders. It appears here once the leader\'s app has shared it: it has not yet, or the leader turned sharing off.',
+  'guild_rank_needed': 'Your API key is fine. The game opens this only to guild leaders. It appears here once the leader\'s app has shared it: it has not yet, or the leader turned sharing off.',
   'browse_all': 'Browse every achievement',
   'instances': 'Instances',
   'raids': 'Raids',
@@ -513,14 +491,12 @@ const enStrings = <String, String>{
   'rec_f_discord': 'Discord invite (https://discord.gg/…)',
   'rec_f_contact': 'Name to whisper in the game (optional)',
   'rec_f_languages': 'Language',
-  'rec_f_tags_hint':
-      'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. {n} of 5 chosen.',
+  'rec_f_tags_hint': 'The page is posted in the forum of the official Discord server with these as its tags, and a post has 5 at the most: choose one language and up to 4 things you look for. {n} of 5 chosen.',
   'rec_f_recruiting': 'Recruiting right now',
   'rec_f_recruiting_hint':
       'Turned off, the post of this page in the forum of the official Discord server is locked: nobody can answer it.',
   'rec_f_published': 'Show this page to everybody',
-  'rec_f_published_hint':
-      'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.',
+  'rec_f_published_hint': 'It is also posted in the guild-recruitment forum of the official Discord server. Turned off, its post there is taken down.',
   'rec_save_hint': 'Saving keeps the page in the list. It leaves the list after 60 days without being saved.',
   'rec_save': 'Save',
   'rec_saved': 'Saved.',
@@ -529,8 +505,7 @@ const enStrings = <String, String>{
   'rec_delete': 'Delete the page',
   'rec_delete_ask': 'Delete this guild\'s recruitment page?',
   'rec_rec_title': 'Who may edit the page',
-  'rec_rec_intro':
-      'You lead this guild, so you decide who may open and edit its recruitment page. This is not the same as being an officer.',
+  'rec_rec_intro': 'You lead this guild, so you decide who may open and edit its recruitment page. This is not the same as being an officer.',
   'rec_rec_none': 'Nobody besides you.',
   'rec_rec_add': 'Allow a member',
   'rec_rec_remove': 'Take it back',
@@ -547,8 +522,7 @@ const enStrings = <String, String>{
   'rec_err_own_guild': 'That is your own guild\'s page.',
   'rec_err_generic': 'Something went wrong. Try again in a moment.',
   'tp_notify_title': 'Trading post notifications',
-  'tp_notify_hint':
-      'Tells you when an item you listed is sold or a buy order is filled, also when the app is closed (every 15 minutes at the most). Needs an API key with the trading post permission.',
+  'tp_notify_hint': 'Tells you when an item you listed is sold or a buy order is filled, also when the app is closed (every 15 minutes at the most). Needs an API key with the trading post permission.',
   'tp_notify_needs_key': 'Add an API key with the trading post permission first.',
   'tp_sold': 'Trading post: sold',
   'tp_bought': 'Trading post: bought',
@@ -654,8 +628,7 @@ const enStrings = <String, String>{
   'goal_add': 'Add to my goals',
   'goal_added': 'Added to your goals',
   'goals_full': 'Your goals list is full',
-  'goals_empty':
-      'Nothing here yet. Open a recipe and tap the list button to add what you want to make, and the materials of all your goals come together in one list.',
+  'goals_empty': 'Nothing here yet. Open a recipe and tap the list button to add what you want to make, and the materials of all your goals come together in one list.',
   'goals_clear': 'Clear goals',
   'goals_clear_ask': 'Remove every goal from the list?',
   'goals_shopping': 'Shopping list',
@@ -664,8 +637,7 @@ const enStrings = <String, String>{
   'goals_share': 'Share',
   'goals_share_missing': 'Still needed',
   'craft_profit': 'Crafting profit',
-  'craft_profit_note':
-      'The recipes that earn the most at the trading post right now. The cost counts the materials of the recipe, each at the lowest listing, and the result is sold a copper under the lowest listing after the 15% fees. Prices move, check them before you buy.',
+  'craft_profit_note': 'The recipes that earn the most at the trading post right now. The cost counts the materials of the recipe, each at the lowest listing, and the result is sold a copper under the lowest listing after the 15% fees. Prices move, check them before you buy.',
   'craft_profit_empty': 'Nothing earns anything with these filters right now.',
   'craft_profit_age': 'Prices read {n} min ago',
   'craft_cost': 'Materials',
@@ -682,8 +654,7 @@ const enStrings = <String, String>{
   'reset_notify_weekly_body': 'Finish the weekly Wizard\'s Vault goals and the raid clears before they reset.',
   'alert_push_hint': 'Signed in with notifications allowed, you are also told when the app is closed.',
   'landing_title': 'Your Guild Wars 2 companion',
-  'landing_sub':
-      'Characters, wallet, trading post, world bosses, crafting, a world map and guild events, all in one place. Free and unofficial.',
+  'landing_sub': 'Characters, wallet, trading post, world bosses, crafting, a world map and guild events, all in one place. Free and unofficial.',
   'landing_start': 'Get started',
   'landing_guest': 'Continue as guest',
   'landing_f_characters': 'Gear, builds and playtime of every character.',
@@ -757,8 +728,7 @@ const enStrings = <String, String>{
   'world_bosses': 'World events',
   'sync_now': 'Sync now',
   'syncing': 'Syncing',
-  'sync_note':
-      'Your account is downloaded once on launch and kept on the device, so sections open without waiting. Sync again after playing.',
+  'sync_note': 'Your account is downloaded once on launch and kept on the device, so sections open without waiting. Sync again after playing.',
   'pinned': 'Pinned',
   'pin': 'Pin',
   'unpin': 'Unpin',
@@ -795,8 +765,7 @@ const enStrings = <String, String>{
   'wiki_source': 'Wiki source',
   'remove_key': 'Remove key',
   'remove_key_body': 'The API key will be deleted from this device and you will go back to the start screen.',
-  'disclaimer':
-      'Wondrous Compass is an unofficial fan app. Guild Wars 2, ArenaNet and NCSOFT are trademarks of their respective owners. Data comes from the official GW2 API and the Guild Wars 2 Wiki.',
+  'disclaimer': 'Wondrous Compass is an unofficial fan app. Guild Wars 2, ArenaNet and NCSOFT are trademarks of their respective owners. Data comes from the official GW2 API and the Guild Wars 2 Wiki.',
   'slot_Helm': 'Helm',
   'slot_Shoulders': 'Shoulders',
   'slot_Coat': 'Chest',
@@ -846,15 +815,13 @@ const enStrings = <String, String>{
   'support_note': 'Wondrous Compass is free and has no ads. If it helps you, you can buy me a coffee.',
   'buy_coffee': 'Buy me a coffee',
   'price_history': 'Price history',
-  'price_history_collecting':
-      'The trading post keeps no history, so the app records one price a day while it runs. Watch the item and its chart builds up from today.',
+  'price_history_collecting': 'The trading post keeps no history, so the app records one price a day while it runs. Watch the item and its chart builds up from today.',
   'price_history_note':
       'Recorded on this phone, one point per day the app saw the price. Watched items are updated on every launch.',
   'pinned_achievements': 'Pinned achievements',
   'about': 'About',
   'about_by': 'by {name}',
-  'about_summary':
-      'An unofficial Guild Wars 2 companion: your characters, account, trading post, achievements and the world map, straight from the official API.',
+  'about_summary': 'An unofficial Guild Wars 2 companion: your characters, account, trading post, achievements and the world map, straight from the official API.',
   'about_community': 'Community',
   'about_github': 'GitHub',
   'about_github_note': 'The source, the releases and every apk.',
@@ -863,8 +830,7 @@ const enStrings = <String, String>{
   'about_credits': 'Credits',
   'about_credit_dev': 'Developed by {name}',
   'about_credit_data': 'Game data, icons and map tiles from the official Guild Wars 2 API',
-  'account_progress_note':
-      'Account wide bonuses: luck raises magic find, and fractal augmentations are the upgrades bought in the Mistlock Observatory.',
+  'account_progress_note': 'Account wide bonuses: luck raises magic find, and fractal augmentations are the upgrades bought in the Mistlock Observatory.',
   'expand_all': 'Expand all',
   'collapse_all': 'Collapse all',
   'slot_PowerCore': 'Jade Bot core',
@@ -895,8 +861,7 @@ const enStrings = <String, String>{
   'demand': 'Demand',
   'supply': 'Supply',
   'welcome_title': 'Your Tyria,\nat a glance.',
-  'welcome_body':
-      'Resets, metas, the Wizard\'s Vault and everything you own, in one place. Connect with a read only API key from ArenaNet.',
+  'welcome_body': 'Resets, metas, the Wizard\'s Vault and everything you own, in one place. Connect with a read only API key from ArenaNet.',
   'step_create': 'Create a key on account.arena.net with the permissions you want to share.',
   'step_paste': 'Paste it here. It is stored only on this device, encrypted.',
   'continue': 'Continue',
@@ -991,8 +956,7 @@ const enStrings = <String, String>{
   'oe_form_edit': 'Edit the event',
   'oe_language': 'LANGUAGE',
   'oe_places_field': 'PLACES (EMPTY FOR NO LIMIT)',
-  'oe_form_note':
-      'Everybody who is signed in sees this event, with your game account name as the organizer\'s. Only you see the names of those who sign up.',
+  'oe_form_note': 'Everybody who is signed in sees this event, with your game account name as the organizer\'s. Only you see the names of those who sign up.',
   'oe_save': 'Save',
   'oe_created': 'Event created',
   'oe_saved': 'Saved',
@@ -1017,10 +981,8 @@ const enStrings = <String, String>{
   'oe_region_eu': 'Europe',
   'oe_region_na': 'North America',
   'oe_region_all': 'All regions',
-  'oe_region_note':
-      'An event of a region is for players with a game account on a world of that region. Your account\'s region is read from its world when you link or refresh it.',
-  'oe_region_unknown':
-      'Your account\'s region is not known yet, so you can only make and join events for all regions. Open your Guild Wars 2 link in Settings and refresh it.',
+  'oe_region_note': 'An event of a region is for players with a game account on a world of that region. Your account\'s region is read from its world when you link or refresh it.',
+  'oe_region_unknown': 'Your account\'s region is not known yet, so you can only make and join events for all regions. Open your Guild Wars 2 link in Settings and refresh it.',
   'oe_tags': 'Tags (up to 3)',
   'oe_tag_any': 'Any tag',
   'oe_tag_meta': 'Meta',
@@ -1036,8 +998,7 @@ const enStrings = <String, String>{
   'oe_err_tags': 'Pick up to three tags from the list.',
   'oe_join_as': 'Sign up as',
   'oe_roles_title': 'Official Discord',
-  'oe_roles_body':
-      'The official Wondrous Compass Discord server posts public events in a channel for each region and kind of event. Join it with the Discord account you signed in with: you get the role of each region you have an account in. When an event you signed up for starts, the bot opens a text and a voice channel for it that only those who signed up can see.',
+  'oe_roles_body': 'The official Wondrous Compass Discord server posts public events in a channel for each region and kind of event. Join it with the Discord account you signed in with: you get the role of each region you have an account in. When an event you signed up for starts, the bot opens a text and a voice channel for it that only those who signed up can see.',
   'oe_roles_join': 'Join the official Discord',
   'oe_err_role_required': 'Pick one of the event\'s roles.',
   'oe_err_profession': 'Pick the profession you come as.',

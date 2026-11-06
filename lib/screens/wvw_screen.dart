@@ -10,11 +10,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 
-const _teamColors = {
-  'red': Color(0xFFE0605A),
-  'blue': Color(0xFF5B9BE0),
-  'green': Color(0xFF6CC070),
-};
+const _teamColors = {'red': Color(0xFFE0605A), 'blue': Color(0xFF5B9BE0), 'green': Color(0xFF6CC070)};
 
 /// world vs world: the live matchup of the account's team, objectives per
 /// map, statistics, and the rank and abilities reference
@@ -29,11 +25,7 @@ class WvwScreen extends ConsumerWidget {
       child: Column(
         children: [
           AppTabBar(labels: [s.t('matchup'), s.t('objectives'), s.t('wvw_stats'), s.t('wvw_rank')]),
-          const Expanded(
-            child: TabBarView(
-              children: [_MatchupTab(), _ObjectivesTab(), _StatsTab(), _RankTab()],
-            ),
-          ),
+          const Expanded(child: TabBarView(children: [_MatchupTab(), _ObjectivesTab(), _StatsTab(), _RankTab()])),
         ],
       ),
     );
@@ -69,9 +61,7 @@ class _MatchupTab extends ConsumerWidget {
           final mine = wvwColorOf(match, team);
           Map<String, int> side(String key) {
             final m = match[key];
-            return {
-              for (final c in _teamColors.keys) c: m is Map ? asInt(m[c]) : 0,
-            };
+            return {for (final c in _teamColors.keys) c: m is Map ? asInt(m[c]) : 0};
           }
 
           final victory = side('victory_points');
@@ -82,9 +72,7 @@ class _MatchupTab extends ConsumerWidget {
           // the worlds on each side, for matchups that still list them. team
           // ids have no name in the api and are left out
           final worlds = ref.watch(worldsProvider).valueOrNull ?? const <int, String>{};
-          final worldNames = {
-            for (final c in _teamColors.keys) c: wvwWorldNames(match, c, worlds),
-          };
+          final worldNames = {for (final c in _teamColors.keys) c: wvwWorldNames(match, c, worlds)};
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -128,10 +116,14 @@ class _MatchupTab extends ConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(fmtInt(victory[c]!),
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _teamColors[c])),
-                            Text(s.t('score_n', {'n': fmtInt(scores[c]!)}),
-                                style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                            Text(
+                              fmtInt(victory[c]!),
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _teamColors[c]),
+                            ),
+                            Text(
+                              s.t('score_n', {'n': fmtInt(scores[c]!)}),
+                              style: TextStyle(fontSize: 11, color: AppColors.muted),
+                            ),
                           ],
                         ),
                       ],
@@ -145,11 +137,15 @@ class _MatchupTab extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (timers.lockout != null)
-                        Text(s.t('wvw_lockout', {'d': _dateTime(timers.lockout!)}),
-                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                        Text(
+                          s.t('wvw_lockout', {'d': _dateTime(timers.lockout!)}),
+                          style: TextStyle(fontSize: 12, color: AppColors.textSoft),
+                        ),
                       if (timers.teamAssignment != null)
-                        Text(s.t('wvw_relink', {'d': _dateTime(timers.teamAssignment!)}),
-                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                        Text(
+                          s.t('wvw_relink', {'d': _dateTime(timers.teamAssignment!)}),
+                          style: TextStyle(fontSize: 12, color: AppColors.textSoft),
+                        ),
                     ],
                   ),
                 ),
@@ -189,19 +185,26 @@ class _MapCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(s.t('wvw_map_${'${map['type'] ?? ''}'.toLowerCase()}'),
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+            Text(
+              s.t('wvw_map_${'${map['type'] ?? ''}'.toLowerCase()}'),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+            ),
             const SizedBox(height: 8),
             Row(
               children: [
                 for (final c in _teamColors.keys) ...[
                   Container(
-                      width: 8, height: 8, decoration: BoxDecoration(color: _teamColors[c], shape: BoxShape.circle)),
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(color: _teamColors[c], shape: BoxShape.circle),
+                  ),
                   const SizedBox(width: 4),
                   Text('${held[c]}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
                   const SizedBox(width: 4),
-                  Text(scores is Map ? fmtInt(asInt(scores[c])) : '',
-                      style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                  Text(
+                    scores is Map ? fmtInt(asInt(scores[c])) : '',
+                    style: TextStyle(fontSize: 11, color: AppColors.muted),
+                  ),
                   const SizedBox(width: 14),
                 ],
               ],
@@ -266,8 +269,10 @@ class _ObjectivesTab extends ConsumerWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text('${catalog['${o['id']}']?['name'] ?? o['id']}',
-                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                          child: Text(
+                            '${catalog['${o['id']}']?['name'] ?? o['id']}',
+                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                          ),
                         ),
                         Text('${o['type']}', style: TextStyle(fontSize: 11, color: AppColors.muted)),
                         const SizedBox(width: 10),
@@ -341,8 +346,10 @@ class _StatsTab extends ConsumerWidget {
               if (start != null && end != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(s.t('wvw_period', {'a': _dateTime(start), 'b': _dateTime(end)}),
-                      style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                  child: Text(
+                    s.t('wvw_period', {'a': _dateTime(start), 'b': _dateTime(end)}),
+                    style: TextStyle(fontSize: 12, color: AppColors.textSoft),
+                  ),
                 ),
               for (final c in _teamColors.keys)
                 _KillsRow(
@@ -363,8 +370,10 @@ class _StatsTab extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(s.t('wvw_map_${'${map['type'] ?? ''}'.toLowerCase()}'),
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                          Text(
+                            s.t('wvw_map_${'${map['type'] ?? ''}'.toLowerCase()}'),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                          ),
                           const SizedBox(height: 8),
                           for (final c in _teamColors.keys)
                             _KillsRow(
@@ -393,16 +402,19 @@ class _StatsTab extends ConsumerWidget {
                           child: Row(
                             children: [
                               Expanded(
-                                child: Text(s.t('wvw_skirmish_n', {'n': k.id}),
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                                child: Text(
+                                  s.t('wvw_skirmish_n', {'n': k.id}),
+                                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                ),
                               ),
                               for (final c in _teamColors.keys)
                                 SizedBox(
                                   width: 62,
-                                  child: Text(fmtInt(k.scores[c]!),
-                                      textAlign: TextAlign.end,
-                                      style:
-                                          TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: _teamColors[c])),
+                                  child: Text(
+                                    fmtInt(k.scores[c]!),
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: _teamColors[c]),
+                                  ),
                                 ),
                             ],
                           ),
@@ -445,21 +457,34 @@ class _KillsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final kdr = Text(s.t('wvw_kdr', {'n': wvwKdr(kills, deaths).toStringAsFixed(2)}),
-        style: TextStyle(fontSize: compact ? 12 : 16, fontWeight: FontWeight.w800, color: color));
-    final line = Text(s.t('kd_line', {'k': fmtInt(kills), 'd': fmtInt(deaths)}),
-        style: TextStyle(fontSize: 11, color: AppColors.muted));
+    final kdr = Text(
+      s.t('wvw_kdr', {'n': wvwKdr(kills, deaths).toStringAsFixed(2)}),
+      style: TextStyle(fontSize: compact ? 12 : 16, fontWeight: FontWeight.w800, color: color),
+    );
+    final line = Text(
+      s.t('kd_line', {'k': fmtInt(kills), 'd': fmtInt(deaths)}),
+      style: TextStyle(fontSize: 11, color: AppColors.muted),
+    );
     if (compact) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 3),
         child: Row(
           children: [
-            Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            ),
             const SizedBox(width: 8),
-            Expanded(child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600))),
+            Expanded(
+              child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+            ),
             line,
             const SizedBox(width: 12),
-            SizedBox(width: 70, child: Align(alignment: Alignment.centerRight, child: kdr)),
+            SizedBox(
+              width: 70,
+              child: Align(alignment: Alignment.centerRight, child: kdr),
+            ),
           ],
         ),
       );
@@ -546,14 +571,21 @@ class _TopRowView extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          SizedBox(width: 26, child: Text('$rank', style: TextStyle(fontSize: 12, color: AppColors.muted))),
+          SizedBox(
+            width: 26,
+            child: Text('$rank', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          ),
           Expanded(
-            child: Text(tag.isEmpty ? name : '$name [$tag]',
-                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            child: Text(
+              tag.isEmpty ? name : '$name [$tag]',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
           ),
           if (value != null)
-            Text(decimals == 0 ? fmtInt(value.round()) : value.toStringAsFixed(decimals),
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+            Text(
+              decimals == 0 ? fmtInt(value.round()) : value.toStringAsFixed(decimals),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+            ),
         ],
       ),
     );
@@ -604,14 +636,18 @@ class _GuildStatsRow extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Expanded(child: Text(name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600))),
+          Expanded(
+            child: Text(name, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+          ),
           if (stats.isLoading)
             const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
           else if (data == null)
             Text(s.t('wvw_no_guild_data'), style: TextStyle(fontSize: 11, color: AppColors.muted))
           else
-            Text(s.t('kd_line', {'k': fmtInt(asInt(data['kills'])), 'd': fmtInt(asInt(data['deaths']))}),
-                style: TextStyle(fontSize: 11, color: AppColors.textSoft)),
+            Text(
+              s.t('kd_line', {'k': fmtInt(asInt(data['kills'])), 'd': fmtInt(asInt(data['deaths']))}),
+              style: TextStyle(fontSize: 11, color: AppColors.textSoft),
+            ),
         ],
       ),
     );
@@ -648,7 +684,10 @@ class _RankTab extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Text(fmtInt(rank), style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                Text(
+                  fmtInt(rank),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.gold),
+                ),
               ],
             ),
           ),
@@ -664,8 +703,10 @@ class _RankTab extends ConsumerWidget {
                 title: '${a['name'] ?? ''}',
                 subtitle: '${a['description'] ?? ''}',
                 iconSize: 36,
-                trailing: Text('${((a['ranks'] as List?) ?? const []).length}',
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                trailing: Text(
+                  '${((a['ranks'] as List?) ?? const []).length}',
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
+                ),
               ),
             ),
         ],
@@ -727,9 +768,14 @@ class _GuildTeamRow extends ConsumerWidget {
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),
-          Text(same ? s.t('your_team') : '#$team',
-              style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w700, color: same ? AppColors.green : AppColors.muted)),
+          Text(
+            same ? s.t('your_team') : '#$team',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: same ? AppColors.green : AppColors.muted,
+            ),
+          ),
         ],
       ),
     );

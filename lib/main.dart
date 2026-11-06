@@ -83,10 +83,10 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
 
   /// what the address in the browser is now: what is open over the page, a link not opened yet, or the page
   String _address() => currentAddress(
-        section: ref.read(sectionProvider),
-        open: ref.read(openLinkProvider),
-        pending: ref.read(pendingLinkProvider),
-      );
+    section: ref.read(sectionProvider),
+    open: ref.read(openLinkProvider),
+    pending: ref.read(pendingLinkProvider),
+  );
 
   /// puts the address of the page back in the browser once the frame is made, which is when the navigator has told it its own, and again a moment later
   /// in case it does so later
@@ -167,10 +167,7 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
     // when it changes (the key), since widgets made once as constants would keep the old colours
     final palette = paletteFor(ref.watch(lookProvider), WidgetsBinding.instance.platformDispatcher.platformBrightness);
     AppColors.use(palette);
-    return KeyedSubtree(
-      key: ValueKey(palette.dark),
-      child: _app(key, guest, chosenScale),
-    );
+    return KeyedSubtree(key: ValueKey(palette.dark), child: _app(key, guest, chosenScale));
   }
 
   Widget _app(AsyncValue<String?> key, bool guest, double? chosenScale) {

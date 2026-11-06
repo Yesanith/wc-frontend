@@ -137,18 +137,22 @@ final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) as
   }
   final ids = [for (final e in entries) e.id];
   final chunks = [
-    for (var i = 0; i < ids.length; i += 200) ids.sublist(i, i + 200 > ids.length ? ids.length : i + 200)
+    for (var i = 0; i < ids.length; i += 200) ids.sublist(i, i + 200 > ids.length ? ids.length : i + 200),
   ];
   final progress = ref.read(marketPricesProgressProvider.notifier);
   Future(() => progress.state = 0);
   final pool = TaskPool(6);
   var done = 0;
-  final parts = await Future.wait(chunks.map((chunk) => pool.run(() async {
+  final parts = await Future.wait(
+    chunks.map(
+      (chunk) => pool.run(() async {
         final prices = await api.prices(chunk);
         done++;
         progress.state = done / chunks.length;
         return prices;
-      })));
+      }),
+    ),
+  );
   final out = <int, TpPrice>{};
   for (final part in parts) {
     for (final e in part.entries) {
@@ -161,13 +165,13 @@ final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) as
 
 /// compact rows for the disk copy: [id, buy, sell, demand, supply]
 List<List<int>> encodeMarketPrices(Map<int, TpPrice> prices) => [
-      for (final e in prices.entries) [e.key, e.value.buy, e.value.sell, e.value.demand, e.value.supply],
-    ];
+  for (final e in prices.entries) [e.key, e.value.buy, e.value.sell, e.value.demand, e.value.supply],
+];
 
 Map<int, TpPrice> decodeMarketPrices(List<dynamic> rows) => {
-      for (final r in rows)
-        if (r is List && r.length >= 5) asInt(r[0]): TpPrice(asInt(r[1]), asInt(r[2]), asInt(r[3]), asInt(r[4])),
-    };
+  for (final r in rows)
+    if (r is List && r.length >= 5) asInt(r[0]): TpPrice(asInt(r[1]), asInt(r[2]), asInt(r[3]), asInt(r[4])),
+};
 
 enum MarketSort { sellHigh, sellLow, supply, demand, flip, name }
 
@@ -203,17 +207,16 @@ class MarketFilter {
     int? maxLevel,
     MarketSort? sort,
     int? minSupply,
-  }) =>
-      MarketFilter(
-        query: query ?? this.query,
-        type: type == null ? this.type : type(),
-        subtype: subtype == null ? this.subtype : subtype(),
-        rarities: rarities ?? this.rarities,
-        minLevel: minLevel ?? this.minLevel,
-        maxLevel: maxLevel ?? this.maxLevel,
-        sort: sort ?? this.sort,
-        minSupply: minSupply ?? this.minSupply,
-      );
+  }) => MarketFilter(
+    query: query ?? this.query,
+    type: type == null ? this.type : type(),
+    subtype: subtype == null ? this.subtype : subtype(),
+    rarities: rarities ?? this.rarities,
+    minLevel: minLevel ?? this.minLevel,
+    maxLevel: maxLevel ?? this.maxLevel,
+    sort: sort ?? this.sort,
+    minSupply: minSupply ?? this.minSupply,
+  );
 }
 
 /// the ids that pass the filter, in the chosen order. prices may still be
@@ -252,16 +255,19 @@ List<int> filterMarket(
   }
 
   final sort = prices == null && f.sort != MarketSort.name ? MarketSort.name : f.sort;
-  hits.sort((a, b) => switch (sort) {
-        MarketSort.sellHigh => by((p) => p.sell, a, b),
-        MarketSort.sellLow => by((p) => p.sell, a, b, descending: false),
-        MarketSort.supply => by((p) => p.supply, a, b),
-        MarketSort.demand => by((p) => p.demand, a, b),
-        MarketSort.flip => by((p) => p.flip, a, b),
-        MarketSort.name => name(a).compareTo(name(b)),
-      });
+  hits.sort(
+    (a, b) => switch (sort) {
+      MarketSort.sellHigh => by((p) => p.sell, a, b),
+      MarketSort.sellLow => by((p) => p.sell, a, b, descending: false),
+      MarketSort.supply => by((p) => p.supply, a, b),
+      MarketSort.demand => by((p) => p.demand, a, b),
+      MarketSort.flip => by((p) => p.flip, a, b),
+      MarketSort.name => name(a).compareTo(name(b)),
+    },
+  );
   return [for (final e in hits) e.id];
 }
 
 /// the item names to search with, from the index the app already ships
-String? Function(int) namesFrom(ItemIndex? index) => (id) => index?.nameOf(id);
+String? Function(int) namesFrom(ItemIndex? index) =>
+    (id) => index?.nameOf(id);

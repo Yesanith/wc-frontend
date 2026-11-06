@@ -75,10 +75,16 @@ class _CurrencyTile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(compact(entry.value),
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, fontFeatures: _tabular)),
-              Text(entry.name,
-                  maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              Text(
+                compact(entry.value),
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, fontFeatures: _tabular),
+              ),
+              Text(
+                entry.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 12, color: AppColors.muted),
+              ),
             ],
           ),
         ],

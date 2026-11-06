@@ -25,39 +25,47 @@ void main() {
           },
         },
       };
-      final rows = boardRows([
-        {
-          'rank': 2,
-          'name': 'Second.1234',
-          'scores': [
-            {'id': 'A', 'value': 1500},
-            {'id': 'B', 'value': 40},
-          ],
-        },
-        {
-          'rank': 1,
-          'name': 'First.5678',
-          'scores': [
-            {'id': 'A', 'value': 1700},
-          ],
-        },
-        // guild boards name the guild and the team that played
-        {'rank': 3, 'name': 'Some Guild', 'team': 'Squad', 'scores': []},
-      ], season, 'ladder');
+      final rows = boardRows(
+        [
+          {
+            'rank': 2,
+            'name': 'Second.1234',
+            'scores': [
+              {'id': 'A', 'value': 1500},
+              {'id': 'B', 'value': 40},
+            ],
+          },
+          {
+            'rank': 1,
+            'name': 'First.5678',
+            'scores': [
+              {'id': 'A', 'value': 1700},
+            ],
+          },
+          // guild boards name the guild and the team that played
+          {'rank': 3, 'name': 'Some Guild', 'team': 'Squad', 'scores': []},
+        ],
+        season,
+        'ladder',
+      );
       expect(rows.map((r) => r.name), ['First.5678', 'Second.1234', 'Some Guild · Squad']);
       expect(rows[1].scores, [('Rating', 1500), ('Wins', 40)]);
     });
 
     test('a board the season does not describe still shows its numbers', () {
-      final rows = boardRows([
-        {
-          'rank': 1,
-          'name': 'x',
-          'scores': [
-            {'id': 'Q', 'value': 3},
-          ],
-        },
-      ], null, 'guild');
+      final rows = boardRows(
+        [
+          {
+            'rank': 1,
+            'name': 'x',
+            'scores': [
+              {'id': 'Q', 'value': 3},
+            ],
+          },
+        ],
+        null,
+        'guild',
+      );
       expect(rows.single.scores, [('', 3)]);
     });
   });
@@ -66,25 +74,16 @@ void main() {
     final book = RecipeBook({
       100: [
         const BookRecipe(
-            id: 7,
-            output: 100,
-            outputCount: 1,
-            disciplines: ['Weaponsmith'],
-            minRating: 0,
-            ingredients: [
-              (1, 2),
-              (2, 1),
-            ]),
+          id: 7,
+          output: 100,
+          outputCount: 1,
+          disciplines: ['Weaponsmith'],
+          minRating: 0,
+          ingredients: [(1, 2), (2, 1)],
+        ),
       ],
       200: [
-        const BookRecipe(
-            output: 200,
-            outputCount: 1,
-            disciplines: [mysticForge],
-            minRating: 0,
-            ingredients: [
-              (1, 77),
-            ]),
+        const BookRecipe(output: 200, outputCount: 1, disciplines: [mysticForge], minRating: 0, ingredients: [(1, 77)]),
       ],
     });
 
@@ -139,36 +138,42 @@ void main() {
 
     test('the subtype names the slot and the weight', () {
       expect(
-          skinSubtype({
-            'details': {'type': 'Helm', 'weight_class': 'Heavy'}
-          }),
-          'Helm · Heavy');
+        skinSubtype({
+          'details': {'type': 'Helm', 'weight_class': 'Heavy'},
+        }),
+        'Helm · Heavy',
+      );
       expect(
-          skinSubtype({
-            'details': {'type': 'Greatsword'}
-          }),
-          'Greatsword');
+        skinSubtype({
+          'details': {'type': 'Greatsword'},
+        }),
+        'Greatsword',
+      );
       expect(
-          skinSubtype({
-            'details': {'type': 'Coat', 'weight_class': 'Clothing'}
-          }),
-          'Coat');
+        skinSubtype({
+          'details': {'type': 'Coat', 'weight_class': 'Clothing'},
+        }),
+        'Coat',
+      );
       // weapons report a weight class of None
       expect(
-          skinSubtype({
-            'details': {'type': 'Shortbow', 'weight_class': 'None'}
-          }),
-          'Shortbow');
+        skinSubtype({
+          'details': {'type': 'Shortbow', 'weight_class': 'None'},
+        }),
+        'Shortbow',
+      );
       expect(
-          skinSubtype({
-            'details': {'type': 'HelmAquatic', 'weight_class': 'Light'}
-          }),
-          'Helm Aquatic · Light');
+        skinSubtype({
+          'details': {'type': 'HelmAquatic', 'weight_class': 'Light'},
+        }),
+        'Helm Aquatic · Light',
+      );
       expect(
-          skinSubtype({
-            'details': {'type': 'LongBow'}
-          }),
-          'Longbow');
+        skinSubtype({
+          'details': {'type': 'LongBow'},
+        }),
+        'Longbow',
+      );
       expect(skinSubtype({'details': {}}), isNull);
       expect(skinSubtype(null), isNull);
     });
@@ -187,25 +192,25 @@ void main() {
           'name': 'Dragonhunter',
           'elite': true,
           'profession_icon': 'dh.png',
-          'profession_icon_big': 'dh_big.png'
+          'profession_icon_big': 'dh_big.png',
         },
       ],
       weapons: {},
     );
 
     Map<String, dynamic> character(List<int> specs) => {
-          'profession': 'Guardian',
-          'build_tabs': [
-            {
-              'is_active': true,
-              'build': {
-                'specializations': [
-                  for (final id in specs) {'id': id, 'traits': []},
-                ],
-              },
-            },
-          ],
-        };
+      'profession': 'Guardian',
+      'build_tabs': [
+        {
+          'is_active': true,
+          'build': {
+            'specializations': [
+              for (final id in specs) {'id': id, 'traits': []},
+            ],
+          },
+        },
+      ],
+    };
 
     test('an elite line in the active build gives its own icon', () {
       final c = character([42, 27]);

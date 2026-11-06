@@ -34,15 +34,17 @@ class SupabaseRecruitBackend implements RecruitBackend {
   }
 
   @override
-  Future<RecruitList> list(RecruitFilter f) async => RecruitList.parse(await _rpc('recruiting_guilds', {
-        'p_language': f.language,
-        'p_region': f.region?.code,
-        'p_looking_for': f.lookingFor,
-        'p_search': f.search.trim().isEmpty ? null : f.search.trim(),
-        'p_open_only': f.openOnly,
-        'p_limit': recruitPageSize,
-        'p_offset': f.offset,
-      }));
+  Future<RecruitList> list(RecruitFilter f) async => RecruitList.parse(
+    await _rpc('recruiting_guilds', {
+      'p_language': f.language,
+      'p_region': f.region?.code,
+      'p_looking_for': f.lookingFor,
+      'p_search': f.search.trim().isEmpty ? null : f.search.trim(),
+      'p_open_only': f.openOnly,
+      'p_limit': recruitPageSize,
+      'p_offset': f.offset,
+    }),
+  );
 
   @override
   Future<RecruitPage?> page(String guildId) async =>
@@ -100,12 +102,14 @@ class SupabaseRecruitBackend implements RecruitBackend {
 final recruitBackendProvider = Provider<RecruitBackend>((ref) => const SupabaseRecruitBackend());
 
 /// a page of the list for a filter
-final recruitListProvider = FutureProvider.autoDispose
-    .family<RecruitList, RecruitFilter>((ref, filter) => ref.watch(recruitBackendProvider).list(filter));
+final recruitListProvider = FutureProvider.autoDispose.family<RecruitList, RecruitFilter>(
+  (ref, filter) => ref.watch(recruitBackendProvider).list(filter),
+);
 
 /// the page of a guild
-final recruitPageProvider = FutureProvider.autoDispose
-    .family<RecruitPage?, String>((ref, guildId) => ref.watch(recruitBackendProvider).page(guildId));
+final recruitPageProvider = FutureProvider.autoDispose.family<RecruitPage?, String>(
+  (ref, guildId) => ref.watch(recruitBackendProvider).page(guildId),
+);
 
 /// the guilds whose page the player may manage. nothing for a player who is not signed in
 final myRecruitProvider = FutureProvider.autoDispose<List<MyRecruitGuild>>((ref) async {
@@ -116,5 +120,6 @@ final myRecruitProvider = FutureProvider.autoDispose<List<MyRecruitGuild>>((ref)
 });
 
 /// who the leader allowed to edit the page of a guild
-final recruitersProvider = FutureProvider.autoDispose
-    .family<List<RecruiterEntry>, String>((ref, guildId) => ref.watch(recruitBackendProvider).recruiters(guildId));
+final recruitersProvider = FutureProvider.autoDispose.family<List<RecruiterEntry>, String>(
+  (ref, guildId) => ref.watch(recruitBackendProvider).recruiters(guildId),
+);

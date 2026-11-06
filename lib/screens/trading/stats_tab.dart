@@ -11,8 +11,11 @@ class _StatsTab extends ConsumerWidget {
 
     return RefreshIndicator(
       color: AppColors.gold,
-      onRefresh: () => refreshProviders(
-          ref, [transactionsProvider('history/sells'), transactionsProvider('history/buys'), tradeStatsProvider]),
+      onRefresh: () => refreshProviders(ref, [
+        transactionsProvider('history/sells'),
+        transactionsProvider('history/buys'),
+        tradeStatsProvider,
+      ]),
       child: AsyncView<TradeStats>(
         permission: 'tradingpost',
         value: stats,
@@ -63,10 +66,12 @@ class _StatsTab extends ConsumerWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(entry.key,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                              child: Text(
+                                entry.key,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                              ),
                             ),
                             const SizedBox(width: 10),
                             CoinText(entry.value, size: 13),
@@ -96,11 +101,14 @@ class _StatLine extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(label,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: highlight ? FontWeight.w800 : FontWeight.w500,
-                  color: highlight ? AppColors.text : AppColors.textSoft)),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: highlight ? FontWeight.w800 : FontWeight.w500,
+              color: highlight ? AppColors.text : AppColors.textSoft,
+            ),
+          ),
         ),
         CoinText(copper, size: highlight ? 18 : 15),
       ],

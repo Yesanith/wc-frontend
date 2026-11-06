@@ -19,9 +19,9 @@ Json? characterByName(List<Json> chars, String name) {
 
 /// stored equipment templates of a character
 List<Json> equipmentTabs(Json c) => [
-      for (final t in (c['equipment_tabs'] as List?) ?? const [])
-        if (t is Map) Map<String, dynamic>.from(t),
-    ];
+  for (final t in (c['equipment_tabs'] as List?) ?? const [])
+    if (t is Map) Map<String, dynamic>.from(t),
+];
 
 /// equipment of one template, or of the active one when [tab] is null
 List<Json> equipmentForTab(Json c, int? tab) {
@@ -80,5 +80,6 @@ final characterPartProvider = FutureProvider.autoDispose.family<dynamic, String>
 });
 
 /// the profession of a character, for skill tree names in training
-final professionProvider =
-    FutureProvider.autoDispose.family<Json, String>((ref, name) => ref.watch(gw2ApiProvider).profession(name));
+final professionProvider = FutureProvider.autoDispose.family<Json, String>(
+  (ref, name) => ref.watch(gw2ApiProvider).profession(name),
+);

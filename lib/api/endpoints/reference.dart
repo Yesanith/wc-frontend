@@ -33,10 +33,7 @@ extension Gw2ReferenceApi on Gw2Api {
       if (e.status != 404 && e.status != 400) rethrow;
       if (ids.length == 1) return const [];
       final middle = ids.length ~/ 2;
-      return [
-        ...await _detailChunk(path, ids.sublist(0, middle)),
-        ...await _detailChunk(path, ids.sublist(middle)),
-      ];
+      return [...await _detailChunk(path, ids.sublist(0, middle)), ...await _detailChunk(path, ids.sublist(middle))];
     }
   }
 

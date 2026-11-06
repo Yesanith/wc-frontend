@@ -28,11 +28,15 @@ class _MasteriesTab extends ConsumerWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(masteryRegionName('${p['region'] ?? ''}'),
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                            child: Text(
+                              masteryRegionName('${p['region'] ?? ''}'),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                            ),
                           ),
-                          Text(s.t('points_spent', {'a': asInt(p['spent']), 'b': asInt(p['earned'])}),
-                              style: TextStyle(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w800)),
+                          Text(
+                            s.t('points_spent', {'a': asInt(p['spent']), 'b': asInt(p['earned'])}),
+                            style: TextStyle(fontSize: 13, color: AppColors.gold, fontWeight: FontWeight.w800),
+                          ),
                         ],
                       ),
                     ),
@@ -61,11 +65,7 @@ class _MasteriesTab extends ConsumerWidget {
                     ),
                     Panel(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Column(
-                        children: [
-                          for (final m in list.where((m) => m.region == region)) _MasteryTile(m),
-                        ],
-                      ),
+                      child: Column(children: [for (final m in list.where((m) => m.region == region)) _MasteryTile(m)]),
                     ),
                     const SizedBox(height: 14),
                   ],
@@ -108,18 +108,26 @@ class _MasteryTile extends StatelessWidget {
         title: Row(
           children: [
             Expanded(
-              child: Text(row.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: row.started ? AppColors.text : AppColors.muted)),
+              child: Text(
+                row.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: row.started ? AppColors.text : AppColors.muted,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
-            Text('${row.level} / ${row.total}',
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w800, color: complete ? AppColors.green : AppColors.muted)),
+            Text(
+              '${row.level} / ${row.total}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: complete ? AppColors.green : AppColors.muted,
+              ),
+            ),
           ],
         ),
         subtitle: Padding(
@@ -155,18 +163,23 @@ class _MasteryLevelRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(done ? Icons.check_circle : Icons.radio_button_unchecked,
-              size: 16, color: done ? AppColors.green : AppColors.track),
+          Icon(
+            done ? Icons.check_circle : Icons.radio_button_unchecked,
+            size: 16,
+            color: done ? AppColors.green : AppColors.track,
+          ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text('${level['name'] ?? ''}',
-                style: TextStyle(
-                    fontSize: 13, fontWeight: FontWeight.w600, color: done ? AppColors.text : AppColors.muted)),
+            child: Text(
+              '${level['name'] ?? ''}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: done ? AppColors.text : AppColors.muted,
+              ),
+            ),
           ),
-          if (points > 0) ...[
-            const SizedBox(width: 8),
-            Pill('$points'),
-          ],
+          if (points > 0) ...[const SizedBox(width: 8), Pill('$points')],
         ],
       ),
     );

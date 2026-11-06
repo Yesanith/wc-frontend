@@ -77,12 +77,10 @@ class SupabasePriceAlertBackend implements PriceAlertBackend {
   Future<void> send(int itemId, String name, PriceAlert? alert) async {
     final client = _client;
     if (client == null) return;
-    await client.rpc('set_price_alert', params: {
-      'p_item': itemId,
-      'p_name': name,
-      'p_sell_below': alert?.sellBelow,
-      'p_buy_above': alert?.buyAbove,
-    });
+    await client.rpc(
+      'set_price_alert',
+      params: {'p_item': itemId, 'p_name': name, 'p_sell_below': alert?.sellBelow, 'p_buy_above': alert?.buyAbove},
+    );
   }
 }
 
@@ -117,8 +115,9 @@ class PriceAlertMirror {
   }
 }
 
-final priceAlertMirrorProvider =
-    Provider<PriceAlertMirror>((ref) => PriceAlertMirror(ref.watch(priceAlertBackendProvider)));
+final priceAlertMirrorProvider = Provider<PriceAlertMirror>(
+  (ref) => PriceAlertMirror(ref.watch(priceAlertBackendProvider)),
+);
 
 /// the alerts of the device are told to the server once a session, when somebody is signed in. the names are those of the item index
 final priceAlertSyncProvider = FutureProvider<void>((ref) async {

@@ -52,13 +52,14 @@ class GoalsScreen extends ConsumerWidget {
               children: [
                 Panel(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
-                    children: [for (final g in goals) _GoalRow(goal: g)],
-                  ),
+                  child: Column(children: [for (final g in goals) _GoalRow(goal: g)]),
                 ),
                 const SizedBox(height: 16),
                 if (trees.isLoading && list.isEmpty)
-                  const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator()))
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
                 else if (trees.hasError)
                   ErrorBox(error: trees.error, onRetry: () => ref.invalidate(goalTreesProvider))
                 else ...[
@@ -132,10 +133,12 @@ class _GoalRow extends ConsumerWidget {
                   ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    child: Text(
+                      name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ],
               ),
@@ -149,8 +152,9 @@ class _GoalRow extends ConsumerWidget {
           Text('${goal.quantity}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
           IconButton(
             tooltip: '+',
-            onPressed:
-                goal.quantity >= maxGoalQuantity ? null : () => goals.setQuantity(goal.itemId, goal.quantity + 1),
+            onPressed: goal.quantity >= maxGoalQuantity
+                ? null
+                : () => goals.setQuantity(goal.itemId, goal.quantity + 1),
             icon: Icon(Icons.add_circle_outline, color: AppColors.gold),
           ),
           IconButton(

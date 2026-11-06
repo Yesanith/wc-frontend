@@ -100,16 +100,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       body: Stack(
         children: [
           // two soft glows behind the title
-          Positioned(
-            top: -120,
-            left: -80,
-            child: _Glow(color: AppColors.gold.withValues(alpha: 0.2), size: 360),
-          ),
-          Positioned(
-            top: 40,
-            right: -120,
-            child: _Glow(color: AppColors.ember.withValues(alpha: 0.14), size: 300),
-          ),
+          Positioned(top: -120, left: -80, child: _Glow(color: AppColors.gold.withValues(alpha: 0.2), size: 360)),
+          Positioned(top: 40, right: -120, child: _Glow(color: AppColors.ember.withValues(alpha: 0.14), size: 300)),
           SafeArea(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
@@ -133,7 +125,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           children: [
                             Icon(Icons.translate, size: 18, color: AppColors.gold),
                             const SizedBox(width: 6),
-                            Text(lang.nativeName, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                            Text(
+                              lang.nativeName,
+                              style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold),
+                            ),
                           ],
                         ),
                       ),
@@ -190,8 +185,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 if (error != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child:
-                        Text(error, style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
+                    child: Text(
+                      error,
+                      style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
                   ),
                 const SizedBox(height: 4),
                 SizedBox(
@@ -209,8 +206,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.onGold),
                           )
-                        : Text(_ready ? s.t('continue') : s.t('connect'),
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                        : Text(
+                            _ready ? s.t('continue') : s.t('connect'),
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                          ),
                   ),
                 ),
                 // the first screen only: opened from settings there is a key or a way back
@@ -297,8 +296,10 @@ class _TokenCard extends ConsumerWidget {
               Icon(ok ? Icons.check_circle_rounded : Icons.error_outline_rounded, color: tint),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(s.t('key_for', {'name': account}),
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                child: Text(
+                  s.t('key_for', {'name': account}),
+                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),
@@ -338,7 +339,10 @@ class _Step extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.gold),
           ),
-          child: Text('$number', style: TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800)),
+          child: Text(
+            '$number',
+            style: TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800),
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(

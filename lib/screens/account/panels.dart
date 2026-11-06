@@ -28,9 +28,13 @@ class _AccountCounters extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
-                  Text(fmtInt(value),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  Expanded(
+                    child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                  ),
+                  Text(
+                    fmtInt(value),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
+                  ),
                 ],
               ),
             ),
@@ -58,25 +62,28 @@ class _WealthPanel extends ConsumerWidget {
     final week = changeOver(points, 7, (p) => p.coins);
     final month = changeOver(points, 30, (p) => p.coins);
     Widget delta(String label, int? value) => Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-              const SizedBox(height: 2),
-              if (value == null)
-                Text('-', style: TextStyle(color: AppColors.muted))
-              else
-                Row(
-                  children: [
-                    Icon(value >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                        size: 14, color: value >= 0 ? AppColors.green : AppColors.red),
-                    const SizedBox(width: 2),
-                    CoinText(value.abs(), size: 13),
-                  ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+          const SizedBox(height: 2),
+          if (value == null)
+            Text('-', style: TextStyle(color: AppColors.muted))
+          else
+            Row(
+              children: [
+                Icon(
+                  value >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                  size: 14,
+                  color: value >= 0 ? AppColors.green : AppColors.red,
                 ),
-            ],
-          ),
-        );
+                const SizedBox(width: 2),
+                CoinText(value.abs(), size: 13),
+              ],
+            ),
+        ],
+      ),
+    );
     final recent = points.length > 60 ? points.sublist(points.length - 60) : points;
     return Panel(
       child: Column(
@@ -141,11 +148,7 @@ class _Pull extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return RefreshIndicator(
-      color: AppColors.gold,
-      onRefresh: () => refreshProviders(ref, providers),
-      child: child,
-    );
+    return RefreshIndicator(color: AppColors.gold, onRefresh: () => refreshProviders(ref, providers), child: child);
   }
 }
 

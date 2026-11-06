@@ -47,8 +47,10 @@ class _RankCardState extends ConsumerState<_RankCard> {
             if (!_open && permissions.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: Text(s.t('n_permissions', {'n': permissions.length}),
-                    style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                child: Text(
+                  s.t('n_permissions', {'n': permissions.length}),
+                  style: TextStyle(fontSize: 11, color: AppColors.muted),
+                ),
               ),
             if (_open)
               for (final p in permissions)
@@ -58,11 +60,14 @@ class _RankCardState extends ConsumerState<_RankCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          '${catalog[p]?['name'] ?? p.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}')}',
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                        '${catalog[p]?['name'] ?? p.replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}')}',
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
                       if ('${catalog[p]?['description'] ?? ''}'.isNotEmpty)
-                        Text('${catalog[p]!['description']}',
-                            style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                        Text(
+                          '${catalog[p]!['description']}',
+                          style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted),
+                        ),
                     ],
                   ),
                 ),
@@ -83,10 +88,17 @@ class _SharedGuild extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    Widget note(String key) => Panel(child: Text(s.t(key), style: TextStyle(color: AppColors.muted, height: 1.5)));
+    Widget note(String key) => Panel(
+      child: Text(s.t(key), style: TextStyle(color: AppColors.muted, height: 1.5)),
+    );
 
-    return ref.watch(tyriaGuildIdProvider(gw2Id)).when(
-          loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
+    return ref
+        .watch(tyriaGuildIdProvider(gw2Id))
+        .when(
+          loading: () => const Padding(
+            padding: EdgeInsets.all(24),
+            child: Center(child: CircularProgressIndicator()),
+          ),
           error: (_, __) => ListView(padding: const EdgeInsets.all(20), children: [note('guild_rank_needed')]),
           data: (guildId) {
             // no account linked in this guild yet, so nothing is shared with the player
@@ -124,18 +136,22 @@ class _SharedGuild extends ConsumerWidget {
                                 m.role == 'leader'
                                     ? Icons.workspace_premium
                                     : m.role == 'officer'
-                                        ? Icons.military_tech_outlined
-                                        : Icons.person_outline,
+                                    ? Icons.military_tech_outlined
+                                    : Icons.person_outline,
                                 size: 18,
                                 color: m.role == 'member' ? AppColors.muted : AppColors.gold,
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(m.accountName,
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                                child: Text(
+                                  m.accountName,
+                                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                ),
                               ),
-                              Text(m.gw2Rank ?? s.t('guild_role_${m.role}'),
-                                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                              Text(
+                                m.gw2Rank ?? s.t('guild_role_${m.role}'),
+                                style: TextStyle(fontSize: 12, color: AppColors.muted),
+                              ),
                             ],
                           ),
                         ),

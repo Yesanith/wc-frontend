@@ -42,10 +42,12 @@ class VaultShopScreen extends ConsumerWidget {
           for (final row in rows) {
             if (row.type != lastType) {
               lastType = row.type;
-              items.add(Padding(
-                padding: const EdgeInsets.only(top: 6, bottom: 8),
-                child: SectionHeader(title: s.t('vault_type_${row.type.toLowerCase()}')),
-              ));
+              items.add(
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, bottom: 8),
+                  child: SectionHeader(title: s.t('vault_type_${row.type.toLowerCase()}')),
+                ),
+              );
             }
             items.add(_ListingRow(row: row, balance: balance));
           }
@@ -58,16 +60,20 @@ class VaultShopScreen extends ConsumerWidget {
                   children: [
                     if (season != null) Text('${season['title'] ?? ''}', style: display(17)),
                     if (end != null)
-                      Text(s.t('season_ends', {'d': '${end.day}.${end.month}.${end.year}'}),
-                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                      Text(
+                        s.t('season_ends', {'d': '${end.day}.${end.month}.${end.year}'}),
+                        style: TextStyle(fontSize: 12, color: AppColors.muted),
+                      ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
                         Expanded(
                           child: Text(s.t('astral_acclaim'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                         ),
-                        Text(fmtInt(balance),
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                        Text(
+                          fmtInt(balance),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold),
+                        ),
                       ],
                     ),
                   ],
@@ -101,12 +107,14 @@ class _ListingRow extends ConsumerWidget {
           rarity: row.item?['rarity'] as String?,
           title: row.count > 1 ? '${row.count} x ${row.name}' : row.name,
           subtitle: row.limit > 0 ? s.t('bought_of', {'n': row.purchased, 'm': row.limit}) : null,
-          trailing: Text(fmtInt(row.cost),
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: row.cost <= balance ? AppColors.gold : AppColors.muted,
-              )),
+          trailing: Text(
+            fmtInt(row.cost),
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: row.cost <= balance ? AppColors.gold : AppColors.muted,
+            ),
+          ),
           onTap: () => showItemSheet(
             context,
             id: row.itemId,

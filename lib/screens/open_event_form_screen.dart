@@ -176,11 +176,11 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
   }
 
   void _preset(String key) => setState(() {
-        _roles
-          ..clear()
-          ..addAll(eventRolePresets[key]!);
-        _rolesChanged();
-      });
+    _roles
+      ..clear()
+      ..addAll(eventRolePresets[key]!);
+    _rolesChanged();
+  });
 
   /// the composition, as a guild's event has it, and for a new event how the organizer comes
   List<Widget> _rolesSection(S s, bool editing) {
@@ -215,21 +215,25 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
                     onPressed: (_roles[key] ?? 0) == 0
                         ? null
                         : () => setState(() {
-                              final n = (_roles[key] ?? 0) - 1;
-                              n == 0 ? _roles.remove(key) : _roles[key] = n;
-                              _rolesChanged();
-                            }),
+                            final n = (_roles[key] ?? 0) - 1;
+                            n == 0 ? _roles.remove(key) : _roles[key] = n;
+                            _rolesChanged();
+                          }),
                     icon: const Icon(Icons.remove_circle_outline, size: 20),
                   ),
                   SizedBox(
                     width: 24,
-                    child: Text('${_roles[key] ?? 0}',
-                        textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800)),
+                    child: Text(
+                      '${_roles[key] ?? 0}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
-                    onPressed:
-                        (_roles[key] ?? 0) >= 50 ? null : () => setState(() => _roles[key] = (_roles[key] ?? 0) + 1),
+                    onPressed: (_roles[key] ?? 0) >= 50
+                        ? null
+                        : () => setState(() => _roles[key] = (_roles[key] ?? 0) + 1),
                     icon: const Icon(Icons.add_circle_outline, size: 20),
                   ),
                 ],
@@ -333,7 +337,8 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               dropdownColor: AppColors.surface,
               decoration: fieldDecoration(''),
               items: [
-                for (final l in openEventLanguages) DropdownMenuItem(value: l, child: Text(openEventLanguageName(s, l)))
+                for (final l in openEventLanguages)
+                  DropdownMenuItem(value: l, child: Text(openEventLanguageName(s, l))),
               ],
               onChanged: (v) => setState(() => _language = v ?? _language),
             ),
@@ -398,7 +403,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               dropdownColor: AppColors.surface,
               decoration: fieldDecoration(''),
               items: [
-                for (final d in openEventDurations) DropdownMenuItem(value: d, child: Text(openEventDuration(d)))
+                for (final d in openEventDurations) DropdownMenuItem(value: d, child: Text(openEventDuration(d))),
               ],
               onChanged: (v) => setState(() => _duration = v ?? _duration),
             ),

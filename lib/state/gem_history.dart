@@ -67,11 +67,13 @@ class LocalGemsNotifier extends Notifier<List<GemPoint>> {
     final at = (now ?? DateTime.now()).toUtc();
     final next = mergeGemPoints(state, [GemPoint(at, buy, sell)], now: at, days: gemHistoryDays + 10);
     state = next;
-    await ref.read(prefsProvider).setString(
+    await ref
+        .read(prefsProvider)
+        .setString(
           _key,
           jsonEncode({
             'points': [
-              for (final p in next) [p.at.millisecondsSinceEpoch ~/ 1000, p.buy, p.sell]
+              for (final p in next) [p.at.millisecondsSinceEpoch ~/ 1000, p.buy, p.sell],
             ],
           }),
         );

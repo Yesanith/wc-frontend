@@ -48,14 +48,16 @@ class RecipeOutputRow extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: item?['rarity'] == 'Legendary' ? rarityColor('Legendary') : AppColors.text,
-                    )),
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: item?['rarity'] == 'Legendary' ? rarityColor('Legendary') : AppColors.text,
+                  ),
+                ),
                 if (entry.disciplines.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Wrap(
@@ -100,8 +102,7 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
       if (_discipline != null && !e.disciplines.contains(_discipline)) return false;
       if (_query.isNotEmpty && !nameOf(e).toLowerCase().contains(_query)) return false;
       return true;
-    }).toList()
-      ..sort((a, b) => nameOf(a).compareTo(nameOf(b)));
+    }).toList()..sort((a, b) => nameOf(a).compareTo(nameOf(b)));
 
     return Scaffold(
       appBar: AppBar(
@@ -114,8 +115,10 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
             child: TextField(
               onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
-              decoration:
-                  fieldDecoration(s.t('search_recipes'), prefixIcon: Icon(Icons.search, color: AppColors.muted)),
+              decoration: fieldDecoration(
+                s.t('search_recipes'),
+                prefixIcon: Icon(Icons.search, color: AppColors.muted),
+              ),
             ),
           ),
           if (disciplines.length > 1)
@@ -146,8 +149,10 @@ class _RecipeOutputsScreenState extends ConsumerState<RecipeOutputsScreen> {
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(s.t('recipes_count', {'n': fmtInt(rows.length)}),
-                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              child: Text(
+                s.t('recipes_count', {'n': fmtInt(rows.length)}),
+                style: TextStyle(fontSize: 12, color: AppColors.muted),
+              ),
             ),
           ),
           Expanded(

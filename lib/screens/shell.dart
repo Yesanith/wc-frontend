@@ -133,7 +133,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     _pageTitle = title;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setApplicationSwitcherDescription(
-          ApplicationSwitcherDescription(label: title, primaryColor: 0xFF0D0B09));
+        ApplicationSwitcherDescription(label: title, primaryColor: 0xFF0D0B09),
+      );
     });
   }
 
@@ -157,7 +158,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         _reviewAsked.add(g.id);
         if (!mounted) return;
         await Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => SharingReviewScreen(guildId: g.id, guildName: g.name)),
+          MaterialPageRoute<void>(
+            builder: (_) => SharingReviewScreen(guildId: g.id, guildName: g.name),
+          ),
         );
         // one guild at a time
         return;
@@ -212,8 +215,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     _pushWhileOpen = pushWhileOpen.stream.listen((message) {
       final n = message.notification;
       if (n == null || !mounted) return;
-      showToast(context, n.body == null ? '${n.title}' : '${n.title} · ${n.body}',
-          duration: const Duration(seconds: 6));
+      showToast(
+        context,
+        n.body == null ? '${n.title}' : '${n.title} · ${n.body}',
+        duration: const Duration(seconds: 6),
+      );
     });
   }
 
@@ -469,7 +475,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                   children: [
                     Row(
                       children: [
-                        Flexible(child: Text('Wondrous Compass', style: display(18), overflow: TextOverflow.ellipsis)),
+                        Flexible(
+                          child: Text('Wondrous Compass', style: display(18), overflow: TextOverflow.ellipsis),
+                        ),
                         const SizedBox(width: 8),
                         const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                       ],
@@ -481,16 +489,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 8),
-          child: Divider(),
-        ),
+        const Padding(padding: EdgeInsets.fromLTRB(24, 0, 24, 8), child: Divider()),
         for (final sec in AppSection.values) ...[
           if (_groupStarts.containsKey(sec)) ...[
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6),
-              child: Divider(),
-            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 28, vertical: 6), child: Divider()),
             if (_groupStarts[sec] case final key?)
               Padding(
                 padding: const EdgeInsets.fromLTRB(28, 4, 28, 8),
@@ -524,10 +526,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               search: switch (siteBarLayout(MediaQuery.sizeOf(context).width).searchWidth) {
                 final width? => _search(width: width, onSelect: _openHit),
                 null => IconButton(
-                    tooltip: s.t('search_placeholder'),
-                    onPressed: _showSearch,
-                    icon: Icon(Icons.search, color: AppColors.muted),
-                  ),
+                  tooltip: s.t('search_placeholder'),
+                  onPressed: _showSearch,
+                  icon: Icon(Icons.search, color: AppColors.muted),
+                ),
               },
               busy: sync.running || refreshing != 0,
               progress: sync.running ? sync.ratio : null,
@@ -555,15 +557,15 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               links: [
                 (
                   label: s.t('site_privacy'),
-                  onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))
+                  onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed')),
                 ),
                 (
                   label: s.t('site_terms'),
-                  onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))
+                  onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed')),
                 ),
                 (
                   label: s.t('site_source'),
-                  onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))
+                  onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed')),
                 ),
               ],
             )
@@ -586,32 +588,32 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                   maxWidth: sec == AppSection.maps
                       ? double.infinity
                       : _readingSections.contains(sec)
-                          ? readingMaxWidth
-                          : contentMaxWidth,
+                      ? readingMaxWidth
+                      : contentMaxWidth,
                   child: !_opened.contains(sec)
                       ? const SizedBox.shrink()
                       : (!hasKey && sectionNeedsKey(sec))
-                          ? const NeedsKeyView()
-                          : site && sec != AppSection.maps && sec != AppSection.home
-                              // a page of a site has its name at the top of it, the bar of an app is where an app has it
-                              ? Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: SitePageHeading(
-                                          title: s.t(_titleKeys[sec]!),
-                                          kicker: siteGroupIndex(sec) == null
-                                              ? null
-                                              : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(child: _page(sec)),
-                                  ],
-                                )
-                              : _page(sec),
+                      ? const NeedsKeyView()
+                      : site && sec != AppSection.maps && sec != AppSection.home
+                      // a page of a site has its name at the top of it, the bar of an app is where an app has it
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: SitePageHeading(
+                                  title: s.t(_titleKeys[sec]!),
+                                  kicker: siteGroupIndex(sec) == null
+                                      ? null
+                                      : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: _page(sec)),
+                          ],
+                        )
+                      : _page(sec),
                 ),
               ),
           ],
@@ -634,11 +636,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                   // the menu of the drawer, as a panel: flat, square, the width of the panel
                   child: Theme(
                     data: Theme.of(context).copyWith(
-                      drawerTheme: Theme.of(context).drawerTheme.copyWith(
-                            elevation: 0,
-                            shape: const RoundedRectangleBorder(),
-                            width: sideMenuWidth,
-                          ),
+                      drawerTheme: Theme.of(context).drawerTheme
+                          .copyWith(elevation: 0, shape: const RoundedRectangleBorder(), width: sideMenuWidth),
                     ),
                     child: menu,
                   ),

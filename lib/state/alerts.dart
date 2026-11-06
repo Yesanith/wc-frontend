@@ -17,15 +17,12 @@ class PriceAlert {
 
   bool get isEmpty => sellBelow == null && buyAbove == null;
 
-  Map<String, dynamic> toJson() => {
-        if (sellBelow != null) 'sell': sellBelow,
-        if (buyAbove != null) 'buy': buyAbove,
-      };
+  Map<String, dynamic> toJson() => {if (sellBelow != null) 'sell': sellBelow, if (buyAbove != null) 'buy': buyAbove};
 
   static PriceAlert fromJson(Map<String, dynamic> j) => PriceAlert(
-        sellBelow: j['sell'] == null ? null : asInt(j['sell']),
-        buyAbove: j['buy'] == null ? null : asInt(j['buy']),
-      );
+    sellBelow: j['sell'] == null ? null : asInt(j['sell']),
+    buyAbove: j['buy'] == null ? null : asInt(j['buy']),
+  );
 
   /// whether the current prices meet either condition
   bool triggeredBy({required int sell, required int buy}) =>

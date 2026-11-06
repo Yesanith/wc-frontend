@@ -21,17 +21,20 @@ class WikiApi {
   Future<List<WikiResult>> search(String query) async {
     final q = query.trim();
     if (q.isEmpty) return const [];
-    final uri = Uri.parse('$base/api.php').replace(queryParameters: {
-      'action': 'opensearch',
-      'search': q,
-      'limit': '20',
-      'namespace': '0',
-      'format': 'json',
-      // a browser may read the answer of the wiki only when it is asked for this
-      if (kIsWeb) 'origin': '*',
-    });
-    final res = await http.get(uri, headers: {'User-Agent': 'WondrousCompass/0.1 (Flutter GW2 companion app)'}).timeout(
-        const Duration(seconds: 15));
+    final uri = Uri.parse('$base/api.php').replace(
+      queryParameters: {
+        'action': 'opensearch',
+        'search': q,
+        'limit': '20',
+        'namespace': '0',
+        'format': 'json',
+        // a browser may read the answer of the wiki only when it is asked for this
+        if (kIsWeb) 'origin': '*',
+      },
+    );
+    final res = await http
+        .get(uri, headers: {'User-Agent': 'WondrousCompass/0.1 (Flutter GW2 companion app)'})
+        .timeout(const Duration(seconds: 15));
     if (res.statusCode != 200) {
       throw Exception('Wiki error (${res.statusCode})');
     }

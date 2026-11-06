@@ -3,8 +3,7 @@ const jaStrings = <String, String>{
   'story_unmatched': 'ゲームがこのキャラクターについて記録した {n} 件のクエストはストーリークエスト一覧にないため、上では数えられていません。',
   'progress_hero_unavailable': 'ゲームの API はヒーローチャレンジについて何も返しません（ArenaNet 側の既知の問題）。そのためここには表示できません。',
   'progress_training_unavailable': 'ゲームの API はキャラクターのトレーニングについて何も返しません（ArenaNet 側の既知の問題）。そのためここには表示できません。',
-  'story_note':
-      'ゲームがこのキャラクターについて記録したクエストを数えます。合計にはすべての分岐・種族・騎士団が含まれるため、バーが満たされることはほとんどありません。別のキャラクターで進めた、またはやり直したストーリーはここには含まれません。',
+  'story_note': 'ゲームがこのキャラクターについて記録したクエストを数えます。合計にはすべての分岐・種族・騎士団が含まれるため、バーが満たされることはほとんどありません。別のキャラクターで進めた、またはやり直したストーリーはここには含まれません。',
   'gshare_unreviewed': 'まだ確認していません。確認するまで、宝物庫・隠し場所・ログはメンバーに表示されません。',
   'gshare_confirm': 'メンバーに見せる内容を確定',
   'gshare_review_title': 'メンバーに何を見せますか？',
@@ -753,8 +752,7 @@ const jaStrings = <String, String>{
   'wiki_source': 'Wiki の参照先',
   'remove_key': 'キーを削除',
   'remove_key_body': 'API キーはこの端末から削除され、スタート画面に戻ります。',
-  'disclaimer':
-      'Wondrous Compass は非公式のファンアプリです。Guild Wars 2、ArenaNet、NCSOFT は各所有者の商標です。データは公式 GW2 API と Guild Wars 2 Wiki から取得しています。',
+  'disclaimer': 'Wondrous Compass は非公式のファンアプリです。Guild Wars 2、ArenaNet、NCSOFT は各所有者の商標です。データは公式 GW2 API と Guild Wars 2 Wiki から取得しています。',
   'slot_Helm': '頭',
   'slot_Shoulders': '肩',
   'slot_Coat': '胴',
@@ -986,8 +984,7 @@ const jaStrings = <String, String>{
   'oe_err_tags': 'リストから最大3つのタグを選んでください。',
   'oe_join_as': '参加アカウント',
   'oe_roles_title': '公式Discord',
-  'oe_roles_body':
-      '公式のWondrous Compass Discordサーバーでは、リージョンとイベントの種類ごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールが付与されます。参加登録したイベントが始まると、ボットが参加登録した人だけに見えるテキストチャンネルとボイスチャンネルを作ります。',
+  'oe_roles_body': '公式のWondrous Compass Discordサーバーでは、リージョンとイベントの種類ごとのチャンネルに公開イベントが投稿されます。ログインに使ったDiscordアカウントで参加すると、アカウントのあるリージョンのロールが付与されます。参加登録したイベントが始まると、ボットが参加登録した人だけに見えるテキストチャンネルとボイスチャンネルを作ります。',
   'oe_roles_join': '公式Discordに参加',
   'oe_err_role_required': 'イベントのロールを選んでください。',
   'oe_err_profession': '参加するプロフェッションを選んでください。',

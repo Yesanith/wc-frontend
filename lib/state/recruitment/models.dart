@@ -12,10 +12,10 @@ enum RecruitRegion {
 }
 
 List<String> _strings(Object? v) => [
-      if (v is List)
-        for (final e in v)
-          if (e is String) e,
-    ];
+  if (v is List)
+    for (final e in v)
+      if (e is String) e,
+];
 
 DateTime? _time(Object? v) => v == null ? null : DateTime.tryParse('$v')?.toLocal();
 
@@ -246,9 +246,10 @@ class RecruiterEntry {
   static RecruiterEntry? parse(Object? raw) {
     if (raw is! Map || raw['user_id'] is! String) return null;
     return RecruiterEntry(
-        userId: raw['user_id'] as String,
-        accountName: '${raw['account_name'] ?? '?'}',
-        grantedAt: _time(raw['granted_at']));
+      userId: raw['user_id'] as String,
+      accountName: '${raw['account_name'] ?? '?'}',
+      grantedAt: _time(raw['granted_at']),
+    );
   }
 }
 
@@ -268,17 +269,17 @@ class RecruitDraft {
   });
 
   factory RecruitDraft.fromPage(RecruitPage p) => RecruitDraft(
-        headline: p.headline,
-        description: p.description,
-        requirements: p.requirements,
-        playTimes: p.playTimes,
-        contact: p.contact,
-        discordInvite: p.discordInvite ?? '',
-        lookingFor: p.lookingFor.toSet(),
-        languages: p.languages.toSet(),
-        region: p.region,
-        recruiting: p.recruiting,
-      );
+    headline: p.headline,
+    description: p.description,
+    requirements: p.requirements,
+    playTimes: p.playTimes,
+    contact: p.contact,
+    discordInvite: p.discordInvite ?? '',
+    lookingFor: p.lookingFor.toSet(),
+    languages: p.languages.toSet(),
+    region: p.region,
+    recruiting: p.recruiting,
+  );
 
   final String headline;
   final String description;
@@ -302,54 +303,53 @@ class RecruitDraft {
     Set<String>? languages,
     RecruitRegion? region,
     bool? recruiting,
-  }) =>
-      RecruitDraft(
-        headline: headline ?? this.headline,
-        description: description ?? this.description,
-        requirements: requirements ?? this.requirements,
-        playTimes: playTimes ?? this.playTimes,
-        contact: contact ?? this.contact,
-        discordInvite: discordInvite ?? this.discordInvite,
-        lookingFor: lookingFor ?? this.lookingFor,
-        languages: languages ?? this.languages,
-        region: region ?? this.region,
-        recruiting: recruiting ?? this.recruiting,
-      );
+  }) => RecruitDraft(
+    headline: headline ?? this.headline,
+    description: description ?? this.description,
+    requirements: requirements ?? this.requirements,
+    playTimes: playTimes ?? this.playTimes,
+    contact: contact ?? this.contact,
+    discordInvite: discordInvite ?? this.discordInvite,
+    lookingFor: lookingFor ?? this.lookingFor,
+    languages: languages ?? this.languages,
+    region: region ?? this.region,
+    recruiting: recruiting ?? this.recruiting,
+  );
 
   /// what is sent: every field, so that the page is what is on the screen
   Map<String, dynamic> toJson() => {
-        'headline': headline.trim(),
-        'description': description.trim(),
-        'requirements': requirements.trim(),
-        'play_times': playTimes.trim(),
-        'contact': contact.trim(),
-        'discord_invite': discordInvite.trim().isEmpty ? null : discordInvite.trim(),
-        'looking_for': lookingFor.toList()..sort(),
-        'languages': languages.toList()..sort(),
-        'region': region.code,
-        'recruiting': recruiting,
-      };
+    'headline': headline.trim(),
+    'description': description.trim(),
+    'requirements': requirements.trim(),
+    'play_times': playTimes.trim(),
+    'contact': contact.trim(),
+    'discord_invite': discordInvite.trim().isEmpty ? null : discordInvite.trim(),
+    'looking_for': lookingFor.toList()..sort(),
+    'languages': languages.toList()..sort(),
+    'region': region.code,
+    'recruiting': recruiting,
+  };
 
   /// what is wrong with the page as it is, before it is sent: a field that is too long or is not what it should be. the database checks the same
   List<RecruitField> problems() => [
-        if (headline.trim().length > recruitHeadlineMax) RecruitField.headline,
-        if (description.trim().length > recruitDescriptionMax) RecruitField.description,
-        if (requirements.trim().length > recruitRequirementsMax) RecruitField.requirements,
-        if (playTimes.trim().length > recruitPlayTimesMax) RecruitField.playTimes,
-        if (contact.trim().length > recruitContactMax) RecruitField.contact,
-        if (discordInvite.trim().isNotEmpty && !isDiscordInvite(discordInvite.trim())) RecruitField.discordInvite,
-        if (lookingFor.length > recruitLookingForMax || lookingFor.length + languages.length > recruitTagsMax)
-          RecruitField.tags,
-        if (languages.length > recruitLanguagesMax || languages.any((l) => !recruitLanguages.contains(l)))
-          RecruitField.languages,
-      ];
+    if (headline.trim().length > recruitHeadlineMax) RecruitField.headline,
+    if (description.trim().length > recruitDescriptionMax) RecruitField.description,
+    if (requirements.trim().length > recruitRequirementsMax) RecruitField.requirements,
+    if (playTimes.trim().length > recruitPlayTimesMax) RecruitField.playTimes,
+    if (contact.trim().length > recruitContactMax) RecruitField.contact,
+    if (discordInvite.trim().isNotEmpty && !isDiscordInvite(discordInvite.trim())) RecruitField.discordInvite,
+    if (lookingFor.length > recruitLookingForMax || lookingFor.length + languages.length > recruitTagsMax)
+      RecruitField.tags,
+    if (languages.length > recruitLanguagesMax || languages.any((l) => !recruitLanguages.contains(l)))
+      RecruitField.languages,
+  ];
 
   /// what it takes to be shown to everybody: a headline, a description and a way to be reached
   List<RecruitField> missingToPublish() => [
-        if (headline.trim().isEmpty) RecruitField.headline,
-        if (description.trim().length < recruitDescriptionMin) RecruitField.description,
-        if (discordInvite.trim().isEmpty && contact.trim().isEmpty) RecruitField.contact,
-      ];
+    if (headline.trim().isEmpty) RecruitField.headline,
+    if (description.trim().length < recruitDescriptionMin) RecruitField.description,
+    if (discordInvite.trim().isEmpty && contact.trim().isEmpty) RecruitField.contact,
+  ];
 }
 
 /// the fields of a page, for saying which one is not right
@@ -362,7 +362,7 @@ enum RecruitField {
   discordInvite,
   lookingFor,
   languages,
-  tags
+  tags,
 }
 
 /// why the database refused, as the hint it gave
@@ -403,7 +403,7 @@ typedef RecruitFilter = ({
   String? lookingFor,
   String search,
   bool openOnly,
-  int offset
+  int offset,
 });
 
 const noRecruitFilter = (language: null, region: null, lookingFor: null, search: '', openOnly: false, offset: 0);

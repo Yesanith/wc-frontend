@@ -8,11 +8,11 @@ import 'package:wondrous_compass/state/price_history.dart';
 import 'package:wondrous_compass/state/server_prices.dart';
 
 Map<String, dynamic> row(int id, {String? readAt, int buy = 90, int sell = 110}) => {
-      'id': id,
-      'buys': {'unit_price': buy, 'quantity': 10},
-      'sells': {'unit_price': sell, 'quantity': 20},
-      if (readAt != null) 'updated_at': readAt,
-    };
+  'id': id,
+  'buys': {'unit_price': buy, 'quantity': 10},
+  'sells': {'unit_price': sell, 'quantity': 20},
+  if (readAt != null) 'updated_at': readAt,
+};
 
 void main() {
   final now = DateTime.utc(2026, 10, 2, 12);
@@ -41,14 +41,15 @@ void main() {
   group('what the server answers', () {
     test('prices are the rows that have an id, and nothing else', () {
       expect(
-          parseServerPrices([
-            row(1),
-            'x',
-            null,
-            {'nothing': true},
-            row(2)
-          ]).map((e) => e['id']),
-          [1, 2]);
+        parseServerPrices([
+          row(1),
+          'x',
+          null,
+          {'nothing': true},
+          row(2),
+        ]).map((e) => e['id']),
+        [1, 2],
+      );
       expect(parseServerPrices(null), isEmpty);
       expect(parseServerPrices({'id': 1}), isEmpty);
     });
@@ -90,9 +91,7 @@ void main() {
 
   group('the prices asked of the api', () {
     /// a pretend game that says what was asked of it, and a pretend server
-    ({Gw2Api api, List<List<int>> asked}) make({
-      Future<List<Map<String, dynamic>>> Function(List<int> ids)? server,
-    }) {
+    ({Gw2Api api, List<List<int>> asked}) make({Future<List<Map<String, dynamic>>> Function(List<int> ids)? server}) {
       final asked = <List<int>>[];
       final api = Gw2Api(
         null,
@@ -146,10 +145,12 @@ void main() {
 
     test('are asked of the server two hundred at a time, and nothing is asked of either for no items', () async {
       var requests = <int>[];
-      final t = make(server: (ids) async {
-        requests.add(ids.length);
-        return [for (final id in ids) row(id, readAt: DateTime.now().toIso8601String())];
-      });
+      final t = make(
+        server: (ids) async {
+          requests.add(ids.length);
+          return [for (final id in ids) row(id, readAt: DateTime.now().toIso8601String())];
+        },
+      );
       await t.api.prices(List.generate(450, (i) => i + 1));
       expect(requests, [200, 200, 50]);
       requests = [];

@@ -55,8 +55,16 @@ final collectionProgressProvider = FutureProvider.autoDispose.family<CollectionP
 });
 
 class CollectionEntry {
-  const CollectionEntry(this.id, this.name, this.icon, this.unlocked,
-      {this.rarity, this.type, this.subtype, this.groups = const []});
+  const CollectionEntry(
+    this.id,
+    this.name,
+    this.icon,
+    this.unlocked, {
+    this.rarity,
+    this.type,
+    this.subtype,
+    this.groups = const [],
+  });
   final String id;
   final String name;
   final String? icon;
@@ -99,8 +107,8 @@ String? skinSubtype(Json? raw) {
   if (details is! Map || details['type'] == null) return null;
   final weight = details['weight_class'];
   // HelmAquatic -> Helm Aquatic, LongBow -> Longbow
-  final slot =
-      professionWeaponKey('${details['type']}').replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}');
+  final slot = professionWeaponKey('${details['type']}')
+      .replaceAllMapped(RegExp(r'(?<=[a-z])([A-Z])'), (m) => ' ${m[1]}');
   // weapons carry a weight class of None, outfits and town clothes Clothing
   return weight == null || weight == 'None' || weight == 'Clothing' ? slot : '$slot · $weight';
 }
@@ -157,8 +165,12 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
   var mountNames = const <String, String>{};
   if (kind.key == 'mount_skins') {
     try {
-      final types =
-          await cachedList(cache, 'collection_mount_types_${lang.apiLang}', 'rows', () => api.allOf('/mounts/types'));
+      final types = await cachedList(
+        cache,
+        'collection_mount_types_${lang.apiLang}',
+        'rows',
+        () => api.allOf('/mounts/types'),
+      );
       // skins used to name their mount by key ("raptor"). since the
       // 2025-08-29 schema they carry mount_guid instead, and types a guid
       mountNames = {
@@ -178,7 +190,11 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
   if (kind.key == 'homestead_decorations') {
     try {
       final categories = await cachedList(
-          cache, 'collection_homestead_categories_${lang.apiLang}', 'rows', () => api.allOf(homesteadCategoriesPath));
+        cache,
+        'collection_homestead_categories_${lang.apiLang}',
+        'rows',
+        () => api.allOf(homesteadCategoriesPath),
+      );
       categoryNames = {
         for (final c in categories.whereType<Map>())
           if ('${c['name'] ?? ''}'.isNotEmpty) '${c['id']}': '${c['name']}',
@@ -192,20 +208,22 @@ final collectionEntriesProvider = FutureProvider.autoDispose.family<List<Collect
     var name = (byId[id]?['name'] as String?) ?? (byId[id]?['hint'] as String?) ?? titleCase(id);
     if (name.isEmpty || placeholder.hasMatch(name)) name = '';
     final row = byId[id];
-    entries.add(CollectionEntry(
-      id,
-      name,
-      row?['icon'] as String?,
-      unlocked.contains(id),
-      rarity: row?['rarity'] as String?,
-      type: switch (kind.key) {
-        'wardrobe' => row?['type'] as String?,
-        'mount_skins' => mountOf(row, mountNames),
-        _ => null,
-      },
-      subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
-      groups: kind.key == 'homestead_decorations' ? decorationGroups(row, categoryNames) : const [],
-    ));
+    entries.add(
+      CollectionEntry(
+        id,
+        name,
+        row?['icon'] as String?,
+        unlocked.contains(id),
+        rarity: row?['rarity'] as String?,
+        type: switch (kind.key) {
+          'wardrobe' => row?['type'] as String?,
+          'mount_skins' => mountOf(row, mountNames),
+          _ => null,
+        },
+        subtype: kind.key == 'wardrobe' ? skinSubtype(row) : null,
+        groups: kind.key == 'homestead_decorations' ? decorationGroups(row, categoryNames) : const [],
+      ),
+    );
   }
   // unnamed entries go last instead of bunching up at the top
   entries.sort((a, b) {

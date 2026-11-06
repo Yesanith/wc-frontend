@@ -22,8 +22,13 @@ enum TradeSide {
 
 /// one transaction of the history that completed: a number that is its own, the item, the price of one and how many
 class TradeFill {
-  const TradeFill(
-      {required this.id, required this.itemId, required this.price, required this.quantity, required this.side});
+  const TradeFill({
+    required this.id,
+    required this.itemId,
+    required this.price,
+    required this.quantity,
+    required this.side,
+  });
 
   final int id;
   final int itemId;
@@ -71,9 +76,9 @@ class TradeSeen {
       final map = jsonDecode(raw);
       if (map is! Map) return null;
       List<int> ids(Object? v) => [
-            for (final n in (v is List ? v : const []))
-              if (n is int) n
-          ];
+        for (final n in (v is List ? v : const []))
+          if (n is int) n,
+      ];
       return TradeSeen(sold: ids(map['sold']), bought: ids(map['bought']));
     } catch (_) {
       return null;
@@ -116,9 +121,8 @@ List<TradeLine> groupFills(List<TradeFill> fills) {
     final (quantity, copper) = byItem[fill.itemId] ?? (0, 0);
     byItem[fill.itemId] = (quantity + fill.quantity, copper + fill.total);
   }
-  final lines = [
-    for (final e in byItem.entries) TradeLine(itemId: e.key, quantity: e.value.$1, copper: e.value.$2),
-  ]..sort((a, b) => b.copper != a.copper ? b.copper.compareTo(a.copper) : a.itemId.compareTo(b.itemId));
+  final lines = [for (final e in byItem.entries) TradeLine(itemId: e.key, quantity: e.value.$1, copper: e.value.$2)]
+    ..sort((a, b) => b.copper != a.copper ? b.copper.compareTo(a.copper) : a.itemId.compareTo(b.itemId));
   return lines;
 }
 
@@ -146,13 +150,7 @@ class TradeNotification {
 }
 
 /// the notification of what happened on one side: what sold, or what was bought. [account] is the name of the account when the player has more than one
-TradeNotification composeTrade(
-  S s,
-  TradeSide side,
-  List<TradeLine> lines,
-  Map<int, String> names, {
-  String? account,
-}) {
+TradeNotification composeTrade(S s, TradeSide side, List<TradeLine> lines, Map<int, String> names, {String? account}) {
   final shown = lines.take(tradeLinesShown);
   final rest = lines.length - tradeLinesShown;
   final body = [
@@ -222,8 +220,10 @@ Future<TradeCheckResult> runTradeCheck({
   if (seen == null) {
     await prefs.setString(
       storageKey,
-      TradeSeen(sold: remember(const [], sold.map((f) => f.id)), bought: remember(const [], bought.map((f) => f.id)))
-          .toJson(),
+      TradeSeen(
+        sold: remember(const [], sold.map((f) => f.id)),
+        bought: remember(const [], bought.map((f) => f.id)),
+      ).toJson(),
     );
     return const TradeCheckResult(first: true);
   }
@@ -242,9 +242,11 @@ Future<TradeCheckResult> runTradeCheck({
 
   var names = const <int, String>{};
   try {
-    names = await source.names({
-      for (final f in [...newSold, ...newBought]) f.itemId
-    }.toList());
+    names = await source.names(
+      {
+        for (final f in [...newSold, ...newBought]) f.itemId,
+      }.toList(),
+    );
   } catch (_) {
     // the items are then told by their number
   }

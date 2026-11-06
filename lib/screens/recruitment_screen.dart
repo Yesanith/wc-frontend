@@ -41,9 +41,9 @@ class _RecruitmentScreenState extends ConsumerState<RecruitmentScreen> {
   }
 
   void _change(VoidCallback change) => setState(() {
-        change();
-        _offsets = [0];
-      });
+    change();
+    _offsets = [0];
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -77,47 +77,62 @@ class _RecruitmentScreenState extends ConsumerState<RecruitmentScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          _ChipRow(children: [
-            ChoiceChip(
+          _ChipRow(
+            children: [
+              ChoiceChip(
                 label: Text(s.t('all')),
                 selected: _language == null,
-                onSelected: (_) => _change(() => _language = null)),
-            for (final code in recruitLanguages)
-              ChoiceChip(
+                onSelected: (_) => _change(() => _language = null),
+              ),
+              for (final code in recruitLanguages)
+                ChoiceChip(
                   label: Text(recruitLanguageLabel(code)),
                   selected: _language == code,
-                  onSelected: (_) => _change(() => _language = code)),
-          ]),
+                  onSelected: (_) => _change(() => _language = code),
+                ),
+            ],
+          ),
           const SizedBox(height: 4),
-          _ChipRow(children: [
-            ChoiceChip(label: Text(s.t('all')), selected: _tag == null, onSelected: (_) => _change(() => _tag = null)),
-            for (final tag in recruitTags)
+          _ChipRow(
+            children: [
               ChoiceChip(
+                label: Text(s.t('all')),
+                selected: _tag == null,
+                onSelected: (_) => _change(() => _tag = null),
+              ),
+              for (final tag in recruitTags)
+                ChoiceChip(
                   label: Text(recruitTagLabel(s, tag)),
                   selected: _tag == tag,
-                  onSelected: (_) => _change(() => _tag = tag)),
-          ]),
+                  onSelected: (_) => _change(() => _tag = tag),
+                ),
+            ],
+          ),
           const SizedBox(height: 4),
           Wrap(
             spacing: 8,
             runSpacing: 4,
             children: [
               ChoiceChip(
-                  label: Text(s.t('rec_region_any')),
-                  selected: _region == null,
-                  onSelected: (_) => _change(() => _region = null)),
+                label: Text(s.t('rec_region_any')),
+                selected: _region == null,
+                onSelected: (_) => _change(() => _region = null),
+              ),
               ChoiceChip(
-                  label: Text(s.t('oe_region_eu')),
-                  selected: _region == RecruitRegion.eu,
-                  onSelected: (_) => _change(() => _region = RecruitRegion.eu)),
+                label: Text(s.t('oe_region_eu')),
+                selected: _region == RecruitRegion.eu,
+                onSelected: (_) => _change(() => _region = RecruitRegion.eu),
+              ),
               ChoiceChip(
-                  label: Text(s.t('oe_region_na')),
-                  selected: _region == RecruitRegion.na,
-                  onSelected: (_) => _change(() => _region = RecruitRegion.na)),
+                label: Text(s.t('oe_region_na')),
+                selected: _region == RecruitRegion.na,
+                onSelected: (_) => _change(() => _region = RecruitRegion.na),
+              ),
               FilterChip(
-                  label: Text(s.t('rec_only_open')),
-                  selected: _openOnly,
-                  onSelected: (on) => _change(() => _openOnly = on)),
+                label: Text(s.t('rec_only_open')),
+                selected: _openOnly,
+                onSelected: (on) => _change(() => _openOnly = on),
+              ),
             ],
           ),
           const SizedBox(height: 14),
@@ -142,9 +157,11 @@ class _ChipRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(children: [for (final c in children) Padding(padding: const EdgeInsets.only(right: 8), child: c)]),
-      );
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: [for (final c in children) Padding(padding: const EdgeInsets.only(right: 8), child: c)],
+    ),
+  );
 }
 
 class _Notice extends ConsumerWidget {
@@ -154,11 +171,15 @@ class _Notice extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Text(text, textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.4)),
-        ),
-      );
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: AppColors.muted, height: 1.4),
+      ),
+    ),
+  );
 }
 
 /// one page of the list, watched by itself so that the next is added under it and what is above is not asked for again
@@ -175,12 +196,19 @@ class _ListPage extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final page = ref.watch(recruitListProvider(filter));
     return page.when(
-      loading: () => const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24),
+        child: Center(child: CircularProgressIndicator()),
+      ),
       error: (e, _) => Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text(s.t(recruitErrorKey(e)), textAlign: TextAlign.center, style: TextStyle(color: AppColors.amber)),
+            Text(
+              s.t(recruitErrorKey(e)),
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.amber),
+            ),
             TextButton(onPressed: () => ref.invalidate(recruitListProvider), child: Text(s.t('retry'))),
           ],
         ),
@@ -192,11 +220,18 @@ class _ListPage extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(24),
               child: Center(
-                  child: Text(s.t('rec_empty'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted))),
+                child: Text(
+                  s.t('rec_empty'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.muted),
+                ),
+              ),
             ),
           for (final card in list.rows) _CardTile(card: card),
           if (last && filter.offset + list.rows.length < list.total && list.rows.length >= recruitPageSize)
-            Align(child: TextButton(onPressed: onMore, child: Text(s.t('rec_more')))),
+            Align(
+              child: TextButton(onPressed: onMore, child: Text(s.t('rec_more'))),
+            ),
         ],
       ),
     );
@@ -223,27 +258,32 @@ class _CardTile extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadius.card), border: Border.all(color: AppColors.line)),
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(color: AppColors.line),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Expanded(
-                        child: Text(card.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800))),
+                      child: Text(card.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    ),
                     Text(
                       card.recruiting ? s.t('rec_recruiting') : s.t('rec_closed'),
                       style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: card.recruiting ? AppColors.gold : AppColors.hint),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: card.recruiting ? AppColors.gold : AppColors.hint,
+                      ),
                     ),
                   ],
                 ),
                 if (card.headline.isNotEmpty)
                   Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(card.headline, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(card.headline, style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
+                  ),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 6,
@@ -256,8 +296,9 @@ class _CardTile extends ConsumerWidget {
                 ),
                 if (card.playTimes.isNotEmpty)
                   Padding(
-                      padding: const EdgeInsets.only(top: 6),
-                      child: Text(card.playTimes, style: TextStyle(fontSize: 12, color: AppColors.hint))),
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(card.playTimes, style: TextStyle(fontSize: 12, color: AppColors.hint)),
+                  ),
               ],
             ),
           ),
@@ -274,10 +315,13 @@ class _Mini extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: AppColors.line)),
-        child: Text(text, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(999),
+      border: Border.all(color: AppColors.line),
+    ),
+    child: Text(text, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+  );
 }
 
 /// the guilds the player may manage the page of: where each page is, and the way to make it, change it, see it and, for the leader, say who else may. a player who is not signed in is told how to be
@@ -297,8 +341,8 @@ class _MyPages extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
-                      child:
-                          Text(s.t('rec_sign_in'), style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4))),
+                    child: Text(s.t('rec_sign_in'), style: TextStyle(fontSize: 12, color: AppColors.hint, height: 1.4)),
+                  ),
                   TextButton(
                     onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.settings,
                     child: Text(s.t('nav_settings')),
@@ -313,9 +357,10 @@ class _MyPages extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 18),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.5))),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.gold.withValues(alpha: 0.5)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -367,8 +412,9 @@ class _MyGuild extends ConsumerWidget {
                 TextButton(onPressed: () => showRecruitPage(context, guild.guildId), child: Text(s.t('rec_view'))),
               if (guild.isLeader)
                 TextButton(
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute<void>(builder: (_) => RecruitersScreen(guild: guild))),
+                  onPressed: () =>
+                      Navigator.of(context)
+                          .push(MaterialPageRoute<void>(builder: (_) => RecruitersScreen(guild: guild))),
                   child: Text(s.t('rec_recruiters')),
                 ),
             ],

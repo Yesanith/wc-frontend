@@ -201,8 +201,10 @@ class _Group extends ConsumerWidget {
                       if (people[i].profession != null) ...[
                         ProfessionIcon(url: professions[people[i].profession]?.icon, size: 18),
                         const SizedBox(width: 4),
-                        Text(professions[people[i].profession]?.name ?? people[i].profession!,
-                            style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
+                        Text(
+                          professions[people[i].profession]?.name ?? people[i].profession!,
+                          style: TextStyle(fontSize: 12, color: AppColors.textSoft),
+                        ),
                         const SizedBox(width: 8),
                       ],
                       if (showRole && people[i].role != null)

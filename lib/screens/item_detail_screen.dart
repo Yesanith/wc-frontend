@@ -140,10 +140,7 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
         // description, facts, attributes and upgrade effects; vendor value
         // and recipes follow below, next to the prices
         ItemFacts(itemId: itemId, instance: instance, showVendor: false, showUsedIn: false),
-        if (upgradeIds.isNotEmpty) ...[
-          Eyebrow(s.t('upgrades')),
-          for (final id in upgradeIds) _UpgradeRow(itemId: id),
-        ],
+        if (upgradeIds.isNotEmpty) ...[Eyebrow(s.t('upgrades')), for (final id in upgradeIds) _UpgradeRow(itemId: id)],
         if (infusionIds.isNotEmpty) ...[
           Eyebrow(s.t('infusions')),
           for (final id in infusionIds) _UpgradeRow(itemId: id),
@@ -212,23 +209,27 @@ class ItemFacts extends ConsumerWidget {
     final bonuses = [for (final b in (details?['bonuses'] as List?) ?? const []) '$b'];
     final buff = details?['infix_upgrade'] is Map && (details!['infix_upgrade'] as Map)['buff'] is Map
         ? '${((details['infix_upgrade'] as Map)['buff'] as Map)['description'] ?? ''}'
-            .replaceAll(RegExp(r'<[^>]*>'), '')
-            .trim()
+              .replaceAll(RegExp(r'<[^>]*>'), '')
+              .trim()
         : '';
     final vendor = asInt(item['vendor_value']);
     final name = (item['name'] as String?) ?? '';
 
     Widget row(String label, Widget value) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7),
-          child: Row(
-            children: [
-              Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
-              value,
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.textSoft)),
           ),
-        );
-    Widget valueText(String v) =>
-        Text(v, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold));
+          value,
+        ],
+      ),
+    );
+    Widget valueText(String v) => Text(
+      v,
+      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -277,8 +278,10 @@ class ItemFacts extends ConsumerWidget {
                 for (var i = 0; i < bonuses.length; i++)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 3),
-                    child: Text('(${i + 1}) ${bonuses[i]}',
-                        style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
+                    child: Text(
+                      '(${i + 1}) ${bonuses[i]}',
+                      style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft),
+                    ),
                   ),
               ],
             ),
@@ -291,7 +294,10 @@ class ItemFacts extends ConsumerWidget {
 
   Widget? _comboText(String? combo) => combo == null
       ? null
-      : Text(combo, style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13));
+      : Text(
+          combo,
+          style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700, fontSize: 13),
+        );
 }
 
 /// label and value pairs for what the api tells about this kind of item
@@ -345,19 +351,19 @@ List<String> itemFlagLabels(S s, Json item) {
 int afterTradingFees(int price) => price - (price * 0.05).ceil() - (price * 0.10).ceil();
 
 String placeLabel(S s, OwnedPlace p) => switch (p.kind) {
-      OwnedKind.bank => s.t('bank'),
-      OwnedKind.materials => s.t('materials'),
-      OwnedKind.shared => s.t('shared_slots'),
-      OwnedKind.armory => s.t('armory'),
-      OwnedKind.bags => p.character ?? '',
-      OwnedKind.equipped => s.t('equipped_on', {'name': p.character ?? ''}),
-    };
+  OwnedKind.bank => s.t('bank'),
+  OwnedKind.materials => s.t('materials'),
+  OwnedKind.shared => s.t('shared_slots'),
+  OwnedKind.armory => s.t('armory'),
+  OwnedKind.bags => p.character ?? '',
+  OwnedKind.equipped => s.t('equipped_on', {'name': p.character ?? ''}),
+};
 
 IconData placeIcon(OwnedKind kind) => switch (kind) {
-      OwnedKind.bank => Icons.account_balance_outlined,
-      OwnedKind.materials => Icons.category_outlined,
-      OwnedKind.shared => Icons.all_inbox_outlined,
-      OwnedKind.armory => Icons.shield_moon_outlined,
-      OwnedKind.bags => Icons.backpack_outlined,
-      OwnedKind.equipped => Icons.checkroom_outlined,
-    };
+  OwnedKind.bank => Icons.account_balance_outlined,
+  OwnedKind.materials => Icons.category_outlined,
+  OwnedKind.shared => Icons.all_inbox_outlined,
+  OwnedKind.armory => Icons.shield_moon_outlined,
+  OwnedKind.bags => Icons.backpack_outlined,
+  OwnedKind.equipped => Icons.checkroom_outlined,
+};

@@ -62,7 +62,9 @@ class TradingItemScreen extends ConsumerWidget {
               value: price,
               onRetry: () => ref.invalidate(priceProvider(itemId)),
               builder: (p) => p == null
-                  ? Panel(child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)))
+                  ? Panel(
+                      child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)),
+                    )
                   : _PricePanel(p),
             ),
             const SizedBox(height: 12),
@@ -80,8 +82,10 @@ class TradingItemScreen extends ConsumerWidget {
                     child: Text(s.t('you_own'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
                   ),
                   totals.when(
-                    data: (t) => Text(fmtInt(t[itemId] ?? 0),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                    data: (t) => Text(
+                      fmtInt(t[itemId] ?? 0),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold),
+                    ),
                     loading: () =>
                         const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
                     error: (_, __) => const Text('-'),
@@ -135,17 +139,17 @@ class _PricePanel extends ConsumerWidget {
     final profit = buy > 0 && sell > 0 ? afterTradingFees(sell - 1) - buy : 0;
 
     Widget col(String label, int value, int qty) => Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
-              const SizedBox(height: 4),
-              CoinText(value, size: 20),
-              const SizedBox(height: 2),
-              Text(s.t('n_listed', {'n': fmtInt(qty)}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
-            ],
-          ),
-        );
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          const SizedBox(height: 4),
+          CoinText(value, size: 20),
+          const SizedBox(height: 2),
+          Text(s.t('n_listed', {'n': fmtInt(qty)}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
+      ),
+    );
 
     return Panel(
       child: Column(
@@ -176,8 +180,9 @@ class _PricePanel extends ConsumerWidget {
 
 /// the first price levels on both sides of the market, with the quantity
 /// waiting at each price
-final _listingsProvider =
-    FutureProvider.autoDispose.family<Json?, int>((ref, id) => ref.watch(gw2ApiProvider).listings(id));
+final _listingsProvider = FutureProvider.autoDispose.family<Json?, int>(
+  (ref, id) => ref.watch(gw2ApiProvider).listings(id),
+);
 
 class _OrderBook extends ConsumerWidget {
   const _OrderBook({required this.itemId});
@@ -190,35 +195,38 @@ class _OrderBook extends ConsumerWidget {
     final book = ref.watch(_listingsProvider(itemId)).valueOrNull;
     if (book == null) return const SizedBox.shrink();
     List<Json> side(String key) => [
-          for (final row in (book[key] as List?) ?? const [])
-            if (row is Map) Map<String, dynamic>.from(row),
-        ].take(5).toList();
+      for (final row in (book[key] as List?) ?? const [])
+        if (row is Map) Map<String, dynamic>.from(row),
+    ].take(5).toList();
     final sells = side('sells');
     final buys = side('buys');
     if (sells.isEmpty && buys.isEmpty) return const SizedBox.shrink();
 
     Widget column(String title, List<Json> rows, Color color) => Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title.toUpperCase(),
-                  style:
-                      TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
-              const SizedBox(height: 6),
-              for (final r in rows)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 3),
-                  child: Row(
-                    children: [
-                      Expanded(child: CoinText(asInt(r['unit_price']), size: 12)),
-                      Text(fmtInt(asInt(r['quantity'])),
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
-                    ],
-                  ),
-                ),
-            ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted),
           ),
-        );
+          const SizedBox(height: 6),
+          for (final r in rows)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Row(
+                children: [
+                  Expanded(child: CoinText(asInt(r['unit_price']), size: 12)),
+                  Text(
+                    fmtInt(asInt(r['quantity'])),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
 
     return Panel(
       child: Column(
@@ -279,9 +287,8 @@ Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemI
           TextButton(onPressed: () => Navigator.of(ctx).pop(const PriceAlert()), child: Text(s.t('remove'))),
         TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
         FilledButton(
-          onPressed: () => Navigator.of(ctx).pop(
-            PriceAlert(sellBelow: goldToCopper(sell.text), buyAbove: goldToCopper(buy.text)),
-          ),
+          onPressed: () =>
+              Navigator.of(ctx).pop(PriceAlert(sellBelow: goldToCopper(sell.text), buyAbove: goldToCopper(buy.text))),
           child: Text(s.t('save_alert')),
         ),
       ],

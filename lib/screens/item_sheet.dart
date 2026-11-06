@@ -12,5 +12,4 @@ void showItemSheet(
   String? rarity,
   String? type,
   int count = 1,
-}) =>
-    showItemDetails(context, id);
+}) => showItemDetails(context, id);

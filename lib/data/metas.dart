@@ -60,30 +60,43 @@ MetaEvent _boss(String name, List<int> times, String id, {bool hard = false, int
 final metaMaps = <MetaMap>[
   // core world bosses, one row per map
   MetaMap('queensdale', 'Queensdale', Expansion.core, [_boss('Shadow Behemoth', _every(105, 120), 'shadow_behemoth')]),
-  MetaMap('wayfarer', 'Wayfarer Foothills', Expansion.core,
-      [_boss('Svanir Shaman Chief', _every(15, 120), 'svanir_shaman_chief')]),
+  MetaMap('wayfarer', 'Wayfarer Foothills', Expansion.core, [
+    _boss('Svanir Shaman Chief', _every(15, 120), 'svanir_shaman_chief'),
+  ]),
   MetaMap('metrica', 'Metrica Province', Expansion.core, [_boss('Fire Elemental', _every(45, 120), 'fire_elemental')]),
-  MetaMap(
-      'caledon', 'Caledon Forest', Expansion.core, [_boss('Great Jungle Wurm', _every(75, 120), 'great_jungle_wurm')]),
+  MetaMap('caledon', 'Caledon Forest', Expansion.core, [
+    _boss('Great Jungle Wurm', _every(75, 120), 'great_jungle_wurm'),
+  ]),
   MetaMap('bloodtide', 'Bloodtide Coast', Expansion.core, [
     _boss('Admiral Taidha Covington', _every(0, 180), 'admiral_taidha_covington'),
-    _boss('Triple Trouble', [_t(1, 0), _t(4, 0), _t(8, 0), _t(12, 30), _t(17, 0), _t(20, 0)], 'triple_trouble_wurm',
-        hard: true, minutes: 20),
+    _boss(
+      'Triple Trouble',
+      [_t(1, 0), _t(4, 0), _t(8, 0), _t(12, 30), _t(17, 0), _t(20, 0)],
+      'triple_trouble_wurm',
+      hard: true,
+      minutes: 20,
+    ),
   ]),
   MetaMap('maelstrom', 'Mount Maelstrom', Expansion.core, [
     _boss('Megadestroyer', _every(30, 180), 'megadestroyer'),
     _boss('Inquest Golem Mark II', _every(120, 180), 'inquest_golem_mark_ii'),
   ]),
-  MetaMap(
-      'blazeridge', 'Blazeridge Steppes', Expansion.core, [_boss('The Shatterer', _every(60, 180), 'the_shatterer')]),
-  MetaMap(
-      'harathi', 'Harathi Hinterlands', Expansion.core, [_boss('Modniir Ulgoth', _every(90, 180), 'modniir_ulgoth')]),
-  MetaMap(
-      'frostgorge', 'Frostgorge Sound', Expansion.core, [_boss('Claw of Jormag', _every(150, 180), 'claw_of_jormag')]),
+  MetaMap('blazeridge', 'Blazeridge Steppes', Expansion.core, [
+    _boss('The Shatterer', _every(60, 180), 'the_shatterer'),
+  ]),
+  MetaMap('harathi', 'Harathi Hinterlands', Expansion.core, [
+    _boss('Modniir Ulgoth', _every(90, 180), 'modniir_ulgoth'),
+  ]),
+  MetaMap('frostgorge', 'Frostgorge Sound', Expansion.core, [
+    _boss('Claw of Jormag', _every(150, 180), 'claw_of_jormag'),
+  ]),
   MetaMap('sparkfly', 'Sparkfly Fen', Expansion.core, [
     _boss(
-        'Tequatl the Sunless', [_t(0, 0), _t(3, 0), _t(7, 0), _t(11, 30), _t(16, 0), _t(19, 0)], 'tequatl_the_sunless',
-        hard: true),
+      'Tequatl the Sunless',
+      [_t(0, 0), _t(3, 0), _t(7, 0), _t(11, 30), _t(16, 0), _t(19, 0)],
+      'tequatl_the_sunless',
+      hard: true,
+    ),
   ]),
   MetaMap('southsun', 'Southsun Cove', Expansion.core, [
     _boss('Karka Queen', [_t(2, 0), _t(6, 0), _t(10, 30), _t(15, 0), _t(18, 0), _t(23, 0)], 'karka_queen', hard: true),
@@ -136,8 +149,9 @@ final metaMaps = <MetaMap>[
     MetaEvent('Chak Gerent', _every(30, 120), minutes: 20),
     MetaEvent('Outposts', _every(50, 120), minutes: 70),
   ]),
-  MetaMap('dragonsstand', "Dragon's Stand", Expansion.hot,
-      [MetaEvent('Advancing on the Blighting Towers', _every(90, 120), minutes: 90)]),
+  MetaMap('dragonsstand', "Dragon's Stand", Expansion.hot, [
+    MetaEvent('Advancing on the Blighting Towers', _every(90, 120), minutes: 90),
+  ]),
 
   // path of fire
   MetaMap('oasis', 'Crystal Oasis', Expansion.pof, [MetaEvent('Casino Blitz', _every(5, 120), minutes: 16)]),
@@ -170,8 +184,9 @@ final metaMaps = <MetaMap>[
   ]),
 
   // end of dragons
-  MetaMap(
-      'seitung', 'Seitung Province', Expansion.eod, [MetaEvent('Aetherblade Assault', _every(90, 120), minutes: 30)]),
+  MetaMap('seitung', 'Seitung Province', Expansion.eod, [
+    MetaEvent('Aetherblade Assault', _every(90, 120), minutes: 30),
+  ]),
   MetaMap('kaineng', 'New Kaineng City', Expansion.eod, [MetaEvent('Kaineng Blackout', _every(0, 120), minutes: 40)]),
   MetaMap('echovald', 'The Echovald Wilds', Expansion.eod, [
     MetaEvent('Gang War', _every(30, 120), minutes: 35),
@@ -183,8 +198,9 @@ final metaMaps = <MetaMap>[
   ]),
 
   // secrets of the obscure
-  MetaMap('skywatch', 'Skywatch Archipelago', Expansion.soto,
-      [MetaEvent("Unlocking the Wizard's Tower", _every(60, 120), minutes: 25)]),
+  MetaMap('skywatch', 'Skywatch Archipelago', Expansion.soto, [
+    MetaEvent("Unlocking the Wizard's Tower", _every(60, 120), minutes: 25),
+  ]),
   MetaMap('wizardstower', "Wizard's Tower", Expansion.soto, [
     MetaEvent('Target Practice', _every(60, 120)),
     MetaEvent('Fly by Night', _every(115, 120), minutes: 20),
@@ -200,13 +216,16 @@ final metaMaps = <MetaMap>[
   MetaMap('balrior', 'Mount Balrior', Expansion.jw, [MetaEvent('Convergence', _every(0, 180), minutes: 20)]),
 
   // visions of eternity
-  MetaMap(
-      'shipwreck', 'Shipwreck Strand', Expansion.voe, [MetaEvent('Hammerhart Rumble!', _every(40, 120), minutes: 20)]),
+  MetaMap('shipwreck', 'Shipwreck Strand', Expansion.voe, [
+    MetaEvent('Hammerhart Rumble!', _every(40, 120), minutes: 20),
+  ]),
   MetaMap('weald', 'Starlit Weald', Expansion.voe, [MetaEvent('Secrets of the Weald', _every(100, 120), minutes: 20)]),
-  MetaMap('garden', "Eternity's Garden", Expansion.voe,
-      [MetaEvent('Shackles of the Ancients', _every(75, 120), minutes: 20)]),
-  MetaMap(
-      'leyspring', 'Leyspring Hollows', Expansion.voe, [MetaEvent('Depths of Cruelty', _every(120, 180), minutes: 20)]),
+  MetaMap('garden', "Eternity's Garden", Expansion.voe, [
+    MetaEvent('Shackles of the Ancients', _every(75, 120), minutes: 20),
+  ]),
+  MetaMap('leyspring', 'Leyspring Hollows', Expansion.voe, [
+    MetaEvent('Depths of Cruelty', _every(120, 180), minutes: 20),
+  ]),
   MetaMap('nexus', 'Nexus of Eternity', Expansion.voe, [MetaEvent('Convergence', _every(60, 180), minutes: 20)]),
 ];
 

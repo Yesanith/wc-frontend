@@ -33,7 +33,8 @@ const eventRolePresets = <String, Map<String, int>>{
   'party5': {'healer': 1, 'boon_dps': 1, 'dps': 3},
 };
 
-const _eventColumns = 'id, guild_id, creator_id, organizer_name, series_id, title, description, activity, start_at, '
+const _eventColumns =
+    'id, guild_id, creator_id, organizer_name, series_id, title, description, activity, start_at, '
     'duration_minutes, max_participants, status, version, discord_only, guilds(name, tag)';
 
 /// the player's guilds' events from a few hours ago on, soonest first
@@ -50,10 +51,9 @@ final upcomingEventsProvider = FutureProvider.autoDispose<List<EventSummary>>((r
       .limit(100);
   final events = [for (final r in rows) GuildEvent.fromRow(r)];
   if (events.isEmpty) return const [];
-  final signups = await client
-      .from('event_participants')
-      .select('event_id, user_id, status')
-      .inFilter('event_id', [for (final e in events) e.id]);
+  final signups = await client.from('event_participants').select('event_id, user_id, status').inFilter('event_id', [
+    for (final e in events) e.id,
+  ]);
   final going = <String, int>{};
   final waiting = <String, int>{};
   final mine = <String, String>{};

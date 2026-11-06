@@ -50,8 +50,9 @@ class PinnedAchievementsNotifier extends Notifier<List<int>> {
   }
 }
 
-final pinnedAchievementsProvider =
-    NotifierProvider<PinnedAchievementsNotifier, List<int>>(PinnedAchievementsNotifier.new);
+final pinnedAchievementsProvider = NotifierProvider<PinnedAchievementsNotifier, List<int>>(
+  PinnedAchievementsNotifier.new,
+);
 
 /// the highest count among an achievement's tiers, which is its goal when
 /// the account has not started it yet
@@ -66,12 +67,12 @@ int topTierCount(Json? detail) {
 /// one achievement's row from its details and the account's progress, which
 /// is null when the account has not started it
 AchievementRow achievementRowFor(int id, Json? detail, Json? progress) => AchievementRow(
-      id,
-      detail,
-      asInt(progress?['current']),
-      progress?['max'] != null ? asInt(progress?['max']) : topTierCount(detail),
-      progress?['done'] == true,
-    );
+  id,
+  detail,
+  asInt(progress?['current']),
+  progress?['max'] != null ? asInt(progress?['max']) : topTierCount(detail),
+  progress?['done'] == true,
+);
 
 /// the pinned achievements with their progress, in pin order
 final pinnedAchievementRowsProvider = FutureProvider<List<AchievementRow>>((ref) async {

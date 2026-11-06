@@ -94,7 +94,9 @@ class PriceHistoryNotifier extends Notifier<Map<int, List<PricePoint>>> {
     await _save();
   }
 
-  Future<void> _save() => ref.read(prefsProvider).setString(
+  Future<void> _save() => ref
+      .read(prefsProvider)
+      .setString(
         _key,
         jsonEncode({for (final e in state.entries) '${e.key}': e.value.map((p) => p.toJson()).toList()}),
       );
@@ -110,8 +112,9 @@ Map<int, List<PricePoint>> prune(Map<int, List<PricePoint>> history, Set<int> wa
   };
 }
 
-final priceHistoryProvider =
-    NotifierProvider<PriceHistoryNotifier, Map<int, List<PricePoint>>>(PriceHistoryNotifier.new);
+final priceHistoryProvider = NotifierProvider<PriceHistoryNotifier, Map<int, List<PricePoint>>>(
+  PriceHistoryNotifier.new,
+);
 
 /// the points of the last [days] days, all of them when [days] is null
 List<PricePoint> lastDays(List<PricePoint> points, int? days, {DateTime? now}) {

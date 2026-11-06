@@ -106,7 +106,10 @@ class _Hero extends StatelessWidget {
                 Wrap(
                   spacing: 8,
                   runSpacing: 6,
-                  children: [VersionPill(version), Pill(by, color: AppColors.goldSoft)],
+                  children: [
+                    VersionPill(version),
+                    Pill(by, color: AppColors.goldSoft),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Text(summary, style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),

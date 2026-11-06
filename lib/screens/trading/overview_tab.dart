@@ -46,8 +46,10 @@ class _OverviewTab extends ConsumerWidget {
                           children: [
                             Text(s.t('gold_to_gems'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                             const SizedBox(height: 4),
-                            Text(s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
-                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                            Text(
+                              s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
+                              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                            ),
                           ],
                         ),
                       ),
@@ -118,7 +120,9 @@ class _OverviewTab extends ConsumerWidget {
             value: watch,
             onRetry: () => ref.invalidate(watchlistPricesProvider),
             builder: (items) => items.isEmpty
-                ? Panel(child: Text(s.t('watchlist_empty'), style: TextStyle(color: AppColors.muted, height: 1.5)))
+                ? Panel(
+                    child: Text(s.t('watchlist_empty'), style: TextStyle(color: AppColors.muted, height: 1.5)),
+                  )
                 : Column(
                     children: [
                       for (final w in items) Padding(padding: const EdgeInsets.only(bottom: 8), child: WatchRow(w)),

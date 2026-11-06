@@ -17,19 +17,23 @@ void main() {
 
   Future<List<int>> pumpClock(WidgetTester tester, ValueNotifier<bool> visible) async {
     final builds = <int>[];
-    await tester.pumpWidget(Directionality(
-      textDirection: TextDirection.ltr,
-      child: ValueListenableBuilder<bool>(
-        valueListenable: visible,
-        builder: (context, on, _) => TickerMode(
-          enabled: on,
-          child: ClockBuilder(builder: (context, now) {
-            builds.add(now.second);
-            return const SizedBox();
-          }),
+    await tester.pumpWidget(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: ValueListenableBuilder<bool>(
+          valueListenable: visible,
+          builder: (context, on, _) => TickerMode(
+            enabled: on,
+            child: ClockBuilder(
+              builder: (context, now) {
+                builds.add(now.second);
+                return const SizedBox();
+              },
+            ),
+          ),
         ),
       ),
-    ));
+    );
     return builds;
   }
 
@@ -77,6 +81,8 @@ void main() {
 
 // a countdown row inside a consumer keeps working when only its clock ticks
 Widget metaRowApp(SharedPreferences prefs, Occurrence o) => ProviderScope(
-      overrides: [prefsProvider.overrideWithValue(prefs)],
-      child: MaterialApp(home: Scaffold(body: MetaRow(occurrence: o, looted: false, pinnable: true))),
-    );
+  overrides: [prefsProvider.overrideWithValue(prefs)],
+  child: MaterialApp(
+    home: Scaffold(body: MetaRow(occurrence: o, looted: false, pinnable: true)),
+  ),
+);

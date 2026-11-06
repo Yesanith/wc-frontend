@@ -34,12 +34,7 @@ final pvpRanksProvider = FutureProvider<List<PvpRank>>((ref) async {
   final rows = await cachedList(cache, 'pvp_ranks_${lang.apiLang}', 'rows', () => api.pvpRanks());
   final tiers = [
     for (final raw in rows.whereType<Map>())
-      PvpRank(
-        '${raw['name'] ?? ''}',
-        raw['icon'] as String?,
-        asInt(raw['min_rank']),
-        asInt(raw['max_rank']),
-      ),
+      PvpRank('${raw['name'] ?? ''}', raw['icon'] as String?, asInt(raw['min_rank']), asInt(raw['max_rank'])),
   ];
   tiers.sort((a, b) => a.minRank.compareTo(b.minRank));
   return tiers;
@@ -62,14 +57,9 @@ final pvpAmuletsProvider = FutureProvider<List<PvpAmulet>>((ref) async {
   final rows = await cachedList(cache, 'pvp_amulets_${lang.apiLang}', 'rows', () => api.pvpAmulets());
   final out = [
     for (final raw in rows.whereType<Map>())
-      PvpAmulet(
-        asInt(raw['id']),
-        '${raw['name'] ?? ''}',
-        raw['icon'] as String?,
-        {
-          for (final e in ((raw['attributes'] as Map?) ?? const {}).entries) attributeName('${e.key}'): asInt(e.value),
-        },
-      ),
+      PvpAmulet(asInt(raw['id']), '${raw['name'] ?? ''}', raw['icon'] as String?, {
+        for (final e in ((raw['attributes'] as Map?) ?? const {}).entries) attributeName('${e.key}'): asInt(e.value),
+      }),
   ];
   out.sort((a, b) => a.name.compareTo(b.name));
   return out;
@@ -126,18 +116,20 @@ final pvpGamesProvider = FutureProvider<List<PvpGame>>((ref) async {
     final team = '${raw['team'] ?? ''}'.toLowerCase();
     final scores = (raw['scores'] as Map?) ?? const {};
     final mapId = asInt(raw['map_id']);
-    games.add(PvpGame(
-      id: '${raw['id'] ?? ''}',
-      mapName: names[mapId] ?? 'Map #$mapId',
-      profession: titleCase('${raw['profession'] ?? ''}'),
-      result: '${raw['result'] ?? ''}',
-      team: titleCase(team),
-      ownScore: asInt(scores[team]),
-      otherScore: asInt(scores[team == 'red' ? 'blue' : 'red']),
-      ratingType: '${raw['rating_type'] ?? ''}',
-      ratingChange: asInt(raw['rating_change']),
-      ended: DateTime.tryParse('${raw['ended'] ?? ''}'),
-    ));
+    games.add(
+      PvpGame(
+        id: '${raw['id'] ?? ''}',
+        mapName: names[mapId] ?? 'Map #$mapId',
+        profession: titleCase('${raw['profession'] ?? ''}'),
+        result: '${raw['result'] ?? ''}',
+        team: titleCase(team),
+        ownScore: asInt(scores[team]),
+        otherScore: asInt(scores[team == 'red' ? 'blue' : 'red']),
+        ratingType: '${raw['rating_type'] ?? ''}',
+        ratingChange: asInt(raw['rating_change']),
+        ended: DateTime.tryParse('${raw['ended'] ?? ''}'),
+      ),
+    );
   }
   games.sort((a, b) {
     final at = a.ended, bt = b.ended;
@@ -211,8 +203,13 @@ final pvpSeasonsProvider = FutureProvider<List<Json>>((ref) async {
   final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
-  final raw = await cachedList(cache, 'pvp_seasons_${lang.apiLang}', 'rows', () => api.pvpSeasons(),
-      maxAge: const Duration(days: 1));
+  final raw = await cachedList(
+    cache,
+    'pvp_seasons_${lang.apiLang}',
+    'rows',
+    () => api.pvpSeasons(),
+    maxAge: const Duration(days: 1),
+  );
   final rows = raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
   rows.sort((a, b) => '${b['start'] ?? ''}'.compareTo('${a['start'] ?? ''}'));
   return rows;

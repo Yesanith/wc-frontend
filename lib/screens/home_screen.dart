@@ -34,14 +34,14 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   Future<void> _refresh(WidgetRef ref) => refreshProviders(ref, [
-        triggeredAlertsProvider,
-        accountProvider,
-        walletProvider,
-        vaultTrackProvider,
-        dailyProgressProvider,
-        doneTodayProvider,
-        pinnedAchievementRowsProvider,
-      ]);
+    triggeredAlertsProvider,
+    accountProvider,
+    walletProvider,
+    vaultTrackProvider,
+    dailyProgressProvider,
+    doneTodayProvider,
+    pinnedAchievementRowsProvider,
+  ]);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,10 +64,7 @@ class HomeScreen extends ConsumerWidget {
           // what the account holds on the right
           SplitColumns(
             primary: [
-              if (hasKey) ...[
-                Eyebrow(s.t('wizards_vault')),
-                const _Vault(),
-              ],
+              if (hasKey) ...[Eyebrow(s.t('wizards_vault')), const _Vault()],
               Eyebrow(
                 s.t('up_next'),
                 trailing: TextButton(
@@ -76,17 +73,10 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const _UpNext(),
-              if (hasKey) ...[
-                Eyebrow(s.t('daily_checklist')),
-                const _Checklist(),
-              ],
+              if (hasKey) ...[Eyebrow(s.t('daily_checklist')), const _Checklist()],
             ],
             secondary: [
-              if (hasKey) ...[
-                Eyebrow(s.t('wallet')),
-                const _Wallet(),
-                const _PinnedAchievements(),
-              ],
+              if (hasKey) ...[Eyebrow(s.t('wallet')), const _Wallet(), const _PinnedAchievements()],
             ],
           ),
         ],
@@ -108,8 +98,8 @@ class _Greeting extends ConsumerWidget {
     final key = hour < 12
         ? 'good_morning'
         : hour < 18
-            ? 'good_afternoon'
-            : 'good_evening';
+        ? 'good_afternoon'
+        : 'good_evening';
     return Padding(
       padding: const EdgeInsets.only(left: 4),
       child: Text(
@@ -131,40 +121,43 @@ class _Resets extends ConsumerWidget {
       step: ClockStep.second,
       builder: (context, now) {
         Widget half(String label, DateTime next, double progress, Color color, AppSection target) => Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(AppRadius.frame),
-                onTap: () => ref.read(sectionProvider.notifier).state = target,
-                child: Row(
-                  children: [
-                    Ring(value: progress, size: 46, stroke: 5, colors: [color, color]),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(label,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 12, color: AppColors.muted)),
-                          const SizedBox(height: 2),
-                          Text(
-                            countdown(next.difference(now)),
-                            style: display(18).copyWith(fontFeatures: _tabular),
-                          ),
-                        ],
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.frame),
+            onTap: () => ref.read(sectionProvider.notifier).state = target,
+            child: Row(
+              children: [
+                Ring(value: progress, size: 46, stroke: 5, colors: [color, color]),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12, color: AppColors.muted),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 2),
+                      Text(countdown(next.difference(now)), style: display(18).copyWith(fontFeatures: _tabular)),
+                    ],
+                  ),
                 ),
-              ),
-            );
+              ],
+            ),
+          ),
+        );
         return GlowCard(
           glow: AppColors.gold,
           child: Row(
             children: [
               half(s.t('daily_reset'), nextDailyReset(now), dayProgress(now), AppColors.gold, AppSection.daily),
               Container(
-                  width: 1, height: 40, color: AppColors.line, margin: const EdgeInsets.symmetric(horizontal: 12)),
+                width: 1,
+                height: 40,
+                color: AppColors.line,
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+              ),
               half(s.t('weekly_reset'), nextWeeklyReset(now), weekProgress(now), AppColors.blue, AppSection.weekly),
             ],
           ),

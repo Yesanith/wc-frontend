@@ -30,10 +30,7 @@ String compact(int n) {
 }
 
 class Coins {
-  Coins(int copper)
-      : gold = copper ~/ 10000,
-        silver = (copper % 10000) ~/ 100,
-        copper = copper % 100;
+  Coins(int copper) : gold = copper ~/ 10000, silver = (copper % 10000) ~/ 100, copper = copper % 100;
   final int gold;
   final int silver;
   final int copper;
@@ -87,18 +84,14 @@ const _attributeNames = {
 };
 
 List<int> intList(dynamic raw) => [
-      for (final v in (raw as List?) ?? const [])
-        if (v != null) asInt(v),
-    ];
+  for (final v in (raw as List?) ?? const [])
+    if (v != null) asInt(v),
+];
 
 // the item table and /v2/professions spell three weapons differently, so an
 // equipped longbow never lines up with the profession's skill list unless the
 // name is translated first
-const _weaponKeys = {
-  'LongBow': 'Longbow',
-  'ShortBow': 'Shortbow',
-  'Harpoon': 'Spear',
-};
+const _weaponKeys = {'LongBow': 'Longbow', 'ShortBow': 'Shortbow', 'Harpoon': 'Spear'};
 
 /// an item's details.type as the profession endpoint keys its weapon skills
 String professionWeaponKey(String itemType) => _weaponKeys[itemType] ?? itemType;

@@ -77,7 +77,11 @@ class _ModuleLinkPanelState extends ConsumerState<_ModuleLinkPanel> {
                         SelectableText(
                           code.code,
                           style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: 3, color: AppColors.gold),
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 3,
+                            color: AppColors.gold,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(s.t('module_link_expires'), style: TextStyle(fontSize: 11, color: AppColors.muted)),

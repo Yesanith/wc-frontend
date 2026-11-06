@@ -34,9 +34,8 @@ class AchievementGroupsScreen extends ConsumerWidget {
           itemBuilder: (context, i) {
             final g = list[i];
             return AppCard(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute<void>(builder: (_) => _CategoriesScreen(group: g)),
-              ),
+              onTap: () =>
+                  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => _CategoriesScreen(group: g))),
               child: Row(
                 children: [
                   Expanded(
@@ -85,9 +84,9 @@ class _CategoriesScreen extends ConsumerWidget {
             icon: c.icon,
             title: c.name,
             subtitle: fmtInt(c.achievementIds.length),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => AchievementCategoryScreen(category: c)),
-            ),
+            onTap: () =>
+                Navigator.of(context)
+                    .push(MaterialPageRoute<void>(builder: (_) => AchievementCategoryScreen(category: c))),
             trailing: Icon(Icons.chevron_right, color: AppColors.muted),
           );
         },
@@ -116,8 +115,10 @@ class AchievementCategoryScreen extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(right: 18),
               child: Center(
-                child: Text('$done / ${category.achievementIds.length}',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                child: Text(
+                  '$done / ${category.achievementIds.length}',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
+                ),
               ),
             ),
         ],
@@ -148,8 +149,10 @@ class _AchievementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description =
-        '${row.detail?['requirement'] ?? row.detail?['description'] ?? ''}'.replaceAll(RegExp(r'<[^>]*>'), '');
+    final description = '${row.detail?['requirement'] ?? row.detail?['description'] ?? ''}'.replaceAll(
+      RegExp(r'<[^>]*>'),
+      '',
+    );
     final points = row.points;
 
     return Panel(
@@ -160,24 +163,24 @@ class _AchievementCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(row.done ? Icons.check_circle : Icons.radio_button_unchecked,
-                  size: 18, color: row.done ? AppColors.green : AppColors.track),
+              Icon(
+                row.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                size: 18,
+                color: row.done ? AppColors.green : AppColors.track,
+              ),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(row.name,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: row.done ? AppColors.text : AppColors.textSoft)),
+                child: Text(
+                  row.name,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: row.done ? AppColors.text : AppColors.textSoft,
+                  ),
+                ),
               ),
-              if (points > 0) ...[
-                const SizedBox(width: 8),
-                Pill('$points'),
-              ],
-              if (!row.done) ...[
-                const SizedBox(width: 4),
-                AchievementPinButton(id: row.id),
-              ],
+              if (points > 0) ...[const SizedBox(width: 8), Pill('$points')],
+              if (!row.done) ...[const SizedBox(width: 4), AchievementPinButton(id: row.id)],
             ],
           ),
           if (description.isNotEmpty) ...[
@@ -190,8 +193,10 @@ class _AchievementCard extends StatelessWidget {
               children: [
                 Expanded(child: Bar(value: row.ratio)),
                 const SizedBox(width: 10),
-                Text('${fmtInt(row.current)} / ${fmtInt(row.max)}',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                Text(
+                  '${fmtInt(row.current)} / ${fmtInt(row.max)}',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted),
+                ),
               ],
             ),
           ],

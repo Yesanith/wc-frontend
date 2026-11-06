@@ -1,20 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wondrous_compass/state/crafting.dart';
 
-CraftNode node(
-  int id, {
-  int perRun = 1,
-  int outputCount = 1,
-  List<CraftNode> children = const [],
-}) =>
-    CraftNode(
-      itemId: id,
-      item: {'name': 'Item $id'},
-      perRun: perRun,
-      outputCount: outputCount,
-      children: children,
-      disciplines: const [],
-    );
+CraftNode node(int id, {int perRun = 1, int outputCount = 1, List<CraftNode> children = const []}) => CraftNode(
+  itemId: id,
+  item: {'name': 'Item $id'},
+  perRun: perRun,
+  outputCount: outputCount,
+  children: children,
+  disciplines: const [],
+);
 
 void main() {
   group('planFor', () {
@@ -43,9 +37,13 @@ void main() {
     });
 
     test('scales through nested recipes', () {
-      final root = node(1, outputCount: 1, children: [
-        node(2, perRun: 2, outputCount: 1, children: [node(3, perRun: 5)]),
-      ]);
+      final root = node(
+        1,
+        outputCount: 1,
+        children: [
+          node(2, perRun: 2, outputCount: 1, children: [node(3, perRun: 5)]),
+        ],
+      );
       final plan = planFor(root, 2);
       expect(plan.children.single.count, 4);
       expect(plan.children.single.children.single.count, 20);
@@ -59,10 +57,13 @@ void main() {
     });
 
     test('sums an ingredient that appears in two branches', () {
-      final root = node(1, children: [
-        node(2, perRun: 1, children: [node(9, perRun: 2)]),
-        node(3, perRun: 1, children: [node(9, perRun: 5)]),
-      ]);
+      final root = node(
+        1,
+        children: [
+          node(2, perRun: 1, children: [node(9, perRun: 2)]),
+          node(3, perRun: 1, children: [node(9, perRun: 5)]),
+        ],
+      );
       expect(craftLeaves(planFor(root, 1)), {9: 7});
     });
 
@@ -73,9 +74,12 @@ void main() {
 
   group('planWithStock', () {
     // item 1 is crafted from two of gift 2, each gift from 5 of ore 3
-    CraftNode tree() => node(1, children: [
-          node(2, perRun: 2, children: [node(3, perRun: 5)]),
-        ]);
+    CraftNode tree() => node(
+      1,
+      children: [
+        node(2, perRun: 2, children: [node(3, perRun: 5)]),
+      ],
+    );
 
     test('without stock it is the plain plan', () {
       final plan = planWithStock(tree(), 1, const {});
@@ -98,14 +102,23 @@ void main() {
 
     test('stock is handed out once, not to every branch that asks', () {
       // two branches both want one of gift 2, the bank holds one
-      final root = node(1, children: [
-        node(4, children: [
-          node(2, children: [node(3, perRun: 5)])
-        ]),
-        node(5, children: [
-          node(2, children: [node(3, perRun: 5)])
-        ]),
-      ]);
+      final root = node(
+        1,
+        children: [
+          node(
+            4,
+            children: [
+              node(2, children: [node(3, perRun: 5)]),
+            ],
+          ),
+          node(
+            5,
+            children: [
+              node(2, children: [node(3, perRun: 5)]),
+            ],
+          ),
+        ],
+      );
       final plan = planWithStock(root, 1, const {2: 1});
       expect(craftLeaves(plan), {2: 1, 3: 5});
     });

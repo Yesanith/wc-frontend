@@ -57,24 +57,24 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
     final lo = values.isEmpty ? 0 : values.reduce((a, b) => a < b ? a : b);
 
     Widget change(String label, Color color, double? pct) => Expanded(
-          child: Row(
-            children: [
-              Container(width: 10, height: 3, color: color),
-              const SizedBox(width: 6),
-              Text(label, style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
-              const SizedBox(width: 6),
-              if (pct != null)
-                Text(
-                  '${pct >= 0 ? '+' : ''}${pct.toStringAsFixed(1)}%',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: pct >= 0 ? AppColors.green : AppColors.red,
-                  ),
-                ),
-            ],
-          ),
-        );
+      child: Row(
+        children: [
+          Container(width: 10, height: 3, color: color),
+          const SizedBox(width: 6),
+          Text(label, style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
+          const SizedBox(width: 6),
+          if (pct != null)
+            Text(
+              '${pct >= 0 ? '+' : ''}${pct.toStringAsFixed(1)}%',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: pct >= 0 ? AppColors.green : AppColors.red,
+              ),
+            ),
+        ],
+      ),
+    );
 
     return Panel(
       child: Column(
@@ -99,10 +99,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: SizedBox(
-                  height: 110,
-                  child: CustomPaint(painter: PriceChartPainter(shown, lo, hi)),
-                ),
+                child: SizedBox(height: 110, child: CustomPaint(painter: PriceChartPainter(shown, lo, hi))),
               ),
               const SizedBox(width: 8),
               SizedBox(

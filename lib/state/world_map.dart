@@ -219,10 +219,7 @@ String bundledMarkersAsset(String lang) => 'assets/data/worldmap_${worldContinen
 /// and has to come from the api. older data jobs wrote one file per floor,
 /// that file is still read when the merged one is missing
 Future<List<MapMarker>?> _bundledMarkers(int floor, String lang) async {
-  for (final asset in [
-    bundledMarkersAsset(lang),
-    'assets/data/worldmap_${worldContinent}_${floor}_$lang.json.gz',
-  ]) {
+  for (final asset in [bundledMarkersAsset(lang), 'assets/data/worldmap_${worldContinent}_${floor}_$lang.json.gz']) {
     try {
       final bytes = await rootBundle.load(asset);
       final rows = await compute(_decodeBundled, bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));

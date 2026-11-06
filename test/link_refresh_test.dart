@@ -97,20 +97,22 @@ void main() {
   group('when a guild is read after linking', () {
     test('only an account that leads a guild asks for it', () {
       expect(
-          leadsAGuild({
-            'guilds': [
-              {'id': 'g1', 'leader': false},
-              {'id': 'g2', 'leader': true},
-            ],
-          }),
-          isTrue);
+        leadsAGuild({
+          'guilds': [
+            {'id': 'g1', 'leader': false},
+            {'id': 'g2', 'leader': true},
+          ],
+        }),
+        isTrue,
+      );
       expect(
-          leadsAGuild({
-            'guilds': [
-              {'id': 'g1', 'leader': false},
-            ],
-          }),
-          isFalse);
+        leadsAGuild({
+          'guilds': [
+            {'id': 'g1', 'leader': false},
+          ],
+        }),
+        isFalse,
+      );
       expect(leadsAGuild({'guilds': []}), isFalse);
       expect(leadsAGuild({'account_name': 'Leo.1'}), isFalse, reason: 'an answer without guilds');
       expect(leadsAGuild(null), isFalse);
@@ -142,14 +144,22 @@ void main() {
       const ok = GuildSyncResult('synced', null);
       const refused = GuildSyncResult('unavailable', 'guild:403');
       expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [ok])), 'Guild details updated.');
-      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [ok, refused])),
-          "The game would not give the guild's details (guild:403).");
-      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('failed', 'db:42501'), refused])),
-          contains('db:42501'));
-      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('too_soon', null)])),
-          contains('few minutes'));
-      expect(guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('synced', 'members:403')])),
-          'Guild details updated. (members:403)');
+      expect(
+        guildSyncMessage(s, const LinkOutcome('Leo.1', [ok, refused])),
+        "The game would not give the guild's details (guild:403).",
+      );
+      expect(
+        guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('failed', 'db:42501'), refused])),
+        contains('db:42501'),
+      );
+      expect(
+        guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('too_soon', null)])),
+        contains('few minutes'),
+      );
+      expect(
+        guildSyncMessage(s, const LinkOutcome('Leo.1', [GuildSyncResult('synced', 'members:403')])),
+        'Guild details updated. (members:403)',
+      );
     });
 
     test('nothing to sync and nothing to refresh are told apart', () {
@@ -182,18 +192,19 @@ void main() {
   group('what a leader shares of the parts the game keeps to the leader', () {
     test('only an ok answer is a list, anything else is nothing', () {
       expect(
-          parseSharedPart({
-            'status': 'ok',
-            'data': [
-              {'a': 1},
-              5
-            ],
-            'synced_at': '2026-10-01T10:00:00Z'
-          }),
-          [
+        parseSharedPart({
+          'status': 'ok',
+          'data': [
             {'a': 1},
             5,
-          ]);
+          ],
+          'synced_at': '2026-10-01T10:00:00Z',
+        }),
+        [
+          {'a': 1},
+          5,
+        ],
+      );
       for (final none in [
         {'status': 'hidden'},
         {'status': 'empty'},
@@ -220,14 +231,16 @@ void main() {
       final none = GuildDetails.fromRow({});
       expect(none.hidden, isEmpty, reason: 'older rows have no such column');
       expect(
-          ['members', 'ranks', 'teams', 'treasury', 'stash', 'log', 'upgrades', 'storage'].every(none.shares), isTrue);
+        ['members', 'ranks', 'teams', 'treasury', 'stash', 'log', 'upgrades', 'storage'].every(none.shares),
+        isTrue,
+      );
       expect(GuildDetails.fromRow({'hidden_parts': 'no'}).hidden, isEmpty);
     });
 
     test('a part is on for the members exactly when the leader has not hidden it', () {
       // the switch shows this, on is gold, so a hidden part must read as off
       final d = GuildDetails.fromRow({
-        'hidden_parts': ['stash']
+        'hidden_parts': ['stash'],
       });
       expect(d.shares('stash'), isFalse);
       expect(d.shares('log'), isTrue);
@@ -311,7 +324,7 @@ void main() {
           'gshare_confirm',
           'gshare_review_title',
           'gshare_review_intro',
-          'gshare_later'
+          'gshare_later',
         ]) {
           expect(s.t(key), isNot(key), reason: '${lang.code} $key');
         }
@@ -321,14 +334,18 @@ void main() {
 
   group('the news feed', () {
     test('a phone reads the site\'s own feed, in the language of the app', () {
-      expect(newsFeedRequest(AppLang.de, web: false, backend: 'https://x.supabase.co'),
-          'https://www.guildwars2.com/de/feed/');
+      expect(
+        newsFeedRequest(AppLang.de, web: false, backend: 'https://x.supabase.co'),
+        'https://www.guildwars2.com/de/feed/',
+      );
       expect(newsFeedRequest(AppLang.en, web: false, backend: ''), 'https://www.guildwars2.com/en/feed/');
     });
 
     test('a browser reads the backend\'s copy, which it is allowed to', () {
-      expect(newsFeedRequest(AppLang.fr, web: true, backend: 'https://x.supabase.co'),
-          'https://x.supabase.co/functions/v1/news-feed?lang=fr');
+      expect(
+        newsFeedRequest(AppLang.fr, web: true, backend: 'https://x.supabase.co'),
+        'https://x.supabase.co/functions/v1/news-feed?lang=fr',
+      );
     });
 
     test('a language the site has no feed in reads English', () {

@@ -66,10 +66,8 @@ final raidsProvider = FutureProvider<List<RaidWing>>((ref) async {
 
 /// encounters cleared this week against every encounter there is
 extension RaidProgress on List<RaidWing> {
-  ({int done, int total}) get tally => (
-        done: fold<int>(0, (n, w) => n + w.done),
-        total: fold<int>(0, (n, w) => n + w.encounters.length),
-      );
+  ({int done, int total}) get tally =>
+      (done: fold<int>(0, (n, w) => n + w.done), total: fold<int>(0, (n, w) => n + w.encounters.length));
 }
 
 class DungeonPath {
@@ -109,8 +107,6 @@ final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
 
 /// paths run today against every path there is
 extension DungeonProgress on List<Dungeon> {
-  ({int done, int total}) get tally => (
-        done: fold<int>(0, (n, d) => n + d.done),
-        total: fold<int>(0, (n, d) => n + d.paths.length),
-      );
+  ({int done, int total}) get tally =>
+      (done: fold<int>(0, (n, d) => n + d.done), total: fold<int>(0, (n, d) => n + d.paths.length));
 }

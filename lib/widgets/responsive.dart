@@ -35,11 +35,7 @@ class ContentFrame extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => Align(
         alignment: Alignment.topCenter,
-        child: SizedBox(
-          width: math.min(constraints.maxWidth, maxWidth),
-          height: constraints.maxHeight,
-          child: child,
-        ),
+        child: SizedBox(width: math.min(constraints.maxWidth, maxWidth), height: constraints.maxHeight, child: child),
       ),
     );
   }
@@ -123,20 +119,27 @@ class SplitColumns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < breakpoint || secondary.isEmpty) {
-        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [...primary, ...secondary]);
-      }
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(flex: primaryFlex, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: primary)),
-          SizedBox(width: spacing),
-          Expanded(
-              flex: secondaryFlex, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: secondary)),
-        ],
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < breakpoint || secondary.isEmpty) {
+          return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [...primary, ...secondary]);
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: primaryFlex,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: primary),
+            ),
+            SizedBox(width: spacing),
+            Expanded(
+              flex: secondaryFlex,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: secondary),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -158,25 +161,24 @@ class CardWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final columns = cardColumns(constraints.maxWidth, minWidth: minWidth, gap: gap, maxColumns: maxColumns);
-      if (columns == 1) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var i = 0; i < children.length; i++) ...[
-              if (i > 0) SizedBox(height: gap),
-              children[i],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = cardColumns(constraints.maxWidth, minWidth: minWidth, gap: gap, maxColumns: maxColumns);
+        if (columns == 1) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < children.length; i++) ...[if (i > 0) SizedBox(height: gap), children[i]],
             ],
-          ],
+          );
+        }
+        final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: [for (final child in children) SizedBox(width: width, child: child)],
         );
-      }
-      final width = (constraints.maxWidth - gap * (columns - 1)) / columns;
-      return Wrap(
-        spacing: gap,
-        runSpacing: gap,
-        children: [for (final child in children) SizedBox(width: width, child: child)],
-      );
-    });
+      },
+    );
   }
 }

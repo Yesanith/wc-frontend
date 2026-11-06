@@ -21,11 +21,11 @@ class WikiScreen extends ConsumerStatefulWidget {
 class _WikiScreenState extends ConsumerState<WikiScreen> {
   // key prefix in the strings table, color
   static List<(String, Color)> get _categories => <(String, Color)>[
-        ('cat_meta', AppColors.gold),
-        ('cat_crafting', const Color(0xFF5FC07F)),
-        ('cat_mastery', const Color(0xFF72C1D9)),
-        ('cat_fractals', const Color(0xFFC08BE0)),
-      ];
+    ('cat_meta', AppColors.gold),
+    ('cat_crafting', const Color(0xFF5FC07F)),
+    ('cat_mastery', const Color(0xFF72C1D9)),
+    ('cat_fractals', const Color(0xFFC08BE0)),
+  ];
 
   final _ctrl = TextEditingController();
   Timer? _debounce;
@@ -150,7 +150,9 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           if (!_loading && error == null && _results.isEmpty)
             Padding(
               padding: const EdgeInsets.all(24),
-              child: Center(child: Text(s.t('no_results'), style: TextStyle(color: AppColors.muted))),
+              child: Center(
+                child: Text(s.t('no_results'), style: TextStyle(color: AppColors.muted)),
+              ),
             ),
           if (_results.isNotEmpty)
             Panel(
@@ -186,7 +188,9 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
           SectionHeader(title: s.t('recently_viewed')),
           const SizedBox(height: 10),
           if (_recent.isEmpty)
-            Panel(child: Text(s.t('recent_empty'), style: TextStyle(color: AppColors.muted)))
+            Panel(
+              child: Text(s.t('recent_empty'), style: TextStyle(color: AppColors.muted)),
+            )
           else
             Panel(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -243,22 +247,23 @@ class _CategoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(9),
                   border: Border.all(color: color),
                 ),
-                child: Transform.rotate(
-                  angle: 0.785398,
-                  child: Container(width: 9, height: 9, color: color),
-                ),
+                child: Transform.rotate(angle: 0.785398, child: Container(width: 9, height: 9, color: color)),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                  Text(subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  ),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12, color: AppColors.muted),
+                  ),
                 ],
               ),
             ],

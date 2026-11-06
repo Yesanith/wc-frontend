@@ -56,11 +56,11 @@ class LandingScreen extends ConsumerWidget {
         links: [
           (
             label: s.t('site_privacy'),
-            onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))
+            onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed')),
           ),
           (
             label: s.t('site_terms'),
-            onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))
+            onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed')),
           ),
           (label: s.t('site_source'), onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))),
         ],
@@ -90,8 +90,12 @@ class LandingScreen extends ConsumerWidget {
                                 child: Row(
                                   children: [
                                     Flexible(
-                                      child: Text('Wondrous Compass',
-                                          maxLines: 1, overflow: TextOverflow.ellipsis, style: display(20)),
+                                      child: Text(
+                                        'Wondrous Compass',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: display(20),
+                                      ),
                                     ),
                                     if (!narrow) ...[
                                       const SizedBox(width: 8),
@@ -105,7 +109,7 @@ class LandingScreen extends ConsumerWidget {
                                 initialValue: lang,
                                 onSelected: (l) => ref.read(langProvider.notifier).set(l),
                                 itemBuilder: (_) => [
-                                  for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName))
+                                  for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName)),
                                 ],
                                 child: Padding(
                                   padding: const EdgeInsets.all(12),
@@ -140,10 +144,11 @@ class LandingScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 32),
                           Wrap(
-                              spacing: 12,
-                              runSpacing: 12,
-                              alignment: WrapAlignment.center,
-                              children: [startButton, guestButton]),
+                            spacing: 12,
+                            runSpacing: 12,
+                            alignment: WrapAlignment.center,
+                            children: [startButton, guestButton],
+                          ),
                           const SizedBox(height: 18),
                           Row(
                             mainAxisSize: MainAxisSize.min,
@@ -151,8 +156,8 @@ class LandingScreen extends ConsumerWidget {
                               Icon(Icons.lock_outline, size: 14, color: AppColors.hint),
                               const SizedBox(width: 6),
                               Flexible(
-                                  child:
-                                      Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.hint))),
+                                child: Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
+                              ),
                             ],
                           ),
                           SizedBox(height: width >= 900 ? 84 : 48),
@@ -181,11 +186,15 @@ class LandingScreen extends ConsumerWidget {
                                               child: Icon(icon, color: AppColors.gold, size: 24),
                                             ),
                                             const SizedBox(height: 14),
-                                            Text(s.t(title),
-                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                                            Text(
+                                              s.t(title),
+                                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                                            ),
                                             const SizedBox(height: 6),
-                                            Text(s.t(body),
-                                                style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted)),
+                                            Text(
+                                              s.t(body),
+                                              style: TextStyle(fontSize: 14, height: 1.45, color: AppColors.muted),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -202,10 +211,11 @@ class LandingScreen extends ConsumerWidget {
                                 Text(s.t('landing_title'), textAlign: TextAlign.center, style: display(24)),
                                 const SizedBox(height: 18),
                                 Wrap(
-                                    spacing: 12,
-                                    runSpacing: 12,
-                                    alignment: WrapAlignment.center,
-                                    children: [startButton, guestButton]),
+                                  spacing: 12,
+                                  runSpacing: 12,
+                                  alignment: WrapAlignment.center,
+                                  children: [startButton, guestButton],
+                                ),
                               ],
                             ),
                           ),

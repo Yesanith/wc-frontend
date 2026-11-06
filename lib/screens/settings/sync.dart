@@ -21,8 +21,10 @@ class _SyncPanel extends ConsumerWidget {
             const SizedBox(height: 12),
             Bar(value: sync.ratio),
             const SizedBox(height: 6),
-            Text('${s.t('syncing')} ${sync.done}/${sync.total}',
-                style: TextStyle(fontSize: 12, color: AppColors.muted)),
+            Text(
+              '${s.t('syncing')} ${sync.done}/${sync.total}',
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
+            ),
           ] else if (at != null) ...[
             const SizedBox(height: 10),
             Row(
@@ -69,7 +71,10 @@ class _UpdatePanel extends ConsumerWidget {
               Expanded(
                 child: Text(s.t('version'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
               ),
-              Text(appVersion, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              Text(
+                appVersion,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: AppColors.gold),
+              ),
               IconButton(
                 tooltip: s.t('check_updates'),
                 onPressed: () => ref.invalidate(updateProvider),
@@ -82,18 +87,16 @@ class _UpdatePanel extends ConsumerWidget {
           else if (update.hasError)
             Text(s.t('check_failed'), style: TextStyle(fontSize: 12, color: AppColors.muted))
           else if (hasUpdate) ...[
-            Text(s.t('update_available', {'v': latest.version}),
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.green)),
+            Text(
+              s.t('update_available', {'v': latest.version}),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.green),
+            ),
             const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
                   child: FilledButton.icon(
-                    onPressed: () => openUrl(
-                      context,
-                      latest.apkUrl ?? latest.pageUrl,
-                      failMessage: s.t('open_failed'),
-                    ),
+                    onPressed: () => openUrl(context, latest.apkUrl ?? latest.pageUrl, failMessage: s.t('open_failed')),
                     icon: const Icon(Icons.download, size: 18),
                     label: Text(s.t('download_update')),
                   ),

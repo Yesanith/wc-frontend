@@ -27,11 +27,11 @@ class BossAlertSettings {
   final bool resetWeekly;
 
   BossAlertSettings copyWith({bool? enabled, int? lead, bool? resetDaily, bool? resetWeekly}) => BossAlertSettings(
-        enabled: enabled ?? this.enabled,
-        lead: lead ?? this.lead,
-        resetDaily: resetDaily ?? this.resetDaily,
-        resetWeekly: resetWeekly ?? this.resetWeekly,
-      );
+    enabled: enabled ?? this.enabled,
+    lead: lead ?? this.lead,
+    resetDaily: resetDaily ?? this.resetDaily,
+    resetWeekly: resetWeekly ?? this.resetWeekly,
+  );
 
   /// whether any reminder of a reset is wanted
   bool get anyReset => resetDaily || resetWeekly;
@@ -77,8 +77,9 @@ class BossAlertSettingsNotifier extends Notifier<BossAlertSettings> {
   }
 }
 
-final bossAlertSettingsProvider =
-    NotifierProvider<BossAlertSettingsNotifier, BossAlertSettings>(BossAlertSettingsNotifier.new);
+final bossAlertSettingsProvider = NotifierProvider<BossAlertSettingsNotifier, BossAlertSettings>(
+  BossAlertSettingsNotifier.new,
+);
 
 /// bumped when the app comes back to the foreground, or a permission may have
 /// changed: the alerts are checked again then, which is cheap when nothing
@@ -98,19 +99,19 @@ BossAlertPlan alertsFor(Set<String> pins, int lead, S s) =>
 
 /// the reminders of the resets the player asked for, in the app's language
 List<BossAlert> resetAlertsFor(BossAlertSettings settings, S s) => planResetAlerts(
-      daily: settings.resetDaily,
-      weekly: settings.resetWeekly,
-      dailyTitle: s.t('reset_notify_daily_title'),
-      dailyBody: s.t('reset_notify_daily_body'),
-      weeklyTitle: s.t('reset_notify_weekly_title'),
-      weeklyBody: s.t('reset_notify_weekly_body'),
-    );
+  daily: settings.resetDaily,
+  weekly: settings.resetWeekly,
+  dailyTitle: s.t('reset_notify_daily_title'),
+  dailyBody: s.t('reset_notify_daily_body'),
+  weeklyTitle: s.t('reset_notify_weekly_title'),
+  weeklyBody: s.t('reset_notify_weekly_body'),
+);
 
 /// everything the phone is to be told of: the pinned events when their alerts are on, and the resets
 List<BossAlert> allAlertsFor(Set<String> pins, BossAlertSettings settings, S s) => [
-      if (settings.enabled) ...alertsFor(pins, settings.lead, s).alerts,
-      ...resetAlertsFor(settings, s),
-    ];
+  if (settings.enabled) ...alertsFor(pins, settings.lead, s).alerts,
+  ...resetAlertsFor(settings, s),
+];
 
 const _sigKey = 'boss_alerts_sig';
 const _onToldKey = 'boss_alerts_on_told';

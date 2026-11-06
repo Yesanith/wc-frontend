@@ -2,36 +2,28 @@
 const trStrings = <String, String>{
   'story_unmatched':
       'Oyunun bu karakter için kaydettiği {n} görev, hikâye görevleri listesinde olmadığı için yukarıda sayılmıyor.',
-  'progress_hero_unavailable':
-      'Oyunun API\'si kahraman görevleri için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
-  'progress_training_unavailable':
-      'Oyunun API\'si karakter eğitimi için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
-  'story_note':
-      'Oyunun bu karakter için kaydettiği görevleri sayar. Toplam her dalı, ırkı ve tarikatı içerir, bu yüzden bir çubuk nadiren dolar. Başka bir karakterde yapılan ya da yeniden başlatılan hikâye burada sayılmaz.',
+  'progress_hero_unavailable': 'Oyunun API\'si kahraman görevleri için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
+  'progress_training_unavailable': 'Oyunun API\'si karakter eğitimi için hiçbir şey döndürmüyor (ArenaNet tarafında bilinen bir sorun), bu yüzden burada gösterilemiyor.',
+  'story_note': 'Oyunun bu karakter için kaydettiği görevleri sayar. Toplam her dalı, ırkı ve tarikatı içerir, bu yüzden bir çubuk nadiren dolar. Başka bir karakterde yapılan ya da yeniden başlatılan hikâye burada sayılmaz.',
   'gshare_unreviewed': 'Bunu henüz onaylamadın. Onaylayana kadar hazine, depo ve günlük üyelerinden gizli kalır.',
   'gshare_confirm': 'Üyelerin göreceklerini onayla',
   'gshare_review_title': 'Üyelerin neleri görebilsin?',
-  'gshare_review_intro':
-      'Loncan oyundan okundu. Lonca üyelerinin uygulamada nelere bakabileceğini seç. Hazine, depo ve günlük kimin ne aldığını gösterir, bu yüzden sen onaylayana kadar gizli kalır.',
+  'gshare_review_intro': 'Loncan oyundan okundu. Lonca üyelerinin uygulamada nelere bakabileceğini seç. Hazine, depo ve günlük kimin ne aldığını gösterir, bu yüzden sen onaylayana kadar gizli kalır.',
   'gshare_later': 'Sonra',
-  'roster_note_game':
-      'Bu loncanın Wondrous Compass üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
+  'roster_note_game': 'Bu loncanın Wondrous Compass üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
   'roster_manual': 'elle atandı',
   'roster_follow_game': 'Yine oyundaki rütbeyi izle',
-  'roster_auto':
-      'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
+  'roster_auto': 'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
   'gshare_on': 'Üyeler görebilir',
   'gshare_off': 'Üyelerden gizli',
   'gshare_title': 'Lonca üyeleriyle paylaşılanlar',
   'gshare_note':
       'Lonca üyelerinin neleri göreceğini seç. Kapatana kadar her şey paylaşılır. Uygulaman açılınca hepsini getirir.',
-  'gshared_note':
-      'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Wondrous Compass kullanan üyeler, oyundaki rütbeleriyle.',
+  'gshared_note': 'Oyun üye listesini yalnızca lonca liderine gösterir. Bunlar Wondrous Compass kullanan üyeler, oyundaki rütbeleriyle.',
   'gshared_not_linked': 'Loncanın liderinin burada paylaştıklarını görmek için ayarlardan GW2 hesabını bağla.',
   'gw2_link_name': '{name} hesabını bağla',
   'gw2_refreshed': 'Loncalar yenilendi.',
-  'gw2_refresh_other':
-      'Etkin API anahtarı bağlı olmayan bir hesaba ait. Yukarıdan bağla ya da loncalarını yenilemek için bağlı bir hesabın anahtarına geç.',
+  'gw2_refresh_other': 'Etkin API anahtarı bağlı olmayan bir hesaba ait. Yukarıdan bağla ya da loncalarını yenilemek için bağlı bir hesabın anahtarına geç.',
   'ginfo_result_synced': 'Lonca bilgileri güncellendi.',
   'ginfo_result_too_soon': 'Az önce güncellendi, birkaç dakika sonra tekrar dene.',
   'ginfo_result_unavailable': 'Oyun lonca bilgilerini vermedi ({detail}).',
@@ -66,17 +58,13 @@ const trStrings = <String, String>{
   'err_no_key': 'Bunun için bir GW2 API key\'i gerekli.',
   'add_api_key': 'API key ekle',
   'guest_continue': 'API key olmadan devam et',
-  'guest_note':
-      'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
+  'guest_note': 'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
   'guest': 'Misafir',
   'guest_home_title': 'Misafir olarak göz atıyorsun',
-  'guest_home_body':
-      'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler key olmadan çalışır. Karakterlerini, cüzdanını, Wizard\'s Vault\'unu ve ilerlemeni görmek için bir API key ekle.',
+  'guest_home_body': 'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler key olmadan çalışır. Karakterlerini, cüzdanını, Wizard\'s Vault\'unu ve ilerlemeni görmek için bir API key ekle.',
   'needs_key_title': 'Bunun için API key gerekli',
-  'needs_key_body':
-      'Bu bölüm kendi hesabını gösterir: karakterler, ilerleme, koleksiyonlar ve loncalar. Görmek için ArenaNet\'ten salt okunur bir API key ekle. Geri kalan her şey key olmadan çalışır.',
-  'boss_alert_limit':
-      '{n} sabitli etkinliğin bildirimi yok: telefon en fazla {max} zamanlanmış bildirim tutabiliyor. Bazılarını kaldır, saatlik etkinlikler en çok yer kaplıyor.',
+  'needs_key_body': 'Bu bölüm kendi hesabını gösterir: karakterler, ilerleme, koleksiyonlar ve loncalar. Görmek için ArenaNet\'ten salt okunur bir API key ekle. Geri kalan her şey key olmadan çalışır.',
+  'boss_alert_limit': '{n} sabitli etkinliğin bildirimi yok: telefon en fazla {max} zamanlanmış bildirim tutabiliyor. Bazılarını kaldır, saatlik etkinlikler en çok yer kaplıyor.',
   'boss_alerts_title': 'Dünya etkinliği bildirimleri',
   'boss_alerts_note':
       'Sabitlediğin etkinliklerin her başlangıcından kısa süre önce, her gün, uygulama kapalıyken de bildirim.',
@@ -87,8 +75,7 @@ const trStrings = <String, String>{
   'boss_alert_none': 'Henüz sabitlenen yok. Dünya boss\'larından etkinlik sabitle.',
   'boss_alert_scheduled': '{pins} sabitli, günde {n} bildirim',
   'boss_alert_allow': 'Bildirimlere izin ver',
-  'boss_alert_exact_note':
-      'Android bildirimleri birkaç dakika geciktirebilir. Tam zamanında gelmesi için bu uygulamaya alarm ve hatırlatıcı izni ver.',
+  'boss_alert_exact_note': 'Android bildirimleri birkaç dakika geciktirebilir. Tam zamanında gelmesi için bu uygulamaya alarm ve hatırlatıcı izni ver.',
   'boss_alert_exact_button': 'Tam zamana izin ver',
   'boss_alert_test': 'Test bildirimi gönder',
   'boss_alert_test_body':
@@ -102,10 +89,8 @@ const trStrings = <String, String>{
   'event_err_own_role': 'Kendi rolünü değiştiremezsin.',
   'event_err_not_member': 'Bu oyuncu artık lonca üyesi değil.',
   'event_delete': 'Etkinliği sil',
-  'event_delete_body':
-      'Yanlışlıkla açılmış etkinlikler için: herkes için tüm katılımlarla ve Discord mesajıyla birlikte kaybolur. İptal edildi olarak görünmeye devam etmesini istiyorsan iptal et.',
-  'event_delete_weekly_body':
-      'Bu, haftalık bir etkinliğin bir haftası. Sadece bu haftayı ya da gelecek haftalarıyla birlikte tüm seriyi silebilirsin.',
+  'event_delete_body': 'Yanlışlıkla açılmış etkinlikler için: herkes için tüm katılımlarla ve Discord mesajıyla birlikte kaybolur. İptal edildi olarak görünmeye devam etmesini istiyorsan iptal et.',
+  'event_delete_weekly_body': 'Bu, haftalık bir etkinliğin bir haftası. Sadece bu haftayı ya da gelecek haftalarıyla birlikte tüm seriyi silebilirsin.',
   'event_delete_week': 'Sadece bu hafta',
   'event_delete_series': 'Tüm seri',
   'event_deleted': 'Etkinlik silindi',
@@ -198,19 +183,16 @@ const trStrings = <String, String>{
   'guild_role_officer': 'Subay',
   'guild_role_member': 'Üye',
   'community_account': 'Wondrous Compass hesabı',
-  'community_intro':
-      'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
+  'community_intro': 'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır.',
   'community_sign_in_discord': 'Discord ile giriş yap',
   'community_signed_in': 'Discord ile giriş yapıldı',
   'community_sign_out': 'Çıkış yap',
   'community_delete': 'Hesabı sil',
-  'community_delete_body':
-      'Wondrous Compass hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
+  'community_delete_body': 'Wondrous Compass hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
   'module_link_title': 'Blish HUD',
-  'module_link_note':
-      'Oyunda etkinlikleri görmek ve oluşturmak için Blish HUD modülünü bağla. Buradan bir kod al ve modüle yaz. Bir kez, on dakika geçerlidir.',
+  'module_link_note': 'Oyunda etkinlikleri görmek ve oluşturmak için Blish HUD modülünü bağla. Buradan bir kod al ve modüle yaz. Bir kez, on dakika geçerlidir.',
   'module_link_get': 'Kod al',
   'module_link_expires': 'Kod bir kez, on dakika geçerlidir.',
   'module_link_copy': 'Kodu kopyala',
@@ -278,8 +260,7 @@ const trStrings = <String, String>{
   'save_alert': 'Kaydet',
   'alerts_fired': '{n} fiyat alarmı tetiklendi',
   'wealth_history': 'Altın geçmişi',
-  'wealth_collecting':
-      'Altın geçmişin bugün başlıyor. Uygulama kullandığın her gün bir kayıt tutar, grafik ikinci günden itibaren görünür.',
+  'wealth_collecting': 'Altın geçmişin bugün başlıyor. Uygulama kullandığın her gün bir kayıt tutar, grafik ikinci günden itibaren görünür.',
   'last_7_days': 'Son 7 gün',
   'last_30_days': 'Son 30 gün',
   'wins_losses': '{w}G · {l}M',
@@ -419,8 +400,7 @@ const trStrings = <String, String>{
   'unnamed_entry': 'Yayınlanmamış (#{id})',
   'version': 'Sürüm',
   'needs_permission': 'API key\'inde {p} izni yok. Bu izinle yeni bir key oluşturup Ayarlar\'dan değiştir.',
-  'guild_rank_needed':
-      'API key\'in sorunsuz. Oyun bunu yalnızca lonca liderlerine açar. Liderin uygulaması paylaşınca burada görünür: henüz paylaşmadı ya da lider paylaşımı kapattı.',
+  'guild_rank_needed': 'API key\'in sorunsuz. Oyun bunu yalnızca lonca liderlerine açar. Liderin uygulaması paylaşınca burada görünür: henüz paylaşmadı ya da lider paylaşımı kapattı.',
   'browse_all': 'Tüm başarımlara göz at',
   'instances': 'Instance',
   'raids': 'Raid',
@@ -510,8 +490,7 @@ const trStrings = <String, String>{
   'rec_f_discord': 'Discord daveti (https://discord.gg/…)',
   'rec_f_contact': 'Oyunda fısıldanacak ad (isteğe bağlı)',
   'rec_f_languages': 'Dil',
-  'rec_f_tags_hint':
-      'Sayfa, resmî Discord sunucusunun forumunda bunlar etiket olarak paylaşılır ve bir gönderide en çok 5 etiket olur: bir dil ve en çok 4 aradığınız şeyi seç. {n} / 5 seçildi.',
+  'rec_f_tags_hint': 'Sayfa, resmî Discord sunucusunun forumunda bunlar etiket olarak paylaşılır ve bir gönderide en çok 5 etiket olur: bir dil ve en çok 4 aradığınız şeyi seç. {n} / 5 seçildi.',
   'rec_f_recruiting': 'Şu an alım yapıyoruz',
   'rec_f_recruiting_hint':
       'Kapatırsan bu sayfanın resmî Discord sunucusundaki forum gönderisi kilitlenir: kimse yanıt veremez.',
@@ -526,8 +505,7 @@ const trStrings = <String, String>{
   'rec_delete': 'Sayfayı sil',
   'rec_delete_ask': 'Bu loncanın alım sayfası silinsin mi?',
   'rec_rec_title': 'Sayfayı kim düzenleyebilir',
-  'rec_rec_intro':
-      'Bu loncanın lideri sensin; alım sayfasını kimin açıp düzenleyebileceğine sen karar verirsin. Bu, görevli olmakla aynı şey değildir.',
+  'rec_rec_intro': 'Bu loncanın lideri sensin; alım sayfasını kimin açıp düzenleyebileceğine sen karar verirsin. Bu, görevli olmakla aynı şey değildir.',
   'rec_rec_none': 'Senden başka kimse yok.',
   'rec_rec_add': 'Bir üyeye izin ver',
   'rec_rec_remove': 'Geri al',
@@ -543,8 +521,7 @@ const trStrings = <String, String>{
   'rec_err_own_guild': 'Bu, kendi loncanın sayfası.',
   'rec_err_generic': 'Bir şeyler ters gitti. Birazdan tekrar dene.',
   'tp_notify_title': 'Ticaret merkezi bildirimleri',
-  'tp_notify_hint':
-      'Listelediğin bir eşya satıldığında ya da bir alış siparişi tamamlandığında haber verir, uygulama kapalıyken de (en sık 15 dakikada bir). Ticaret merkezi iznine sahip bir API anahtarı gerekir.',
+  'tp_notify_hint': 'Listelediğin bir eşya satıldığında ya da bir alış siparişi tamamlandığında haber verir, uygulama kapalıyken de (en sık 15 dakikada bir). Ticaret merkezi iznine sahip bir API anahtarı gerekir.',
   'tp_notify_needs_key': 'Önce ticaret merkezi iznine sahip bir API anahtarı ekle.',
   'tp_sold': 'Ticaret merkezi: satıldı',
   'tp_bought': 'Ticaret merkezi: alındı',
@@ -650,8 +627,7 @@ const trStrings = <String, String>{
   'goal_add': 'Hedeflerime ekle',
   'goal_added': 'Hedeflerine eklendi',
   'goals_full': 'Hedef listen dolu',
-  'goals_empty':
-      'Henüz bir şey yok. Bir tarif aç ve yapmak istediğini eklemek için liste düğmesine dokun; tüm hedeflerinin malzemeleri tek bir listede toplanır.',
+  'goals_empty': 'Henüz bir şey yok. Bir tarif aç ve yapmak istediğini eklemek için liste düğmesine dokun; tüm hedeflerinin malzemeleri tek bir listede toplanır.',
   'goals_clear': 'Hedefleri temizle',
   'goals_clear_ask': 'Tüm hedefler listeden kaldırılsın mı?',
   'goals_shopping': 'Alışveriş listesi',
@@ -660,8 +636,7 @@ const trStrings = <String, String>{
   'goals_share': 'Paylaş',
   'goals_share_missing': 'Hâlâ gerekenler',
   'craft_profit': 'Üretim kârı',
-  'craft_profit_note':
-      'Şu anda ticaret merkezinde en çok kazandıran tarifler. Maliyet, tarifin malzemelerini en düşük ilan fiyatından sayar; sonuç, %15 ücret düşüldükten sonra en düşük ilanın bir bakır altına satılır. Fiyatlar değişir, almadan önce kontrol et.',
+  'craft_profit_note': 'Şu anda ticaret merkezinde en çok kazandıran tarifler. Maliyet, tarifin malzemelerini en düşük ilan fiyatından sayar; sonuç, %15 ücret düşüldükten sonra en düşük ilanın bir bakır altına satılır. Fiyatlar değişir, almadan önce kontrol et.',
   'craft_profit_empty': 'Bu filtrelerle şu anda kazandıran bir şey yok.',
   'craft_profit_age': 'Fiyatlar {n} dk önce okundu',
   'craft_cost': 'Malzemeler',
@@ -678,8 +653,7 @@ const trStrings = <String, String>{
   'reset_notify_weekly_body': 'Haftalık Büyücü Kasası hedeflerini ve baskınları sıfırlanmadan önce bitir.',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
-  'landing_sub':
-      'Karakterler, cüzdan, ticaret merkezi, dünya bossları, üretim, dünya haritası ve lonca etkinlikleri, hepsi tek yerde. Ücretsiz, resmî olmayan bir uygulama.',
+  'landing_sub': 'Karakterler, cüzdan, ticaret merkezi, dünya bossları, üretim, dünya haritası ve lonca etkinlikleri, hepsi tek yerde. Ücretsiz, resmî olmayan bir uygulama.',
   'landing_start': 'Başla',
   'landing_guest': 'Misafir olarak devam et',
   'landing_f_characters': 'Her karakterin ekipmanı, buildi ve oynama süresi.',
@@ -752,8 +726,7 @@ const trStrings = <String, String>{
   'world_bosses': 'Dünya etkinlikleri',
   'sync_now': 'Şimdi eşitle',
   'syncing': 'Eşitleniyor',
-  'sync_note':
-      'Hesabın açılışta bir kez indirilip cihazda tutulur, böylece bölümler beklemeden açılır. Oynadıktan sonra tekrar eşitle.',
+  'sync_note': 'Hesabın açılışta bir kez indirilip cihazda tutulur, böylece bölümler beklemeden açılır. Oynadıktan sonra tekrar eşitle.',
   'pinned': 'Sabitlenenler',
   'pin': 'Sabitle',
   'unpin': 'Sabitlemeyi kaldır',
@@ -790,8 +763,7 @@ const trStrings = <String, String>{
   'wiki_source': 'Wiki kaynağı',
   'remove_key': 'Key\'i kaldır',
   'remove_key_body': 'API key bu cihazdan silinecek ve giriş ekranına döneceksin.',
-  'disclaimer':
-      'Wondrous Compass resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
+  'disclaimer': 'Wondrous Compass resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
   'slot_Helm': 'Kask',
   'slot_Shoulders': 'Omuz',
   'slot_Coat': 'Göğüs',
@@ -841,15 +813,12 @@ const trStrings = <String, String>{
   'support_note': 'Wondrous Compass ücretsiz ve reklamsız. İşine yarıyorsa bana bir kahve ısmarlayabilirsin.',
   'buy_coffee': 'Bana bir kahve ısmarla',
   'price_history': 'Fiyat geçmişi',
-  'price_history_collecting':
-      'Ticaret merkezi geçmiş tutmaz, bu yüzden uygulama çalıştığı her gün bir fiyat kaydeder. Eşyayı izlemeye al, grafiği bugünden itibaren oluşur.',
-  'price_history_note':
-      'Bu telefonda kaydedilir, uygulamanın fiyatı gördüğü her gün için bir nokta. İzlenen eşyalar her açılışta güncellenir.',
+  'price_history_collecting': 'Ticaret merkezi geçmiş tutmaz, bu yüzden uygulama çalıştığı her gün bir fiyat kaydeder. Eşyayı izlemeye al, grafiği bugünden itibaren oluşur.',
+  'price_history_note': 'Bu telefonda kaydedilir, uygulamanın fiyatı gördüğü her gün için bir nokta. İzlenen eşyalar her açılışta güncellenir.',
   'pinned_achievements': 'Sabitlenen başarımlar',
   'about': 'Hakkında',
   'about_by': '{name} tarafından',
-  'about_summary':
-      'Resmi olmayan bir Guild Wars 2 yardımcısı: karakterlerin, hesabın, ticaret merkezi, başarımlar ve dünya haritası, doğrudan resmi API\'den.',
+  'about_summary': 'Resmi olmayan bir Guild Wars 2 yardımcısı: karakterlerin, hesabın, ticaret merkezi, başarımlar ve dünya haritası, doğrudan resmi API\'den.',
   'about_community': 'Topluluk',
   'about_github': 'GitHub',
   'about_github_note': 'Kaynak kodu, sürümler ve tüm apk dosyaları.',
@@ -858,8 +827,7 @@ const trStrings = <String, String>{
   'about_credits': 'Emeği geçenler',
   'about_credit_dev': '{name} tarafından geliştirildi',
   'about_credit_data': 'Oyun verileri, simgeler ve harita karoları resmi Guild Wars 2 API\'sinden',
-  'account_progress_note':
-      'Hesap geneli bonuslar: şans büyü bulma oranını artırır, fraktal geliştirmeleri Mistlock Observatory\'den alınan yükseltmelerdir.',
+  'account_progress_note': 'Hesap geneli bonuslar: şans büyü bulma oranını artırır, fraktal geliştirmeleri Mistlock Observatory\'den alınan yükseltmelerdir.',
   'expand_all': 'Tümünü aç',
   'collapse_all': 'Tümünü kapat',
   'slot_PowerCore': 'Jade Bot çekirdeği',
@@ -890,8 +858,7 @@ const trStrings = <String, String>{
   'demand': 'Talep',
   'supply': 'Arz',
   'welcome_title': 'Tyria\'n,\ntek bakışta.',
-  'welcome_body':
-      'Sıfırlamalar, metalar, Wizard\'s Vault ve sahip olduğun her şey tek yerde. ArenaNet\'ten alacağın salt okunur bir API anahtarıyla bağlan.',
+  'welcome_body': 'Sıfırlamalar, metalar, Wizard\'s Vault ve sahip olduğun her şey tek yerde. ArenaNet\'ten alacağın salt okunur bir API anahtarıyla bağlan.',
   'step_create': 'account.arena.net üzerinde paylaşmak istediğin izinlerle bir anahtar oluştur.',
   'step_paste': 'Buraya yapıştır. Yalnızca bu cihazda, şifreli olarak saklanır.',
   'continue': 'Devam',
@@ -987,8 +954,7 @@ const trStrings = <String, String>{
   'oe_form_edit': 'Etkinliği düzenle',
   'oe_language': 'DİL',
   'oe_places_field': 'KONTENJAN (BOŞ = SINIRSIZ)',
-  'oe_form_note':
-      'Giriş yapan herkes bu etkinliği, düzenleyen olarak oyun hesap adınla görür. Katılanların adlarını yalnızca sen görürsün.',
+  'oe_form_note': 'Giriş yapan herkes bu etkinliği, düzenleyen olarak oyun hesap adınla görür. Katılanların adlarını yalnızca sen görürsün.',
   'oe_save': 'Kaydet',
   'oe_created': 'Etkinlik oluşturuldu',
   'oe_saved': 'Kaydedildi',
@@ -1013,10 +979,8 @@ const trStrings = <String, String>{
   'oe_region_eu': 'Avrupa',
   'oe_region_na': 'Kuzey Amerika',
   'oe_region_all': 'Tüm bölgeler',
-  'oe_region_note':
-      'Bir bölgenin etkinliği, o bölgedeki bir dünyada oyun hesabı olan oyunculara yöneliktir. Hesabının bölgesi, bağladığında veya yenilediğinde dünyasından okunur.',
-  'oe_region_unknown':
-      'Hesabının bölgesi henüz bilinmiyor, bu yüzden yalnızca tüm bölgeler için etkinlik oluşturabilir ve katılabilirsin. Ayarlar\'da Guild Wars 2 bağlantını aç ve yenile.',
+  'oe_region_note': 'Bir bölgenin etkinliği, o bölgedeki bir dünyada oyun hesabı olan oyunculara yöneliktir. Hesabının bölgesi, bağladığında veya yenilediğinde dünyasından okunur.',
+  'oe_region_unknown': 'Hesabının bölgesi henüz bilinmiyor, bu yüzden yalnızca tüm bölgeler için etkinlik oluşturabilir ve katılabilirsin. Ayarlar\'da Guild Wars 2 bağlantını aç ve yenile.',
   'oe_tags': 'Etiketler (en fazla 3)',
   'oe_tag_any': 'Herhangi bir etiket',
   'oe_tag_meta': 'Meta',
@@ -1032,8 +996,7 @@ const trStrings = <String, String>{
   'oe_err_tags': 'Listeden en fazla üç etiket seç.',
   'oe_join_as': 'Şu hesapla katıl',
   'oe_roles_title': 'Resmi Discord',
-  'oe_roles_body':
-      'Resmi Wondrous Compass Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
+  'oe_roles_body': 'Resmi Wondrous Compass Discord sunucusu, herkese açık etkinlikleri her bölge ve etkinlik türü için ayrı bir kanalda paylaşır. Giriş yaptığın Discord hesabıyla katıl: hesabın olan her bölgenin rolünü alırsın. Katıldığın bir etkinlik başladığında bot, yalnızca katılanların görebildiği bir metin ve bir ses kanalı açar.',
   'oe_roles_join': 'Resmi Discord\'a katıl',
   'oe_err_role_required': 'Etkinliğin rollerinden birini seç.',
   'oe_err_profession': 'Hangi meslekle geldiğini seç.',

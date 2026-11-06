@@ -22,7 +22,7 @@ extension Gw2TradingApi on Gw2Api {
     }
     for (final chunk in _chunks([
       for (final id in wanted)
-        if (!out.containsKey(id)) id
+        if (!out.containsKey(id)) id,
     ])) {
       try {
         final raw = await get('/commerce/prices', {'ids': chunk.join(',')});
@@ -47,11 +47,13 @@ extension Gw2TradingApi on Gw2Api {
       try {
         // each page is kept on disk like the rest of the account, so the
         // history and stats tabs open from it and refresh in the background
-        rows = _list(await cachedGet(
-          '/commerce/transactions/$kind',
-          query: {'page_size': '200', 'page': '$page'},
-          ttl: const Duration(minutes: 10),
-        ));
+        rows = _list(
+          await cachedGet(
+            '/commerce/transactions/$kind',
+            query: {'page_size': '200', 'page': '$page'},
+            ttl: const Duration(minutes: 10),
+          ),
+        );
       } on Gw2ApiException catch (e) {
         // asking past the last page is a 400, that just means we are done
         if (page > 0 && (e.status == 400 || e.status == 404)) break;

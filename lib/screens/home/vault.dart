@@ -44,7 +44,7 @@ class _VaultState extends ConsumerState<_Vault> {
             builder: (v) {
               final objectives = [
                 for (final o in (v['objectives'] as List?) ?? const [])
-                  if (o is Map) Map<String, dynamic>.from(o)
+                  if (o is Map) Map<String, dynamic>.from(o),
               ];
               if (objectives.isEmpty) return EmptyNote(s.t('vault_empty'), center: false);
               bool done(Json o) =>
@@ -78,15 +78,17 @@ class _VaultState extends ConsumerState<_Vault> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                // the ring is the track of the chest, which is not all of the objectives
-                                metaGoal > 0 && metaGoal != objectives.length
-                                    ? s.t(
-                                        'objectives_done_chest', {'a': finished, 'b': objectives.length, 'c': metaGoal})
-                                    : s.t('objectives_done', {'a': finished, 'b': objectives.length}),
-                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                              // the ring is the track of the chest, which is not all of the objectives
+                              metaGoal > 0 && metaGoal != objectives.length
+                                  ? s.t('objectives_done_chest', {'a': finished, 'b': objectives.length, 'c': metaGoal})
+                                  : s.t('objectives_done', {'a': finished, 'b': objectives.length}),
+                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                            ),
                             const SizedBox(height: 4),
-                            Text(s.t('acclaim_left', {'n': fmtInt(left)}),
-                                style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                            Text(
+                              s.t('acclaim_left', {'n': fmtInt(left)}),
+                              style: TextStyle(fontSize: 12, color: AppColors.muted),
+                            ),
                           ],
                         ),
                       ),
@@ -124,7 +126,10 @@ class _Objective extends StatelessWidget {
       child: Row(
         children: [
           Container(
-              width: 3, height: 30, decoration: BoxDecoration(color: track, borderRadius: BorderRadius.circular(2))),
+            width: 3,
+            height: 30,
+            decoration: BoxDecoration(color: track, borderRadius: BorderRadius.circular(2)),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -140,26 +145,30 @@ class _Objective extends StatelessWidget {
                     decoration: claimed ? TextDecoration.lineThrough : null,
                   ),
                 ),
-                if (!done) ...[
-                  const SizedBox(height: 5),
-                  Meter(value: ratio, height: 4),
-                ],
+                if (!done) ...[const SizedBox(height: 5), Meter(value: ratio, height: 4)],
               ],
             ),
           ),
           const SizedBox(width: 12),
           if (done)
-            Icon(claimed ? Icons.check_circle_rounded : Icons.redeem_rounded,
-                color: claimed ? AppColors.green : AppColors.amber, size: 20)
+            Icon(
+              claimed ? Icons.check_circle_rounded : Icons.redeem_rounded,
+              color: claimed ? AppColors.green : AppColors.amber,
+              size: 20,
+            )
           else
-            Text('${asInt(o['progress_current'])}/${asInt(o['progress_complete'])}',
-                style: TextStyle(fontSize: 12, color: AppColors.muted, fontFeatures: _tabular)),
+            Text(
+              '${asInt(o['progress_current'])}/${asInt(o['progress_complete'])}',
+              style: TextStyle(fontSize: 12, color: AppColors.muted, fontFeatures: _tabular),
+            ),
           const SizedBox(width: 8),
           SizedBox(
             width: 34,
-            child: Text('${asInt(o['acclaim'])}',
-                textAlign: TextAlign.end,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold)),
+            child: Text(
+              '${asInt(o['acclaim'])}',
+              textAlign: TextAlign.end,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
+            ),
           ),
         ],
       ),

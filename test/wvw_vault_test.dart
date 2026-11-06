@@ -4,15 +4,8 @@ import 'package:wondrous_compass/state/reference.dart';
 import 'package:wondrous_compass/state/vault.dart';
 import 'package:wondrous_compass/state/wvw.dart';
 
-VaultListing listing(String type, int cost) => VaultListing(
-      itemId: cost,
-      count: 1,
-      type: type,
-      cost: cost,
-      purchased: 0,
-      limit: 0,
-      item: null,
-    );
+VaultListing listing(String type, int cost) =>
+    VaultListing(itemId: cost, count: 1, type: type, cost: cost, purchased: 0, limit: 0, item: null);
 
 void main() {
   group('wvwColorOf', () {
@@ -60,7 +53,7 @@ void main() {
       final dye = {
         'base_rgb': [1, 2, 3],
         'cloth': {
-          'rgb': [200, 100, 50]
+          'rgb': [200, 100, 50],
         },
       };
       expect(dyeColor(dye), const Color.fromARGB(255, 200, 100, 50));
@@ -68,18 +61,20 @@ void main() {
 
     test('falls back to the base colour and handles junk', () {
       expect(
-          dyeColor({
-            'base_rgb': [10, 20, 30]
-          }),
-          const Color.fromARGB(255, 10, 20, 30));
+        dyeColor({
+          'base_rgb': [10, 20, 30],
+        }),
+        const Color.fromARGB(255, 10, 20, 30),
+      );
       expect(dyeColor(null), isNull);
       expect(
-          dyeColor({
-            'cloth': {
-              'rgb': [1]
-            }
-          }),
-          isNull);
+        dyeColor({
+          'cloth': {
+            'rgb': [1],
+          },
+        }),
+        isNull,
+      );
     });
   });
 
@@ -94,9 +89,13 @@ void main() {
   });
 
   test('a listing is sold out only with a limit', () {
-    expect(const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut,
-        isTrue);
-    expect(const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut,
-        isFalse);
+    expect(
+      const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 3, limit: 3, item: null).soldOut,
+      isTrue,
+    );
+    expect(
+      const VaultListing(itemId: 1, count: 1, type: 'Normal', cost: 1, purchased: 9, limit: 0, item: null).soldOut,
+      isFalse,
+    );
   });
 }

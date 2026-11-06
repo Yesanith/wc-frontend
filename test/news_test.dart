@@ -61,8 +61,10 @@ void main() {
   test('patch note dates come from the page name', () {
     expect(patchDate('Game updates/2026-09-23'), DateTime.utc(2026, 9, 23));
     expect(patchDate('Game updates'), isNull);
-    expect(const PatchNote('Game updates/2026-09-23', null).url,
-        'https://wiki.guildwars2.com/wiki/Game_updates/2026-09-23');
+    expect(
+      const PatchNote('Game updates/2026-09-23', null).url,
+      'https://wiki.guildwars2.com/wiki/Game_updates/2026-09-23',
+    );
   });
 
   test('images from the real feed shape: no scheme, a srcset, or only a video', () {

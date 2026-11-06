@@ -45,7 +45,9 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
           if (left == null || right == null) {
             return Padding(
               padding: const EdgeInsets.all(24),
-              child: Center(child: Text(s.t('need_two_characters'), style: TextStyle(color: AppColors.muted))),
+              child: Center(
+                child: Text(s.t('need_two_characters'), style: TextStyle(color: AppColors.muted)),
+              ),
             );
           }
 
@@ -93,11 +95,7 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
                 left: races['${left['race']}'] ?? '${left['race'] ?? ''}',
                 right: races['${right['race']}'] ?? '${right['race'] ?? ''}',
               ),
-              _CompareRow(
-                label: s.t('crafting'),
-                left: _crafting(s, left),
-                right: _crafting(s, right),
-              ),
+              _CompareRow(label: s.t('crafting'), left: _crafting(s, left), right: _crafting(s, right)),
               const SizedBox(height: 16),
               SectionHeader(title: s.t('equipment')),
               const SizedBox(height: 10),
@@ -137,8 +135,10 @@ class _Head extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('${c['name'] ?? ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: display(16)),
-          Text(profession,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: professionColor(profession))),
+          Text(
+            profession,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: professionColor(profession)),
+          ),
         ],
       ),
     );
@@ -159,8 +159,10 @@ class _CompareRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label.toUpperCase(),
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
+          Text(
+            label.toUpperCase(),
+            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted),
+          ),
           const SizedBox(height: 4),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

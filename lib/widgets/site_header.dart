@@ -119,7 +119,9 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
       color: AppColors.navBg,
       child: Container(
         height: height,
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.line))),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.line)),
+        ),
         child: Stack(
           children: [
             Center(
@@ -148,7 +150,10 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                       const SizedBox(width: 24),
                       // a window just wide enough has more sections than room: the bar scrolls sideways rather than overflow
                       Expanded(
-                        child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: nav)),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: nav),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       if (search != null) ...[search!, const SizedBox(width: 12)],
@@ -202,7 +207,8 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Colors.transparent, AppColors.gold.withValues(alpha: 0.7), Colors.transparent]),
+                    colors: [Colors.transparent, AppColors.gold.withValues(alpha: 0.7), Colors.transparent],
+                  ),
                 ),
               ),
             ),
@@ -291,7 +297,10 @@ class _SiteNavMenu extends StatelessWidget {
       style: MenuStyle(
         backgroundColor: WidgetStatePropertyAll(AppColors.surface),
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: AppColors.line)),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: AppColors.line),
+          ),
         ),
       ),
       menuChildren: [

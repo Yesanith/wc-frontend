@@ -11,13 +11,7 @@ import '../data/metas.dart';
 /// every day: the phone's alarm system keeps it going with the app closed
 /// and after a reboot, no server and no need to open the app again.
 class BossAlert {
-  const BossAlert({
-    required this.id,
-    required this.minuteOfDay,
-    required this.title,
-    required this.body,
-    this.weekday,
-  });
+  const BossAlert({required this.id, required this.minuteOfDay, required this.title, required this.body, this.weekday});
 
   final int id;
 
@@ -94,13 +88,15 @@ BossAlertPlan planBossAlerts({
         while (!used.add(id)) {
           id = (id + 1) & 0x7fffffff;
         }
-        out.add(BossAlert(
-          id: id,
-          // a start just after midnight alerts before it, on the day before
-          minuteOfDay: (start - lead) % 1440,
-          title: event.name,
-          body: body(map),
-        ));
+        out.add(
+          BossAlert(
+            id: id,
+            // a start just after midnight alerts before it, on the day before
+            minuteOfDay: (start - lead) % 1440,
+            title: event.name,
+            body: body(map),
+          ),
+        );
       }
     }
   }
@@ -143,24 +139,18 @@ List<BossAlert> planResetAlerts({
   required String dailyBody,
   required String weeklyTitle,
   required String weeklyBody,
-}) =>
-    [
-      if (daily)
-        BossAlert(
-          id: dailyResetAlertId,
-          minuteOfDay: (0 - resetAlertLead) % 1440,
-          title: dailyTitle,
-          body: dailyBody,
-        ),
-      if (weekly)
-        BossAlert(
-          id: weeklyResetAlertId,
-          minuteOfDay: (7 * 60 + 30 - resetAlertLead) % 1440,
-          weekday: DateTime.monday,
-          title: weeklyTitle,
-          body: weeklyBody,
-        ),
-    ];
+}) => [
+  if (daily)
+    BossAlert(id: dailyResetAlertId, minuteOfDay: (0 - resetAlertLead) % 1440, title: dailyTitle, body: dailyBody),
+  if (weekly)
+    BossAlert(
+      id: weeklyResetAlertId,
+      minuteOfDay: (7 * 60 + 30 - resetAlertLead) % 1440,
+      weekday: DateTime.monday,
+      title: weeklyTitle,
+      body: weeklyBody,
+    ),
+];
 
 /// changes when anything about the scheduled alerts changes, so an
 /// unchanged plan is not scheduled again
@@ -206,22 +196,21 @@ Future<void> showTradeNotification({
   required String body,
   required String channelName,
   required String channelDescription,
-}) =>
-    _plugin.show(
-      id: id,
-      title: title,
-      body: body,
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(
-          _tradeChannelId,
-          channelName,
-          channelDescription: channelDescription,
-          // the lines of what sold are all there when it is opened
-          styleInformation: BigTextStyleInformation(body),
-        ),
-      ),
-      payload: _tradePayload,
-    );
+}) => _plugin.show(
+  id: id,
+  title: title,
+  body: body,
+  notificationDetails: NotificationDetails(
+    android: AndroidNotificationDetails(
+      _tradeChannelId,
+      channelName,
+      channelDescription: channelDescription,
+      // the lines of what sold are all there when it is opened
+      styleInformation: BigTextStyleInformation(body),
+    ),
+  ),
+  payload: _tradePayload,
+);
 
 Future<void> initBossAlerts() async {
   try {
@@ -281,14 +270,14 @@ Future<void> openExactAlarmSettings() async {
 }
 
 NotificationDetails _details(String channelName, String channelDescription) => NotificationDetails(
-      android: AndroidNotificationDetails(
-        _channelId,
-        channelName,
-        channelDescription: channelDescription,
-        importance: Importance.high,
-        priority: Priority.high,
-      ),
-    );
+  android: AndroidNotificationDetails(
+    _channelId,
+    channelName,
+    channelDescription: channelDescription,
+    importance: Importance.high,
+    priority: Priority.high,
+  ),
+);
 
 /// how many alerts the alarm system holds for the app right now
 Future<int> pendingBossAlerts() async {
@@ -339,11 +328,10 @@ Future<void> showBossAlertTest({
   required String body,
   required String channelName,
   required String channelDescription,
-}) =>
-    _plugin.show(
-      id: 1,
-      title: title,
-      body: body,
-      notificationDetails: _details(channelName, channelDescription),
-      payload: _payload,
-    );
+}) => _plugin.show(
+  id: 1,
+  title: title,
+  body: body,
+  notificationDetails: _details(channelName, channelDescription),
+  payload: _payload,
+);

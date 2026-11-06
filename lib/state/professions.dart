@@ -43,9 +43,7 @@ class ProfessionInfo {
 final professionsProvider = FutureProvider<Map<String, ProfessionInfo>>((ref) async {
   final api = ref.watch(gw2ApiProvider);
   final rows = await referenceRows(ref, 'professions', '/professions');
-  final specIds = <int>{
-    for (final r in rows) ...intList(r['specializations']),
-  };
+  final specIds = <int>{for (final r in rows) ...intList(r['specializations'])};
   final specs = await api.specializations(specIds);
 
   final out = <String, ProfessionInfo>{};

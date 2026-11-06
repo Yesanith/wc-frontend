@@ -12,13 +12,13 @@ import 'package:wondrous_compass/state/settings.dart';
 import 'package:wondrous_compass/theme.dart';
 
 CraftNode node(int id, {int perRun = 1, List<CraftNode> children = const []}) => CraftNode(
-      itemId: id,
-      item: {'name': 'Item $id'},
-      perRun: perRun,
-      outputCount: 1,
-      children: children,
-      disciplines: const [],
-    );
+  itemId: id,
+  item: {'name': 'Item $id'},
+  perRun: perRun,
+  outputCount: 1,
+  children: children,
+  disciplines: const [],
+);
 
 void main() {
   Future<ProviderContainer> show(

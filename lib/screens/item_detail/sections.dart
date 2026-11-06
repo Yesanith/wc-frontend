@@ -29,11 +29,14 @@ class _OwnedSection extends ConsumerWidget {
                         Icon(placeIcon(e.key.kind), size: 18, color: AppColors.muted),
                         const SizedBox(width: 12),
                         Expanded(child: Text(placeLabel(s, e.key), style: const TextStyle(fontSize: 14))),
-                        Text('×${fmtInt(e.value)}',
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                fontFeatures: [FontFeature.tabularFigures()])),
+                        Text(
+                          '×${fmtInt(e.value)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -77,8 +80,11 @@ class _PricePanel extends ConsumerWidget {
         ),
         SizedBox(
           width: 44,
-          child: Text('$qty',
-              textAlign: TextAlign.center, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+          child: Text(
+            '$qty',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+          ),
         ),
         IconButton(
           onPressed: qty < 250 ? () => onQty(qty == 1 ? 10 : (qty == 10 ? 250 : qty + 1)) : null,
@@ -110,25 +116,28 @@ class _PricePanel extends ConsumerWidget {
     }
 
     Widget side(String label, int unit, int count, String countLabel, Color accent) => Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border.all(color: accent.withValues(alpha: 0.35)),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: accent.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(color: accent.withValues(alpha: 0.35)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.muted),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.muted)),
-                const SizedBox(height: 6),
-                CoinDots(unit * qty, size: 16, weight: FontWeight.w800),
-                const SizedBox(height: 6),
-                Text('$countLabel ${compact(count)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
-              ],
-            ),
-          ),
-        );
+            const SizedBox(height: 6),
+            CoinDots(unit * qty, size: 16, weight: FontWeight.w800),
+            const SizedBox(height: 6),
+            Text('$countLabel ${compact(count)}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          ],
+        ),
+      ),
+    );
 
     // buy at the highest order, relist a copper under the lowest listing
     final flip = buy > 0 && sell > 0 ? afterTradingFees(sell - 1) - buy : 0;
@@ -196,9 +205,7 @@ class _UpgradeRow extends ConsumerWidget {
     final item = ref.watch(itemProvider(itemId)).valueOrNull;
     final name = (item?['name'] as String?) ?? s.t('item_n', {'id': itemId});
     final details = item?['details'] is Map ? Map<String, dynamic>.from(item!['details'] as Map) : null;
-    final bonuses = [
-      for (final b in (details?['bonuses'] as List?) ?? const []) '$b',
-    ];
+    final bonuses = [for (final b in (details?['bonuses'] as List?) ?? const []) '$b'];
     final buff = details?['infix_upgrade'] is Map
         ? '${(details!['infix_upgrade'] as Map)['buff'] is Map ? ((details['infix_upgrade'] as Map)['buff'] as Map)['description'] ?? '' : ''}'
         : '';
@@ -219,11 +226,15 @@ class _UpgradeRow extends ConsumerWidget {
                 children: [
                   Text(name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                   if (buff.isNotEmpty)
-                    Text(buff.replaceAll(RegExp(r'<[^>]*>'), ''),
-                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                    Text(
+                      buff.replaceAll(RegExp(r'<[^>]*>'), ''),
+                      style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted),
+                    ),
                   for (var i = 0; i < bonuses.length; i++)
-                    Text('(${i + 1}) ${bonuses[i]}',
-                        style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                    Text(
+                      '(${i + 1}) ${bonuses[i]}',
+                      style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted),
+                    ),
                 ],
               ),
             ),

@@ -41,13 +41,7 @@ const _endpoints = <_Endpoint>[
 const _lanes = 4;
 
 class SyncState {
-  const SyncState({
-    this.done = 0,
-    this.total = 0,
-    this.failed = 0,
-    this.running = false,
-    this.finishedAt,
-  });
+  const SyncState({this.done = 0, this.total = 0, this.failed = 0, this.running = false, this.finishedAt});
 
   final int done;
   final int total;
@@ -112,12 +106,7 @@ class SyncNotifier extends Notifier<SyncState> {
           _Endpoint('/guild/$id/log'),
         ],
       ];
-      state = SyncState(
-        running: true,
-        total: state.total + extra.length,
-        done: done,
-        failed: failed,
-      );
+      state = SyncState(running: true, total: state.total + extra.length, done: done, failed: failed);
       for (final e in extra) {
         try {
           await api.cachedGet(e.path, query: e.query, force: true);
@@ -130,12 +119,7 @@ class SyncNotifier extends Notifier<SyncState> {
       }
     }
 
-    state = SyncState(
-      total: state.total,
-      done: done,
-      failed: failed,
-      finishedAt: DateTime.now(),
-    );
+    state = SyncState(total: state.total, done: done, failed: failed, finishedAt: DateTime.now());
     ref.read(accountRevisionProvider.notifier).state++;
     if (_again) await run();
   }

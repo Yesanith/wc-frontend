@@ -32,20 +32,23 @@ void main() {
     const access = {'GuildWars2', 'HeartOfThorns'};
     expect(entryApplies({'id': 1}, access), isTrue);
     expect(
-        entryApplies({
-          'required_access': {'product': 'HeartOfThorns', 'condition': 'HasAccess'}
-        }, access),
-        isTrue);
+      entryApplies({
+        'required_access': {'product': 'HeartOfThorns', 'condition': 'HasAccess'},
+      }, access),
+      isTrue,
+    );
     expect(
-        entryApplies({
-          'required_access': {'product': 'PathOfFire', 'condition': 'HasAccess'}
-        }, access),
-        isFalse);
+      entryApplies({
+        'required_access': {'product': 'PathOfFire', 'condition': 'HasAccess'},
+      }, access),
+      isFalse,
+    );
     expect(
-        entryApplies({
-          'required_access': {'product': 'PathOfFire', 'condition': 'NoAccess'}
-        }, access),
-        isTrue);
+      entryApplies({
+        'required_access': {'product': 'PathOfFire', 'condition': 'NoAccess'},
+      }, access),
+      isTrue,
+    );
   });
 
   group('price alerts', () {

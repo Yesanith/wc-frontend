@@ -36,23 +36,29 @@ class SkillRow extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (slot.isNotEmpty)
-                        Text(slot.toUpperCase(),
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
-                      Text((data['name'] as String?) ?? '-',
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+                        Text(
+                          slot.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.6,
+                            color: AppColors.muted,
+                          ),
+                        ),
+                      Text(
+                        (data['name'] as String?) ?? '-',
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
                       if (description.isNotEmpty)
-                        Text(description,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
+                        Text(
+                          description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted),
+                        ),
                       if (facts.isNotEmpty) ...[
                         const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: [for (final f in facts.take(6)) Pill(f)],
-                        ),
+                        Wrap(spacing: 6, runSpacing: 6, children: [for (final f in facts.take(6)) Pill(f)]),
                       ],
                     ],
                   ),
@@ -112,8 +118,10 @@ void showSkillSheet(BuildContext context, Json data) {
                 ItemIcon(url: data['icon'] as String?, rarity: 'Exotic', size: 44),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text((data['name'] as String?) ?? '-',
-                      style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                  child: Text(
+                    (data['name'] as String?) ?? '-',
+                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                  ),
                 ),
               ],
             ),

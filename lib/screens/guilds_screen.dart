@@ -38,11 +38,17 @@ class GuildsScreen extends ConsumerWidget {
           onRetry: () => ref.invalidate(guildIdsProvider),
           builder: (list) {
             if (list.isEmpty) {
-              return Panel(child: Text(s.t('no_guilds'), style: TextStyle(color: AppColors.muted)));
+              return Panel(
+                child: Text(s.t('no_guilds'), style: TextStyle(color: AppColors.muted)),
+              );
             }
             return Column(
               children: [
-                for (final id in list) Padding(padding: const EdgeInsets.only(bottom: 10), child: _GuildCard(id: id)),
+                for (final id in list)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _GuildCard(id: id),
+                  ),
               ],
             );
           },
@@ -64,9 +70,7 @@ class _GuildCard extends ConsumerWidget {
     final tag = (guild?['tag'] as String?) ?? '';
 
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id)),
-      ),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GuildDetailScreen(id: id))),
       padding: const EdgeInsets.all(16),
       radius: AppRadius.card,
       child: Row(
@@ -83,8 +87,10 @@ class _GuildCard extends ConsumerWidget {
             ),
           ),
           if (asInt(guild?['level']) > 0)
-            Text('${asInt(guild?['level'])}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold)),
+            Text(
+              '${asInt(guild?['level'])}',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.gold),
+            ),
           const SizedBox(width: 6),
           Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
@@ -106,9 +112,11 @@ class GuildDetailScreen extends ConsumerWidget {
 
     // the leader chooses here what the members see of the treasury, the stash and the log
     final tyriaId = ref.watch(tyriaGuildIdProvider(id)).valueOrNull;
-    final leads = tyriaId != null &&
-        (ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[])
-            .any((g) => g.id == tyriaId && g.role == 'leader');
+    final leads =
+        tyriaId != null &&
+        (ref.watch(myGuildsProvider).valueOrNull ?? const <MyGuild>[]).any(
+          (g) => g.id == tyriaId && g.role == 'leader',
+        );
 
     return DefaultTabController(
       length: 5,

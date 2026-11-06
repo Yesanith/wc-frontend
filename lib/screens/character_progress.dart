@@ -83,19 +83,21 @@ class _SeasonSheet extends StatelessWidget {
                         r.total > 0 && r.done >= r.total
                             ? Icons.check_circle
                             : r.done > 0
-                                ? Icons.timelapse
-                                : Icons.radio_button_unchecked,
+                            ? Icons.timelapse
+                            : Icons.radio_button_unchecked,
                         size: 16,
                         color: r.total > 0 && r.done >= r.total
                             ? AppColors.green
                             : r.done > 0
-                                ? AppColors.gold
-                                : AppColors.muted,
+                            ? AppColors.gold
+                            : AppColors.muted,
                       ),
                       const SizedBox(width: 10),
                       Expanded(child: Text(r.name, style: const TextStyle(fontSize: 13))),
-                      Text(r.total == 0 ? '–' : '${r.done}/${r.total}',
-                          style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                      Text(
+                        r.total == 0 ? '–' : '${r.done}/${r.total}',
+                        style: TextStyle(fontSize: 12, color: AppColors.muted),
+                      ),
                     ],
                   ),
                 ),
@@ -105,8 +107,10 @@ class _SeasonSheet extends StatelessWidget {
         if (unmatched > 0)
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-            child: Text(s.t('story_unmatched', {'n': unmatched}),
-                style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint)),
+            child: Text(
+              s.t('story_unmatched', {'n': unmatched}),
+              style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint),
+            ),
           ),
       ],
     );

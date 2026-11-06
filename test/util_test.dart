@@ -116,7 +116,7 @@ void main() {
         'Sword',
         'Torch',
         'Trident',
-        'Warhorn'
+        'Warhorn',
       ]) {
         expect(professionWeaponKey(w), w);
       }

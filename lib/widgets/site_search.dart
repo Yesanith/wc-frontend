@@ -9,20 +9,11 @@ enum SearchKind { section, item, wiki }
 
 /// something the search of the site found: a page of the site, an item, or the wiki, which is asked when nothing else is what was meant
 class SearchHit {
-  const SearchHit.section(this.section, this.label)
-      : kind = SearchKind.section,
-        itemId = null,
-        query = null;
+  const SearchHit.section(this.section, this.label) : kind = SearchKind.section, itemId = null, query = null;
 
-  const SearchHit.item(this.itemId, this.label)
-      : kind = SearchKind.item,
-        section = null,
-        query = null;
+  const SearchHit.item(this.itemId, this.label) : kind = SearchKind.item, section = null, query = null;
 
-  const SearchHit.wiki(this.query, this.label)
-      : kind = SearchKind.wiki,
-        section = null,
-        itemId = null;
+  const SearchHit.wiki(this.query, this.label) : kind = SearchKind.wiki, section = null, itemId = null;
 
   final SearchKind kind;
   final String label;
@@ -47,14 +38,15 @@ List<SearchHit> searchHits(
   final typed = query.trim();
   final q = typed.toLowerCase();
   if (q.length < 2) return const [];
-  final pages = [
-    for (final e in labels.entries)
-      if (e.value.toLowerCase().contains(q)) e,
-  ]..sort((a, b) {
-      final aStarts = a.value.toLowerCase().startsWith(q) ? 0 : 1;
-      final bStarts = b.value.toLowerCase().startsWith(q) ? 0 : 1;
-      return aStarts != bStarts ? aStarts - bStarts : a.key.index - b.key.index;
-    });
+  final pages =
+      [
+        for (final e in labels.entries)
+          if (e.value.toLowerCase().contains(q)) e,
+      ]..sort((a, b) {
+        final aStarts = a.value.toLowerCase().startsWith(q) ? 0 : 1;
+        final bStarts = b.value.toLowerCase().startsWith(q) ? 0 : 1;
+        return aStarts != bStarts ? aStarts - bStarts : a.key.index - b.key.index;
+      });
   return [
     for (final e in pages.take(sectionLimit)) SearchHit.section(e.key, e.value),
     for (final item in index.search(typed, limit: itemLimit)) SearchHit.item(item.id, item.name),
@@ -108,16 +100,16 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
   }
 
   String _kind(SearchHit hit) => switch (hit.kind) {
-        SearchKind.section => widget.pageLabel,
-        SearchKind.item => widget.itemLabel,
-        SearchKind.wiki => 'Wiki',
-      };
+    SearchKind.section => widget.pageLabel,
+    SearchKind.item => widget.itemLabel,
+    SearchKind.wiki => 'Wiki',
+  };
 
   IconData _icon(SearchHit hit) => switch (hit.kind) {
-        SearchKind.section => Icons.dashboard_outlined,
-        SearchKind.item => Icons.inventory_2_outlined,
-        SearchKind.wiki => Icons.menu_book_outlined,
-      };
+    SearchKind.section => Icons.dashboard_outlined,
+    SearchKind.item => Icons.inventory_2_outlined,
+    SearchKind.wiki => Icons.menu_book_outlined,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -151,11 +143,17 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
             prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 36),
             contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.line)),
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.line),
+            ),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.line)),
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.line),
+            ),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.gold)),
+              borderRadius: BorderRadius.circular(999),
+              borderSide: BorderSide(color: AppColors.gold),
+            ),
           ),
         ),
         optionsViewBuilder: (context, onSelected, options) => Align(
@@ -166,7 +164,9 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
               color: AppColors.surface,
               elevation: 8,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14), side: BorderSide(color: AppColors.line)),
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(color: AppColors.line),
+              ),
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: widget.width + 140, maxHeight: 420),
@@ -175,18 +175,20 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
                   shrinkWrap: true,
                   children: [
                     for (final (i, hit) in options.indexed)
-                      Builder(builder: (context) {
-                        final highlighted = AutocompleteHighlightedOption.of(context) == i;
-                        return ListTile(
-                          dense: true,
-                          selected: highlighted,
-                          selectedTileColor: AppColors.surface2,
-                          leading: Icon(_icon(hit), size: 20, color: highlighted ? AppColors.gold : AppColors.muted),
-                          title: Text(hit.label, maxLines: 1, overflow: TextOverflow.ellipsis),
-                          subtitle: Text(_kind(hit), style: TextStyle(fontSize: 11, color: AppColors.hint)),
-                          onTap: () => onSelected(hit),
-                        );
-                      }),
+                      Builder(
+                        builder: (context) {
+                          final highlighted = AutocompleteHighlightedOption.of(context) == i;
+                          return ListTile(
+                            dense: true,
+                            selected: highlighted,
+                            selectedTileColor: AppColors.surface2,
+                            leading: Icon(_icon(hit), size: 20, color: highlighted ? AppColors.gold : AppColors.muted),
+                            title: Text(hit.label, maxLines: 1, overflow: TextOverflow.ellipsis),
+                            subtitle: Text(_kind(hit), style: TextStyle(fontSize: 11, color: AppColors.hint)),
+                            onTap: () => onSelected(hit),
+                          );
+                        },
+                      ),
                   ],
                 ),
               ),

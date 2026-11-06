@@ -71,8 +71,11 @@ class _NewsTab extends ConsumerWidget {
           separatorBuilder: (_, __) => const SizedBox(height: 12),
           itemBuilder: (context, i) {
             if (i == items.length) {
-              return Text(s.t('news_source'),
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 11, color: AppColors.hint));
+              return Text(
+                s.t('news_source'),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 11, color: AppColors.hint),
+              );
             }
             return _NewsCard(item: items[i]);
           },
@@ -100,7 +103,10 @@ class _NewsCard extends ConsumerWidget {
           if (image != null)
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: ColoredBox(color: AppColors.surface2, child: CachedIcon(url: image)),
+              child: ColoredBox(
+                color: AppColors.surface2,
+                child: CachedIcon(url: image),
+              ),
             ),
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
@@ -150,8 +156,10 @@ class _PatchNotesTab extends ConsumerWidget {
                       Icon(Icons.description_outlined, color: AppColors.gold, size: 20),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: Text(s.t('game_update_on', {'d': _date(n.date)}),
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                        child: Text(
+                          s.t('game_update_on', {'d': _date(n.date)}),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                        ),
                       ),
                       Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
                     ],

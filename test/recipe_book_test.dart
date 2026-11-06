@@ -2,15 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wondrous_compass/services/recipe_book.dart';
 import 'package:wondrous_compass/state/crafting.dart';
 
-BookRecipe recipe(int output, List<(int, int)> ingredients,
-        {int count = 1, List<String> disciplines = const ['Weaponsmith']}) =>
-    BookRecipe(
-      output: output,
-      outputCount: count,
-      disciplines: disciplines,
-      minRating: 0,
-      ingredients: ingredients,
-    );
+BookRecipe recipe(
+  int output,
+  List<(int, int)> ingredients, {
+  int count = 1,
+  List<String> disciplines = const ['Weaponsmith'],
+}) => BookRecipe(output: output, outputCount: count, disciplines: disciplines, minRating: 0, ingredients: ingredients);
 
 RecipeBook bookOf(List<BookRecipe> recipes) {
   final byOutput = <int, List<BookRecipe>>{};

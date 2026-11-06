@@ -18,8 +18,10 @@ class _AlertBanner extends ConsumerWidget {
             Icon(Icons.notifications_active, color: AppColors.green),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(s.t('alerts_fired', {'n': fired.length}),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+              child: Text(
+                s.t('alerts_fired', {'n': fired.length}),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              ),
             ),
             Icon(Icons.chevron_right, color: AppColors.chevron),
           ],
@@ -69,15 +71,22 @@ class _PinnedAchievements extends ConsumerWidget {
                                       const SizedBox(width: 6),
                                     ],
                                     Expanded(
-                                      child: Text(a.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                      child: Text(
+                                        a.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                                      ),
                                     ),
                                     if (a.max > 0)
-                                      Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                          style: TextStyle(
-                                              fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                      Text(
+                                        '${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.muted,
+                                        ),
+                                      ),
                                   ],
                                 ),
                                 if (a.max > 0) ...[
@@ -128,8 +137,10 @@ class _NewsBanner extends ConsumerWidget {
             Icon(Icons.newspaper, color: AppColors.gold),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(s.t('news_new', {'n': count}),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+              child: Text(
+                s.t('news_new', {'n': count}),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              ),
             ),
             Icon(Icons.chevron_right, color: AppColors.chevron),
           ],

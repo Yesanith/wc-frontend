@@ -68,10 +68,9 @@ class WealthNotifier extends Notifier<Map<String, List<WealthPoint>>> {
     }
     if (list.length > _keepDays) list.removeRange(0, list.length - _keepDays);
     state = {...state, account: list};
-    await ref.read(prefsProvider).setString(
-          _key,
-          jsonEncode({for (final e in state.entries) e.key: e.value.map((p) => p.toJson()).toList()}),
-        );
+    await ref
+        .read(prefsProvider)
+        .setString(_key, jsonEncode({for (final e in state.entries) e.key: e.value.map((p) => p.toJson()).toList()}));
   }
 }
 

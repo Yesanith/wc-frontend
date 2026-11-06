@@ -20,23 +20,26 @@ void main() {
     });
 
     test('has the groups the menu of the app has', () {
-      expect(siteNavGroups.map((g) => g.$1),
-          ['nav_group_account', 'nav_group_economy', 'nav_group_world', 'nav_group_reference']);
+      expect(siteNavGroups.map((g) => g.$1), [
+        'nav_group_account',
+        'nav_group_economy',
+        'nav_group_world',
+        'nav_group_reference',
+      ]);
     });
   });
 
   group('what the bar has room for', () {
     test(
-        'is a site from a width that has room for the whole bar, with the search as a button where the box does not fit',
-        () {
-      expect(siteMinWidth, 1280);
-      expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
-      expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
-    });
+      'is a site from a width that has room for the whole bar, with the search as a button where the box does not fit',
+      () {
+        expect(siteMinWidth, 1280);
+        expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
+        expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
+      },
+    );
 
-    test(
-        'is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest',
-        () {
+    test('is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest', () {
       expect(siteBarLayout(1000).searchWidth, isNull);
       expect(siteBarLayout(1499).searchWidth, isNull);
       expect(siteBarLayout(1500).searchWidth, 200);
@@ -89,15 +92,19 @@ void main() {
     });
 
     testWidgets('the heading has the group above the name, and none above a page that stands alone', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: const Scaffold(
-          body: Column(children: [
-            SitePageHeading(title: 'Trading post', kicker: 'Economy'),
-            SitePageHeading(title: 'Daily'),
-          ]),
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: const Scaffold(
+            body: Column(
+              children: [
+                SitePageHeading(title: 'Trading post', kicker: 'Economy'),
+                SitePageHeading(title: 'Daily'),
+              ],
+            ),
+          ),
         ),
-      ));
+      );
       expect(find.text('ECONOMY'), findsOneWidget, reason: 'in capitals, small');
       expect(find.text('Trading post'), findsOneWidget);
       expect(find.text('Daily'), findsOneWidget);
@@ -132,26 +139,29 @@ void main() {
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: Scaffold(
-          appBar: SiteHeader(
-            current: current,
-            onSelect: onSelect,
-            labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
-            icons: {for (final sec in AppSection.values) sec: Icons.circle},
-            groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
-            account: 'Leo.1234',
-            busy: busy,
-            progress: 0.5,
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: Scaffold(
+            appBar: SiteHeader(
+              current: current,
+              onSelect: onSelect,
+              labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+              icons: {for (final sec in AppSection.values) sec: Icons.circle},
+              groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+              account: 'Leo.1234',
+              busy: busy,
+              progress: 0.5,
+            ),
+            body: const SizedBox.expand(),
           ),
-          body: const SizedBox.expand(),
         ),
-      ));
+      );
     }
 
-    testWidgets('has the name, the sections that stand alone, the groups, the account and the settings',
-        (tester) async {
+    testWidgets('has the name, the sections that stand alone, the groups, the account and the settings', (
+      tester,
+    ) async {
       await show(tester, current: AppSection.home, onSelect: (_) {});
       expect(find.text('Wondrous Compass'), findsOneWidget);
       for (final sec in siteNavSingles) {
@@ -168,60 +178,73 @@ void main() {
     });
 
     testWidgets(
-        'has every section within reach at every width the page gives it, with the search the bar has room for in it',
-        (tester) async {
-      addTearDown(tester.view.reset);
-      for (final width in [siteMinWidth, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
-        final layout = siteBarLayout(width);
-        tester.view.physicalSize = Size(width, 900);
-        tester.view.devicePixelRatio = 1;
-        await tester.pumpWidget(MaterialApp(
-          theme: buildTheme(),
-          // the font of a test has every letter as wide as it is tall, a real one a little over half of that
-          builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)),
-            child: child!,
-          ),
-          home: Scaffold(
-            appBar: SiteHeader(
-              current: AppSection.home,
-              onSelect: (_) {},
-              labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
-              icons: {for (final sec in AppSection.values) sec: Icons.circle},
-              groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
-              account: layout.account ? 'Leo.1234' : null,
-              search: SizedBox(width: layout.searchWidth ?? 48, child: const Text('SEARCH')),
+      'has every section within reach at every width the page gives it, with the search the bar has room for in it',
+      (tester) async {
+        addTearDown(tester.view.reset);
+        for (final width in [siteMinWidth, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
+          final layout = siteBarLayout(width);
+          tester.view.physicalSize = Size(width, 900);
+          tester.view.devicePixelRatio = 1;
+          await tester.pumpWidget(
+            MaterialApp(
+              theme: buildTheme(),
+              // the font of a test has every letter as wide as it is tall, a real one a little over half of that
+              builder: (context, child) => MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)),
+                child: child!,
+              ),
+              home: Scaffold(
+                appBar: SiteHeader(
+                  current: AppSection.home,
+                  onSelect: (_) {},
+                  labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+                  icons: {for (final sec in AppSection.values) sec: Icons.circle},
+                  groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+                  account: layout.account ? 'Leo.1234' : null,
+                  search: SizedBox(width: layout.searchWidth ?? 48, child: const Text('SEARCH')),
+                ),
+                body: const SizedBox.expand(),
+              ),
             ),
-            body: const SizedBox.expand(),
-          ),
-        ));
-        for (final label in ['S-home', 'S-bosses', 'S-daily', 'S-weekly', 'Account', 'Economy', 'World', 'Reference']) {
-          expect(find.text(label).hitTestable(), findsOneWidget, reason: '$label at $width');
+          );
+          for (final label in [
+            'S-home',
+            'S-bosses',
+            'S-daily',
+            'S-weekly',
+            'Account',
+            'Economy',
+            'World',
+            'Reference',
+          ]) {
+            expect(find.text(label).hitTestable(), findsOneWidget, reason: '$label at $width');
+          }
+          expect(tester.takeException(), isNull, reason: 'at $width');
         }
-        expect(tester.takeException(), isNull, reason: 'at $width');
-      }
-    });
+      },
+    );
 
-    testWidgets('has the search between the sections and the account when it is given one, and none when it is not',
-        (tester) async {
+    testWidgets('has the search between the sections and the account when it is given one, and none when it is not', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1800, 900);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       Widget header({Widget? search}) => MaterialApp(
-            theme: buildTheme(),
-            home: Scaffold(
-              appBar: SiteHeader(
-                current: AppSection.home,
-                onSelect: (_) {},
-                labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
-                icons: {for (final sec in AppSection.values) sec: Icons.circle},
-                groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
-                account: 'Leo.1234',
-                search: search,
-              ),
-              body: const SizedBox.expand(),
-            ),
-          );
+        theme: buildTheme(),
+        home: Scaffold(
+          appBar: SiteHeader(
+            current: AppSection.home,
+            onSelect: (_) {},
+            labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+            icons: {for (final sec in AppSection.values) sec: Icons.circle},
+            groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+            account: 'Leo.1234',
+            search: search,
+          ),
+          body: const SizedBox.expand(),
+        ),
+      );
       await tester.pumpWidget(header());
       expect(find.text('SEARCH BOX'), findsNothing);
       await tester.pumpWidget(header(search: const SizedBox(width: 260, child: Text('SEARCH BOX'))));
@@ -232,8 +255,9 @@ void main() {
       expect(box > tester.getCenter(find.text('S-weekly')).dx, isTrue, reason: 'after the sections');
     });
 
-    testWidgets('goes to a section that stands alone, to the settings and to the home page by its name',
-        (tester) async {
+    testWidgets('goes to a section that stands alone, to the settings and to the home page by its name', (
+      tester,
+    ) async {
       final chosen = <AppSection>[];
       await show(tester, current: AppSection.home, onSelect: chosen.add);
       await tester.tap(find.text('S-daily'));
@@ -243,8 +267,9 @@ void main() {
       expect(chosen, [AppSection.daily, AppSection.settings, AppSection.about, AppSection.home]);
     });
 
-    testWidgets('opens a group under its heading, and what is chosen in it is gone to and the menu shut',
-        (tester) async {
+    testWidgets('opens a group under its heading, and what is chosen in it is gone to and the menu shut', (
+      tester,
+    ) async {
       final chosen = <AppSection>[];
       await show(tester, current: AppSection.home, onSelect: chosen.add);
       await tester.tap(find.text('Economy'));
@@ -271,14 +296,15 @@ void main() {
     });
 
     testWidgets(
-        'does not overflow in a window just wide enough for it, and has the progress bar only while something is updating',
-        (tester) async {
-      await show(tester, current: AppSection.home, onSelect: (_) {}, size: const Size(1100, 800));
-      expect(tester.takeException(), isNull);
-      expect(find.byType(LinearProgressIndicator), findsNothing);
-      await show(tester, current: AppSection.home, onSelect: (_) {}, size: const Size(1100, 800), busy: true);
-      expect(find.byType(LinearProgressIndicator), findsOneWidget);
-    });
+      'does not overflow in a window just wide enough for it, and has the progress bar only while something is updating',
+      (tester) async {
+        await show(tester, current: AppSection.home, onSelect: (_) {}, size: const Size(1100, 800));
+        expect(tester.takeException(), isNull);
+        expect(find.byType(LinearProgressIndicator), findsNothing);
+        await show(tester, current: AppSection.home, onSelect: (_) {}, size: const Size(1100, 800), busy: true);
+        expect(find.byType(LinearProgressIndicator), findsOneWidget);
+      },
+    );
   });
 
   group('the footer', () {
@@ -286,43 +312,51 @@ void main() {
       tester.view.physicalSize = const Size(1800, 900);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: Scaffold(
-          bottomNavigationBar: SiteFooter(
-            note: 'An unofficial companion',
-            links: [(label: 'Privacy', onTap: () {})],
-            year: 2026,
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: Scaffold(
+            bottomNavigationBar: SiteFooter(
+              note: 'An unofficial companion',
+              links: [(label: 'Privacy', onTap: () {})],
+              year: 2026,
+            ),
           ),
         ),
-      ));
+      );
       expect(tester.takeException(), isNull);
-      expect(tester.getSize(find.byType(SiteFooter)).height, SiteFooter.height + 1,
-          reason: 'a line, and the rule above it');
+      expect(
+        tester.getSize(find.byType(SiteFooter)).height,
+        SiteFooter.height + 1,
+        reason: 'a line, and the rule above it',
+      );
       final owner = tester.getTopLeft(find.text('© 2026 Wondrous Compass')).dy;
       final link = tester.getTopLeft(find.text('Privacy')).dy;
       expect((owner - link).abs() < 12, isTrue, reason: 'on one line');
     });
 
-    testWidgets('puts its parts one under another where there is no room for a line, and does not overflow',
-        (tester) async {
+    testWidgets('puts its parts one under another where there is no room for a line, and does not overflow', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: Scaffold(
-          bottomNavigationBar: SiteFooter(
-            note: 'An unofficial Guild Wars 2 companion. Not affiliated with ArenaNet or NCSOFT.',
-            links: [
-              (label: 'Privacy', onTap: () {}),
-              (label: 'Terms', onTap: () {}),
-              (label: 'Source code', onTap: () {})
-            ],
-            year: 2026,
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: Scaffold(
+            bottomNavigationBar: SiteFooter(
+              note: 'An unofficial Guild Wars 2 companion. Not affiliated with ArenaNet or NCSOFT.',
+              links: [
+                (label: 'Privacy', onTap: () {}),
+                (label: 'Terms', onTap: () {}),
+                (label: 'Source code', onTap: () {}),
+              ],
+              year: 2026,
+            ),
           ),
         ),
-      ));
+      );
       expect(tester.takeException(), isNull);
       expect(find.text('© 2026 Wondrous Compass'), findsOneWidget);
       expect(find.text('Source code'), findsOneWidget);
@@ -333,32 +367,42 @@ void main() {
     });
 
     testWidgets('says whose it is and the year, the year of the day when none is given', (tester) async {
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [], year: 2031)),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: const Scaffold(
+            bottomNavigationBar: SiteFooter(note: 'note', links: [], year: 2031),
+          ),
+        ),
+      );
       expect(find.text('© 2031 Wondrous Compass'), findsOneWidget);
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: const Scaffold(bottomNavigationBar: SiteFooter(note: 'note', links: [])),
-      ));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: const Scaffold(
+            bottomNavigationBar: SiteFooter(note: 'note', links: []),
+          ),
+        ),
+      );
       expect(find.text('© ${DateTime.now().year} Wondrous Compass'), findsOneWidget);
     });
 
     testWidgets('has the note and the links, which are followed', (tester) async {
       final followed = <String>[];
-      await tester.pumpWidget(MaterialApp(
-        theme: buildTheme(),
-        home: Scaffold(
-          bottomNavigationBar: SiteFooter(
-            note: 'An unofficial companion',
-            links: [
-              (label: 'Privacy', onTap: () => followed.add('privacy')),
-              (label: 'Source code', onTap: () => followed.add('source')),
-            ],
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildTheme(),
+          home: Scaffold(
+            bottomNavigationBar: SiteFooter(
+              note: 'An unofficial companion',
+              links: [
+                (label: 'Privacy', onTap: () => followed.add('privacy')),
+                (label: 'Source code', onTap: () => followed.add('source')),
+              ],
+            ),
           ),
         ),
-      ));
+      );
       expect(find.text('An unofficial companion'), findsOneWidget);
       await tester.tap(find.text('Privacy'));
       await tester.tap(find.text('Source code'));

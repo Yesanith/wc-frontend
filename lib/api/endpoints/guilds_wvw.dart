@@ -15,8 +15,9 @@ extension Gw2GuildWvwApi on Gw2Api {
   Future<List<Json>> guildPart(String id, String part) async => _list(await cachedGet('/guild/$id/$part'));
 
   /// upgrade ids the guild has built
-  Future<List<int>> guildUpgradeIds(String id) async =>
-      [for (final v in (await cachedGet('/guild/$id/upgrades') as List)) asInt(v)];
+  Future<List<int>> guildUpgradeIds(String id) async => [
+    for (final v in (await cachedGet('/guild/$id/upgrades') as List)) asInt(v),
+  ];
 
   Future<Json?> wvwMatch(int team) async {
     try {

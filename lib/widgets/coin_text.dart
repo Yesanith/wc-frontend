@@ -17,19 +17,30 @@ class CoinText extends StatelessWidget {
     final unit = TextStyle(fontSize: size * 0.75, fontWeight: FontWeight.w800);
     final value = TextStyle(fontSize: size, fontWeight: FontWeight.w800, color: negative ? AppColors.red : null);
     return Text.rich(
-      TextSpan(children: [
-        if (negative) TextSpan(text: '-', style: value),
-        if (c.gold > 0) ...[
-          TextSpan(text: fmtInt(c.gold), style: value),
-          TextSpan(text: 'g ', style: unit.copyWith(color: AppColors.gold)),
+      TextSpan(
+        children: [
+          if (negative) TextSpan(text: '-', style: value),
+          if (c.gold > 0) ...[
+            TextSpan(text: fmtInt(c.gold), style: value),
+            TextSpan(
+              text: 'g ',
+              style: unit.copyWith(color: AppColors.gold),
+            ),
+          ],
+          if (c.gold > 0 || c.silver > 0) ...[
+            TextSpan(text: '${c.silver}', style: value),
+            TextSpan(
+              text: 's ',
+              style: unit.copyWith(color: AppColors.silver),
+            ),
+          ],
+          TextSpan(text: '${c.copper}', style: value),
+          TextSpan(
+            text: 'c',
+            style: unit.copyWith(color: AppColors.copper),
+          ),
         ],
-        if (c.gold > 0 || c.silver > 0) ...[
-          TextSpan(text: '${c.silver}', style: value),
-          TextSpan(text: 's ', style: unit.copyWith(color: AppColors.silver)),
-        ],
-        TextSpan(text: '${c.copper}', style: value),
-        TextSpan(text: 'c', style: unit.copyWith(color: AppColors.copper)),
-      ]),
+      ),
     );
   }
 }
@@ -54,20 +65,20 @@ class CoinDots extends StatelessWidget {
       fontFeatures: const [FontFeature.tabularFigures()],
     );
     Widget part(int v, Color coin) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(fmtInt(v), style: style),
-            const SizedBox(width: 3),
-            Container(
-              width: size * 0.62,
-              height: size * 0.62,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(colors: [Color.lerp(coin, Colors.white, 0.35)!, coin]),
-              ),
-            ),
-          ],
-        );
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(fmtInt(v), style: style),
+        const SizedBox(width: 3),
+        Container(
+          width: size * 0.62,
+          height: size * 0.62,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(colors: [Color.lerp(coin, Colors.white, 0.35)!, coin]),
+          ),
+        ),
+      ],
+    );
     return Wrap(
       spacing: size * 0.45,
       crossAxisAlignment: WrapCrossAlignment.center,

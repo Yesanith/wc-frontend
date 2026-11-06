@@ -23,13 +23,15 @@ final walletProvider = FutureProvider<List<WalletEntry>>((ref) async {
   for (final e in raw) {
     final id = asInt(e['id']);
     final c = cur[id];
-    list.add(WalletEntry(
-      id,
-      asInt(e['value']),
-      (c?['name'] as String?) ?? 'Currency #$id',
-      c?['icon'] as String?,
-      c == null ? 9999 : asInt(c['order']),
-    ));
+    list.add(
+      WalletEntry(
+        id,
+        asInt(e['value']),
+        (c?['name'] as String?) ?? 'Currency #$id',
+        c?['icon'] as String?,
+        c == null ? 9999 : asInt(c['order']),
+      ),
+    );
   }
   list.sort((a, b) => a.order.compareTo(b.order));
   return list;
@@ -76,7 +78,7 @@ final accountTotalsProvider = FutureProvider<Map<int, int>>((ref) async {
   // armory legendaries show up in equipment as well, count them only once
   final armory = {
     for (final row in results[3])
-      if (row != null) asInt(row['id'])
+      if (row != null) asInt(row['id']),
   };
   final chars = await charsFuture;
   for (final c in chars) {
@@ -138,7 +140,7 @@ final ownedPlacesProvider = FutureProvider<Map<int, Map<OwnedPlace, int>>>((ref)
   }
   final armory = {
     for (final row in results[3])
-      if (row != null) asInt(row['id'])
+      if (row != null) asInt(row['id']),
   };
   for (final c in await charsFuture) {
     final name = '${c['name'] ?? ''}';
@@ -158,15 +160,17 @@ final ownedPlacesProvider = FutureProvider<Map<int, Map<OwnedPlace, int>>>((ref)
 // extras
 
 /// recipe ids this account has learned
-final learnedRecipesProvider =
-    FutureProvider<Set<int>>((ref) async => (await accountApi(ref).learnedRecipes()).toSet());
+final learnedRecipesProvider = FutureProvider<Set<int>>(
+  (ref) async => (await accountApi(ref).learnedRecipes()).toSet(),
+);
 
 /// {'luck': n}
 final accountLuckProvider = FutureProvider<Map<String, int>>((ref) => accountApi(ref).accountCounters('/account/luck'));
 
 /// fractal augmentations and similar account wide counters
-final accountProgressionProvider =
-    FutureProvider<Map<String, int>>((ref) => accountApi(ref).accountCounters('/account/progression'));
+final accountProgressionProvider = FutureProvider<Map<String, int>>(
+  (ref) => accountApi(ref).accountCounters('/account/progression'),
+);
 
 final accountWvwProvider = FutureProvider<Json>((ref) => accountApi(ref).accountWvw());
 

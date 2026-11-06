@@ -72,10 +72,11 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
       // too many tags, or a language the forum has no tag for, which a page that chose before may have: said as it is, and not as a text that is too long
       final tags = problems.contains(RecruitField.tags) || problems.contains(RecruitField.languages);
       showToast(
-          context,
-          tags
-              ? s.t('rec_f_tags_hint', {'n': _draft.lookingFor.length + _draft.languages.length})
-              : s.t('rec_err_invalid'));
+        context,
+        tags
+            ? s.t('rec_f_tags_hint', {'n': _draft.lookingFor.length + _draft.languages.length})
+            : s.t('rec_err_invalid'),
+      );
       return;
     }
     // a page that is shown to everybody stays whole
@@ -139,7 +140,8 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     final page = ref.watch(recruitPageProvider(widget.guild.guildId));
     return Scaffold(
       appBar: AppBar(
-          title: Text('${s.t('rec_editor')} · ${widget.guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis)),
+        title: Text('${s.t('rec_editor')} · ${widget.guild.title}', maxLines: 1, overflow: TextOverflow.ellipsis),
+      ),
       body: AsyncView<RecruitPage?>(
         value: page,
         onRetry: () => ref.invalidate(recruitPageProvider(widget.guild.guildId)),
@@ -159,10 +161,12 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     // a language the page has that the app offers no choice for stays a chip, so that it can be taken off
     final languages = [...recruitLanguages, ..._draft.languages.where((l) => !recruitLanguages.contains(l))];
     Widget label(String text) => Padding(
-          padding: const EdgeInsets.only(top: 18, bottom: 6),
-          child: Text(text.toUpperCase(),
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
-        );
+      padding: const EdgeInsets.only(top: 18, bottom: 6),
+      child: Text(
+        text.toUpperCase(),
+        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint),
+      ),
+    );
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
@@ -200,13 +204,15 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
             s.t('rec_f_tags_hint', {'n': chosen}),
             key: const Key('rec-tags-hint'),
             style: TextStyle(
-                fontSize: 12,
-                height: 1.4,
-                color: chosen > recruitTagsMax ||
-                        _draft.lookingFor.length > recruitLookingForMax ||
-                        _draft.problems().contains(RecruitField.languages)
-                    ? AppColors.amber
-                    : AppColors.hint),
+              fontSize: 12,
+              height: 1.4,
+              color:
+                  chosen > recruitTagsMax ||
+                      _draft.lookingFor.length > recruitLookingForMax ||
+                      _draft.problems().contains(RecruitField.languages)
+                  ? AppColors.amber
+                  : AppColors.hint,
+            ),
           ),
         ),
         label(s.t('rec_page_looking_for')),
@@ -243,7 +249,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
         label(s.t('rec_page_region')),
         SegmentedButton<RecruitRegion>(
           segments: [
-            for (final r in RecruitRegion.values) ButtonSegment(value: r, label: Text(recruitRegionLabel(s, r)))
+            for (final r in RecruitRegion.values) ButtonSegment(value: r, label: Text(recruitRegionLabel(s, r))),
           ],
           selected: {_draft.region},
           onSelectionChanged: (v) => _set(_draft.copyWith(region: v.first)),

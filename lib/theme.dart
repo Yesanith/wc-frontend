@@ -188,11 +188,11 @@ class AppRadius {
 /// headlines and titles, in the serif of the journal: Marcellus, which has one
 /// weight. scripts it lacks fall back to Noto Sans
 TextStyle display(double size, {Color? color}) => GoogleFonts.marcellus(
-      fontSize: size,
-      fontWeight: FontWeight.w400,
-      color: color ?? AppColors.text,
-      letterSpacing: 0.3,
-    ).copyWith(fontFamilyFallback: const ['Noto Sans']);
+  fontSize: size,
+  fontWeight: FontWeight.w400,
+  color: color ?? AppColors.text,
+  letterSpacing: 0.3,
+).copyWith(fontFamilyFallback: const ['Noto Sans']);
 
 /// the theme of the palette in use. build it again after [AppColors.use]
 ThemeData buildTheme() {
@@ -221,10 +221,8 @@ ThemeData buildTheme() {
   const card = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(AppRadius.card)));
   const window = RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(AppRadius.window)));
   return base.copyWith(
-    textTheme: GoogleFonts.sourceSans3TextTheme(base.textTheme).apply(
-      bodyColor: AppColors.text,
-      displayColor: AppColors.text,
-    ),
+    textTheme: GoogleFonts.sourceSans3TextTheme(base.textTheme)
+        .apply(bodyColor: AppColors.text, displayColor: AppColors.text),
     // the bar across the top is dark ink in both palettes, over a gold rule
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.header,
@@ -240,19 +238,25 @@ ThemeData buildTheme() {
     // gold track and a dark knob when on, a quiet grey knob when off
     switchTheme: SwitchThemeData(
       trackColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? AppColors.gold : AppColors.surface2),
+        (s) => s.contains(WidgetState.selected) ? AppColors.gold : AppColors.surface2,
+      ),
       thumbColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? AppColors.onGold : AppColors.textSoft),
+        (s) => s.contains(WidgetState.selected) ? AppColors.onGold : AppColors.textSoft,
+      ),
       trackOutlineColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? AppColors.goldSoft.withValues(alpha: 0.6) : AppColors.line),
+        (s) => s.contains(WidgetState.selected) ? AppColors.goldSoft.withValues(alpha: 0.6) : AppColors.line,
+      ),
     ),
     // pills: gold tinted with a gold rim when picked, quiet otherwise
     chipTheme: ChipThemeData(
       shape: stadium,
       backgroundColor: AppColors.surface,
       selectedColor: AppColors.gold.withValues(alpha: 0.18),
-      side: WidgetStateBorderSide.resolveWith((s) =>
-          BorderSide(color: s.contains(WidgetState.selected) ? AppColors.gold.withValues(alpha: 0.6) : AppColors.line)),
+      side: WidgetStateBorderSide.resolveWith(
+        (s) => BorderSide(
+          color: s.contains(WidgetState.selected) ? AppColors.gold.withValues(alpha: 0.6) : AppColors.line,
+        ),
+      ),
       labelStyle: TextStyle(color: AppColors.textSoft, fontWeight: FontWeight.w600),
       secondaryLabelStyle: TextStyle(color: AppColors.goldSoft, fontWeight: FontWeight.w700),
       checkmarkColor: AppColors.goldSoft,
@@ -326,12 +330,16 @@ ThemeData buildTheme() {
       surfaceTintColor: Colors.transparent,
       indicatorColor: AppColors.gold.withValues(alpha: 0.16),
       indicatorShape: frame,
-      iconTheme: WidgetStateProperty.resolveWith((s) =>
-          IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.goldSoft : AppColors.muted, size: 22)),
-      labelTextStyle: WidgetStateProperty.resolveWith((s) => TextStyle(
+      iconTheme: WidgetStateProperty.resolveWith(
+        (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.goldSoft : AppColors.muted, size: 22),
+      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (s) => TextStyle(
           fontSize: 14,
           fontWeight: s.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-          color: s.contains(WidgetState.selected) ? AppColors.text : AppColors.textSoft)),
+          color: s.contains(WidgetState.selected) ? AppColors.text : AppColors.textSoft,
+        ),
+      ),
     ),
     listTileTheme: ListTileThemeData(iconColor: AppColors.muted),
     cardTheme: CardThemeData(color: AppColors.surface, surfaceTintColor: Colors.transparent, shape: card),

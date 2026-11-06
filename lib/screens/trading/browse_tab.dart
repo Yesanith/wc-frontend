@@ -84,7 +84,10 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(vertical: 12),
             children: [
-              Padding(padding: const EdgeInsets.fromLTRB(20, 4, 20, 8), child: Text(title, style: display(17))),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                child: Text(title, style: display(17)),
+              ),
               for (final o in options)
                 ListTile(
                   title: Text(o.$2),
@@ -152,14 +155,14 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
         }
         final ids = filterMarket(list, _f, nameOf: namesFrom(index), prices: prices.valueOrNull);
         Widget chip(String label, bool on, VoidCallback onTap, {IconData? icon}) => Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: FilterChip(
-                avatar: icon == null ? null : Icon(icon, size: 16),
-                label: Text(label),
-                selected: on,
-                onSelected: (_) => onTap(),
-              ),
-            );
+          padding: const EdgeInsets.only(right: 8),
+          child: FilterChip(
+            avatar: icon == null ? null : Icon(icon, size: 16),
+            label: Text(label),
+            selected: on,
+            onSelected: (_) => onTap(),
+          ),
+        );
         final levelOn = _f.minLevel > 0 || _f.maxLevel < 80;
         final header = <Widget>[
           TextField(
@@ -188,18 +191,30 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                chip(_f.type == null ? s.t('item_type') : _typeLabel(s, _f.type!), _f.type != null,
-                    () => _pickType(list),
-                    icon: Icons.category_outlined),
+                chip(
+                  _f.type == null ? s.t('item_type') : _typeLabel(s, _f.type!),
+                  _f.type != null,
+                  () => _pickType(list),
+                  icon: Icons.category_outlined,
+                ),
                 if (_f.type != null)
-                  chip(_f.subtype == null ? s.t('item_subtype') : spacedType(_f.subtype!), _f.subtype != null,
-                      () => _pickSubtype(list)),
-                chip(levelOn ? s.t('level_range_n', {'a': _f.minLevel, 'b': _f.maxLevel}) : s.t('level'), levelOn,
-                    _pickLevel,
-                    icon: Icons.signal_cellular_alt),
+                  chip(
+                    _f.subtype == null ? s.t('item_subtype') : spacedType(_f.subtype!),
+                    _f.subtype != null,
+                    () => _pickSubtype(list),
+                  ),
+                chip(
+                  levelOn ? s.t('level_range_n', {'a': _f.minLevel, 'b': _f.maxLevel}) : s.t('level'),
+                  levelOn,
+                  _pickLevel,
+                  icon: Icons.signal_cellular_alt,
+                ),
                 chip(s.t('msort_${_f.sort.name}'), true, _pickSort, icon: Icons.sort),
                 chip(
-                    s.t('only_listed'), _f.minSupply > 0, () => _set(_f.copyWith(minSupply: _f.minSupply > 0 ? 0 : 1))),
+                  s.t('only_listed'),
+                  _f.minSupply > 0,
+                  () => _set(_f.copyWith(minSupply: _f.minSupply > 0 ? 0 : 1)),
+                ),
               ],
             ),
           ),
@@ -230,12 +245,16 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
           Row(
             children: [
               Expanded(
-                child: Text(s.t('n_items', {'n': fmtInt(ids.length)}),
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
+                child: Text(
+                  s.t('n_items', {'n': fmtInt(ids.length)}),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft),
+                ),
               ),
               if (prices.isLoading)
-                Text(s.t('prices_loading', {'n': (progress * 100).round()}),
-                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                Text(
+                  s.t('prices_loading', {'n': (progress * 100).round()}),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted),
+                ),
               if (prices.hasError)
                 TextButton(onPressed: () => ref.invalidate(allPricesProvider), child: Text(s.t('retry'))),
             ],
@@ -243,7 +262,11 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
           if (prices.isLoading) ...[
             const SizedBox(height: 6),
             LinearProgressIndicator(
-                value: progress, minHeight: 2, color: AppColors.gold, backgroundColor: AppColors.track),
+              value: progress,
+              minHeight: 2,
+              color: AppColors.gold,
+              backgroundColor: AppColors.track,
+            ),
           ],
           const SizedBox(height: 10),
         ];

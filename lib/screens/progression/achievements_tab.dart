@@ -34,18 +34,14 @@ class _AchievementsTab extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  if (total != null && total > 0) ...[
-                    const SizedBox(height: 12),
-                    Bar(value: summary.done / total),
-                  ],
+                  if (total != null && total > 0) ...[const SizedBox(height: 12), Bar(value: summary.done / total)],
                 ],
               ),
             ),
           const SizedBox(height: 12),
           AppCard(
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const AchievementGroupsScreen()),
-            ),
+            onTap: () =>
+                Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const AchievementGroupsScreen())),
             child: Row(
               children: [
                 Icon(Icons.list_alt_outlined, size: 20, color: AppColors.gold),
@@ -81,15 +77,18 @@ class _AchievementsTab extends ConsumerWidget {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text(a.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                  child: Text(
+                                    a.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
-                                Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                    style:
-                                        TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                Text(
+                                  '${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted),
+                                ),
                                 AchievementPinButton(id: a.id),
                               ],
                             ),

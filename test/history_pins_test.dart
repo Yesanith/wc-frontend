@@ -9,17 +9,17 @@ import 'package:wondrous_compass/widgets/expansion_badge.dart';
 
 Future<ProviderContainer> _container([Map<String, Object> prefs = const {}]) async {
   SharedPreferences.setMockInitialValues(prefs);
-  final container = ProviderContainer(overrides: [
-    prefsProvider.overrideWithValue(await SharedPreferences.getInstance()),
-  ]);
+  final container = ProviderContainer(
+    overrides: [prefsProvider.overrideWithValue(await SharedPreferences.getInstance())],
+  );
   addTearDown(container.dispose);
   return container;
 }
 
 Map<String, dynamic> _price(int buy, int sell) => {
-      'buys': {'unit_price': buy, 'quantity': 1},
-      'sells': {'unit_price': sell, 'quantity': 1},
-    };
+  'buys': {'unit_price': buy, 'quantity': 1},
+  'sells': {'unit_price': sell, 'quantity': 1},
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

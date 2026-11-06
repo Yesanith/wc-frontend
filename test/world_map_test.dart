@@ -19,53 +19,53 @@ void main() {
                 'type': 'waypoint',
                 'name': 'Shaemoor Waypoint',
                 'coord': [1, 2],
-                'chat_link': '[&BAAA]'
+                'chat_link': '[&BAAA]',
               },
               '2': {
                 'type': 'landmark',
                 'name': 'Shaemoor',
                 'coord': [3, 4],
-                'chat_link': '[&BBBB]'
+                'chat_link': '[&BBBB]',
               },
               '3': {
                 'type': 'vista',
-                'coord': [5, 6]
+                'coord': [5, 6],
               },
               '4': {
                 'type': 'something_new',
-                'coord': [7, 8]
+                'coord': [7, 8],
               },
             },
             'tasks': {
               '9': {
                 'objective': 'Help Farmer Diah',
                 'coord': [9, 10],
-                'chat_link': '[&BCCC]'
+                'chat_link': '[&BCCC]',
               },
             },
             'skill_challenges': [
               {
                 'id': '0-4',
-                'coord': [11, 12]
+                'coord': [11, 12],
               },
             ],
             'mastery_points': [
               {
                 'id': 1,
                 'region': 'Tyria',
-                'coord': [13, 14]
+                'coord': [13, 14],
               },
             ],
             'sectors': {
               '20': {
                 'name': 'Shaemoor Fields',
-                'coord': [15, 16]
+                'coord': [15, 16],
               },
             },
           },
           '99': {
             'name': '',
-            'label_coord': [0, 0]
+            'label_coord': [0, 0],
           },
         },
       },
@@ -76,7 +76,9 @@ void main() {
     final markers = extractMarkers(floor).map(MapMarker.fromRow).whereType<MapMarker>().toList();
     final kinds = markers.map((m) => m.kind).toList();
     expect(
-        kinds, containsAll(['region', 'map', 'waypoint', 'landmark', 'vista', 'heart', 'hero', 'mastery', 'sector']));
+      kinds,
+      containsAll(['region', 'map', 'waypoint', 'landmark', 'vista', 'heart', 'hero', 'mastery', 'sector']),
+    );
     // unknown point types and nameless maps are skipped
     expect(markers.where((m) => m.name == 'something_new'), isEmpty);
     expect(markers.where((m) => m.kind == 'map').map((m) => m.name), ['Queensdale']);

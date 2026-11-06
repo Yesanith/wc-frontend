@@ -62,8 +62,11 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
             return Padding(
               padding: const EdgeInsets.all(24),
               child: Center(
-                child: Text(s.t('no_recipe'),
-                    textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted, height: 1.5)),
+                child: Text(
+                  s.t('no_recipe'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.muted, height: 1.5),
+                ),
               ),
             );
           }
@@ -143,9 +146,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
               Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Column(
-                  children: [
-                    for (final child in plan.children) _CraftNodeTile(line: child, totals: totals),
-                  ],
+                  children: [for (final child in plan.children) _CraftNodeTile(line: child, totals: totals)],
                 ),
               ),
             ],
@@ -214,8 +215,10 @@ class _CostPanel extends ConsumerWidget {
           ),
           if (unpriced > 0) ...[
             const SizedBox(height: 6),
-            Text(s.t('unpriced_materials', {'n': unpriced}),
-                style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
+            Text(
+              s.t('unpriced_materials', {'n': unpriced}),
+              style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint),
+            ),
           ],
           if (buyInstead > 0) ...[
             const SizedBox(height: 10),
@@ -271,20 +274,30 @@ class MaterialRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w700, color: done ? AppColors.muted : AppColors.text)),
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: done ? AppColors.muted : AppColors.text,
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   Bar(value: need == 0 ? 0 : have / need, color: done ? AppColors.green : AppColors.gold),
                 ],
               ),
             ),
             const SizedBox(width: 10),
-            Text('${fmtInt(have)} / ${fmtInt(need)}',
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w800, color: done ? AppColors.green : AppColors.gold)),
+            Text(
+              '${fmtInt(have)} / ${fmtInt(need)}',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: done ? AppColors.green : AppColors.gold,
+              ),
+            ),
           ],
         ),
       ),
@@ -306,17 +319,22 @@ class _CraftNodeTile extends StatelessWidget {
         ItemIcon(url: line.node.item?['icon'] as String?, rarity: line.node.item?['rarity'] as String?, size: 30),
         const SizedBox(width: 10),
         Expanded(
-          child: Text('${fmtInt(line.count)} x ${line.name}',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          child: Text(
+            '${fmtInt(line.count)} x ${line.name}',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+          ),
         ),
         if (have > 0)
-          Text(fmtInt(have),
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: have >= line.count ? AppColors.green : AppColors.muted)),
+          Text(
+            fmtInt(have),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              color: have >= line.count ? AppColors.green : AppColors.muted,
+            ),
+          ),
       ],
     );
 
@@ -331,9 +349,7 @@ class _CraftNodeTile extends StatelessWidget {
         iconColor: AppColors.gold,
         collapsedIconColor: AppColors.muted,
         title: title,
-        children: [
-          for (final child in line.children) _CraftNodeTile(line: child, totals: totals),
-        ],
+        children: [for (final child in line.children) _CraftNodeTile(line: child, totals: totals)],
       ),
     );
   }

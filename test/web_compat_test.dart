@@ -57,8 +57,10 @@ void main() {
 
   group('signing in from a browser', () {
     test('the page the player comes back to is the app\'s address as configured', () {
-      expect(webAuthRedirect('https://yesanith.github.io/wc-frontend/app/', Uri.parse('http://localhost:8080/')),
-          'https://yesanith.github.io/wc-frontend/app/');
+      expect(
+        webAuthRedirect('https://yesanith.github.io/wc-frontend/app/', Uri.parse('http://localhost:8080/')),
+        'https://yesanith.github.io/wc-frontend/app/',
+      );
     });
 
     test('without one, the address of the page, with no query, fragment or index file', () {

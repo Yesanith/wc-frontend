@@ -41,7 +41,9 @@ class SiteFooter extends StatelessWidget {
       color: AppColors.navBg,
       child: Container(
         constraints: const BoxConstraints(minHeight: height),
-        decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.line)),
+        ),
         child: LayoutBuilder(
           builder: (context, box) {
             if (box.maxWidth < 760) {
@@ -107,10 +109,7 @@ class SitePageHeading extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (kicker != null) ...[
-          Kicker(kicker!.toUpperCase(), color: AppColors.gold),
-          const SizedBox(height: 4),
-        ],
+        if (kicker != null) ...[Kicker(kicker!.toUpperCase(), color: AppColors.gold), const SizedBox(height: 4)],
         Text(title, style: display(30)),
         const SizedBox(height: 10),
         Container(

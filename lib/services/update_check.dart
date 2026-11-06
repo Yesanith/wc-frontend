@@ -25,9 +25,8 @@ class UpdateInfo {
 /// always sees a release as newer
 int compareVersions(String a, String b) {
   List<int> parts(String v) => [
-        for (final piece in v.replaceAll('v', '').split('.'))
-          int.tryParse(piece.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
-      ];
+    for (final piece in v.replaceAll('v', '').split('.')) int.tryParse(piece.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+  ];
   final left = parts(a);
   final right = parts(b);
   if (b == 'dev') return 1;
@@ -40,8 +39,9 @@ int compareVersions(String a, String b) {
 }
 
 final updateProvider = FutureProvider<UpdateInfo?>((ref) async {
-  final res = await http.get(Uri.parse(_releasesApi),
-      headers: {'Accept': 'application/vnd.github+json'}).timeout(const Duration(seconds: 15));
+  final res = await http
+      .get(Uri.parse(_releasesApi), headers: {'Accept': 'application/vnd.github+json'})
+      .timeout(const Duration(seconds: 15));
   if (res.statusCode != 200) return null;
   final data = jsonDecode(utf8.decode(res.bodyBytes));
   if (data is! Map) return null;

@@ -82,11 +82,7 @@ CraftLine _planFrom(Map<int, int> stock, CraftNode root, int count) {
 /// scaling happens on device, so changing the quantity never refetches
 CraftLine planFor(CraftNode node, int count) {
   final runs = node.outputCount <= 0 ? count : (count / node.outputCount).ceil();
-  return CraftLine(
-    node,
-    count,
-    [for (final child in node.children) planFor(child, child.perRun * runs)],
-  );
+  return CraftLine(node, count, [for (final child in node.children) planFor(child, child.perRun * runs)]);
 }
 
 /// ids a book tree touches, so their details come in one batched request
@@ -160,13 +156,13 @@ Future<CraftNode> _liveTree(Gw2Api api, int rootId) async {
     ]);
     final item = (lookups[0] as Map<int, Json>)[itemId];
     CraftNode leaf() => CraftNode(
-          itemId: itemId,
-          item: item,
-          perRun: perRun,
-          outputCount: 1,
-          children: const [],
-          disciplines: const [],
-        );
+      itemId: itemId,
+      item: item,
+      perRun: perRun,
+      outputCount: 1,
+      children: const [],
+      disciplines: const [],
+    );
     final recipeIds = lookups[1] as List<int>;
     if (recipeIds.isEmpty) return leaf();
     final recipes = await pool.run(() => api.recipes(recipeIds));
@@ -179,12 +175,10 @@ Future<CraftNode> _liveTree(Gw2Api api, int rootId) async {
     final children = await Future.wait([
       for (final ingredient in (recipe['ingredients'] as List?) ?? const [])
         if (ingredient is Map && asInt(ingredient['item_id'] ?? ingredient['id']) > 0)
-          expand(
-            asInt(ingredient['item_id'] ?? ingredient['id']),
-            asInt(ingredient['count']),
-            {...seen, itemId},
-            depth + 1,
-          ),
+          expand(asInt(ingredient['item_id'] ?? ingredient['id']), asInt(ingredient['count']), {
+            ...seen,
+            itemId,
+          }, depth + 1),
     ]);
     return CraftNode(
       itemId: itemId,
@@ -265,8 +259,11 @@ List<UsedIn> mergeUsedIn(RecipeBook book, List<int> apiIds, Map<int, Json> apiRe
     if (seen == null) {
       byOutput[output] = UsedIn(output, disciplines, recipeId: recipeId);
     } else {
-      byOutput[output] = UsedIn(output, {...seen.disciplines, ...disciplines}.toList(),
-          recipeId: seen.recipeId > 0 ? seen.recipeId : recipeId);
+      byOutput[output] = UsedIn(
+        output,
+        {...seen.disciplines, ...disciplines}.toList(),
+        recipeId: seen.recipeId > 0 ? seen.recipeId : recipeId,
+      );
     }
   }
 
@@ -319,9 +316,11 @@ final characterRecipesProvider = FutureProvider.autoDispose.family<List<UsedIn>,
     if (known != null) {
       out.add(UsedIn(known.output, known.disciplines, recipeId: id));
     } else if (raw[id] != null) {
-      out.add(UsedIn(
-          asInt(raw[id]!['output_item_id']), [for (final d in (raw[id]!['disciplines'] as List?) ?? const []) '$d'],
-          recipeId: id));
+      out.add(
+        UsedIn(asInt(raw[id]!['output_item_id']), [
+          for (final d in (raw[id]!['disciplines'] as List?) ?? const []) '$d',
+        ], recipeId: id),
+      );
     }
   }
   return out;

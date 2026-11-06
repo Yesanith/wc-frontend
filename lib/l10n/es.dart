@@ -1,44 +1,32 @@
 /// spanish ui strings. `{name}` placeholders are filled by S.t
 const esStrings = <String, String>{
-  'story_unmatched':
-      '{n} misiones que el juego registró para este personaje no están en su lista de misiones de historia, así que no se cuentan arriba.',
-  'progress_hero_unavailable':
-      'La API del juego no devuelve nada sobre los desafíos de héroe (un problema conocido de ArenaNet), así que no se pueden mostrar aquí.',
-  'progress_training_unavailable':
-      'La API del juego no devuelve nada sobre el entrenamiento de personajes (un problema conocido de ArenaNet), así que no se puede mostrar aquí.',
-  'story_note':
-      'Cuenta las misiones que el juego ha registrado para este personaje. El total incluye todas las ramas, razas y órdenes, así que una barra rara vez se llena. La historia hecha con otro personaje, o reiniciada, no cuenta aquí.',
-  'gshare_unreviewed':
-      'Aún no lo has confirmado. Hasta entonces, la tesorería, el alijo y el registro siguen ocultos para tus miembros.',
+  'story_unmatched': '{n} misiones que el juego registró para este personaje no están en su lista de misiones de historia, así que no se cuentan arriba.',
+  'progress_hero_unavailable': 'La API del juego no devuelve nada sobre los desafíos de héroe (un problema conocido de ArenaNet), así que no se pueden mostrar aquí.',
+  'progress_training_unavailable': 'La API del juego no devuelve nada sobre el entrenamiento de personajes (un problema conocido de ArenaNet), así que no se puede mostrar aquí.',
+  'story_note': 'Cuenta las misiones que el juego ha registrado para este personaje. El total incluye todas las ramas, razas y órdenes, así que una barra rara vez se llena. La historia hecha con otro personaje, o reiniciada, no cuenta aquí.',
+  'gshare_unreviewed': 'Aún no lo has confirmado. Hasta entonces, la tesorería, el alijo y el registro siguen ocultos para tus miembros.',
   'gshare_confirm': 'Confirmar lo que ven los miembros',
   'gshare_review_title': '¿Qué pueden ver tus miembros?',
-  'gshare_review_intro':
-      'Tu gremio se ha leído desde el juego. Elige lo que los miembros de tu gremio pueden ver en la app. La tesorería, el alijo y el registro muestran quién tomó qué, así que siguen ocultos hasta que confirmes.',
+  'gshare_review_intro': 'Tu gremio se ha leído desde el juego. Elige lo que los miembros de tu gremio pueden ver en la app. La tesorería, el alijo y el registro muestran quién tomó qué, así que siguen ocultos hasta que confirmes.',
   'gshare_later': 'Más tarde',
-  'roster_note_game':
-      'Miembros de este gremio en Wondrous Compass, con el rango que les da el juego. Los rangos que pueden invitar, ascender o expulsar, o editar rangos, pueden crear y gestionar eventos.',
+  'roster_note_game': 'Miembros de este gremio en Wondrous Compass, con el rango que les da el juego. Los rangos que pueden invitar, ascender o expulsar, o editar rangos, pueden crear y gestionar eventos.',
   'roster_manual': 'asignado a mano',
   'roster_follow_game': 'Volver a seguir el rango del juego',
-  'roster_auto':
-      'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
+  'roster_auto': 'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
   'gshare_on': 'Los miembros lo ven',
   'gshare_off': 'Oculto a los miembros',
   'gshare_title': 'Compartido con los miembros del gremio',
-  'gshare_note':
-      'Elige lo que ven los miembros del gremio. Todo se comparte hasta que lo desactives. Tu app lo trae todo al abrirse.',
-  'gshared_note':
-      'El juego muestra la lista de miembros solo al líder del gremio. Estos son los miembros que usan Wondrous Compass, con el rango que les da el juego.',
+  'gshare_note': 'Elige lo que ven los miembros del gremio. Todo se comparte hasta que lo desactives. Tu app lo trae todo al abrirse.',
+  'gshared_note': 'El juego muestra la lista de miembros solo al líder del gremio. Estos son los miembros que usan Wondrous Compass, con el rango que les da el juego.',
   'gshared_not_linked': 'Vincula tu cuenta de GW2 en Ajustes para ver lo que el líder del gremio comparte aquí.',
   'gw2_link_name': 'Vincular {name}',
   'gw2_refreshed': 'Gremios actualizados.',
-  'gw2_refresh_other':
-      'La clave API activa es de una cuenta no vinculada. Vincúlala arriba o cambia a la clave de una cuenta vinculada para actualizar sus gremios.',
+  'gw2_refresh_other': 'La clave API activa es de una cuenta no vinculada. Vincúlala arriba o cambia a la clave de una cuenta vinculada para actualizar sus gremios.',
   'ginfo_result_synced': 'Datos del gremio actualizados.',
   'ginfo_result_too_soon': 'Actualizado hace un momento, inténtalo de nuevo en unos minutos.',
   'ginfo_result_unavailable': 'El juego no dio los datos del gremio ({detail}).',
   'ginfo_result_failed': 'El servidor no pudo guardar los datos del gremio ({detail}).',
-  'ginfo_result_none':
-      'Esta cuenta no lidera ningún gremio que conozca el servidor. Vincúlala con una clave API con el permiso de gremios.',
+  'ginfo_result_none': 'Esta cuenta no lidera ningún gremio que conozca el servidor. Vincúlala con una clave API con el permiso de gremios.',
   'ginfo_result_skipped': 'La cuenta de la clave API activa no está vinculada aquí, no se actualizó nada.',
   'ginfo_level': 'Nivel',
   'ginfo_members': 'Miembros',
@@ -68,17 +56,13 @@ const esStrings = <String, String>{
   'err_no_key': 'Esto necesita una clave API de GW2.',
   'add_api_key': 'Añadir una clave API',
   'guest_continue': 'Continuar sin clave API',
-  'guest_note':
-      'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',
+  'guest_note': 'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',
   'guest': 'Invitado',
   'guest_home_title': 'Estás mirando como invitado',
-  'guest_home_body':
-      'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin clave. Añade una clave API para ver tus personajes, cartera, Cámara del Mago y progreso.',
+  'guest_home_body': 'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin clave. Añade una clave API para ver tus personajes, cartera, Cámara del Mago y progreso.',
   'needs_key_title': 'Esto necesita una clave API',
-  'needs_key_body':
-      'Esta sección muestra tu propia cuenta: personajes, progreso, colecciones y gremios. Añade una clave API de solo lectura de ArenaNet para verla. Todo lo demás funciona sin ella.',
-  'boss_alert_limit':
-      '{n} eventos fijados no tienen aviso: el teléfono admite como máximo {max} avisos programados. Quita algunos, los eventos de cada hora gastan más.',
+  'needs_key_body': 'Esta sección muestra tu propia cuenta: personajes, progreso, colecciones y gremios. Añade una clave API de solo lectura de ArenaNet para verla. Todo lo demás funciona sin ella.',
+  'boss_alert_limit': '{n} eventos fijados no tienen aviso: el teléfono admite como máximo {max} avisos programados. Quita algunos, los eventos de cada hora gastan más.',
   'boss_alerts_title': 'Avisos de eventos del mundo',
   'boss_alerts_note':
       'Un aviso poco antes de cada inicio de los eventos que fijaste, cada día, también con la app cerrada.',
@@ -89,8 +73,7 @@ const esStrings = <String, String>{
   'boss_alert_none': 'Nada fijado aún. Fija eventos en Jefes del mundo.',
   'boss_alert_scheduled': '{pins} fijados, {n} avisos al día',
   'boss_alert_allow': 'Permitir notificaciones',
-  'boss_alert_exact_note':
-      'Android puede retrasar los avisos unos minutos. Para la hora exacta permite alarmas y recordatorios para esta app.',
+  'boss_alert_exact_note': 'Android puede retrasar los avisos unos minutos. Para la hora exacta permite alarmas y recordatorios para esta app.',
   'boss_alert_exact_button': 'Permitir hora exacta',
   'boss_alert_test': 'Enviar un aviso de prueba',
   'boss_alert_test_body':
@@ -104,8 +87,7 @@ const esStrings = <String, String>{
   'event_err_own_role': 'No puedes cambiar tu propio rol.',
   'event_err_not_member': 'Este jugador ya no está en el gremio.',
   'event_delete': 'Eliminar evento',
-  'event_delete_body':
-      'Para un evento creado por error: desaparece para todos, con todas las inscripciones y su mensaje de Discord. Para que siga visible como cancelado, cancélalo en su lugar.',
+  'event_delete_body': 'Para un evento creado por error: desaparece para todos, con todas las inscripciones y su mensaje de Discord. Para que siga visible como cancelado, cancélalo en su lugar.',
   'event_delete_weekly_body':
       'Es una semana de un evento semanal. Elimina solo esta semana o toda la serie con todas sus próximas semanas.',
   'event_delete_week': 'Solo esta semana',
@@ -188,8 +170,7 @@ const esStrings = <String, String>{
   'gw2_link_intro': 'Vincula la cuenta de GW2 de tu clave API activa para unirte aquí a tus gremios.',
   'gw2_link': 'Vincular cuenta de GW2',
   'gw2_refresh': 'Actualizar gremios',
-  'gw2_link_note':
-      'Solo se envía un token de diez minutos que puede leer el nombre de tu cuenta y tus gremios. Tu clave API se queda en este dispositivo.',
+  'gw2_link_note': 'Solo se envía un token de diez minutos que puede leer el nombre de tu cuenta y tus gremios. Tu clave API se queda en este dispositivo.',
   'gw2_linked': '{name} está vinculada',
   'gw2_link_taken': 'Esta cuenta de GW2 ya está vinculada a otra cuenta de Wondrous Compass.',
   'gw2_link_key': 'No se pudo usar la clave API. Necesita el permiso account.',
@@ -200,19 +181,16 @@ const esStrings = <String, String>{
   'guild_role_officer': 'Oficial',
   'guild_role_member': 'Miembro',
   'community_account': 'Cuenta de Wondrous Compass',
-  'community_intro':
-      'Inicia sesión para participar en eventos de gremio, encontrar amigos y conectar el Discord de tu gremio. Tus claves API se quedan en este dispositivo.',
+  'community_intro': 'Inicia sesión para participar en eventos de gremio, encontrar amigos y conectar el Discord de tu gremio. Tus claves API se quedan en este dispositivo.',
   'community_sign_in_discord': 'Iniciar sesión con Discord',
   'community_signed_in': 'Sesión iniciada con Discord',
   'community_sign_out': 'Cerrar sesión',
   'community_delete': 'Eliminar cuenta',
-  'community_delete_body':
-      'Tu cuenta de Wondrous Compass y todo lo asociado se eliminarán para siempre. Tus claves API y el resto de datos de la app en este dispositivo no se ven afectados.',
+  'community_delete_body': 'Tu cuenta de Wondrous Compass y todo lo asociado se eliminarán para siempre. Tus claves API y el resto de datos de la app en este dispositivo no se ven afectados.',
   'community_delete_confirm': 'Eliminar para siempre',
   'community_failed': 'No ha funcionado, inténtalo de nuevo.',
   'module_link_title': 'Blish HUD',
-  'module_link_note':
-      'Vincula el módulo de Blish HUD para ver y crear eventos en el juego. Consigue un código aquí y escríbelo en el módulo. Sirve una vez, durante diez minutos.',
+  'module_link_note': 'Vincula el módulo de Blish HUD para ver y crear eventos en el juego. Consigue un código aquí y escríbelo en el módulo. Sirve una vez, durante diez minutos.',
   'module_link_get': 'Conseguir un código',
   'module_link_expires': 'El código sirve una vez, durante diez minutos.',
   'module_link_copy': 'Copiar código',
@@ -242,8 +220,7 @@ const esStrings = <String, String>{
   'event_starts_in': 'Empieza en {t}',
   'event_ended': 'Ya terminó',
   'gem_history_title': '100 gemas · últimos 30 días',
-  'gem_history_collecting':
-      'Se está reuniendo el historial, el gráfico aparecerá tras los próximos registros. La tasa se guarda cada pocas horas.',
+  'gem_history_collecting': 'Se está reuniendo el historial, el gráfico aparecerá tras los próximos registros. La tasa se guarda cada pocas horas.',
   'gem_buy_100': 'Compra',
   'gem_sell_100': 'Venta',
   'gem_range': '100 gemas costaron entre {lo} y {hi} de oro',
@@ -380,8 +357,7 @@ const esStrings = <String, String>{
   'add_account': 'Añadir otra cuenta',
   'guilds': 'Gremios',
   'guild': 'Gremio',
-  'guilds_note':
-      'Los datos del gremio necesitan el permiso guilds, y el arcón y el registro solo los ven los miembros con el rango adecuado.',
+  'guilds_note': 'Los datos del gremio necesitan el permiso guilds, y el arcón y el registro solo los ven los miembros con el rango adecuado.',
   'no_guilds': 'Esta cuenta no pertenece a ningún gremio.',
   'treasury': 'Tesorería',
   'stash': 'Arcón',
@@ -423,8 +399,7 @@ const esStrings = <String, String>{
   'version': 'Versión',
   'needs_permission':
       'A tu clave API le falta el permiso {p}. Crea una clave nueva con ese permiso y cámbiala en los ajustes.',
-  'guild_rank_needed':
-      'Tu clave API está bien. El juego solo abre esto a los líderes del gremio. Aparece aquí cuando la app del líder lo comparte: aún no lo ha hecho, o el líder desactivó el compartir.',
+  'guild_rank_needed': 'Tu clave API está bien. El juego solo abre esto a los líderes del gremio. Aparece aquí cuando la app del líder lo comparte: aún no lo ha hecho, o el líder desactivó el compartir.',
   'browse_all': 'Ver todos los logros',
   'instances': 'Instancias',
   'raids': 'Incursiones',
@@ -468,8 +443,7 @@ const esStrings = <String, String>{
   'copied': 'Copiado.',
   'copy_page_link': 'Copiar enlace a esta página',
   'recruitment': 'Reclutamiento',
-  'rec_intro':
-      'Gremios que buscan jugadores. Cualquiera puede leer estas páginas. Contacta con un gremio con los datos que ofrece.',
+  'rec_intro': 'Gremios que buscan jugadores. Cualquiera puede leer estas páginas. Contacta con un gremio con los datos que ofrece.',
   'rec_unavailable': 'Las páginas de reclutamiento no están disponibles en esta versión.',
   'rec_search': 'Buscar por nombre, etiqueta o título',
   'rec_region_any': 'Cualquier región',
@@ -515,14 +489,11 @@ const esStrings = <String, String>{
   'rec_f_discord': 'Invitación de Discord (https://discord.gg/…)',
   'rec_f_contact': 'Nombre al que susurrar en el juego (opcional)',
   'rec_f_languages': 'Idioma',
-  'rec_f_tags_hint':
-      'La página se publica en el foro del servidor oficial de Discord con estas etiquetas, y una publicación tiene 5 como máximo: elige un idioma y hasta 4 cosas que buscáis. {n} de 5 elegidas.',
+  'rec_f_tags_hint': 'La página se publica en el foro del servidor oficial de Discord con estas etiquetas, y una publicación tiene 5 como máximo: elige un idioma y hasta 4 cosas que buscáis. {n} de 5 elegidas.',
   'rec_f_recruiting': 'Reclutando ahora mismo',
-  'rec_f_recruiting_hint':
-      'Si lo desactivas, la publicación de esta página en el foro del servidor oficial de Discord se bloquea: nadie puede responderla.',
+  'rec_f_recruiting_hint': 'Si lo desactivas, la publicación de esta página en el foro del servidor oficial de Discord se bloquea: nadie puede responderla.',
   'rec_f_published': 'Mostrar esta página a todos',
-  'rec_f_published_hint':
-      'También se publica en el foro guild-recruitment del servidor oficial de Discord. Si la desactivas, la publicación allí se elimina.',
+  'rec_f_published_hint': 'También se publica en el foro guild-recruitment del servidor oficial de Discord. Si la desactivas, la publicación allí se elimina.',
   'rec_save_hint': 'Guardar mantiene la página en la lista. Sale de ella tras 60 días sin guardar.',
   'rec_save': 'Guardar',
   'rec_saved': 'Guardado.',
@@ -531,8 +502,7 @@ const esStrings = <String, String>{
   'rec_delete': 'Eliminar la página',
   'rec_delete_ask': '¿Eliminar la página de reclutamiento de este gremio?',
   'rec_rec_title': 'Quién puede editar la página',
-  'rec_rec_intro':
-      'Diriges este gremio, así que decides quién puede crear y editar su página de reclutamiento. No es lo mismo que ser oficial.',
+  'rec_rec_intro': 'Diriges este gremio, así que decides quién puede crear y editar su página de reclutamiento. No es lo mismo que ser oficial.',
   'rec_rec_none': 'Nadie más que tú.',
   'rec_rec_add': 'Permitir a un miembro',
   'rec_rec_remove': 'Retirar',
@@ -548,8 +518,7 @@ const esStrings = <String, String>{
   'rec_err_own_guild': 'Es la página de tu propio gremio.',
   'rec_err_generic': 'Algo salió mal. Inténtalo de nuevo en un momento.',
   'tp_notify_title': 'Notificaciones del Mercado',
-  'tp_notify_hint':
-      'Te avisa cuando se vende un objeto que pusiste a la venta o se completa una orden de compra, también con la app cerrada (cada 15 minutos como máximo). Necesita una clave API con el permiso del Mercado.',
+  'tp_notify_hint': 'Te avisa cuando se vende un objeto que pusiste a la venta o se completa una orden de compra, también con la app cerrada (cada 15 minutos como máximo). Necesita una clave API con el permiso del Mercado.',
   'tp_notify_needs_key': 'Primero añade una clave API con el permiso del Mercado.',
   'tp_sold': 'Mercado: vendido',
   'tp_bought': 'Mercado: comprado',
@@ -655,8 +624,7 @@ const esStrings = <String, String>{
   'goal_add': 'Añadir a mis objetivos',
   'goal_added': 'Añadido a tus objetivos',
   'goals_full': 'Tu lista de objetivos está llena',
-  'goals_empty':
-      'Aún no hay nada. Abre una receta y pulsa el botón de lista para añadir lo que quieres fabricar, y los materiales de todos tus objetivos se juntan en una sola lista.',
+  'goals_empty': 'Aún no hay nada. Abre una receta y pulsa el botón de lista para añadir lo que quieres fabricar, y los materiales de todos tus objetivos se juntan en una sola lista.',
   'goals_clear': 'Vaciar objetivos',
   'goals_clear_ask': '¿Quitar todos los objetivos de la lista?',
   'goals_shopping': 'Lista de compras',
@@ -665,8 +633,7 @@ const esStrings = <String, String>{
   'goals_share': 'Compartir',
   'goals_share_missing': 'Aún falta',
   'craft_profit': 'Beneficio de fabricación',
-  'craft_profit_note':
-      'Las recetas que más ganan ahora en el bazar. El coste cuenta los materiales de la receta, cada uno al precio de venta más bajo, y el resultado se vende un cobre por debajo del precio más bajo, tras las tasas del 15 %. Los precios cambian, compruébalos antes de comprar.',
+  'craft_profit_note': 'Las recetas que más ganan ahora en el bazar. El coste cuenta los materiales de la receta, cada uno al precio de venta más bajo, y el resultado se vende un cobre por debajo del precio más bajo, tras las tasas del 15 %. Los precios cambian, compruébalos antes de comprar.',
   'craft_profit_empty': 'Con estos filtros nada da beneficio ahora mismo.',
   'craft_profit_age': 'Precios leídos hace {n} min',
   'craft_cost': 'Materiales',
@@ -684,8 +651,7 @@ const esStrings = <String, String>{
       'Termina los objetivos semanales de la Cámara del Mago y las incursiones antes de que se reinicien.',
   'alert_push_hint': 'Con la sesión iniciada y las notificaciones permitidas, te avisamos también con la app cerrada.',
   'landing_title': 'Tu compañero de Guild Wars 2',
-  'landing_sub':
-      'Personajes, cartera, banco de comercio, jefes del mundo, artesanía, mapa del mundo y eventos de gremio, todo en un solo lugar. Gratis y no oficial.',
+  'landing_sub': 'Personajes, cartera, banco de comercio, jefes del mundo, artesanía, mapa del mundo y eventos de gremio, todo en un solo lugar. Gratis y no oficial.',
   'landing_start': 'Empezar',
   'landing_guest': 'Continuar como invitado',
   'landing_f_characters': 'Equipo, builds y tiempo de juego de cada personaje.',
@@ -752,16 +718,14 @@ const esStrings = <String, String>{
   'lowest_sell': 'Venta más barata',
   'n_listed': '{n} en venta',
   'flip_profit': 'Beneficio tras el 15% de comisión',
-  'tp_note':
-      'Los precios vienen en vivo de la api oficial. La gráfica muestra el último precio de cada día, que guarda nuestro servidor.',
+  'tp_note': 'Los precios vienen en vivo de la api oficial. La gráfica muestra el último precio de cada día, que guarda nuestro servidor.',
   'watchlist': 'Lista de seguimiento',
   'watchlist_empty': 'Aquí no hay nada todavía. Abre cualquier objeto, toca Bazar y luego Seguir.',
   'buy_short': 'compra',
   'world_bosses': 'Eventos del mundo',
   'sync_now': 'Sincronizar ahora',
   'syncing': 'Sincronizando',
-  'sync_note':
-      'Tu cuenta se descarga una vez al abrir la app y se guarda en el dispositivo, así las secciones abren sin esperar. Vuelve a sincronizar después de jugar.',
+  'sync_note': 'Tu cuenta se descarga una vez al abrir la app y se guarda en el dispositivo, así las secciones abren sin esperar. Vuelve a sincronizar después de jugar.',
   'pinned': 'Fijados',
   'pin': 'Fijar',
   'unpin': 'Dejar de fijar',
@@ -798,8 +762,7 @@ const esStrings = <String, String>{
   'wiki_source': 'Fuente de la wiki',
   'remove_key': 'Quitar la clave',
   'remove_key_body': 'La clave API se borrará de este dispositivo y volverás a la pantalla de inicio.',
-  'disclaimer':
-      'Wondrous Compass es una app no oficial hecha por fans. Guild Wars 2, ArenaNet y NCSOFT son marcas de sus respectivos propietarios. Los datos vienen de la api oficial de GW2 y de la Guild Wars 2 Wiki.',
+  'disclaimer': 'Wondrous Compass es una app no oficial hecha por fans. Guild Wars 2, ArenaNet y NCSOFT son marcas de sus respectivos propietarios. Los datos vienen de la api oficial de GW2 y de la Guild Wars 2 Wiki.',
   'slot_Helm': 'Casco',
   'slot_Shoulders': 'Hombreras',
   'slot_Coat': 'Torso',
@@ -849,15 +812,12 @@ const esStrings = <String, String>{
   'support_note': 'Wondrous Compass es gratis y no tiene anuncios. Si te resulta útil, puedes invitarme a un café.',
   'buy_coffee': 'Invítame a un café',
   'price_history': 'Historial de precios',
-  'price_history_collecting':
-      'El bazar no guarda historial, así que la app anota un precio al día mientras se usa. Sigue el objeto y su gráfico irá creciendo desde hoy.',
-  'price_history_note':
-      'Registrado en este teléfono, un punto por cada día que la app vio el precio. Los objetos seguidos se actualizan en cada inicio.',
+  'price_history_collecting': 'El bazar no guarda historial, así que la app anota un precio al día mientras se usa. Sigue el objeto y su gráfico irá creciendo desde hoy.',
+  'price_history_note': 'Registrado en este teléfono, un punto por cada día que la app vio el precio. Los objetos seguidos se actualizan en cada inicio.',
   'pinned_achievements': 'Logros fijados',
   'about': 'Acerca de',
   'about_by': 'por {name}',
-  'about_summary':
-      'Un compañero no oficial de Guild Wars 2: tus personajes, tu cuenta, el bazar, los logros y el mapa del mundo, directamente de la API oficial.',
+  'about_summary': 'Un compañero no oficial de Guild Wars 2: tus personajes, tu cuenta, el bazar, los logros y el mapa del mundo, directamente de la API oficial.',
   'about_community': 'Comunidad',
   'about_github': 'GitHub',
   'about_github_note': 'El código, las versiones y cada apk.',
@@ -866,8 +826,7 @@ const esStrings = <String, String>{
   'about_credits': 'Créditos',
   'about_credit_dev': 'Desarrollado por {name}',
   'about_credit_data': 'Datos del juego, iconos y mapas de la API oficial de Guild Wars 2',
-  'account_progress_note':
-      'Bonificaciones de cuenta: la suerte aumenta el hallazgo mágico y los aumentos fractales son las mejoras compradas en el Observatorio del Cierre de la Niebla.',
+  'account_progress_note': 'Bonificaciones de cuenta: la suerte aumenta el hallazgo mágico y los aumentos fractales son las mejoras compradas en el Observatorio del Cierre de la Niebla.',
   'expand_all': 'Desplegar todo',
   'collapse_all': 'Plegar todo',
   'slot_PowerCore': 'Núcleo del bot de jade',
@@ -898,8 +857,7 @@ const esStrings = <String, String>{
   'demand': 'Demanda',
   'supply': 'Oferta',
   'welcome_title': 'Tu Tyria,\nde un vistazo.',
-  'welcome_body':
-      'Reinicios, metas, la Cámara del Brujo y todo lo que tienes, en un solo lugar. Conéctate con una clave API de solo lectura de ArenaNet.',
+  'welcome_body': 'Reinicios, metas, la Cámara del Brujo y todo lo que tienes, en un solo lugar. Conéctate con una clave API de solo lectura de ArenaNet.',
   'step_create': 'Crea una clave en account.arena.net con los permisos que quieras compartir.',
   'step_paste': 'Pégala aquí. Se guarda cifrada solo en este dispositivo.',
   'continue': 'Continuar',
@@ -995,8 +953,7 @@ const esStrings = <String, String>{
   'oe_form_edit': 'Editar el evento',
   'oe_language': 'IDIOMA',
   'oe_places_field': 'PLAZAS (VACÍO = SIN LÍMITE)',
-  'oe_form_note':
-      'Todos los jugadores con sesión ven este evento, con el nombre de tu cuenta del juego como organizador. Solo tú ves los nombres de quienes se apuntan.',
+  'oe_form_note': 'Todos los jugadores con sesión ven este evento, con el nombre de tu cuenta del juego como organizador. Solo tú ves los nombres de quienes se apuntan.',
   'oe_save': 'Guardar',
   'oe_created': 'Evento creado',
   'oe_saved': 'Guardado',
@@ -1021,10 +978,8 @@ const esStrings = <String, String>{
   'oe_region_eu': 'Europa',
   'oe_region_na': 'Norteamérica',
   'oe_region_all': 'Todas las regiones',
-  'oe_region_note':
-      'Un evento de una región es para jugadores con una cuenta del juego en un mundo de esa región. La región de tu cuenta se lee de su mundo al vincularla o actualizarla.',
-  'oe_region_unknown':
-      'La región de tu cuenta aún no se conoce, así que solo puedes crear y unirte a eventos para todas las regiones. Abre tu vínculo de Guild Wars 2 en Ajustes y actualízalo.',
+  'oe_region_note': 'Un evento de una región es para jugadores con una cuenta del juego en un mundo de esa región. La región de tu cuenta se lee de su mundo al vincularla o actualizarla.',
+  'oe_region_unknown': 'La región de tu cuenta aún no se conoce, así que solo puedes crear y unirte a eventos para todas las regiones. Abre tu vínculo de Guild Wars 2 en Ajustes y actualízalo.',
   'oe_tags': 'Etiquetas (hasta 3)',
   'oe_tag_any': 'Cualquier etiqueta',
   'oe_tag_meta': 'Meta',
@@ -1040,8 +995,7 @@ const esStrings = <String, String>{
   'oe_err_tags': 'Elige hasta tres etiquetas de la lista.',
   'oe_join_as': 'Apuntarse como',
   'oe_roles_title': 'Discord oficial',
-  'oe_roles_body':
-      'El servidor oficial de Discord de Wondrous Compass publica los eventos públicos en un canal por cada región y tipo de evento. Únete con la cuenta de Discord con la que iniciaste sesión: recibes el rol de cada región en la que tienes una cuenta. Cuando empieza un evento al que te apuntaste, el bot abre para él un canal de texto y uno de voz que solo ven quienes se apuntaron.',
+  'oe_roles_body': 'El servidor oficial de Discord de Wondrous Compass publica los eventos públicos en un canal por cada región y tipo de evento. Únete con la cuenta de Discord con la que iniciaste sesión: recibes el rol de cada región en la que tienes una cuenta. Cuando empieza un evento al que te apuntaste, el bot abre para él un canal de texto y uno de voz que solo ven quienes se apuntaron.',
   'oe_roles_join': 'Unirse al Discord oficial',
   'oe_err_role_required': 'Elige uno de los roles del evento.',
   'oe_err_profession': 'Elige la profesión con la que vienes.',

@@ -48,8 +48,9 @@ final armoryMaxProvider = FutureProvider<Map<int, int>>((ref) async {
 // -------------------------------------------------------------------------
 // world vs world
 
-final wvwObjectivesProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'wvw_objectives', '/wvw/objectives')));
+final wvwObjectivesProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'wvw_objectives', '/wvw/objectives')),
+);
 
 final wvwRanksProvider = FutureProvider<List<Json>>((ref) async {
   final rows = await _static(ref, 'wvw_ranks', '/wvw/ranks');
@@ -59,8 +60,9 @@ final wvwRanksProvider = FutureProvider<List<Json>>((ref) async {
 
 final wvwAbilitiesProvider = FutureProvider<List<Json>>((ref) => _static(ref, 'wvw_abilities', '/wvw/abilities'));
 
-final wvwUpgradesProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'wvw_upgrades', '/wvw/upgrades')));
+final wvwUpgradesProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'wvw_upgrades', '/wvw/upgrades')),
+);
 
 /// the title of a wvw rank number, from the highest tier it reached
 String? wvwRankTitle(List<Json> ranks, int rank) {
@@ -83,17 +85,21 @@ final worldsProvider = FutureProvider<Map<int, String>>((ref) async {
 
 /// what each guild rank permission is called, by permission id
 final guildPermissionsProvider = FutureProvider<Map<String, Json>>(
-    (ref) async => _byId(await _static(ref, 'guild_permissions', '/guild/permissions')));
+  (ref) async => _byId(await _static(ref, 'guild_permissions', '/guild/permissions')),
+);
 
 /// every guild upgrade and scribe decoration
-final guildUpgradeCatalogProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'guild_upgrades', '/guild/upgrades')));
+final guildUpgradeCatalogProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'guild_upgrades', '/guild/upgrades')),
+);
 
-final emblemBackgroundsProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'emblem_bg', '/emblem/backgrounds')));
+final emblemBackgroundsProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'emblem_bg', '/emblem/backgrounds')),
+);
 
-final emblemForegroundsProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'emblem_fg', '/emblem/foregrounds')));
+final emblemForegroundsProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'emblem_fg', '/emblem/foregrounds')),
+);
 
 /// dye colours, used to tint the emblem layers
 final colorsProvider = FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'colors', '/colors')));
@@ -108,8 +114,9 @@ Color? dyeColor(Json? dye) {
 // -------------------------------------------------------------------------
 // story journal and biography
 
-final storiesProvider =
-    FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'stories', '/stories')));
+final storiesProvider = FutureProvider<Map<String, Json>>(
+  (ref) async => _byId(await _static(ref, 'stories', '/stories')),
+);
 
 final storySeasonsProvider = FutureProvider<List<Json>>((ref) async {
   final rows = await _static(ref, 'story_seasons', '/stories/seasons');
@@ -120,10 +127,12 @@ final storySeasonsProvider = FutureProvider<List<Json>>((ref) async {
 final questsProvider = FutureProvider<Map<String, Json>>((ref) async => _byId(await _static(ref, 'quests', '/quests')));
 
 final backstoryAnswersProvider = FutureProvider<Map<String, Json>>(
-    (ref) async => _byId(await _static(ref, 'backstory_answers', '/backstory/answers')));
+  (ref) async => _byId(await _static(ref, 'backstory_answers', '/backstory/answers')),
+);
 
 final backstoryQuestionsProvider = FutureProvider<Map<String, Json>>(
-    (ref) async => _byId(await _static(ref, 'backstory_questions', '/backstory/questions')));
+  (ref) async => _byId(await _static(ref, 'backstory_questions', '/backstory/questions')),
+);
 
 // -------------------------------------------------------------------------
 // characters

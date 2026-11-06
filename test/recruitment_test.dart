@@ -5,35 +5,35 @@ import 'package:wondrous_compass/state/recruitment.dart';
 const _id = '7c1d8e2a-3b4f-4a5c-8d6e-9f0a1b2c3d4e';
 
 Map<String, dynamic> _card([Map<String, dynamic> over = const {}]) => {
-      'guild_id': _id,
-      'gw2_guild_id': '99999999-0000-0000-0000-00000000000a',
-      'name': 'Mistwalkers',
-      'tag': 'MIST',
-      'headline': 'Raids on Thursdays',
-      'looking_for': ['raids', 'fractals'],
-      'languages': ['en', 'de'],
-      'region': 'eu',
-      'recruiting': true,
-      'play_times': 'EU evenings',
-      'updated_at': '2026-10-03T10:00:00Z',
-      ...over,
-    };
+  'guild_id': _id,
+  'gw2_guild_id': '99999999-0000-0000-0000-00000000000a',
+  'name': 'Mistwalkers',
+  'tag': 'MIST',
+  'headline': 'Raids on Thursdays',
+  'looking_for': ['raids', 'fractals'],
+  'languages': ['en', 'de'],
+  'region': 'eu',
+  'recruiting': true,
+  'play_times': 'EU evenings',
+  'updated_at': '2026-10-03T10:00:00Z',
+  ...over,
+};
 
 Map<String, dynamic> _page([Map<String, dynamic> over = const {}]) => {
-      ..._card(),
-      'description': 'A friendly raiding guild that plays in the evenings.',
-      'requirements': 'Level 80',
-      'discord_invite': 'https://discord.gg/abc123',
-      'contact': 'Whisper Leo.1',
-      'published_at': '2026-10-01T10:00:00Z',
-      'stale': false,
-      'can_edit': true,
-      'is_leader': true,
-      'published': true,
-      'hidden': false,
-      'hidden_reason': null,
-      ...over,
-    };
+  ..._card(),
+  'description': 'A friendly raiding guild that plays in the evenings.',
+  'requirements': 'Level 80',
+  'discord_invite': 'https://discord.gg/abc123',
+  'contact': 'Whisper Leo.1',
+  'published_at': '2026-10-01T10:00:00Z',
+  'stale': false,
+  'can_edit': true,
+  'is_leader': true,
+  'published': true,
+  'hidden': false,
+  'hidden_reason': null,
+  ...over,
+};
 
 void main() {
   group('a Discord invite', () {
@@ -90,7 +90,7 @@ void main() {
         'looking_for': 'raids',
         'languages': [1, 'en'],
         'region': 'asia',
-        'updated_at': 'no'
+        'updated_at': 'no',
       })!;
       expect(bare.lookingFor, isEmpty, reason: 'a text is not a list');
       expect(bare.languages, ['en'], reason: 'and what is in a list that is not a text is left out');
@@ -107,8 +107,8 @@ void main() {
           _card(),
           _card({'guild_id': 'b', 'name': 'B'}),
           'junk',
-          {'name': 'no number'}
-        ]
+          {'name': 'no number'},
+        ],
       });
       expect(list.rows.map((r) => r.name), ['Mistwalkers', 'B']);
       expect(list.total, 45);
@@ -151,8 +151,11 @@ void main() {
     test('can be reached by an invite, by a name, by either, and by neither', () {
       expect(RecruitPage.parse(_page({'contact': ''}))!.canBeReached, isTrue);
       expect(RecruitPage.parse(_page({'discord_invite': null}))!.canBeReached, isTrue);
-      expect(RecruitPage.parse(_page({'discord_invite': ''}))!.discordInvite, isNull,
-          reason: 'an invite that is empty is none');
+      expect(
+        RecruitPage.parse(_page({'discord_invite': ''}))!.discordInvite,
+        isNull,
+        reason: 'an invite that is empty is none',
+      );
       expect(RecruitPage.parse(_page({'discord_invite': null, 'contact': ''}))!.canBeReached, isFalse);
     });
 
@@ -165,17 +168,17 @@ void main() {
 
   group('a guild whose page the player may manage', () {
     MyRecruitGuild guild(Map<String, dynamic> over) => MyRecruitGuild.parse({
-          'guild_id': _id,
-          'gw2_guild_id': 'g',
-          'name': 'Mistwalkers',
-          'tag': 'MIST',
-          'is_leader': true,
-          'has_page': true,
-          'published': true,
-          'hidden': false,
-          'stale': false,
-          ...over,
-        })!;
+      'guild_id': _id,
+      'gw2_guild_id': 'g',
+      'name': 'Mistwalkers',
+      'tag': 'MIST',
+      'is_leader': true,
+      'has_page': true,
+      'published': true,
+      'hidden': false,
+      'stale': false,
+      ...over,
+    })!;
 
     test('has where its page is', () {
       expect(guild({'has_page': false, 'published': false}).status, RecruitStatus.none);
@@ -201,8 +204,11 @@ void main() {
 
   group('a recruiter', () {
     test('is read by the account they play', () {
-      final r =
-          RecruiterEntry.parse({'user_id': 'u1', 'account_name': 'Mira.2', 'granted_at': '2026-10-03T10:00:00Z'})!;
+      final r = RecruiterEntry.parse({
+        'user_id': 'u1',
+        'account_name': 'Mira.2',
+        'granted_at': '2026-10-03T10:00:00Z',
+      })!;
       expect((r.userId, r.accountName), ('u1', 'Mira.2'));
       expect(r.grantedAt, isNotNull);
       expect(RecruiterEntry.parse({'user_id': 'u1'})!.accountName, '?');
@@ -230,10 +236,11 @@ void main() {
 
     test('is sent trimmed, with an invite that is empty as none, and its lists in order', () {
       final json = const RecruitDraft(
-          headline: '  Hi  ',
-          discordInvite: '   ',
-          lookingFor: {'raids', 'casual', 'fractals'},
-          languages: {'tr', 'en'}).toJson();
+        headline: '  Hi  ',
+        discordInvite: '   ',
+        lookingFor: {'raids', 'casual', 'fractals'},
+        languages: {'tr', 'en'},
+      ).toJson();
       expect(json['headline'], 'Hi');
       expect(json['discord_invite'], isNull);
       expect(json['looking_for'], ['casual', 'fractals', 'raids']);
@@ -248,26 +255,32 @@ void main() {
       expect(a.headline, 'A', reason: 'and the first is not touched');
     });
 
-    test('has nothing wrong with it when it is as long as it may be, and each field that is too long when it is not',
-        () {
-      expect(const RecruitDraft().problems(), isEmpty);
-      expect(
+    test(
+      'has nothing wrong with it when it is as long as it may be, and each field that is too long when it is not',
+      () {
+        expect(const RecruitDraft().problems(), isEmpty);
+        expect(
           RecruitDraft(
-                  headline: 'x' * 80,
-                  description: 'y' * 2000,
-                  requirements: 'z' * 500,
-                  playTimes: 'p' * 120,
-                  contact: 'c' * 120)
-              .problems(),
-          isEmpty);
-      expect(RecruitDraft(headline: 'x' * 81).problems(), [RecruitField.headline]);
-      expect(RecruitDraft(description: 'x' * 2001).problems(), [RecruitField.description]);
-      expect(RecruitDraft(requirements: 'x' * 501).problems(), [RecruitField.requirements]);
-      expect(RecruitDraft(playTimes: 'x' * 121).problems(), [RecruitField.playTimes]);
-      expect(RecruitDraft(contact: 'x' * 121).problems(), [RecruitField.contact]);
-      expect(RecruitDraft(headline: '${' ' * 50}x${' ' * 50}').problems(), isEmpty,
-          reason: 'spaces round a text are not counted: the database trims it');
-    });
+            headline: 'x' * 80,
+            description: 'y' * 2000,
+            requirements: 'z' * 500,
+            playTimes: 'p' * 120,
+            contact: 'c' * 120,
+          ).problems(),
+          isEmpty,
+        );
+        expect(RecruitDraft(headline: 'x' * 81).problems(), [RecruitField.headline]);
+        expect(RecruitDraft(description: 'x' * 2001).problems(), [RecruitField.description]);
+        expect(RecruitDraft(requirements: 'x' * 501).problems(), [RecruitField.requirements]);
+        expect(RecruitDraft(playTimes: 'x' * 121).problems(), [RecruitField.playTimes]);
+        expect(RecruitDraft(contact: 'x' * 121).problems(), [RecruitField.contact]);
+        expect(
+          RecruitDraft(headline: '${' ' * 50}x${' ' * 50}').problems(),
+          isEmpty,
+          reason: 'spaces round a text are not counted: the database trims it',
+        );
+      },
+    );
 
     test('has an invite that is not an invite', () {
       expect(const RecruitDraft(discordInvite: 'https://example.com/x').problems(), [RecruitField.discordInvite]);
@@ -275,52 +288,67 @@ void main() {
     });
 
     test(
-        'plays in one language and looks for four things at the most, which are the five tags of its post in the forum',
-        () {
-      expect(recruitTagsMax, 5);
-      expect(recruitLanguagesMax, 1);
-      expect(recruitLookingForMax, 4);
-      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet()).problems(), isEmpty,
-          reason: 'four things looked for');
-      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), [RecruitField.tags],
-          reason: 'five leave no place for the language');
-      expect(const RecruitDraft(languages: {'en'}).problems(), isEmpty, reason: 'one language');
-      expect(const RecruitDraft(languages: {'en', 'de'}).problems(), [RecruitField.languages], reason: 'two languages');
-      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(), isEmpty,
-          reason: 'four and one');
-      expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
-      expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en', 'de'}).problems(),
-          [RecruitField.tags, RecruitField.languages],
-          reason: 'six in all, and two languages');
-    });
+      'plays in one language and looks for four things at the most, which are the five tags of its post in the forum',
+      () {
+        expect(recruitTagsMax, 5);
+        expect(recruitLanguagesMax, 1);
+        expect(recruitLookingForMax, 4);
+        expect(
+          RecruitDraft(lookingFor: recruitTags.take(4).toSet()).problems(),
+          isEmpty,
+          reason: 'four things looked for',
+        );
+        expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet()).problems(), [
+          RecruitField.tags,
+        ], reason: 'five leave no place for the language');
+        expect(const RecruitDraft(languages: {'en'}).problems(), isEmpty, reason: 'one language');
+        expect(const RecruitDraft(languages: {'en', 'de'}).problems(), [
+          RecruitField.languages,
+        ], reason: 'two languages');
+        expect(
+          RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en'}).problems(),
+          isEmpty,
+          reason: 'four and one',
+        );
+        expect(RecruitDraft(lookingFor: recruitTags.take(6).toSet()).problems(), [RecruitField.tags]);
+        expect(RecruitDraft(lookingFor: recruitTags.take(4).toSet(), languages: {'en', 'de'}).problems(), [
+          RecruitField.tags,
+          RecruitField.languages,
+        ], reason: 'six in all, and two languages');
+      },
+    );
 
-    test(
-        'plays in the languages that the forum has a tag for, and a language of another kind is a problem to be taken off',
-        () {
+    test('plays in the languages that the forum has a tag for, and a language of another kind is a problem to be taken off', () {
       expect(recruitLanguages, ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru']);
       expect(const RecruitDraft(languages: {'ja'}).problems(), [RecruitField.languages], reason: 'Japanese is no tag');
       expect(const RecruitDraft(languages: {'zh'}).problems(), [RecruitField.languages]);
       expect(const RecruitDraft(languages: {'it'}).problems(), [RecruitField.languages]);
       expect(const RecruitDraft(languages: {'en', 'ja'}).problems(), [RecruitField.languages]);
-      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet(), languages: {'ja'}).problems(),
-          [RecruitField.tags, RecruitField.languages],
-          reason: 'both');
+      expect(RecruitDraft(lookingFor: recruitTags.take(5).toSet(), languages: {'ja'}).problems(), [
+        RecruitField.tags,
+        RecruitField.languages,
+      ], reason: 'both');
     });
 
-    test(
-        'lacks what is needed to be shown to everybody: a headline, a description of twenty characters and a way to be reached',
-        () {
-      expect(const RecruitDraft().missingToPublish(),
-          [RecruitField.headline, RecruitField.description, RecruitField.contact]);
+    test('lacks what is needed to be shown to everybody: a headline, a description of twenty characters and a way to be reached', () {
+      expect(const RecruitDraft().missingToPublish(), [
+        RecruitField.headline,
+        RecruitField.description,
+        RecruitField.contact,
+      ]);
       const whole = RecruitDraft(headline: 'H', description: 'twenty characters!!!', contact: 'Whisper me');
       expect(whole.missingToPublish(), isEmpty);
       expect(whole.copyWith(description: 'nineteen characters').missingToPublish(), [RecruitField.description]);
       expect(whole.copyWith(headline: '   ').missingToPublish(), [RecruitField.headline]);
-      expect(whole.copyWith(contact: '', discordInvite: 'https://discord.gg/abc123').missingToPublish(), isEmpty,
-          reason: 'an invite is a way');
+      expect(
+        whole.copyWith(contact: '', discordInvite: 'https://discord.gg/abc123').missingToPublish(),
+        isEmpty,
+        reason: 'an invite is a way',
+      );
       expect(whole.copyWith(contact: '  ').missingToPublish(), [RecruitField.contact]);
-      expect(whole.copyWith(description: ' ${'x' * 19} ').missingToPublish(), [RecruitField.description],
-          reason: 'trimmed before it is counted');
+      expect(whole.copyWith(description: ' ${'x' * 19} ').missingToPublish(), [
+        RecruitField.description,
+      ], reason: 'trimmed before it is counted');
     });
   });
 
@@ -369,14 +397,20 @@ void main() {
       for (final lang in AppLang.values) {
         final s = S(lang);
         final names = [for (final tag in recruitTags) recruitTagLabel(s, tag)];
-        expect(names.toSet().length, recruitTags.length,
-            reason: 'each of them is called something of its own in ${lang.code}');
+        expect(
+          names.toSet().length,
+          recruitTags.length,
+          reason: 'each of them is called something of its own in ${lang.code}',
+        );
         for (final (i, name) in names.indexed) {
           expect(name, isNot(recruitTags[i]), reason: '${recruitTags[i]} has a word in ${lang.code}');
         }
       }
-      expect(recruitTagLabel(const S(AppLang.en), 'something new'), 'something new',
-          reason: 'what is not known is shown as it is');
+      expect(
+        recruitTagLabel(const S(AppLang.en), 'something new'),
+        'something new',
+        reason: 'what is not known is shown as it is',
+      );
     });
 
     test('are the name of a language as it is written, or its code in capitals', () {

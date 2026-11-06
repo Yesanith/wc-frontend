@@ -15,21 +15,21 @@ const recruitTags = [
 
 /// what a thing a guild looks for is called, in the language of the app. most have a word already (the activities of events, the tags); the others have their own
 String recruitTagLabel(S s, String tag) => s.t(switch (tag) {
-      'raids' => 'raids',
-      'dungeons' => 'dungeons',
-      'fractals' => 'cat_fractals',
-      'wvw' => 'activity_wvw',
-      'pvp' => 'activity_pvp',
-      'achievements' => 'achievements',
-      'casual' => 'oe_tag_casual',
-      'newcomers' => 'oe_tag_new_players',
-      'strikes' => 'rec_tag_strikes',
-      'open_world' => 'rec_tag_open_world',
-      'farming' => 'rec_tag_farming',
-      'social' => 'rec_tag_social',
-      'roleplay' => 'rec_tag_roleplay',
-      _ => tag,
-    });
+  'raids' => 'raids',
+  'dungeons' => 'dungeons',
+  'fractals' => 'cat_fractals',
+  'wvw' => 'activity_wvw',
+  'pvp' => 'activity_pvp',
+  'achievements' => 'achievements',
+  'casual' => 'oe_tag_casual',
+  'newcomers' => 'oe_tag_new_players',
+  'strikes' => 'rec_tag_strikes',
+  'open_world' => 'rec_tag_open_world',
+  'farming' => 'rec_tag_farming',
+  'social' => 'rec_tag_social',
+  'roleplay' => 'rec_tag_roleplay',
+  _ => tag,
+});
 
 /// a language by the name it is written in (Deutsch), or by its code in capitals for one the app has no name for
 String recruitLanguageLabel(String code) {
@@ -41,10 +41,10 @@ String recruitLanguageLabel(String code) {
 
 /// a region in the language of the app
 String recruitRegionLabel(S s, RecruitRegion region) => s.t(switch (region) {
-      RecruitRegion.eu => 'oe_region_eu',
-      RecruitRegion.na => 'oe_region_na',
-      RecruitRegion.any => 'rec_region_any',
-    });
+  RecruitRegion.eu => 'oe_region_eu',
+  RecruitRegion.na => 'oe_region_na',
+  RecruitRegion.any => 'rec_region_any',
+});
 
 /// the languages a guild may say it plays in: the seven that the forum of the official server has a tag for, which is what the database takes. a page that chose another before shows it as it is, to be taken off
 const recruitLanguages = ['en', 'de', 'es', 'fr', 'tr', 'pt', 'ru'];

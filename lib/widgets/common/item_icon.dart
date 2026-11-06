@@ -43,10 +43,12 @@ class ItemRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    maxLines: titleLines,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  maxLines: titleLines,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                ),
                 if (sub != null) Text(sub, style: TextStyle(fontSize: 12, color: AppColors.muted)),
               ],
             ),
@@ -72,10 +74,12 @@ class ItemIcon extends StatelessWidget {
     final fixed = size;
     if (fixed != null) return SizedBox.square(dimension: fixed, child: _framed(fixed));
     // in a grid the cell decides the size
-    return LayoutBuilder(builder: (context, box) {
-      final side = box.biggest.shortestSide.isFinite ? box.biggest.shortestSide : 44.0;
-      return _framed(side);
-    });
+    return LayoutBuilder(
+      builder: (context, box) {
+        final side = box.biggest.shortestSide.isFinite ? box.biggest.shortestSide : 44.0;
+        return _framed(side);
+      },
+    );
   }
 
   Widget _framed(double side) {

@@ -6,13 +6,13 @@ import 'package:wondrous_compass/state/goals.dart';
 import 'package:wondrous_compass/state/settings.dart';
 
 CraftNode node(int id, {int perRun = 1, int outputCount = 1, List<CraftNode> children = const []}) => CraftNode(
-      itemId: id,
-      item: {'name': 'Item $id'},
-      perRun: perRun,
-      outputCount: outputCount,
-      children: children,
-      disciplines: const [],
-    );
+  itemId: id,
+  item: {'name': 'Item $id'},
+  perRun: perRun,
+  outputCount: outputCount,
+  children: children,
+  disciplines: const [],
+);
 
 Future<ProviderContainer> container([Map<String, Object> saved = const {}]) async {
   SharedPreferences.setMockInitialValues(saved);
@@ -32,7 +32,7 @@ void main() {
       expect(prefs.getStringList('goals'), ['10:2', '20:1']);
 
       final again = await container({
-        'goals': ['10:2', '20:1']
+        'goals': ['10:2', '20:1'],
       });
       expect(again.read(goalsProvider).map((g) => (g.itemId, g.quantity)), [(10, 2), (20, 1)]);
     });

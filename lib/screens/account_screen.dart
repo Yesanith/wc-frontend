@@ -38,16 +38,19 @@ class AccountScreen extends ConsumerWidget {
             child: TabBarView(
               children: [
                 _Pull(
-                    providers: [walletProvider, accountLuckProvider, accountProgressionProvider],
-                    child: const ContentFrame(maxWidth: readingMaxWidth, child: _WalletTab())),
+                  providers: [walletProvider, accountLuckProvider, accountProgressionProvider],
+                  child: const ContentFrame(maxWidth: readingMaxWidth, child: _WalletTab()),
+                ),
                 _Pull(providers: [bankProvider], child: const _BankTab()),
                 _Pull(providers: [materialGroupsProvider], child: const _MaterialsTab()),
                 _Pull(
-                    providers: [armoryProvider],
-                    child: const ContentFrame(maxWidth: readingMaxWidth, child: _ArmoryTab())),
+                  providers: [armoryProvider],
+                  child: const ContentFrame(maxWidth: readingMaxWidth, child: _ArmoryTab()),
+                ),
                 _Pull(
-                    providers: [buildStorageProvider],
-                    child: const ContentFrame(maxWidth: readingMaxWidth, child: _BuildsTab())),
+                  providers: [buildStorageProvider],
+                  child: const ContentFrame(maxWidth: readingMaxWidth, child: _BuildsTab()),
+                ),
               ],
             ),
           ),

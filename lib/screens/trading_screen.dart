@@ -56,14 +56,20 @@ class WatchRow extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (hasAlert)
-            Icon(fired ? Icons.notifications_active : Icons.notifications_none,
-                size: 16, color: fired ? AppColors.green : AppColors.gold),
+            Icon(
+              fired ? Icons.notifications_active : Icons.notifications_none,
+              size: 16,
+              color: fired ? AppColors.green : AppColors.gold,
+            ),
           CoinText(asInt(sells['unit_price']), size: 15),
           if (change != null)
             Text(
               '${change >= 0 ? '+' : ''}${change.toStringAsFixed(1)}% · 7d',
               style: TextStyle(
-                  fontSize: 10, fontWeight: FontWeight.w700, color: change >= 0 ? AppColors.green : AppColors.red),
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: change >= 0 ? AppColors.green : AppColors.red,
+              ),
             ),
           const SizedBox(height: 2),
           Row(
@@ -81,8 +87,13 @@ class WatchRow extends ConsumerWidget {
 
 /// item row that opens the trading post page for the item
 class _ItemTile extends StatelessWidget {
-  const _ItemTile(
-      {required this.itemId, required this.item, required this.title, this.subtitle, required this.trailing});
+  const _ItemTile({
+    required this.itemId,
+    required this.item,
+    required this.title,
+    this.subtitle,
+    required this.trailing,
+  });
 
   final int itemId;
   final Json? item;
@@ -117,8 +128,9 @@ class TradingHubScreen extends ConsumerWidget {
       child: Column(
         children: [
           AppTabBar(
-              scrollable: true,
-              labels: [s.t('overview'), s.t('tp_all_items'), s.t('orders'), s.t('history'), s.t('stats')]),
+            scrollable: true,
+            labels: [s.t('overview'), s.t('tp_all_items'), s.t('orders'), s.t('history'), s.t('stats')],
+          ),
           const Expanded(
             child: TabBarView(
               children: [

@@ -5,24 +5,26 @@ import 'package:wondrous_compass/widgets/swipe_open.dart';
 void main() {
   Future<List<int>> pump(WidgetTester tester) async {
     final opened = <int>[];
-    await tester.pumpWidget(MaterialApp(
-      home: SwipeToOpen(
-        onOpen: () => opened.add(1),
-        child: Column(
-          children: [
-            const SizedBox(height: 200, width: 400, child: Center(child: Text('page'))),
-            SizedBox(
-              height: 60,
-              child: ListView(
-                key: const Key('row'),
-                scrollDirection: Axis.horizontal,
-                children: [for (var i = 0; i < 30; i++) SizedBox(width: 80, child: Text('$i'))],
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SwipeToOpen(
+          onOpen: () => opened.add(1),
+          child: Column(
+            children: [
+              const SizedBox(height: 200, width: 400, child: Center(child: Text('page'))),
+              SizedBox(
+                height: 60,
+                child: ListView(
+                  key: const Key('row'),
+                  scrollDirection: Axis.horizontal,
+                  children: [for (var i = 0; i < 30; i++) SizedBox(width: 80, child: Text('$i'))],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ));
+    );
     return opened;
   }
 
@@ -54,17 +56,19 @@ void main() {
   testWidgets('switched off, a page that pans in every direction keeps sideways drags', (tester) async {
     final opened = <int>[];
     var panned = 0.0;
-    await tester.pumpWidget(MaterialApp(
-      home: SwipeToOpen(
-        enabled: false,
-        onOpen: () => opened.add(1),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onScaleUpdate: (d) => panned += d.focalPointDelta.dx,
-          child: const SizedBox.expand(),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SwipeToOpen(
+          enabled: false,
+          onOpen: () => opened.add(1),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onScaleUpdate: (d) => panned += d.focalPointDelta.dx,
+            child: const SizedBox.expand(),
+          ),
         ),
       ),
-    ));
+    );
     await tester.dragFrom(const Offset(100, 300), const Offset(200, 0));
     await tester.pumpAndSettle();
     expect(opened, isEmpty);
@@ -74,12 +78,16 @@ void main() {
   testWidgets('switching it off and on keeps the page underneath', (tester) async {
     var enabled = true;
     late StateSetter flip;
-    await tester.pumpWidget(MaterialApp(
-      home: StatefulBuilder(builder: (context, setState) {
-        flip = setState;
-        return SwipeToOpen(enabled: enabled, onOpen: () {}, child: const _Counter());
-      }),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: StatefulBuilder(
+          builder: (context, setState) {
+            flip = setState;
+            return SwipeToOpen(enabled: enabled, onOpen: () {}, child: const _Counter());
+          },
+        ),
+      ),
+    );
     await tester.tap(find.byType(_Counter));
     await tester.pump();
     expect(find.text('1'), findsOneWidget);
@@ -103,6 +111,8 @@ class _CounterState extends State<_Counter> {
   int _n = 0;
 
   @override
-  Widget build(BuildContext context) =>
-      GestureDetector(onTap: () => setState(() => _n++), child: Center(child: Text('$_n')));
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: () => setState(() => _n++),
+    child: Center(child: Text('$_n')),
+  );
 }

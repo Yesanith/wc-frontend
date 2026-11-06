@@ -32,7 +32,7 @@ class ProfessionsScreen extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
-            CardWrap(minWidth: 400, children: [for (final p in list) _ProfessionCard(p)])
+            CardWrap(minWidth: 400, children: [for (final p in list) _ProfessionCard(p)]),
           ],
         );
       },
@@ -172,8 +172,10 @@ class _WeaponRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(titleCase(professionWeaponKey(name)),
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(
+                  titleCase(professionWeaponKey(name)),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                ),
                 Text(weaponHands(s, weapon), style: TextStyle(fontSize: 11, color: AppColors.muted)),
               ],
             ),
@@ -225,8 +227,10 @@ class _SpecTileState extends ConsumerState<_SpecTile> {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child:
-                      Text('${line['name'] ?? ''}', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                  child: Text(
+                    '${line['name'] ?? ''}',
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  ),
                 ),
                 if (elite) Pill(s.t('elite'), color: widget.color),
                 Icon(_open ? Icons.expand_less : Icons.expand_more, color: AppColors.chevron),
@@ -261,13 +265,12 @@ class _Traits extends ConsumerWidget {
           children: [
             // three tiers, each a minor trait followed by its three majors
             for (var tier = 0; tier < 3; tier++) ...[
-              Text(s.t('tier_n', {'n': tier + 1}),
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+              Text(
+                s.t('tier_n', {'n': tier + 1}),
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted),
+              ),
               const SizedBox(height: 4),
-              for (final id in [
-                if (tier < minors.length) minors[tier],
-                ...majors.skip(tier * 3).take(3),
-              ])
+              for (final id in [if (tier < minors.length) minors[tier], ...majors.skip(tier * 3).take(3)])
                 if (byId[id] != null) _TraitRow(trait: byId[id]!, minor: minors.contains(id)),
               const SizedBox(height: 8),
             ],
@@ -313,11 +316,14 @@ class _TraitRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${trait['name'] ?? ''}',
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: minor ? FontWeight.w500 : FontWeight.w700,
-                        color: minor ? AppColors.textSoft : AppColors.text)),
+                Text(
+                  '${trait['name'] ?? ''}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: minor ? FontWeight.w500 : FontWeight.w700,
+                    color: minor ? AppColors.textSoft : AppColors.text,
+                  ),
+                ),
                 if (description.isNotEmpty)
                   Text(description, style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.muted)),
               ],

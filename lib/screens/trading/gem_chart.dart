@@ -12,15 +12,15 @@ class _GemHistoryChart extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final points = ref.watch(gemHistoryProvider).valueOrNull ?? const <GemPoint>[];
     Widget legend(Color color, String label, int value) => Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 10, height: 3, color: color),
-            const SizedBox(width: 6),
-            Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-            const SizedBox(width: 6),
-            CoinText(value, size: 12),
-          ],
-        );
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(width: 10, height: 3, color: color),
+        const SizedBox(width: 6),
+        Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+        const SizedBox(width: 6),
+        CoinText(value, size: 12),
+      ],
+    );
     return Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
