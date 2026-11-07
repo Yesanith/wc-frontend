@@ -35,8 +35,6 @@ class _AccountsPanel extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('accounts').toUpperCase()),
-          const SizedBox(height: 4),
           for (var i = 0; i < keys.length; i++)
             ListTile(
               contentPadding: EdgeInsets.zero,

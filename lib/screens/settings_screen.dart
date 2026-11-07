@@ -105,115 +105,174 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final lang = ref.watch(langProvider);
+    final signedIn = communityReady && ref.watch(sessionProvider).valueOrNull != null;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
       children: [
-        if (kIsWeb) ...[const _UiSizePanel(), const SizedBox(height: 12)],
-        const _LookPanel(),
-        const SizedBox(height: 12),
-        Panel(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Kicker(s.t('language').toUpperCase()),
-              const SizedBox(height: 4),
-              // one line instead of nine, the list opens from the bottom
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                onTap: () => _pickLanguage(context, ref),
-                leading: Icon(Icons.translate, color: AppColors.gold),
-                title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(lang.code.toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
-                    const SizedBox(width: 4),
-                    Icon(Icons.expand_more, color: AppColors.muted),
-                  ],
-                ),
-              ),
-              Divider(color: AppColors.track),
-              const SizedBox(height: 4),
-              _InfoRow(
-                s.t('data_language'),
-                lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
-              ),
-              const SizedBox(height: 6),
-              _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
-            ],
+        // who the player is: the community account (shown only in builds that know the backend), the keys of the game,
+        // and the addons of the game that link to the account
+        if (communityReady)
+          _Section(
+            title: s.t('settings_account'),
+            note: s.t('settings_account_note'),
+            children: const [_CommunityPanel()],
           ),
+        _Section(
+          title: s.t('settings_keys'),
+          note: s.t('settings_keys_note'),
+          children: const [_AccountsPanel()],
         ),
-        // shown only in builds that know the community backend
-        if (communityReady) ...[
-          const SizedBox(height: 16),
-          const _CommunityPanel(),
-          // signed in, the account can be linked to the overlay of the game
-          if (ref.watch(sessionProvider).valueOrNull != null) ...[
-            const SizedBox(height: 16),
-            const _ModuleLinkPanel(),
-          ],
-        ],
-        const SizedBox(height: 16),
-        const _AccountsPanel(),
-        const SizedBox(height: 16),
-        const _SyncPanel(),
-        if (bossAlertsReady) ...[
-          const SizedBox(height: 16),
-          const _BossAlertsPanel(),
-          const SizedBox(height: 16),
-          const _ResetAlertsPanel(),
-          // what the trading post did for the player, from the phone: the api key stays on it
-          if (!kIsWeb) ...[
-            const SizedBox(height: 16),
-            const _TradeNotifyPanel(),
-          ],
-        ],
-        const SizedBox(height: 16),
-        Panel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Kicker(s.t('backup').toUpperCase()),
-              const SizedBox(height: 8),
-              Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
-              const SizedBox(height: 12),
-              Row(
+        if (signedIn)
+          _Section(
+            title: s.t('settings_modules'),
+            note: s.t('settings_modules_note'),
+            children: const [_ModuleLinkPanel()],
+          ),
+        // how the app looks, in one card
+        _Section(
+          title: s.t('settings_appearance'),
+          note: s.t('settings_appearance_note'),
+          children: [
+            Panel(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => shareBackup(ref),
-                      icon: const Icon(Icons.ios_share, size: 18),
-                      label: Text(s.t('export_backup')),
+                  Kicker(s.t('look').toUpperCase()),
+                  const SizedBox(height: 10),
+                  const _LookChoice(),
+                  Divider(height: 28, color: AppColors.track),
+                  Kicker(s.t('language').toUpperCase()),
+                  const SizedBox(height: 4),
+                  // one line instead of nine, the list opens from the bottom
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    onTap: () => _pickLanguage(context, ref),
+                    leading: Icon(Icons.translate, color: AppColors.gold),
+                    title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(lang.code.toUpperCase(),
+                            style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                        const SizedBox(width: 4),
+                        Icon(Icons.expand_more, color: AppColors.muted),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => _import(context, ref),
-                      icon: const Icon(Icons.download_outlined, size: 18),
-                      label: Text(s.t('import_backup')),
-                    ),
+                  _InfoRow(
+                    s.t('data_language'),
+                    lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
+                  ),
+                  const SizedBox(height: 6),
+                  _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
+                  if (kIsWeb) ...[
+                    Divider(height: 28, color: AppColors.track),
+                    const _UiSizeChoice(),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+        if (bossAlertsReady)
+          _Section(
+            title: s.t('settings_notifications'),
+            note: s.t('settings_notifications_note'),
+            children: [
+              const _BossAlertsPanel(),
+              const _ResetAlertsPanel(),
+              // what the trading post did for the player, from the phone: the api key stays on it
+              if (!kIsWeb) const _TradeNotifyPanel(),
+            ],
+          ),
+        _Section(
+          title: s.t('settings_data'),
+          note: s.t('settings_data_note'),
+          children: [
+            const _SyncPanel(),
+            Panel(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Kicker(s.t('backup').toUpperCase()),
+                  const SizedBox(height: 8),
+                  Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => shareBackup(ref),
+                          icon: const Icon(Icons.ios_share, size: 18),
+                          label: Text(s.t('export_backup')),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => _import(context, ref),
+                          icon: const Icon(Icons.download_outlined, size: 18),
+                          label: Text(s.t('import_backup')),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: () => _clearCache(context, ref),
+                    icon: const Icon(Icons.cleaning_services_outlined, size: 18),
+                    label: Text(s.t('clear_cache')),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              TextButton.icon(
-                onPressed: () => _clearCache(context, ref),
-                icon: const Icon(Icons.cleaning_services_outlined, size: 18),
-                label: Text(s.t('clear_cache')),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         // an apk cannot be installed from a browser
-        if (!kIsWeb) ...[
-          const SizedBox(height: 22),
-          const _UpdatePanel(),
-        ],
+        if (!kIsWeb) _Section(title: s.t('settings_app'), children: const [_UpdatePanel()]),
       ],
+    );
+  }
+}
+
+/// a group of the settings: a title, a line on what it is for, and its cards one under the other
+class _Section extends StatelessWidget {
+  const _Section({required this.title, this.note, required this.children});
+
+  final String title;
+  final String? note;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final n = note;
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: display(18)),
+                if (n != null) ...[
+                  const SizedBox(height: 3),
+                  Text(n, style: TextStyle(fontSize: 12.5, height: 1.4, color: AppColors.muted)),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const SizedBox(height: 10),
+            children[i],
+          ],
+        ],
+      ),
     );
   }
 }
@@ -236,81 +295,68 @@ class _InfoRow extends StatelessWidget {
 }
 
 /// how large the interface is in the browser: automatic, which grows with a wide screen, or one of the sizes
-class _UiSizePanel extends ConsumerWidget {
-  const _UiSizePanel();
+class _UiSizeChoice extends ConsumerWidget {
+  const _UiSizeChoice();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final chosen = ref.watch(uiScaleProvider);
-    return Panel(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Kicker(s.t('ui_scale').toUpperCase()),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final size in uiScaleChoices)
-                ChoiceChip(
-                  label: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
-                  selected: chosen == size,
-                  onSelected: (_) => ref.read(uiScaleProvider.notifier).set(size),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(s.t('ui_scale_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Kicker(s.t('ui_scale').toUpperCase()),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final size in uiScaleChoices)
+              ChoiceChip(
+                label: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
+                selected: chosen == size,
+                onSelected: (_) => ref.read(uiScaleProvider.notifier).set(size),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(s.t('ui_scale_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+      ],
     );
   }
 }
 
 /// light, dark or whichever the phone is set to
-class _LookPanel extends ConsumerWidget {
-  const _LookPanel();
+class _LookChoice extends ConsumerWidget {
+  const _LookChoice();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final mode = ref.watch(lookProvider);
-    return Panel(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Kicker(s.t('look').toUpperCase()),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: SegmentedButton<LookMode>(
-              showSelectedIcon: false,
-              segments: [
-                ButtonSegment(
-                  value: LookMode.system,
-                  icon: const Icon(Icons.brightness_auto_outlined, size: 18),
-                  label: Text(s.t('look_system')),
-                ),
-                ButtonSegment(
-                  value: LookMode.light,
-                  icon: const Icon(Icons.light_mode_outlined, size: 18),
-                  label: Text(s.t('look_light')),
-                ),
-                ButtonSegment(
-                  value: LookMode.dark,
-                  icon: const Icon(Icons.dark_mode_outlined, size: 18),
-                  label: Text(s.t('look_dark')),
-                ),
-              ],
-              selected: {mode},
-              onSelectionChanged: (picked) => ref.read(lookProvider.notifier).set(picked.first),
-            ),
+    return SizedBox(
+      width: double.infinity,
+      child: SegmentedButton<LookMode>(
+        showSelectedIcon: false,
+        segments: [
+          ButtonSegment(
+            value: LookMode.system,
+            icon: const Icon(Icons.brightness_auto_outlined, size: 18),
+            label: Text(s.t('look_system')),
+          ),
+          ButtonSegment(
+            value: LookMode.light,
+            icon: const Icon(Icons.light_mode_outlined, size: 18),
+            label: Text(s.t('look_light')),
+          ),
+          ButtonSegment(
+            value: LookMode.dark,
+            icon: const Icon(Icons.dark_mode_outlined, size: 18),
+            label: Text(s.t('look_dark')),
           ),
         ],
+        selected: {mode},
+        onSelectionChanged: (picked) => ref.read(lookProvider.notifier).set(picked.first),
       ),
     );
   }

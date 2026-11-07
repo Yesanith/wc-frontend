@@ -55,8 +55,6 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Kicker(s.t('community_account').toUpperCase()),
-          const SizedBox(height: 10),
           if (session == null) ...[
             Text(s.t('community_intro'), style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.muted)),
             const SizedBox(height: 12),

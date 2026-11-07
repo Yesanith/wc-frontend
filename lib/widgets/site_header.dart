@@ -74,6 +74,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
     required this.icons,
     required this.groupLabels,
     required this.account,
+    this.accountBadge,
     this.search,
     this.busy = false,
     this.progress,
@@ -87,6 +88,9 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
   /// the heading of each group, in the order of [siteNavGroups]
   final List<String> groupLabels;
   final String? account;
+
+  /// who is signed in to the community account, or a way to sign in, in place of [account] when it is given
+  final Widget? accountBadge;
 
   /// the box to search in, between the sections and the account
   final Widget? search;
@@ -154,7 +158,9 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                       if (search != null) ...[search!, const SizedBox(width: 12)],
                       Container(width: 1, height: 28, color: AppColors.line),
                       const SizedBox(width: 12),
-                      if (account != null)
+                      if (accountBadge != null)
+                        Padding(padding: const EdgeInsets.only(right: 6), child: accountBadge)
+                      else if (account != null)
                         Container(
                           margin: const EdgeInsets.only(right: 6),
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

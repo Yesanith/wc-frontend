@@ -26,6 +26,7 @@ import '../state/trading.dart';
 import '../state/wealth.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/account_badge.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -455,10 +456,16 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       selectedIndex: section.index,
       onDestinationSelected: (i) => _select(AppSection.values[i]),
       children: [
+        // who is signed in, first of all: a button to sign in with Discord, or the Discord name with the game accounts
+        if (communityReady)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: AccountBadge(onOpen: () => _select(AppSection.settings)),
+          ),
         // the plugin's header bar: the emblem, the name and the version
-        // in a pill, with the account underneath
+        // in a pill, with the account of the api key underneath
         Padding(
-          padding: const EdgeInsets.fromLTRB(24, 22, 16, 14),
+          padding: EdgeInsets.fromLTRB(24, communityReady ? 16 : 22, 16, 14),
           child: Row(
             children: [
               const DiamondEmblem(size: 34),
@@ -521,6 +528,15 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               // the room of the bar decides what is in it: the account and a wide search, a narrower search, or a button that opens the
               // search in a window, so that the sections are always all there
               account: siteBarLayout(MediaQuery.sizeOf(context).width).account ? accountName : null,
+              // with the community backend the bar says who is signed in, or offers to sign in, at every width
+              accountBadge:
+                  communityReady
+                      ? AccountBadge(
+                          compact: true,
+                          showName: siteBarLayout(MediaQuery.sizeOf(context).width).account,
+                          onOpen: () => _select(AppSection.settings),
+                        )
+                      : null,
               search: switch (siteBarLayout(MediaQuery.sizeOf(context).width).searchWidth) {
                 final width? => _search(width: width, onSelect: _openHit),
                 null => IconButton(
