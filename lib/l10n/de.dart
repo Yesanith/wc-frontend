@@ -216,7 +216,8 @@ const deStrings = <String, String>{
   'community_delete_confirm': 'Endgültig löschen',
   'community_failed': 'Das hat nicht geklappt, bitte versuche es erneut.',
   'settings_account': 'Konto',
-  'settings_account_note': 'Dein Wondrous-Compass-Konto, angemeldet mit Discord: Gilden-Events, öffentliche Events und der Discord-Bot hängen daran.',
+  'settings_account_note':
+      'Dein Wondrous-Compass-Konto, angemeldet mit Discord: Gilden-Events, öffentliche Events und der Discord-Bot hängen daran.',
   'settings_keys': 'Guild-Wars-2-API-Schlüssel',
   'settings_keys_note': 'Die Schlüssel bleiben auf diesem Gerät. Jede Seite liest den aktiven.',
   'settings_modules': 'Addons im Spiel',

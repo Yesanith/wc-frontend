@@ -209,7 +209,8 @@ const trStrings = <String, String>{
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
   'settings_account': 'Hesap',
-  'settings_account_note': 'Discord ile girdiğin Wondrous Compass hesabın: lonca etkinlikleri, herkese açık etkinlikler ve Discord botu buna bağlı.',
+  'settings_account_note':
+      'Discord ile girdiğin Wondrous Compass hesabın: lonca etkinlikleri, herkese açık etkinlikler ve Discord botu buna bağlı.',
   'settings_keys': 'Guild Wars 2 API anahtarları',
   'settings_keys_note': 'Anahtarlar bu cihazda kalır. Tüm sayfalar etkin olanı okur.',
   'settings_modules': 'Oyun içi eklentiler',

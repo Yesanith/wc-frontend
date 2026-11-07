@@ -210,7 +210,8 @@ const ruStrings = <String, String>{
   'community_delete_confirm': 'Удалить навсегда',
   'community_failed': 'Не получилось, попробуйте ещё раз.',
   'settings_account': 'Аккаунт',
-  'settings_account_note': 'Ваш аккаунт Wondrous Compass, вход через Discord: от него зависят события гильдии, публичные события и бот Discord.',
+  'settings_account_note':
+      'Ваш аккаунт Wondrous Compass, вход через Discord: от него зависят события гильдии, публичные события и бот Discord.',
   'settings_keys': 'API-ключи Guild Wars 2',
   'settings_keys_note': 'Ключи хранятся на этом устройстве. Все страницы читают активный.',
   'settings_modules': 'Аддоны в игре',

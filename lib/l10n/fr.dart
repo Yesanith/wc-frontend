@@ -213,7 +213,8 @@ const frStrings = <String, String>{
   'community_delete_confirm': 'Supprimer définitivement',
   'community_failed': 'Cela n\'a pas marché, réessaie.',
   'settings_account': 'Compte',
-  'settings_account_note': 'Ton compte Wondrous Compass, connecté avec Discord : les événements de guilde, les événements publics et le bot Discord en dépendent.',
+  'settings_account_note':
+      'Ton compte Wondrous Compass, connecté avec Discord : les événements de guilde, les événements publics et le bot Discord en dépendent.',
   'settings_keys': 'Clés d\'API Guild Wars 2',
   'settings_keys_note': 'Les clés restent sur cet appareil. Chaque page lit la clé active.',
   'settings_modules': 'Addons en jeu',

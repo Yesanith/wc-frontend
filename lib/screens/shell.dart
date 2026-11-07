@@ -529,14 +529,13 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               // search in a window, so that the sections are always all there
               account: siteBarLayout(MediaQuery.sizeOf(context).width).account ? accountName : null,
               // with the community backend the bar says who is signed in, or offers to sign in, at every width
-              accountBadge:
-                  communityReady
-                      ? AccountBadge(
-                          compact: true,
-                          showName: siteBarLayout(MediaQuery.sizeOf(context).width).account,
-                          onOpen: () => _select(AppSection.settings),
-                        )
-                      : null,
+              accountBadge: communityReady
+                  ? AccountBadge(
+                      compact: true,
+                      showName: siteBarLayout(MediaQuery.sizeOf(context).width).account,
+                      onOpen: () => _select(AppSection.settings),
+                    )
+                  : null,
               search: switch (siteBarLayout(MediaQuery.sizeOf(context).width).searchWidth) {
                 final width? => _search(width: width, onSelect: _openHit),
                 null => IconButton(

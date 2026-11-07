@@ -114,23 +114,23 @@ class _AccountBadgeState extends ConsumerState<AccountBadge> {
                 if (widget.showName) ...[
                   const SizedBox(width: 8),
                   ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 160),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, height: 1.2)),
-                      if (second.isNotEmpty)
-                        Text(second,
+                    constraints: const BoxConstraints(maxWidth: 160),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 11, color: AppColors.muted, height: 1.2)),
-                    ],
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, height: 1.2)),
+                        if (second.isNotEmpty)
+                          Text(second,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 11, color: AppColors.muted, height: 1.2)),
+                      ],
+                    ),
                   ),
-                ),
                 ],
               ],
             ),
@@ -162,13 +162,15 @@ class _AccountBadgeState extends ConsumerState<AccountBadge> {
                     if (second.isNotEmpty)
                       Row(
                         children: [
-                          Icon(Icons.shield_outlined, size: 13, color: games.isEmpty ? AppColors.amber : AppColors.gold),
+                          Icon(Icons.shield_outlined,
+                              size: 13, color: games.isEmpty ? AppColors.amber : AppColors.gold),
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(second,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 12, color: games.isEmpty ? AppColors.amber : AppColors.muted)),
+                                style:
+                                    TextStyle(fontSize: 12, color: games.isEmpty ? AppColors.amber : AppColors.muted)),
                           ),
                         ],
                       ),

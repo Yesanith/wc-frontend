@@ -210,7 +210,8 @@ const enStrings = <String, String>{
   'community_delete_confirm': 'Delete for good',
   'community_failed': 'That did not work, please try again.',
   'settings_account': 'Account',
-  'settings_account_note': 'Your Wondrous Compass account, signed in with Discord: guild events, public events and the Discord bot hang on it.',
+  'settings_account_note':
+      'Your Wondrous Compass account, signed in with Discord: guild events, public events and the Discord bot hang on it.',
   'settings_keys': 'Guild Wars 2 API keys',
   'settings_keys_note': 'The keys stay on this device. The active one is what every page reads.',
   'settings_modules': 'In-game addons',
