@@ -185,8 +185,7 @@ const zhStrings = <String, String>{
   'community_delete_confirm': '永久删除',
   'community_failed': '操作失败，请重试。',
   'module_link_title': 'Blish HUD · Nexus',
-  'module_link_note':
-      '关联 Blish HUD 模块或 Nexus 插件，即可在游戏内查看和创建活动。在此获取代码并输入到模块或插件中。代码仅可使用一次，有效期十分钟。',
+  'module_link_note': '关联 Blish HUD 模块或 Nexus 插件，即可在游戏内查看和创建活动。在此获取代码并输入到模块或插件中。代码仅可使用一次，有效期十分钟。',
   'module_link_get': '获取代码',
   'module_link_expires': '代码仅可使用一次，有效期十分钟。',
   'module_link_copy': '复制代码',
