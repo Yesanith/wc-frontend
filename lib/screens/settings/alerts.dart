@@ -39,7 +39,7 @@ class _TradeNotifyPanelState extends ConsumerState<_TradeNotifyPanel> {
         contentPadding: EdgeInsets.zero,
         value: ref.watch(tradeNotifyProvider),
         onChanged: _busy ? null : _set,
-        title: Text(s.t('tp_notify_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+        title: Text(s.t('tp_notify_local_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
         subtitle: Text(s.t('tp_notify_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
       ),
     );
@@ -209,6 +209,60 @@ class _ResetAlertsPanelState extends ConsumerState<_ResetAlertsPanel> {
             title: Text(s.t('reset_alert_weekly'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// what the trading post did for the player, told by the server even when the app is closed: it is given a subtoken
+/// that reads only the history of the trading post, which this turns on and off
+class _TradeWatchPanel extends ConsumerStatefulWidget {
+  const _TradeWatchPanel();
+
+  @override
+  ConsumerState<_TradeWatchPanel> createState() => _TradeWatchPanelState();
+}
+
+class _TradeWatchPanelState extends ConsumerState<_TradeWatchPanel> {
+  bool _busy = false;
+
+  Future<void> _set(bool on) async {
+    final s = ref.read(stringsProvider);
+    final container = ProviderScope.containerOf(context, listen: false);
+    setState(() => _busy = true);
+    try {
+      if (on) {
+        await turnOnTradeWatch(context, container);
+      } else {
+        await stopTradeWatch();
+        container.invalidate(tradeWatchesProvider);
+        if (mounted) showToast(context, s.t('trade_watch_off'));
+      }
+    } catch (_) {
+      if (mounted) showToast(context, s.t('community_failed'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final watches = ref.watch(tradeWatchesProvider).valueOrNull;
+    final on = watches != null && watches.any((w) => w.on);
+    return Panel(
+      child: SwitchListTile(
+        contentPadding: EdgeInsets.zero,
+        value: on,
+        onChanged: _busy || watches == null ? null : _set,
+        title: Text(s.t('trade_watch_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+        subtitle: Text(
+          [
+            s.t('trade_watch_note'),
+            if (on) watches.where((w) => w.on).map((w) => w.accountName).join(', '),
+          ].join('\n'),
+          style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
+        ),
       ),
     );
   }

@@ -19,10 +19,12 @@ import '../state/module_link.dart';
 import 'guild_roster_screen.dart';
 import '../state/settings.dart';
 import '../state/trade_notify.dart';
+import '../state/trade_watch.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/site_header.dart' show sitePageUrl;
+import '../widgets/trade_watch_ask.dart';
 import '../widgets/ui_zoom.dart';
 import 'onboarding_screen.dart';
 
@@ -106,6 +108,7 @@ class SettingsScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final lang = ref.watch(langProvider);
     final signedIn = communityReady && ref.watch(sessionProvider).valueOrNull != null;
+    final tradeWatchOn = signedIn && (ref.watch(tradeWatchesProvider).valueOrNull?.any((w) => w.on) ?? false);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
@@ -176,15 +179,20 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
         ),
-        if (bossAlertsReady)
+        if (bossAlertsReady || (signedIn && pushReady))
           _Section(
             title: s.t('settings_notifications'),
             note: s.t('settings_notifications_note'),
             children: [
-              const _BossAlertsPanel(),
-              const _ResetAlertsPanel(),
-              // what the trading post did for the player, from the phone: the api key stays on it
-              if (!kIsWeb) const _TradeNotifyPanel(),
+              // what the trading post did for the player, told by the server even when the app is closed
+              if (signedIn && pushReady) const _TradeWatchPanel(),
+              if (bossAlertsReady) ...[
+                const _BossAlertsPanel(),
+                const _ResetAlertsPanel(),
+                // or looked at by the phone alone, with the key that stays on it, for who would rather not give the
+                // server anything. not both: every sale would be told twice
+                if (!kIsWeb && !tradeWatchOn) const _TradeNotifyPanel(),
+              ],
             ],
           ),
         _Section(

@@ -23,11 +23,13 @@ import '../state/reference.dart';
 import '../state/server_price_alerts.dart';
 import '../state/settings.dart';
 import '../state/trade_notify.dart';
+import '../state/trade_watch.dart';
 import '../state/trading.dart';
 import '../state/wealth.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/account_badge.dart';
+import '../widgets/trade_watch_ask.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -149,6 +151,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     unawaited(recordAppOpen(ref));
     await refreshLink(ProviderScope.containerOf(context, listen: false));
     if (!mounted) return;
+    // one question at a time: the one of the trading post first, the guild's sharing at the next opening
+    if (await _tradeWatch() || !mounted) return;
     try {
       final guilds = await ref.read(myGuildsProvider.future);
       for (final g in guilds) {
@@ -166,6 +170,43 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       }
     } catch (_) {
       // the question is asked again the next time the app opens
+    }
+  }
+
+  /// the server's look at the trading post of the active account: asked once, when the account is linked and its key
+  /// may read the trading post, and the subtoken the server has is made again before it runs out or after the game
+  /// turned it down. whether the question was asked
+  Future<bool> _tradeWatch() async {
+    if (!pushReady) return false;
+    final container = ProviderScope.containerOf(context, listen: false);
+    try {
+      if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return false;
+      final permissions = [
+        for (final p in ((await container.read(tokenInfoProvider.future))['permissions'] as List?) ?? const []) '$p',
+      ];
+      if (!canWatchTrades(permissions)) return false;
+      final name = '${(await container.read(accountProvider.future))['name'] ?? ''}'.toLowerCase();
+      final linked = await container.read(linkedAccountsProvider.future);
+      if (name.isEmpty || !linked.any((a) => a.name.toLowerCase() == name)) return false;
+      final watch =
+          (await container.read(tradeWatchesProvider.future)).where((w) => w.accountName.toLowerCase() == name).firstOrNull;
+      if (watch != null) {
+        if (watch.renewalDue(DateTime.now())) {
+          await startTradeWatch(container.read(gw2ApiProvider));
+          container.invalidate(tradeWatchesProvider);
+        }
+        return false;
+      }
+      final prefs = container.read(prefsProvider);
+      if (prefs.getBool(tradeWatchAskedPref) == true || !mounted) return false;
+      await prefs.setBool(tradeWatchAskedPref, true);
+      if (!mounted) return false;
+      final yes = await showDialog<bool>(context: context, builder: (_) => const TradeWatchAsk());
+      if (yes == true && mounted) await turnOnTradeWatch(context, container);
+      return true;
+    } catch (_) {
+      // asked, or renewed, at the next opening
+      return false;
     }
   }
 
@@ -229,6 +270,12 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       WidgetsBinding.instance.addPostFrameCallback((_) => _openFromAlert(payload));
     }
     _pushTaps = pushTapped.stream.listen(_openFromPush);
+    // a notification of the trading post that started the app opens the trading post
+    if ('${initialPushData?['kind'] ?? ''}'.startsWith('trade_')) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ref.read(sectionProvider.notifier).state = AppSection.trading;
+      });
+    }
     final started = linkFromPushData(initialPushData);
     initialPushData = null;
     if (started != null) ref.read(pendingLinkProvider.notifier).state = started;
@@ -289,6 +336,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   }
 
   void _openFromPush(Map<String, dynamic> data) {
+    // what the trading post did for the player opens the trading post
+    if ('${data['kind'] ?? ''}'.startsWith('trade_')) {
+      if (mounted) ref.read(sectionProvider.notifier).state = AppSection.trading;
+      return;
+    }
     final link = linkFromPushData(data);
     if (link == null || !mounted) return;
     openLinkNow(context, link);
