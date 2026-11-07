@@ -193,7 +193,7 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
     });
     try {
       final leads = (ref.read(myGuildsProvider).valueOrNull ?? const <MyGuild>[]).any((g) => g.role == 'leader');
-      final outcome = await refreshLink(ref, force: true);
+      final outcome = await refreshLink(ProviderScope.containerOf(context, listen: false), force: true);
       if (!mounted) return;
       // a leader is told how the guild's sync went, anybody else that it is done
       showToast(

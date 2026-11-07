@@ -186,8 +186,9 @@ const jaStrings = <String, String>{
   'community_delete_body': 'Wondrous Compass アカウントと関連するすべてのデータが完全に削除されます。この端末の API キーやアプリの他のデータには影響しません。',
   'community_delete_confirm': '完全に削除',
   'community_failed': 'うまくいきませんでした。もう一度お試しください。',
-  'module_link_title': 'Blish HUD',
-  'module_link_note': 'Blish HUDモジュールを連携すると、ゲーム内でイベントを見たり作成したりできます。ここでコードを取得してモジュールに入力してください。コードは一度だけ、10分間有効です。',
+  'module_link_title': 'Blish HUD · Nexus',
+  'module_link_note':
+      'Blish HUDモジュールまたはNexusアドオンを連携すると、ゲーム内でイベントを見たり作成したりできます。ここでコードを取得してモジュールまたはアドオンに入力してください。コードは一度だけ、十分間有効です。',
   'module_link_get': 'コードを取得',
   'module_link_expires': 'コードは一度だけ、10分間有効です。',
   'module_link_copy': 'コードをコピー',

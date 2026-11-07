@@ -145,7 +145,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   Future<void> _refreshAndReview() async {
     // which version is in use, counted for the dashboard, not waited for
     unawaited(recordAppOpen(ref));
-    await refreshLink(ref);
+    await refreshLink(ProviderScope.containerOf(context, listen: false));
     if (!mounted) return;
     try {
       final guilds = await ref.read(myGuildsProvider.future);

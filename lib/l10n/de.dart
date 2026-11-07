@@ -215,9 +215,9 @@ const deStrings = <String, String>{
       'Dein Wondrous-Compass-Konto und alles, was daran hängt, wird endgültig gelöscht. Deine API-Schlüssel und die übrigen App-Daten auf diesem Gerät bleiben erhalten.',
   'community_delete_confirm': 'Endgültig löschen',
   'community_failed': 'Das hat nicht geklappt, bitte versuche es erneut.',
-  'module_link_title': 'Blish HUD',
+  'module_link_title': 'Blish HUD · Nexus',
   'module_link_note':
-      'Verbinde das Blish-HUD-Modul, um Events im Spiel zu sehen und zu erstellen. Hole hier einen Code und gib ihn im Modul ein. Er gilt einmal, zehn Minuten lang.',
+      'Verbinde das Blish-HUD-Modul oder das Nexus-Addon, um Events im Spiel zu sehen und zu erstellen. Hole hier einen Code und gib ihn im Modul oder Addon ein. Er gilt einmal, zehn Minuten lang.',
   'module_link_get': 'Code holen',
   'module_link_expires': 'Der Code gilt einmal, zehn Minuten lang.',
   'module_link_copy': 'Code kopieren',

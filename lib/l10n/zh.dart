@@ -184,8 +184,9 @@ const zhStrings = <String, String>{
   'community_delete_body': '你的 Wondrous Compass 账号及其所有关联数据将被永久删除。本设备上的 API 密钥和应用的其他数据不受影响。',
   'community_delete_confirm': '永久删除',
   'community_failed': '操作失败，请重试。',
-  'module_link_title': 'Blish HUD',
-  'module_link_note': '关联 Blish HUD 模块，即可在游戏内查看和创建活动。在此获取代码并输入到模块中。代码仅可使用一次，有效期十分钟。',
+  'module_link_title': 'Blish HUD · Nexus',
+  'module_link_note':
+      '关联 Blish HUD 模块或 Nexus 插件，即可在游戏内查看和创建活动。在此获取代码并输入到模块或插件中。代码仅可使用一次，有效期十分钟。',
   'module_link_get': '获取代码',
   'module_link_expires': '代码仅可使用一次，有效期十分钟。',
   'module_link_copy': '复制代码',

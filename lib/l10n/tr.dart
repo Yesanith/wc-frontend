@@ -208,9 +208,9 @@ const trStrings = <String, String>{
       'Wondrous Compass hesabın ve ona bağlı her şey kalıcı olarak silinecek. API key\'lerin ve uygulamanın bu cihazdaki diğer verileri etkilenmez.',
   'community_delete_confirm': 'Kalıcı olarak sil',
   'community_failed': 'Olmadı, lütfen tekrar dene.',
-  'module_link_title': 'Blish HUD',
+  'module_link_title': 'Blish HUD · Nexus',
   'module_link_note':
-      'Oyunda etkinlikleri görmek ve oluşturmak için Blish HUD modülünü bağla. Buradan bir kod al ve modüle yaz. Bir kez, on dakika geçerlidir.',
+      'Oyunda etkinlikleri görmek ve oluşturmak için Blish HUD modülünü ya da Nexus eklentisini bağla. Buradan bir kod al ve modüle ya da eklentiye yaz. Bir kez, on dakika geçerlidir.',
   'module_link_get': 'Kod al',
   'module_link_expires': 'Kod bir kez, on dakika geçerlidir.',
   'module_link_copy': 'Kodu kopyala',

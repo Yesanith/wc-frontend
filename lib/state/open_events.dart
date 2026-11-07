@@ -76,9 +76,21 @@ final myOpenEventsProvider = FutureProvider.autoDispose<List<OpenEvent>>((ref) a
   return parseOpenEvents(await _rpc('my_open_events', {}));
 });
 
-/// one event, as the player sees it: from their own list when it is theirs or they signed up, else from the feed.
-/// null when it is not there any more
+/// one event, as the player sees it: theirs whatever it is, anybody else's while it is to come or going on. null when
+/// it is not there any more, or not to be seen
 final openEventProvider = FutureProvider.autoDispose.family<OpenEvent?, String>((ref, id) async {
+  try {
+    final one = await Supabase.instance.client.rpc('open_event', params: {'p_event': id});
+    return one is Map ? OpenEvent.fromJson(Map<String, dynamic>.from(one)) : null;
+  } on PostgrestException catch (e) {
+    // a backend from before open_event has no such function: the event is looked for in the lists as it was then
+    if (e.code != 'PGRST202') throw OpenEventFailure(e.hint ?? e.code ?? 'failed');
+  }
+  return _findInLists(id);
+});
+
+/// the event in the player's own list, else in the first hundred of the feed
+Future<OpenEvent?> _findInLists(String id) async {
   final mine = parseOpenEvents(await _rpc('my_open_events', {}));
   for (final e in mine) {
     if (e.id == id) return e;
@@ -88,7 +100,7 @@ final openEventProvider = FutureProvider.autoDispose.family<OpenEvent?, String>(
     if (e.id == id) return e;
   }
   return null;
-});
+}
 
 /// who signed up to an event of the player's, by the name of their game account
 final openRosterProvider = FutureProvider.autoDispose.family<List<OpenRosterEntry>, String>((ref, id) async {

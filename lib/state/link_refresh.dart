@@ -35,8 +35,11 @@ DateTime? _lastAttempt;
 /// did not choose to link. a failure is ignored and tried again later, not
 /// within five minutes. [force] skips the waiting, for pulling down to refresh,
 /// and lets a failure through so it can be shown. returns what linking came
-/// to, null when there was nothing to refresh
-Future<LinkOutcome?> refreshLink(WidgetRef ref, {bool force = false}) async {
+/// to, null when there was nothing to refresh.
+///
+/// it is given the container and not the ref of a page: linking takes a while, and the page that asked may be closed
+/// before the lists are to be read again
+Future<LinkOutcome?> refreshLink(ProviderContainer ref, {bool force = false}) async {
   if (_running) return null;
   final now = DateTime.now();
   final attempt = _lastAttempt;

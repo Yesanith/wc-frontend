@@ -25,7 +25,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
   Future<void> _bringFromGame() async {
     final s = ref.read(stringsProvider);
     try {
-      final outcome = await refreshLink(ref, force: true);
+      final outcome = await refreshLink(ProviderScope.containerOf(context, listen: false), force: true);
       if (mounted) showToast(context, guildSyncMessage(s, outcome), duration: const Duration(seconds: 6));
     } catch (e) {
       if (mounted) showToast(context, '${s.t('community_failed')} ($e)', duration: const Duration(seconds: 6));

@@ -210,9 +210,9 @@ const ptStrings = <String, String>{
       'Sua conta Wondrous Compass e tudo ligado a ela serão excluídos para sempre. Suas chaves de API e os outros dados do app neste dispositivo não são afetados.',
   'community_delete_confirm': 'Excluir para sempre',
   'community_failed': 'Não deu certo, tente de novo.',
-  'module_link_title': 'Blish HUD',
+  'module_link_title': 'Blish HUD · Nexus',
   'module_link_note':
-      'Vincule o módulo do Blish HUD para ver e criar eventos no jogo. Pegue um código aqui e digite no módulo. Vale uma vez, por dez minutos.',
+      'Vincule o módulo do Blish HUD ou o addon do Nexus para ver e criar eventos no jogo. Pegue um código aqui e digite no módulo ou no addon. Vale uma vez, por dez minutos.',
   'module_link_get': 'Pegar um código',
   'module_link_expires': 'O código vale uma vez, por dez minutos.',
   'module_link_copy': 'Copiar código',
