@@ -564,10 +564,12 @@ const enStrings = <String, String>{
   'rec_err_own_guild': 'That is your own guild\'s page.',
   'rec_err_generic': 'Something went wrong. Try again in a moment.',
   'trade_watch_title': 'Sales and purchases',
-  'trade_watch_ask': 'Get a notification when one of your trading post listings sells or a buy order is filled?\n\nTo do this, the app gives our server a limited key that can only see your account name and your buy and sell history, for 30 days. Your API key stays on this device: the server cannot see your inventory, wallet or characters.\n\nYou can turn it off any time in Settings.',
+  'trade_watch_ask':
+      'Get a notification when one of your trading post listings sells or a buy order is filled?\n\nTo do this, the app gives our server a limited key that can only see your account name and your buy and sell history, for 30 days. Your API key stays on this device: the server cannot see your inventory, wallet or characters.\n\nYou can turn it off any time in Settings.',
   'trade_watch_yes': 'Yes, notify me',
   'trade_watch_no': 'Not now',
-  'trade_watch_note': 'Checked by our server every few minutes, even when the app is closed. Only your trading post history is shared, never your API key.',
+  'trade_watch_note':
+      'Checked by our server every few minutes, even when the app is closed. Only your trading post history is shared, never your API key.',
   'trade_watch_on': 'You will be notified of your sales and purchases.',
   'trade_watch_off': 'Sale and purchase notifications are off.',
   'trade_watch_failed': 'Could not turn on sale notifications. Try again later.',

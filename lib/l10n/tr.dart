@@ -560,10 +560,12 @@ const trStrings = <String, String>{
   'rec_err_own_guild': 'Bu, kendi loncanın sayfası.',
   'rec_err_generic': 'Bir şeyler ters gitti. Birazdan tekrar dene.',
   'trade_watch_title': 'Satış ve alış bildirimleri',
-  'trade_watch_ask': 'Ticaret merkezindeki bir ilanın satıldığında ya da alım emrin tamamlandığında bildirim almak ister misin?\n\nBunun için uygulama sunucumuza 30 gün geçerli, yalnızca hesap adını ve alım-satım geçmişini görebilen sınırlı bir anahtar verir. API anahtarın bu cihazda kalır: sunucu envanterini, cüzdanını ya da karakterlerini göremez.\n\nİstediğin zaman Ayarlar\'dan kapatabilirsin.',
+  'trade_watch_ask':
+      'Ticaret merkezindeki bir ilanın satıldığında ya da alım emrin tamamlandığında bildirim almak ister misin?\n\nBunun için uygulama sunucumuza 30 gün geçerli, yalnızca hesap adını ve alım-satım geçmişini görebilen sınırlı bir anahtar verir. API anahtarın bu cihazda kalır: sunucu envanterini, cüzdanını ya da karakterlerini göremez.\n\nİstediğin zaman Ayarlar\'dan kapatabilirsin.',
   'trade_watch_yes': 'Evet, bildir',
   'trade_watch_no': 'Şimdi değil',
-  'trade_watch_note': 'Sunucumuz uygulama kapalıyken bile birkaç dakikada bir bakar. Yalnızca alım-satım geçmişin paylaşılır, API anahtarın asla.',
+  'trade_watch_note':
+      'Sunucumuz uygulama kapalıyken bile birkaç dakikada bir bakar. Yalnızca alım-satım geçmişin paylaşılır, API anahtarın asla.',
   'trade_watch_on': 'Satış ve alışların bildirilecek.',
   'trade_watch_off': 'Satış ve alış bildirimleri kapalı.',
   'trade_watch_failed': 'Satış bildirimleri açılamadı. Daha sonra tekrar dene.',

@@ -566,10 +566,12 @@ const esStrings = <String, String>{
   'rec_err_own_guild': 'Es la página de tu propio gremio.',
   'rec_err_generic': 'Algo salió mal. Inténtalo de nuevo en un momento.',
   'trade_watch_title': 'Ventas y compras',
-  'trade_watch_ask': '¿Quieres recibir una notificación cuando se venda uno de tus anuncios del bazar o se complete una orden de compra?\n\nPara ello, la app le da a nuestro servidor una clave limitada que, durante 30 días, solo puede ver el nombre de tu cuenta y tu historial de compras y ventas. Tu clave de API se queda en este dispositivo: el servidor no puede ver tu inventario, tu cartera ni tus personajes.\n\nPuedes desactivarlo cuando quieras en Ajustes.',
+  'trade_watch_ask':
+      '¿Quieres recibir una notificación cuando se venda uno de tus anuncios del bazar o se complete una orden de compra?\n\nPara ello, la app le da a nuestro servidor una clave limitada que, durante 30 días, solo puede ver el nombre de tu cuenta y tu historial de compras y ventas. Tu clave de API se queda en este dispositivo: el servidor no puede ver tu inventario, tu cartera ni tus personajes.\n\nPuedes desactivarlo cuando quieras en Ajustes.',
   'trade_watch_yes': 'Sí, avísame',
   'trade_watch_no': 'Ahora no',
-  'trade_watch_note': 'Nuestro servidor lo revisa cada pocos minutos, incluso con la app cerrada. Solo se comparte tu historial del bazar, nunca tu clave de API.',
+  'trade_watch_note':
+      'Nuestro servidor lo revisa cada pocos minutos, incluso con la app cerrada. Solo se comparte tu historial del bazar, nunca tu clave de API.',
   'trade_watch_on': 'Te avisaremos de tus ventas y compras.',
   'trade_watch_off': 'Las notificaciones de ventas y compras están desactivadas.',
   'trade_watch_failed': 'No se pudieron activar las notificaciones de ventas. Inténtalo más tarde.',

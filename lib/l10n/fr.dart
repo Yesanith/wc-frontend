@@ -568,10 +568,12 @@ const frStrings = <String, String>{
   'rec_err_own_guild': 'C\'est la page de ta propre guilde.',
   'rec_err_generic': 'Un problème est survenu. Réessaie dans un instant.',
   'trade_watch_title': 'Ventes et achats',
-  'trade_watch_ask': 'Recevoir une notification quand une de tes annonces du comptoir est vendue ou qu\'un ordre d\'achat est exécuté ?\n\nPour cela, l\'app donne à notre serveur une clé limitée qui, pendant 30 jours, ne peut voir que le nom de ton compte et ton historique d\'achats et de ventes. Ta clé d\'API reste sur cet appareil : le serveur ne voit ni ton inventaire, ni ton portefeuille, ni tes personnages.\n\nTu peux le désactiver à tout moment dans les Paramètres.',
+  'trade_watch_ask':
+      'Recevoir une notification quand une de tes annonces du comptoir est vendue ou qu\'un ordre d\'achat est exécuté ?\n\nPour cela, l\'app donne à notre serveur une clé limitée qui, pendant 30 jours, ne peut voir que le nom de ton compte et ton historique d\'achats et de ventes. Ta clé d\'API reste sur cet appareil : le serveur ne voit ni ton inventaire, ni ton portefeuille, ni tes personnages.\n\nTu peux le désactiver à tout moment dans les Paramètres.',
   'trade_watch_yes': 'Oui, me prévenir',
   'trade_watch_no': 'Pas maintenant',
-  'trade_watch_note': 'Notre serveur vérifie toutes les quelques minutes, même quand l\'app est fermée. Seul ton historique du comptoir est partagé, jamais ta clé d\'API.',
+  'trade_watch_note':
+      'Notre serveur vérifie toutes les quelques minutes, même quand l\'app est fermée. Seul ton historique du comptoir est partagé, jamais ta clé d\'API.',
   'trade_watch_on': 'Tu seras prévenu de tes ventes et achats.',
   'trade_watch_off': 'Les notifications de ventes et d\'achats sont désactivées.',
   'trade_watch_failed': 'Impossible d\'activer les notifications de ventes. Réessaie plus tard.',

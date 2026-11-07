@@ -564,10 +564,12 @@ const ptStrings = <String, String>{
   'rec_err_own_guild': 'É a página da sua própria guilda.',
   'rec_err_generic': 'Algo deu errado. Tente novamente em instantes.',
   'trade_watch_title': 'Vendas e compras',
-  'trade_watch_ask': 'Quer receber uma notificação quando um anúncio seu no bazar for vendido ou uma ordem de compra for concluída?\n\nPara isso, o app entrega ao nosso servidor uma chave limitada que, por 30 dias, só vê o nome da sua conta e seu histórico de compras e vendas. Sua chave de API fica neste dispositivo: o servidor não vê seu inventário, sua carteira nem seus personagens.\n\nVocê pode desligar quando quiser nas Configurações.',
+  'trade_watch_ask':
+      'Quer receber uma notificação quando um anúncio seu no bazar for vendido ou uma ordem de compra for concluída?\n\nPara isso, o app entrega ao nosso servidor uma chave limitada que, por 30 dias, só vê o nome da sua conta e seu histórico de compras e vendas. Sua chave de API fica neste dispositivo: o servidor não vê seu inventário, sua carteira nem seus personagens.\n\nVocê pode desligar quando quiser nas Configurações.',
   'trade_watch_yes': 'Sim, me avise',
   'trade_watch_no': 'Agora não',
-  'trade_watch_note': 'Nosso servidor verifica a cada poucos minutos, mesmo com o app fechado. Só o seu histórico do bazar é compartilhado, nunca a sua chave de API.',
+  'trade_watch_note':
+      'Nosso servidor verifica a cada poucos minutos, mesmo com o app fechado. Só o seu histórico do bazar é compartilhado, nunca a sua chave de API.',
   'trade_watch_on': 'Você será avisado das suas vendas e compras.',
   'trade_watch_off': 'As notificações de vendas e compras estão desligadas.',
   'trade_watch_failed': 'Não foi possível ligar as notificações de vendas. Tente mais tarde.',
