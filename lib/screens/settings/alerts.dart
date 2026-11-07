@@ -232,7 +232,9 @@ class _TradeWatchPanelState extends ConsumerState<_TradeWatchPanel> {
     setState(() => _busy = true);
     try {
       if (on) {
-        await turnOnTradeWatch(context, container);
+        // what the server is given is said first, in plain words, and nothing is sent without a yes
+        final yes = await showDialog<bool>(context: context, builder: (_) => const TradeWatchAsk());
+        if (yes == true && mounted) await turnOnTradeWatch(context, container);
       } else {
         await stopTradeWatch();
         container.invalidate(tradeWatchesProvider);

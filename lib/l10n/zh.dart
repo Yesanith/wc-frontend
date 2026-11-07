@@ -524,6 +524,7 @@ const zhStrings = <String, String>{
   'rec_err_too_many': '你今天举报了很多页面，请明天再试。',
   'rec_err_own_guild': '这是你自己公会的页面。',
   'rec_err_generic': '出错了，请稍后再试。',
+  'push_browser_blocked': '此浏览器拒绝了通知订阅。如果你使用 Brave：设置 → 隐私和安全 → 开启“使用 Google 服务推送消息”，然后刷新页面。',
   'trade_watch_title': '买卖通知',
   'trade_watch_ask':
       '当你在交易所的挂单售出或购买订单完成时，要接收通知吗？\n\n为此，应用会向我们的服务器提供一个受限密钥，30 天内只能查看你的账户名和买卖记录。你的 API 密钥留在此设备上：服务器看不到你的背包、钱包或角色。\n\n你可以随时在设置中关闭。',

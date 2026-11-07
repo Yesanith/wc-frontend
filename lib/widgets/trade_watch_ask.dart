@@ -43,21 +43,37 @@ Future<bool> turnOnTradeWatch(BuildContext context, ProviderContainer container)
   }
 
   try {
-    if (!await enablePush(container.read(langProvider).code)) {
+    final bool allowed;
+    try {
+      allowed = await enablePush(container.read(langProvider).code);
+    } catch (e) {
+      // the browser turned the subscription down although notifications are allowed: Brave, for one, leaves the push
+      // service of Google off until it is switched on in its settings
+      if (context.mounted) {
+        showToast(context, '${s.t('push_browser_blocked')} (${'$e'.split('\n').first})',
+            duration: const Duration(seconds: 12));
+      }
+      return false;
+    }
+    if (!allowed) {
       say('push_denied');
       return false;
     }
     await prefs.setBool(pushPref, true);
     await startTradeWatch(container.read(gw2ApiProvider));
   } on LinkFailure catch (e) {
-    say(switch (e.code) {
+    final key = switch (e.code) {
       'not_linked' || 'missing_permission' || 'subtoken_failed' => 'trade_watch_needs',
       'rate_limited' => 'err_rate_limited',
       _ => 'trade_watch_failed',
-    });
+    };
+    // the code goes with the words, so that a report says which step failed
+    if (context.mounted) showToast(context, '${s.t(key)} (${e.code})', duration: const Duration(seconds: 6));
     return false;
-  } catch (_) {
-    say('trade_watch_failed');
+  } catch (e) {
+    if (context.mounted) {
+      showToast(context, '${s.t('trade_watch_failed')} (${'$e'.split('\n').first})', duration: const Duration(seconds: 6));
+    }
     return false;
   } finally {
     container.invalidate(tradeWatchesProvider);

@@ -4,10 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../api/gw2_api.dart';
 import 'community.dart';
 
-/// on once the player was asked whether the server may tell them what the trading post did for them, whatever they
-/// answered: they are asked once, and change it in the settings
-const tradeWatchAskedPref = 'trade_watch_asked';
-
 /// the addresses the subtoken the server keeps may read, and nothing else: whose account it is, and the history of
 /// what was sold and bought
 const tradeWatchUrls = [

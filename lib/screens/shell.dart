@@ -29,7 +29,6 @@ import '../state/wealth.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/account_badge.dart';
-import '../widgets/trade_watch_ask.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -151,8 +150,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     unawaited(recordAppOpen(ref));
     await refreshLink(ProviderScope.containerOf(context, listen: false));
     if (!mounted) return;
-    // one question at a time: the one of the trading post first, the guild's sharing at the next opening
-    if (await _tradeWatch() || !mounted) return;
+    unawaited(_renewTradeWatch());
     try {
       final guilds = await ref.read(myGuildsProvider.future);
       for (final g in guilds) {
@@ -173,41 +171,22 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     }
   }
 
-  /// the server's look at the trading post of the active account: asked once, when the account is linked and its key
-  /// may read the trading post, and the subtoken the server has is made again before it runs out or after the game
-  /// turned it down. whether the question was asked
-  Future<bool> _tradeWatch() async {
-    if (!pushReady) return false;
+  /// the server's look at the trading post of the active account: the subtoken it has is made again before it runs out,
+  /// or after the game turned it down. the player turns it on in the settings, where they are asked. never fails
+  Future<void> _renewTradeWatch() async {
+    if (!pushReady) return;
     final container = ProviderScope.containerOf(context, listen: false);
     try {
-      if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return false;
-      final permissions = [
-        for (final p in ((await container.read(tokenInfoProvider.future))['permissions'] as List?) ?? const []) '$p',
-      ];
-      if (!canWatchTrades(permissions)) return false;
+      if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return;
       final name = '${(await container.read(accountProvider.future))['name'] ?? ''}'.toLowerCase();
-      final linked = await container.read(linkedAccountsProvider.future);
-      if (name.isEmpty || !linked.any((a) => a.name.toLowerCase() == name)) return false;
-      final watch = (await container.read(tradeWatchesProvider.future))
-          .where((w) => w.accountName.toLowerCase() == name)
-          .firstOrNull;
-      if (watch != null) {
-        if (watch.renewalDue(DateTime.now())) {
-          await startTradeWatch(container.read(gw2ApiProvider));
-          container.invalidate(tradeWatchesProvider);
-        }
-        return false;
-      }
-      final prefs = container.read(prefsProvider);
-      if (prefs.getBool(tradeWatchAskedPref) == true || !mounted) return false;
-      await prefs.setBool(tradeWatchAskedPref, true);
-      if (!mounted) return false;
-      final yes = await showDialog<bool>(context: context, builder: (_) => const TradeWatchAsk());
-      if (yes == true && mounted) await turnOnTradeWatch(context, container);
-      return true;
+      if (name.isEmpty) return;
+      final watch =
+          (await container.read(tradeWatchesProvider.future)).where((w) => w.accountName.toLowerCase() == name).firstOrNull;
+      if (watch == null || !watch.renewalDue(DateTime.now())) return;
+      await startTradeWatch(container.read(gw2ApiProvider));
+      container.invalidate(tradeWatchesProvider);
     } catch (_) {
-      // asked, or renewed, at the next opening
-      return false;
+      // renewed at the next opening
     }
   }
 
