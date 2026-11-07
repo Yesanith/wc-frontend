@@ -18,6 +18,7 @@ import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
 import 'guild_roster_screen.dart';
+import 'open_event_labels.dart' show openEventDuration;
 
 part 'guild_events/detail.dart';
 part 'guild_events/roster.dart';

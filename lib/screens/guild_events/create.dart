@@ -58,10 +58,13 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
 
   Future<void> _pickDate() async {
     final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    // an event that is going on may have begun before today, and the picker refuses a day before its first
+    final first = DateUtils.dateOnly(_start).isBefore(today) ? DateUtils.dateOnly(_start) : today;
     final day = await showDatePicker(
       context: context,
       initialDate: _start,
-      firstDate: DateTime(now.year, now.month, now.day),
+      firstDate: first,
       lastDate: now.add(const Duration(days: 365)),
     );
     if (day == null || !mounted) return;
@@ -273,7 +276,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
             children: [
               for (final m in durations)
                 ChoiceChip(
-                  label: Text(m < 60 ? '$m min' : '${m ~/ 60}${m % 60 == 0 ? '' : '.5'} h'),
+                  label: Text(openEventDuration(m)),
                   selected: _duration == m,
                   onSelected: (_) => setState(() => _duration = m),
                 ),

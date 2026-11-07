@@ -85,6 +85,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     }
     setState(() => _busy = true);
     final backend = ref.read(recruitBackendProvider);
+    final refresh = _refreshLater();
     try {
       final id = widget.guild.guildId;
       final wasPublished = _page?.published ?? false;
@@ -93,9 +94,9 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
       if (wasPublished && !_published) await backend.setPublished(id, false);
       var saved = await backend.save(id, _draft);
       if (!wasPublished && _published && saved != null) saved = await backend.setPublished(id, true);
+      refresh();
       if (!mounted) return;
       setState(() => _page = saved ?? _page);
-      _refreshLists();
       showToast(context, s.t('rec_saved'));
     } catch (e) {
       if (mounted) showToast(context, s.t(recruitErrorKey(e)));
@@ -117,20 +118,27 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
       ),
     );
     if (yes != true || !mounted) return;
+    final refresh = _refreshLater();
     try {
       await ref.read(recruitBackendProvider).delete(widget.guild.guildId);
+      refresh();
       if (!mounted) return;
-      _refreshLists();
       Navigator.of(context).pop();
     } catch (e) {
       if (mounted) showToast(context, s.t(recruitErrorKey(e)));
     }
   }
 
-  void _refreshLists() {
-    ref.invalidate(recruitPageProvider(widget.guild.guildId));
-    ref.invalidate(recruitListProvider);
-    ref.invalidate(myRecruitProvider);
+  /// the page and the lists, read again through the container: the editor may have been left while the database
+  /// answered, and the lists behind it still have to show what was saved or deleted
+  void Function() _refreshLater() {
+    final container = ProviderScope.containerOf(context, listen: false);
+    final guildId = widget.guild.guildId;
+    return () {
+      container.invalidate(recruitPageProvider(guildId));
+      container.invalidate(recruitListProvider);
+      container.invalidate(myRecruitProvider);
+    };
   }
 
   @override

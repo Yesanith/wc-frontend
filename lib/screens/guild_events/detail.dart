@@ -71,7 +71,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     String? profession;
     if (status == 'going' && d.roles.isNotEmpty) {
       role = await _pickRole(d);
-      if (role == null) return;
+      if (role == null || !mounted) return;
       // the others see which profession fills the role
       profession = await _pickProfession(role);
       if (profession == null) return;
@@ -221,8 +221,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
     } finally {
-      ref.invalidate(eventDetailProvider(widget.eventId));
-      if (mounted) setState(() => _busy = false);
+      _done();
     }
   }
 
