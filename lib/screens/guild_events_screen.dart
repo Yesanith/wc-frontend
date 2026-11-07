@@ -51,6 +51,7 @@ Color statusColor(String? status) => switch (status) {
 
 String eventFailureText(S s, Object e) {
   final code = e is EventFailure ? e.code : 'event_failed';
+  if (code == 'rate_limited') return s.t('err_rate_limited');
   const known = {
     'start_in_past',
     'version_conflict',
@@ -99,10 +100,12 @@ class GuildEventsScreen extends ConsumerWidget {
               backgroundColor: AppColors.gold,
               foregroundColor: AppColors.bg,
               onPressed: () async {
+                // the container outlives this page, which may be gone when the form is closed
+                final container = ProviderScope.containerOf(context, listen: false);
                 final created = await Navigator.of(context).push<bool>(
                   MaterialPageRoute(builder: (_) => const CreateGuildEventScreen()),
                 );
-                if (created == true) ref.invalidate(upcomingEventsProvider);
+                if (created == true) container.invalidate(upcomingEventsProvider);
               },
               icon: const Icon(Icons.add),
               label: Text(s.t('event_create')),
@@ -193,8 +196,10 @@ class _EventCard extends ConsumerWidget {
     final capacity = e.maxParticipants == null ? '${summary.going}' : '${summary.going}/${e.maxParticipants}';
     return AppCard(
       onTap: () async {
+        // an event deleted in its page is gone from the list, and this card with it, by the time the page closes
+        final container = ProviderScope.containerOf(context, listen: false);
         await openPanel(context, (_) => GuildEventScreen(eventId: e.id));
-        ref.invalidate(upcomingEventsProvider);
+        container.invalidate(upcomingEventsProvider);
       },
       child: Row(
         children: [

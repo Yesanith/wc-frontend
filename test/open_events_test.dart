@@ -186,6 +186,7 @@ void main() {
         'event_full': 'oe_err_full',
         'below_going': 'oe_err_below',
         'already_reported': 'oe_err_reported',
+        'rate_limited': 'err_rate_limited',
       };
       reasons.forEach((hint, key) {
         expect(openEventErrorKey(OpenEventFailure(hint)), key, reason: hint);

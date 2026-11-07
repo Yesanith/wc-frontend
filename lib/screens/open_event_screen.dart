@@ -137,11 +137,13 @@ class _EventBodyState extends ConsumerState<_EventBody> {
 
   S get _s => ref.read(stringsProvider);
 
-  void _refresh() {
-    ref.invalidate(openEventProvider(widget.event.id));
-    ref.invalidate(openEventsFeedProvider);
-    ref.invalidate(myOpenEventsProvider);
-    ref.invalidate(openRosterProvider(widget.event.id));
+  /// the lists are asked for again through the container, which outlives this page: it may have been closed while the
+  /// database answered
+  void _refresh(ProviderContainer container) {
+    container.invalidate(openEventProvider(widget.event.id));
+    container.invalidate(openEventsFeedProvider);
+    container.invalidate(myOpenEventsProvider);
+    container.invalidate(openRosterProvider(widget.event.id));
   }
 
   /// the accounts of the player that may take part, and what to ask for: nothing when there is no choice to make
@@ -186,12 +188,13 @@ class _EventBodyState extends ConsumerState<_EventBody> {
       role = await pickEventRole(context, _s, e.roles, current: e.myRole);
       if (role == null || !mounted) return;
       profession = await pickEventProfession(context, _s, role);
-      if (profession == null) return;
+      if (profession == null || !mounted) return;
     }
     await _act(() => joinOpenEvent(e.id, status, account: _chosenAccount(e), role: role, profession: profession));
   }
 
   Future<void> _act(Future<void> Function() action, {String? done, bool leave = false}) async {
+    final container = ProviderScope.containerOf(context, listen: false);
     setState(() => _busy = true);
     try {
       await action();
@@ -201,7 +204,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
-    _refresh();
+    _refresh(container);
     if (leave && mounted) Navigator.of(context).pop();
   }
 
@@ -229,7 +232,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
         ],
       ),
     );
-    if (reason == null) return;
+    if (reason == null || !mounted) return;
     await _act(() => reportOpenEvent(widget.event.id, reason), done: _s.t('oe_reported'));
   }
 
@@ -388,9 +391,10 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                   onPressed: _busy
                       ? null
                       : () async {
+                          final container = ProviderScope.containerOf(context, listen: false);
                           final saved = await Navigator.of(context)
                               .push<bool>(MaterialPageRoute(builder: (_) => OpenEventFormScreen(editing: e)));
-                          if (saved == true) _refresh();
+                          if (saved == true) _refresh(container);
                         },
                   icon: const Icon(Icons.edit_outlined, size: 18),
                   label: Text(s.t('oe_edit')),

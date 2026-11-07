@@ -209,6 +209,8 @@ void main() {
           expect(text, isNot('event_err_$code'), reason: '${lang.code} $code');
           expect(text, isNot(contains('(')), reason: 'a known code has its own text');
         }
+        // too many changes in an hour, which the database counts per player
+        expect(eventFailureText(s, const EventFailure('rate_limited')), s.t('err_rate_limited'), reason: lang.code);
       }
     });
   });

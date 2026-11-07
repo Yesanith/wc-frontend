@@ -392,6 +392,7 @@ String recruitErrorKey(Object e) {
     'too_many': 'rec_err_too_many',
     'own_guild': 'rec_err_own_guild',
     'unavailable': 'rec_unavailable',
+    'rate_limited': 'err_rate_limited',
   };
   return e is RecruitFailure ? (keys[e.code] ?? 'rec_err_generic') : 'rec_err_generic';
 }

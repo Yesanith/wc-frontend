@@ -341,6 +341,7 @@ void main() {
         'too_many': 'rec_err_too_many',
         'own_guild': 'rec_err_own_guild',
         'unavailable': 'rec_unavailable',
+        'rate_limited': 'err_rate_limited',
       };
       expected.forEach((hint, key) => expect(recruitErrorKey(RecruitFailure(hint)), key, reason: hint));
       expect(recruitErrorKey(const RecruitFailure('something new')), 'rec_err_generic');

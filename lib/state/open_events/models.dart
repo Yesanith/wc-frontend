@@ -37,6 +37,8 @@ String openEventErrorKey(Object e) {
     'bad_profession': 'oe_err_profession',
     'role_full': 'oe_err_role_full',
     'bad_roles': 'oe_err_roles',
+    // the database counts reports, sign ups and changes per player and hour
+    'rate_limited': 'err_rate_limited',
   };
   final code = e is OpenEventFailure ? e.code : (e is PostgrestException ? e.hint : null);
   return keys[code] ?? 'oe_err_generic';

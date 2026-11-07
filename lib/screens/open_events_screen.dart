@@ -33,11 +33,13 @@ class OpenEventsScreen extends ConsumerWidget {
           backgroundColor: AppColors.gold,
           foregroundColor: AppColors.bg,
           onPressed: () async {
+            // the container outlives this page, which may be gone when the form is closed
+            final container = ProviderScope.containerOf(context, listen: false);
             final made =
                 await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const OpenEventFormScreen()));
             if (made == true) {
-              ref.invalidate(openEventsFeedProvider);
-              ref.invalidate(myOpenEventsProvider);
+              container.invalidate(openEventsFeedProvider);
+              container.invalidate(myOpenEventsProvider);
             }
           },
           icon: const Icon(Icons.add),
@@ -257,9 +259,11 @@ class _OpenEventCard extends ConsumerWidget {
     final live = e.isLive(DateTime.now());
     return AppCard(
       onTap: () async {
+        // an event deleted or left in its page is gone from the list, and this card with it, when the page closes
+        final container = ProviderScope.containerOf(context, listen: false);
         await showOpenEvent(context, e.id);
-        ref.invalidate(openEventsFeedProvider);
-        ref.invalidate(myOpenEventsProvider);
+        container.invalidate(openEventsFeedProvider);
+        container.invalidate(myOpenEventsProvider);
       },
       child: Row(
         children: [
@@ -319,7 +323,7 @@ class _OpenEventCard extends ConsumerWidget {
 }
 
 // ---------------------------------------------------------------------------
-// one event
+// hidden organizers
 
 /// the organizers whose events are hidden, each with a way to show them again
 void _showHiddenOrganizers(BuildContext context) {

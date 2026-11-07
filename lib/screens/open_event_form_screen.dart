@@ -394,11 +394,14 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
             Kicker(s.t('event_duration')),
             const SizedBox(height: 6),
             DropdownButtonFormField<int>(
-              initialValue: openEventDurations.contains(_duration) ? _duration : null,
+              initialValue: _duration,
               dropdownColor: AppColors.surface,
               decoration: fieldDecoration(''),
+              // an event made elsewhere, on Discord or in a game module, may last a time that is not in the list: it is
+              // offered too, so that the field shows it and saving keeps it
               items: [
-                for (final d in openEventDurations) DropdownMenuItem(value: d, child: Text(openEventDuration(d)))
+                for (final d in ({...openEventDurations, _duration}.toList()..sort()))
+                  DropdownMenuItem(value: d, child: Text(openEventDuration(d)))
               ],
               onChanged: (v) => setState(() => _duration = v ?? _duration),
             ),
