@@ -12,6 +12,9 @@ world's timers in one place. It is free, has no ads and does not track you.
 - **Browser:** [yesanith.github.io/wc-frontend/app](https://yesanith.github.io/wc-frontend/app/)
 - **Site, FAQ and privacy policy:** [yesanith.github.io/wc-frontend](https://yesanith.github.io/wc-frontend/)
 
+These are the only official builds. A copy under this name anywhere else that asks for your API key is not this app, see
+[TRADEMARKS.md](TRADEMARKS.md).
+
 ## Getting started
 
 1. Install the APK (Android asks once to allow installs from your browser or file manager), or open the
@@ -216,7 +219,8 @@ regenerates it with the recipes.
 
 ## License
 
-The code is under the [MIT License](LICENSE). Game data, icons, map tiles and names come from
+The code is under the [MIT License](LICENSE). The name Wondrous Compass, its logo and its icons are not: a fork is
+published under a name and with art of its own, see [TRADEMARKS.md](TRADEMARKS.md). Game data, icons, map tiles and names come from
 ArenaNet's Guild Wars 2 API and belong to ArenaNet; wiki text belongs to the Guild Wars 2 Wiki. Neither
 is covered by this license.
 
