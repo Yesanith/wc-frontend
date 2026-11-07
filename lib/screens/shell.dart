@@ -206,7 +206,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       told = now;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dropAddressQuery();
-        if (mounted) showToast(context, ref.read(stringsProvider).t('signin_failed'), duration: const Duration(seconds: 6));
+        if (mounted)
+          showToast(context, ref.read(stringsProvider).t('signin_failed'), duration: const Duration(seconds: 6));
       });
     }
 

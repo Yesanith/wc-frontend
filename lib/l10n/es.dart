@@ -224,7 +224,8 @@ const esStrings = <String, String>{
   'settings_data': 'Datos',
   'settings_data_note': 'Sincronización, copia de seguridad y la copia guardada de los datos del juego.',
   'settings_app': 'Aplicación',
-  'signin_failed': 'El inicio de sesión con Discord no terminó. Inténtalo de nuevo y quédate en la página hasta que acabe.',
+  'signin_failed':
+      'El inicio de sesión con Discord no terminó. Inténtalo de nuevo y quédate en la página hasta que acabe.',
   'nav_sign_in': 'Iniciar sesión con Discord',
   'nav_no_gw2': 'Sin cuenta del juego vinculada',
   'module_link_title': 'Blish HUD · Nexus',

@@ -12,7 +12,8 @@ void main() {
   });
 
   test('the address a sign in that went wrong came back to is told apart', () {
-    expect(hasAuthError(Uri.parse('https://x.example/app/?error=invalid_request&error_code=bad_oauth_state#/settings')), isTrue);
+    expect(hasAuthError(Uri.parse('https://x.example/app/?error=invalid_request&error_code=bad_oauth_state#/settings')),
+        isTrue);
     expect(hasAuthError(Uri.parse('https://x.example/app/#/settings')), isFalse);
     expect(hasAuthError(Uri.parse('https://x.example/app/?code=abc')), isFalse);
   });
