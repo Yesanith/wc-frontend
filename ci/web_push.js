@@ -18,9 +18,20 @@
     });
     if (reg.active) return reg;
     var sw = reg.installing || reg.waiting;
-    await new Promise(function (done) {
+    // a worker that cannot be installed turns redundant and is never activated: it is given up after a while, so that
+    // the switch does not turn for ever
+    await new Promise(function (done, fail) {
+      var timer = setTimeout(function () {
+        fail(new Error('the service worker did not start'));
+      }, 15000);
       sw.addEventListener('statechange', function () {
-        if (sw.state === 'activated') done();
+        if (sw.state === 'activated') {
+          clearTimeout(timer);
+          done();
+        } else if (sw.state === 'redundant') {
+          clearTimeout(timer);
+          fail(new Error('the service worker could not be installed'));
+        }
       });
     });
     return reg;

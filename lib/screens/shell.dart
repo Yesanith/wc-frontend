@@ -174,7 +174,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   /// the server's look at the trading post of the active account: the subtoken it has is made again before it runs out,
   /// or after the game turned it down. the player turns it on in the settings, where they are asked. never fails
   Future<void> _renewTradeWatch() async {
-    if (!pushReady) return;
+    // any device of the player renews it, also one that gets no notifications itself
+    if (!communityReady) return;
     final container = ProviderScope.containerOf(context, listen: false);
     try {
       if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return;
