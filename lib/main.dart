@@ -33,10 +33,10 @@ Future<void> main() async {
   final icons = kIsWeb ? null : await IconCache.open();
   // the community account is optional, a failure here never blocks the app
   await initCommunity();
-  // push notifications need the community account, and are off without firebase values
-  // in a browser there are neither, the settings hide them
+  // push notifications need the community account, and are off without firebase values. a browser has them through
+  // the page's bridge (web_push.js) when the site was built with the Firebase web app
+  await initPush();
   if (!kIsWeb) {
-    await initPush();
     // alerts before pinned world events, from the phone's own alarms
     await initBossAlerts();
     // the look at the trading post while the app is closed, asked for again each time in case an update of the app lost it

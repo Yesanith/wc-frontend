@@ -43,12 +43,18 @@ const siteNavGroups = <(String, List<AppSection>)>[
 /// that. a narrower one is shown as an app, with its menu beside the page
 const siteMinWidth = 1280.0;
 
-/// what the bar has room for at a width: a search box of a width and the account, or the search as a button that opens it in a window, so
-/// that the sections are never pushed out of the bar. the room is a width of the window and not of the bar, which is never wider than a page
-({double? searchWidth, bool account}) siteBarLayout(double width) {
-  if (width >= 1700) return (searchWidth: 260, account: true);
-  if (width >= 1500) return (searchWidth: 200, account: false);
-  return (searchWidth: null, account: false);
+/// how wide the bar may grow. wider than a page: the sections, the search and the account are more than a page's width
+/// holds in the longer languages, and the search was drawn over the last of the sections
+const siteBarMaxWidth = 1880.0;
+
+/// what the bar has room for at a width: a search box of a width, the name of the account beside its picture, and the
+/// version beside the name of the app; or the search as a button that opens it in a window and the picture alone, so that
+/// the sections are never pushed out of the bar. the room is a width of the window, the bar is at most [siteBarMaxWidth]
+({double? searchWidth, bool account, bool version}) siteBarLayout(double width) {
+  if (width >= 1900) return (searchWidth: 260, account: true, version: true);
+  if (width >= 1700) return (searchWidth: 200, account: false, version: true);
+  if (width >= 1500) return (searchWidth: null, account: false, version: true);
+  return (searchWidth: null, account: false, version: false);
 }
 
 /// which group a section is in, by its place in [siteNavGroups], or null for one that stands alone
@@ -128,7 +134,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
           children: [
             Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: contentMaxWidth),
+                constraints: const BoxConstraints(maxWidth: siteBarMaxWidth),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -143,8 +149,10 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                               const DiamondEmblem(size: 30),
                               const SizedBox(width: 10),
                               Text('Wondrous Compass', style: display(20)),
-                              const SizedBox(width: 8),
-                              const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                              if (siteBarLayout(MediaQuery.sizeOf(context).width).version) ...[
+                                const SizedBox(width: 8),
+                                const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
+                              ],
                             ],
                           ),
                         ),
