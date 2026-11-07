@@ -38,17 +38,20 @@ void main() {
         'is a search that is a button on a window that is not wide, a narrower box on a wider one, and a wide one with the account on the widest',
         () {
       expect(siteBarLayout(1000).searchWidth, isNull);
-      expect(siteBarLayout(1499).searchWidth, isNull);
-      expect(siteBarLayout(1500).searchWidth, 200);
-      expect(siteBarLayout(1699).searchWidth, 200);
-      expect(siteBarLayout(1700).searchWidth, 260);
+      expect(siteBarLayout(1699).searchWidth, isNull);
+      expect(siteBarLayout(1700).searchWidth, 200);
+      expect(siteBarLayout(1899).searchWidth, 200);
+      expect(siteBarLayout(1900).searchWidth, 260);
       expect(siteBarLayout(3840).searchWidth, 260);
+      // the version beside the name of the app makes room on the narrowest
+      expect(siteBarLayout(1499).version, isFalse);
+      expect(siteBarLayout(1500).version, isTrue);
     });
 
     test('has the account only where the bar is widest, and never takes it when the search is a button', () {
       expect(siteBarLayout(1000).account, isFalse);
-      expect(siteBarLayout(1699).account, isFalse);
-      expect(siteBarLayout(1700).account, isTrue);
+      expect(siteBarLayout(1899).account, isFalse);
+      expect(siteBarLayout(1900).account, isTrue);
       for (var w = 800.0; w <= 3000; w += 50) {
         final layout = siteBarLayout(w);
         if (layout.searchWidth == null) expect(layout.account, isFalse, reason: '$w');
