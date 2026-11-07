@@ -373,7 +373,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   void _startPush() {
     if (!pushReady || ref.read(prefsProvider).getBool(pushPref) == false) return;
-    enablePush(ref.read(langProvider).code).catchError((_) => false);
+    // quietly: a browser asks for the permission only after a click, in the settings or when the player agreed
+    enablePush(ref.read(langProvider).code, quiet: kIsWeb).catchError((_) => false);
   }
 
   @override

@@ -123,6 +123,13 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          # the notifications of a browser: the web app of the Firebase project and its Web Push certificate. without
+          # them the page has no notifications, and says nothing of them
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_WEB_APP_ID: ${{ secrets.FIREBASE_WEB_APP_ID }}
+          FIREBASE_VAPID_KEY: ${{ secrets.FIREBASE_VAPID_KEY }}
         run: |
           OWNER="${GITHUB_REPOSITORY_OWNER,,}"
           REPO="${GITHUB_REPOSITORY#*/}"
@@ -136,7 +143,22 @@ jobs:
             --dart-define=APP_VERSION="${TAG#v}-web" \
             --dart-define=WEB_BASE_URL="https://$OWNER.github.io/$REPO/app/" \
             --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY"
+            --dart-define=SUPABASE_PUBLISHABLE_KEY="$SUPABASE_PUBLISHABLE_KEY" \
+            --dart-define=FIREBASE_API_KEY="$FIREBASE_API_KEY" \
+            --dart-define=FIREBASE_SENDER_ID="$FIREBASE_SENDER_ID" \
+            --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            --dart-define=FIREBASE_WEB_APP_ID="$FIREBASE_WEB_APP_ID" \
+            --dart-define=FIREBASE_VAPID_KEY="$FIREBASE_VAPID_KEY"
+          # the service worker of the notifications, next to the app, with the configuration written in
+          if [ -n "$FIREBASE_API_KEY" ] && [ -n "$FIREBASE_WEB_APP_ID" ] && [ -n "$FIREBASE_VAPID_KEY" ]; then
+            CONFIG=$(jq -cn --arg apiKey "$FIREBASE_API_KEY" --arg projectId "$FIREBASE_PROJECT_ID" \
+              --arg messagingSenderId "$FIREBASE_SENDER_ID" --arg appId "$FIREBASE_WEB_APP_ID" \
+              '{apiKey: $apiKey, projectId: $projectId, messagingSenderId: $messagingSenderId, appId: $appId}')
+            python3 -c 'import sys; t = open("ci/firebase-messaging-sw.js").read(); open("build/web/firebase-messaging-sw.js", "w").write(t.replace("__FIREBASE_CONFIG__", sys.argv[1]))' "$CONFIG"
+            echo "notifications of the browser set up"
+          else
+            echo "no Firebase web app: the page has no notifications"
+          fi
 
       - name: Put the app in the site
         run: |

@@ -12,6 +12,7 @@ import '../state/account.dart';
 import '../state/api.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
+import '../services/web_push.dart';
 import '../state/boss_alerts.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';

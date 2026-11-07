@@ -362,7 +362,8 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final on = ref.watch(prefsProvider).getBool(pushPref) != false;
+    // a browser shows notifications only once the player allowed it there
+    final on = ref.watch(prefsProvider).getBool(pushPref) != false && (!kIsWeb || webPushPermission() == 'granted');
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       value: on,

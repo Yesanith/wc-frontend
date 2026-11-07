@@ -83,6 +83,9 @@ def patch_index(html: str) -> str:
             " var l = document.getElementById('loading'); if (l) l.remove(); });</script>\n</body>",
             1,
         )
+    # the notifications of the app in a browser (web_push.js)
+    if "web_push.js" not in html:
+        html = html.replace("</head>", '  <script src="web_push.js" defer></script>\n</head>', 1)
     return html
 
 
@@ -131,6 +134,9 @@ def main() -> int:
     manifest = WEB / "manifest.json"
     manifest.write_text(json.dumps(patch_manifest(json.loads(manifest.read_text())), indent=2, ensure_ascii=False))
     make_icons()
+    # the bridge to the notifications of the browser; the service worker is written in when the site is built, with
+    # the configuration of Firebase
+    (WEB / "web_push.js").write_text(Path("ci/web_push.js").read_text())
     print("web build set up")
     return 0
 

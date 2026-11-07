@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../state/community.dart';
+import 'web_push.dart';
 
 /// set by the release build from the repository secrets. without them the
 /// app has no push notifications and never touches firebase
@@ -13,7 +17,21 @@ const _appId = String.fromEnvironment('FIREBASE_APP_ID');
 const _senderId = String.fromEnvironment('FIREBASE_SENDER_ID');
 const _projectId = String.fromEnvironment('FIREBASE_PROJECT_ID');
 
-bool get pushConfigured => _apiKey.isNotEmpty && _appId.isNotEmpty && _senderId.isNotEmpty && _projectId.isNotEmpty;
+/// a browser is a web app of the Firebase project, with an app id of its own, and its Web Push certificate
+const _webAppId = String.fromEnvironment('FIREBASE_WEB_APP_ID');
+const _vapidKey = String.fromEnvironment('FIREBASE_VAPID_KEY');
+
+bool get pushConfigured => kIsWeb
+    ? _apiKey.isNotEmpty && _webAppId.isNotEmpty && _senderId.isNotEmpty && _projectId.isNotEmpty && _vapidKey.isNotEmpty
+    : _apiKey.isNotEmpty && _appId.isNotEmpty && _senderId.isNotEmpty && _projectId.isNotEmpty;
+
+/// what the page's bridge starts Firebase with in a browser
+String get _webConfig => jsonEncode({
+      'apiKey': _apiKey,
+      'projectId': _projectId,
+      'messagingSenderId': _senderId,
+      'appId': _webAppId,
+    });
 
 bool _ready = false;
 
@@ -37,6 +55,11 @@ StreamSubscription<String>? _tokenRefresh;
 /// needed. a failure only switches notifications off
 Future<void> initPush() async {
   if (!pushConfigured) return;
+  // a browser goes through the page's bridge, which keeps the service worker next to the app
+  if (kIsWeb) {
+    _ready = webPushSupported();
+    return;
+  }
   try {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -57,9 +80,17 @@ Future<void> initPush() async {
 }
 
 /// asks for permission on android 13 and later, and registers this device
-/// for the signed in player's reminders in [lang]. false when not allowed
-Future<bool> enablePush(String lang) async {
+/// for the signed in player's reminders in [lang]. false when not allowed.
+/// [quiet] asks nothing: a browser is only registered when it already may show notifications, as a browser asks
+/// only after a click of the player
+Future<bool> enablePush(String lang, {bool quiet = false}) async {
   if (!pushReady || Supabase.instance.client.auth.currentSession == null) return false;
+  if (kIsWeb) {
+    final token = await webPushToken(_webConfig, _vapidKey, ask: !quiet);
+    if (token == null || token.isEmpty) return false;
+    await _register(token, lang);
+    return true;
+  }
   final messaging = FirebaseMessaging.instance;
   final permission = await messaging.requestPermission();
   if (permission.authorizationStatus == AuthorizationStatus.denied) return false;
@@ -80,6 +111,18 @@ Future<void> _register(String token, String lang) async {
 /// out, or when they are switched off
 Future<void> disablePush() async {
   if (!pushReady) return;
+  if (kIsWeb) {
+    try {
+      final token = await webPushToken(_webConfig, _vapidKey, ask: false);
+      if (token != null && Supabase.instance.client.auth.currentSession != null) {
+        await Supabase.instance.client.rpc('unregister_push_device', params: {'p_token': token});
+      }
+      await webPushRemove(_webConfig);
+    } catch (_) {
+      // signing out goes on
+    }
+    return;
+  }
   await _tokenRefresh?.cancel();
   _tokenRefresh = null;
   try {

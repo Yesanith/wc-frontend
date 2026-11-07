@@ -53,6 +53,10 @@ class WebTest(unittest.TestCase):
         self.assertIn('<div id="loading">', self.patched)
         self.assertIn("flutter-first-frame", self.patched)
 
+    def test_the_bridge_to_the_notifications_of_the_browser_is_loaded_once(self):
+        self.assertEqual(self.patched.count('<script src="web_push.js" defer></script>'), 1)
+        self.assertEqual(web.patch_index(self.patched).count("web_push.js"), 1)
+
     def test_the_manifest_is_the_apps(self):
         manifest = web.patch_manifest(json.loads('{"name": "x", "short_name": "x"}'))
         self.assertEqual(manifest["name"], "Wondrous Compass")
