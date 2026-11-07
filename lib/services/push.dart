@@ -22,7 +22,11 @@ const _webAppId = String.fromEnvironment('FIREBASE_WEB_APP_ID');
 const _vapidKey = String.fromEnvironment('FIREBASE_VAPID_KEY');
 
 bool get pushConfigured => kIsWeb
-    ? _apiKey.isNotEmpty && _webAppId.isNotEmpty && _senderId.isNotEmpty && _projectId.isNotEmpty && _vapidKey.isNotEmpty
+    ? _apiKey.isNotEmpty &&
+        _webAppId.isNotEmpty &&
+        _senderId.isNotEmpty &&
+        _projectId.isNotEmpty &&
+        _vapidKey.isNotEmpty
     : _apiKey.isNotEmpty && _appId.isNotEmpty && _senderId.isNotEmpty && _projectId.isNotEmpty;
 
 /// what the page's bridge starts Firebase with in a browser

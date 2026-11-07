@@ -30,9 +30,8 @@ String webPushPermission() {
 Future<String?> webPushToken(String configJson, String vapidKey, {required bool ask}) async {
   final bridge = _bridge;
   if (bridge == null) return null;
-  final token = await bridge
-      .callMethod<JSPromise<JSString?>>('token'.toJS, configJson.toJS, vapidKey.toJS, ask.toJS)
-      .toDart;
+  final token =
+      await bridge.callMethod<JSPromise<JSString?>>('token'.toJS, configJson.toJS, vapidKey.toJS, ask.toJS).toDart;
   return token?.toDart;
 }
 
