@@ -7,11 +7,12 @@ diamond, in the theme's gold, here on the theme's dark background.
 Writes into ci/launcher/res, which the release job copies over the default
 Flutter icons after `flutter create`:
 
-  * mipmap-*/ic_launcher.png            classic square icons, every density
-  * mipmap-*/ic_launcher_foreground.png adaptive icon layer (android 8+)
+  * mipmap-*/ic_launcher.png            classic square icons, every density: the icon of the store listing
+  * mipmap-*/ic_launcher_foreground.png adaptive icon layer (android 8+), the same mark with sharp corners
+  * mipmap-*/ic_launcher_background.png the layer under it, the dark of the theme with the glow
   * mipmap-*/ic_launcher_monochrome.png themed icon layer (android 13+)
   * mipmap-anydpi-v26/ic_launcher.xml   ties the adaptive layers together
-  * values/ic_launcher_background.xml   the adaptive background colour
+  * values/ic_launcher_background.xml   the colour of that dark, for what asks for a colour
   * drawable-*/ic_stat_tyria.png        the small icon of notifications, white on clear,
                                         drawn bolder and filling its square because the
                                         status bar shows it about 24dp across
@@ -78,19 +79,30 @@ def write_notification_icons():
         write(render(px, clear, WHITE, 0.92, bold=True), RES, "drawable-%s" % density, "ic_stat_tyria.png")
 
 
-def store_icon(px=512):
-    """the icon of the store listing: the mark as the picture of the site draws it, every corner sharp, about three fifths of the
-    square, on the dark of the theme with a hint of gold glow behind it"""
+def glow(px, share):
+    """the dark of the theme with a hint of gold glow in the middle, as wide as an emblem that is [share] of the square"""
+    flat = Image.new("RGB", (px, px), BG[:3])
+    light = Image.new("RGB", (px, px), BG[:3])
+    reach = px * 0.32 * share / 0.62
+    ImageDraw.Draw(light).ellipse((px / 2 - reach, px / 2 - reach, px / 2 + reach, px / 2 + reach), fill=(58, 47, 33))
+    return Image.blend(flat, light.filter(ImageFilter.GaussianBlur(px * 0.12 * share / 0.62)), 1.0).convert("RGBA")
+
+
+def sharp(px, share, background=None):
+    """the mark as the picture of the site draws it, every corner sharp, [share] of the square across, in gold on the glow
+    or on clear"""
     n = px * 4
-    flat = Image.new("RGB", (n, n), BG[:3])
-    glow = Image.new("RGB", (n, n), BG[:3])
-    ImageDraw.Draw(glow).ellipse((n * 0.18, n * 0.18, n * 0.82, n * 0.82), fill=(58, 47, 33))
-    img = Image.blend(flat, glow.filter(ImageFilter.GaussianBlur(n * 0.12)), 1.0)
+    img = glow(n, share) if background == "glow" else Image.new("RGBA", (n, n), (0, 0, 0, 0))
     layer = Image.new("L", (n, n), 0)
-    r = n * 0.31
-    mark(layer, n / 2, n / 2, (r * 0.93, r * 0.57), n * 0.034, r * 0.24)
-    img.paste(Image.new("RGB", (n, n), GOLD[:3]), (0, 0), layer)
-    return img.resize((px, px), Image.LANCZOS).convert("RGBA")
+    r = n * share / 2
+    mark(layer, n / 2, n / 2, (r * 0.93, r * 0.57), n * 0.034 * share / 0.62, r * 0.24)
+    img.paste(Image.new("RGBA", (n, n), GOLD), (0, 0), layer)
+    return img.resize((px, px), Image.LANCZOS)
+
+
+def store_icon(px=512):
+    """the icon of the store listing: the mark about three fifths of the square on the glow, square, Play rounds it"""
+    return sharp(px, 0.62, "glow")
 
 
 def write(img, *parts):
@@ -103,11 +115,12 @@ def main():
     clear = (0, 0, 0, 0)
     for density, px in DENSITIES.items():
         folder = os.path.join(RES, "mipmap-%s" % density)
-        # the classic icon fills its square, launchers round it themselves
-        write(render(px, BG, GOLD, 0.62), folder, "ic_launcher.png")
-        # adaptive layers are 108dp with a 66dp safe circle in the middle
+        # the classic icon is the icon of the store listing: it fills its square, launchers round it themselves
+        write(store_icon(px), folder, "ic_launcher.png")
+        # adaptive layers are 108dp with a 66dp safe circle in the middle: the same mark on clear, over the glow
         layer = round(px * 108 / 48)
-        write(render(layer, clear, GOLD, 0.42), folder, "ic_launcher_foreground.png")
+        write(sharp(layer, 0.42), folder, "ic_launcher_foreground.png")
+        write(glow(layer, 0.42), folder, "ic_launcher_background.png")
         write(render(layer, clear, WHITE, 0.42), folder, "ic_launcher_monochrome.png")
 
     write_notification_icons()
@@ -118,7 +131,7 @@ def main():
         f.write(
             '<?xml version="1.0" encoding="utf-8"?>\n'
             '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
-            '    <background android:drawable="@color/ic_launcher_background"/>\n'
+            '    <background android:drawable="@mipmap/ic_launcher_background"/>\n'
             '    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>\n'
             '    <monochrome android:drawable="@mipmap/ic_launcher_monochrome"/>\n'
             "</adaptive-icon>\n"
