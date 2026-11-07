@@ -81,6 +81,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     String? account;
     if (status != 'declined') {
       final accounts = await _accountsInGuild(d.event.guildId);
+      if (!mounted) return;
       final me = ref.read(sessionProvider).valueOrNull?.user.id;
       final mine = d.participants.where((p) => p.userId == me).firstOrNull;
       account = accountToKeep(mine?.accountId, accounts);
@@ -89,6 +90,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
         if (account == null) return;
       }
     }
+    if (!mounted) return;
     setState(() => _busy = true);
     try {
       final result = await rsvp(widget.eventId, status, role: role, profession: profession, accountId: account);
@@ -96,9 +98,16 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
     } finally {
-      ref.invalidate(eventDetailProvider(widget.eventId));
-      if (mounted) setState(() => _busy = false);
+      _done();
     }
+  }
+
+  /// after a sign up: the event is read again and the buttons come back. a page that was left meanwhile has nothing to
+  /// read again, its ref is gone with it
+  void _done() {
+    if (!mounted) return;
+    ref.invalidate(eventDetailProvider(widget.eventId));
+    setState(() => _busy = false);
   }
 
   Future<String?> _pickRole(EventDetail d) {
@@ -179,7 +188,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     final accounts = await _accountsInGuild(d.event.guildId);
     if (accounts.length < 2 || !mounted) return;
     final picked = await _pickAccount(accounts, current: accountToKeep(mine.accountId, accounts));
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
     setState(() => _busy = true);
     try {
       // waiting means going that did not fit, going again keeps the place in line
@@ -194,8 +203,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
     } finally {
-      ref.invalidate(eventDetailProvider(widget.eventId));
-      if (mounted) setState(() => _busy = false);
+      _done();
     }
   }
 
@@ -274,7 +282,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     } catch (e) {
       if (mounted) showToast(context, eventFailureText(s, e));
     }
-    ref.invalidate(eventDetailProvider(widget.eventId));
+    if (mounted) ref.invalidate(eventDetailProvider(widget.eventId));
   }
 
   /// null when the player backed out, otherwise whether the whole weekly
@@ -308,11 +316,13 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
   Future<void> _delete(GuildEvent e) async {
     final s = ref.read(stringsProvider);
     final whole = await _confirmDelete(e);
-    if (whole == null) return;
+    if (whole == null || !mounted) return;
+    // the list behind this page has to lose the event even when the page was left while it was deleted
+    final container = ProviderScope.containerOf(context, listen: false);
     setState(() => _busy = true);
     try {
       await deleteEvent(e.id, wholeSeries: whole);
-      ref.invalidate(upcomingEventsProvider);
+      container.invalidate(upcomingEventsProvider);
       if (mounted) {
         showToast(context, s.t('event_deleted'));
         Navigator.of(context).pop();
@@ -474,7 +484,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                       final saved = await Navigator.of(context).push<bool>(
                         MaterialPageRoute(builder: (_) => CreateGuildEventScreen(editing: d)),
                       );
-                      if (saved == true) ref.invalidate(eventDetailProvider(widget.eventId));
+                      if (saved == true && mounted) ref.invalidate(eventDetailProvider(widget.eventId));
                     },
                     icon: const Icon(Icons.edit_outlined),
                     label: Text(s.t('event_edit')),

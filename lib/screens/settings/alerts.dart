@@ -61,14 +61,13 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
   Future<void> _turnOn(bool on) async {
     final s = ref.read(stringsProvider);
     await ref.read(bossAlertSettingsProvider.notifier).setEnabled(on);
-    if (!on) return;
+    if (!on || !mounted) return;
     setState(() => _busy = true);
     final allowed = await requestBossAlertPermission();
+    if (!mounted) return;
     ref.read(bossAlertsRecheckProvider.notifier).bump();
-    if (mounted) {
-      setState(() => _busy = false);
-      if (!allowed) showToast(context, s.t('push_denied'));
-    }
+    setState(() => _busy = false);
+    if (!allowed) showToast(context, s.t('push_denied'));
   }
 
   Future<void> _test() async {
@@ -144,7 +143,7 @@ class _BossAlertsPanelState extends ConsumerState<_BossAlertsPanel> {
               OutlinedButton(
                 onPressed: () async {
                   await openExactAlarmSettings();
-                  ref.read(bossAlertsRecheckProvider.notifier).bump();
+                  if (mounted) ref.read(bossAlertsRecheckProvider.notifier).bump();
                 },
                 child: Text(s.t('boss_alert_exact_button')),
               ),
@@ -178,8 +177,9 @@ class _ResetAlertsPanelState extends ConsumerState<_ResetAlertsPanel> {
       await (daily ? settings.setResetDaily(on) : settings.setResetWeekly(on));
       if (!on) return;
       final allowed = await requestBossAlertPermission();
+      if (!mounted) return;
       ref.read(bossAlertsRecheckProvider.notifier).bump();
-      if (mounted && !allowed) showToast(context, s.t('push_denied'));
+      if (!allowed) showToast(context, s.t('push_denied'));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

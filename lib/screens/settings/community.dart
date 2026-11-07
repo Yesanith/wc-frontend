@@ -147,16 +147,26 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
   /// the refresh button is the one running, not the link button
   bool _refreshing = false;
 
+  /// the lists of the accounts and of the guilds, read again. other pages watch them too, so they are read again even
+  /// when the settings were left while the server answered
+  void Function() _readAgainLater() {
+    final container = ProviderScope.containerOf(context, listen: false);
+    return () {
+      container.invalidate(linkedAccountsProvider);
+      container.invalidate(myGuildsProvider);
+    };
+  }
+
   Future<void> _link({bool quiet = false}) async {
     final s = ref.read(stringsProvider);
+    final readAgain = _readAgainLater();
     setState(() => _busy = true);
     try {
       final permissions = [
         for (final p in ((await ref.read(tokenInfoProvider.future))['permissions'] as List?) ?? const []) '$p',
       ];
       final name = await linkGw2Account(ref.read(gw2ApiProvider), permissions);
-      ref.invalidate(linkedAccountsProvider);
-      ref.invalidate(myGuildsProvider);
+      readAgain();
       if (!quiet && mounted) showToast(context, s.t('gw2_linked', {'name': name}));
     } on LinkFailure catch (e) {
       // the code travels with the message so a report tells which step failed
@@ -221,11 +231,11 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
         ],
       ),
     );
-    if (ok != true) return;
+    if (ok != true || !mounted) return;
+    final readAgain = _readAgainLater();
     try {
       await unlinkGw2Account(account.id);
-      ref.invalidate(linkedAccountsProvider);
-      ref.invalidate(myGuildsProvider);
+      readAgain();
     } catch (_) {
       if (mounted) showToast(context, s.t('community_failed'));
     }

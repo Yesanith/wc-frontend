@@ -64,7 +64,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
       firstDate: DateTime(now.year, now.month, now.day),
       lastDate: now.add(const Duration(days: 365)),
     );
-    if (day != null) setState(() => _start = DateTime(day.year, day.month, day.day, _start.hour, _start.minute));
+    if (day == null || !mounted) return;
+    setState(() => _start = DateTime(day.year, day.month, day.day, _start.hour, _start.minute));
   }
 
   Future<void> _pickTime() async {
@@ -74,7 +75,8 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
       builder: (context, child) =>
           MediaQuery(data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true), child: child!),
     );
-    if (time != null) setState(() => _start = DateTime(_start.year, _start.month, _start.day, time.hour, time.minute));
+    if (time == null || !mounted) return;
+    setState(() => _start = DateTime(_start.year, _start.month, _start.day, time.hour, time.minute));
   }
 
   /// the account chosen, or the only one that may when there is just one

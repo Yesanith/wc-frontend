@@ -358,6 +358,7 @@ class _MyGuild extends ConsumerWidget {
                 onPressed: () async {
                   await Navigator.of(context)
                       .push(MaterialPageRoute<void>(builder: (_) => RecruitEditorScreen(guild: guild)));
+                  if (!context.mounted) return;
                   ref.invalidate(myRecruitProvider);
                   ref.invalidate(recruitListProvider);
                 },
