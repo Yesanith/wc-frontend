@@ -180,8 +180,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return;
       final name = '${(await container.read(accountProvider.future))['name'] ?? ''}'.toLowerCase();
       if (name.isEmpty) return;
-      final watch =
-          (await container.read(tradeWatchesProvider.future)).where((w) => w.accountName.toLowerCase() == name).firstOrNull;
+      final watch = (await container.read(tradeWatchesProvider.future))
+          .where((w) => w.accountName.toLowerCase() == name)
+          .firstOrNull;
       if (watch == null || !watch.renewalDue(DateTime.now())) return;
       await startTradeWatch(container.read(gw2ApiProvider));
       container.invalidate(tradeWatchesProvider);

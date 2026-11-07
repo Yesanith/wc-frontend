@@ -72,7 +72,8 @@ Future<bool> turnOnTradeWatch(BuildContext context, ProviderContainer container)
     return false;
   } catch (e) {
     if (context.mounted) {
-      showToast(context, '${s.t('trade_watch_failed')} (${'$e'.split('\n').first})', duration: const Duration(seconds: 6));
+      showToast(context, '${s.t('trade_watch_failed')} (${'$e'.split('\n').first})',
+          duration: const Duration(seconds: 6));
     }
     return false;
   } finally {

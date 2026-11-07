@@ -355,7 +355,8 @@ class _PushSwitchState extends ConsumerState<_PushSwitch> {
     } catch (e) {
       // a browser that will not subscribe says why, and how to let it
       if (mounted) {
-        showToast(context, kIsWeb && on ? '${s.t('push_browser_blocked')} (${'$e'.split('\n').first})' : s.t('community_failed'),
+        showToast(context,
+            kIsWeb && on ? '${s.t('push_browser_blocked')} (${'$e'.split('\n').first})' : s.t('community_failed'),
             duration: Duration(seconds: kIsWeb && on ? 12 : 3));
       }
     } finally {

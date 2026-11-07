@@ -563,7 +563,8 @@ const enStrings = <String, String>{
   'rec_err_too_many': 'You have reported many pages today. Try again tomorrow.',
   'rec_err_own_guild': 'That is your own guild\'s page.',
   'rec_err_generic': 'Something went wrong. Try again in a moment.',
-  'push_browser_blocked': 'This browser refused to subscribe to notifications. In Brave: Settings → Privacy and security → turn on "Use Google services for push messaging", then reload the page.',
+  'push_browser_blocked':
+      'This browser refused to subscribe to notifications. In Brave: Settings → Privacy and security → turn on "Use Google services for push messaging", then reload the page.',
   'trade_watch_title': 'Sales and purchases',
   'trade_watch_ask':
       'Get a notification when one of your trading post listings sells or a buy order is filled?\n\nTo do this, the app gives our server a limited key that can only see your account name and your buy and sell history, for 30 days. Your API key stays on this device: the server cannot see your inventory, wallet or characters.\n\nYou can turn it off any time in Settings.',

@@ -573,7 +573,8 @@ const deStrings = <String, String>{
   'rec_err_too_many': 'Du hast heute viele Seiten gemeldet. Versuche es morgen wieder.',
   'rec_err_own_guild': 'Das ist die Seite deiner eigenen Gilde.',
   'rec_err_generic': 'Etwas ist schiefgelaufen. Versuche es gleich noch einmal.',
-  'push_browser_blocked': 'Dieser Browser hat das Abonnieren von Benachrichtigungen abgelehnt. In Brave: Einstellungen → Datenschutz und Sicherheit → „Google-Dienste für Push-Nachrichten verwenden“ einschalten und die Seite neu laden.',
+  'push_browser_blocked':
+      'Dieser Browser hat das Abonnieren von Benachrichtigungen abgelehnt. In Brave: Einstellungen → Datenschutz und Sicherheit → „Google-Dienste für Push-Nachrichten verwenden“ einschalten und die Seite neu laden.',
   'trade_watch_title': 'Verkäufe und Käufe',
   'trade_watch_ask':
       'Möchtest du benachrichtigt werden, wenn ein Angebot am Handelsposten verkauft oder ein Kaufauftrag erfüllt wird?\n\nDafür gibt die App unserem Server einen eingeschränkten Schlüssel, der 30 Tage lang nur deinen Kontonamen und deinen Kauf- und Verkaufsverlauf sehen kann. Dein API-Schlüssel bleibt auf diesem Gerät: Der Server sieht weder Inventar noch Geldbörse oder Charaktere.\n\nDu kannst es jederzeit in den Einstellungen ausschalten.',

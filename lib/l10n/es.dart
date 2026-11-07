@@ -565,7 +565,8 @@ const esStrings = <String, String>{
   'rec_err_too_many': 'Hoy has denunciado muchas páginas. Prueba mañana.',
   'rec_err_own_guild': 'Es la página de tu propio gremio.',
   'rec_err_generic': 'Algo salió mal. Inténtalo de nuevo en un momento.',
-  'push_browser_blocked': 'Este navegador rechazó la suscripción a notificaciones. En Brave: Configuración → Privacidad y seguridad → activa "Usar servicios de Google para mensajes push" y recarga la página.',
+  'push_browser_blocked':
+      'Este navegador rechazó la suscripción a notificaciones. En Brave: Configuración → Privacidad y seguridad → activa "Usar servicios de Google para mensajes push" y recarga la página.',
   'trade_watch_title': 'Ventas y compras',
   'trade_watch_ask':
       '¿Quieres recibir una notificación cuando se venda uno de tus anuncios del bazar o se complete una orden de compra?\n\nPara ello, la app le da a nuestro servidor una clave limitada que, durante 30 días, solo puede ver el nombre de tu cuenta y tu historial de compras y ventas. Tu clave de API se queda en este dispositivo: el servidor no puede ver tu inventario, tu cartera ni tus personajes.\n\nPuedes desactivarlo cuando quieras en Ajustes.',

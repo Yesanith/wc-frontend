@@ -567,7 +567,8 @@ const frStrings = <String, String>{
   'rec_err_too_many': 'Tu as signalé beaucoup de pages aujourd\'hui. Réessaie demain.',
   'rec_err_own_guild': 'C\'est la page de ta propre guilde.',
   'rec_err_generic': 'Un problème est survenu. Réessaie dans un instant.',
-  'push_browser_blocked': 'Ce navigateur a refusé l\'abonnement aux notifications. Dans Brave : Paramètres → Confidentialité et sécurité → active « Utiliser les services Google pour les messages push », puis recharge la page.',
+  'push_browser_blocked':
+      'Ce navigateur a refusé l\'abonnement aux notifications. Dans Brave : Paramètres → Confidentialité et sécurité → active « Utiliser les services Google pour les messages push », puis recharge la page.',
   'trade_watch_title': 'Ventes et achats',
   'trade_watch_ask':
       'Recevoir une notification quand une de tes annonces du comptoir est vendue ou qu\'un ordre d\'achat est exécuté ?\n\nPour cela, l\'app donne à notre serveur une clé limitée qui, pendant 30 jours, ne peut voir que le nom de ton compte et ton historique d\'achats et de ventes. Ta clé d\'API reste sur cet appareil : le serveur ne voit ni ton inventaire, ni ton portefeuille, ni tes personnages.\n\nTu peux le désactiver à tout moment dans les Paramètres.',
