@@ -125,7 +125,8 @@ jobs:
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
           # the notifications of a browser: the web app of the Firebase project and its Web Push certificate. without
           # them the page has no notifications, and says nothing of them
-          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          # the key of the web app when there is one: the key of the Android app may be kept to Android
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY || secrets.FIREBASE_API_KEY }}
           FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_WEB_APP_ID: ${{ secrets.FIREBASE_WEB_APP_ID }}
