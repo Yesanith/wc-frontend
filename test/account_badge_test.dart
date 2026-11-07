@@ -11,6 +11,16 @@ void main() {
     expect(linkedAccountsLabel(const ['Leo.1234', 'Mira.5678', 'Kai.9012']), 'Leo.1234 +2');
   });
 
+  test('the address a sign in that went wrong came back to is told apart', () {
+    expect(hasAuthError(Uri.parse('https://x.example/app/?error=invalid_request&error_code=bad_oauth_state#/settings')), isTrue);
+    expect(hasAuthError(Uri.parse('https://x.example/app/#/settings')), isFalse);
+    expect(hasAuthError(Uri.parse('https://x.example/app/?code=abc')), isFalse);
+  });
+
+  test('without the profile, the name and the picture Discord gave the session', () {
+    expect(sessionIdentity(null), (name: null, avatar: null));
+  });
+
   testWidgets('a build without the community backend has nothing at the top of the menu', (tester) async {
     debugSetCommunityReady(false);
     await tester.pumpWidget(ProviderScope(

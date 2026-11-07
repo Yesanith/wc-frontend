@@ -223,6 +223,7 @@ const ruStrings = <String, String>{
   'settings_data': 'Данные',
   'settings_data_note': 'Синхронизация, резервная копия и сохранённая копия игровых данных.',
   'settings_app': 'Приложение',
+  'signin_failed': 'Вход через Discord не завершился. Попробуйте ещё раз и не уходите со страницы до конца.',
   'nav_sign_in': 'Войти через Discord',
   'nav_no_gw2': 'Игровой аккаунт не привязан',
   'module_link_title': 'Blish HUD · Nexus',

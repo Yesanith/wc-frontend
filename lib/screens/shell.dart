@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../services/address_bar.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
 import '../services/sync.dart';
@@ -177,6 +178,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _listenForSession();
+    _listenForSignInProblems();
     _listenForTaps();
     _listenForPushWhileOpen();
     _startBackgroundWork();
@@ -191,6 +193,29 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         WidgetsBinding.instance.addPostFrameCallback((_) => _refreshAndReview());
       }
     }, fireImmediately: true);
+  }
+
+  /// a sign in with Discord that went wrong is said once, and what it left in the address of the page is taken away: a
+  /// page reloaded half way through it comes back with ?error=…, which stayed in the address and was opened again with it
+  void _listenForSignInProblems() {
+    // the error in the address and the one on the stream are the same sign in: it is said once
+    DateTime? told;
+    void tell() {
+      final now = DateTime.now();
+      if (told != null && now.difference(told!) < const Duration(seconds: 10)) return;
+      told = now;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        dropAddressQuery();
+        if (mounted) showToast(context, ref.read(stringsProvider).t('signin_failed'), duration: const Duration(seconds: 6));
+      });
+    }
+
+    if (kIsWeb && hasAuthError(Uri.base)) tell();
+    ref.listenManual(authProblemProvider, (_, next) {
+      if (next == null) return;
+      tell();
+      ref.read(authProblemProvider.notifier).state = null;
+    });
   }
 
   /// a tap on a world event alert or on a notification opens what it is about, also when it started the app; and so does a link the app was

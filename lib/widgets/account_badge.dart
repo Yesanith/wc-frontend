@@ -84,13 +84,16 @@ class _AccountBadgeState extends ConsumerState<AccountBadge> {
 
     final profile = ref.watch(myProfileProvider).valueOrNull;
     final linked = ref.watch(linkedAccountsProvider).valueOrNull;
-    final name = profile?.displayName.isNotEmpty == true ? profile!.displayName : '…';
+    // the profile is the name the player has here; until it is read, or when it cannot be, what Discord gave the session
+    final identity = sessionIdentity(session.valueOrNull);
+    final name = profile?.displayName.isNotEmpty == true ? profile!.displayName : (identity.name ?? '…');
+    final picture = profile?.avatarUrl ?? identity.avatar;
     final games = linked == null ? '' : linkedAccountsLabel([for (final a in linked) a.name]);
     final second = linked == null ? '' : (games.isEmpty ? s.t('nav_no_gw2') : games);
     final avatar = CircleAvatar(
       radius: widget.compact ? 14 : 18,
       backgroundColor: AppColors.surface2,
-      foregroundImage: profile?.avatarUrl == null ? null : NetworkImage(profile!.avatarUrl!),
+      foregroundImage: picture == null ? null : NetworkImage(picture),
       child: Icon(Icons.person_outline, size: widget.compact ? 16 : 20, color: AppColors.muted),
     );
 

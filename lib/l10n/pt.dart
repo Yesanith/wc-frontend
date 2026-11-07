@@ -224,6 +224,7 @@ const ptStrings = <String, String>{
   'settings_data': 'Dados',
   'settings_data_note': 'Sincronização, backup e a cópia salva dos dados do jogo.',
   'settings_app': 'Aplicativo',
+  'signin_failed': 'O login com o Discord não terminou. Tente de novo e fique na página até acabar.',
   'nav_sign_in': 'Entrar com o Discord',
   'nav_no_gw2': 'Nenhuma conta do jogo vinculada',
   'module_link_title': 'Blish HUD · Nexus',

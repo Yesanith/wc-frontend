@@ -229,6 +229,7 @@ const deStrings = <String, String>{
   'settings_data': 'Daten',
   'settings_data_note': 'Synchronisierung, Sicherung und die gespeicherte Kopie der Spieldaten.',
   'settings_app': 'App',
+  'signin_failed': 'Die Anmeldung mit Discord wurde nicht abgeschlossen. Versuche es erneut und bleib auf der Seite, bis sie fertig ist.',
   'nav_sign_in': 'Mit Discord anmelden',
   'nav_no_gw2': 'Kein Spielkonto verbunden',
   'module_link_title': 'Blish HUD · Nexus',

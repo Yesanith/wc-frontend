@@ -222,6 +222,7 @@ const trStrings = <String, String>{
   'settings_data': 'Veri',
   'settings_data_note': 'Eşitleme, yedek ve oyun verisinin kayıtlı kopyası.',
   'settings_app': 'Uygulama',
+  'signin_failed': 'Discord ile giriş tamamlanmadı. Tekrar dene ve bitene kadar sayfada kal.',
   'nav_sign_in': 'Discord ile giriş yap',
   'nav_no_gw2': 'Bağlı oyun hesabı yok',
   'module_link_title': 'Blish HUD · Nexus',

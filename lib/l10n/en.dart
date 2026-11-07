@@ -223,6 +223,7 @@ const enStrings = <String, String>{
   'settings_data': 'Data',
   'settings_data_note': 'Sync, backup and the saved copy of the game data.',
   'settings_app': 'App',
+  'signin_failed': 'Signing in with Discord did not finish. Try again, and stay on the page until it is done.',
   'nav_sign_in': 'Sign in with Discord',
   'nav_no_gw2': 'No game account linked',
   'module_link_title': 'Blish HUD · Nexus',

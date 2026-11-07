@@ -199,6 +199,7 @@ const jaStrings = <String, String>{
   'settings_data': 'データ',
   'settings_data_note': '同期、バックアップ、保存されたゲームデータ。',
   'settings_app': 'アプリ',
+  'signin_failed': 'Discordでのサインインが完了しませんでした。もう一度試し、終わるまでページを離れないでください。',
   'nav_sign_in': 'Discordでサインイン',
   'nav_no_gw2': 'ゲームアカウント未連携',
   'module_link_title': 'Blish HUD · Nexus',

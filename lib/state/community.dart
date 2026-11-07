@@ -61,6 +61,10 @@ Future<void> initCommunity() async {
   }
 }
 
+/// why the last sign in did not go through: the browser came back from Discord with an error, say when the page was
+/// reloaded half way through it. null when nothing went wrong, or once it was told
+final authProblemProvider = StateProvider<String?>((ref) => null);
+
 /// the signed in session, null when signed out or not configured
 final sessionProvider = StreamProvider<Session?>((ref) async* {
   if (!communityReady) {
@@ -69,8 +73,29 @@ final sessionProvider = StreamProvider<Session?>((ref) async* {
   }
   final auth = Supabase.instance.client.auth;
   yield auth.currentSession;
-  yield* auth.onAuthStateChange.map((state) => state.session);
+  // a sign in that went wrong arrives as an error on this stream. it is no reason to lose the session there is: as an
+  // error it left the session in place but failed everything that waits for it (the profile, the linked accounts),
+  // which then stayed empty. it is told apart instead
+  yield* auth.onAuthStateChange.map((state) => state.session).handleError((Object e) {
+    ref.read(authProblemProvider.notifier).state = '$e';
+  });
 });
+
+/// whether the browser was sent back to the app with the error of a sign in: ?error=…&error_description=…
+bool hasAuthError(Uri address) =>
+    address.queryParameters.containsKey('error') || address.queryParameters.containsKey('error_description');
+
+/// what Discord, through the backend, says of the player who is signed in, for when the profile cannot be read: the
+/// name they show and their picture
+({String? name, String? avatar}) sessionIdentity(Session? session) {
+  final meta = session?.user.userMetadata ?? const <String, dynamic>{};
+  String? text(Object? v) => v is String && v.trim().isNotEmpty ? v.trim() : null;
+  final claims = meta['custom_claims'];
+  return (
+    name: text(claims is Map ? claims['global_name'] : null) ?? text(meta['full_name']) ?? text(meta['name']),
+    avatar: text(meta['avatar_url']) ?? text(meta['picture']),
+  );
+}
 
 class CommunityProfile {
   const CommunityProfile({required this.id, required this.displayName, this.avatarUrl});

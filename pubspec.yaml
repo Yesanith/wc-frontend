@@ -26,6 +26,8 @@ dependencies:
   path_provider: ^2.1.4
   # unpacks the bundled gzip data in a browser, where dart:io has no gzip
   archive: ^4.0.7
+  # the address bar of a browser, to take away what a sign in that went wrong left in it
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:

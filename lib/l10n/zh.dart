@@ -197,6 +197,7 @@ const zhStrings = <String, String>{
   'settings_data': '数据',
   'settings_data_note': '同步、备份以及已保存的游戏数据副本。',
   'settings_app': '应用',
+  'signin_failed': 'Discord 登录未完成。请重试，并在完成前停留在此页面。',
   'nav_sign_in': '使用 Discord 登录',
   'nav_no_gw2': '未关联游戏账户',
   'module_link_title': 'Blish HUD · Nexus',
