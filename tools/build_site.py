@@ -176,7 +176,7 @@ def footer(lang, contents):
     ui, c, root = contents[lang]["ui"], contents[lang]["index"], root_of(lang)
     return ('<footer class="foot">\n'
             '  <div class="foot-in">\n'
-            '    <div class="foot-brand"><a class="brand" href="index.html">%s<span>Wondrous Compass</span></a><p>%s</p></div>\n'
+            '    <div class="foot-brand"><a class="brand" href="index.html"><span>Wondrous Compass</span></a><p>%s</p></div>\n'
             '    <div><h2>%s</h2><ul><li><a href="%sapp/">%s</a></li><li><a href="%s">%s</a></li><li><a href="index.html#features">%s</a></li>'
             '<li><a href="faq.html">%s</a></li></ul></div>\n'
             '    <div><h2>%s</h2><ul><li><a href="privacy.html">%s</a></li><li><a href="terms.html">%s</a></li>'
@@ -184,7 +184,7 @@ def footer(lang, contents):
             '    <div><h2>%s</h2><ul><li><a href="%s">%s</a></li><li><a href="%s">%s</a></li></ul></div>\n'
             '  </div>\n'
             '  <div class="fan"><p>%s</p></div>\n'
-            '</footer>') % (BRAND, c["tagline"],
+            '</footer>') % (c["tagline"],
                             ui["footer_product"], root, ui["nav_app"], RELEASES, ui["nav_releases"], ui["nav_features"], ui["nav_faq"],
                             ui["footer_legal"], ui["nav_privacy"], ui["nav_terms"], ui["nav_delete"],
                             ui["footer_project"], REPO, ui["nav_source"], ISSUES, ui["nav_contact"],

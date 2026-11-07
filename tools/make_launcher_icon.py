@@ -15,14 +15,17 @@ Flutter icons after `flutter create`:
   * drawable-*/ic_stat_tyria.png        the small icon of notifications, white on clear,
                                         drawn bolder and filling its square because the
                                         status bar shows it about 24dp across
-  * ci/launcher/play_store_512.png      for a store listing later
+  * ci/launcher/play_store_512.png      the icon of the Play store listing, which the browser version uses too:
+                                        the mark with sharp corners on a soft gold glow, square, Play rounds it
 
 Usage: python tools/make_launcher_icon.py
 """
 
 import os
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
+
+from make_site_image import mark
 
 GOLD = (0xDF, 0xC2, 0x95, 255)
 BG = (0x0D, 0x0B, 0x09, 255)
@@ -75,6 +78,21 @@ def write_notification_icons():
         write(render(px, clear, WHITE, 0.92, bold=True), RES, "drawable-%s" % density, "ic_stat_tyria.png")
 
 
+def store_icon(px=512):
+    """the icon of the store listing: the mark as the picture of the site draws it, every corner sharp, about three fifths of the
+    square, on the dark of the theme with a hint of gold glow behind it"""
+    n = px * 4
+    flat = Image.new("RGB", (n, n), BG[:3])
+    glow = Image.new("RGB", (n, n), BG[:3])
+    ImageDraw.Draw(glow).ellipse((n * 0.18, n * 0.18, n * 0.82, n * 0.82), fill=(58, 47, 33))
+    img = Image.blend(flat, glow.filter(ImageFilter.GaussianBlur(n * 0.12)), 1.0)
+    layer = Image.new("L", (n, n), 0)
+    r = n * 0.31
+    mark(layer, n / 2, n / 2, (r * 0.93, r * 0.57), n * 0.034, r * 0.24)
+    img.paste(Image.new("RGB", (n, n), GOLD[:3]), (0, 0), layer)
+    return img.resize((px, px), Image.LANCZOS).convert("RGBA")
+
+
 def write(img, *parts):
     path = os.path.join(*parts)
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -114,7 +132,7 @@ def main():
             '    <color name="ic_launcher_background">#0D0B09</color>\n'
             "</resources>\n"
         )
-    write(render(512, BG, GOLD, 0.62), OUT, "play_store_512.png")
+    write(store_icon(), OUT, "play_store_512.png")
     print("launcher icons written to", RES)
 
 

@@ -15,16 +15,9 @@ class SiteFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final owner = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const DiamondEmblem(size: 18),
-        const SizedBox(width: 8),
-        Text(
-          '© ${year ?? DateTime.now().year} Wondrous Compass',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted),
-        ),
-      ],
+    final owner = Text(
+      '© ${year ?? DateTime.now().year} Wondrous Compass',
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted),
     );
     final buttons = [
       for (final link in links)

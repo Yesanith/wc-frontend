@@ -1,5 +1,7 @@
 # Wondrous Compass
 
+![Wondrous Compass](docs/store/feature-1024x500.png)
+
 An unofficial Guild Wars 2 companion for Android and the browser, built with Flutter. It reads your
 account through the official Guild Wars 2 API and puts the day, your characters, the trading post and the
 world's timers in one place. It is free, has no ads and does not track you.
@@ -37,6 +39,16 @@ pages and price alerts sent by the server, and even then the app sends a ten min
 your API key. The [privacy policy](https://yesanith.github.io/wc-frontend/privacy.html) lists exactly
 what is kept, where and for how long, and the account can be deleted from Settings or the
 [delete account page](https://yesanith.github.io/wc-frontend/delete-account.html).
+
+## Screenshots
+
+| Home | World events | Characters | Account |
+| :---: | :---: | :---: | :---: |
+| <img src="docs/screenshots/01-home.png" alt="Home" width="200"> | <img src="docs/screenshots/02-bosses.png" alt="World events" width="200"> | <img src="docs/screenshots/03-characters.png" alt="Characters" width="200"> | <img src="docs/screenshots/04-account.png" alt="Account" width="200"> |
+
+| Trading post | Recipes | Map | World vs World |
+| :---: | :---: | :---: | :---: |
+| <img src="docs/screenshots/05-trading.png" alt="Trading post" width="200"> | <img src="docs/screenshots/06-recipes.png" alt="Recipes" width="200"> | <img src="docs/screenshots/07-map.png" alt="Map" width="200"> | <img src="docs/screenshots/08-wvw.png" alt="World vs World" width="200"> |
 
 ## Features
 
@@ -145,6 +157,12 @@ bundle still asks for it.
 The first upload decides which key signs the app for good (Play App Signing). Upload the key of the APKs as the app
 signing key in the Play Console, or phones that have the APK cannot update from Play without uninstalling.
 
+The pictures of the listing are in the repository. The icon is `ci/launcher/play_store_512.png`, made with the
+launcher icons by `tools/make_launcher_icon.py`. The feature graphic (`docs/store/feature-1024x500.png`) and the
+picture GitHub shows with a link to the repository (`docs/store/social-preview.png`, set in Settings, Social preview)
+are made by `tools/make_store_images.py`. The phone screenshots in `docs/screenshots` are 1080 by 1920, taken from
+the browser build at the size of a phone.
+
 ## Project layout
 
 ```
@@ -163,6 +181,7 @@ site/         the website's stylesheet and static files
 ci/           release helpers: launcher icons, the signing key
 e2e/          end to end checks of the browser build
 design/       static UI concept mock-ups, not shipped
+docs/         the screenshots and the pictures of the store listing
 assets/       bundled map tiles and data
 ```
 
