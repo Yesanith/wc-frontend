@@ -55,6 +55,9 @@ Map<String, dynamic>? initialPushData;
 
 StreamSubscription<String>? _tokenRefresh;
 
+/// the language the device was last registered in, which a renewed token is registered in too
+String _lang = 'en';
+
 /// starts firebase with the values from the build, no google-services.json
 /// needed. a failure only switches notifications off
 Future<void> initPush() async {
@@ -89,6 +92,7 @@ Future<void> initPush() async {
 /// only after a click of the player
 Future<bool> enablePush(String lang, {bool quiet = false}) async {
   if (!pushReady || Supabase.instance.client.auth.currentSession == null) return false;
+  _lang = lang;
   if (kIsWeb) {
     final token = await webPushToken(_webConfig, _vapidKey, ask: !quiet);
     if (token == null || token.isEmpty) return false;
@@ -102,7 +106,7 @@ Future<bool> enablePush(String lang, {bool quiet = false}) async {
   if (token == null) return false;
   await _register(token, lang);
   // firebase renews tokens now and then, the new one replaces the old
-  _tokenRefresh ??= messaging.onTokenRefresh.listen((fresh) => _register(fresh, lang).catchError((_) {}));
+  _tokenRefresh ??= messaging.onTokenRefresh.listen((fresh) => _register(fresh, _lang).catchError((_) {}));
   return true;
 }
 

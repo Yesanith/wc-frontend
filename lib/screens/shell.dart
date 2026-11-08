@@ -216,6 +216,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
         WidgetsBinding.instance.addPostFrameCallback((_) => _refreshAndReview());
       }
     }, fireImmediately: true);
+    // the server writes the notifications in the language the device was registered in: a new language registers it again
+    ref.listenManual(langProvider, (previous, next) {
+      if (previous != null && previous != next && ref.read(sessionProvider).valueOrNull != null) _startPush();
+    });
   }
 
   /// a sign in with Discord that went wrong is said once, and what it left in the address of the page is taken away: a
