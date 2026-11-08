@@ -76,8 +76,10 @@ const trStrings = <String, String>{
   'err_no_key': 'Bunun için bir GW2 API key\'i gerekli.',
   'add_api_key': 'API key ekle',
   'link_title': 'Oyun hesabını\nbağla.',
-  'link_body': 'Discord hesabın henüz bir Guild Wars 2 hesabına bağlı değil. Bir API anahtarı gir: anahtarın hesabı Discord hesabına bağlanır; lonca etkinlikleri, lonca kadrosu ve herkese açık etkinlikler için.',
-  'signin_discord_note': 'Lonca etkinlikleri, loncanın kadrosu ve herkese açık etkinlikler, bağladığın hesapla. Yeni bir cihazda bağlı hesapların seninle gelir.',
+  'link_body':
+      'Discord hesabın henüz bir Guild Wars 2 hesabına bağlı değil. Bir API anahtarı gir: anahtarın hesabı Discord hesabına bağlanır; lonca etkinlikleri, lonca kadrosu ve herkese açık etkinlikler için.',
+  'signin_discord_note':
+      'Lonca etkinlikleri, loncanın kadrosu ve herkese açık etkinlikler, bağladığın hesapla. Yeni bir cihazda bağlı hesapların seninle gelir.',
   'signin_or_key': 'ya da yalnızca API anahtarıyla',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

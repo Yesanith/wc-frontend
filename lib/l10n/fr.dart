@@ -79,8 +79,10 @@ const frStrings = <String, String>{
   'err_no_key': 'Cela nécessite une clé API GW2.',
   'add_api_key': 'Ajouter une clé API',
   'link_title': 'Lie ton\ncompte de jeu.',
-  'link_body': 'Ton compte Discord n\'est encore lié à aucun compte Guild Wars 2. Saisis une clé API : son compte est lié à ton compte Discord, pour les événements de guilde, la liste de la guilde et les événements publics.',
-  'signin_discord_note': 'Événements de guilde, liste de ta guilde et événements publics, avec le compte que tu as lié. Sur un nouvel appareil, tes comptes liés te suivent.',
+  'link_body':
+      'Ton compte Discord n\'est encore lié à aucun compte Guild Wars 2. Saisis une clé API : son compte est lié à ton compte Discord, pour les événements de guilde, la liste de la guilde et les événements publics.',
+  'signin_discord_note':
+      'Événements de guilde, liste de ta guilde et événements publics, avec le compte que tu as lié. Sur un nouvel appareil, tes comptes liés te suivent.',
   'signin_or_key': 'ou seulement avec une clé API',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

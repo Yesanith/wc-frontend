@@ -79,8 +79,10 @@ const ptStrings = <String, String>{
   'err_no_key': 'Isso precisa de uma chave de API do GW2.',
   'add_api_key': 'Adicionar uma chave de API',
   'link_title': 'Vincule sua\nconta do jogo.',
-  'link_body': 'Sua conta do Discord ainda não está vinculada a uma conta de Guild Wars 2. Insira uma chave de API: a conta dela é vinculada à sua conta do Discord, para eventos da guilda, a lista da guilda e eventos públicos.',
-  'signin_discord_note': 'Eventos da guilda, a lista da sua guilda e eventos públicos, com a conta que você vinculou. Em um novo dispositivo, suas contas vinculadas vêm junto.',
+  'link_body':
+      'Sua conta do Discord ainda não está vinculada a uma conta de Guild Wars 2. Insira uma chave de API: a conta dela é vinculada à sua conta do Discord, para eventos da guilda, a lista da guilda e eventos públicos.',
+  'signin_discord_note':
+      'Eventos da guilda, a lista da sua guilda e eventos públicos, com a conta que você vinculou. Em um novo dispositivo, suas contas vinculadas vêm junto.',
   'signin_or_key': 'ou apenas com uma chave de API',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

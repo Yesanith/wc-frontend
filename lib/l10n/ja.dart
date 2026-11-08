@@ -63,7 +63,8 @@ const jaStrings = <String, String>{
   'err_no_key': 'これには GW2 の API キーが必要です。',
   'add_api_key': 'API キーを追加',
   'link_title': 'ゲームアカウントを\n連携しましょう。',
-  'link_body': 'Discord アカウントはまだ Guild Wars 2 のアカウントと連携していません。API キーを入力すると、そのアカウントが Discord アカウントと連携され、ギルドイベント、ギルド名簿、公開イベントを利用できます。',
+  'link_body':
+      'Discord アカウントはまだ Guild Wars 2 のアカウントと連携していません。API キーを入力すると、そのアカウントが Discord アカウントと連携され、ギルドイベント、ギルド名簿、公開イベントを利用できます。',
   'signin_discord_note': '連携したアカウントで、ギルドイベント、ギルド名簿、公開イベントを利用できます。新しい端末でも連携済みのアカウントが引き継がれます。',
   'signin_or_key': 'または API キーのみで',
   'guest_continue': 'API キーなしで続ける',
