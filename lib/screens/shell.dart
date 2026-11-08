@@ -706,8 +706,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                 : site && sec != AppSection.bosses
                                     ? sitePageWidth
                                     : _readingSections.contains(sec)
-                                    ? readingMaxWidth
-                                    : contentMaxWidth,
+                                        ? readingMaxWidth
+                                        : contentMaxWidth,
                             child: !_opened.contains(sec)
                                 ? const SizedBox.shrink()
                                 : (!hasKey && sectionNeedsKey(sec))
