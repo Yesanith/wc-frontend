@@ -7,9 +7,10 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 
-String _date(DateTime? d) {
+/// [utc] for a day with no time, which is the same day everywhere: the date of an update in the wiki
+String _date(DateTime? d, {bool utc = false}) {
   if (d == null) return '';
-  final local = d.toLocal();
+  final local = utc ? d : d.toLocal();
   return '${local.day.toString().padLeft(2, '0')}.${local.month.toString().padLeft(2, '0')}.${local.year}';
 }
 
@@ -150,7 +151,7 @@ class _PatchNotesTab extends ConsumerWidget {
                       Icon(Icons.description_outlined, color: AppColors.gold, size: 20),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: Text(s.t('game_update_on', {'d': _date(n.date)}),
+                        child: Text(s.t('game_update_on', {'d': _date(n.date, utc: true)}),
                             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                       ),
                       Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
