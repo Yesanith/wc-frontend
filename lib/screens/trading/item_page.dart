@@ -50,7 +50,8 @@ class TradingItemScreen extends ConsumerWidget {
                       Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
                       const SizedBox(height: 2),
                       Text(
-                        [if (rarity != null) rarity, if (item?['type'] != null) _typeLabel(s, '${item?['type']}')].join(' · '),
+                        [if (rarity != null) rarity, if (item?['type'] != null) _typeLabel(s, '${item?['type']}')]
+                            .join(' · '),
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
                       ),
                     ],

@@ -226,7 +226,10 @@ class _InventoryTab extends ConsumerWidget {
       );
     }
     // the items only: how many slots are free is said above them, a grid of empty boxes says it less well
-    final filled = [for (final slot in slots) if (slot != null) slot];
+    final filled = [
+      for (final slot in slots)
+        if (slot != null) slot
+    ];
     final used = filled.length;
     final items = ref.watch(characterItemsProvider(name));
 
