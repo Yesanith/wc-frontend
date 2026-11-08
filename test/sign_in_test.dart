@@ -39,7 +39,8 @@ void main() {
       expect(homeFor(key: null, guest: false, signedIn: true, linked: one, landing: false), isA<AppShell>());
       // not knowing keeps nobody out
       expect(
-        homeFor(key: null, guest: false, signedIn: true, linked: const AsyncError('x', StackTrace.empty), landing: false),
+        homeFor(
+            key: null, guest: false, signedIn: true, linked: const AsyncError('x', StackTrace.empty), landing: false),
         isA<AppShell>(),
       );
     });

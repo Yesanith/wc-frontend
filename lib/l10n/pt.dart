@@ -93,7 +93,8 @@ const ptStrings = <String, String>{
       'Suas chaves ficam criptografadas na sua conta do Wondrous Compass, para irem com você ao entrar com o Discord em outro dispositivo. Desligar isso as apaga dos nossos servidores; elas continuam neste dispositivo.',
   'keep_keys_kept': 'Guardadas na sua conta: {names}',
   'keep_keys_off': 'guardar chaves não está disponível agora',
-  'delete_last_admin': 'Você é o último administrador do backend. Adicione outro administrador antes de apagar sua conta.',
+  'delete_last_admin':
+      'Você é o último administrador do backend. Adicione outro administrador antes de apagar sua conta.',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
       'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',

@@ -92,7 +92,8 @@ const enStrings = <String, String>{
       'Your keys are kept encrypted in your Wondrous Compass account, so they come with you when you sign in with Discord on another device. Turning this off deletes them from our servers; they stay on this device.',
   'keep_keys_kept': 'Kept in your account: {names}',
   'keep_keys_off': 'keeping keys is not available right now',
-  'delete_last_admin': 'You are the last administrator of the backend. Add another administrator before deleting your account.',
+  'delete_last_admin':
+      'You are the last administrator of the backend. Add another administrator before deleting your account.',
   'guest_continue': 'Continue without an API key',
   'guest_note':
       'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',

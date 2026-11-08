@@ -96,7 +96,8 @@ const deStrings = <String, String>{
       'Deine Schlüssel werden verschlüsselt in deinem Wondrous-Compass-Konto gespeichert, damit sie dich begleiten, wenn du dich auf einem anderen Gerät mit Discord anmeldest. Ausschalten löscht sie von unseren Servern; auf diesem Gerät bleiben sie.',
   'keep_keys_kept': 'In deinem Konto gespeichert: {names}',
   'keep_keys_off': 'das Speichern von Schlüsseln ist gerade nicht verfügbar',
-  'delete_last_admin': 'Du bist der letzte Administrator des Backends. Füge zuerst einen weiteren Administrator hinzu, bevor du dein Konto löschst.',
+  'delete_last_admin':
+      'Du bist der letzte Administrator des Backends. Füge zuerst einen weiteren Administrator hinzu, bevor du dein Konto löschst.',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
       'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',
