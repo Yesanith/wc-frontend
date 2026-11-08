@@ -30,7 +30,7 @@
   "browser_p": "Henüz iPhone uygulaması yok. Uygulamanın tamamı tarayıcıda, her telefonda ve bilgisayarda da çalışır.",
   "open_button": "Wondrous Compass'i aç",
   "iphone": "<strong>iPhone:</strong> Safari'de aç, paylaş düğmesine dokun ve <em>Ana Ekrana Ekle</em>'yi seç. Sonra uygulama gibi kendi başına açılır.",
-  "limits": "Tarayıcı sürümünde bildirim, dünya olayı uyarıları ve cihazda önbellek yoktur, bu yüzden daha yavaş yüklenir. API key'in bu tarayıcıda kalır ve yalnızca Guild Wars 2 sunucularına gönderilir.",
+  "limits": "Tarayıcı sürümünde bildirim, dünya etkinliği uyarısı ve cihazda önbellek yoktur, bu yüzden daha yavaş yüklenir. API anahtarın bu tarayıcıda kalır ve yalnızca Guild Wars 2 sunucularına gönderilir; hesabında saklamayı seçersen bu hariç.",
   "fan": "Wondrous Compass bir hayran projesidir; ArenaNet veya NCSOFT ile bağlantısı yoktur, onlar tarafından onaylanmamıştır. Guild Wars 2 ve tüm logoları ile tasarımları NCSOFT Corporation'ın ticari markalarıdır.",
   "eyebrow": "Resmi olmayan Guild Wars 2 yardımcısı",
   "hero_h": "Tyria'n, <em>tek bakışta</em>.",
@@ -83,14 +83,14 @@
   "discord_p": "Katılımlı ve bekleme listeli lonca etkinlikleri, lonca rütbelerini izleyen roller, haber ve yama akışları ve resmî sunucuda loncaların üye aradığı bir forum.",
   "discord_link": "Bot nasıl eklenir",
   "privacy_h": "API key'in senin kalır",
-  "privacy_p": "Cihazında ya da tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gider. Reklam yok, takip yok; isteğe bağlı hesabı istediğin zaman silebilirsin.",
+  "privacy_p": "Cihazında ya da tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gider; şifreli olarak hesabında saklamayı seçersen bu hariç. Reklam yok, takip yok ve isteğe bağlı hesabı istediğin zaman silebilirsin.",
   "privacy_link": "Gizlilik politikasını oku",
   "cta_h": "Göz at, kayıt gerekmez",
   "cta_p": "Wondrous Compass'i misafir olarak aç, kendi hesabını görmek istediğinde bir API key ekle."
  },
  "delete": {
   "title": "Hesabını sil",
-  "intro": "Bu işlem Wondrous Compass hesabını kalıcı olarak siler: profilin, bağlı Guild Wars 2 hesapların, lonca üyeliklerin, etkinlik katılımların, oluşturduğun etkinlikler ve bildirim cihazların. Guild Wars 2 hesabına, Discord hesabına ve uygulamanın telefonunda tuttuğu hiçbir şeye dokunmaz.",
+  "intro": "Bu işlem Wondrous Compass hesabını kalıcı olarak siler: profilin, bağlı Guild Wars 2 hesapların, hesabında saklanan API anahtarları, lonca üyeliklerin, etkinlik kayıtların, oluşturduğun etkinlikler ve bildirim cihazların. Guild Wars 2 hesabına, Discord hesabına ya da uygulamanın telefonunda tuttuğu hiçbir şeye dokunmaz.",
   "signin_p": "Uygulamada kullandığın Discord hesabıyla giriş yap.",
   "signin_btn": "Discord ile giriş yap",
   "signed_prefix": "Giriş yapılan hesap: ",
@@ -121,7 +121,7 @@
    ],
    [
     "API key'im güvende mi?",
-    "Key'in cihazında (tarayıcı sürümünde tarayıcında) kalır ve yalnızca Guild Wars 2 sunucularına gönderilir, bizimkilere asla. <a href='privacy.html'>Gizlilik politikasına</a> bak. Key yalnızca okuyabilir ve account.arena.net'ten istediğin zaman silebilirsin."
+    "Anahtarın cihazında ya da tarayıcı sürümü için tarayıcında kalır ve yalnızca Guild Wars 2 sunucularına gönderilir. Discord ile giriş yaparsan, başka bir cihaza da seninle gelmesi için anahtarını hesabında saklamayı seçebilirsin: o zaman sunucularımızda şifreli olarak tutulur ve Ayarlar'dan istediğin zaman oradan silebilirsin. <a href='privacy.html'>Gizlilik politikasına</a> bak. Bir anahtar yalnızca okuyabilir ve onu account.arena.net üzerinden istediğin zaman silebilirsin."
    ],
    [
     "Wondrous Compass hesabı gerekli mi?",
@@ -182,7 +182,7 @@
   "blocks": [
    "Wondrous Compass resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
-   "GW2 API key'lerin, onlarla indirilen oyun verileri, ayarların, favorilerin, takip listen ve fiyat geçmişin sadece cihazında (tarayıcı sürümünde tarayıcında) tutulur. Uygulama doğrudan resmi Guild Wars 2 API'siyle konuşur. API key'lerin hiçbir zaman sunucularımıza gönderilmez. Telefonda key, ArenaNet'e istek başlığında gider. Tarayıcı bunu oyunun API'siyle yapamaz, bu yüzden orada isteğin adresinde, yalnızca ArenaNet'e gider. Tarayıcıda key o tarayıcının depolamasında durur, sitenin verilerini temizlemek onu siler.",
+   "Guild Wars 2 API anahtarların, uygulamanın onlarla indirdiği oyun verileri, ayarların, favorilerin, izleme listen ve fiyat geçmişin cihazında, tarayıcı sürümünde ise tarayıcında saklanır. Uygulama doğrudan resmi Guild Wars 2 API'si ile konuşur. API anahtarların sunucularımıza yalnızca onları hesabında saklamayı seçersen gönderilir (aşağıya bak). Telefonda anahtar ArenaNet'e bir istek başlığında gider. Tarayıcı oyunun API'siyle bunu yapamaz, bu yüzden orada anahtar isteğin adresinde, yalnızca ArenaNet'e gider. Tarayıcıda anahtar o tarayıcının depolamasında tutulur; sitenin verilerini temizlemek onu siler.",
    "İsteğe bağlı Wondrous Compass hesabı",
    "Lonca etkinlikleri, lonca bilgileri ve Discord botu için Discord ile giriş yaparak hesap açarsın. Aşağıdakiler yalnızca bunu yaparsan geçerlidir.",
    [
@@ -194,7 +194,8 @@
     "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
     "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır.",
     "<strong>Fiyat alarmları:</strong> giriş yapmışken bir alarm kurarsan uygulama onu sunucularımızda da tutar: eşya, adı, fiyatların ve sana en son ne zaman bildirim gönderildiği. Böylece trading post bu fiyatlara ulaşınca bildirim gönderebiliriz. Alarmı kaldırdığında ya da hesabını sildiğinde silinir.",
-    "<strong>Ticaret merkezin:</strong> ticaret merkezinde ne olduğunu sunucunun sana bildirmesini istersen uygulama, kullandığın API key'den 30 gün geçerli, yalnızca hesabın kime ait olduğunu ve alım satım geçmişini okuyabilen bir subtoken üretir ve bize gönderir. Bunu şifreli olarak, hesabın adı ve son işlemlerinin numaralarıyla birlikte saklarız, geçmişe birkaç dakikada bir bakarız ve bir şey satıldığında ya da alındığında bildirim göndeririz. Uygulama süresi dolmadan yeni bir subtoken üretir. API key'in kendisi asla gönderilmez. Bunu kapatmak, hesabın bağlantısını kaldırmak ya da hesabını silmek hepsini siler."
+    "<strong>Ticaret merkezin:</strong> ticaret merkezinde ne olduğunu sunucunun sana bildirmesini istersen uygulama, kullandığın API key'den 30 gün geçerli, yalnızca hesabın kime ait olduğunu ve alım satım geçmişini okuyabilen bir subtoken üretir ve bize gönderir. Bunu şifreli olarak, hesabın adı ve son işlemlerinin numaralarıyla birlikte saklarız, geçmişe birkaç dakikada bir bakarız ve bir şey satıldığında ya da alındığında bildirim göndeririz. Uygulama süresi dolmadan yeni bir subtoken üretir. API key'in kendisi asla gönderilmez. Bunu kapatmak, hesabın bağlantısını kaldırmak ya da hesabını silmek hepsini siler.",
+    "<strong>Seçersen API anahtarların:</strong> Discord ile giriş yaptıysan, başka bir cihazda giriş yaptığında seninle gelmeleri için API anahtarlarını hesabında saklayabilirsin. Anahtar Guild Wars 2 API'si ile doğrulanır ve yalnızca bağladığın bir hesap için, veritabanımızın sahip olmadığı bir anahtarla şifrelenerek, hesabın adı ve anahtarın izinleriyle birlikte saklanır. Yalnızca sana, uygulamada geri verilir. Ayarlar'dan kapatmak, anahtarı uygulamadan kaldırmak, hesabın bağlantısını kesmek ya da hesabını silmek onu siler."
    ],
    "Kimler görür",
    [
@@ -241,7 +242,8 @@
     "Lonca bir kişiye ait değildir, o yüzden hesap silmek loncayı silmez, ama liderin uygulamasının getirdiği veriler liderden uzun yaşamamalı: uygulamayı kullanan son lider ayrılınca seviye, günün mesajı, sayılar, üye listesi, rütbeler, hazine, depo, günlük ve liderin seçimleri silinir; son üye ayrılınca lonca Discord bağlantısıyla birlikte silinir.",
     "Uygulamanın 30 gün yenilemediği lonca üyeliği geçersiz olur, 90 gün sonra silinir. Geri gelip yeniden bağlamak onu geri getirir.",
     "Bildirim token'ı çıkış yapınca, bildirimleri kapatınca veya geçersiz olunca silinir. Bir Discord sunucusunun verileri bağlantı kesilince veya loncası silinince silinir.",
-    "Herkese açık bir etkinlik, bittikten 30 gün sonra katılımları ve şikâyetleriyle birlikte silinir. Bir günde oluşturduklarının sayısı iki gün sonra silinir."
+    "Herkese açık bir etkinlik, bittikten 30 gün sonra katılımları ve şikâyetleriyle birlikte silinir. Bir günde oluşturduklarının sayısı iki gün sonra silinir.",
+    "Hesabında saklanan bir API anahtarı; saklamayı kapattığında, anahtarı uygulamadan kaldırdığında, hesabının bağlantısını kestiğinde ya da hesabını sildiğinde silinir."
    ],
    "Hesabı silme ve haklarını kullanma",
    "Hesabını uygulamada Ayarlar → Hesabı sil ile veya uygulama olmadan <a href='delete-account.html'>hesap silme sayfasından</a> silebilirsin; profilin, GW2 bağlantıların, lonca üyeliklerin, katılımların, oluşturduğun etkinlikler ve bildirim token'ların hemen ve geri alınamaz şekilde silinir. Hakkında ne tuttuğumuzu sorabilir, düzeltilmesini isteyebilir ve kullanımına itiraz edebilirsin; Avrupa Birliği'ndeysen veri koruma kurumuna şikâyet edebilirsin. Aşağıdan yaz. Verilerini yalnızca giriş yaparak ve bağlayarak istediğin şeyi sunmak için kullanırız, işlememizin dayanağı budur.",
@@ -263,7 +265,7 @@
    "Hesabın ve API key'in",
    [
     "Wondrous Compass hesabı isteğe bağlıdır ve Discord ile girişle açılır. Onun üzerinden olanlardan sen sorumlusun.",
-    "API key'in senindir. Kendine sakla, yalnızca vermek istediğin izinlere sahip key'ler kullan, sızdığını düşünürsen account.arena.net'ten iptal et. Senden key'ini asla istemeyiz.",
+    "API anahtarın senindir. Kimseyle paylaşma, yalnızca vermek istediğin izinlere sahip anahtarlar kullan ve sızdığını düşünüyorsan account.arena.net üzerinden iptal et. Anahtarını uygulama dışında asla istemeyiz; onu hesabında saklamak senin tercihindir.",
     "Yalnızca kendi Guild Wars 2 hesaplarını bağlayabilirsin."
    ],
    "Loncalar ve paylaştıkların",

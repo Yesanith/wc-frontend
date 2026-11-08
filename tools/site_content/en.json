@@ -30,7 +30,7 @@
   "browser_p": "There is no iPhone app yet. The whole app also runs in the browser, on any phone or computer.",
   "open_button": "Open Wondrous Compass",
   "iphone": "<strong>iPhone:</strong> open it in Safari, tap the share button and choose <em>Add to Home Screen</em>. It then opens on its own, like an app.",
-  "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers.",
+  "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers, unless you choose to keep it in your account.",
   "fan": "Wondrous Compass is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation.",
   "eyebrow": "Unofficial Guild Wars 2 companion",
   "hero_h": "Your Tyria, <em>at a glance</em>.",
@@ -83,14 +83,14 @@
   "discord_p": "Guild events with sign ups and waiting lists, roles that follow guild ranks, news and patch feeds, and a forum on the official server where guilds recruit.",
   "discord_link": "How to add the bot",
   "privacy_h": "Your API key stays yours",
-  "privacy_p": "It stays on your device, or in your browser, and goes only to the Guild Wars 2 servers. No ads, no tracking, and you can delete the optional account at any time.",
+  "privacy_p": "It stays on your device, or in your browser, and goes only to the Guild Wars 2 servers, unless you choose to keep it, encrypted, in your account. No ads, no tracking, and you can delete the optional account at any time.",
   "privacy_link": "Read the privacy policy",
   "cta_h": "Look around, no sign up needed",
   "cta_p": "Open Wondrous Compass as a guest, and add an API key when you want to see your own account."
  },
  "delete": {
   "title": "Delete your account",
-  "intro": "This deletes your Wondrous Compass account for good: your profile, linked Guild Wars 2 accounts, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.",
+  "intro": "This deletes your Wondrous Compass account for good: your profile, linked Guild Wars 2 accounts, the API keys kept in your account, guild memberships, event sign ups, the events you created and your notification devices. It does not touch your Guild Wars 2 account, your Discord account or anything the app keeps on your phone.",
   "signin_p": "Sign in with the Discord account you use in the app.",
   "signin_btn": "Sign in with Discord",
   "signed_prefix": "Signed in as ",
@@ -121,7 +121,7 @@
    ],
    [
     "Is my API key safe?",
-    "Your key stays on your device, or in your browser for the browser version, and is sent only to the Guild Wars 2 servers. It is never sent to ours. See the <a href='privacy.html'>privacy policy</a>. A key can only read, and you can delete it any time on account.arena.net."
+    "Your key stays on your device, or in your browser for the browser version, and is sent only to the Guild Wars 2 servers. If you sign in with Discord you can choose to keep it in your account, so it comes with you to another device: it is then kept encrypted on our servers, and you can delete it there any time in Settings. See the <a href='privacy.html'>privacy policy</a>. A key can only read, and you can delete it any time on account.arena.net."
    ],
    [
     "Do I need the Wondrous Compass account?",
@@ -190,7 +190,7 @@
    ],
    [
     "p",
-    "Your Guild Wars 2 API keys, the game data the app downloads with them, your settings, favourites, watchlist and price history are stored only on your device, or in your browser for the browser version. The app talks to the official Guild Wars 2 API directly. Your API keys are never sent to our servers. On a phone the key travels to ArenaNet in a request header. A browser cannot do that with the game's API, so there it travels in the address of the request, to ArenaNet only. In a browser the key is kept in that browser's storage; clearing the site's data removes it."
+    "Your Guild Wars 2 API keys, the game data the app downloads with them, your settings, favourites, watchlist and price history are stored on your device, or in your browser for the browser version. The app talks to the official Guild Wars 2 API directly. Your API keys are sent to our servers only if you choose to keep them in your account (see below). On a phone the key travels to ArenaNet in a request header. A browser cannot do that with the game's API, so there it travels in the address of the request, to ArenaNet only. In a browser the key is kept in that browser's storage; clearing the site's data removes it."
    ],
    [
     "h2",
@@ -211,7 +211,8 @@
      "<strong>Discord servers:</strong> if you lead a guild and connect a Discord server: the server's id and the channel events are posted to, its settings (time zone, language, threads, scheduled events, reminders), the channels and the optional role for news and game updates, the Discord roles matched to guild ranks, and which roles the bot gave to which Discord user so that it can take back only those. The bot cannot read messages. It receives the commands and buttons people use, and with a button press Discord sends the person's id and their roles in that server, which are used for that moment and not stored.",
      "<strong>Counts without a name:</strong> to see that it works and which versions are in use, our servers count, per day and with nothing that says who, how often each version of the app is opened by a signed in player and on what it runs (Android or the browser), what the Discord bot's commands do and how many requests succeed or fail. These are numbers only.",
      "<strong>Price alerts:</strong> if you set one while signed in, the app also keeps it on our servers: the item, its name, your prices and when it last notified you, so that we can send a notification when the trading post reaches them. It is deleted when you remove it or delete your account.",
-     "<strong>Your trading post:</strong> if you ask the server to tell you what your trading post did, the app makes a subtoken of the API key in use that lasts 30 days and can read only whose account it is and its buy and sell history, and sends it to us. We keep it encrypted, with the account's name and the numbers of your latest transactions, look at the history every few minutes and send a notification when something was sold or bought. The app makes a new subtoken before it runs out. Your API key itself is never sent. Turning it off, unlinking the account or deleting your account deletes all of it."
+     "<strong>Your trading post:</strong> if you ask the server to tell you what your trading post did, the app makes a subtoken of the API key in use that lasts 30 days and can read only whose account it is and its buy and sell history, and sends it to us. We keep it encrypted, with the account's name and the numbers of your latest transactions, look at the history every few minutes and send a notification when something was sold or bought. The app makes a new subtoken before it runs out. Your API key itself is never sent. Turning it off, unlinking the account or deleting your account deletes all of it.",
+     "<strong>Your API keys, if you choose:</strong> signed in with Discord, you can keep your API keys in your account so they come with you when you sign in on another device. A key is checked with the Guild Wars 2 API and kept only for an account you linked, encrypted with a key our database does not have, with the account's name and the key's permissions. It is given back only to you, in the app. Turning it off in Settings, removing the key in the app, unlinking the account or deleting your account deletes it."
     ]
    ],
    [
@@ -288,7 +289,8 @@
      "A guild is not a person's, so deleting an account does not delete it, but what the leader's app brought must not outlive the leader: when the last leader who uses the app goes, the level, message of the day, counts, member list, ranks, treasury, stash, log and the leader's choices are deleted, and when the last member goes the guild is deleted with its Discord connection.",
      "A guild membership the app has not refreshed for 30 days stops counting, and after 90 days it is deleted. Coming back and linking again restores it.",
      "A device's notification token is removed when you sign out, switch notifications off or the token stops working. A Discord server's data is removed when it is disconnected or its guild is deleted.",
-     "A public event is deleted 30 days after it ends, with its sign ups and reports. The count of what you made in a day is deleted after two days."
+     "A public event is deleted 30 days after it ends, with its sign ups and reports. The count of what you made in a day is deleted after two days.",
+     "An API key kept in your account is deleted when you turn keeping off, remove the key in the app, unlink its account or delete your account."
     ]
    ],
    [
@@ -349,7 +351,7 @@
     "ul",
     [
      "The Wondrous Compass account is optional and made by signing in with Discord. You are responsible for what happens through it.",
-     "Your API key is yours. Keep it to yourself, use keys that only have the permissions you want to give, and revoke it on account.arena.net if you think it leaked. We never ask for your key.",
+     "Your API key is yours. Keep it to yourself, use keys that only have the permissions you want to give, and revoke it on account.arena.net if you think it leaked. We never ask for your key outside the app, and keeping it in your account is your choice.",
      "You may only link Guild Wars 2 accounts that are yours."
     ]
    ],

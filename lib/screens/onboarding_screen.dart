@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../state/api.dart';
 import '../state/community.dart';
+import '../state/kept_keys.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/account_badge.dart' show discordBlurple;
@@ -125,10 +126,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _save() async {
+    final s = ref.read(stringsProvider);
+    final key = _ctrl.text.trim();
     // signed in with Discord: the account is linked first, the key is kept once it is. a key kept before would open the
     // app with an account that is not linked
     if (widget.linking && !await _link()) return;
-    await ref.read(keysProvider.notifier).add(_ctrl.text.trim(), _account ?? '');
+    // the player chose to keep their keys in their account: done before the key is on the device, which opens the app
+    // and closes this screen. a failure is said, the key stays on the device all the same
+    if (ref.read(sessionProvider).valueOrNull != null && ref.read(keepKeysProvider)) {
+      setState(() => _busy = true);
+      final failed = await keepKeyInAccount(key);
+      if (!mounted) return;
+      setState(() => _busy = false);
+      if (failed != null) showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+      ref.invalidate(keptAccountsProvider);
+    }
+    await ref.read(keysProvider.notifier).add(key, _account ?? '');
     if (widget.linking) ref.invalidate(linkedAccountsProvider);
     // a key ends the guest choice, after the key is in so the app never
     // passes through the welcome screen on its way
@@ -145,6 +158,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final lang = ref.watch(langProvider);
     final error = _error;
     final perms = _perms;
+    final signedIn = communityReady && ref.watch(sessionProvider).valueOrNull != null;
     return Scaffold(
       body: Stack(
         children: [
@@ -275,6 +289,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child:
                         Text(error, style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
                   ),
+                // signed in with Discord: whether the key is kept in the account too, to come along to another device
+                if (signedIn) ...[
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: ref.watch(keepKeysProvider),
+                    onChanged: _busy ? null : (on) => ref.read(keepKeysProvider.notifier).set(on ?? false),
+                    title: Text(s.t('keep_key_title'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    subtitle: Text(s.t('keep_key_note'),
+                        style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                  ),
+                  const SizedBox(height: 4),
+                ],
                 const SizedBox(height: 4),
                 SizedBox(
                   height: 54,

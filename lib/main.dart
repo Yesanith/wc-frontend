@@ -15,6 +15,7 @@ import 'services/boss_alerts.dart';
 import 'services/icon_cache.dart';
 import 'services/push.dart';
 import 'state/community.dart';
+import 'state/kept_keys.dart';
 import 'state/api.dart';
 import 'state/navigation.dart';
 import 'state/settings.dart';
@@ -175,12 +176,15 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
 
   Widget _home(String? key, bool guest) {
     final signedIn = ref.watch(sessionProvider).valueOrNull != null;
+    final noKey = key == null || key.isEmpty;
     return homeFor(
       key: key,
       guest: guest,
       signedIn: signedIn,
+      // signed in on a device with no key: the keys the account keeps are brought first
+      restoring: signedIn && noKey && ref.watch(restoredKeysProvider).isLoading,
       // read only while it decides something: a player with a key never waits for it
-      linked: signedIn && (key == null || key.isEmpty)
+      linked: signedIn && noKey
           ? ref.watch(linkedAccountsProvider)
           : const AsyncData(<LinkedAccount>[]),
       landing: kIsWeb && !ref.watch(landingDismissedProvider),
@@ -211,18 +215,20 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
   }
 }
 
-/// what the app opens on: with a key the app. signed in with Discord and no key, the app when a game account is linked
-/// to the Discord account, the screen that asks for a key to link when none is. otherwise the way in, or the app as a
-/// guest
+/// what the app opens on: with a key the app. signed in with Discord and no key, a wait while the keys the account keeps
+/// are brought ([restoring]), then the app when a game account is linked to the Discord account, the screen that asks
+/// for a key to link when none is. otherwise the way in, or the app as a guest
 Widget homeFor({
   required String? key,
   required bool guest,
   required bool signedIn,
   required AsyncValue<List<LinkedAccount>> linked,
   required bool landing,
+  bool restoring = false,
 }) {
   if (key != null && key.isNotEmpty) return const AppShell();
   if (signedIn) {
+    if (restoring) return const Scaffold(body: Center(child: CircularProgressIndicator()));
     return linked.when(
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
       // not knowing is no reason to keep the player out

@@ -21,7 +21,13 @@ class _AccountsPanel extends ConsumerWidget {
         ],
       ),
     );
-    if (ok == true) await ref.read(keysProvider.notifier).removeAt(index);
+    if (ok != true) return;
+    await ref.read(keysProvider.notifier).removeAt(index);
+    // a key kept in the account goes too, or it would come back on the next sign in
+    if (ref.read(sessionProvider).valueOrNull != null && label.isNotEmpty) {
+      await forgetKeptKeyOf(label);
+      ref.invalidate(keptAccountsProvider);
+    }
   }
 
   @override
@@ -65,6 +71,10 @@ class _AccountsPanel extends ConsumerWidget {
                 return Wrap(spacing: 6, runSpacing: 6, children: [for (final p in perms) Pill(p)]);
               },
             ),
+          if (communityReady && ref.watch(sessionProvider).valueOrNull != null) ...[
+            const SizedBox(height: 8),
+            _KeepKeysSwitch(keys: keys),
+          ],
           const SizedBox(height: 12),
           OutlinedButton.icon(
             onPressed: () => Navigator.of(context).push(
@@ -75,6 +85,71 @@ class _AccountsPanel extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// for a player signed in with Discord: whether the API keys are kept in the account, to come along to another device.
+/// turning it on keeps the keys on this device there, turning it off deletes every key the account keeps
+class _KeepKeysSwitch extends ConsumerStatefulWidget {
+  const _KeepKeysSwitch({required this.keys});
+
+  final List<StoredKey> keys;
+
+  @override
+  ConsumerState<_KeepKeysSwitch> createState() => _KeepKeysSwitchState();
+}
+
+class _KeepKeysSwitchState extends ConsumerState<_KeepKeysSwitch> {
+  bool _busy = false;
+
+  Future<void> _set(bool on) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      if (on) {
+        await ref.read(keepKeysProvider.notifier).set(true);
+        // one key after another: the server takes a few calls a minute
+        for (final k in widget.keys) {
+          final failed = await keepKeyInAccount(k.key);
+          if (failed != null) {
+            if (mounted) showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+            break;
+          }
+        }
+      } else {
+        await forgetKeptKeys();
+        await ref.read(keepKeysProvider.notifier).set(false);
+      }
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)');
+    } finally {
+      ref.invalidate(keptAccountsProvider);
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final kept = ref.watch(keptAccountsProvider).valueOrNull ?? const <KeptAccount>[];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          value: ref.watch(keepKeysProvider),
+          onChanged: _busy ? null : _set,
+          title: Text(s.t('keep_keys_setting'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+          subtitle: Text(s.t('keep_keys_setting_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+        ),
+        if (_busy) LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
+        if (kept.isNotEmpty)
+          Text(
+            s.t('keep_keys_kept', {'names': kept.map((k) => k.accountName).join(', ')}),
+            style: TextStyle(fontSize: 12, color: AppColors.gold),
+          ),
+      ],
     );
   }
 }

@@ -78,9 +78,15 @@ const trStrings = <String, String>{
   'link_title': 'Oyun hesabını\nbağla.',
   'link_body':
       'Discord hesabın henüz bir Guild Wars 2 hesabına bağlı değil. Bir API anahtarı gir: anahtarın hesabı Discord hesabına bağlanır; lonca etkinlikleri, lonca kadrosu ve herkese açık etkinlikler için.',
-  'signin_discord_note':
-      'Lonca etkinlikleri, loncanın kadrosu ve herkese açık etkinlikler, bağladığın hesapla. Yeni bir cihazda bağlı hesapların seninle gelir.',
+  'signin_discord_note': 'Lonca etkinlikleri, loncanın kadrosu ve herkese açık etkinlikler, bağladığın hesapla. Yeni bir cihazda bağlı hesapların ve hesabında sakladığın anahtarlar seninle gelir.',
   'signin_or_key': 'ya da yalnızca API anahtarıyla',
+  'keep_key_title': 'Bu anahtarı hesabımda sakla',
+  'keep_key_note': 'Başka bir cihazda Discord ile giriş yaptığında seninle gelir. Şifreli olarak saklanır ve Ayarlar\'dan istediğin zaman silebilirsin.',
+  'keep_key_failed': 'Anahtar bu cihaza kaydedildi ama hesabında saklanamadı: {e}',
+  'keep_keys_setting': 'API anahtarlarımı hesabımda sakla',
+  'keep_keys_setting_note': 'Anahtarların Wondrous Compass hesabında şifreli olarak saklanır; böylece başka bir cihazda Discord ile giriş yaptığında seninle gelir. Kapatırsan sunucularımızdan silinir, bu cihazda kalır.',
+  'keep_keys_kept': 'Hesabında saklananlar: {names}',
+  'keep_keys_off': 'anahtar saklama şu anda kullanılamıyor',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
       'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
@@ -202,8 +208,7 @@ const trStrings = <String, String>{
   'gw2_link_intro': 'Loncalarına burada katılmak için aktif API key\'inin GW2 hesabını bağla.',
   'gw2_link': 'GW2 hesabını bağla',
   'gw2_refresh': 'Loncaları yenile',
-  'gw2_link_note':
-      'Sadece hesap adını ve loncalarını okuyabilen 10 dakikalık bir token gönderilir. API key\'in bu cihazda kalır.',
+  'gw2_link_note': 'Bağlama yalnızca hesap adını ve loncalarını okuyabilen on dakikalık bir anahtar gönderir. API anahtarın yalnızca hesabında saklamayı seçersen gönderilir.',
   'gw2_linked': '{name} bağlandı',
   'gw2_link_taken': 'Bu GW2 hesabı başka bir Wondrous Compass hesabına bağlı.',
   'gw2_link_key': 'API key kullanılamadı. account iznine sahip olması gerekiyor.',
@@ -578,8 +583,7 @@ const trStrings = <String, String>{
   'push_browser_blocked':
       'Bu tarayıcı bildirim aboneliğini reddetti. Brave kullanıyorsan: Ayarlar → Gizlilik ve güvenlik → "Anlık bildirimler için Google hizmetlerini kullan" seçeneğini aç ve sayfayı yenile.',
   'trade_watch_title': 'Satış ve alış bildirimleri',
-  'trade_watch_ask':
-      'Ticaret merkezindeki bir ilanın satıldığında ya da alım emrin tamamlandığında bildirim almak ister misin?\n\nBunun için uygulama sunucumuza 30 gün geçerli, yalnızca hesap adını ve alım-satım geçmişini görebilen sınırlı bir anahtar verir. API anahtarın bu cihazda kalır: sunucu envanterini, cüzdanını ya da karakterlerini göremez.\n\nİstediğin zaman Ayarlar\'dan kapatabilirsin.',
+  'trade_watch_ask': 'Ticaret noktasındaki bir ilanın satıldığında ya da bir alış emrin gerçekleştiğinde bildirim almak ister misin?\n\nBunun için uygulama sunucumuza 30 gün boyunca yalnızca hesap adını ve alım satım geçmişini görebilen sınırlı bir anahtar verir. API anahtarın bunun için kullanılmaz: sınırlı anahtar envanterini, cüzdanını ya da karakterlerini göremez.\n\nAyarlar\'dan istediğin zaman kapatabilirsin.',
   'trade_watch_yes': 'Evet, bildir',
   'trade_watch_no': 'Şimdi değil',
   'trade_watch_note':
@@ -836,7 +840,7 @@ const trStrings = <String, String>{
   'data_lang_fallback': 'İngilizce (Türkçe yok)',
   'wiki_source': 'Wiki kaynağı',
   'remove_key': 'Key\'i kaldır',
-  'remove_key_body': 'API key bu cihazdan silinecek ve giriş ekranına döneceksin.',
+  'remove_key_body': 'API anahtarı bu cihazdan, hesabında saklanıyorsa oradan da silinecek. Hiç anahtar kalmazsa giriş ekranına dönersin.',
   'disclaimer':
       'Wondrous Compass resmi olmayan bir hayran uygulamasıdır. Guild Wars 2, ArenaNet ve NCSOFT ilgili sahiplerinin ticari markalarıdır. Veriler resmi GW2 API ve Guild Wars 2 Wiki üzerinden alınır.',
   'slot_Helm': 'Kask',
@@ -940,7 +944,7 @@ const trStrings = <String, String>{
   'welcome_body':
       'Sıfırlamalar, metalar, Wizard\'s Vault ve sahip olduğun her şey tek yerde. ArenaNet\'ten alacağın salt okunur bir API anahtarıyla bağlan.',
   'step_create': 'account.arena.net üzerinde paylaşmak istediğin izinlerle bir anahtar oluştur.',
-  'step_paste': 'Buraya yapıştır. Yalnızca bu cihazda, şifreli olarak saklanır.',
+  'step_paste': 'Buraya yapıştır. Bu cihazda şifreli olarak saklanır; hesabında ise yalnızca sen seçersen.',
   'continue': 'Devam',
   'privacy_note': 'Anahtarlar salt okunurdur. Harcama, takas ya da değişiklik yapamaz.',
   'key_for': '{name} olarak bağlandı',

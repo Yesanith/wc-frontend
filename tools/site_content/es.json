@@ -30,7 +30,7 @@
   "browser_p": "Todavía no hay una app para iPhone. Toda la app también funciona en el navegador, en cualquier móvil u ordenador.",
   "open_button": "Abrir Wondrous Compass",
   "iphone": "<strong>iPhone:</strong> ábrela en Safari, toca el botón de compartir y elige <em>Añadir a pantalla de inicio</em>. Después se abre por sí sola, como una app.",
-  "limits": "La versión del navegador no tiene notificaciones, ni alertas de eventos del mundo, ni caché en el dispositivo, por lo que carga más despacio. Tu clave de API se queda en este navegador y solo se envía a los servidores de Guild Wars 2.",
+  "limits": "La versión del navegador no tiene notificaciones, ni avisos de eventos del mundo, ni caché en el dispositivo, así que carga más despacio. Tu clave API se queda en este navegador y solo se envía a los servidores de Guild Wars 2, salvo que elijas guardarla en tu cuenta.",
   "fan": "Wondrous Compass es un proyecto de fans y no está afiliado ni respaldado por ArenaNet ni NCSOFT. Guild Wars 2 y todos los logotipos y diseños asociados son marcas comerciales o marcas registradas de NCSOFT Corporation.",
   "eyebrow": "Compañero no oficial de Guild Wars 2",
   "hero_h": "Tu Tyria, <em>de un vistazo</em>.",
@@ -83,14 +83,14 @@
   "discord_p": "Eventos de gremio con inscripciones y listas de espera, roles que siguen los rangos del gremio, feeds de noticias y parches, y un foro en el servidor oficial donde los gremios reclutan.",
   "discord_link": "Cómo añadir el bot",
   "privacy_h": "Tu clave de API sigue siendo tuya",
-  "privacy_p": "Se queda en tu dispositivo o en tu navegador y solo viaja a los servidores de Guild Wars 2. Sin anuncios, sin rastreo, y puedes borrar la cuenta opcional cuando quieras.",
+  "privacy_p": "Se queda en tu dispositivo o en tu navegador y solo va a los servidores de Guild Wars 2, salvo que elijas guardarla, cifrada, en tu cuenta. Sin anuncios, sin rastreo, y puedes borrar la cuenta opcional cuando quieras.",
   "privacy_link": "Leer la política de privacidad",
   "cta_h": "Echa un vistazo, sin registrarte",
   "cta_p": "Abre Wondrous Compass como invitado y añade una clave de API cuando quieras ver tu propia cuenta."
  },
  "delete": {
   "title": "Eliminar tu cuenta",
-  "intro": "Esto elimina tu cuenta de Wondrous Compass de forma definitiva: tu perfil, las cuentas de Guild Wars 2 vinculadas, las pertenencias a gremios, las inscripciones a eventos, los eventos que creaste y tus dispositivos de notificación. No afecta a tu cuenta de Guild Wars 2, a tu cuenta de Discord ni a nada que la app guarde en tu teléfono.",
+  "intro": "Esto borra tu cuenta de Wondrous Compass para siempre: tu perfil, las cuentas de Guild Wars 2 vinculadas, las claves API guardadas en tu cuenta, las membresías de gremio, las inscripciones a eventos, los eventos que creaste y tus dispositivos de notificaciones. No toca tu cuenta de Guild Wars 2, tu cuenta de Discord ni nada que la app guarde en tu teléfono.",
   "signin_p": "Inicia sesión con la cuenta de Discord que usas en la app.",
   "signin_btn": "Iniciar sesión con Discord",
   "signed_prefix": "Sesión iniciada como ",
@@ -121,7 +121,7 @@
    ],
    [
     "¿Es segura mi clave de API?",
-    "Tu clave se queda en tu dispositivo, o en tu navegador en la versión web, y solo se envía a los servidores de Guild Wars 2. Nunca se envía a los nuestros. Consulta la <a href='privacy.html'>política de privacidad</a>. Una clave solo puede leer, y puedes eliminarla en cualquier momento en account.arena.net."
+    "Tu clave se queda en tu dispositivo, o en tu navegador en la versión web, y solo se envía a los servidores de Guild Wars 2. Si inicias sesión con Discord puedes elegir guardarla en tu cuenta para que te acompañe a otro dispositivo: entonces se guarda cifrada en nuestros servidores y puedes borrarla de ahí cuando quieras en Ajustes. Consulta la <a href='privacy.html'>política de privacidad</a>. Una clave solo puede leer, y puedes borrarla cuando quieras en account.arena.net."
    ],
    [
     "¿Necesito la cuenta de Wondrous Compass?",
@@ -182,7 +182,7 @@
   "blocks": [
    "Wondrous Compass es un acompañante no oficial de Guild Wars 2. No tiene anuncios, no te rastrea y no vende ni comparte tus datos con fines publicitarios. Esta página explica qué trata, dónde, quién puede verlo y durante cuánto tiempo. Cubre la app de Android, la versión que funciona en el navegador en este sitio y el bot de Discord.",
    "Lo que se queda en tu dispositivo",
-   "Tus claves de API de Guild Wars 2, los datos del juego que la app descarga con ellas, tus ajustes, favoritos, lista de seguimiento e historial de precios se guardan solo en tu dispositivo, o en tu navegador en la versión web. La app habla directamente con la API oficial de Guild Wars 2. Tus claves de API nunca se envían a nuestros servidores. En un teléfono la clave viaja a ArenaNet en una cabecera de la petición. Un navegador no puede hacerlo con la API del juego, así que allí viaja en la dirección de la petición, solo a ArenaNet. En un navegador la clave se guarda en el almacenamiento de ese navegador; borrar los datos del sitio la elimina.",
+   "Tus claves API de Guild Wars 2, los datos del juego que la app descarga con ellas, tus ajustes, favoritos, lista de seguimiento e historial de precios se guardan en tu dispositivo, o en tu navegador en la versión web. La app habla directamente con la API oficial de Guild Wars 2. Tus claves API solo se envían a nuestros servidores si eliges guardarlas en tu cuenta (ver abajo). En un teléfono la clave viaja a ArenaNet en una cabecera de la petición. Un navegador no puede hacerlo con la API del juego, así que allí viaja en la dirección de la petición, solo a ArenaNet. En un navegador la clave se guarda en el almacenamiento de ese navegador; borrar los datos del sitio la elimina.",
    "La cuenta opcional de Wondrous Compass",
    "Los eventos de gremio, la información del gremio y el bot de Discord necesitan una cuenta, que creas iniciando sesión con Discord. Todo lo que sigue se aplica solo si lo haces.",
    [
@@ -194,7 +194,8 @@
     "<strong>Servidores de Discord:</strong> si diriges un gremio y conectas un servidor de Discord: el id del servidor y el canal donde se publican los eventos, sus ajustes (zona horaria, idioma, hilos, eventos programados, recordatorios), los canales y el rol opcional para noticias y actualizaciones del juego, los roles de Discord asociados a rangos del gremio y qué roles dio el bot a qué usuario de Discord para poder retirar solo esos. El bot no puede leer mensajes. Recibe los comandos y botones que usa la gente y, al pulsar un botón, Discord envía el id de la persona y sus roles en ese servidor, que se usan en ese momento y no se guardan.",
     "<strong>Recuentos sin nombre:</strong> para ver que todo funciona y qué versiones se usan, nuestros servidores cuentan, por día y sin nada que diga quién fue, cuántas veces abre cada versión de la app un jugador con sesión iniciada y en qué se ejecuta (Android o el navegador), qué hacen los comandos del bot de Discord y cuántas solicitudes tienen éxito o fallan. Son solo números.",
     "<strong>Alertas de precio:</strong> si creas una con la sesión iniciada, la app también la guarda en nuestros servidores: el objeto, su nombre, tus precios y cuándo te avisó por última vez, para poder enviarte una notificación cuando el banco de comercio los alcance. Se elimina al quitarla o al borrar tu cuenta.",
-    "<strong>Tu bazar:</strong> si pides al servidor que te avise de lo que hizo tu bazar, la app crea con la clave API en uso un subtoken que dura 30 días y solo puede leer de quién es la cuenta y su historial de compras y ventas, y nos lo envía. Lo guardamos cifrado, con el nombre de la cuenta y los números de tus últimas transacciones, miramos el historial cada pocos minutos y enviamos una notificación cuando se vendió o compró algo. La app crea un subtoken nuevo antes de que caduque. Tu clave API nunca se envía. Desactivarlo, desvincular la cuenta o eliminar tu cuenta lo borra todo."
+    "<strong>Tu bazar:</strong> si pides al servidor que te avise de lo que hizo tu bazar, la app crea con la clave API en uso un subtoken que dura 30 días y solo puede leer de quién es la cuenta y su historial de compras y ventas, y nos lo envía. Lo guardamos cifrado, con el nombre de la cuenta y los números de tus últimas transacciones, miramos el historial cada pocos minutos y enviamos una notificación cuando se vendió o compró algo. La app crea un subtoken nuevo antes de que caduque. Tu clave API nunca se envía. Desactivarlo, desvincular la cuenta o eliminar tu cuenta lo borra todo.",
+    "<strong>Tus claves API, si lo eliges:</strong> con la sesión iniciada con Discord, puedes guardar tus claves API en tu cuenta para que te acompañen al iniciar sesión en otro dispositivo. La clave se comprueba con la API de Guild Wars 2 y solo se guarda para una cuenta que vinculaste, cifrada con una clave que nuestra base de datos no tiene, junto con el nombre de la cuenta y los permisos de la clave. Solo se te devuelve a ti, en la app. Desactivarlo en Ajustes, quitar la clave en la app, desvincular la cuenta o borrar tu cuenta la borra."
    ],
    "Quién lo ve",
    [
@@ -241,7 +242,8 @@
     "Un gremio no es de una persona, así que eliminar una cuenta no lo elimina, pero lo que trajo la app del líder no debe sobrevivir al líder: cuando se va el último líder que usa la app, se eliminan el nivel, el mensaje del día, los recuentos, la lista de miembros, los rangos, la tesorería, el alijo, el registro y las elecciones del líder, y cuando se va el último miembro se elimina el gremio con su conexión de Discord.",
     "Una pertenencia a un gremio que la app no ha actualizado durante 30 días deja de contar, y a los 90 días se elimina. Volver y vincular de nuevo la restablece.",
     "El token de notificaciones de un dispositivo se elimina cuando cierras sesión, desactivas las notificaciones o el token deja de funcionar. Los datos de un servidor de Discord se eliminan cuando se desconecta o cuando se elimina su gremio.",
-    "Un evento público se borra 30 días después de terminar, con sus inscripciones y denuncias. La cuenta de lo que creaste en un día se borra a los dos días."
+    "Un evento público se borra 30 días después de terminar, con sus inscripciones y denuncias. La cuenta de lo que creaste en un día se borra a los dos días.",
+    "Una clave API guardada en tu cuenta se borra cuando desactivas el guardado, quitas la clave en la app, desvinculas su cuenta o borras tu cuenta."
    ],
    "Eliminar tu cuenta y tus derechos",
    "En la app abre Ajustes y elige Eliminar cuenta, o usa la <a href='delete-account.html'>página para eliminar la cuenta</a> sin la app. Tu perfil, las cuentas de Guild Wars 2 vinculadas, las pertenencias a gremios, las inscripciones, los eventos que creaste y tus tokens de notificación se eliminan al instante y no se pueden restaurar. También puedes preguntar qué tenemos sobre ti, pedir que se corrija o oponerte a su uso y, si estás en la Unión Europea, puedes reclamar ante tu autoridad de protección de datos. Escríbenos como se indica abajo. Usamos tus datos solo para ofrecer lo que pediste al iniciar sesión y vincular, que es nuestra base para tratarlos.",
@@ -263,7 +265,7 @@
    "Tu cuenta y tu clave de API",
    [
     "La cuenta de Wondrous Compass es opcional y se crea iniciando sesión con Discord. Eres responsable de lo que ocurra a través de ella.",
-    "Tu clave de API es tuya. Guárdala para ti, usa claves que solo tengan los permisos que quieres dar y revócala en account.arena.net si crees que se filtró. Nunca te pedimos tu clave.",
+    "Tu clave API es tuya. No la compartas, usa claves que solo tengan los permisos que quieras dar y revócala en account.arena.net si crees que se filtró. Nunca te pedimos la clave fuera de la app, y guardarla en tu cuenta es decisión tuya.",
     "Solo puedes vincular cuentas de Guild Wars 2 que sean tuyas."
    ],
    "Gremios y lo que compartes",

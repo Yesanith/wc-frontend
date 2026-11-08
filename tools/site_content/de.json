@@ -30,7 +30,7 @@
   "browser_p": "Es gibt noch keine iPhone-App. Die gesamte App läuft auch im Browser, auf jedem Handy und Computer.",
   "open_button": "Wondrous Compass öffnen",
   "iphone": "<strong>iPhone:</strong> Öffne die Seite in Safari, tippe auf „Teilen“ und wähle <em>Zum Home-Bildschirm</em>. Dann startet sie eigenständig wie eine App.",
-  "limits": "Die Browserversion hat keine Benachrichtigungen, keine Warnungen für Weltevents und keinen Zwischenspeicher auf dem Gerät und lädt daher langsamer. Dein API-Schlüssel bleibt in diesem Browser und wird nur an die Guild-Wars-2-Server gesendet.",
+  "limits": "Die Browserversion hat keine Benachrichtigungen, keine Hinweise auf Weltereignisse und keinen Cache auf dem Gerät, daher lädt sie langsamer. Dein API-Schlüssel bleibt in diesem Browser und wird nur an die Guild-Wars-2-Server gesendet, außer du entscheidest dich, ihn in deinem Konto zu speichern.",
   "fan": "Wondrous Compass ist ein Fanprojekt und steht in keiner Verbindung zu ArenaNet oder NCSOFT und wird von ihnen nicht unterstützt. Guild Wars 2 und alle zugehörigen Logos und Designs sind Marken oder eingetragene Marken der NCSOFT Corporation.",
   "eyebrow": "Inoffizieller Guild-Wars-2-Begleiter",
   "hero_h": "Dein Tyria, <em>auf einen Blick</em>.",
@@ -83,14 +83,14 @@
   "discord_p": "Gildenevents mit Anmeldungen und Wartelisten, Rollen, die den Gildenrängen folgen, News- und Patch-Feeds und ein Forum auf dem offiziellen Server, in dem Gilden Mitglieder suchen.",
   "discord_link": "So fügst du den Bot hinzu",
   "privacy_h": "Dein API-Schlüssel bleibt deiner",
-  "privacy_p": "Er bleibt auf deinem Gerät oder in deinem Browser und geht nur an die Guild-Wars-2-Server. Keine Werbung, kein Tracking, und das optionale Konto kannst du jederzeit löschen.",
+  "privacy_p": "Er bleibt auf deinem Gerät oder in deinem Browser und geht nur an die Guild-Wars-2-Server, außer du entscheidest dich, ihn verschlüsselt in deinem Konto zu speichern. Keine Werbung, kein Tracking, und du kannst das optionale Konto jederzeit löschen.",
   "privacy_link": "Datenschutzerklärung lesen",
   "cta_h": "Schau dich um, ohne Anmeldung",
   "cta_p": "Öffne Wondrous Compass als Gast und füge einen API-Schlüssel hinzu, wenn du dein eigenes Konto sehen willst."
  },
  "delete": {
   "title": "Konto löschen",
-  "intro": "Dies löscht dein Wondrous-Compass-Konto endgültig: dein Profil, verknüpfte Guild-Wars-2-Konten, Gildenmitgliedschaften, Event-Anmeldungen, die von dir erstellten Events und deine Benachrichtigungsgeräte. Dein Guild-Wars-2-Konto, dein Discord-Konto und alles, was die App auf deinem Handy speichert, bleiben unberührt.",
+  "intro": "Damit wird dein Wondrous-Compass-Konto endgültig gelöscht: dein Profil, verknüpfte Guild-Wars-2-Konten, die in deinem Konto gespeicherten API-Schlüssel, Gildenmitgliedschaften, Event-Anmeldungen, die von dir erstellten Events und deine Geräte für Benachrichtigungen. Dein Guild-Wars-2-Konto, dein Discord-Konto und alles, was die App auf deinem Telefon speichert, bleiben unberührt.",
   "signin_p": "Melde dich mit dem Discord-Konto an, das du in der App verwendest.",
   "signin_btn": "Mit Discord anmelden",
   "signed_prefix": "Angemeldet als ",
@@ -121,7 +121,7 @@
    ],
    [
     "Ist mein API-Schlüssel sicher?",
-    "Dein Schlüssel bleibt auf deinem Gerät, in der Browserversion in deinem Browser, und wird nur an die Guild-Wars-2-Server gesendet. An unsere wird er nie gesendet. Siehe die <a href='privacy.html'>Datenschutzerklärung</a>. Ein Schlüssel kann nur lesen, und du kannst ihn jederzeit auf account.arena.net löschen."
+    "Dein Schlüssel bleibt auf deinem Gerät, in der Browserversion in deinem Browser, und wird nur an die Guild-Wars-2-Server gesendet. Wenn du dich mit Discord anmeldest, kannst du ihn in deinem Konto speichern, damit er dich auf ein anderes Gerät begleitet: Dann wird er verschlüsselt auf unseren Servern gespeichert, und du kannst ihn dort jederzeit in den Einstellungen löschen. Siehe die <a href='privacy.html'>Datenschutzerklärung</a>. Ein Schlüssel kann nur lesen, und du kannst ihn jederzeit auf account.arena.net löschen."
    ],
    [
     "Brauche ich das Wondrous-Compass-Konto?",
@@ -182,7 +182,7 @@
   "blocks": [
    "Wondrous Compass ist ein inoffizieller Guild-Wars-2-Begleiter. Es gibt keine Werbung und keine Analysewerkzeuge, wir verfolgen dich nicht und verkaufen oder teilen deine Daten nicht für Werbung. Diese Seite sagt, was verarbeitet wird, wo, wer es sehen kann und wie lange. Sie gilt für die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot.",
    "Was auf deinem Gerät bleibt",
-   "Deine Guild-Wars-2-API-Schlüssel, die damit geladenen Spieldaten, deine Einstellungen, Favoriten, Beobachtungsliste und der Preisverlauf werden nur auf deinem Gerät gespeichert, in der Browserversion in deinem Browser. Die App spricht direkt mit der offiziellen Guild-Wars-2-API. Deine API-Schlüssel werden nie an unsere Server gesendet. Auf dem Handy geht der Schlüssel in einem Anfrage-Header an ArenaNet. Ein Browser kann das mit der API des Spiels nicht, daher geht er dort in der Adresse der Anfrage, nur an ArenaNet. Im Browser wird der Schlüssel im Speicher dieses Browsers aufbewahrt; das Löschen der Websitedaten entfernt ihn.",
+   "Deine Guild-Wars-2-API-Schlüssel, die Spieldaten, die die App damit lädt, deine Einstellungen, Favoriten, Beobachtungsliste und Preisverläufe werden auf deinem Gerät gespeichert, in der Browserversion in deinem Browser. Die App spricht direkt mit der offiziellen Guild-Wars-2-API. Deine API-Schlüssel werden nur an unsere Server gesendet, wenn du dich entscheidest, sie in deinem Konto zu speichern (siehe unten). Auf einem Telefon reist der Schlüssel in einem Anfrage-Header zu ArenaNet. Ein Browser kann das mit der API des Spiels nicht, deshalb reist er dort in der Adresse der Anfrage, nur zu ArenaNet. Im Browser wird der Schlüssel im Speicher dieses Browsers gehalten; das Löschen der Website-Daten entfernt ihn.",
    "Das optionale Wondrous-Compass-Konto",
    "Gildenevents, Gildeninformationen und der Discord-Bot brauchen ein Konto, das du durch Anmelden mit Discord erstellst. Alles Folgende gilt nur, wenn du das tust.",
    [
@@ -194,7 +194,8 @@
     "<strong>Discord-Server:</strong> wenn du eine Gilde leitest und einen Discord-Server verbindest: die ID des Servers und den Kanal, in den Events gepostet werden, seine Einstellungen (Zeitzone, Sprache, Threads, geplante Events, Erinnerungen), die Kanäle und die optionale Rolle für Neuigkeiten und Spiel-Updates, die Discord-Rollen, die Gildenrängen zugeordnet sind, und welche Rollen der Bot welchem Discord-Nutzer gegeben hat, damit er nur diese zurücknehmen kann. Der Bot kann keine Nachrichten lesen. Er erhält die Befehle und Schaltflächen, die Menschen nutzen, und bei einem Klick sendet Discord die ID der Person und ihre Rollen auf diesem Server, die für diesen Moment verwendet und nicht gespeichert werden.",
     "<strong>Zählungen ohne Namen:</strong> Um zu sehen, dass alles funktioniert und welche Versionen im Einsatz sind, zählen unsere Server pro Tag und ohne jeden Hinweis darauf, wer es war, wie oft jede Version der App von einem angemeldeten Spieler geöffnet wird und worauf sie läuft (Android oder Browser), was die Befehle des Discord-Bots bewirken und wie viele Anfragen gelingen oder scheitern. Das sind nur Zahlen.",
     "<strong>Preisalarme:</strong> Wenn du einen setzt, während du angemeldet bist, speichert die App ihn auch auf unseren Servern: das Item, seinen Namen, deine Preise und wann er dich zuletzt benachrichtigt hat, damit wir dir eine Benachrichtigung senden können, wenn der Handelsposten sie erreicht. Er wird gelöscht, wenn du ihn entfernst oder dein Konto löschst.",
-    "<strong>Dein Handelsposten:</strong> Wenn du den Server bittest, dir zu sagen, was dein Handelsposten getan hat, erstellt die App aus dem verwendeten API-Key einen Subtoken, der 30 Tage gilt und nur lesen kann, wem das Konto gehört und seinen Kauf- und Verkaufsverlauf, und schickt ihn uns. Wir speichern ihn verschlüsselt, mit dem Namen des Kontos und den Nummern deiner letzten Transaktionen, sehen alle paar Minuten in den Verlauf und schicken eine Benachrichtigung, wenn etwas verkauft oder gekauft wurde. Die App erstellt einen neuen Subtoken, bevor er abläuft. Dein API-Key selbst wird nie gesendet. Ausschalten, das Konto trennen oder dein Konto löschen löscht alles davon."
+    "<strong>Dein Handelsposten:</strong> Wenn du den Server bittest, dir zu sagen, was dein Handelsposten getan hat, erstellt die App aus dem verwendeten API-Key einen Subtoken, der 30 Tage gilt und nur lesen kann, wem das Konto gehört und seinen Kauf- und Verkaufsverlauf, und schickt ihn uns. Wir speichern ihn verschlüsselt, mit dem Namen des Kontos und den Nummern deiner letzten Transaktionen, sehen alle paar Minuten in den Verlauf und schicken eine Benachrichtigung, wenn etwas verkauft oder gekauft wurde. Die App erstellt einen neuen Subtoken, bevor er abläuft. Dein API-Key selbst wird nie gesendet. Ausschalten, das Konto trennen oder dein Konto löschen löscht alles davon.",
+    "<strong>Deine API-Schlüssel, wenn du willst:</strong> Mit Discord angemeldet kannst du deine API-Schlüssel in deinem Konto speichern, damit sie dich begleiten, wenn du dich auf einem anderen Gerät anmeldest. Ein Schlüssel wird mit der Guild-Wars-2-API geprüft und nur für ein von dir verknüpftes Konto gespeichert, verschlüsselt mit einem Schlüssel, den unsere Datenbank nicht hat, zusammen mit dem Namen des Kontos und den Berechtigungen des Schlüssels. Er wird nur dir in der App zurückgegeben. Ausschalten in den Einstellungen, Entfernen des Schlüssels in der App, Trennen des Kontos oder Löschen deines Kontos löscht ihn."
    ],
    "Wer es sieht",
    [
@@ -241,7 +242,8 @@
     "Eine Gilde gehört keiner Person, daher löscht das Löschen eines Kontos sie nicht, aber was die App des Anführers geholt hat, darf den Anführer nicht überdauern: Wenn der letzte Anführer, der die App nutzt, geht, werden Stufe, Nachricht des Tages, Zahlen, Mitgliederliste, Ränge, Schatzkammer, Lager, Protokoll und die Auswahl des Anführers gelöscht, und wenn das letzte Mitglied geht, wird die Gilde mit ihrer Discord-Verbindung gelöscht.",
     "Eine Gildenmitgliedschaft, die die App 30 Tage lang nicht aktualisiert hat, zählt nicht mehr und wird nach 90 Tagen gelöscht. Wiederkommen und erneut verknüpfen stellt sie wieder her.",
     "Das Benachrichtigungs-Token eines Geräts wird entfernt, wenn du dich abmeldest, Benachrichtigungen ausschaltest oder das Token nicht mehr funktioniert. Die Daten eines Discord-Servers werden entfernt, wenn er getrennt oder seine Gilde gelöscht wird.",
-    "Ein öffentliches Event wird 30 Tage nach seinem Ende mit Anmeldungen und Meldungen gelöscht. Die Zählung dessen, was du an einem Tag erstellt hast, wird nach zwei Tagen gelöscht."
+    "Ein öffentliches Event wird 30 Tage nach seinem Ende mit Anmeldungen und Meldungen gelöscht. Die Zählung dessen, was du an einem Tag erstellt hast, wird nach zwei Tagen gelöscht.",
+    "Ein in deinem Konto gespeicherter API-Schlüssel wird gelöscht, wenn du das Speichern ausschaltest, den Schlüssel in der App entfernst, sein Konto trennst oder dein Konto löschst."
    ],
    "Dein Konto löschen und deine Rechte",
    "In der App öffne die Einstellungen und wähle „Konto löschen“, oder nutze ohne die App die <a href='delete-account.html'>Seite zum Löschen des Kontos</a>. Dein Profil, verknüpfte Guild-Wars-2-Konten, Gildenmitgliedschaften, Anmeldungen, die von dir erstellten Events und deine Benachrichtigungs-Tokens werden sofort gelöscht und können nicht wiederhergestellt werden. Du kannst auch fragen, was wir über dich gespeichert haben, es berichtigen lassen oder der Verwendung widersprechen, und wenn du in der Europäischen Union bist, kannst du dich bei deiner Datenschutzbehörde beschweren. Schreib uns wie unten angegeben. Wir verwenden deine Daten nur, um bereitzustellen, worum du durch Anmelden und Verknüpfen gebeten hast; das ist unsere Grundlage für die Verarbeitung.",
@@ -263,7 +265,7 @@
    "Dein Konto und dein API-Schlüssel",
    [
     "Das Wondrous-Compass-Konto ist optional und wird durch Anmelden mit Discord erstellt. Du bist verantwortlich für das, was darüber geschieht.",
-    "Dein API-Schlüssel gehört dir. Behalte ihn für dich, nutze Schlüssel, die nur die Berechtigungen haben, die du geben willst, und widerrufe ihn auf account.arena.net, wenn du glaubst, dass er offengelegt wurde. Wir fragen nie nach deinem Schlüssel.",
+    "Dein API-Schlüssel gehört dir. Behalte ihn für dich, nutze Schlüssel, die nur die Berechtigungen haben, die du geben willst, und widerrufe ihn auf account.arena.net, wenn du denkst, dass er bekannt wurde. Außerhalb der App fragen wir nie nach deinem Schlüssel, und ihn in deinem Konto zu speichern ist deine Entscheidung.",
     "Du darfst nur Guild-Wars-2-Konten verknüpfen, die dir gehören."
    ],
    "Gilden und was du teilst",

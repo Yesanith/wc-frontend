@@ -81,9 +81,15 @@ const ptStrings = <String, String>{
   'link_title': 'Vincule sua\nconta do jogo.',
   'link_body':
       'Sua conta do Discord ainda não está vinculada a uma conta de Guild Wars 2. Insira uma chave de API: a conta dela é vinculada à sua conta do Discord, para eventos da guilda, a lista da guilda e eventos públicos.',
-  'signin_discord_note':
-      'Eventos da guilda, a lista da sua guilda e eventos públicos, com a conta que você vinculou. Em um novo dispositivo, suas contas vinculadas vêm junto.',
+  'signin_discord_note': 'Eventos da guilda, a lista da sua guilda e eventos públicos, com a conta que você vinculou. Em um novo dispositivo, suas contas vinculadas e as chaves que você guarda na conta vêm junto.',
   'signin_or_key': 'ou apenas com uma chave de API',
+  'keep_key_title': 'Guardar esta chave na minha conta',
+  'keep_key_note': 'Entre com o Discord em outro dispositivo e ela vai com você. Ela fica criptografada, e você pode apagá-la em Configurações quando quiser.',
+  'keep_key_failed': 'A chave foi salva neste dispositivo, mas não pôde ser guardada na sua conta: {e}',
+  'keep_keys_setting': 'Guardar minhas chaves de API na minha conta',
+  'keep_keys_setting_note': 'Suas chaves ficam criptografadas na sua conta do Wondrous Compass, para irem com você ao entrar com o Discord em outro dispositivo. Desligar isso as apaga dos nossos servidores; elas continuam neste dispositivo.',
+  'keep_keys_kept': 'Guardadas na sua conta: {names}',
+  'keep_keys_off': 'guardar chaves não está disponível agora',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
       'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',
@@ -204,8 +210,7 @@ const ptStrings = <String, String>{
   'gw2_link_intro': 'Vincule a conta de GW2 da sua chave de API ativa para entrar aqui nas suas guildas.',
   'gw2_link': 'Vincular conta de GW2',
   'gw2_refresh': 'Atualizar guildas',
-  'gw2_link_note':
-      'Só é enviado um token de dez minutos que lê o nome da conta e as guildas. Sua chave de API fica neste dispositivo.',
+  'gw2_link_note': 'Vincular envia apenas um token de dez minutos que pode ler o nome da sua conta e suas guildas. Sua chave de API só é enviada se você escolher guardá-la na sua conta.',
   'gw2_linked': '{name} foi vinculada',
   'gw2_link_taken': 'Esta conta de GW2 já está vinculada a outra conta Wondrous Compass.',
   'gw2_link_key': 'Não foi possível usar a chave de API. Ela precisa da permissão account.',
@@ -582,8 +587,7 @@ const ptStrings = <String, String>{
   'push_browser_blocked':
       'Este navegador recusou a assinatura de notificações. No Brave: Configurações → Privacidade e segurança → ative "Usar serviços do Google para mensagens push" e recarregue a página.',
   'trade_watch_title': 'Vendas e compras',
-  'trade_watch_ask':
-      'Quer receber uma notificação quando um anúncio seu no bazar for vendido ou uma ordem de compra for concluída?\n\nPara isso, o app entrega ao nosso servidor uma chave limitada que, por 30 dias, só vê o nome da sua conta e seu histórico de compras e vendas. Sua chave de API fica neste dispositivo: o servidor não vê seu inventário, sua carteira nem seus personagens.\n\nVocê pode desligar quando quiser nas Configurações.',
+  'trade_watch_ask': 'Receber uma notificação quando um dos seus anúncios no entreposto for vendido ou uma ordem de compra for concluída?\n\nPara isso, o app dá ao nosso servidor uma chave limitada que só pode ver o nome da sua conta e seu histórico de compras e vendas, por 30 dias. Sua chave de API não é usada para isso: a chave limitada não pode ver seu inventário, sua carteira nem seus personagens.\n\nVocê pode desligar quando quiser em Configurações.',
   'trade_watch_yes': 'Sim, me avise',
   'trade_watch_no': 'Agora não',
   'trade_watch_note':
@@ -841,7 +845,7 @@ const ptStrings = <String, String>{
   'data_lang_fallback': 'Inglês (não disponível em português)',
   'wiki_source': 'Fonte da wiki',
   'remove_key': 'Remover chave',
-  'remove_key_body': 'A chave de API será apagada deste aparelho e você voltará à tela inicial.',
+  'remove_key_body': 'A chave de API será apagada deste dispositivo, e da sua conta se estiver guardada lá. Sem nenhuma chave você volta para a tela inicial.',
   'disclaimer':
       'Wondrous Compass é um app de fã não oficial. Guild Wars 2, ArenaNet e NCSOFT são marcas de seus respectivos donos. Os dados vêm da API oficial do GW2 e da Guild Wars 2 Wiki.',
   'slot_Helm': 'Elmo',
@@ -945,7 +949,7 @@ const ptStrings = <String, String>{
   'welcome_body':
       'Resets, metas, o Wizard\'s Vault e tudo o que você tem, em um só lugar. Conecte com uma chave de API somente leitura da ArenaNet.',
   'step_create': 'Crie uma chave em account.arena.net com as permissões que quer compartilhar.',
-  'step_paste': 'Cole aqui. Ela fica só neste aparelho, criptografada.',
+  'step_paste': 'Cole aqui. Ela fica criptografada neste dispositivo, e na sua conta só se você escolher.',
   'continue': 'Continuar',
   'privacy_note': 'As chaves são somente leitura. Não podem gastar, negociar nem mudar nada.',
   'key_for': 'Conectado como {name}',

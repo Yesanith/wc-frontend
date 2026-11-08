@@ -38,8 +38,12 @@ the device (in the browser for the browser version), sent only to the official A
 kept and switched for alt accounts.
 
 Signing in with Discord is optional. It is only needed for guild events, public events, guild recruitment
-pages and price alerts sent by the server, and even then the app sends a ten minute read only token, never
-your API key. The [privacy policy](https://yesanith.github.io/wc-frontend/privacy.html) lists exactly
+pages and price alerts sent by the server, and linking an account sends a ten minute read only token, not
+your API key. The first screen offers both ways in: Discord, or an API key alone. A player signed in with
+Discord can choose to keep their API keys in their account, encrypted with a key the database does not
+have, so they come along when signing in on another device; it is asked when a key is added, can be turned
+off in Settings, which deletes them from the server, and a Discord account with no game account linked is
+asked for a key on a screen of its own. The [privacy policy](https://yesanith.github.io/wc-frontend/privacy.html) lists exactly
 what is kept, where and for how long, and the account can be deleted from Settings or the
 [delete account page](https://yesanith.github.io/wc-frontend/delete-account.html).
 

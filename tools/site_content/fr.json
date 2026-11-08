@@ -30,7 +30,7 @@
   "browser_p": "Il n'y a pas encore d'app pour iPhone. Toute l'app fonctionne aussi dans le navigateur, sur n'importe quel téléphone ou ordinateur.",
   "open_button": "Ouvrir Wondrous Compass",
   "iphone": "<strong>iPhone :</strong> ouvre-la dans Safari, appuie sur le bouton de partage et choisis <em>Sur l'écran d'accueil</em>. Elle s'ouvre ensuite toute seule, comme une app.",
-  "limits": "La version navigateur n'a ni notifications, ni alertes d'événements mondiaux, ni cache sur l'appareil, et se charge donc plus lentement. Ta clé d'API reste dans ce navigateur et n'est envoyée qu'aux serveurs de Guild Wars 2.",
+  "limits": "La version navigateur n'a ni notifications, ni alertes d'événements du monde, ni cache sur l'appareil, elle charge donc plus lentement. Ta clé API reste dans ce navigateur et n'est envoyée qu'aux serveurs de Guild Wars 2, sauf si tu choisis de la garder dans ton compte.",
   "fan": "Wondrous Compass est un projet de fans, sans lien avec ArenaNet ni NCSOFT et non soutenu par eux. Guild Wars 2 et tous les logos et designs associés sont des marques ou des marques déposées de NCSOFT Corporation.",
   "eyebrow": "Compagnon non officiel de Guild Wars 2",
   "hero_h": "Ton Tyria, <em>d'un coup d'œil</em>.",
@@ -83,14 +83,14 @@
   "discord_p": "Événements de guilde avec inscriptions et listes d'attente, rôles qui suivent les rangs de la guilde, flux d'actualités et de correctifs, et un forum sur le serveur officiel où les guildes recrutent.",
   "discord_link": "Comment ajouter le bot",
   "privacy_h": "Ta clé d'API reste à toi",
-  "privacy_p": "Elle reste sur ton appareil ou dans ton navigateur et n'est envoyée qu'aux serveurs de Guild Wars 2. Pas de publicité, pas de pistage, et tu peux supprimer le compte facultatif à tout moment.",
+  "privacy_p": "Elle reste sur ton appareil, ou dans ton navigateur, et ne va qu'aux serveurs de Guild Wars 2, sauf si tu choisis de la garder, chiffrée, dans ton compte. Pas de pub, pas de pistage, et tu peux supprimer le compte facultatif à tout moment.",
   "privacy_link": "Lire la politique de confidentialité",
   "cta_h": "Jette un œil, sans inscription",
   "cta_p": "Ouvre Wondrous Compass en invité et ajoute une clé d'API quand tu veux voir ton propre compte."
  },
  "delete": {
   "title": "Supprimer ton compte",
-  "intro": "Cela supprime définitivement ton compte Wondrous Compass : ton profil, les comptes Guild Wars 2 liés, les appartenances à des guildes, les inscriptions aux événements, les événements que tu as créés et tes appareils de notification. Cela ne touche ni ton compte Guild Wars 2, ni ton compte Discord, ni rien de ce que l'app garde sur ton téléphone.",
+  "intro": "Ceci supprime définitivement ton compte Wondrous Compass : ton profil, les comptes Guild Wars 2 liés, les clés API gardées dans ton compte, les adhésions de guilde, les inscriptions aux événements, les événements que tu as créés et tes appareils de notification. Cela ne touche ni ton compte Guild Wars 2, ni ton compte Discord, ni ce que l'app garde sur ton téléphone.",
   "signin_p": "Connecte-toi avec le compte Discord que tu utilises dans l'app.",
   "signin_btn": "Se connecter avec Discord",
   "signed_prefix": "Connecté en tant que ",
@@ -121,7 +121,7 @@
    ],
    [
     "Ma clé d'API est-elle en sécurité ?",
-    "Ta clé reste sur ton appareil, ou dans ton navigateur pour la version navigateur, et n'est envoyée qu'aux serveurs de Guild Wars 2. Elle n'est jamais envoyée aux nôtres. Voir la <a href='privacy.html'>politique de confidentialité</a>. Une clé ne peut que lire, et tu peux la supprimer à tout moment sur account.arena.net."
+    "Ta clé reste sur ton appareil, ou dans ton navigateur pour la version navigateur, et n'est envoyée qu'aux serveurs de Guild Wars 2. Si tu te connectes avec Discord, tu peux choisir de la garder dans ton compte pour qu'elle te suive sur un autre appareil : elle est alors gardée chiffrée sur nos serveurs, et tu peux l'y supprimer à tout moment dans les Réglages. Voir la <a href='privacy.html'>politique de confidentialité</a>. Une clé ne peut que lire, et tu peux la supprimer à tout moment sur account.arena.net."
    ],
    [
     "Ai-je besoin du compte Wondrous Compass ?",
@@ -182,7 +182,7 @@
   "blocks": [
    "Wondrous Compass est un compagnon non officiel de Guild Wars 2. Il n'a pas de publicité, ne te suit pas et ne vend ni ne partage tes données à des fins publicitaires. Cette page explique ce qu'il traite, où, qui peut le voir et pendant combien de temps. Elle couvre l'app Android, la version qui fonctionne dans un navigateur sur ce site et le bot Discord.",
    "Ce qui reste sur ton appareil",
-   "Tes clés d'API Guild Wars 2, les données du jeu que l'app télécharge avec elles, tes paramètres, favoris, liste de suivi et historique des prix sont stockés uniquement sur ton appareil, ou dans ton navigateur pour la version navigateur. L'app parle directement à l'API officielle de Guild Wars 2. Tes clés d'API ne sont jamais envoyées à nos serveurs. Sur un téléphone, la clé va à ArenaNet dans un en-tête de requête. Un navigateur ne peut pas le faire avec l'API du jeu, donc elle voyage alors dans l'adresse de la requête, vers ArenaNet uniquement. Dans un navigateur, la clé est conservée dans le stockage de ce navigateur ; effacer les données du site la supprime.",
+   "Tes clés API Guild Wars 2, les données de jeu que l'app télécharge avec elles, tes réglages, favoris, liste de suivi et historique des prix sont stockés sur ton appareil, ou dans ton navigateur pour la version navigateur. L'app parle directement à l'API officielle de Guild Wars 2. Tes clés API ne sont envoyées à nos serveurs que si tu choisis de les garder dans ton compte (voir plus bas). Sur un téléphone, la clé voyage vers ArenaNet dans un en-tête de requête. Un navigateur ne peut pas le faire avec l'API du jeu, elle voyage donc dans l'adresse de la requête, vers ArenaNet uniquement. Dans un navigateur, la clé est gardée dans le stockage de ce navigateur ; effacer les données du site la supprime.",
    "Le compte Wondrous Compass facultatif",
    "Les événements de guilde, les informations de la guilde et le bot Discord nécessitent un compte, que tu crées en te connectant avec Discord. Tout ce qui suit ne s'applique que si tu le fais.",
    [
@@ -194,7 +194,8 @@
     "<strong>Serveurs Discord :</strong> si tu diriges une guilde et connectes un serveur Discord : l'identifiant du serveur et le salon où les événements sont publiés, ses paramètres (fuseau horaire, langue, fils, événements planifiés, rappels), les salons et le rôle facultatif pour les actualités et les mises à jour du jeu, les rôles Discord associés aux rangs de la guilde, et quels rôles le bot a donnés à quel utilisateur Discord afin de ne retirer que ceux-là. Le bot ne peut pas lire les messages. Il reçoit les commandes et les boutons que les gens utilisent, et lors de l'appui sur un bouton, Discord envoie l'identifiant de la personne et ses rôles sur ce serveur, qui sont utilisés à ce moment et non conservés.",
     "<strong>Des comptes sans nom :</strong> pour voir que tout fonctionne et quelles versions sont utilisées, nos serveurs comptent, par jour et sans rien qui dise qui, combien de fois chaque version de l'app est ouverte par un joueur connecté et sur quoi elle tourne (Android ou le navigateur), ce que font les commandes du bot Discord et combien de requêtes réussissent ou échouent. Ce ne sont que des chiffres.",
     "<strong>Alertes de prix :</strong> si tu en crées une en étant connecté, l'app la conserve aussi sur nos serveurs : l'objet, son nom, tes prix et la dernière fois que tu as été prévenu, afin de pouvoir t'envoyer une notification quand le comptoir commercial les atteint. Elle est supprimée quand tu la retires ou supprimes ton compte.",
-    "<strong>Ton comptoir :</strong> si tu demandes au serveur de te dire ce qu'a fait ton comptoir, l'app crée à partir de la clé API utilisée un sous-jeton valable 30 jours qui ne peut lire que le propriétaire du compte et son historique d'achats et de ventes, et nous l'envoie. Nous le gardons chiffré, avec le nom du compte et les numéros de tes dernières transactions, consultons l'historique toutes les quelques minutes et envoyons une notification quand quelque chose a été vendu ou acheté. L'app crée un nouveau sous-jeton avant qu'il expire. Ta clé API elle-même n'est jamais envoyée. Le désactiver, délier le compte ou supprimer ton compte efface tout."
+    "<strong>Ton comptoir :</strong> si tu demandes au serveur de te dire ce qu'a fait ton comptoir, l'app crée à partir de la clé API utilisée un sous-jeton valable 30 jours qui ne peut lire que le propriétaire du compte et son historique d'achats et de ventes, et nous l'envoie. Nous le gardons chiffré, avec le nom du compte et les numéros de tes dernières transactions, consultons l'historique toutes les quelques minutes et envoyons une notification quand quelque chose a été vendu ou acheté. L'app crée un nouveau sous-jeton avant qu'il expire. Ta clé API elle-même n'est jamais envoyée. Le désactiver, délier le compte ou supprimer ton compte efface tout.",
+    "<strong>Tes clés API, si tu le choisis :</strong> connecté avec Discord, tu peux garder tes clés API dans ton compte pour qu'elles te suivent quand tu te connectes sur un autre appareil. Une clé est vérifiée avec l'API de Guild Wars 2 et gardée uniquement pour un compte que tu as lié, chiffrée avec une clé que notre base de données n'a pas, avec le nom du compte et les permissions de la clé. Elle n'est rendue qu'à toi, dans l'app. La désactiver dans les Réglages, retirer la clé dans l'app, délier le compte ou supprimer ton compte la supprime."
    ],
    "Qui le voit",
    [
@@ -241,7 +242,8 @@
     "Une guilde n'appartient pas à une personne, donc supprimer un compte ne la supprime pas, mais ce que l'app du chef a apporté ne doit pas survivre au chef : quand le dernier chef qui utilise l'app s'en va, le niveau, le message du jour, les nombres, la liste de membres, les rangs, la trésorerie, la réserve, le journal et les choix du chef sont supprimés, et quand le dernier membre s'en va, la guilde est supprimée avec sa connexion Discord.",
     "Une appartenance à une guilde que l'app n'a pas actualisée depuis 30 jours ne compte plus, et après 90 jours elle est supprimée. Revenir et lier à nouveau la rétablit.",
     "Le jeton de notification d'un appareil est supprimé quand tu te déconnectes, désactives les notifications ou que le jeton cesse de fonctionner. Les données d'un serveur Discord sont supprimées quand il est déconnecté ou que sa guilde est supprimée.",
-    "Un événement public est supprimé 30 jours après sa fin, avec ses inscriptions et ses signalements. Le compte de ce que tu as créé dans une journée est supprimé au bout de deux jours."
+    "Un événement public est supprimé 30 jours après sa fin, avec ses inscriptions et ses signalements. Le compte de ce que tu as créé dans une journée est supprimé au bout de deux jours.",
+    "Une clé API gardée dans ton compte est supprimée quand tu désactives la conservation, retires la clé dans l'app, délies son compte ou supprimes ton compte."
    ],
    "Supprimer ton compte et tes droits",
    "Dans l'app, ouvre les Paramètres et choisis Supprimer le compte, ou utilise la <a href='delete-account.html'>page de suppression du compte</a> sans l'app. Ton profil, les comptes Guild Wars 2 liés, les appartenances à des guildes, les inscriptions, les événements que tu as créés et tes jetons de notification sont supprimés immédiatement et ne peuvent pas être restaurés. Tu peux aussi demander ce que nous détenons sur toi, le faire corriger ou t'opposer à son utilisation, et si tu es dans l'Union européenne, tu peux déposer une réclamation auprès de ton autorité de protection des données. Écris-nous comme indiqué ci-dessous. Nous n'utilisons tes données que pour fournir ce que tu as demandé en te connectant et en liant, ce qui est notre base pour les traiter.",
@@ -263,7 +265,7 @@
    "Ton compte et ta clé d'API",
    [
     "Le compte Wondrous Compass est facultatif et créé en se connectant avec Discord. Tu es responsable de ce qui se passe par son intermédiaire.",
-    "Ta clé d'API est à toi. Garde-la pour toi, utilise des clés qui n'ont que les permissions que tu veux donner, et révoque-la sur account.arena.net si tu penses qu'elle a fuité. Nous ne te demandons jamais ta clé.",
+    "Ta clé API est à toi. Garde-la pour toi, utilise des clés qui n'ont que les permissions que tu veux donner, et révoque-la sur account.arena.net si tu penses qu'elle a fuité. Nous ne te demandons jamais ta clé en dehors de l'app, et la garder dans ton compte est ton choix.",
     "Tu ne peux lier que des comptes Guild Wars 2 qui sont à toi."
    ],
    "Les guildes et ce que tu partages",
