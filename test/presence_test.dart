@@ -11,7 +11,8 @@ void main() {
   });
 
   test('the announcement is read from the server, nothing when there is none', () {
-    final a = Announcement.fromJson({'text': ' Maintenance at 22:00 ', 'kind': 'maintenance', 'set_at': '2026-11-08T16:00:00Z'})!;
+    final a = Announcement.fromJson(
+        {'text': ' Maintenance at 22:00 ', 'kind': 'maintenance', 'set_at': '2026-11-08T16:00:00Z'})!;
     expect(a.text, 'Maintenance at 22:00');
     expect(a.maintenance, isTrue);
     expect(a.id, '2026-11-08T16:00:00Z|Maintenance at 22:00');

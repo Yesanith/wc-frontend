@@ -105,4 +105,5 @@ class ClosedAnnouncementNotifier extends Notifier<String?> {
   }
 }
 
-final closedAnnouncementProvider = NotifierProvider<ClosedAnnouncementNotifier, String?>(ClosedAnnouncementNotifier.new);
+final closedAnnouncementProvider =
+    NotifierProvider<ClosedAnnouncementNotifier, String?>(ClosedAnnouncementNotifier.new);
