@@ -181,7 +181,6 @@ class CardWrap extends StatelessWidget {
   }
 }
 
-
 /// whether the page is shown as a site (the bar along the top, in a wide browser) or as an app. a page that is laid out
 /// differently on the site asks this
 class SiteScope extends InheritedWidget {
