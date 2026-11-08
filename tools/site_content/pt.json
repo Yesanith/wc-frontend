@@ -145,15 +145,15 @@
    ],
    [
     "Como adiciono o bot do Discord?",
-    "Convide-o para o seu servidor, depois um líder de guilda que tenha Gerenciar Servidor executa <code>/tyria connect</code> com a tag ou o nome da guilda no canal onde os eventos devem aparecer. O bot precisa ver e escrever no canal; para tópicos, eventos agendados, cargos e lembretes ele precisa das permissões correspondentes, e <code>/tyria status</code> diz o que falta."
+    "Convide-o para o seu servidor, depois um líder de guilda que tenha Gerenciar Servidor executa <code>/compass connect</code> com a tag ou o nome da guilda no canal onde os eventos devem aparecer. O bot precisa ver e escrever no canal; para tópicos, eventos agendados, cargos e lembretes ele precisa das permissões correspondentes, e <code>/compass status</code> diz o que falta."
    ],
    [
     "O que o bot pode fazer?",
-    "<code>/event create</code> e <code>/event weekly</code> criam eventos, e os jogadores se inscrevem com botões, com sua profissão e funções. <code>/event report</code> adiciona um link de relatório do Arcdps. <code>/tyria settings</code> configura tópicos, eventos do Discord e lembretes. <code>/tyria notify</code> publica notícias e atualizações do jogo. <code>/tyria roles</code> e <code>/tyria rankrole</code> dão cargos do Discord para os postos da guilda. O bot não pode ler mensagens."
+    "<code>/event create</code> e <code>/event weekly</code> criam eventos, e os jogadores se inscrevem com botões, com sua profissão e funções. <code>/event report</code> adiciona um link de relatório do Arcdps. <code>/compass settings</code> configura tópicos, eventos do Discord e lembretes. <code>/compass notify</code> publica notícias e atualizações do jogo. <code>/compass roles</code> e <code>/compass rankrole</code> dão cargos do Discord para os postos da guilda. O bot não pode ler mensagens."
    ],
    [
     "Como os cargos do Discord seguem os postos da guilda?",
-    "Execute <code>/tyria roles ranks:true</code>. O bot então cria um cargo do Discord para cada posto da sua guilda, sem permissões, e o dá a quem tem o posto. Começa quando o app do líder trouxer os postos; até lá valem os cargos de membro, oficial e líder."
+    "Execute <code>/compass roles ranks:true</code>. O bot então cria um cargo do Discord para cada posto da sua guilda, sem permissões, e o dá a quem tem o posto. Começa quando o app do líder trouxer os postos; até lá só recebem cargo os postos a que você deu um com <code>/compass rankrole</code>."
    ],
    [
     "Por que falta algo no navegador?",

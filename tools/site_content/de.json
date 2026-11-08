@@ -145,15 +145,15 @@
    ],
    [
     "Wie füge ich den Discord-Bot hinzu?",
-    "Lade ihn auf deinen Server ein, dann führt ein Gildenanführer mit der Berechtigung „Server verwalten“ <code>/tyria connect</code> mit Tag oder Name der Gilde in dem Kanal aus, in dem die Events erscheinen sollen. Der Bot muss den Kanal sehen und darin schreiben können; für Threads, geplante Events, Rollen und Erinnerungen braucht er die passenden Berechtigungen, und <code>/tyria status</code> sagt, was fehlt."
+    "Lade ihn auf deinen Server ein, dann führt ein Gildenanführer mit der Berechtigung „Server verwalten“ <code>/compass connect</code> mit Tag oder Name der Gilde in dem Kanal aus, in dem die Events erscheinen sollen. Der Bot muss den Kanal sehen und darin schreiben können; für Threads, geplante Events, Rollen und Erinnerungen braucht er die passenden Berechtigungen, und <code>/compass status</code> sagt, was fehlt."
    ],
    [
     "Was kann der Bot?",
-    "<code>/event create</code> und <code>/event weekly</code> erstellen Events, Spieler melden sich mit Schaltflächen an, mit Beruf und Rollen. <code>/event report</code> fügt einen Arcdps-Berichtslink hinzu. <code>/tyria settings</code> stellt Threads, Discord-Events und Erinnerungen ein. <code>/tyria notify</code> postet Neuigkeiten und Spiel-Updates. <code>/tyria roles</code> und <code>/tyria rankrole</code> vergeben Discord-Rollen für Gildenränge. Der Bot kann keine Nachrichten lesen."
+    "<code>/event create</code> und <code>/event weekly</code> erstellen Events, Spieler melden sich mit Schaltflächen an, mit Beruf und Rollen. <code>/event report</code> fügt einen Arcdps-Berichtslink hinzu. <code>/compass settings</code> stellt Threads, Discord-Events und Erinnerungen ein. <code>/compass notify</code> postet Neuigkeiten und Spiel-Updates. <code>/compass roles</code> und <code>/compass rankrole</code> vergeben Discord-Rollen für Gildenränge. Der Bot kann keine Nachrichten lesen."
    ],
    [
     "Wie folgen Discord-Rollen den Gildenrängen?",
-    "Führe <code>/tyria roles ranks:true</code> aus. Der Bot erstellt dann für jeden Rang deiner Gilde eine Discord-Rolle ohne Berechtigungen und gibt sie dem, der den Rang hat. Es beginnt, sobald die App des Anführers die Ränge geholt hat; bis dahin gelten die Rollen Mitglied, Offizier und Anführer."
+    "Führe <code>/compass roles ranks:true</code> aus. Der Bot erstellt dann für jeden Rang deiner Gilde eine Discord-Rolle ohne Berechtigungen und gibt sie dem, der den Rang hat. Es beginnt, sobald die App des Anführers die Ränge geholt hat; bis dahin bekommen nur die Ränge eine Rolle, denen du mit <code>/compass rankrole</code> eine gegeben hast."
    ],
    [
     "Warum fehlt im Browser etwas?",

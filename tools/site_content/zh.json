@@ -145,15 +145,15 @@
    ],
    [
     "如何添加 Discord 机器人？",
-    "先把它邀请到你的服务器，然后由拥有“管理服务器”权限的公会会长，在希望显示活动的频道中运行 <code>/tyria connect</code>，并附上公会标签或名称。机器人需要能查看并在该频道发言；使用子区、预定活动、身份组和提醒时，还需要相应的权限，<code>/tyria status</code> 会告诉你缺少什么。"
+    "先把它邀请到你的服务器，然后由拥有“管理服务器”权限的公会会长，在希望显示活动的频道中运行 <code>/compass connect</code>，并附上公会标签或名称。机器人需要能查看并在该频道发言；使用子区、预定活动、身份组和提醒时，还需要相应的权限，<code>/compass status</code> 会告诉你缺少什么。"
    ],
    [
     "机器人能做什么？",
-    "<code>/event create</code> 和 <code>/event weekly</code> 创建活动，玩家通过按钮报名，并选择职业和职责。<code>/event report</code> 添加 Arcdps 报告链接。<code>/tyria settings</code> 设置子区、Discord 活动和提醒。<code>/tyria notify</code> 发布新闻和游戏更新。<code>/tyria roles</code> 和 <code>/tyria rankrole</code> 按公会职位授予 Discord 身份组。机器人无法读取消息。"
+    "<code>/event create</code> 和 <code>/event weekly</code> 创建活动，玩家通过按钮报名，并选择职业和职责。<code>/event report</code> 添加 Arcdps 报告链接。<code>/compass settings</code> 设置子区、Discord 活动和提醒。<code>/compass notify</code> 发布新闻和游戏更新。<code>/compass roles</code> 和 <code>/compass rankrole</code> 按公会职位授予 Discord 身份组。机器人无法读取消息。"
    ],
    [
     "Discord 身份组如何跟随公会职位？",
-    "运行 <code>/tyria roles ranks:true</code>。机器人会为你公会的每个职位创建一个没有任何权限的 Discord 身份组，并授予拥有该职位的人。会长的应用取回职位后才会开始；在此之前，成员、官员和会长身份组生效。"
+    "运行 <code>/compass roles ranks:true</code>。机器人会为你公会的每个职位创建一个没有任何权限的 Discord 身份组，并授予拥有该职位的人。会长的应用取回职位后才会开始；在此之前，只有你用 <code>/compass rankrole</code> 授予了身份组的职位才会获得身份组。"
    ],
    [
     "为什么浏览器中缺少一些功能？",

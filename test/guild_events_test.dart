@@ -119,6 +119,47 @@ void main() {
     });
   });
 
+  group('members let make events', () {
+    test('what the server says decides, the role only when it says nothing', () {
+      expect(const GuildAccount('g1', 'a', 'Abe.2', 'member', canCreate: true).mayCreate, isTrue);
+      expect(const GuildAccount('g1', 'a', 'Abe.2', 'member').mayCreate, isFalse);
+      expect(const GuildAccount('g1', 'a', 'Mia.3', 'officer').mayCreate, isTrue);
+      expect(const GuildAccount('g1', 'a', 'Mia.3', 'officer', canCreate: false).mayCreate, isFalse);
+    });
+
+    test('a member let in organizes, after the leader and the officers', () {
+      const accounts = [
+        GuildAccount('g1', 'a-abe', 'Abe.2', 'member', canCreate: true),
+        GuildAccount('g1', 'a-zed', 'Zed.1', 'leader', canCreate: true),
+        GuildAccount('g1', 'a-bo', 'Bo.5', 'member', canCreate: false),
+      ];
+      expect(organizersFor(accounts, 'g1').map((a) => a.accountName), ['Zed.1', 'Abe.2']);
+    });
+
+    test('the guilds events can be made in are those where one of the accounts may', () {
+      const guilds = [MyGuild('g1', 'Mistwalkers', 'MIST', 'member'), MyGuild('g2', 'Dawn', 'DAWN', 'member')];
+      const accounts = [
+        GuildAccount('g1', 'a-abe', 'Abe.2', 'member', canCreate: true),
+        GuildAccount('g2', 'a-abe', 'Abe.2', 'member', canCreate: false),
+      ];
+      expect(creatableGuilds(guilds, accounts).map((g) => g.id), ['g1']);
+    });
+
+    test('who was let in reads from the server, by hand or by the rank of the game', () {
+      final c = EventCreators.fromJson({
+        'users': ['u1'],
+        'ranks': ['Raid Lead'],
+        'game_ranks': ['Leader', 'Officer', 'Raid Lead', 'Member'],
+      });
+      expect(c.gameRanks, ['Leader', 'Officer', 'Raid Lead', 'Member']);
+      expect(c.lets(const RosterMember('u1', 'Abe.2', 'member', gw2Rank: 'Member')), isTrue);
+      expect(c.lets(const RosterMember('u2', 'Kai.3', 'member', gw2Rank: 'raid lead')), isTrue);
+      expect(c.lets(const RosterMember('u3', 'Bo.5', 'member', gw2Rank: 'Member')), isFalse);
+      expect(c.lets(const RosterMember('u4', 'Cy.6', 'member')), isFalse);
+      expect(EventCreators.fromJson(null).gameRanks, isEmpty);
+    });
+  });
+
   group('signing up with an account', () {
     const accounts = [
       GuildAccount('g1', 'a-mia', 'Mia.3', 'member'),

@@ -20,6 +20,13 @@ const trStrings = <String, String>{
   'roster_follow_game': 'Yine oyundaki rütbeyi izle',
   'roster_auto':
       'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
+  'ecreate_title': 'Etkinlik açabilenler',
+  'ecreate_note': 'Lider ve subaylar her zaman açabilir. Diğer üyelerin de etkinlik açmasına buradan izin ver: oyundaki rütbelerine göre ya da tek tek. Yalnızca kendi açtıkları etkinlikleri yönetirler.',
+  'ecreate_ranks': 'Oyundaki rütbeye göre',
+  'ecreate_players': 'Tek tek',
+  'ecreate_by_rank': 'rütbe ile',
+  'ecreate_no_ranks': 'Rütbeler, liderin uygulaması onları oyundan okuduğunda görünür.',
+  'ecreate_no_members': 'Henüz uygulamayı kullanan başka üye yok.',
   'gshare_on': 'Üyeler görebilir',
   'gshare_off': 'Üyelerden gizli',
   'gshare_title': 'Lonca üyeleriyle paylaşılanlar',

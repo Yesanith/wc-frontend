@@ -145,15 +145,15 @@
    ],
    [
     "Comment ajouter le bot Discord ?",
-    "Invite-le sur ton serveur, puis un chef de guilde qui a la permission Gérer le serveur exécute <code>/tyria connect</code> avec le tag ou le nom de la guilde dans le salon où les événements doivent apparaître. Le bot doit pouvoir voir et écrire dans le salon ; pour les fils, les événements planifiés, les rôles et les rappels, il lui faut les permissions correspondantes, et <code>/tyria status</code> indique ce qui manque."
+    "Invite-le sur ton serveur, puis un chef de guilde qui a la permission Gérer le serveur exécute <code>/compass connect</code> avec le tag ou le nom de la guilde dans le salon où les événements doivent apparaître. Le bot doit pouvoir voir et écrire dans le salon ; pour les fils, les événements planifiés, les rôles et les rappels, il lui faut les permissions correspondantes, et <code>/compass status</code> indique ce qui manque."
    ],
    [
     "Que peut faire le bot ?",
-    "<code>/event create</code> et <code>/event weekly</code> créent des événements, les joueurs s'inscrivent avec des boutons, avec leur profession et leurs rôles. <code>/event report</code> ajoute un lien de rapport Arcdps. <code>/tyria settings</code> règle les fils, les événements Discord et les rappels. <code>/tyria notify</code> publie les actualités et les mises à jour du jeu. <code>/tyria roles</code> et <code>/tyria rankrole</code> donnent des rôles Discord pour les rangs de la guilde. Le bot ne peut pas lire les messages."
+    "<code>/event create</code> et <code>/event weekly</code> créent des événements, les joueurs s'inscrivent avec des boutons, avec leur profession et leurs rôles. <code>/event report</code> ajoute un lien de rapport Arcdps. <code>/compass settings</code> règle les fils, les événements Discord et les rappels. <code>/compass notify</code> publie les actualités et les mises à jour du jeu. <code>/compass roles</code> et <code>/compass rankrole</code> donnent des rôles Discord pour les rangs de la guilde. Le bot ne peut pas lire les messages."
    ],
    [
     "Comment les rôles Discord suivent-ils les rangs de la guilde ?",
-    "Exécute <code>/tyria roles ranks:true</code>. Le bot crée alors un rôle Discord pour chaque rang de ta guilde, sans aucune permission, et le donne à celui qui détient le rang. Cela commence une fois que l'app du chef a apporté les rangs ; d'ici là, les rôles de membre, officier et chef s'appliquent."
+    "Exécute <code>/compass roles ranks:true</code>. Le bot crée alors un rôle Discord pour chaque rang de ta guilde, sans aucune permission, et le donne à celui qui détient le rang. Cela commence une fois que l'app du chef a apporté les rangs ; d'ici là, seuls les rangs auxquels tu as donné un rôle avec <code>/compass rankrole</code> en reçoivent un."
    ],
    [
     "Pourquoi manque-t-il quelque chose dans le navigateur ?",

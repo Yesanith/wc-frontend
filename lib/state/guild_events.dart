@@ -106,14 +106,19 @@ final eventDetailProvider = FutureProvider.autoDispose.family<EventDetail?, Stri
   ]);
 });
 
-/// guilds where the player may create events: leader or officer there
+/// guilds where the player may create events: leader or officer there, or
+/// let in by them
 final creatableGuildsProvider = FutureProvider.autoDispose<List<MyGuild>>((ref) async {
   final guilds = await ref.watch(myGuildsProvider.future);
-  return [
-    for (final g in guilds)
-      if (g.role == 'leader' || g.role == 'officer') g,
-  ];
+  final accounts = await ref.watch(myGuildAccountsProvider.future);
+  return creatableGuilds(guilds, accounts);
 });
+
+/// the guilds in which one of the player's accounts may make events
+List<MyGuild> creatableGuilds(List<MyGuild> guilds, List<GuildAccount> accounts) => [
+      for (final g in guilds)
+        if (accounts.any((a) => a.guildId == g.id && a.mayCreate)) g,
+    ];
 
 /// a text from json, null when it is missing or empty
 String? nonEmpty(Object? value) {

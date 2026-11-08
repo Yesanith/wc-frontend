@@ -145,15 +145,15 @@
    ],
    [
     "Discord ボットはどう追加しますか？",
-    "サーバーに招待し、「サーバー管理」権限を持つギルドリーダーが、イベントを表示したいチャンネルで、ギルドのタグまたは名前を付けて <code>/tyria connect</code> を実行します。ボットにはチャンネルを見て書き込む権限が必要です。スレッド、スケジュールイベント、ロール、リマインダーには対応する権限が必要で、足りないものは <code>/tyria status</code> が教えてくれます。"
+    "サーバーに招待し、「サーバー管理」権限を持つギルドリーダーが、イベントを表示したいチャンネルで、ギルドのタグまたは名前を付けて <code>/compass connect</code> を実行します。ボットにはチャンネルを見て書き込む権限が必要です。スレッド、スケジュールイベント、ロール、リマインダーには対応する権限が必要で、足りないものは <code>/compass status</code> が教えてくれます。"
    ],
    [
     "ボットには何ができますか？",
-    "<code>/event create</code> と <code>/event weekly</code> でイベントを作成し、プレイヤーはボタンでクラスと役割を選んで参加登録します。<code>/event report</code> は Arcdps のレポートリンクを追加します。<code>/tyria settings</code> はスレッド、Discord イベント、リマインダーを設定します。<code>/tyria notify</code> はニュースとゲームのアップデートを投稿します。<code>/tyria roles</code> と <code>/tyria rankrole</code> はギルドのランクに応じた Discord ロールを付与します。ボットはメッセージを読めません。"
+    "<code>/event create</code> と <code>/event weekly</code> でイベントを作成し、プレイヤーはボタンでクラスと役割を選んで参加登録します。<code>/event report</code> は Arcdps のレポートリンクを追加します。<code>/compass settings</code> はスレッド、Discord イベント、リマインダーを設定します。<code>/compass notify</code> はニュースとゲームのアップデートを投稿します。<code>/compass roles</code> と <code>/compass rankrole</code> はギルドのランクに応じた Discord ロールを付与します。ボットはメッセージを読めません。"
    ],
    [
     "Discord ロールはギルドのランクにどう連動しますか？",
-    "<code>/tyria roles ranks:true</code> を実行します。ボットはギルドの各ランクに対して、権限のない Discord ロールを 1 つ作成し、そのランクを持つ人に付与します。リーダーのアプリがランクを取り込んだ時点で始まり、それまではメンバー・オフィサー・リーダーのロールが適用されます。"
+    "<code>/compass roles ranks:true</code> を実行します。ボットはギルドの各ランクに対して、権限のない Discord ロールを 1 つ作成し、そのランクを持つ人に付与します。リーダーのアプリがランクを取り込んだ時点で始まり、それまでは <code>/compass rankrole</code> でロールを付けたランクだけにロールが付与されます。"
    ],
    [
     "ブラウザで足りない機能があるのはなぜですか？",

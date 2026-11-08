@@ -21,6 +21,13 @@ const ptStrings = <String, String>{
   'roster_follow_game': 'Voltar a seguir o posto do jogo',
   'roster_auto':
       'Os cargos seguem o jogo: um posto que pode convidar, promover ou expulsar, ou editar postos, faz oficiais. O que você definir à mão fica até devolver ao jogo.',
+  'ecreate_title': 'Quem pode criar eventos',
+  'ecreate_note': 'O líder e os oficiais sempre podem. Permita aqui que outros membros criem eventos, pelo posto no jogo ou um a um. Eles gerenciam apenas os eventos que criaram.',
+  'ecreate_ranks': 'Por posto no jogo',
+  'ecreate_players': 'Um a um',
+  'ecreate_by_rank': 'pelo posto',
+  'ecreate_no_ranks': 'Os postos aparecem quando o app do líder os tiver lido do jogo.',
+  'ecreate_no_members': 'Nenhum outro membro usa o app ainda.',
   'gshare_on': 'Os membros veem isto',
   'gshare_off': 'Oculto dos membros',
   'gshare_title': 'Compartilhado com os membros da guilda',

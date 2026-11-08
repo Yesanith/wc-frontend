@@ -38,6 +38,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
     final me = ref.watch(sessionProvider).valueOrNull?.user.id;
     final g = widget.guild;
     final leading = g.role == 'leader';
+    final managing = leading || g.role == 'officer';
 
     return Scaffold(
       appBar: AppBar(title: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]')),
@@ -48,6 +49,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
           if (leading) await _bringFromGame();
           ref.invalidate(guildRosterProvider(g.id));
           ref.invalidate(guildDetailsProvider(g.id));
+          if (managing) ref.invalidate(eventCreatorsProvider(g.id));
           await ref.read(guildRosterProvider(g.id).future);
         },
         child: AsyncView<List<RosterMember>>(
@@ -59,6 +61,7 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
               GuildInfoCard(guildId: g.id, leading: leading),
               const SizedBox(height: 12),
               if (leading) ...[GuildSharingPanel(guildId: g.id), const SizedBox(height: 12)],
+              if (managing) ...[EventCreatorsPanel(guildId: g.id, members: members), const SizedBox(height: 12)],
               Text(
                 s.t('roster_note_game'),
                 style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted),
@@ -107,6 +110,113 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// for the leader and the officers: the members they let make events, by the
+/// rank of the game they hold or one by one
+class EventCreatorsPanel extends ConsumerStatefulWidget {
+  const EventCreatorsPanel({super.key, required this.guildId, required this.members});
+
+  final String guildId;
+  final List<RosterMember> members;
+
+  @override
+  ConsumerState<EventCreatorsPanel> createState() => _EventCreatorsPanelState();
+}
+
+class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
+  bool _busy = false;
+
+  Future<void> _change(Future<void> Function() action) async {
+    final s = ref.read(stringsProvider);
+    setState(() => _busy = true);
+    try {
+      await action();
+      ref.invalidate(eventCreatorsProvider(widget.guildId));
+      await ref.read(eventCreatorsProvider(widget.guildId).future);
+    } catch (e) {
+      if (mounted) showToast(context, '${s.t('community_failed')} ($e)');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final value = ref.watch(eventCreatorsProvider(widget.guildId));
+    final c = value.valueOrNull;
+    if (c == null) {
+      return value.isLoading
+          ? LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+          : Text(s.t('community_failed'), style: TextStyle(fontSize: 12, color: AppColors.hint));
+    }
+    final others = [for (final m in widget.members) if (m.role == 'member') m];
+
+    return Panel(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.t('ecreate_title'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 4),
+          Text(s.t('ecreate_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+          const SizedBox(height: 10),
+          Text(s.t('ecreate_ranks'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 6),
+          if (c.gameRanks.isEmpty)
+            Text(s.t('ecreate_no_ranks'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.hint))
+          else
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final rank in c.gameRanks)
+                  FilterChip(
+                    label: Text(rank),
+                    selected: c.hasRank(rank),
+                    onSelected: _busy
+                        ? null
+                        : (on) => _change(() => setEventCreatorRank(widget.guildId, rank, on)),
+                  ),
+              ],
+            ),
+          ExpansionTile(
+            tilePadding: EdgeInsets.zero,
+            childrenPadding: EdgeInsets.zero,
+            title: Text(s.t('ecreate_players'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+            subtitle: Text(
+              '${others.where(c.lets).length} / ${others.length}',
+              style: TextStyle(fontSize: 11, color: AppColors.muted),
+            ),
+            children: [
+              if (others.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(s.t('ecreate_no_members'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
+                ),
+              for (final m in others)
+                CheckboxListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  // let in by the rank they hold: the rank decides, not this box
+                  value: c.lets(m),
+                  onChanged: _busy || (c.hasRank(m.gw2Rank) && !c.users.contains(m.userId))
+                      ? null
+                      : (on) => _change(() => setEventCreator(widget.guildId, m.userId, on ?? false)),
+                  title: Text(m.accountName, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                  subtitle: Text(
+                    c.hasRank(m.gw2Rank) ? '${rankLabel(s, m.role, m.gw2Rank)} · ${s.t('ecreate_by_rank')}'
+                        : rankLabel(s, m.role, m.gw2Rank),
+                    style: TextStyle(fontSize: 11, color: AppColors.muted),
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

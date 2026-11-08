@@ -145,15 +145,15 @@
    ],
    [
     "Discord botunu nasıl eklerim?",
-    "Sunucuna davet et, sonra Sunucuyu Yönet yetkisi olan bir lonca lideri etkinliklerin görünmesini istediği kanalda <code>/tyria connect</code> komutunu loncanın etiketi ya da adıyla çalıştırır. Botun kanalı görüp yazabilmesi gerekir; thread, planlı etkinlik, rol ve hatırlatma için ilgili izinleri ister, eksik olanı <code>/tyria status</code> söyler."
+    "Sunucuna davet et, sonra Sunucuyu Yönet yetkisi olan bir lonca lideri etkinliklerin görünmesini istediği kanalda <code>/compass connect</code> komutunu loncanın etiketi ya da adıyla çalıştırır. Botun kanalı görüp yazabilmesi gerekir; thread, planlı etkinlik, rol ve hatırlatma için ilgili izinleri ister, eksik olanı <code>/compass status</code> söyler."
    ],
    [
     "Bot neler yapabilir?",
-    "<code>/event create</code> ve <code>/event weekly</code> etkinlik açar, oyuncular sınıflarıyla ve rolleriyle düğmelerle katılır. <code>/event report</code> Arcdps raporu ekler. <code>/tyria settings</code> thread, Discord etkinliği ve hatırlatmaları ayarlar. <code>/tyria notify</code> haberleri ve oyun güncellemelerini paylaşır. <code>/tyria roles</code> ve <code>/tyria rankrole</code> lonca rütbeleri için Discord rolü verir. Bot mesajları okuyamaz."
+    "<code>/event create</code> ve <code>/event weekly</code> etkinlik açar, oyuncular sınıflarıyla ve rolleriyle düğmelerle katılır. <code>/event report</code> Arcdps raporu ekler. <code>/compass settings</code> thread, Discord etkinliği ve hatırlatmaları ayarlar. <code>/compass notify</code> haberleri ve oyun güncellemelerini paylaşır. <code>/compass roles</code> ve <code>/compass rankrole</code> lonca rütbeleri için Discord rolü verir. Bot mesajları okuyamaz."
    ],
    [
     "Discord rolleri lonca rütbelerini nasıl izler?",
-    "<code>/tyria roles ranks:true</code> çalıştır. Bot loncanın her rütbesi için izinsiz bir Discord rolü oluşturur ve rütbeyi taşıyana verir. Liderin uygulaması rütbeleri getirince başlar; o zamana kadar üye, officer ve lider rolleri geçerlidir."
+    "<code>/compass roles ranks:true</code> çalıştır. Bot loncanın her rütbesi için izinsiz bir Discord rolü oluşturur ve rütbeyi taşıyana verir. Liderin uygulaması rütbeleri getirince başlar; o zamana kadar yalnızca <code>/compass rankrole</code> ile rol verdiğin rütbeler rol alır."
    ],
    [
     "Tarayıcıda neden bir şey eksik?",

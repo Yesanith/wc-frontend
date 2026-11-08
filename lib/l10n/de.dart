@@ -21,6 +21,13 @@ const deStrings = <String, String>{
   'roster_follow_game': 'Wieder dem Rang im Spiel folgen',
   'roster_auto':
       'Rollen folgen dem Spiel: Ein Rang, der einladen, befördern, kicken oder Ränge bearbeiten darf, macht Offiziere. Was du von Hand vergibst, bleibt, bis du es dem Spiel zurückgibst.',
+  'ecreate_title': 'Wer Events erstellen darf',
+  'ecreate_note': 'Der Anführer und die Offiziere dürfen es immer. Erlaube hier weiteren Mitgliedern, Events zu erstellen, nach ihrem Rang im Spiel oder einzeln. Sie verwalten nur die Events, die sie selbst erstellt haben.',
+  'ecreate_ranks': 'Nach Rang im Spiel',
+  'ecreate_players': 'Einzeln',
+  'ecreate_by_rank': 'per Rang',
+  'ecreate_no_ranks': 'Die Ränge erscheinen, sobald die App des Anführers sie aus dem Spiel gelesen hat.',
+  'ecreate_no_members': 'Noch keine weiteren Mitglieder nutzen die App.',
   'gshare_on': 'Mitglieder sehen das',
   'gshare_off': 'Vor Mitgliedern verborgen',
   'gshare_title': 'Mit den Gildenmitgliedern geteilt',

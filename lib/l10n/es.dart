@@ -21,6 +21,13 @@ const esStrings = <String, String>{
   'roster_follow_game': 'Volver a seguir el rango del juego',
   'roster_auto':
       'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
+  'ecreate_title': 'Quién puede crear eventos',
+  'ecreate_note': 'El líder y los oficiales siempre pueden. Deja que otros miembros creen eventos aquí, por su rango en el juego o uno a uno. Solo gestionan los eventos que crearon.',
+  'ecreate_ranks': 'Por rango en el juego',
+  'ecreate_players': 'Uno a uno',
+  'ecreate_by_rank': 'por rango',
+  'ecreate_no_ranks': 'Los rangos aparecen cuando la app del líder los ha leído del juego.',
+  'ecreate_no_members': 'Aún no hay otros miembros que usen la app.',
   'gshare_on': 'Los miembros lo ven',
   'gshare_off': 'Oculto a los miembros',
   'gshare_title': 'Compartido con los miembros del gremio',

@@ -145,15 +145,15 @@
    ],
    [
     "How do I add the Discord bot?",
-    "Invite it to your server, then a guild leader who has Manage Server runs <code>/tyria connect</code> with the guild's tag or name in the channel where events should appear. The bot needs to see and write in the channel; for threads, scheduled events, roles and reminders it needs the matching permissions, and <code>/tyria status</code> says what is missing."
+    "Invite it to your server, then a guild leader who has Manage Server runs <code>/compass connect</code> with the guild's tag or name in the channel where events should appear. The bot needs to see and write in the channel; for threads, scheduled events, roles and reminders it needs the matching permissions, and <code>/compass status</code> says what is missing."
    ],
    [
     "What can the bot do?",
-    "<code>/event create</code> and <code>/event weekly</code> make events, players sign up with buttons, with their profession and roles. <code>/event report</code> adds an Arcdps report link. <code>/tyria settings</code> sets threads, Discord events and reminders. <code>/tyria notify</code> posts the game's news and game updates. <code>/tyria roles</code> and <code>/tyria rankrole</code> give Discord roles for guild ranks. The bot cannot read messages."
+    "<code>/event create</code> and <code>/event weekly</code> make events, players sign up with buttons, with their profession and roles. <code>/event report</code> adds an Arcdps report link. <code>/compass settings</code> sets threads, Discord events and reminders. <code>/compass notify</code> posts the game's news and game updates. <code>/compass roles</code> and <code>/compass rankrole</code> give Discord roles for guild ranks. The bot cannot read messages."
    ],
    [
     "How do Discord roles follow guild ranks?",
-    "Run <code>/tyria roles ranks:true</code>. The bot then makes one Discord role for each rank of your guild, with no permissions, and gives it to whoever holds the rank. It starts once the leader's app has brought the ranks; until then the roles of member, officer and leader apply."
+    "Run <code>/compass roles ranks:true</code>. The bot then makes one Discord role for each rank of your guild, with no permissions, and gives it to whoever holds the rank. It starts once the leader's app has brought the ranks; until then only the ranks you gave a role with <code>/compass rankrole</code> get one."
    ],
    [
     "Why is something missing in the browser?",

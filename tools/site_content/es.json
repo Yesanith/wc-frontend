@@ -145,15 +145,15 @@
    ],
    [
     "¿Cómo añado el bot de Discord?",
-    "Invítalo a tu servidor y después un líder de gremio con el permiso Administrar servidor ejecuta <code>/tyria connect</code> con la etiqueta o el nombre del gremio en el canal donde deben aparecer los eventos. El bot necesita ver y escribir en el canal; para hilos, eventos programados, roles y recordatorios necesita los permisos correspondientes, y <code>/tyria status</code> indica lo que falta."
+    "Invítalo a tu servidor y después un líder de gremio con el permiso Administrar servidor ejecuta <code>/compass connect</code> con la etiqueta o el nombre del gremio en el canal donde deben aparecer los eventos. El bot necesita ver y escribir en el canal; para hilos, eventos programados, roles y recordatorios necesita los permisos correspondientes, y <code>/compass status</code> indica lo que falta."
    ],
    [
     "¿Qué puede hacer el bot?",
-    "<code>/event create</code> y <code>/event weekly</code> crean eventos, y los jugadores se inscriben con botones, con su profesión y roles. <code>/event report</code> añade un enlace de informe de Arcdps. <code>/tyria settings</code> ajusta hilos, eventos de Discord y recordatorios. <code>/tyria notify</code> publica noticias y actualizaciones del juego. <code>/tyria roles</code> y <code>/tyria rankrole</code> dan roles de Discord según los rangos del gremio. El bot no puede leer mensajes."
+    "<code>/event create</code> y <code>/event weekly</code> crean eventos, y los jugadores se inscriben con botones, con su profesión y roles. <code>/event report</code> añade un enlace de informe de Arcdps. <code>/compass settings</code> ajusta hilos, eventos de Discord y recordatorios. <code>/compass notify</code> publica noticias y actualizaciones del juego. <code>/compass roles</code> y <code>/compass rankrole</code> dan roles de Discord según los rangos del gremio. El bot no puede leer mensajes."
    ],
    [
     "¿Cómo siguen los roles de Discord a los rangos del gremio?",
-    "Ejecuta <code>/tyria roles ranks:true</code>. El bot crea entonces un rol de Discord para cada rango de tu gremio, sin permisos, y se lo da a quien tiene el rango. Empieza cuando la app del líder haya traído los rangos; hasta entonces se aplican los roles de miembro, oficial y líder."
+    "Ejecuta <code>/compass roles ranks:true</code>. El bot crea entonces un rol de Discord para cada rango de tu gremio, sin permisos, y se lo da a quien tiene el rango. Empieza cuando la app del líder haya traído los rangos; hasta entonces solo reciben rol los rangos a los que diste uno con <code>/compass rankrole</code>."
    ],
    [
     "¿Por qué falta algo en el navegador?",
