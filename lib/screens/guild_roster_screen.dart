@@ -94,7 +94,11 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
                                     m.accountName,
                                     style: TextStyle(fontWeight: m.userId == me ? FontWeight.w800 : FontWeight.w600),
                                   ),
-                                  Text(rankLabel(s, m.role, m.gw2Rank),
+                                  Text(
+                                      // a member the leader or the officers let make events says so, for everybody to see
+                                      m.role == 'member' && m.canCreate
+                                          ? '${rankLabel(s, m.role, m.gw2Rank)} · ${s.t('roster_can_create')}'
+                                          : rankLabel(s, m.role, m.gw2Rank),
                                       style: TextStyle(fontSize: 12, color: AppColors.muted)),
                                 ],
                               ),
@@ -135,6 +139,8 @@ class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
     setState(() => _busy = true);
     try {
       await action();
+      // the roster says who may make events too
+      ref.invalidate(guildRosterProvider(widget.guildId));
       ref.invalidate(eventCreatorsProvider(widget.guildId));
       await ref.read(eventCreatorsProvider(widget.guildId).future);
     } catch (e) {

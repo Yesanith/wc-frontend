@@ -13,6 +13,7 @@ const zhStrings = <String, String>{
   'roster_manual': '手动设置',
   'roster_follow_game': '重新跟随游戏内职位',
   'roster_auto': '角色跟随游戏：可以邀请、晋升、踢出成员或编辑职位的职位将成为官员。你手动设置的内容会保留，直到你交还给游戏。',
+  'roster_can_create': '可创建活动',
   'ecreate_title': '谁可以创建活动',
   'ecreate_note': '会长和官员始终可以创建。在这里允许其他成员创建活动：按其游戏内职位或逐个设置。他们只能管理自己创建的活动。',
   'ecreate_ranks': '按游戏内职位',

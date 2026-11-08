@@ -145,6 +145,11 @@ void main() {
       expect(creatableGuilds(guilds, accounts).map((g) => g.id), ['g1']);
     });
 
+    test('the roster says who may make events', () {
+      expect(RosterMember.fromRow({'user_id': 'u1', 'role': 'member', 'can_create': true}).canCreate, isTrue);
+      expect(RosterMember.fromRow({'user_id': 'u2', 'role': 'member'}).canCreate, isFalse);
+    });
+
     test('who was let in reads from the server, by hand or by the rank of the game', () {
       final c = EventCreators.fromJson({
         'users': ['u1'],

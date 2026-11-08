@@ -21,6 +21,7 @@ const deStrings = <String, String>{
   'roster_follow_game': 'Wieder dem Rang im Spiel folgen',
   'roster_auto':
       'Rollen folgen dem Spiel: Ein Rang, der einladen, befördern, kicken oder Ränge bearbeiten darf, macht Offiziere. Was du von Hand vergibst, bleibt, bis du es dem Spiel zurückgibst.',
+  'roster_can_create': 'darf Events erstellen',
   'ecreate_title': 'Wer Events erstellen darf',
   'ecreate_note':
       'Der Anführer und die Offiziere dürfen es immer. Erlaube hier weiteren Mitgliedern, Events zu erstellen, nach ihrem Rang im Spiel oder einzeln. Sie verwalten nur die Events, die sie selbst erstellt haben.',

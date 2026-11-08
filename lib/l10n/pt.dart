@@ -21,6 +21,7 @@ const ptStrings = <String, String>{
   'roster_follow_game': 'Voltar a seguir o posto do jogo',
   'roster_auto':
       'Os cargos seguem o jogo: um posto que pode convidar, promover ou expulsar, ou editar postos, faz oficiais. O que você definir à mão fica até devolver ao jogo.',
+  'roster_can_create': 'pode criar eventos',
   'ecreate_title': 'Quem pode criar eventos',
   'ecreate_note':
       'O líder e os oficiais sempre podem. Permita aqui que outros membros criem eventos, pelo posto no jogo ou um a um. Eles gerenciam apenas os eventos que criaram.',

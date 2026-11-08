@@ -1,7 +1,7 @@
 part of '../guild_events.dart';
 
 class RosterMember {
-  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank, this.manual = false});
+  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank, this.manual = false, this.canCreate = false});
 
   factory RosterMember.fromRow(Map<String, dynamic> r) {
     final rank = '${r['gw2_rank'] ?? ''}';
@@ -11,6 +11,7 @@ class RosterMember {
       '${r['role'] ?? 'member'}',
       gw2Rank: rank.isEmpty ? null : rank,
       manual: r['manual'] == true,
+      canCreate: r['can_create'] == true,
     );
   }
 
@@ -27,6 +28,9 @@ class RosterMember {
   /// the leader appointed the role by hand, so it stays whatever the game's rank is.
   /// otherwise it follows the game: a rank that may invite, promote, kick or edit ranks makes an officer
   final bool manual;
+
+  /// may make the guild's events: the leader, the officers and the members they let
+  final bool canCreate;
 }
 
 /// a guild's wondrous compass members, leader first, then officers

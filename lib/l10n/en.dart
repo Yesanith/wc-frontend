@@ -21,6 +21,7 @@ const enStrings = <String, String>{
   'roster_follow_game': 'Follow the game\'s rank again',
   'roster_auto':
       'Roles follow the game: a rank that may invite, promote or kick, or edit ranks, makes officers. What you appoint by hand stays until you hand it back to the game.',
+  'roster_can_create': 'can create events',
   'ecreate_title': 'Who can create events',
   'ecreate_note':
       'The leader and the officers always can. Let other members create events here, by the rank they hold in the game or one by one. They manage only the events they made.',

@@ -21,6 +21,7 @@ const frStrings = <String, String>{
   'roster_follow_game': 'Suivre à nouveau le rang du jeu',
   'roster_auto':
       'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
+  'roster_can_create': 'peut créer des événements',
   'ecreate_title': 'Qui peut créer des événements',
   'ecreate_note':
       'Le chef et les officiers le peuvent toujours. Autorise ici d\'autres membres à créer des événements, selon leur rang dans le jeu ou un par un. Ils ne gèrent que les événements qu\'ils ont créés.',
