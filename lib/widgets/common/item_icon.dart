@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/icon_cache.dart';
 import '../../theme.dart';
+import '../responsive.dart';
 import 'surfaces.dart';
 
 /// icon, title, optional subtitle and trailing widget. the shape of almost
@@ -32,6 +33,40 @@ class ItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final sub = subtitle;
     final end = trailing;
+    // on the site a list is a table: flat rows with a line between them, not a card each
+    if (SiteScope.of(context)) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.track))),
+            child: Row(
+              children: [
+                ItemIcon(url: icon, rarity: rarity, size: iconSize < 34 ? iconSize : 34),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                      if (sub != null)
+                        Text(sub, maxLines: 1, overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    ],
+                  ),
+                ),
+                if (end != null) ...[const SizedBox(width: 8), end],
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.all(10),

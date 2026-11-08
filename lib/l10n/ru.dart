@@ -97,6 +97,12 @@ const ruStrings = <String, String>{
   'age': 'Возраст',
   'equipment_armor': 'Броня',
   'equipment_weapons_trinkets': 'Оружие и аксессуары',
+  'tp_col_buy': 'Покупка',
+  'tp_col_sell': 'Продажа',
+  'tp_col_flip': 'Выгода',
+  'tp_col_date': 'Дата',
+  'tp_col_price': 'Цена',
+  'tp_col_qty': 'Кол.',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':
       'Мировые боссы, карта, рецепты, цены торговой площадки, вики и новости работают без него. Для персонажей и прогресса нужен ключ.',

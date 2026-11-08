@@ -97,6 +97,12 @@ const esStrings = <String, String>{
   'age': 'Edad',
   'equipment_armor': 'Armadura',
   'equipment_weapons_trinkets': 'Armas y abalorios',
+  'tp_col_buy': 'Compra',
+  'tp_col_sell': 'Venta',
+  'tp_col_flip': 'Margen',
+  'tp_col_date': 'Fecha',
+  'tp_col_price': 'Precio',
+  'tp_col_qty': 'Cant.',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
       'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',

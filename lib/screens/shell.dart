@@ -699,9 +699,13 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                           // the map takes the whole window, a list keeps to a width it can be read in and a page laid
                           // out in columns to a wider one, both in the middle
                           child: ContentFrame(
+                            // on the site every page keeps to the width of the site, as a site's pages do; the map and the
+                            // timeline of the world's events, which are drawn across, take what there is
                             maxWidth: sec == AppSection.maps
                                 ? double.infinity
-                                : _readingSections.contains(sec)
+                                : site && sec != AppSection.bosses
+                                    ? sitePageWidth
+                                    : _readingSections.contains(sec)
                                     ? readingMaxWidth
                                     : contentMaxWidth,
                             child: !_opened.contains(sec)

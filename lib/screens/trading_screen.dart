@@ -20,6 +20,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/price_chart.dart';
 import 'item_sheet.dart';
 import 'item_detail_screen.dart';
@@ -101,6 +102,36 @@ class _ItemTile extends StatelessWidget {
       trailing: trailing,
       iconSize: 44,
       onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: itemId)),
+    );
+  }
+}
+
+/// on the site the trading post's lists are tables: these are their columns, as wide as their headings
+const _siteCol = 104.0;
+
+/// a cell of a table of the site, its content on the right
+Widget _siteCell(Widget child, [double width = _siteCol]) =>
+    SizedBox(width: width, child: Align(alignment: Alignment.centerRight, child: child));
+
+/// the headings of a table of the site, over its columns
+class _SiteHeadings extends StatelessWidget {
+  const _SiteHeadings({required this.first, required this.columns});
+
+  final String first;
+  final List<String> columns;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = TextStyle(fontSize: 11, letterSpacing: 0.8, fontWeight: FontWeight.w700, color: AppColors.muted);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.line))),
+      child: Row(
+        children: [
+          Expanded(child: Text(first.toUpperCase(), style: style)),
+          for (final c in columns) _siteCell(Text(c.toUpperCase(), style: style)),
+        ],
+      ),
     );
   }
 }

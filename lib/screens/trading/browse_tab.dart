@@ -246,7 +246,16 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
                 value: progress, minHeight: 2, color: AppColors.gold, backgroundColor: AppColors.track),
           ],
           const SizedBox(height: 10),
+          if (SiteScope.of(context))
+            _SiteHeadings(first: s.t('item'), columns: [
+              s.t('tp_col_buy'),
+              s.t('tp_col_sell'),
+              s.t('supply'),
+              s.t('demand'),
+              s.t('tp_col_flip'),
+            ]),
         ];
+        final site = SiteScope.of(context);
         return RefreshIndicator(
           color: AppColors.gold,
           // forceNetwork skips the ten minute disk copy
@@ -259,7 +268,8 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
               if (ids.isEmpty) return EmptyNote(s.t('no_results'));
               final n = i - header.length;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                // the rows of a table of the site touch, a line between them
+                padding: EdgeInsets.only(bottom: site ? 0 : 8),
                 child: _BrowseRow(
                   id: ids[n],
                   batchKey: pageKey(ids, n),
@@ -301,6 +311,28 @@ class _BrowseRow extends ConsumerWidget {
       if (level > 0) s.t('level_n', {'n': level}),
     ].join(' · ');
     final small = TextStyle(fontSize: 11, color: AppColors.muted);
+    // on the site the prices are columns of a table, under their headings
+    if (SiteScope.of(context)) {
+      final number = TextStyle(fontSize: 13, color: AppColors.textSoft);
+      return _ItemTile(
+        itemId: id,
+        item: item,
+        title: name,
+        subtitle: sub.isEmpty ? null : sub,
+        trailing: p == null
+            ? const SizedBox.shrink()
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _siteCell(CoinText(p.buy, size: 13)),
+                  _siteCell(CoinText(p.sell, size: 13)),
+                  _siteCell(Text(compact(p.supply), style: number)),
+                  _siteCell(Text(compact(p.demand), style: number)),
+                  _siteCell(CoinText(p.flip, size: 13)),
+                ],
+              ),
+      );
+    }
     return _ItemTile(
       itemId: id,
       item: item,

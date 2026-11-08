@@ -98,6 +98,12 @@ const enStrings = <String, String>{
   'age': 'Age',
   'equipment_armor': 'Armor',
   'equipment_weapons_trinkets': 'Weapons and trinkets',
+  'tp_col_buy': 'Buy',
+  'tp_col_sell': 'Sell',
+  'tp_col_flip': 'Flip',
+  'tp_col_date': 'Date',
+  'tp_col_price': 'Price',
+  'tp_col_qty': 'Qty',
   'guest_continue': 'Continue without an API key',
   'guest_note':
       'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',

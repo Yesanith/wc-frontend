@@ -99,6 +99,12 @@ const frStrings = <String, String>{
   'age': 'Âge',
   'equipment_armor': 'Armure',
   'equipment_weapons_trinkets': 'Armes et bijoux',
+  'tp_col_buy': 'Achat',
+  'tp_col_sell': 'Vente',
+  'tp_col_flip': 'Marge',
+  'tp_col_date': 'Date',
+  'tp_col_price': 'Prix',
+  'tp_col_qty': 'Qté',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
       'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',

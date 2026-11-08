@@ -102,6 +102,12 @@ const deStrings = <String, String>{
   'age': 'Alter',
   'equipment_armor': 'Rüstung',
   'equipment_weapons_trinkets': 'Waffen und Schmuck',
+  'tp_col_buy': 'Kauf',
+  'tp_col_sell': 'Verkauf',
+  'tp_col_flip': 'Gewinn',
+  'tp_col_date': 'Datum',
+  'tp_col_price': 'Preis',
+  'tp_col_qty': 'Anz.',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
       'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',

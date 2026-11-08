@@ -95,6 +95,12 @@ const trStrings = <String, String>{
   'age': 'Yaş',
   'equipment_armor': 'Zırh',
   'equipment_weapons_trinkets': 'Silahlar ve takılar',
+  'tp_col_buy': 'Alış',
+  'tp_col_sell': 'Satış',
+  'tp_col_flip': 'Kâr',
+  'tp_col_date': 'Tarih',
+  'tp_col_price': 'Fiyat',
+  'tp_col_qty': 'Adet',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
       'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',

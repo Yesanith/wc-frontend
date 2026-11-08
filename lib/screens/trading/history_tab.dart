@@ -22,7 +22,12 @@ class _TxTab extends ConsumerWidget {
               ? Panel(child: Text(s.t(emptyKey), style: TextStyle(color: AppColors.muted)))
               : Column(
                   children: [
-                    for (final r in rows) Padding(padding: const EdgeInsets.only(bottom: 8), child: _TxRowTile(r)),
+                    // on the site a table under its headings, the rows touching
+                    if (SiteScope.of(context))
+                      _SiteHeadings(
+                          first: s.t('item'), columns: [s.t('tp_col_date'), s.t('tp_col_qty'), s.t('tp_col_price')]),
+                    for (final r in rows)
+                      Padding(padding: EdgeInsets.only(bottom: SiteScope.of(context) ? 0 : 8), child: _TxRowTile(r)),
                   ],
                 ),
         );
@@ -57,6 +62,22 @@ class _TxRowTile extends ConsumerWidget {
     final id = asInt(r.tx['item_id']);
     final qty = asInt(r.tx['quantity']);
     final date = '${r.tx['purchased'] ?? r.tx['created'] ?? ''}';
+    if (SiteScope.of(context)) {
+      final small = TextStyle(fontSize: 13, color: AppColors.textSoft);
+      return _ItemTile(
+        itemId: id,
+        item: r.item,
+        title: (r.item?['name'] as String?) ?? s.t('item_n', {'id': id}),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _siteCell(Text(date.length >= 10 ? date.substring(0, 10) : '', style: small)),
+            _siteCell(Text(fmtInt(qty), style: small)),
+            _siteCell(CoinText(asInt(r.tx['price']), size: 13)),
+          ],
+        ),
+      );
+    }
     return _ItemTile(
       itemId: id,
       item: r.item,
