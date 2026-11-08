@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Gizlilik politikası",
-  "updated": "Son güncelleme 18 Ekim 2026",
+  "updated": "Son güncelleme 8 Kasım 2026",
   "blocks": [
    "Wondrous Compass resmi olmayan bir Guild Wars 2 yardımcısıdır. Reklam içermez, seni takip etmez, verilerini reklam için satmaz veya paylaşmaz. Bu sayfa neyin, nerede, kimin görebileceği ve ne kadar süre tutulduğunu anlatır. Android uygulamasını, bu sitede tarayıcıda çalışan sürümü ve Discord botunu kapsar.",
    "Cihazında kalanlar",
@@ -193,7 +193,8 @@
     "<strong>Bildirimler:</strong> izin verirsen cihazının bildirim token'ı ve uygulama dili.",
     "<strong>Discord sunucuları:</strong> lonca lideri olarak bir sunucu bağlarsan: sunucu kimliği ve etkinliklerin gönderildiği kanal, ayarları (saat dilimi, dil, thread, planlı etkinlikler, hatırlatmalar), haber ve oyun güncellemeleri için kanallar ve isteğe bağlı rol, lonca rütbelerine eşlenen Discord rolleri ve botun hangi Discord kullanıcısına hangi rolü verdiği (yalnızca kendi verdiklerini geri alabilmesi için). Bot mesajları okuyamaz. İnsanların kullandığı komutları ve düğmeleri alır, düğmeye basılınca Discord kişinin kimliğini ve o sunucudaki rollerini gönderir; bunlar o an için kullanılır ve saklanmaz.",
     "<strong>İsimsiz sayımlar:</strong> her şeyin çalıştığını ve hangi sürümlerin kullanıldığını görmek için sunucularımız, günlük olarak ve kimin olduğunu gösteren hiçbir şey olmadan, uygulamanın her sürümünün giriş yapmış bir oyuncu tarafından kaç kez açıldığını ve neyin üzerinde çalıştığını (Android veya tarayıcı), Discord botunun komutlarının ne yaptığını ve kaç isteğin başarılı ya da başarısız olduğunu sayar. Bunlar yalnızca sayılardır.",
-    "<strong>Fiyat alarmları:</strong> giriş yapmışken bir alarm kurarsan uygulama onu sunucularımızda da tutar: eşya, adı, fiyatların ve sana en son ne zaman bildirim gönderildiği. Böylece trading post bu fiyatlara ulaşınca bildirim gönderebiliriz. Alarmı kaldırdığında ya da hesabını sildiğinde silinir."
+    "<strong>Fiyat alarmları:</strong> giriş yapmışken bir alarm kurarsan uygulama onu sunucularımızda da tutar: eşya, adı, fiyatların ve sana en son ne zaman bildirim gönderildiği. Böylece trading post bu fiyatlara ulaşınca bildirim gönderebiliriz. Alarmı kaldırdığında ya da hesabını sildiğinde silinir.",
+    "<strong>Ticaret merkezin:</strong> ticaret merkezinde ne olduğunu sunucunun sana bildirmesini istersen uygulama, kullandığın API key'den 30 gün geçerli, yalnızca hesabın kime ait olduğunu ve alım satım geçmişini okuyabilen bir subtoken üretir ve bize gönderir. Bunu şifreli olarak, hesabın adı ve son işlemlerinin numaralarıyla birlikte saklarız, geçmişe birkaç dakikada bir bakarız ve bir şey satıldığında ya da alındığında bildirim göndeririz. Uygulama süresi dolmadan yeni bir subtoken üretir. API key'in kendisi asla gönderilmez. Bunu kapatmak, hesabın bağlantısını kaldırmak ya da hesabını silmek hepsini siler."
    ],
    "Kimler görür",
    [

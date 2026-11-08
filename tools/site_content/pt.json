@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Política de privacidade",
-  "updated": "Última atualização em 18 de outubro de 2026",
+  "updated": "Última atualização em 8 de novembro de 2026",
   "blocks": [
    "O Wondrous Compass é um companheiro não oficial de Guild Wars 2. Não tem anúncios, não rastreia você e não vende nem compartilha seus dados para publicidade. Esta página diz o que ele trata, onde, quem pode ver e por quanto tempo. Cobre o app Android, a versão que roda em um navegador neste site e o bot do Discord.",
    "O que fica no seu dispositivo",
@@ -193,7 +193,8 @@
     "<strong>Notificações:</strong> se você permitir, o token de notificação do seu dispositivo e o idioma do app, para enviar lembretes de eventos.",
     "<strong>Servidores do Discord:</strong> se você lidera uma guilda e conecta um servidor do Discord: o id do servidor e o canal onde os eventos são publicados, suas configurações (fuso horário, idioma, tópicos, eventos agendados, lembretes), os canais e o cargo opcional para notícias e atualizações do jogo, os cargos do Discord associados aos postos da guilda e quais cargos o bot deu a qual usuário do Discord, para poder retirar somente esses. O bot não pode ler mensagens. Ele recebe os comandos e botões que as pessoas usam e, ao apertar um botão, o Discord envia o id da pessoa e seus cargos nesse servidor, que são usados naquele momento e não são guardados.",
     "<strong>Contagens sem nome:</strong> para ver que tudo funciona e quais versões estão em uso, nossos servidores contam, por dia e sem nada que diga quem foi, quantas vezes cada versão do app é aberta por um jogador conectado e em que ela roda (Android ou o navegador), o que os comandos do bot do Discord fazem e quantas solicitações têm sucesso ou falham. São apenas números.",
-    "<strong>Alertas de preço:</strong> se você criar um com a sessão iniciada, o app também o guarda em nossos servidores: o item, seu nome, seus preços e quando você foi avisado pela última vez, para podermos enviar uma notificação quando o posto de troca os alcançar. Ele é apagado quando você o remove ou exclui sua conta."
+    "<strong>Alertas de preço:</strong> se você criar um com a sessão iniciada, o app também o guarda em nossos servidores: o item, seu nome, seus preços e quando você foi avisado pela última vez, para podermos enviar uma notificação quando o posto de troca os alcançar. Ele é apagado quando você o remove ou exclui sua conta.",
+    "<strong>Seu trading post:</strong> se você pedir ao servidor que avise o que aconteceu no seu trading post, o app cria a partir da chave de API em uso um subtoken válido por 30 dias que só pode ler de quem é a conta e o histórico de compras e vendas, e o envia para nós. Guardamos ele criptografado, com o nome da conta e os números das suas últimas transações, olhamos o histórico a cada poucos minutos e enviamos uma notificação quando algo foi vendido ou comprado. O app cria um subtoken novo antes que ele expire. Sua chave de API em si nunca é enviada. Desligar, desvincular a conta ou excluir sua conta apaga tudo."
    ],
    "Quem vê",
    [

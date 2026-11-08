@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Privacy policy",
-  "updated": "Last updated 18 October 2026",
+  "updated": "Last updated 8 November 2026",
   "blocks": [
    [
     "p",
@@ -210,7 +210,8 @@
      "<strong>Notifications:</strong> if you allow them, your device's notification token and the app's language, to send event reminders.",
      "<strong>Discord servers:</strong> if you lead a guild and connect a Discord server: the server's id and the channel events are posted to, its settings (time zone, language, threads, scheduled events, reminders), the channels and the optional role for news and game updates, the Discord roles matched to guild ranks, and which roles the bot gave to which Discord user so that it can take back only those. The bot cannot read messages. It receives the commands and buttons people use, and with a button press Discord sends the person's id and their roles in that server, which are used for that moment and not stored.",
      "<strong>Counts without a name:</strong> to see that it works and which versions are in use, our servers count, per day and with nothing that says who, how often each version of the app is opened by a signed in player and on what it runs (Android or the browser), what the Discord bot's commands do and how many requests succeed or fail. These are numbers only.",
-     "<strong>Price alerts:</strong> if you set one while signed in, the app also keeps it on our servers: the item, its name, your prices and when it last notified you, so that we can send a notification when the trading post reaches them. It is deleted when you remove it or delete your account."
+     "<strong>Price alerts:</strong> if you set one while signed in, the app also keeps it on our servers: the item, its name, your prices and when it last notified you, so that we can send a notification when the trading post reaches them. It is deleted when you remove it or delete your account.",
+     "<strong>Your trading post:</strong> if you ask the server to tell you what your trading post did, the app makes a subtoken of the API key in use that lasts 30 days and can read only whose account it is and its buy and sell history, and sends it to us. We keep it encrypted, with the account's name and the numbers of your latest transactions, look at the history every few minutes and send a notification when something was sold or bought. The app makes a new subtoken before it runs out. Your API key itself is never sent. Turning it off, unlinking the account or deleting your account deletes all of it."
     ]
    ],
    [

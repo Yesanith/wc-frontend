@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Politique de confidentialité",
-  "updated": "Dernière mise à jour : 18 octobre 2026",
+  "updated": "Dernière mise à jour : 8 novembre 2026",
   "blocks": [
    "Wondrous Compass est un compagnon non officiel de Guild Wars 2. Il n'a pas de publicité, ne te suit pas et ne vend ni ne partage tes données à des fins publicitaires. Cette page explique ce qu'il traite, où, qui peut le voir et pendant combien de temps. Elle couvre l'app Android, la version qui fonctionne dans un navigateur sur ce site et le bot Discord.",
    "Ce qui reste sur ton appareil",
@@ -193,7 +193,8 @@
     "<strong>Notifications :</strong> si tu les autorises, le jeton de notification de ton appareil et la langue de l'app, pour envoyer les rappels d'événements.",
     "<strong>Serveurs Discord :</strong> si tu diriges une guilde et connectes un serveur Discord : l'identifiant du serveur et le salon où les événements sont publiés, ses paramètres (fuseau horaire, langue, fils, événements planifiés, rappels), les salons et le rôle facultatif pour les actualités et les mises à jour du jeu, les rôles Discord associés aux rangs de la guilde, et quels rôles le bot a donnés à quel utilisateur Discord afin de ne retirer que ceux-là. Le bot ne peut pas lire les messages. Il reçoit les commandes et les boutons que les gens utilisent, et lors de l'appui sur un bouton, Discord envoie l'identifiant de la personne et ses rôles sur ce serveur, qui sont utilisés à ce moment et non conservés.",
     "<strong>Des comptes sans nom :</strong> pour voir que tout fonctionne et quelles versions sont utilisées, nos serveurs comptent, par jour et sans rien qui dise qui, combien de fois chaque version de l'app est ouverte par un joueur connecté et sur quoi elle tourne (Android ou le navigateur), ce que font les commandes du bot Discord et combien de requêtes réussissent ou échouent. Ce ne sont que des chiffres.",
-    "<strong>Alertes de prix :</strong> si tu en crées une en étant connecté, l'app la conserve aussi sur nos serveurs : l'objet, son nom, tes prix et la dernière fois que tu as été prévenu, afin de pouvoir t'envoyer une notification quand le comptoir commercial les atteint. Elle est supprimée quand tu la retires ou supprimes ton compte."
+    "<strong>Alertes de prix :</strong> si tu en crées une en étant connecté, l'app la conserve aussi sur nos serveurs : l'objet, son nom, tes prix et la dernière fois que tu as été prévenu, afin de pouvoir t'envoyer une notification quand le comptoir commercial les atteint. Elle est supprimée quand tu la retires ou supprimes ton compte.",
+    "<strong>Ton comptoir :</strong> si tu demandes au serveur de te dire ce qu'a fait ton comptoir, l'app crée à partir de la clé API utilisée un sous-jeton valable 30 jours qui ne peut lire que le propriétaire du compte et son historique d'achats et de ventes, et nous l'envoie. Nous le gardons chiffré, avec le nom du compte et les numéros de tes dernières transactions, consultons l'historique toutes les quelques minutes et envoyons une notification quand quelque chose a été vendu ou acheté. L'app crée un nouveau sous-jeton avant qu'il expire. Ta clé API elle-même n'est jamais envoyée. Le désactiver, délier le compte ou supprimer ton compte efface tout."
    ],
    "Qui le voit",
    [

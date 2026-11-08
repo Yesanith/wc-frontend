@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Política de privacidad",
-  "updated": "Última actualización: 18 de octubre de 2026",
+  "updated": "Última actualización: 8 de noviembre de 2026",
   "blocks": [
    "Wondrous Compass es un acompañante no oficial de Guild Wars 2. No tiene anuncios, no te rastrea y no vende ni comparte tus datos con fines publicitarios. Esta página explica qué trata, dónde, quién puede verlo y durante cuánto tiempo. Cubre la app de Android, la versión que funciona en el navegador en este sitio y el bot de Discord.",
    "Lo que se queda en tu dispositivo",
@@ -193,7 +193,8 @@
     "<strong>Notificaciones:</strong> si las permites, el token de notificaciones de tu dispositivo y el idioma de la app, para enviar recordatorios de eventos.",
     "<strong>Servidores de Discord:</strong> si diriges un gremio y conectas un servidor de Discord: el id del servidor y el canal donde se publican los eventos, sus ajustes (zona horaria, idioma, hilos, eventos programados, recordatorios), los canales y el rol opcional para noticias y actualizaciones del juego, los roles de Discord asociados a rangos del gremio y qué roles dio el bot a qué usuario de Discord para poder retirar solo esos. El bot no puede leer mensajes. Recibe los comandos y botones que usa la gente y, al pulsar un botón, Discord envía el id de la persona y sus roles en ese servidor, que se usan en ese momento y no se guardan.",
     "<strong>Recuentos sin nombre:</strong> para ver que todo funciona y qué versiones se usan, nuestros servidores cuentan, por día y sin nada que diga quién fue, cuántas veces abre cada versión de la app un jugador con sesión iniciada y en qué se ejecuta (Android o el navegador), qué hacen los comandos del bot de Discord y cuántas solicitudes tienen éxito o fallan. Son solo números.",
-    "<strong>Alertas de precio:</strong> si creas una con la sesión iniciada, la app también la guarda en nuestros servidores: el objeto, su nombre, tus precios y cuándo te avisó por última vez, para poder enviarte una notificación cuando el banco de comercio los alcance. Se elimina al quitarla o al borrar tu cuenta."
+    "<strong>Alertas de precio:</strong> si creas una con la sesión iniciada, la app también la guarda en nuestros servidores: el objeto, su nombre, tus precios y cuándo te avisó por última vez, para poder enviarte una notificación cuando el banco de comercio los alcance. Se elimina al quitarla o al borrar tu cuenta.",
+    "<strong>Tu bazar:</strong> si pides al servidor que te avise de lo que hizo tu bazar, la app crea con la clave API en uso un subtoken que dura 30 días y solo puede leer de quién es la cuenta y su historial de compras y ventas, y nos lo envía. Lo guardamos cifrado, con el nombre de la cuenta y los números de tus últimas transacciones, miramos el historial cada pocos minutos y enviamos una notificación cuando se vendió o compró algo. La app crea un subtoken nuevo antes de que caduque. Tu clave API nunca se envía. Desactivarlo, desvincular la cuenta o eliminar tu cuenta lo borra todo."
    ],
    "Quién lo ve",
    [

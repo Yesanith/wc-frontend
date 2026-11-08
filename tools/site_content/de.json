@@ -178,7 +178,7 @@
  },
  "privacy": {
   "title": "Datenschutzerklärung",
-  "updated": "Zuletzt aktualisiert am 18. Oktober 2026",
+  "updated": "Zuletzt aktualisiert am 8. November 2026",
   "blocks": [
    "Wondrous Compass ist ein inoffizieller Guild-Wars-2-Begleiter. Es gibt keine Werbung und keine Analysewerkzeuge, wir verfolgen dich nicht und verkaufen oder teilen deine Daten nicht für Werbung. Diese Seite sagt, was verarbeitet wird, wo, wer es sehen kann und wie lange. Sie gilt für die Android-App, die Version, die auf dieser Website im Browser läuft, und den Discord-Bot.",
    "Was auf deinem Gerät bleibt",
@@ -193,7 +193,8 @@
     "<strong>Benachrichtigungen:</strong> wenn du sie erlaubst, das Benachrichtigungs-Token deines Geräts und die Sprache der App, um Event-Erinnerungen zu senden.",
     "<strong>Discord-Server:</strong> wenn du eine Gilde leitest und einen Discord-Server verbindest: die ID des Servers und den Kanal, in den Events gepostet werden, seine Einstellungen (Zeitzone, Sprache, Threads, geplante Events, Erinnerungen), die Kanäle und die optionale Rolle für Neuigkeiten und Spiel-Updates, die Discord-Rollen, die Gildenrängen zugeordnet sind, und welche Rollen der Bot welchem Discord-Nutzer gegeben hat, damit er nur diese zurücknehmen kann. Der Bot kann keine Nachrichten lesen. Er erhält die Befehle und Schaltflächen, die Menschen nutzen, und bei einem Klick sendet Discord die ID der Person und ihre Rollen auf diesem Server, die für diesen Moment verwendet und nicht gespeichert werden.",
     "<strong>Zählungen ohne Namen:</strong> Um zu sehen, dass alles funktioniert und welche Versionen im Einsatz sind, zählen unsere Server pro Tag und ohne jeden Hinweis darauf, wer es war, wie oft jede Version der App von einem angemeldeten Spieler geöffnet wird und worauf sie läuft (Android oder Browser), was die Befehle des Discord-Bots bewirken und wie viele Anfragen gelingen oder scheitern. Das sind nur Zahlen.",
-    "<strong>Preisalarme:</strong> Wenn du einen setzt, während du angemeldet bist, speichert die App ihn auch auf unseren Servern: das Item, seinen Namen, deine Preise und wann er dich zuletzt benachrichtigt hat, damit wir dir eine Benachrichtigung senden können, wenn der Handelsposten sie erreicht. Er wird gelöscht, wenn du ihn entfernst oder dein Konto löschst."
+    "<strong>Preisalarme:</strong> Wenn du einen setzt, während du angemeldet bist, speichert die App ihn auch auf unseren Servern: das Item, seinen Namen, deine Preise und wann er dich zuletzt benachrichtigt hat, damit wir dir eine Benachrichtigung senden können, wenn der Handelsposten sie erreicht. Er wird gelöscht, wenn du ihn entfernst oder dein Konto löschst.",
+    "<strong>Dein Handelsposten:</strong> Wenn du den Server bittest, dir zu sagen, was dein Handelsposten getan hat, erstellt die App aus dem verwendeten API-Key einen Subtoken, der 30 Tage gilt und nur lesen kann, wem das Konto gehört und seinen Kauf- und Verkaufsverlauf, und schickt ihn uns. Wir speichern ihn verschlüsselt, mit dem Namen des Kontos und den Nummern deiner letzten Transaktionen, sehen alle paar Minuten in den Verlauf und schicken eine Benachrichtigung, wenn etwas verkauft oder gekauft wurde. Die App erstellt einen neuen Subtoken, bevor er abläuft. Dein API-Key selbst wird nie gesendet. Ausschalten, das Konto trennen oder dein Konto löschen löscht alles davon."
    ],
    "Wer es sieht",
    [
