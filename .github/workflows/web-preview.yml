@@ -1,8 +1,8 @@
 name: Web preview
 
-# builds the app for the browser from a feature branch and keeps it as a zip, without
-# touching the site. runs only for a push whose message says [web]. to try it:
-# download the artifact, unzip it and run `python -m http.server` in the folder
+# builds the app for the browser from a feature branch and keeps it in the bucket of Supabase (ci/keep.sh),
+# without touching the site. runs only for a push whose message says [web]. to try it: download it from
+# Storage, unpack it and run `python -m http.server` in the folder
 on:
   push:
     branches: ['feature/**']

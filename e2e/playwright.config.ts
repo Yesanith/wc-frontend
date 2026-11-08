@@ -12,8 +12,9 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     ...devices['Desktop Chrome'],
-    // wide enough for the bar of a site, which begins at 1280 pixels, with the search as a box from 1500
-    viewport: { width: 1600, height: 900 },
+    // wide enough for the bar of a site, which begins at 1280 pixels, with the search as a box from 1700
+    // (lib/widgets/site_header.dart, siteBarLayout)
+    viewport: { width: 1760, height: 900 },
     locale: 'en-US',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

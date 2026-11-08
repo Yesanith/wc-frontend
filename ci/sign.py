@@ -3,7 +3,8 @@
 
 flutter create writes a template that signs release builds with the debug
 key. That key is public, so scanners treat those apks as test builds and
-warn on install. This rewrites the signing config to use ci/release.keystore.
+warn on install. This rewrites the signing config to use the keystore at $KEYSTORE_PATH,
+which the workflow writes from the repository secrets.
 """
 import os
 import re
