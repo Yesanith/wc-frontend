@@ -19,6 +19,7 @@ import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../state/navigation.dart';
 import '../state/period_refresh.dart';
+import '../state/presence.dart';
 import '../state/reference.dart';
 import '../state/server_price_alerts.dart';
 import '../state/settings.dart';
@@ -29,6 +30,7 @@ import '../state/wealth.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/account_badge.dart';
+import '../widgets/announcement_bar.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -649,7 +651,13 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
             )
           : null,
       drawer: wide ? null : menu,
-      body: SwipeToOpen(
+      // the administrator's announcement above every page, and the app says it is open while it is
+      body: AppPresence(
+        child: Column(
+          children: [
+            const AnnouncementBar(),
+            Expanded(
+              child: SwipeToOpen(
         // the map pans sideways, the menu stays on the button and back there
         enabled: section != AppSection.maps && !wide,
         onOpen: () => _scaffoldKey.currentState?.openDrawer(),
@@ -694,6 +702,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                               : _page(sec),
                 ),
               ),
+          ],
+        ),
+      ),
+            ),
           ],
         ),
       ),
