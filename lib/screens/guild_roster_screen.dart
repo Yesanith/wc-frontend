@@ -154,7 +154,10 @@ class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
           ? LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
           : Text(s.t('community_failed'), style: TextStyle(fontSize: 12, color: AppColors.hint));
     }
-    final others = [for (final m in widget.members) if (m.role == 'member') m];
+    final others = [
+      for (final m in widget.members)
+        if (m.role == 'member') m
+    ];
 
     return Panel(
       child: Column(
@@ -178,9 +181,7 @@ class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
                   FilterChip(
                     label: Text(rank),
                     selected: c.hasRank(rank),
-                    onSelected: _busy
-                        ? null
-                        : (on) => _change(() => setEventCreatorRank(widget.guildId, rank, on)),
+                    onSelected: _busy ? null : (on) => _change(() => setEventCreatorRank(widget.guildId, rank, on)),
                   ),
               ],
             ),
@@ -209,7 +210,8 @@ class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
                       : (on) => _change(() => setEventCreator(widget.guildId, m.userId, on ?? false)),
                   title: Text(m.accountName, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
                   subtitle: Text(
-                    c.hasRank(m.gw2Rank) ? '${rankLabel(s, m.role, m.gw2Rank)} · ${s.t('ecreate_by_rank')}'
+                    c.hasRank(m.gw2Rank)
+                        ? '${rankLabel(s, m.role, m.gw2Rank)} · ${s.t('ecreate_by_rank')}'
                         : rankLabel(s, m.role, m.gw2Rank),
                     style: TextStyle(fontSize: 11, color: AppColors.muted),
                   ),

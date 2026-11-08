@@ -21,7 +21,8 @@ const trStrings = <String, String>{
   'roster_auto':
       'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
   'ecreate_title': 'Etkinlik açabilenler',
-  'ecreate_note': 'Lider ve subaylar her zaman açabilir. Diğer üyelerin de etkinlik açmasına buradan izin ver: oyundaki rütbelerine göre ya da tek tek. Yalnızca kendi açtıkları etkinlikleri yönetirler.',
+  'ecreate_note':
+      'Lider ve subaylar her zaman açabilir. Diğer üyelerin de etkinlik açmasına buradan izin ver: oyundaki rütbelerine göre ya da tek tek. Yalnızca kendi açtıkları etkinlikleri yönetirler.',
   'ecreate_ranks': 'Oyundaki rütbeye göre',
   'ecreate_players': 'Tek tek',
   'ecreate_by_rank': 'rütbe ile',

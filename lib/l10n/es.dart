@@ -22,7 +22,8 @@ const esStrings = <String, String>{
   'roster_auto':
       'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
   'ecreate_title': 'Quién puede crear eventos',
-  'ecreate_note': 'El líder y los oficiales siempre pueden. Deja que otros miembros creen eventos aquí, por su rango en el juego o uno a uno. Solo gestionan los eventos que crearon.',
+  'ecreate_note':
+      'El líder y los oficiales siempre pueden. Deja que otros miembros creen eventos aquí, por su rango en el juego o uno a uno. Solo gestionan los eventos que crearon.',
   'ecreate_ranks': 'Por rango en el juego',
   'ecreate_players': 'Uno a uno',
   'ecreate_by_rank': 'por rango',
