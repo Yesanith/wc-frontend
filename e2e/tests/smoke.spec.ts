@@ -133,10 +133,16 @@ test.describe('the app in a browser', () => {
   test('the search finds a page and goes to it', async ({ page }) => {
     const errors = await open(page);
     await asGuest(page);
-    const search = page.getByRole('textbox', { name: /Search items and pages/ });
+    // the bar has the search as a box when it has room for it, else as a button that opens it in a window
+    const box = page.getByRole('textbox', { name: /Search items and pages/ });
+    const button = page.getByRole('button', { name: /Search items and pages/ });
+    await expect(box.or(button).first()).toBeVisible();
+    if (!(await box.isVisible())) await button.first().click();
+    const search = box.first();
     await search.click();
     await search.fill('daily');
-    await expect(written(page, /^Daily$/)).toBeAttached();
+    // the hit of the page, named with what it is under it ("Daily", "Page")
+    await expect(written(page, /^Daily(\s+Page)?$/)).toBeAttached();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/#\/daily$/);
     expect(errors).toEqual([]);
