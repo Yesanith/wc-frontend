@@ -98,6 +98,10 @@ const deStrings = <String, String>{
   'keep_keys_off': 'das Speichern von Schlüsseln ist gerade nicht verfügbar',
   'delete_last_admin':
       'Du bist der letzte Administrator des Backends. Füge zuerst einen weiteren Administrator hinzu, bevor du dein Konto löschst.',
+  'played': 'Gespielt',
+  'age': 'Alter',
+  'equipment_armor': 'Rüstung',
+  'equipment_weapons_trinkets': 'Waffen und Schmuck',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
       'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',

@@ -91,6 +91,10 @@ const trStrings = <String, String>{
   'keep_keys_kept': 'Hesabında saklananlar: {names}',
   'keep_keys_off': 'anahtar saklama şu anda kullanılamıyor',
   'delete_last_admin': 'Backend\'in son yöneticisisin. Hesabını silmeden önce başka bir yönetici ekle.',
+  'played': 'Oynama',
+  'age': 'Yaş',
+  'equipment_armor': 'Zırh',
+  'equipment_weapons_trinkets': 'Silahlar ve takılar',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
       'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',

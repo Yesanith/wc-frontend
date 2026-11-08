@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'api.dart';
 
+/// on the site, the character whose page is open in place of the list, under the bar of the site; null for the list. the app
+/// opens a character on a page of its own instead
+final openCharacterProvider = StateProvider<String?>((ref) => null);
+
 final charactersProvider = FutureProvider<List<Json>>((ref) async {
   final api = accountApi(ref);
   final list = await api.characters();

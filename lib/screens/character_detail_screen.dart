@@ -22,6 +22,7 @@ import 'hero_card_screen.dart';
 import 'item_detail_screen.dart';
 import 'item_sheet.dart';
 
+part 'character_detail/site_page.dart';
 part 'character_detail/tabs.dart';
 
 const _slotOrder = [

@@ -15,6 +15,7 @@ import '../state/account.dart';
 import '../state/api.dart';
 import '../state/app_open.dart';
 import '../state/boss_alerts.dart';
+import '../state/characters.dart';
 import '../state/community.dart';
 import '../state/link_refresh.dart';
 import '../state/navigation.dart';
@@ -403,6 +404,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   void _select(AppSection next) {
     // a menu that is always there has no closing to be mistaken for a back press
     if (!_wide) _selecting = true;
+    // the characters, chosen again, are the list again
+    if (next == AppSection.characters) ref.read(openCharacterProvider.notifier).state = null;
     ref.read(sectionProvider.notifier).state = next;
     _scaffoldKey.currentState?.closeDrawer();
   }
@@ -654,60 +657,67 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       drawer: wide ? null : menu,
       // the administrator's announcement above every page, and the app says it is open while it is
       body: AppPresence(
-        child: Column(
-          children: [
-            const AnnouncementBar(),
-            Expanded(
-              child: SwipeToOpen(
-                // the map pans sideways, the menu stays on the button and back there
-                enabled: section != AppSection.maps && !wide,
-                onOpen: () => _scaffoldKey.currentState?.openDrawer(),
-                child: IndexedStack(
-                  index: section.index,
-                  children: [
-                    for (final sec in AppSection.values)
-                      // hidden sections keep their state but stop their tickers and timers
-                      TickerMode(
-                        enabled: sec == section,
-                        // the map takes the whole window, a list keeps to a width it can be read in and a page laid
-                        // out in columns to a wider one, both in the middle
-                        child: ContentFrame(
-                          maxWidth: sec == AppSection.maps
-                              ? double.infinity
-                              : _readingSections.contains(sec)
-                                  ? readingMaxWidth
-                                  : contentMaxWidth,
-                          child: !_opened.contains(sec)
-                              ? const SizedBox.shrink()
-                              : (!hasKey && sectionNeedsKey(sec))
-                                  ? const NeedsKeyView()
-                                  : site && sec != AppSection.maps && sec != AppSection.home
-                                      // a page of a site has its name at the top of it, the bar of an app is where an app has it
-                                      ? Column(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: SitePageHeading(
-                                                  title: s.t(_titleKeys[sec]!),
-                                                  kicker: siteGroupIndex(sec) == null
-                                                      ? null
-                                                      : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+        child: SiteScope(
+          site: site,
+          child: Column(
+            children: [
+              const AnnouncementBar(),
+              Expanded(
+                child: SwipeToOpen(
+                  // the map pans sideways, the menu stays on the button and back there
+                  enabled: section != AppSection.maps && !wide,
+                  onOpen: () => _scaffoldKey.currentState?.openDrawer(),
+                  child: IndexedStack(
+                    index: section.index,
+                    children: [
+                      for (final sec in AppSection.values)
+                        // hidden sections keep their state but stop their tickers and timers
+                        TickerMode(
+                          enabled: sec == section,
+                          // the map takes the whole window, a list keeps to a width it can be read in and a page laid
+                          // out in columns to a wider one, both in the middle
+                          child: ContentFrame(
+                            maxWidth: sec == AppSection.maps
+                                ? double.infinity
+                                : _readingSections.contains(sec)
+                                    ? readingMaxWidth
+                                    : contentMaxWidth,
+                            child: !_opened.contains(sec)
+                                ? const SizedBox.shrink()
+                                : (!hasKey && sectionNeedsKey(sec))
+                                    ? const NeedsKeyView()
+                                    : site &&
+                                            sec != AppSection.maps &&
+                                            sec != AppSection.home &&
+                                            // a character's page has its own way back to the list instead of the name of the list
+                                            !(sec == AppSection.characters && ref.watch(openCharacterProvider) != null)
+                                        // a page of a site has its name at the top of it, the bar of an app is where an app has it
+                                        ? Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: SitePageHeading(
+                                                    title: s.t(_titleKeys[sec]!),
+                                                    kicker: siteGroupIndex(sec) == null
+                                                        ? null
+                                                        : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(child: _page(sec)),
-                                          ],
-                                        )
-                                      : _page(sec),
+                                              Expanded(child: _page(sec)),
+                                            ],
+                                          )
+                                        : _page(sec),
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

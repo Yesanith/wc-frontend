@@ -34,6 +34,10 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
+    final open = ref.watch(openCharacterProvider);
+    if (open != null && SiteScope.of(context)) {
+      return CharacterSitePage(name: open, onBack: () => ref.read(openCharacterProvider.notifier).state = null);
+    }
     final chars = ref.watch(charactersProvider);
     final count = chars.valueOrNull?.length;
 
@@ -135,9 +139,12 @@ class _CharacterCard extends ConsumerWidget {
     final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
 
     return AppCard(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
-      ),
+      // on the site the character opens in place, under the bar of the site, as a page of a site does; the app opens a page
+      onTap: () => SiteScope.of(context)
+          ? ref.read(openCharacterProvider.notifier).state = name
+          : Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => CharacterDetailScreen(name: name)),
+            ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       radius: AppRadius.card,
       child: Row(

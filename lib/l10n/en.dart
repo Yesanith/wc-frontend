@@ -94,6 +94,10 @@ const enStrings = <String, String>{
   'keep_keys_off': 'keeping keys is not available right now',
   'delete_last_admin':
       'You are the last administrator of the backend. Add another administrator before deleting your account.',
+  'played': 'Played',
+  'age': 'Age',
+  'equipment_armor': 'Armor',
+  'equipment_weapons_trinkets': 'Weapons and trinkets',
   'guest_continue': 'Continue without an API key',
   'guest_note':
       'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',

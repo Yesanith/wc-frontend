@@ -93,6 +93,10 @@ const esStrings = <String, String>{
   'keep_keys_kept': 'Guardadas en tu cuenta: {names}',
   'keep_keys_off': 'guardar claves no está disponible ahora',
   'delete_last_admin': 'Eres el último administrador del backend. Añade otro administrador antes de borrar tu cuenta.',
+  'played': 'Jugado',
+  'age': 'Edad',
+  'equipment_armor': 'Armadura',
+  'equipment_weapons_trinkets': 'Armas y abalorios',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
       'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',

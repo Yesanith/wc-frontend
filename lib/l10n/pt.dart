@@ -95,6 +95,10 @@ const ptStrings = <String, String>{
   'keep_keys_off': 'guardar chaves não está disponível agora',
   'delete_last_admin':
       'Você é o último administrador do backend. Adicione outro administrador antes de apagar sua conta.',
+  'played': 'Jogado',
+  'age': 'Idade',
+  'equipment_armor': 'Armadura',
+  'equipment_weapons_trinkets': 'Armas e acessórios',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
       'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',

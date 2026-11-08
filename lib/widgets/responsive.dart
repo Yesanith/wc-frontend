@@ -180,3 +180,17 @@ class CardWrap extends StatelessWidget {
     });
   }
 }
+
+
+/// whether the page is shown as a site (the bar along the top, in a wide browser) or as an app. a page that is laid out
+/// differently on the site asks this
+class SiteScope extends InheritedWidget {
+  const SiteScope({super.key, required this.site, required super.child});
+
+  final bool site;
+
+  static bool of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<SiteScope>()?.site ?? false;
+
+  @override
+  bool updateShouldNotify(SiteScope oldWidget) => oldWidget.site != site;
+}
