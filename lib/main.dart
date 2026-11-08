@@ -173,6 +173,20 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
     );
   }
 
+  Widget _home(String? key, bool guest) {
+    final signedIn = ref.watch(sessionProvider).valueOrNull != null;
+    return homeFor(
+      key: key,
+      guest: guest,
+      signedIn: signedIn,
+      // read only while it decides something: a player with a key never waits for it
+      linked: signedIn && (key == null || key.isEmpty)
+          ? ref.watch(linkedAccountsProvider)
+          : const AsyncData(<LinkedAccount>[]),
+      landing: kIsWeb && !ref.watch(landingDismissedProvider),
+    );
+  }
+
   Widget _app(AsyncValue<String?> key, bool guest, double? chosenScale) {
     return MaterialApp(
       navigatorKey: _navigator,
@@ -191,12 +205,33 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
         loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
         error: (error, stack) => const OnboardingScreen(),
         // a visitor of the site is shown what the app is first, then asked to sign in. the app on a phone goes straight to signing in
-        data: (k) => (k == null || k.isEmpty) && !guest
-            ? (kIsWeb && !ref.watch(landingDismissedProvider) ? const LandingScreen() : const OnboardingScreen())
-            : const AppShell(),
+        data: (k) => _home(k, guest),
       ),
     );
   }
+}
+
+/// what the app opens on: with a key the app. signed in with Discord and no key, the app when a game account is linked
+/// to the Discord account, the screen that asks for a key to link when none is. otherwise the way in, or the app as a
+/// guest
+Widget homeFor({
+  required String? key,
+  required bool guest,
+  required bool signedIn,
+  required AsyncValue<List<LinkedAccount>> linked,
+  required bool landing,
+}) {
+  if (key != null && key.isNotEmpty) return const AppShell();
+  if (signedIn) {
+    return linked.when(
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      // not knowing is no reason to keep the player out
+      error: (_, __) => const AppShell(),
+      data: (accounts) => accounts.isEmpty ? const OnboardingScreen(linking: true) : const AppShell(),
+    );
+  }
+  if (guest) return const AppShell();
+  return landing ? const LandingScreen() : const OnboardingScreen();
 }
 
 /// tells the app when the phone changes between light and dark

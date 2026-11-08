@@ -77,6 +77,10 @@ const esStrings = <String, String>{
   'event_err_account_not_allowed': 'Esa cuenta no puede crear eventos en este gremio.',
   'err_no_key': 'Esto necesita una clave API de GW2.',
   'add_api_key': 'Añadir una clave API',
+  'link_title': 'Vincula tu\ncuenta del juego.',
+  'link_body': 'Tu cuenta de Discord aún no está vinculada a una cuenta de Guild Wars 2. Introduce una clave API: su cuenta se vincula a tu cuenta de Discord, para los eventos del gremio, la lista del gremio y los eventos públicos.',
+  'signin_discord_note': 'Eventos del gremio, la lista de tu gremio y eventos públicos, con la cuenta que vinculaste. En un dispositivo nuevo tus cuentas vinculadas te acompañan.',
+  'signin_or_key': 'o solo con una clave API',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
       'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',

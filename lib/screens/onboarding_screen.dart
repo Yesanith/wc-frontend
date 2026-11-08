@@ -4,12 +4,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../state/api.dart';
+import '../state/community.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../widgets/account_badge.dart' show discordBlurple;
 import '../widgets/common.dart';
 
+/// the first screen: sign in with Discord, or use the app with an API key alone. with [linking] it is the screen of a
+/// player signed in with Discord whose Discord account has no Guild Wars 2 account yet: the key is asked for, and the
+/// account it belongs to is linked to the Discord account
 class OnboardingScreen extends ConsumerStatefulWidget {
-  const OnboardingScreen({super.key});
+  const OnboardingScreen({super.key, this.linking = false});
+
+  final bool linking;
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -79,8 +86,50 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
   }
 
+  Future<void> _signIn() async {
+    final s = ref.read(stringsProvider);
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await signInWithDiscord();
+    } catch (_) {
+      if (mounted) setState(() => _error = s.t('community_failed'));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// links the key's account to the Discord account signed in. false, with the reason shown, when it could not be
+  Future<bool> _link() async {
+    final s = ref.read(stringsProvider);
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    final api = Gw2Api(_ctrl.text.trim());
+    try {
+      await linkGw2AccountOutcome(api, _perms ?? const []);
+      return true;
+    } on LinkFailure catch (e) {
+      if (mounted) setState(() => _error = '${s.t(linkFailureKey(e.code))} ($e)');
+      return false;
+    } catch (e) {
+      if (mounted) setState(() => _error = '${s.t('community_failed')} ($e)');
+      return false;
+    } finally {
+      api.close();
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _save() async {
+    // signed in with Discord: the account is linked first, the key is kept once it is. a key kept before would open the
+    // app with an account that is not linked
+    if (widget.linking && !await _link()) return;
     await ref.read(keysProvider.notifier).add(_ctrl.text.trim(), _account ?? '');
+    if (widget.linking) ref.invalidate(linkedAccountsProvider);
     // a key ends the guest choice, after the key is in so the app never
     // passes through the welcome screen on its way
     await ref.read(guestModeProvider.notifier).set(false);
@@ -141,10 +190,43 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ],
                 ),
                 const SizedBox(height: 28),
-                Text(s.t('welcome_title'), style: display(34).copyWith(height: 1.15)),
+                Text(s.t(widget.linking ? 'link_title' : 'welcome_title'), style: display(34).copyWith(height: 1.15)),
                 const SizedBox(height: 12),
-                Text(s.t('welcome_body'), style: TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
+                Text(s.t(widget.linking ? 'link_body' : 'welcome_body'),
+                    style: TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
                 const SizedBox(height: 24),
+                // two ways in: Discord, whose account the app links a game account to, or an API key alone
+                if (!widget.linking && communityReady && !Navigator.of(context).canPop()) ...[
+                  SizedBox(
+                    height: 54,
+                    child: FilledButton.icon(
+                      onPressed: _busy ? null : _signIn,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: discordBlurple,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+                      ),
+                      icon: const Icon(Icons.login, size: 20),
+                      label: Text(s.t('community_sign_in_discord'),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(s.t('signin_discord_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(s.t('signin_or_key'),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                      ),
+                      Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                ],
                 _Step(1, s.t('step_create')),
                 Padding(
                   padding: const EdgeInsets.only(left: 40, top: 6, bottom: 10),
@@ -214,7 +296,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                 ),
                 // the first screen only: opened from settings there is a key or a way back
-                if (!Navigator.of(context).canPop()) ...[
+                // signed in with Discord and not wanting to link: the way out is signing out
+                if (widget.linking) ...[
+                  const SizedBox(height: 6),
+                  Center(
+                    child: TextButton(
+                      onPressed: _busy ? null : () => signOut(),
+                      child: Text(s.t('community_sign_out'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                ] else if (!Navigator.of(context).canPop()) ...[
                   const SizedBox(height: 6),
                   Center(
                     child: TextButton(

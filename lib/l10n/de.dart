@@ -80,6 +80,10 @@ const deStrings = <String, String>{
   'event_err_account_not_allowed': 'Dieses Konto darf in dieser Gilde keine Events erstellen.',
   'err_no_key': 'Dafür wird ein GW2-API-Schlüssel benötigt.',
   'add_api_key': 'API-Schlüssel hinzufügen',
+  'link_title': 'Verbinde dein\nSpielkonto.',
+  'link_body': 'Dein Discord-Konto ist noch mit keinem Guild-Wars-2-Konto verbunden. Gib einen API-Schlüssel ein: Sein Konto wird mit deinem Discord-Konto verbunden, für Gilden-Events, die Mitgliederliste der Gilde und öffentliche Events.',
+  'signin_discord_note': 'Gilden-Events, die Mitgliederliste deiner Gilde und öffentliche Events, mit dem verbundenen Konto. Auf einem neuen Gerät kommen deine verbundenen Konten mit.',
+  'signin_or_key': 'oder nur mit einem API-Schlüssel',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
       'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',

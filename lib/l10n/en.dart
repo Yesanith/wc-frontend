@@ -77,6 +77,10 @@ const enStrings = <String, String>{
   'event_err_account_not_allowed': 'That account may not create events in this guild.',
   'err_no_key': 'This needs a GW2 API key.',
   'add_api_key': 'Add an API key',
+  'link_title': 'Link your\ngame account.',
+  'link_body': 'Your Discord account is not linked to a Guild Wars 2 account yet. Enter an API key: its account is linked to your Discord account, for guild events, the guild\'s roster and public events.',
+  'signin_discord_note': 'Guild events, your guild\'s roster and public events, with the account you linked. On a new device your linked accounts come with you.',
+  'signin_or_key': 'or with an API key only',
   'guest_continue': 'Continue without an API key',
   'guest_note':
       'World bosses, the map, recipes, trading post prices, the wiki and the news work without one. Your characters and progress need a key.',
