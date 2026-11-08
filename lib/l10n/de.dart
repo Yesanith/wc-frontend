@@ -71,7 +71,8 @@ const deStrings = <String, String>{
   'event_guild_hint': 'Bitte wähle eine Gilde',
   'event_account': 'ORGANISATOR-KONTO',
   'event_account_hint': 'Wähle ein Konto',
-  'event_account_none': 'Keines deiner Konten darf in dieser Gilde Events erstellen. Das dürfen der Anführer, die Offiziere und die Mitglieder, denen sie es erlauben.',
+  'event_account_none':
+      'Keines deiner Konten darf in dieser Gilde Events erstellen. Das dürfen der Anführer, die Offiziere und die Mitglieder, denen sie es erlauben.',
   'event_organizer': 'Organisator',
   'event_err_guild': 'Bitte wähle eine Gilde.',
   'event_err_account': 'Wähle, mit welchem deiner Konten das Event erstellt wird.',

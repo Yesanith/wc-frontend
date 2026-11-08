@@ -66,7 +66,8 @@ const trStrings = <String, String>{
   'event_guild_hint': 'Lütfen lonca seçiniz',
   'event_account': 'ORGANİZATÖR HESABI',
   'event_account_hint': 'Hesap seçiniz',
-  'event_account_none': 'Hesaplarından hiçbiri bu loncada etkinlik oluşturamaz. Lider, subaylar ve onların izin verdiği üyeler oluşturabilir.',
+  'event_account_none':
+      'Hesaplarından hiçbiri bu loncada etkinlik oluşturamaz. Lider, subaylar ve onların izin verdiği üyeler oluşturabilir.',
   'event_organizer': 'Organizatör',
   'event_err_guild': 'Lütfen lonca seçiniz.',
   'event_err_account': 'Etkinliği hangi hesabınla oluşturacağını seç.',
