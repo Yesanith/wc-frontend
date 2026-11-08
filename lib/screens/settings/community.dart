@@ -152,6 +152,8 @@ class _Gw2LinkSectionState extends ConsumerState<_Gw2LinkSection> {
     return () {
       container.invalidate(linkedAccountsProvider);
       container.invalidate(myGuildsProvider);
+      // an account that is let go takes the watch of its trading post with it, on the server
+      container.invalidate(tradeWatchesProvider);
     };
   }
 
