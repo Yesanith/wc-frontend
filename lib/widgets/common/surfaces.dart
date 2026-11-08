@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../responsive.dart';
+
 import '../../theme.dart';
 
 class Panel extends StatelessWidget {
@@ -99,9 +101,11 @@ class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     // the plugin's tab strip: bright text on the picked tab over a short
     // gold underline, the rest dimmed, and a hairline under the whole row
+    // on the site the tabs keep to their own width, from the left, as the tabs of a site's page do
+    final start = scrollable || SiteScope.of(context);
     return TabBar(
-      isScrollable: scrollable,
-      tabAlignment: scrollable ? TabAlignment.start : null,
+      isScrollable: start,
+      tabAlignment: start ? TabAlignment.start : null,
       labelColor: AppColors.text,
       unselectedLabelColor: AppColors.muted,
       dividerColor: AppColors.hairline,

@@ -103,6 +103,7 @@ const esStrings = <String, String>{
   'tp_col_date': 'Fecha',
   'tp_col_price': 'Precio',
   'tp_col_qty': 'Cant.',
+  'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
       'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',

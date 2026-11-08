@@ -86,6 +86,7 @@ const jaStrings = <String, String>{
   'tp_col_date': '日付',
   'tp_col_price': '価格',
   'tp_col_qty': '数量',
+  'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',
   'guest': 'ゲスト',

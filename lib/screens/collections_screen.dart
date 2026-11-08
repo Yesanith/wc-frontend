@@ -141,6 +141,46 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
             return true;
           }).toList();
           final shown = list.where((e) => e.unlocked).length;
+          Widget entry(CollectionEntry e) {
+            return Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.card),
+                border: Border.all(color: AppColors.line),
+              ),
+              child: Row(
+                children: [
+                  Opacity(
+                    opacity: e.unlocked ? 1 : 0.35,
+                    child: ItemIcon(url: e.icon, rarity: e.unlocked ? (e.rarity ?? 'Exotic') : null, size: 40),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: e.unlocked ? AppColors.text : AppColors.muted,
+                          ),
+                        ),
+                        if (e.subtype != null) Text(e.subtype!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    e.unlocked ? Icons.check_circle : Icons.lock_outline,
+                    size: 20,
+                    color: e.unlocked ? AppColors.green : AppColors.hint,
+                  ),
+                ],
+              ),
+            );
+          }
 
           return Column(
             children: [
@@ -207,53 +247,25 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                 ),
               ),
               Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                  itemCount: list.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (context, i) {
-                    final e = list[i];
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(AppRadius.card),
-                        border: Border.all(color: AppColors.line),
+                // on the site the entries are a grid of short tiles, as a collection is shown on a page
+                child: SiteScope.of(context)
+                    ? GridView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 290,
+                          mainAxisExtent: 62,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemCount: list.length,
+                        itemBuilder: (context, i) => entry(list[i]),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: list.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                        itemBuilder: (context, i) => entry(list[i]),
                       ),
-                      child: Row(
-                        children: [
-                          Opacity(
-                            opacity: e.unlocked ? 1 : 0.35,
-                            child: ItemIcon(url: e.icon, rarity: e.unlocked ? (e.rarity ?? 'Exotic') : null, size: 40),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: e.unlocked ? AppColors.text : AppColors.muted,
-                                  ),
-                                ),
-                                if (e.subtype != null)
-                                  Text(e.subtype!, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-                              ],
-                            ),
-                          ),
-                          Icon(
-                            e.unlocked ? Icons.check_circle : Icons.lock_outline,
-                            size: 20,
-                            color: e.unlocked ? AppColors.green : AppColors.hint,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
               ),
             ],
           );

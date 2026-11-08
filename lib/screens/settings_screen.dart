@@ -26,6 +26,7 @@ import '../state/trade_watch.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/site_header.dart' show sitePageUrl;
 import '../widgets/trade_watch_ask.dart';
 import '../widgets/ui_zoom.dart';
@@ -113,137 +114,141 @@ class SettingsScreen extends ConsumerWidget {
     final signedIn = communityReady && ref.watch(sessionProvider).valueOrNull != null;
     final tradeWatchOn = signedIn && (ref.watch(tradeWatchesProvider).valueOrNull?.any((w) => w.on) ?? false);
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-      children: [
-        // who the player is: the community account (shown only in builds that know the backend), the keys of the game,
-        // and the addons of the game that link to the account
-        if (communityReady)
-          _Section(
-            title: s.t('settings_account'),
-            note: s.t('settings_account_note'),
-            children: const [_CommunityPanel()],
-          ),
-        _Section(
-          title: s.t('settings_keys'),
-          note: s.t('settings_keys_note'),
-          children: const [_AccountsPanel()],
-        ),
-        if (signedIn)
-          _Section(
-            title: s.t('settings_modules'),
-            note: s.t('settings_modules_note'),
-            children: const [_ModuleLinkPanel()],
-          ),
-        // how the app looks, in one card
-        _Section(
-          title: s.t('settings_appearance'),
-          note: s.t('settings_appearance_note'),
-          children: [
-            Panel(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Kicker(s.t('look').toUpperCase()),
-                  const SizedBox(height: 10),
-                  const _LookChoice(),
-                  Divider(height: 28, color: AppColors.track),
-                  Kicker(s.t('language').toUpperCase()),
-                  const SizedBox(height: 4),
-                  // one line instead of nine, the list opens from the bottom
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    onTap: () => _pickLanguage(context, ref),
-                    leading: Icon(Icons.translate, color: AppColors.gold),
-                    title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(lang.code.toUpperCase(),
-                            style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
-                        const SizedBox(width: 4),
-                        Icon(Icons.expand_more, color: AppColors.muted),
-                      ],
-                    ),
-                  ),
-                  _InfoRow(
-                    s.t('data_language'),
-                    lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
-                  ),
-                  const SizedBox(height: 6),
-                  _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
-                  if (kIsWeb) ...[
-                    Divider(height: 28, color: AppColors.track),
-                    const _UiSizeChoice(),
-                  ],
-                ],
-              ),
+    // on the site the settings keep to a column a form is read in, from the left of the page
+    final narrow = SiteScope.of(context);
+    return LayoutBuilder(
+      builder: (context, box) => ListView(
+        padding: EdgeInsets.fromLTRB(20, 8, narrow && box.maxWidth > 820 ? box.maxWidth - 780 : 20, 32),
+        children: [
+          // who the player is: the community account (shown only in builds that know the backend), the keys of the game,
+          // and the addons of the game that link to the account
+          if (communityReady)
+            _Section(
+              title: s.t('settings_account'),
+              note: s.t('settings_account_note'),
+              children: const [_CommunityPanel()],
             ),
-          ],
-        ),
-        if (bossAlertsReady || (signedIn && pushReady))
           _Section(
-            title: s.t('settings_notifications'),
-            note: s.t('settings_notifications_note'),
+            title: s.t('settings_keys'),
+            note: s.t('settings_keys_note'),
+            children: const [_AccountsPanel()],
+          ),
+          if (signedIn)
+            _Section(
+              title: s.t('settings_modules'),
+              note: s.t('settings_modules_note'),
+              children: const [_ModuleLinkPanel()],
+            ),
+          // how the app looks, in one card
+          _Section(
+            title: s.t('settings_appearance'),
+            note: s.t('settings_appearance_note'),
             children: [
-              // what the trading post did for the player, told by the server even when the app is closed
-              if (signedIn && pushReady) const _TradeWatchPanel(),
-              if (bossAlertsReady) ...[
-                const _BossAlertsPanel(),
-                const _ResetAlertsPanel(),
-                // or looked at by the phone alone, with the key that stays on it, for who would rather not give the
-                // server anything. not both: every sale would be told twice
-                if (!kIsWeb && !tradeWatchOn) const _TradeNotifyPanel(),
-              ],
+              Panel(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Kicker(s.t('look').toUpperCase()),
+                    const SizedBox(height: 10),
+                    const _LookChoice(),
+                    Divider(height: 28, color: AppColors.track),
+                    Kicker(s.t('language').toUpperCase()),
+                    const SizedBox(height: 4),
+                    // one line instead of nine, the list opens from the bottom
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      onTap: () => _pickLanguage(context, ref),
+                      leading: Icon(Icons.translate, color: AppColors.gold),
+                      title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(lang.code.toUpperCase(),
+                              style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
+                          const SizedBox(width: 4),
+                          Icon(Icons.expand_more, color: AppColors.muted),
+                        ],
+                      ),
+                    ),
+                    _InfoRow(
+                      s.t('data_language'),
+                      lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
+                    ),
+                    const SizedBox(height: 6),
+                    _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
+                    if (kIsWeb) ...[
+                      Divider(height: 28, color: AppColors.track),
+                      const _UiSizeChoice(),
+                    ],
+                  ],
+                ),
+              ),
             ],
           ),
-        _Section(
-          title: s.t('settings_data'),
-          note: s.t('settings_data_note'),
-          children: [
-            const _SyncPanel(),
-            Panel(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Kicker(s.t('backup').toUpperCase()),
-                  const SizedBox(height: 8),
-                  Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => shareBackup(ref),
-                          icon: const Icon(Icons.ios_share, size: 18),
-                          label: Text(s.t('export_backup')),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _import(context, ref),
-                          icon: const Icon(Icons.download_outlined, size: 18),
-                          label: Text(s.t('import_backup')),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton.icon(
-                    onPressed: () => _clearCache(context, ref),
-                    icon: const Icon(Icons.cleaning_services_outlined, size: 18),
-                    label: Text(s.t('clear_cache')),
-                  ),
+          if (bossAlertsReady || (signedIn && pushReady))
+            _Section(
+              title: s.t('settings_notifications'),
+              note: s.t('settings_notifications_note'),
+              children: [
+                // what the trading post did for the player, told by the server even when the app is closed
+                if (signedIn && pushReady) const _TradeWatchPanel(),
+                if (bossAlertsReady) ...[
+                  const _BossAlertsPanel(),
+                  const _ResetAlertsPanel(),
+                  // or looked at by the phone alone, with the key that stays on it, for who would rather not give the
+                  // server anything. not both: every sale would be told twice
+                  if (!kIsWeb && !tradeWatchOn) const _TradeNotifyPanel(),
                 ],
-              ),
+              ],
             ),
-          ],
-        ),
-        // an apk cannot be installed from a browser
-        if (!kIsWeb) _Section(title: s.t('settings_app'), children: const [_UpdatePanel()]),
-      ],
+          _Section(
+            title: s.t('settings_data'),
+            note: s.t('settings_data_note'),
+            children: [
+              const _SyncPanel(),
+              Panel(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Kicker(s.t('backup').toUpperCase()),
+                    const SizedBox(height: 8),
+                    Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => shareBackup(ref),
+                            icon: const Icon(Icons.ios_share, size: 18),
+                            label: Text(s.t('export_backup')),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => _import(context, ref),
+                            icon: const Icon(Icons.download_outlined, size: 18),
+                            label: Text(s.t('import_backup')),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton.icon(
+                      onPressed: () => _clearCache(context, ref),
+                      icon: const Icon(Icons.cleaning_services_outlined, size: 18),
+                      label: Text(s.t('clear_cache')),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // an apk cannot be installed from a browser
+          if (!kIsWeb) _Section(title: s.t('settings_app'), children: const [_UpdatePanel()]),
+        ],
+      ),
     );
   }
 }

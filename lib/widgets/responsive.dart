@@ -32,11 +32,14 @@ class ContentFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // on the site the page already keeps to the site's width, so a reading column inside it would only
+    // leave a page in the middle of a page; it takes the page's width, from the same left edge as its tabs
+    final limit = SiteScope.of(context) && maxWidth <= readingMaxWidth ? double.infinity : maxWidth;
     return LayoutBuilder(
       builder: (context, constraints) => Align(
         alignment: Alignment.topCenter,
         child: SizedBox(
-          width: math.min(constraints.maxWidth, maxWidth),
+          width: math.min(constraints.maxWidth, limit),
           height: constraints.maxHeight,
           child: child,
         ),

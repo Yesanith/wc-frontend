@@ -29,22 +29,45 @@ class _Wallet extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            GridView(
-              // three across on a phone, more where there is room, never a tile wider than a phone's
-              gridDelegate: const AdaptiveGridDelegate(
-                minColumns: 3,
-                maxTile: 150,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 1.25,
+            if (SiteScope.of(context))
+              Column(
+                children: [
+                  for (final id in _highlights)
+                    if (byId[id] != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+                        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.track))),
+                        child: Row(
+                          children: [
+                            SizedBox.square(
+                                dimension: 20, child: byId[id]!.icon == null ? null : CachedIcon(url: byId[id]!.icon!)),
+                            const SizedBox(width: 10),
+                            Expanded(child: Text(byId[id]!.name, style: const TextStyle(fontSize: 14))),
+                            Text(fmtInt(byId[id]!.value),
+                                style:
+                                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, fontFeatures: _tabular)),
+                          ],
+                        ),
+                      ),
+                ],
+              )
+            else
+              GridView(
+                // three across on a phone, more where there is room, never a tile wider than a phone's
+                gridDelegate: const AdaptiveGridDelegate(
+                  minColumns: 3,
+                  maxTile: 150,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1.25,
+                ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  for (final id in _highlights)
+                    if (byId[id] != null) _CurrencyTile(byId[id]!),
+                ],
               ),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                for (final id in _highlights)
-                  if (byId[id] != null) _CurrencyTile(byId[id]!),
-              ],
-            ),
           ],
         );
       },

@@ -27,6 +27,8 @@ class DailyScreen extends ConsumerWidget {
     final crafts = ref.watch(dailyProgressProvider('dailycrafting')).valueOrNull;
     final chests = ref.watch(dailyProgressProvider('mapchests')).valueOrNull;
     final dungeons = ref.watch(dungeonsProvider).valueOrNull;
+    // on the site the lists stand open, two side by side, as a checklist on a page does
+    final site = SiteScope.of(context);
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -58,44 +60,48 @@ class DailyScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          FoldSection(
-            title: s.t('wizards_vault'),
-            leading: const VaultIcon(),
-            summary: _vaultSummary(s, v),
-            initiallyExpanded: !_vaultDone(v),
-            trailing: IconButton(
-              tooltip: s.t('vault_shop'),
-              visualDensity: VisualDensity.compact,
-              onPressed: () =>
-                  Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
-              icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+          _Columns(two: site, children: [
+            FoldSection(
+              title: s.t('wizards_vault'),
+              leading: const VaultIcon(),
+              summary: _vaultSummary(s, v),
+              initiallyExpanded: !_vaultDone(v),
+              trailing: IconButton(
+                tooltip: s.t('vault_shop'),
+                visualDensity: VisualDensity.compact,
+                onPressed: () =>
+                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
+                icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
+              ),
+              child: AsyncView(
+                value: vault,
+                permission: 'progression',
+                onRetry: () => ref.invalidate(vaultTrackProvider('daily')),
+                builder: (json) => VaultObjectives(json, framed: false),
+              ),
             ),
-            child: AsyncView(
-              value: vault,
-              permission: 'progression',
-              onRetry: () => ref.invalidate(vaultTrackProvider('daily')),
-              builder: (json) => VaultObjectives(json, framed: false),
+            ...?ref.watch(periodicAchievementsProvider).whenOrNull(
+                  data: (split) => [
+                    for (final c in split.daily)
+                      FoldSection(
+                        title: c.name,
+                        leading: _GameIcon(url: c.icon),
+                        summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
+                        initiallyExpanded: site && c.done < c.rows.length,
+                        child: PeriodicCategoryList(category: c),
+                      ),
+                  ],
+                ),
+          ]),
+          if (!ref.watch(periodicAchievementsProvider).hasValue)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: AsyncView<PeriodicAchievements>(
+                value: ref.watch(periodicAchievementsProvider),
+                onRetry: () => ref.invalidate(periodicAchievementsProvider),
+                builder: (_) => const SizedBox.shrink(),
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          AsyncView<PeriodicAchievements>(
-            value: ref.watch(periodicAchievementsProvider),
-            onRetry: () => ref.invalidate(periodicAchievementsProvider),
-            builder: (split) => Column(
-              children: [
-                for (final c in split.daily)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: FoldSection(
-                      title: c.name,
-                      leading: _GameIcon(url: c.icon),
-                      summary: c.done >= c.rows.length ? s.t('all_done') : '${c.done}/${c.rows.length}',
-                      child: PeriodicCategoryList(category: c),
-                    ),
-                  ),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -111,6 +117,31 @@ bool _vaultDone(Json? v) {
   if (v == null) return false;
   final total = asInt(v['meta_progress_complete']);
   return total > 0 && asInt(v['meta_progress_current']) >= total;
+}
+
+/// the folding lists one under another, or on the site in two columns that fill side by side
+class _Columns extends StatelessWidget {
+  const _Columns({required this.two, required this.children});
+
+  final bool two;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget column(Iterable<Widget> items) => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [for (final w in items) Padding(padding: const EdgeInsets.only(bottom: 12), child: w)],
+        );
+    if (!two) return column(children);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: column([for (var i = 0; i < children.length; i += 2) children[i]])),
+        const SizedBox(width: 20),
+        Expanded(child: column([for (var i = 1; i < children.length; i += 2) children[i]])),
+      ],
+    );
+  }
 }
 
 class _Tile {
@@ -130,12 +161,13 @@ class _ChecklistGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView(
-      gridDelegate: const AdaptiveGridDelegate(
+      gridDelegate: AdaptiveGridDelegate(
         minColumns: 2,
         maxTile: 330,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 2.6,
+        // on the site the counters are a short strip, not tiles to tap
+        childAspectRatio: SiteScope.of(context) ? 4.8 : 2.6,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

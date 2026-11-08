@@ -101,6 +101,7 @@ const trStrings = <String, String>{
   'tp_col_date': 'Tarih',
   'tp_col_price': 'Fiyat',
   'tp_col_qty': 'Adet',
+  'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
       'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',

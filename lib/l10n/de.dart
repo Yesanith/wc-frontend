@@ -108,6 +108,7 @@ const deStrings = <String, String>{
   'tp_col_date': 'Datum',
   'tp_col_price': 'Preis',
   'tp_col_qty': 'Anz.',
+  'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
       'Weltbosse, Karte, Rezepte, Handelsposten-Preise, Wiki und News funktionieren ohne. Deine Charaktere und dein Fortschritt brauchen einen Schlüssel.',

@@ -105,6 +105,7 @@ const frStrings = <String, String>{
   'tp_col_date': 'Date',
   'tp_col_price': 'Prix',
   'tp_col_qty': 'Qté',
+  'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
       'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',

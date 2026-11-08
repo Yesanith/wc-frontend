@@ -105,6 +105,7 @@ const ptStrings = <String, String>{
   'tp_col_date': 'Data',
   'tp_col_price': 'Preço',
   'tp_col_qty': 'Qtd.',
+  'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
       'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',
