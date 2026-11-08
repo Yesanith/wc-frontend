@@ -1,7 +1,8 @@
 part of '../guild_events.dart';
 
 class RosterMember {
-  const RosterMember(this.userId, this.accountName, this.role, {this.gw2Rank, this.manual = false, this.canCreate = false});
+  const RosterMember(this.userId, this.accountName, this.role,
+      {this.gw2Rank, this.manual = false, this.canCreate = false});
 
   factory RosterMember.fromRow(Map<String, dynamic> r) {
     final rank = '${r['gw2_rank'] ?? ''}';
