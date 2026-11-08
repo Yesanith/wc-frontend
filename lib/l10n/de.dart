@@ -233,7 +233,8 @@ const deStrings = <String, String>{
   'guild_role_officer': 'Offizier',
   'guild_role_member': 'Mitglied',
   'community_account': 'Wondrous-Compass-Konto',
-  'community_intro': 'Melde dich an, um an Gildenevents teilzunehmen, Freunde zu finden und den Discord deiner Gilde zu verbinden. Deine API-Schlüssel bleiben auf diesem Gerät, außer du speicherst sie in deinem Konto.',
+  'community_intro':
+      'Melde dich an, um an Gildenevents teilzunehmen, Freunde zu finden und den Discord deiner Gilde zu verbinden. Deine API-Schlüssel bleiben auf diesem Gerät, außer du speicherst sie in deinem Konto.',
   'community_sign_in_discord': 'Mit Discord anmelden',
   'community_signed_in': 'Mit Discord angemeldet',
   'community_sign_out': 'Abmelden',
@@ -246,7 +247,8 @@ const deStrings = <String, String>{
   'settings_account_note':
       'Dein Wondrous-Compass-Konto, angemeldet mit Discord: Gilden-Events, öffentliche Events und der Discord-Bot hängen daran.',
   'settings_keys': 'Guild-Wars-2-API-Schlüssel',
-  'settings_keys_note': 'Die Schlüssel sind auf diesem Gerät, und in deinem Konto nur, wenn du es willst. Jede Seite liest den aktiven.',
+  'settings_keys_note':
+      'Die Schlüssel sind auf diesem Gerät, und in deinem Konto nur, wenn du es willst. Jede Seite liest den aktiven.',
   'settings_modules': 'Addons im Spiel',
   'settings_modules_note': 'Events sehen und erstellen, ohne das Spiel zu verlassen.',
   'settings_appearance': 'Darstellung',

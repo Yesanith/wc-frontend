@@ -224,7 +224,8 @@ const trStrings = <String, String>{
   'guild_role_officer': 'Subay',
   'guild_role_member': 'Üye',
   'community_account': 'Wondrous Compass hesabı',
-  'community_intro': 'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır; hesabında saklamayı seçersen orada da durur.',
+  'community_intro':
+      'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır; hesabında saklamayı seçersen orada da durur.',
   'community_sign_in_discord': 'Discord ile giriş yap',
   'community_signed_in': 'Discord ile giriş yapıldı',
   'community_sign_out': 'Çıkış yap',
@@ -237,7 +238,8 @@ const trStrings = <String, String>{
   'settings_account_note':
       'Discord ile girdiğin Wondrous Compass hesabın: lonca etkinlikleri, herkese açık etkinlikler ve Discord botu buna bağlı.',
   'settings_keys': 'Guild Wars 2 API anahtarları',
-  'settings_keys_note': 'Anahtarlar bu cihazda, hesabında ise yalnızca sen seçersen saklanır. Tüm sayfalar etkin olanı okur.',
+  'settings_keys_note':
+      'Anahtarlar bu cihazda, hesabında ise yalnızca sen seçersen saklanır. Tüm sayfalar etkin olanı okur.',
   'settings_modules': 'Oyun içi eklentiler',
   'settings_modules_note': 'Oyundan çıkmadan etkinlikleri gör ve oluştur.',
   'settings_appearance': 'Görünüm',

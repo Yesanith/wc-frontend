@@ -226,7 +226,8 @@ const ruStrings = <String, String>{
   'guild_role_officer': 'Офицер',
   'guild_role_member': 'Участник',
   'community_account': 'Аккаунт Wondrous Compass',
-  'community_intro': 'Войдите, чтобы участвовать в событиях гильдии, находить друзей и подключать Discord гильдии. Ваши API-ключи остаются на этом устройстве, если только вы не решите хранить их в аккаунте.',
+  'community_intro':
+      'Войдите, чтобы участвовать в событиях гильдии, находить друзей и подключать Discord гильдии. Ваши API-ключи остаются на этом устройстве, если только вы не решите хранить их в аккаунте.',
   'community_sign_in_discord': 'Войти через Discord',
   'community_signed_in': 'Вход выполнен через Discord',
   'community_sign_out': 'Выйти',
@@ -239,7 +240,8 @@ const ruStrings = <String, String>{
   'settings_account_note':
       'Ваш аккаунт Wondrous Compass, вход через Discord: от него зависят события гильдии, публичные события и бот Discord.',
   'settings_keys': 'API-ключи Guild Wars 2',
-  'settings_keys_note': 'Ключи хранятся на этом устройстве, а в аккаунте — только если вы это выберете. Все страницы читают активный.',
+  'settings_keys_note':
+      'Ключи хранятся на этом устройстве, а в аккаунте — только если вы это выберете. Все страницы читают активный.',
   'settings_modules': 'Аддоны в игре',
   'settings_modules_note': 'Смотрите и создавайте события, не выходя из игры.',
   'settings_appearance': 'Внешний вид',

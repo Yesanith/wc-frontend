@@ -226,7 +226,8 @@ const enStrings = <String, String>{
   'guild_role_officer': 'Officer',
   'guild_role_member': 'Member',
   'community_account': 'Wondrous Compass account',
-  'community_intro': 'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device, unless you choose to keep them in your account.',
+  'community_intro':
+      'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device, unless you choose to keep them in your account.',
   'community_sign_in_discord': 'Sign in with Discord',
   'community_signed_in': 'Signed in with Discord',
   'community_sign_out': 'Sign out',
@@ -239,7 +240,8 @@ const enStrings = <String, String>{
   'settings_account_note':
       'Your Wondrous Compass account, signed in with Discord: guild events, public events and the Discord bot hang on it.',
   'settings_keys': 'Guild Wars 2 API keys',
-  'settings_keys_note': 'The keys are on this device, and in your account only if you choose. The active one is what every page reads.',
+  'settings_keys_note':
+      'The keys are on this device, and in your account only if you choose. The active one is what every page reads.',
   'settings_modules': 'In-game addons',
   'settings_modules_note': 'See and make events without leaving the game.',
   'settings_appearance': 'Appearance',

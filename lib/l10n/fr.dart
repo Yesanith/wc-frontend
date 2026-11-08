@@ -229,7 +229,8 @@ const frStrings = <String, String>{
   'guild_role_officer': 'Officier',
   'guild_role_member': 'Membre',
   'community_account': 'Compte Wondrous Compass',
-  'community_intro': 'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil, sauf si tu choisis de les garder dans ton compte.',
+  'community_intro':
+      'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil, sauf si tu choisis de les garder dans ton compte.',
   'community_sign_in_discord': 'Se connecter avec Discord',
   'community_signed_in': 'Connecté avec Discord',
   'community_sign_out': 'Se déconnecter',
@@ -242,7 +243,8 @@ const frStrings = <String, String>{
   'settings_account_note':
       'Ton compte Wondrous Compass, connecté avec Discord : les événements de guilde, les événements publics et le bot Discord en dépendent.',
   'settings_keys': 'Clés d\'API Guild Wars 2',
-  'settings_keys_note': 'Les clés sont sur cet appareil, et dans ton compte seulement si tu le choisis. Chaque page lit la clé active.',
+  'settings_keys_note':
+      'Les clés sont sur cet appareil, et dans ton compte seulement si tu le choisis. Chaque page lit la clé active.',
   'settings_modules': 'Addons en jeu',
   'settings_modules_note': 'Vois et crée des événements sans quitter le jeu.',
   'settings_appearance': 'Apparence',
