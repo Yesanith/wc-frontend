@@ -28,6 +28,12 @@ const siteNavGroups = <(String, List<AppSection>)>[
       AppSection.account,
       AppSection.progression,
       AppSection.collections,
+    ],
+  ),
+  // what is done with other players: the guild, its events, public events and recruiting
+  (
+    'nav_group_community',
+    [
       AppSection.guilds,
       AppSection.guildEvents,
       AppSection.publicEvents,
@@ -41,7 +47,7 @@ const siteNavGroups = <(String, List<AppSection>)>[
 
 /// the narrowest window that is shown as a site, with the bar along the top: it has the sections, the groups and a way to search in
 /// that. a narrower one is shown as an app, with its menu beside the page
-const siteMinWidth = 1280.0;
+const siteMinWidth = 1360.0;
 
 /// how wide the bar may grow. wider than a page: the sections, the search and the account are more than a page's width
 /// holds in the longer languages, and the search was drawn over the last of the sections

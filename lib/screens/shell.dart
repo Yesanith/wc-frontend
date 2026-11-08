@@ -631,7 +631,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                       ),
                     ),
             ),
-      bottomNavigationBar: site
+      // the footer of the site closes its home page; on every other page it would only take a line off the content
+      bottomNavigationBar: site && section == AppSection.home
           ? SiteFooter(
               note: s.t('site_footer_note'),
               links: [

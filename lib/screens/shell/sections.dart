@@ -64,6 +64,7 @@ const _icons = {
 /// get a divider without a heading
 const _groupStarts = <AppSection, String?>{
   AppSection.characters: 'nav_group_account',
+  AppSection.guilds: 'nav_group_community',
   AppSection.trading: 'nav_group_economy',
   AppSection.maps: 'nav_group_world',
   AppSection.professions: 'nav_group_reference',

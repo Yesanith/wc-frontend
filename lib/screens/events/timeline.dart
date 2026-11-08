@@ -230,47 +230,56 @@ class _Block extends ConsumerWidget {
     final pinned = ref.watch(pinnedEventsProvider).contains(eventKey(o.map, o.event));
     // a tap opens the event, where it can be pinned. the old tooltip only
     // showed the name, so nothing on the timeline could be pinned
-    return GestureDetector(
-      onTap: () => showEventSheet(context, ref, o),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        alignment: Alignment.centerLeft,
-        decoration: BoxDecoration(
-          color: tint.withValues(alpha: dim ? 0.08 : (active ? 0.34 : 0.18)),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)), width: active ? 1.5 : 1),
-        ),
-        // narrow blocks cut their label instead of overflowing
-        child: ClipRect(
-          child: OverflowBox(
+    // the label of a narrow block is cut, so the whole name shows on hover; a tap still opens the event
+    return Tooltip(
+      message: o.event.name,
+      waitDuration: const Duration(milliseconds: 300),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => showEventSheet(context, ref, o),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             alignment: Alignment.centerLeft,
-            maxWidth: double.infinity,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (pinned) ...[
-                  Icon(Icons.push_pin, size: 11, color: AppColors.gold),
-                  const SizedBox(width: 3),
-                ],
-                if (looted) ...[
-                  Icon(Icons.check_rounded, size: 12, color: AppColors.green),
-                  const SizedBox(width: 3),
-                ],
-                if (o.event.kind == MetaKind.hardBoss) ...[
-                  Icon(Icons.local_fire_department_rounded, size: 12, color: AppColors.red),
-                  const SizedBox(width: 2),
-                ],
-                Text(
-                  o.event.name,
-                  maxLines: 1,
-                  softWrap: false,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: dim ? AppColors.hint : AppColors.text,
-                  ),
+            decoration: BoxDecoration(
+              color: tint.withValues(alpha: dim ? 0.08 : (active ? 0.34 : 0.18)),
+              borderRadius: BorderRadius.circular(8),
+              border:
+                  Border.all(color: tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)), width: active ? 1.5 : 1),
+            ),
+            // narrow blocks cut their label instead of overflowing
+            child: ClipRect(
+              child: OverflowBox(
+                alignment: Alignment.centerLeft,
+                maxWidth: double.infinity,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (pinned) ...[
+                      Icon(Icons.push_pin, size: 11, color: AppColors.gold),
+                      const SizedBox(width: 3),
+                    ],
+                    if (looted) ...[
+                      Icon(Icons.check_rounded, size: 12, color: AppColors.green),
+                      const SizedBox(width: 3),
+                    ],
+                    if (o.event.kind == MetaKind.hardBoss) ...[
+                      Icon(Icons.local_fire_department_rounded, size: 12, color: AppColors.red),
+                      const SizedBox(width: 2),
+                    ],
+                    Text(
+                      o.event.name,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: dim ? AppColors.hint : AppColors.text,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

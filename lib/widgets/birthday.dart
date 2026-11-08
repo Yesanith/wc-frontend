@@ -27,12 +27,11 @@ class BirthdayLine extends ConsumerWidget {
     final today = left.inHours < 24;
     final soon = left.inDays < 7;
     final color = today || soon ? AppColors.amber : AppColors.muted;
+    // one year and one day are said as one, not as "1 years"
+    final days = left.inDays == 1 ? s.t('n_days_one') : s.t('n_days', {'n': left.inDays});
     final text = today
-        ? s.t('birthday_today', {'n': age})
-        : s.t('birthday_in', {
-            't': left.inDays > 0 ? s.t('n_days', {'n': left.inDays}) : countdown(left),
-            'n': age
-          });
+        ? s.t(age == 1 ? 'birthday_today_one' : 'birthday_today', {'n': age})
+        : s.t(age == 1 ? 'birthday_in_one' : 'birthday_in', {'t': left.inDays > 0 ? days : countdown(left), 'n': age});
     final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [

@@ -213,8 +213,7 @@ final newsProvider = FutureProvider<List<NewsItem>>((ref) async {
           if (r is Map) NewsItem.fromJson(Map<String, dynamic>.from(r))
       ];
     }
-    // guildwars2.com sends no CORS headers, so a browser cannot read its feed
-    if (kIsWeb) return const <NewsItem>[];
+    // nothing kept and nothing read: the page says so and offers to try again, on the web too, instead of an empty page
     rethrow;
   }
 });

@@ -21,7 +21,7 @@ void main() {
 
     test('has the groups the menu of the app has', () {
       expect(siteNavGroups.map((g) => g.$1),
-          ['nav_group_account', 'nav_group_economy', 'nav_group_world', 'nav_group_reference']);
+          ['nav_group_account', 'nav_group_community', 'nav_group_economy', 'nav_group_world', 'nav_group_reference']);
     });
   });
 
@@ -29,7 +29,7 @@ void main() {
     test(
         'is a site from a width that has room for the whole bar, with the search as a button where the box does not fit',
         () {
-      expect(siteMinWidth, 1280);
+      expect(siteMinWidth, 1360, reason: "the bar has five groups; below this the menu of the app is used");
       expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
       expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
     });
@@ -71,9 +71,9 @@ void main() {
 
   group('the heading and the title of a page', () {
     test('a page in a group says the group, and one that stands alone none', () {
-      expect(siteGroupIndex(AppSection.trading), 1);
+      expect(siteGroupIndex(AppSection.trading), 2);
       expect(siteNavGroups[siteGroupIndex(AppSection.trading)!].$1, 'nav_group_economy');
-      expect(siteGroupIndex(AppSection.wiki), 3);
+      expect(siteGroupIndex(AppSection.wiki), 4);
       expect(siteGroupIndex(AppSection.home), isNull);
       expect(siteGroupIndex(AppSection.daily), isNull);
       expect(siteGroupIndex(AppSection.settings), isNull);
@@ -143,7 +143,7 @@ void main() {
             onSelect: onSelect,
             labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
             icons: {for (final sec in AppSection.values) sec: Icons.circle},
-            groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+            groupLabels: const ['Account', 'Community', 'Economy', 'World', 'Reference'],
             account: 'Leo.1234',
             busy: busy,
             progress: 0.5,
@@ -191,7 +191,7 @@ void main() {
               onSelect: (_) {},
               labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
               icons: {for (final sec in AppSection.values) sec: Icons.circle},
-              groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+              groupLabels: const ['Account', 'Community', 'Economy', 'World', 'Reference'],
               account: layout.account ? 'Leo.1234' : null,
               search: SizedBox(width: layout.searchWidth ?? 48, child: const Text('SEARCH')),
             ),
@@ -218,7 +218,7 @@ void main() {
                 onSelect: (_) {},
                 labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
                 icons: {for (final sec in AppSection.values) sec: Icons.circle},
-                groupLabels: const ['Account', 'Economy', 'World', 'Reference'],
+                groupLabels: const ['Account', 'Community', 'Economy', 'World', 'Reference'],
                 account: 'Leo.1234',
                 search: search,
               ),

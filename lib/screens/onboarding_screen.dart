@@ -176,190 +176,199 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             child: _Glow(color: AppColors.ember.withValues(alpha: 0.14), size: 300),
           ),
           SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-              children: [
-                Row(
+            // on a wide screen the form keeps to a width it can be read in, in the middle
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 620),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
                   children: [
-                    const DiamondEmblem(size: 34),
-                    const SizedBox(width: 12),
-                    Expanded(child: Text('Wondrous Compass', style: display(19))),
-                    PopupMenuButton<AppLang>(
-                      tooltip: s.t('language'),
-                      initialValue: lang,
-                      onSelected: (l) => ref.read(langProvider.notifier).set(l),
-                      itemBuilder: (_) => [
-                        for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName)),
-                      ],
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.translate, size: 18, color: AppColors.gold),
-                            const SizedBox(width: 6),
-                            Text(lang.nativeName, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                    Row(
+                      children: [
+                        const DiamondEmblem(size: 34),
+                        const SizedBox(width: 12),
+                        Expanded(child: Text('Wondrous Compass', style: display(19))),
+                        PopupMenuButton<AppLang>(
+                          tooltip: s.t('language'),
+                          initialValue: lang,
+                          onSelected: (l) => ref.read(langProvider.notifier).set(l),
+                          itemBuilder: (_) => [
+                            for (final l in AppLang.values) PopupMenuItem(value: l, child: Text(l.nativeName)),
                           ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.translate, size: 18, color: AppColors.gold),
+                                const SizedBox(width: 6),
+                                Text(lang.nativeName,
+                                    style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.gold)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
+                    Text(s.t(widget.linking ? 'link_title' : 'welcome_title'),
+                        style: display(34).copyWith(height: 1.15)),
+                    const SizedBox(height: 12),
+                    Text(s.t(widget.linking ? 'link_body' : 'welcome_body'),
+                        style: TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
+                    const SizedBox(height: 24),
+                    // two ways in: Discord, whose account the app links a game account to, or an API key alone
+                    if (!widget.linking && communityReady && !Navigator.of(context).canPop()) ...[
+                      SizedBox(
+                        height: 54,
+                        child: FilledButton.icon(
+                          onPressed: _busy ? null : _signIn,
+                          style: FilledButton.styleFrom(
+                            backgroundColor: discordBlurple,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+                          ),
+                          icon: const Icon(Icons.login, size: 20),
+                          label: Text(s.t('community_sign_in_discord'),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(s.t('signin_discord_note'),
+                          style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                      const SizedBox(height: 18),
+                      Row(
+                        children: [
+                          Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(s.t('signin_or_key'),
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                          ),
+                          Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
+                    ],
+                    _Step(1, s.t('step_create')),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40, top: 6, bottom: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: () => openUrl(context, 'https://account.arena.net/applications',
+                              failMessage: s.t('open_failed')),
+                          icon: const Icon(Icons.open_in_new, size: 18),
+                          label: Text(s.t('open_arena_net')),
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 28),
-                Text(s.t(widget.linking ? 'link_title' : 'welcome_title'), style: display(34).copyWith(height: 1.15)),
-                const SizedBox(height: 12),
-                Text(s.t(widget.linking ? 'link_body' : 'welcome_body'),
-                    style: TextStyle(fontSize: 15, height: 1.5, color: AppColors.muted)),
-                const SizedBox(height: 24),
-                // two ways in: Discord, whose account the app links a game account to, or an API key alone
-                if (!widget.linking && communityReady && !Navigator.of(context).canPop()) ...[
-                  SizedBox(
-                    height: 54,
-                    child: FilledButton.icon(
-                      onPressed: _busy ? null : _signIn,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: discordBlurple,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+                    _Step(2, s.t('step_paste')),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _ctrl,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      minLines: 1,
+                      maxLines: 2,
+                      style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
+                      onChanged: (_) => setState(() {
+                        _account = null;
+                        _perms = null;
+                        _error = null;
+                      }),
+                      onSubmitted: (_) => _connect(),
+                      decoration: fieldDecoration(
+                        'XXXXXXXX-XXXX-XXXX-XXXX-…',
+                        suffixIcon: IconButton(
+                          tooltip: s.t('paste'),
+                          icon: const Icon(Icons.content_paste_rounded),
+                          onPressed: _paste,
+                        ),
                       ),
-                      icon: const Icon(Icons.login, size: 20),
-                      label: Text(s.t('community_sign_in_discord'),
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(s.t('signin_discord_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
-                  const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(s.t('signin_or_key'),
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted)),
-                      ),
-                      Expanded(child: Divider(color: AppColors.hint.withValues(alpha: 0.4))),
+                    const SizedBox(height: 12),
+                    if (perms != null) ...[
+                      _TokenCard(account: _account ?? '', perms: perms, required: _required, optional: _optional),
+                      const SizedBox(height: 12),
                     ],
-                  ),
-                  const SizedBox(height: 18),
-                ],
-                _Step(1, s.t('step_create')),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 6, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton.icon(
-                      onPressed: () =>
-                          openUrl(context, 'https://account.arena.net/applications', failMessage: s.t('open_failed')),
-                      icon: const Icon(Icons.open_in_new, size: 18),
-                      label: Text(s.t('open_arena_net')),
+                    if (error != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(error,
+                            style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
+                      ),
+                    // signed in with Discord: whether the key is kept in the account too, to come along to another device
+                    if (signedIn) ...[
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: ref.watch(keepKeysProvider),
+                        onChanged: _busy ? null : (on) => ref.read(keepKeysProvider.notifier).set(on ?? false),
+                        title: Text(s.t('keep_key_title'),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                        subtitle: Text(s.t('keep_key_note'),
+                            style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      height: 54,
+                      child: FilledButton(
+                        onPressed: _busy ? null : (_ready ? _save : _connect),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.gold,
+                          foregroundColor: AppColors.onGold,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
+                        ),
+                        child: _busy
+                            ? SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.onGold),
+                              )
+                            : Text(_ready ? s.t('continue') : s.t('connect'),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                      ),
                     ),
-                  ),
-                ),
-                _Step(2, s.t('step_paste')),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _ctrl,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  minLines: 1,
-                  maxLines: 2,
-                  style: const TextStyle(fontFamily: 'monospace', fontSize: 13),
-                  onChanged: (_) => setState(() {
-                    _account = null;
-                    _perms = null;
-                    _error = null;
-                  }),
-                  onSubmitted: (_) => _connect(),
-                  decoration: fieldDecoration(
-                    'XXXXXXXX-XXXX-XXXX-XXXX-…',
-                    suffixIcon: IconButton(
-                      tooltip: s.t('paste'),
-                      icon: const Icon(Icons.content_paste_rounded),
-                      onPressed: _paste,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                if (perms != null) ...[
-                  _TokenCard(account: _account ?? '', perms: perms, required: _required, optional: _optional),
-                  const SizedBox(height: 12),
-                ],
-                if (error != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child:
-                        Text(error, style: TextStyle(color: AppColors.red, fontSize: 13, fontWeight: FontWeight.w600)),
-                  ),
-                // signed in with Discord: whether the key is kept in the account too, to come along to another device
-                if (signedIn) ...[
-                  CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    value: ref.watch(keepKeysProvider),
-                    onChanged: _busy ? null : (on) => ref.read(keepKeysProvider.notifier).set(on ?? false),
-                    title:
-                        Text(s.t('keep_key_title'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                    subtitle:
-                        Text(s.t('keep_key_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-                const SizedBox(height: 4),
-                SizedBox(
-                  height: 54,
-                  child: FilledButton(
-                    onPressed: _busy ? null : (_ready ? _save : _connect),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.gold,
-                      foregroundColor: AppColors.onGold,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.card)),
-                    ),
-                    child: _busy
-                        ? SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.onGold),
-                          )
-                        : Text(_ready ? s.t('continue') : s.t('connect'),
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-                  ),
-                ),
-                // the first screen only: opened from settings there is a key or a way back
-                // signed in with Discord and not wanting to link: the way out is signing out
-                if (widget.linking) ...[
-                  const SizedBox(height: 6),
-                  Center(
-                    child: TextButton(
-                      onPressed: _busy ? null : () => signOut(),
-                      child: Text(s.t('community_sign_out'), style: const TextStyle(fontWeight: FontWeight.w700)),
-                    ),
-                  ),
-                ] else if (!Navigator.of(context).canPop()) ...[
-                  const SizedBox(height: 6),
-                  Center(
-                    child: TextButton(
-                      onPressed: _busy ? null : () => ref.read(guestModeProvider.notifier).set(true),
-                      child: Text(s.t('guest_continue'), style: const TextStyle(fontWeight: FontWeight.w700)),
-                    ),
-                  ),
-                  Text(
-                    s.t('guest_note'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
-                  ),
-                ],
-                const SizedBox(height: 14),
-                Row(
-                  children: [
-                    Icon(Icons.shield_outlined, size: 16, color: AppColors.hint),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    // the first screen only: opened from settings there is a key or a way back
+                    // signed in with Discord and not wanting to link: the way out is signing out
+                    if (widget.linking) ...[
+                      const SizedBox(height: 6),
+                      Center(
+                        child: TextButton(
+                          onPressed: _busy ? null : () => signOut(),
+                          child: Text(s.t('community_sign_out'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                    ] else if (!Navigator.of(context).canPop()) ...[
+                      const SizedBox(height: 6),
+                      Center(
+                        child: TextButton(
+                          onPressed: _busy ? null : () => ref.read(guestModeProvider.notifier).set(true),
+                          child: Text(s.t('guest_continue'), style: const TextStyle(fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                      Text(
+                        s.t('guest_note'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted),
+                      ),
+                    ],
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Icon(Icons.shield_outlined, size: 16, color: AppColors.hint),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(s.t('privacy_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
