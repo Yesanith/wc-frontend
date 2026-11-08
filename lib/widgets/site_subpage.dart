@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-
 /// the width a page opened from a section keeps to on the site, in the middle
 const sitePageWidth = 1200.0;
 
