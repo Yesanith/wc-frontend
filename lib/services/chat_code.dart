@@ -101,8 +101,7 @@ String? buildChatCode(Json build, Json? profession, Map<int, Json> specDetails) 
   } else if (professionName == 'Revenant') {
     // the two legends on land, then the two under water, which the api keeps apart
     List<int> codes(String key) => [
-          for (final l in (build[key] as List?) ?? const [])
-            int.tryParse('$l'.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+          for (final l in (build[key] as List?) ?? const []) int.tryParse('$l'.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
         ];
     final legends = codes('legends');
     final aquatic = codes('aquatic_legends');
