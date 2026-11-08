@@ -72,6 +72,7 @@ const zhStrings = <String, String>{
   'keep_keys_setting_note': '你的密钥会加密保存在 Wondrous Compass 账号中，在其他设备上使用 Discord 登录时也能使用。关闭后会从我们的服务器删除，但仍保留在此设备上。',
   'keep_keys_kept': '已保存在你的账号中：{names}',
   'keep_keys_off': '目前无法保存密钥',
+  'delete_last_admin': '你是后端的最后一位管理员。删除账号前请先添加另一位管理员。',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',
   'guest': '访客',

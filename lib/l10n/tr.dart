@@ -90,6 +90,7 @@ const trStrings = <String, String>{
       'Anahtarların Wondrous Compass hesabında şifreli olarak saklanır; böylece başka bir cihazda Discord ile giriş yaptığında seninle gelir. Kapatırsan sunucularımızdan silinir, bu cihazda kalır.',
   'keep_keys_kept': 'Hesabında saklananlar: {names}',
   'keep_keys_off': 'anahtar saklama şu anda kullanılamıyor',
+  'delete_last_admin': 'Backend\'in son yöneticisisin. Hesabını silmeden önce başka bir yönetici ekle.',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
       'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',

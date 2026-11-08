@@ -113,8 +113,9 @@ class _KeepKeysSwitchState extends ConsumerState<_KeepKeysSwitch> {
         for (final k in widget.keys) {
           final failed = await keepKeyInAccount(k.key);
           if (failed != null) {
-            if (mounted)
+            if (mounted) {
               showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+            }
             break;
           }
         }

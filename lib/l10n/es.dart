@@ -92,6 +92,7 @@ const esStrings = <String, String>{
       'Tus claves se guardan cifradas en tu cuenta de Wondrous Compass, para que te acompañen al iniciar sesión con Discord en otro dispositivo. Desactivarlo las borra de nuestros servidores; se quedan en este dispositivo.',
   'keep_keys_kept': 'Guardadas en tu cuenta: {names}',
   'keep_keys_off': 'guardar claves no está disponible ahora',
+  'delete_last_admin': 'Eres el último administrador del backend. Añade otro administrador antes de borrar tu cuenta.',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
       'Jefes del mundo, mapa, recetas, precios del Puesto Comercial, wiki y noticias funcionan sin ella. Tus personajes y progreso necesitan una clave.',

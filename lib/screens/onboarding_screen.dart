@@ -138,8 +138,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final failed = await keepKeyInAccount(key);
       if (!mounted) return;
       setState(() => _busy = false);
-      if (failed != null)
+      if (failed != null) {
         showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+      }
       ref.invalidate(keptAccountsProvider);
     }
     await ref.read(keysProvider.notifier).add(key, _account ?? '');

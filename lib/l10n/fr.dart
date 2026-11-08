@@ -93,6 +93,7 @@ const frStrings = <String, String>{
       'Tes clés sont gardées chiffrées dans ton compte Wondrous Compass, pour te suivre quand tu te connectes avec Discord sur un autre appareil. Désactiver cette option les supprime de nos serveurs ; elles restent sur cet appareil.',
   'keep_keys_kept': 'Gardées dans ton compte : {names}',
   'keep_keys_off': 'garder les clés n\'est pas disponible pour le moment',
+  'delete_last_admin': 'Tu es le dernier administrateur du backend. Ajoute un autre administrateur avant de supprimer ton compte.',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
       'Boss mondiaux, carte, recettes, prix du comptoir, wiki et actualités fonctionnent sans. Tes personnages et ta progression nécessitent une clé.',

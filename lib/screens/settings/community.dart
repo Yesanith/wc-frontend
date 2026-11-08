@@ -17,6 +17,9 @@ class _CommunityPanelState extends ConsumerState<_CommunityPanel> {
     setState(() => _busy = true);
     try {
       await action();
+    } on PostgrestException catch (e) {
+      // the last administrator of the backend keeps their account, or nobody could open the dashboard
+      if (mounted) showToast(context, s.t(e.hint == 'last_admin' ? 'delete_last_admin' : 'community_failed'));
     } catch (_) {
       if (mounted) showToast(context, s.t('community_failed'));
     } finally {
