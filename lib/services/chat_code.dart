@@ -99,14 +99,17 @@ String? buildChatCode(Json build, Json? profession, Map<int, Json> specDetails) 
     bytes[30] = _at(aquatic, 0) ?? 0;
     bytes[31] = _at(aquatic, 1) ?? 0;
   } else if (professionName == 'Revenant') {
-    final legends = [
-      for (final l in (build['legends'] as List?) ?? const [])
-        int.tryParse('$l'.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
-    ];
+    // the two legends on land, then the two under water, which the api keeps apart
+    List<int> codes(String key) => [
+          for (final l in (build[key] as List?) ?? const [])
+            int.tryParse('$l'.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+        ];
+    final legends = codes('legends');
+    final aquatic = codes('aquatic_legends');
     bytes[28] = _at(legends, 0) ?? 0;
     bytes[29] = _at(legends, 1) ?? 0;
-    bytes[30] = _at(legends, 2) ?? 0;
-    bytes[31] = _at(legends, 3) ?? 0;
+    bytes[30] = _at(aquatic, 0) ?? 0;
+    bytes[31] = _at(aquatic, 1) ?? 0;
   }
 
   return '[&${base64Encode(bytes)}]';

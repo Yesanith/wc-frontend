@@ -97,12 +97,11 @@ void main() {
     test('stores revenant legend numbers in the profession block', () {
       final build = guardianBuild()
         ..['profession'] = 'Revenant'
-        ..['legends'] = ['Legend2', 'Legend5'];
+        ..['legends'] = ['Legend2', 'Legend5']
+        ..['aquatic_legends'] = ['Legend1', 'Legend3'];
       final code = buildChatCode(build, professionWith(_palette), const {});
       final bytes = decode(code!);
-      expect(bytes[28], 2);
-      expect(bytes[29], 5);
-      expect(bytes[30], 0);
+      expect(bytes.sublist(28, 32), [2, 5, 1, 3]);
     });
 
     test('stores ranger pets in the profession block', () {
