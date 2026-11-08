@@ -242,29 +242,65 @@ class _OrderBook extends ConsumerWidget {
 
 /// set or clear the price alert of one item, prices typed in gold
 Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemId, String name) async {
-  final s = ref.read(stringsProvider);
   final current = ref.read(priceAlertsProvider)[itemId];
-  final sell = TextEditingController(text: current?.sellBelow == null ? '' : copperToGold(current!.sellBelow!));
-  final buy = TextEditingController(text: current?.buyAbove == null ? '' : copperToGold(current!.buyAbove!));
+  // the dialog owns its fields' controllers: disposing them here, as soon as it returned, broke the fields while it
+  // animated out
   final result = await showDialog<PriceAlert?>(
     context: context,
-    builder: (ctx) => AlertDialog(
+    builder: (_) => _PriceAlertDialog(name: name, current: current, s: ref.read(stringsProvider)),
+  );
+  // null means cancelled, an empty alert means remove
+  if (result != null) {
+    await ref.read(priceAlertsProvider.notifier).set(itemId, result);
+    // and the server, so that it comes as a notification when the app is shut
+    unawaited(ref.read(priceAlertMirrorProvider).mirror(itemId, name, result));
+  }
+}
+
+class _PriceAlertDialog extends StatefulWidget {
+  const _PriceAlertDialog({required this.name, required this.current, required this.s});
+
+  final String name;
+  final PriceAlert? current;
+  final S s;
+
+  @override
+  State<_PriceAlertDialog> createState() => _PriceAlertDialogState();
+}
+
+class _PriceAlertDialogState extends State<_PriceAlertDialog> {
+  late final _sell =
+      TextEditingController(text: widget.current?.sellBelow == null ? '' : copperToGold(widget.current!.sellBelow!));
+  late final _buy =
+      TextEditingController(text: widget.current?.buyAbove == null ? '' : copperToGold(widget.current!.buyAbove!));
+
+  @override
+  void dispose() {
+    _sell.dispose();
+    _buy.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = widget.s;
+    return AlertDialog(
       backgroundColor: AppColors.surface,
       title: Text(s.t('price_alert')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name, style: const TextStyle(fontWeight: FontWeight.w700)),
+          Text(widget.name, style: const TextStyle(fontWeight: FontWeight.w700)),
           const SizedBox(height: 12),
           TextField(
-            controller: sell,
+            controller: _sell,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: fieldDecoration(s.t('alert_sell_below')),
           ),
           const SizedBox(height: 10),
           TextField(
-            controller: buy,
+            controller: _buy,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: fieldDecoration(s.t('alert_buy_above')),
           ),
@@ -275,24 +311,16 @@ Future<void> showPriceAlertDialog(BuildContext context, WidgetRef ref, int itemI
         ],
       ),
       actions: [
-        if (current != null)
-          TextButton(onPressed: () => Navigator.of(ctx).pop(const PriceAlert()), child: Text(s.t('remove'))),
-        TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(s.t('cancel'))),
+        if (widget.current != null)
+          TextButton(onPressed: () => Navigator.of(context).pop(const PriceAlert()), child: Text(s.t('remove'))),
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(s.t('cancel'))),
         FilledButton(
-          onPressed: () => Navigator.of(ctx).pop(
-            PriceAlert(sellBelow: goldToCopper(sell.text), buyAbove: goldToCopper(buy.text)),
+          onPressed: () => Navigator.of(context).pop(
+            PriceAlert(sellBelow: goldToCopper(_sell.text), buyAbove: goldToCopper(_buy.text)),
           ),
           child: Text(s.t('save_alert')),
         ),
       ],
-    ),
-  );
-  sell.dispose();
-  buy.dispose();
-  // null means cancelled, an empty alert means remove
-  if (result != null) {
-    await ref.read(priceAlertsProvider.notifier).set(itemId, result);
-    // and the server, so that it comes as a notification when the app is shut
-    unawaited(ref.read(priceAlertMirrorProvider).mirror(itemId, name, result));
+    );
   }
 }
