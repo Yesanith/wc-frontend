@@ -503,7 +503,7 @@ const deStrings = <String, String>{
   'tier_n': 'Stufe {n}',
   'wvw': 'WvW',
   'stats': 'Statistik',
-  'last_90_days': 'Die api hält die letzten 90 Tage vor.',
+  'last_90_days': 'Die API hält die letzten 90 Tage vor.',
   'sold_for': 'Verkauft, nach Gebühren',
   'spent_on_buys': 'Für Käufe ausgegeben',
   'net': 'Netto',

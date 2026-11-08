@@ -498,7 +498,7 @@ const frStrings = <String, String>{
   'tier_n': 'Palier {n}',
   'wvw': 'McM',
   'stats': 'Stats',
-  'last_90_days': 'L\'api conserve les 90 derniers jours.',
+  'last_90_days': 'L\'API conserve les 90 derniers jours.',
   'sold_for': 'Vendu, après taxes',
   'spent_on_buys': 'Dépensé en achats',
   'net': 'Net',

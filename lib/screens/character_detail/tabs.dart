@@ -225,7 +225,9 @@ class _InventoryTab extends ConsumerWidget {
         child: Text(s.t('no_inventory'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
       );
     }
-    final used = slots.where((s) => s != null).length;
+    // the items only: how many slots are free is said above them, a grid of empty boxes says it less well
+    final filled = [for (final slot in slots) if (slot != null) slot];
+    final used = filled.length;
     final items = ref.watch(characterItemsProvider(name));
 
     return AsyncView<Map<int, Json>>(
@@ -255,8 +257,7 @@ class _InventoryTab extends ConsumerWidget {
                   const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
               delegate: SliverChildBuilderDelegate(
                 (context, i) {
-                  final slot = slots[i];
-                  if (slot == null) return const ItemIcon(empty: true);
+                  final slot = filled[i];
                   final item = map[asInt(slot['id'])];
                   final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': slot['id']});
                   return GestureDetector(
@@ -276,7 +277,7 @@ class _InventoryTab extends ConsumerWidget {
                     ),
                   );
                 },
-                childCount: slots.length,
+                childCount: filled.length,
               ),
             ),
           ),

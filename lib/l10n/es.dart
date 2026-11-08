@@ -496,7 +496,7 @@ const esStrings = <String, String>{
   'tier_n': 'Nivel {n}',
   'wvw': 'MvM',
   'stats': 'Estadísticas',
-  'last_90_days': 'La api guarda los últimos 90 días de transacciones.',
+  'last_90_days': 'La API guarda los últimos 90 días de transacciones.',
   'sold_for': 'Vendido, ya sin comisiones',
   'spent_on_buys': 'Gastado en compras',
   'net': 'Neto',

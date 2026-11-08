@@ -293,7 +293,8 @@ class _BrowseRow extends ConsumerWidget {
     final details = item?['details'] is Map ? item!['details'] as Map : const {};
     final level = asInt(item?['level']);
     final sub = [
-      if (details['type'] != null)
+      // "Default" is what the api calls an item that has no subtype: the item's type says more
+      if (details['type'] != null && details['type'] != 'Default')
         spacedType('${details['type']}')
       else if (item?['type'] != null)
         _typeLabel(s, '${item?['type']}'),

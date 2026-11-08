@@ -494,7 +494,7 @@ const enStrings = <String, String>{
   'tier_n': 'Tier {n}',
   'wvw': 'WvW',
   'stats': 'Stats',
-  'last_90_days': 'The api keeps the last 90 days of transactions.',
+  'last_90_days': 'The API keeps the last 90 days of transactions.',
   'sold_for': 'Sold for, after fees',
   'spent_on_buys': 'Spent on buys',
   'net': 'Net',

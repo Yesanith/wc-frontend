@@ -18,7 +18,8 @@ class TradingItemScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('trading_post')),
+        // the item's name, in the bar of the page, which on the site is its heading
+        title: Text(name),
         actions: [
           IconButton(
             tooltip: s.t('price_alert'),
@@ -49,7 +50,7 @@ class TradingItemScreen extends ConsumerWidget {
                       Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
                       const SizedBox(height: 2),
                       Text(
-                        [if (rarity != null) rarity, if (item?['type'] != null) '${item?['type']}'].join(' · '),
+                        [if (rarity != null) rarity, if (item?['type'] != null) _typeLabel(s, '${item?['type']}')].join(' · '),
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
                       ),
                     ],
