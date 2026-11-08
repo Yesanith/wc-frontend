@@ -80,13 +80,16 @@ const esStrings = <String, String>{
   'link_title': 'Vincula tu\ncuenta del juego.',
   'link_body':
       'Tu cuenta de Discord aún no está vinculada a una cuenta de Guild Wars 2. Introduce una clave API: su cuenta se vincula a tu cuenta de Discord, para los eventos del gremio, la lista del gremio y los eventos públicos.',
-  'signin_discord_note': 'Eventos del gremio, la lista de tu gremio y eventos públicos, con la cuenta que vinculaste. En un dispositivo nuevo te acompañan tus cuentas vinculadas y las claves que guardas en tu cuenta.',
+  'signin_discord_note':
+      'Eventos del gremio, la lista de tu gremio y eventos públicos, con la cuenta que vinculaste. En un dispositivo nuevo te acompañan tus cuentas vinculadas y las claves que guardas en tu cuenta.',
   'signin_or_key': 'o solo con una clave API',
   'keep_key_title': 'Guardar esta clave en mi cuenta',
-  'keep_key_note': 'Inicia sesión con Discord en otro dispositivo y vendrá contigo. Se guarda cifrada y puedes borrarla en Ajustes cuando quieras.',
+  'keep_key_note':
+      'Inicia sesión con Discord en otro dispositivo y vendrá contigo. Se guarda cifrada y puedes borrarla en Ajustes cuando quieras.',
   'keep_key_failed': 'La clave se guardó en este dispositivo, pero no se pudo guardar en tu cuenta: {e}',
   'keep_keys_setting': 'Guardar mis claves API en mi cuenta',
-  'keep_keys_setting_note': 'Tus claves se guardan cifradas en tu cuenta de Wondrous Compass, para que te acompañen al iniciar sesión con Discord en otro dispositivo. Desactivarlo las borra de nuestros servidores; se quedan en este dispositivo.',
+  'keep_keys_setting_note':
+      'Tus claves se guardan cifradas en tu cuenta de Wondrous Compass, para que te acompañen al iniciar sesión con Discord en otro dispositivo. Desactivarlo las borra de nuestros servidores; se quedan en este dispositivo.',
   'keep_keys_kept': 'Guardadas en tu cuenta: {names}',
   'keep_keys_off': 'guardar claves no está disponible ahora',
   'guest_continue': 'Continuar sin clave API',
@@ -210,7 +213,8 @@ const esStrings = <String, String>{
   'gw2_link_intro': 'Vincula la cuenta de GW2 de tu clave API activa para unirte aquí a tus gremios.',
   'gw2_link': 'Vincular cuenta de GW2',
   'gw2_refresh': 'Actualizar gremios',
-  'gw2_link_note': 'Al vincular solo se envía un token de diez minutos que puede leer el nombre de tu cuenta y tus gremios. Tu clave API solo se envía si eliges guardarla en tu cuenta.',
+  'gw2_link_note':
+      'Al vincular solo se envía un token de diez minutos que puede leer el nombre de tu cuenta y tus gremios. Tu clave API solo se envía si eliges guardarla en tu cuenta.',
   'gw2_linked': '{name} está vinculada',
   'gw2_link_taken': 'Esta cuenta de GW2 ya está vinculada a otra cuenta de Wondrous Compass.',
   'gw2_link_key': 'No se pudo usar la clave API. Necesita el permiso account.',
@@ -589,7 +593,8 @@ const esStrings = <String, String>{
   'push_browser_blocked':
       'Este navegador rechazó la suscripción a notificaciones. En Brave: Configuración → Privacidad y seguridad → activa "Usar servicios de Google para mensajes push" y recarga la página.',
   'trade_watch_title': 'Ventas y compras',
-  'trade_watch_ask': '¿Quieres una notificación cuando se venda uno de tus anuncios del bazar o se complete una orden de compra?\n\nPara ello, la app da a nuestro servidor una clave limitada que solo puede ver el nombre de tu cuenta y tu historial de compras y ventas, durante 30 días. Tu clave API no se usa para esto: la clave limitada no puede ver tu inventario, tu cartera ni tus personajes.\n\nPuedes desactivarlo cuando quieras en Ajustes.',
+  'trade_watch_ask':
+      '¿Quieres una notificación cuando se venda uno de tus anuncios del bazar o se complete una orden de compra?\n\nPara ello, la app da a nuestro servidor una clave limitada que solo puede ver el nombre de tu cuenta y tu historial de compras y ventas, durante 30 días. Tu clave API no se usa para esto: la clave limitada no puede ver tu inventario, tu cartera ni tus personajes.\n\nPuedes desactivarlo cuando quieras en Ajustes.',
   'trade_watch_yes': 'Sí, avísame',
   'trade_watch_no': 'Ahora no',
   'trade_watch_note':
@@ -849,7 +854,8 @@ const esStrings = <String, String>{
   'data_lang_fallback': 'Inglés (no disponible en turco)',
   'wiki_source': 'Fuente de la wiki',
   'remove_key': 'Quitar la clave',
-  'remove_key_body': 'La clave API se borrará de este dispositivo, y de tu cuenta si está guardada allí. Sin ninguna clave vuelves a la pantalla de inicio.',
+  'remove_key_body':
+      'La clave API se borrará de este dispositivo, y de tu cuenta si está guardada allí. Sin ninguna clave vuelves a la pantalla de inicio.',
   'disclaimer':
       'Wondrous Compass es una app no oficial hecha por fans. Guild Wars 2, ArenaNet y NCSOFT son marcas de sus respectivos propietarios. Los datos vienen de la api oficial de GW2 y de la Guild Wars 2 Wiki.',
   'slot_Helm': 'Casco',

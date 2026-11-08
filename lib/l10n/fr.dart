@@ -81,13 +81,16 @@ const frStrings = <String, String>{
   'link_title': 'Lie ton\ncompte de jeu.',
   'link_body':
       'Ton compte Discord n\'est encore lié à aucun compte Guild Wars 2. Saisis une clé API : son compte est lié à ton compte Discord, pour les événements de guilde, la liste de la guilde et les événements publics.',
-  'signin_discord_note': 'Événements de guilde, liste de ta guilde et événements publics, avec le compte que tu as lié. Sur un nouvel appareil, tes comptes liés et les clés gardées dans ton compte te suivent.',
+  'signin_discord_note':
+      'Événements de guilde, liste de ta guilde et événements publics, avec le compte que tu as lié. Sur un nouvel appareil, tes comptes liés et les clés gardées dans ton compte te suivent.',
   'signin_or_key': 'ou seulement avec une clé API',
   'keep_key_title': 'Garder cette clé dans mon compte',
-  'keep_key_note': 'Connecte-toi avec Discord sur un autre appareil et elle te suit. Elle est gardée chiffrée, et tu peux la supprimer à tout moment dans les Réglages.',
+  'keep_key_note':
+      'Connecte-toi avec Discord sur un autre appareil et elle te suit. Elle est gardée chiffrée, et tu peux la supprimer à tout moment dans les Réglages.',
   'keep_key_failed': 'La clé est enregistrée sur cet appareil, mais n\'a pas pu être gardée dans ton compte : {e}',
   'keep_keys_setting': 'Garder mes clés API dans mon compte',
-  'keep_keys_setting_note': 'Tes clés sont gardées chiffrées dans ton compte Wondrous Compass, pour te suivre quand tu te connectes avec Discord sur un autre appareil. Désactiver cette option les supprime de nos serveurs ; elles restent sur cet appareil.',
+  'keep_keys_setting_note':
+      'Tes clés sont gardées chiffrées dans ton compte Wondrous Compass, pour te suivre quand tu te connectes avec Discord sur un autre appareil. Désactiver cette option les supprime de nos serveurs ; elles restent sur cet appareil.',
   'keep_keys_kept': 'Gardées dans ton compte : {names}',
   'keep_keys_off': 'garder les clés n\'est pas disponible pour le moment',
   'guest_continue': 'Continuer sans clé API',
@@ -212,7 +215,8 @@ const frStrings = <String, String>{
   'gw2_link_intro': 'Relie le compte GW2 de ta clé API active pour rejoindre tes guildes ici.',
   'gw2_link': 'Relier le compte GW2',
   'gw2_refresh': 'Actualiser les guildes',
-  'gw2_link_note': 'La liaison n\'envoie qu\'un jeton de dix minutes qui peut lire le nom de ton compte et tes guildes. Ta clé API n\'est envoyée que si tu choisis de la garder dans ton compte.',
+  'gw2_link_note':
+      'La liaison n\'envoie qu\'un jeton de dix minutes qui peut lire le nom de ton compte et tes guildes. Ta clé API n\'est envoyée que si tu choisis de la garder dans ton compte.',
   'gw2_linked': '{name} est relié',
   'gw2_link_taken': 'Ce compte GW2 est déjà relié à un autre compte Wondrous Compass.',
   'gw2_link_key': 'La clé API n\'a pas pu être utilisée. Elle a besoin de l\'autorisation account.',
@@ -591,7 +595,8 @@ const frStrings = <String, String>{
   'push_browser_blocked':
       'Ce navigateur a refusé l\'abonnement aux notifications. Dans Brave : Paramètres → Confidentialité et sécurité → active « Utiliser les services Google pour les messages push », puis recharge la page.',
   'trade_watch_title': 'Ventes et achats',
-  'trade_watch_ask': 'Recevoir une notification quand une de tes annonces au comptoir se vend ou qu\'un ordre d\'achat est rempli ?\n\nPour cela, l\'app donne à notre serveur une clé limitée qui ne peut voir que le nom de ton compte et ton historique d\'achats et de ventes, pendant 30 jours. Ta clé API n\'est pas utilisée pour cela : la clé limitée ne peut voir ni ton inventaire, ni ton porte-monnaie, ni tes personnages.\n\nTu peux le désactiver à tout moment dans les Réglages.',
+  'trade_watch_ask':
+      'Recevoir une notification quand une de tes annonces au comptoir se vend ou qu\'un ordre d\'achat est rempli ?\n\nPour cela, l\'app donne à notre serveur une clé limitée qui ne peut voir que le nom de ton compte et ton historique d\'achats et de ventes, pendant 30 jours. Ta clé API n\'est pas utilisée pour cela : la clé limitée ne peut voir ni ton inventaire, ni ton porte-monnaie, ni tes personnages.\n\nTu peux le désactiver à tout moment dans les Réglages.',
   'trade_watch_yes': 'Oui, me prévenir',
   'trade_watch_no': 'Pas maintenant',
   'trade_watch_note':
@@ -853,7 +858,8 @@ const frStrings = <String, String>{
   'data_lang_fallback': 'Anglais',
   'wiki_source': 'Source du wiki',
   'remove_key': 'Retirer la clé',
-  'remove_key_body': 'La clé API sera supprimée de cet appareil, et de ton compte si elle y est gardée. Sans clé, tu reviens à l\'écran d\'accueil.',
+  'remove_key_body':
+      'La clé API sera supprimée de cet appareil, et de ton compte si elle y est gardée. Sans clé, tu reviens à l\'écran d\'accueil.',
   'disclaimer':
       'Wondrous Compass est une application de fan non officielle. Guild Wars 2, ArenaNet et NCSOFT sont des marques de leurs propriétaires respectifs. Les données proviennent de l\'API officielle de GW2 et du wiki Guild Wars 2.',
   'slot_Helm': 'Tête',
@@ -958,7 +964,8 @@ const frStrings = <String, String>{
   'welcome_body':
       'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que vous possédez, au même endroit. Connectez-vous avec une clé API en lecture seule d\'ArenaNet.',
   'step_create': 'Créez une clé sur account.arena.net avec les autorisations que vous voulez partager.',
-  'step_paste': 'Colle-la ici. Elle est stockée chiffrée sur cet appareil, et dans ton compte seulement si tu le choisis.',
+  'step_paste':
+      'Colle-la ici. Elle est stockée chiffrée sur cet appareil, et dans ton compte seulement si tu le choisis.',
   'continue': 'Continuer',
   'privacy_note': 'Les clés sont en lecture seule. Elles ne peuvent rien dépenser, échanger ou modifier.',
   'key_for': 'Connecté en tant que {name}',

@@ -83,13 +83,17 @@ const deStrings = <String, String>{
   'link_title': 'Verbinde dein\nSpielkonto.',
   'link_body':
       'Dein Discord-Konto ist noch mit keinem Guild-Wars-2-Konto verbunden. Gib einen API-Schlüssel ein: Sein Konto wird mit deinem Discord-Konto verbunden, für Gilden-Events, die Mitgliederliste der Gilde und öffentliche Events.',
-  'signin_discord_note': 'Gilden-Events, die Mitgliederliste deiner Gilde und öffentliche Events, mit dem verbundenen Konto. Auf einem neuen Gerät kommen deine verbundenen Konten und die Schlüssel, die du in deinem Konto speicherst, mit.',
+  'signin_discord_note':
+      'Gilden-Events, die Mitgliederliste deiner Gilde und öffentliche Events, mit dem verbundenen Konto. Auf einem neuen Gerät kommen deine verbundenen Konten und die Schlüssel, die du in deinem Konto speicherst, mit.',
   'signin_or_key': 'oder nur mit einem API-Schlüssel',
   'keep_key_title': 'Diesen Schlüssel in meinem Konto speichern',
-  'keep_key_note': 'Melde dich auf einem anderen Gerät mit Discord an, und er ist dabei. Er wird verschlüsselt gespeichert, und du kannst ihn jederzeit in den Einstellungen löschen.',
-  'keep_key_failed': 'Der Schlüssel ist auf diesem Gerät gespeichert, konnte aber nicht in deinem Konto gespeichert werden: {e}',
+  'keep_key_note':
+      'Melde dich auf einem anderen Gerät mit Discord an, und er ist dabei. Er wird verschlüsselt gespeichert, und du kannst ihn jederzeit in den Einstellungen löschen.',
+  'keep_key_failed':
+      'Der Schlüssel ist auf diesem Gerät gespeichert, konnte aber nicht in deinem Konto gespeichert werden: {e}',
   'keep_keys_setting': 'Meine API-Schlüssel in meinem Konto speichern',
-  'keep_keys_setting_note': 'Deine Schlüssel werden verschlüsselt in deinem Wondrous-Compass-Konto gespeichert, damit sie dich begleiten, wenn du dich auf einem anderen Gerät mit Discord anmeldest. Ausschalten löscht sie von unseren Servern; auf diesem Gerät bleiben sie.',
+  'keep_keys_setting_note':
+      'Deine Schlüssel werden verschlüsselt in deinem Wondrous-Compass-Konto gespeichert, damit sie dich begleiten, wenn du dich auf einem anderen Gerät mit Discord anmeldest. Ausschalten löscht sie von unseren Servern; auf diesem Gerät bleiben sie.',
   'keep_keys_kept': 'In deinem Konto gespeichert: {names}',
   'keep_keys_off': 'das Speichern von Schlüsseln ist gerade nicht verfügbar',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
@@ -215,7 +219,8 @@ const deStrings = <String, String>{
   'gw2_link_intro': 'Verknüpfe das GW2-Konto deines aktiven API-Schlüssels, um hier deinen Gilden beizutreten.',
   'gw2_link': 'GW2-Konto verknüpfen',
   'gw2_refresh': 'Gilden aktualisieren',
-  'gw2_link_note': 'Beim Verknüpfen wird nur ein zehn Minuten gültiges Token gesendet, das deinen Kontonamen und deine Gilden lesen kann. Dein API-Schlüssel wird nur gesendet, wenn du ihn in deinem Konto speichern willst.',
+  'gw2_link_note':
+      'Beim Verknüpfen wird nur ein zehn Minuten gültiges Token gesendet, das deinen Kontonamen und deine Gilden lesen kann. Dein API-Schlüssel wird nur gesendet, wenn du ihn in deinem Konto speichern willst.',
   'gw2_linked': '{name} ist verknüpft',
   'gw2_link_taken': 'Dieses GW2-Konto ist bereits mit einem anderen Wondrous-Compass-Konto verknüpft.',
   'gw2_link_key': 'Der API-Schlüssel konnte nicht verwendet werden. Er braucht die Berechtigung account.',
@@ -597,7 +602,8 @@ const deStrings = <String, String>{
   'push_browser_blocked':
       'Dieser Browser hat das Abonnieren von Benachrichtigungen abgelehnt. In Brave: Einstellungen → Datenschutz und Sicherheit → „Google-Dienste für Push-Nachrichten verwenden“ einschalten und die Seite neu laden.',
   'trade_watch_title': 'Verkäufe und Käufe',
-  'trade_watch_ask': 'Möchtest du benachrichtigt werden, wenn eines deiner Angebote im Handelsposten verkauft oder ein Kaufauftrag erfüllt wird?\n\nDafür gibt die App unserem Server für 30 Tage einen eingeschränkten Schlüssel, der nur deinen Kontonamen und deinen Kauf- und Verkaufsverlauf sehen kann. Dein API-Schlüssel wird dafür nicht verwendet: Der eingeschränkte Schlüssel sieht weder dein Inventar noch deine Geldbörse oder deine Charaktere.\n\nDu kannst es jederzeit in den Einstellungen ausschalten.',
+  'trade_watch_ask':
+      'Möchtest du benachrichtigt werden, wenn eines deiner Angebote im Handelsposten verkauft oder ein Kaufauftrag erfüllt wird?\n\nDafür gibt die App unserem Server für 30 Tage einen eingeschränkten Schlüssel, der nur deinen Kontonamen und deinen Kauf- und Verkaufsverlauf sehen kann. Dein API-Schlüssel wird dafür nicht verwendet: Der eingeschränkte Schlüssel sieht weder dein Inventar noch deine Geldbörse oder deine Charaktere.\n\nDu kannst es jederzeit in den Einstellungen ausschalten.',
   'trade_watch_yes': 'Ja, benachrichtigen',
   'trade_watch_no': 'Nicht jetzt',
   'trade_watch_note':
@@ -859,7 +865,8 @@ const deStrings = <String, String>{
   'data_lang_fallback': 'Englisch',
   'wiki_source': 'Wiki-Quelle',
   'remove_key': 'Schlüssel entfernen',
-  'remove_key_body': 'Der API-Schlüssel wird von diesem Gerät gelöscht, und aus deinem Konto, falls er dort gespeichert ist. Ohne Schlüssel kehrst du zum Startbildschirm zurück.',
+  'remove_key_body':
+      'Der API-Schlüssel wird von diesem Gerät gelöscht, und aus deinem Konto, falls er dort gespeichert ist. Ohne Schlüssel kehrst du zum Startbildschirm zurück.',
   'disclaimer':
       'Wondrous Compass ist eine inoffizielle Fan-App. Guild Wars 2, ArenaNet und NCSOFT sind Marken ihrer jeweiligen Eigentümer. Die Daten stammen aus der offiziellen GW2-API und dem Guild Wars 2 Wiki.',
   'slot_Helm': 'Kopf',
@@ -964,7 +971,8 @@ const deStrings = <String, String>{
   'welcome_body':
       'Resets, Metas, das Gewölbe des Zauberers und alles, was du besitzt, an einem Ort. Verbinde dich mit einem schreibgeschützten API-Schlüssel von ArenaNet.',
   'step_create': 'Erstelle auf account.arena.net einen Schlüssel mit den Berechtigungen, die du teilen möchtest.',
-  'step_paste': 'Füge ihn hier ein. Er wird verschlüsselt auf diesem Gerät gespeichert, und in deinem Konto nur, wenn du es willst.',
+  'step_paste':
+      'Füge ihn hier ein. Er wird verschlüsselt auf diesem Gerät gespeichert, und in deinem Konto nur, wenn du es willst.',
   'continue': 'Weiter',
   'privacy_note': 'Schlüssel sind schreibgeschützt. Sie können nichts ausgeben, handeln oder ändern.',
   'key_for': 'Verbunden als {name}',

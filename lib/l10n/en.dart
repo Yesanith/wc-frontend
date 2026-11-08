@@ -80,13 +80,16 @@ const enStrings = <String, String>{
   'link_title': 'Link your\ngame account.',
   'link_body':
       'Your Discord account is not linked to a Guild Wars 2 account yet. Enter an API key: its account is linked to your Discord account, for guild events, the guild\'s roster and public events.',
-  'signin_discord_note': 'Guild events, your guild\'s roster and public events, with the account you linked. On a new device your linked accounts, and the keys you keep in your account, come with you.',
+  'signin_discord_note':
+      'Guild events, your guild\'s roster and public events, with the account you linked. On a new device your linked accounts, and the keys you keep in your account, come with you.',
   'signin_or_key': 'or with an API key only',
   'keep_key_title': 'Keep this key in my account',
-  'keep_key_note': 'Sign in with Discord on another device and it comes with you. It is kept encrypted, and you can delete it in Settings at any time.',
+  'keep_key_note':
+      'Sign in with Discord on another device and it comes with you. It is kept encrypted, and you can delete it in Settings at any time.',
   'keep_key_failed': 'The key is saved on this device, but it could not be kept in your account: {e}',
   'keep_keys_setting': 'Keep my API keys in my account',
-  'keep_keys_setting_note': 'Your keys are kept encrypted in your Wondrous Compass account, so they come with you when you sign in with Discord on another device. Turning this off deletes them from our servers; they stay on this device.',
+  'keep_keys_setting_note':
+      'Your keys are kept encrypted in your Wondrous Compass account, so they come with you when you sign in with Discord on another device. Turning this off deletes them from our servers; they stay on this device.',
   'keep_keys_kept': 'Kept in your account: {names}',
   'keep_keys_off': 'keeping keys is not available right now',
   'guest_continue': 'Continue without an API key',
@@ -209,7 +212,8 @@ const enStrings = <String, String>{
   'gw2_link_intro': 'Link the GW2 account of your active API key to join your guilds here.',
   'gw2_link': 'Link GW2 account',
   'gw2_refresh': 'Refresh guilds',
-  'gw2_link_note': 'Linking sends only a ten minute token that can read your account name and guilds. Your API key is sent only if you choose to keep it in your account.',
+  'gw2_link_note':
+      'Linking sends only a ten minute token that can read your account name and guilds. Your API key is sent only if you choose to keep it in your account.',
   'gw2_linked': '{name} is linked',
   'gw2_link_taken': 'This GW2 account is already linked to another Wondrous Compass account.',
   'gw2_link_key': 'The API key could not be used. It needs the account permission.',
@@ -587,7 +591,8 @@ const enStrings = <String, String>{
   'push_browser_blocked':
       'This browser refused to subscribe to notifications. In Brave: Settings → Privacy and security → turn on "Use Google services for push messaging", then reload the page.',
   'trade_watch_title': 'Sales and purchases',
-  'trade_watch_ask': 'Get a notification when one of your trading post listings sells or a buy order is filled?\n\nTo do this, the app gives our server a limited key that can only see your account name and your buy and sell history, for 30 days. Your API key is not used for this: the limited key cannot see your inventory, wallet or characters.\n\nYou can turn it off any time in Settings.',
+  'trade_watch_ask':
+      'Get a notification when one of your trading post listings sells or a buy order is filled?\n\nTo do this, the app gives our server a limited key that can only see your account name and your buy and sell history, for 30 days. Your API key is not used for this: the limited key cannot see your inventory, wallet or characters.\n\nYou can turn it off any time in Settings.',
   'trade_watch_yes': 'Yes, notify me',
   'trade_watch_no': 'Not now',
   'trade_watch_note':
@@ -845,7 +850,8 @@ const enStrings = <String, String>{
   'data_lang_fallback': 'English (not available in Turkish)',
   'wiki_source': 'Wiki source',
   'remove_key': 'Remove key',
-  'remove_key_body': 'The API key will be deleted from this device, and from your account if it is kept there. Without a key you go back to the start screen.',
+  'remove_key_body':
+      'The API key will be deleted from this device, and from your account if it is kept there. Without a key you go back to the start screen.',
   'disclaimer':
       'Wondrous Compass is an unofficial fan app. Guild Wars 2, ArenaNet and NCSOFT are trademarks of their respective owners. Data comes from the official GW2 API and the Guild Wars 2 Wiki.',
   'slot_Helm': 'Helm',

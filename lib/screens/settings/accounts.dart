@@ -113,7 +113,8 @@ class _KeepKeysSwitchState extends ConsumerState<_KeepKeysSwitch> {
         for (final k in widget.keys) {
           final failed = await keepKeyInAccount(k.key);
           if (failed != null) {
-            if (mounted) showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+            if (mounted)
+              showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
             break;
           }
         }
@@ -141,7 +142,8 @@ class _KeepKeysSwitchState extends ConsumerState<_KeepKeysSwitch> {
           value: ref.watch(keepKeysProvider),
           onChanged: _busy ? null : _set,
           title: Text(s.t('keep_keys_setting'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-          subtitle: Text(s.t('keep_keys_setting_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+          subtitle:
+              Text(s.t('keep_keys_setting_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
         ),
         if (_busy) LinearProgressIndicator(minHeight: 2, color: AppColors.gold),
         if (kept.isNotEmpty)

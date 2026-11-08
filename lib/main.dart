@@ -184,9 +184,7 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
       // signed in on a device with no key: the keys the account keeps are brought first
       restoring: signedIn && noKey && ref.watch(restoredKeysProvider).isLoading,
       // read only while it decides something: a player with a key never waits for it
-      linked: signedIn && noKey
-          ? ref.watch(linkedAccountsProvider)
-          : const AsyncData(<LinkedAccount>[]),
+      linked: signedIn && noKey ? ref.watch(linkedAccountsProvider) : const AsyncData(<LinkedAccount>[]),
       landing: kIsWeb && !ref.watch(landingDismissedProvider),
     );
   }

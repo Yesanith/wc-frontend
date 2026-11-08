@@ -138,7 +138,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final failed = await keepKeyInAccount(key);
       if (!mounted) return;
       setState(() => _busy = false);
-      if (failed != null) showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
+      if (failed != null)
+        showToast(context, s.t('keep_key_failed', {'e': s.t(failed)}), duration: const Duration(seconds: 6));
       ref.invalidate(keptAccountsProvider);
     }
     await ref.read(keysProvider.notifier).add(key, _account ?? '');
@@ -296,9 +297,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     controlAffinity: ListTileControlAffinity.leading,
                     value: ref.watch(keepKeysProvider),
                     onChanged: _busy ? null : (on) => ref.read(keepKeysProvider.notifier).set(on ?? false),
-                    title: Text(s.t('keep_key_title'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                    subtitle: Text(s.t('keep_key_note'),
-                        style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+                    title:
+                        Text(s.t('keep_key_title'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    subtitle:
+                        Text(s.t('keep_key_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
                   ),
                   const SizedBox(height: 4),
                 ],

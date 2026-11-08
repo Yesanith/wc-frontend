@@ -58,7 +58,8 @@ List<KeptKey> parseKeptKeys(Object? data) {
   if (keys is! List) return const [];
   return [
     for (final k in keys)
-      if (k is Map && k['key'] is String && (k['key'] as String).isNotEmpty) KeptKey('${k['account_name'] ?? ''}', k['key'] as String),
+      if (k is Map && k['key'] is String && (k['key'] as String).isNotEmpty)
+        KeptKey('${k['account_name'] ?? ''}', k['key'] as String),
   ];
 }
 
