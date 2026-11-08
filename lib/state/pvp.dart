@@ -115,8 +115,8 @@ final pvpGamesProvider = FutureProvider<List<PvpGame>>((ref) async {
   // the match only carries a map id, the names come from the map list
   var names = const <int, String>{};
   try {
-    final maps = await ref.watch(mapsProvider.future);
-    names = {for (final m in maps) m.id: m.name};
+    // pvp maps are not open world ones, so the list of every map is asked
+    names = await ref.watch(mapNamesProvider.future);
   } catch (_) {
     // a missing map list only costs the label
   }

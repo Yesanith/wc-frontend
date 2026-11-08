@@ -27,12 +27,7 @@ class GameMap {
 /// are type Public. The rest are not drawn on any continent floor, so they
 /// carry no waypoints and their detail lookup 404s
 final mapsProvider = FutureProvider<List<GameMap>>((ref) async {
-  final api = ref.watch(gw2ApiProvider);
-  final cache = ref.watch(diskCacheProvider);
-  final lang = ref.watch(langProvider);
-
-  final raw = await cachedList(cache, 'maps_${lang.apiLang}', 'rows', () => api.maps());
-  final rows = raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+  final rows = await ref.watch(_mapRowsProvider.future);
 
   final maps = <GameMap>[];
   for (final row in rows) {
@@ -52,4 +47,22 @@ final mapsProvider = FutureProvider<List<GameMap>>((ref) async {
   }
   maps.sort((a, b) => a.region == b.region ? a.name.compareTo(b.name) : a.region.compareTo(b.region));
   return maps;
+});
+
+/// every entry of /v2/maps as it comes, read once for the open world list and the names below
+final _mapRowsProvider = FutureProvider<List<Json>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final cache = ref.watch(diskCacheProvider);
+  final lang = ref.watch(langProvider);
+  final raw = await cachedList(cache, 'maps_${lang.apiLang}', 'rows', () => api.maps());
+  return raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+});
+
+/// the name of every map by its id, the ones that are not open world too: a pvp match is played on a map of its own
+final mapNamesProvider = FutureProvider<Map<int, String>>((ref) async {
+  final rows = await ref.watch(_mapRowsProvider.future);
+  return {
+    for (final r in rows)
+      if ('${r['name'] ?? ''}'.isNotEmpty) asInt(r['id']): '${r['name']}',
+  };
 });

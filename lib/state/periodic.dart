@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';
+import 'period_refresh.dart';
 import 'progression.dart';
 import 'settings.dart';
 
@@ -70,6 +71,8 @@ bool _isWeekly(Json? detail) => ((detail?['flags'] as List?) ?? const []).contai
 /// list is fetched fresh after every daily reset, the monthly catalogue cache
 /// would show yesterday's picks
 final periodicAchievementsProvider = FutureProvider<PeriodicAchievements>((ref) async {
+  // a page left open across the reset reads the new picks
+  ref.watch(periodRefreshProvider);
   final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);

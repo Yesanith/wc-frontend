@@ -90,6 +90,7 @@ class Dungeon {
 
 /// dungeon paths, reset daily
 final dungeonsProvider = FutureProvider<List<Dungeon>>((ref) async {
+  ref.watch(periodRefreshProvider);
   final api = accountApi(ref);
   final all = await api.dungeons();
   Set<String> cleared;
