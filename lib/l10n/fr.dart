@@ -69,7 +69,7 @@ const frStrings = <String, String>{
   'event_guild_hint': 'Choisis une guilde',
   'event_account': 'COMPTE ORGANISATEUR',
   'event_account_hint': 'Choisis un compte',
-  'event_account_none': 'Aucun de tes comptes ne dirige cette guilde ni n\'y est officier.',
+  'event_account_none': 'Aucun de tes comptes ne peut créer d\'événements dans cette guilde. Le chef, les officiers et les membres qu\'ils autorisent le peuvent.',
   'event_organizer': 'Organisateur',
   'event_err_guild': 'Choisis une guilde.',
   'event_err_account': 'Choisis avec quel compte l\'événement est créé.',

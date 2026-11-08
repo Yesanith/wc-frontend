@@ -53,7 +53,7 @@ const zhStrings = <String, String>{
   'event_guild_hint': '请选择公会',
   'event_account': '主办账号',
   'event_account_hint': '请选择账号',
-  'event_account_none': '你的账号中没有该公会的会长或官员。',
+  'event_account_none': '你的账号都不能在该公会创建活动。会长、官员以及他们允许的成员可以创建。',
   'event_organizer': '主办',
   'event_err_guild': '请选择公会。',
   'event_err_account': '请选择用哪个账号创建活动。',

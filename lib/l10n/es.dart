@@ -68,7 +68,7 @@ const esStrings = <String, String>{
   'event_guild_hint': 'Elige un gremio',
   'event_account': 'CUENTA ORGANIZADORA',
   'event_account_hint': 'Elige una cuenta',
-  'event_account_none': 'Ninguna de tus cuentas lidera este gremio ni es oficial en él.',
+  'event_account_none': 'Ninguna de tus cuentas puede crear eventos en este gremio. Pueden el líder, los oficiales y los miembros a los que ellos lo permitan.',
   'event_organizer': 'Organizador',
   'event_err_guild': 'Elige un gremio.',
   'event_err_account': 'Elige con qué cuenta se crea el evento.',

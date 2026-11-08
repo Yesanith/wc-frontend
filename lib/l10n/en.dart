@@ -68,7 +68,7 @@ const enStrings = <String, String>{
   'event_guild_hint': 'Please select a guild',
   'event_account': 'ORGANIZER ACCOUNT',
   'event_account_hint': 'Select an account',
-  'event_account_none': 'None of your accounts leads or is an officer of this guild.',
+  'event_account_none': 'None of your accounts may create events in this guild. The leader and the officers can, and the members they let.',
   'event_organizer': 'Organizer',
   'event_err_guild': 'Please select a guild.',
   'event_err_account': 'Select which of your accounts creates the event.',

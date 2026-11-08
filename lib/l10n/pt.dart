@@ -69,7 +69,7 @@ const ptStrings = <String, String>{
   'event_guild_hint': 'Selecione uma guilda',
   'event_account': 'CONTA ORGANIZADORA',
   'event_account_hint': 'Selecione uma conta',
-  'event_account_none': 'Nenhuma das suas contas lidera esta guilda nem é oficial nela.',
+  'event_account_none': 'Nenhuma das suas contas pode criar eventos nesta guilda. Podem o líder, os oficiais e os membros que eles permitirem.',
   'event_organizer': 'Organizador',
   'event_err_guild': 'Selecione uma guilda.',
   'event_err_account': 'Escolha com qual conta o evento é criado.',

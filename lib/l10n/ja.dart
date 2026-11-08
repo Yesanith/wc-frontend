@@ -54,7 +54,7 @@ const jaStrings = <String, String>{
   'event_guild_hint': 'ギルドを選んでください',
   'event_account': '主催アカウント',
   'event_account_hint': 'アカウントを選んでください',
-  'event_account_none': 'このギルドのリーダーまたはオフィサーのアカウントがありません。',
+  'event_account_none': 'このギルドでイベントを作成できるアカウントがありません。作成できるのはリーダー、オフィサー、そして彼らが許可したメンバーです。',
   'event_organizer': '主催',
   'event_err_guild': 'ギルドを選んでください。',
   'event_err_account': 'イベントを作成するアカウントを選んでください。',
