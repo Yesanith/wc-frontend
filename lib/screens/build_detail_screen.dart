@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/settings.dart';
-import '../theme.dart';
 import '../util.dart';
 import '../widgets/build_view.dart';
 
@@ -17,7 +16,7 @@ class BuildDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('build'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('build')),
       ),
       body: BuildView(buildData: buildData, padding: const EdgeInsets.fromLTRB(20, 8, 20, 24)),
     );

@@ -15,6 +15,7 @@ import '../widgets/common.dart';
 import '../widgets/meters.dart';
 import '../l10n/strings.dart';
 import '../widgets/recipe_outputs.dart';
+import '../widgets/responsive.dart';
 import 'trading_screen.dart';
 
 part 'item_detail/sections.dart';
@@ -29,6 +30,13 @@ void showItemDetails(BuildContext context, int itemId, {Json? instance, bool ann
   final closed = instance == null
       ? linkOpened(ProviderScope.containerOf(context, listen: false), ItemLink(itemId), announce: announce)
       : null;
+  // on the site the item is a page of the site, under its bar, as every page opened there is
+  if (SiteScope.of(context)) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => _ItemPage(itemId: itemId, instance: instance)))
+        .whenComplete(() => closed?.call());
+    return;
+  }
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -44,6 +52,23 @@ void showItemDetails(BuildContext context, int itemId, {Json? instance, bool ann
       builder: (context, scroll) => ItemDetails(itemId: itemId, instance: instance, scroll: scroll),
     ),
   ).whenComplete(() => closed?.call());
+}
+
+/// an item as a page of the site: its name in the bar of the page, everything about it under it
+class _ItemPage extends ConsumerWidget {
+  const _ItemPage({required this.itemId, this.instance});
+
+  final int itemId;
+  final Json? instance;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final name = ref.watch(itemProvider(itemId)).valueOrNull?['name'] as String?;
+    return Scaffold(
+      appBar: AppBar(title: Text(name ?? '')),
+      body: ItemDetails(itemId: itemId, instance: instance),
+    );
+  }
 }
 
 class ItemDetails extends ConsumerStatefulWidget {

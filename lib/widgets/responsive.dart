@@ -193,3 +193,4 @@ class SiteScope extends InheritedWidget {
   @override
   bool updateShouldNotify(SiteScope oldWidget) => oldWidget.site != site;
 }
+

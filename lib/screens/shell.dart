@@ -35,6 +35,7 @@ import '../widgets/announcement_bar.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
+import '../widgets/site_subpage.dart';
 import '../widgets/site_search.dart';
 import '../widgets/swipe_open.dart';
 import 'about_screen.dart';
@@ -401,7 +402,28 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
   /// after the menu was dismissed, a back press within this window exits
   DateTime? _exitArmedUntil;
 
+  /// on the site each section keeps its own pages: what a page of it opens (a character, an item, a collection) opens under
+  /// the bar of the site, in the place of the section, with a way back, instead of over the whole window
+  final _sectionNavigators = <AppSection, GlobalKey<NavigatorState>>{};
+
+  Widget _sectionBody(AppSection sec, bool site) {
+    if (!site) return _page(sec);
+    return Theme(
+      data: siteSubpageTheme(Theme.of(context)),
+      child: HeroControllerScope.none(
+        child: Navigator(
+          key: _sectionNavigators.putIfAbsent(sec, GlobalKey<NavigatorState>.new),
+          onGenerateRoute: (_) => PageRouteBuilder<void>(pageBuilder: (_, __, ___) => _page(sec)),
+        ),
+      ),
+    );
+  }
+
   void _select(AppSection next) {
+    // a section chosen again shows itself, not the page of it that was open
+    if (next == ref.read(sectionProvider)) {
+      _sectionNavigators[next]?.currentState?.popUntil((route) => route.isFirst);
+    }
     // a menu that is always there has no closing to be mistaken for a back press
     if (!_wide) _selecting = true;
     // the characters, chosen again, are the list again
@@ -706,10 +728,10 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(child: _page(sec)),
+                                              Expanded(child: _sectionBody(sec, site)),
                                             ],
                                           )
-                                        : _page(sec),
+                                        : _sectionBody(sec, site),
                           ),
                         ),
                     ],

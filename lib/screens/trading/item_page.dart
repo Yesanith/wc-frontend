@@ -18,7 +18,7 @@ class TradingItemScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('trading_post'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('trading_post')),
         actions: [
           IconButton(
             tooltip: s.t('price_alert'),

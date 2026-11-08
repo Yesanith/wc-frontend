@@ -20,7 +20,7 @@ class PvpMatchesScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('match_history'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('match_history')),
       ),
       body: AsyncView<List<PvpGame>>(
         permission: 'pvp',
@@ -115,7 +115,7 @@ class PvpAmuletsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('amulets'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('amulets')),
       ),
       body: AsyncView<List<PvpAmulet>>(
         value: amulets,
@@ -189,7 +189,7 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('leaderboard'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('leaderboard')),
       ),
       body: AsyncView<List<Json>>(
         value: seasons,

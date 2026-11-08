@@ -160,7 +160,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('world_bosses'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('world_bosses')),
       ),
       body: refreshable,
     );

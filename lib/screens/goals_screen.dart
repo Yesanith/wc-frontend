@@ -29,7 +29,7 @@ class GoalsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('goals'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('goals')),
         actions: [
           if (goals.isNotEmpty)
             IconButton(

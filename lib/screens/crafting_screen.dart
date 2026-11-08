@@ -37,7 +37,7 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text((item?['name'] as String?) ?? s.t('crafting'), style: display(20, color: AppColors.accent)),
+        title: Text((item?['name'] as String?) ?? s.t('crafting')),
         actions: [
           IconButton(
             tooltip: s.t('goal_add'),

@@ -76,7 +76,7 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('hero_card'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('hero_card')),
       ),
       body: c == null
           ? const Center(child: CircularProgressIndicator())

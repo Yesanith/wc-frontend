@@ -45,7 +45,7 @@ class _CraftProfitScreenState extends ConsumerState<CraftProfitScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('craft_profit'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('craft_profit')),
       ),
       body: AsyncView<RecipeBook>(
         value: book,

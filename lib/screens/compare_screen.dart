@@ -32,7 +32,7 @@ class _CompareScreenState extends ConsumerState<CompareScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: Text(s.t('compare'), style: display(20, color: AppColors.accent)),
+        title: Text(s.t('compare')),
       ),
       body: AsyncView<List<Json>>(
         value: chars,

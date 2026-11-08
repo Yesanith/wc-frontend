@@ -115,7 +115,7 @@ class GuildDetailScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          title: Text(name, style: display(20, color: AppColors.accent)),
+          title: Text(name),
           actions: [
             if (leads)
               IconButton(
