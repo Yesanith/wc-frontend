@@ -717,6 +717,8 @@ const ptStrings = <String, String>{
   'n_items': '{n} itens',
   'language': 'Idioma',
   'look': 'Aparência',
+  'look_theme': 'Tema',
+  'look_device': 'Sistema',
   'look_system': 'Como o dispositivo',
   'look_light': 'Claro',
   'look_dark': 'Escuro',

@@ -712,6 +712,8 @@ const trStrings = <String, String>{
   'n_items': '{n} item',
   'language': 'Dil',
   'look': 'Görünüm',
+  'look_theme': 'Tema',
+  'look_device': 'Sistem',
   'look_system': 'Cihazla aynı',
   'look_light': 'Açık',
   'look_dark': 'Koyu',

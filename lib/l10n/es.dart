@@ -718,6 +718,8 @@ const esStrings = <String, String>{
   'n_items': '{n} objetos',
   'language': 'Idioma',
   'look': 'Apariencia',
+  'look_theme': 'Tema',
+  'look_device': 'Sistema',
   'look_system': 'Como el dispositivo',
   'look_light': 'Claro',
   'look_dark': 'Oscuro',

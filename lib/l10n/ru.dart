@@ -715,6 +715,8 @@ const ruStrings = <String, String>{
   'n_items': 'Предметов: {n}',
   'language': 'Язык',
   'look': 'Оформление',
+  'look_theme': 'Тема',
+  'look_device': 'Системная',
   'look_system': 'Как в системе',
   'look_light': 'Светлая',
   'look_dark': 'Тёмная',

@@ -717,6 +717,8 @@ const enStrings = <String, String>{
   'n_items': '{n} items',
   'language': 'Language',
   'look': 'Appearance',
+  'look_theme': 'Theme',
+  'look_device': 'System',
   'look_system': 'Match phone',
   'look_light': 'Light',
   'look_dark': 'Dark',

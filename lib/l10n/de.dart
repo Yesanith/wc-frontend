@@ -729,6 +729,8 @@ const deStrings = <String, String>{
   'n_items': '{n} Gegenstände',
   'language': 'Sprache',
   'look': 'Darstellung',
+  'look_theme': 'Design',
+  'look_device': 'System',
   'look_system': 'Wie das Gerät',
   'look_light': 'Hell',
   'look_dark': 'Dunkel',

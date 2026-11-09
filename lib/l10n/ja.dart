@@ -672,6 +672,8 @@ const jaStrings = <String, String>{
   'n_items': '{n} 件',
   'language': '言語',
   'look': '外観',
+  'look_theme': 'テーマ',
+  'look_device': 'システム',
   'look_system': '端末に合わせる',
   'look_light': 'ライト',
   'look_dark': 'ダーク',

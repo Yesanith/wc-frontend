@@ -666,6 +666,8 @@ const zhStrings = <String, String>{
   'n_items': '{n} 件物品',
   'language': '语言',
   'look': '外观',
+  'look_theme': '主题',
+  'look_device': '跟随系统',
   'look_system': '跟随系统',
   'look_light': '浅色',
   'look_dark': '深色',

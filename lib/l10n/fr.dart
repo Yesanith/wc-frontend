@@ -721,6 +721,8 @@ const frStrings = <String, String>{
   'n_items': '{n} objets',
   'language': 'Langue',
   'look': 'Apparence',
+  'look_theme': 'Thème',
+  'look_device': 'Système',
   'look_system': 'Comme l\'appareil',
   'look_light': 'Clair',
   'look_dark': 'Sombre',
