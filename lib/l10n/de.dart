@@ -108,6 +108,8 @@ const deStrings = <String, String>{
   'tp_col_date': 'Datum',
   'tp_col_price': 'Preis',
   'tp_col_qty': 'Anz.',
+  'search_storage': 'Nach Gegenstand suchen',
+  'n_found': '{n} gefunden',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

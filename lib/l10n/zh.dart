@@ -83,6 +83,8 @@ const zhStrings = <String, String>{
   'tp_col_date': '日期',
   'tp_col_price': '价格',
   'tp_col_qty': '数量',
+  'search_storage': '按物品名称搜索',
+  'n_found': '找到 {n} 个',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

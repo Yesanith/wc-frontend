@@ -149,80 +149,87 @@ class _BankTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(bankProvider),
       builder: (slots) {
         final used = slots.where((s) => s != null).length;
+        final query = ref.watch(_storageQueryProvider('bank')).trim().toLowerCase();
+        bool hit(ItemSlot? slot) => slot != null && slot.name.toLowerCase().contains(query);
+        final found = query.isEmpty ? 0 : slots.where(hit).length;
         Widget slotOf(ItemSlot? slot) {
-          if (slot == null) return const ItemIcon(empty: true);
-          return GestureDetector(
-            onTap: () => showItemSheet(
-              context,
-              id: slot.id,
-              name: slot.name,
-              icon: slot.icon,
-              rarity: slot.rarity,
-              type: slot.type,
-              count: slot.count,
-            ),
-            child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
-          );
+          // while searching, what is not looked for fades, so the bank keeps its places as the game's does
+          final dim = query.isNotEmpty && !hit(slot);
+          final Widget icon;
+          if (slot == null) {
+            icon = const ItemIcon(empty: true);
+          } else {
+            icon = GestureDetector(
+              onTap: () => showItemSheet(
+                context,
+                id: slot.id,
+                name: slot.name,
+                icon: slot.icon,
+                rarity: slot.rarity,
+                type: slot.type,
+                count: slot.count,
+              ),
+              child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
+            );
+          }
+          return dim ? Opacity(opacity: 0.15, child: IgnorePointer(child: icon)) : icon;
         }
 
-        if (SiteScope.of(context)) {
-          const perTab = 30;
-          final tabs = (slots.length / perTab).ceil();
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        // the bank by its tabs of thirty, as in the game: ten to a row on the site, as many as fit on a phone
+        const perTab = 30;
+        final site = SiteScope.of(context);
+        final tabs = [
+          for (var t = 0; t * perTab < slots.length; t++)
+            // a tab with nothing looked for in it is left out while searching
+            if (query.isEmpty || slots.skip(t * perTab).take(perTab).any(hit)) t,
+        ];
+        Widget tab(int t) {
+          final range = [for (var i = t * perTab; i < (t + 1) * perTab && i < slots.length; i++) i];
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(s.t('slots_used', {'a': used, 'b': slots.length}),
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 32,
-                runSpacing: 20,
-                children: [
-                  for (var t = 0; t < tabs; t++)
-                    SizedBox(
-                      width: 10 * 46 + 9 * 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(s.t('bank_tab_n', {'n': t + 1}),
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted)),
-                          const SizedBox(height: 6),
-                          Wrap(
-                            spacing: 5,
-                            runSpacing: 5,
-                            children: [
-                              for (var i = t * perTab; i < (t + 1) * perTab && i < slots.length; i++)
-                                SizedBox.square(dimension: 46, child: slotOf(slots[i])),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+              Text(s.t('bank_tab_n', {'n': t + 1}),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.muted)),
+              const SizedBox(height: 6),
+              if (site)
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: [for (final i in range) SizedBox.square(dimension: 46, child: slotOf(slots[i]))],
+                )
+              else
+                GridView(
+                  gridDelegate:
+                      const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [for (final i in range) slotOf(slots[i])],
+                ),
             ],
           );
         }
-        return CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 10),
-              sliver: SliverToBoxAdapter(
-                child: Text(s.t('slots_used', {'a': used, 'b': slots.length}),
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
-              ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-              sliver: SliverGrid(
-                gridDelegate:
-                    const AdaptiveGridDelegate(minColumns: 8, maxTile: 60, mainAxisSpacing: 6, crossAxisSpacing: 6),
-                delegate: SliverChildBuilderDelegate(
-                  (context, i) => slotOf(slots[i]),
-                  childCount: slots.length,
-                ),
-              ),
-            ),
+
+        return ListView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          children: [
+            const _StorageSearch(kind: 'bank'),
+            const SizedBox(height: 12),
+            Text(
+                query.isEmpty
+                    ? s.t('slots_used', {'a': used, 'b': slots.length})
+                    : found == 0
+                        ? s.t('no_results')
+                        : s.t('n_found', {'n': found}),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+            const SizedBox(height: 12),
+            if (site)
+              Wrap(
+                spacing: 32,
+                runSpacing: 20,
+                children: [for (final t in tabs) SizedBox(width: 10 * 46 + 9 * 5, child: tab(t))],
+              )
+            else
+              for (final t in tabs) Padding(padding: const EdgeInsets.only(bottom: 16), child: tab(t)),
           ],
         );
       },
@@ -244,25 +251,50 @@ class _MaterialsTab extends ConsumerWidget {
         if (list.isEmpty) return _EmptyTab(s.t('materials_empty'));
         // one grid per storage category, like the game shows it. a tap on a
         // category's title folds it away, and the choice is remembered
-        final collapsed = ref.watch(collapsedMaterialsProvider);
+        final query = ref.watch(_storageQueryProvider('materials')).trim().toLowerCase();
+        // while searching only what matches, every category with some of it open
+        final shown = query.isEmpty
+            ? list
+            : [
+                for (final g in list)
+                  if (g.slots.any((m) => m.name.toLowerCase().contains(query)))
+                    MaterialGroup(
+                        g.name,
+                        [
+                          for (final m in g.slots)
+                            if (m.name.toLowerCase().contains(query)) m
+                        ],
+                        id: g.id),
+              ];
+        final collapsed = query.isEmpty ? ref.watch(collapsedMaterialsProvider) : const <int>{};
         final allFolded = list.every((g) => collapsed.contains(g.id));
+        final found = shown.fold<int>(0, (n, g) => n + g.slots.length);
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: () => ref
-                    .read(collapsedMaterialsProvider.notifier)
-                    .setAll(allFolded ? <int>{} : {for (final g in list) g.id}),
-                icon: Icon(allFolded ? Icons.unfold_more : Icons.unfold_less, size: 18),
-                label: Text(s.t(allFolded ? 'expand_all' : 'collapse_all')),
+            const _StorageSearch(kind: 'materials'),
+            const SizedBox(height: 4),
+            if (query.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(found == 0 ? s.t('no_results') : s.t('n_found', {'n': found}),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+              )
+            else
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () => ref
+                      .read(collapsedMaterialsProvider.notifier)
+                      .setAll(allFolded ? <int>{} : {for (final g in list) g.id}),
+                  icon: Icon(allFolded ? Icons.unfold_more : Icons.unfold_less, size: 18),
+                  label: Text(s.t(allFolded ? 'expand_all' : 'collapse_all')),
+                ),
               ),
-            ),
-            for (final g in list) ...[
+            for (final g in shown) ...[
               InkWell(
                 borderRadius: BorderRadius.circular(AppRadius.frame),
-                onTap: () => ref.read(collapsedMaterialsProvider.notifier).toggle(g.id),
+                onTap: query.isNotEmpty ? null : () => ref.read(collapsedMaterialsProvider.notifier).toggle(g.id),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   child: Row(
@@ -432,6 +464,65 @@ class _BuildsTab extends ConsumerWidget {
           },
         );
       },
+    );
+  }
+}
+
+/// what is looked for in the bank and in the material storage, kept while the other tabs are open
+final _storageQueryProvider = StateProvider.family<String, String>((ref, kind) => '');
+
+/// the box to look for an item of the bank or of the material storage by its name
+class _StorageSearch extends ConsumerStatefulWidget {
+  const _StorageSearch({required this.kind});
+
+  final String kind;
+
+  @override
+  ConsumerState<_StorageSearch> createState() => _StorageSearchState();
+}
+
+class _StorageSearchState extends ConsumerState<_StorageSearch> {
+  late final _ctrl = TextEditingController(text: ref.read(_storageQueryProvider(widget.kind)));
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  void _set(String value) {
+    ref.read(_storageQueryProvider(widget.kind).notifier).state = value;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: ConstrainedBox(
+        // on a page a box of a box's width, not the page's
+        constraints: BoxConstraints(maxWidth: SiteScope.of(context) ? 420 : double.infinity),
+        child: TextField(
+          controller: _ctrl,
+          onChanged: _set,
+          textInputAction: TextInputAction.search,
+          decoration: fieldDecoration(
+            s.t('search_storage'),
+            prefixIcon: Icon(Icons.search, color: AppColors.gold),
+            suffixIcon: _ctrl.text.isEmpty
+                ? null
+                : IconButton(
+                    tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
+                    icon: Icon(Icons.close, color: AppColors.muted),
+                    onPressed: () {
+                      _ctrl.clear();
+                      _set('');
+                    },
+                  ),
+          ),
+        ),
+      ),
     );
   }
 }

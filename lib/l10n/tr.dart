@@ -101,6 +101,8 @@ const trStrings = <String, String>{
   'tp_col_date': 'Tarih',
   'tp_col_price': 'Fiyat',
   'tp_col_qty': 'Adet',
+  'search_storage': 'Eşya adıyla ara',
+  'n_found': '{n} sonuç',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

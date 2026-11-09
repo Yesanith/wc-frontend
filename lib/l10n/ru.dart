@@ -103,6 +103,8 @@ const ruStrings = <String, String>{
   'tp_col_date': 'Дата',
   'tp_col_price': 'Цена',
   'tp_col_qty': 'Кол.',
+  'search_storage': 'Поиск по названию предмета',
+  'n_found': 'Найдено: {n}',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

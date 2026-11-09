@@ -105,6 +105,8 @@ const frStrings = <String, String>{
   'tp_col_date': 'Date',
   'tp_col_price': 'Prix',
   'tp_col_qty': 'Qté',
+  'search_storage': 'Chercher un objet par son nom',
+  'n_found': '{n} trouvés',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

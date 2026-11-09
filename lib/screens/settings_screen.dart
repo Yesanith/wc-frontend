@@ -68,44 +68,6 @@ class SettingsScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _pickLanguage(BuildContext context, WidgetRef ref) {
-    return showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColors.surface,
-      isScrollControlled: true,
-      builder: (ctx) => Consumer(
-        builder: (ctx, ref, _) {
-          final current = ref.watch(langProvider);
-          return SafeArea(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(ctx).size.height * 0.75),
-              child: ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                children: [
-                  for (final l in AppLang.values)
-                    ListTile(
-                      onTap: () {
-                        ref.read(langProvider.notifier).set(l);
-                        Navigator.of(ctx).pop();
-                      },
-                      leading: Icon(
-                        l == current ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                        color: l == current ? AppColors.gold : AppColors.muted,
-                      ),
-                      title: Text(l.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                      trailing: Text(l.code.toUpperCase(),
-                          style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
-                    ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
@@ -138,49 +100,7 @@ class SettingsScreen extends ConsumerWidget {
         title: s.t('settings_appearance'),
         note: s.t('settings_appearance_note'),
         children: [
-          if (kIsWeb)
-            _AppearanceRows(lang: lang)
-          else
-            Panel(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Kicker(s.t('look').toUpperCase()),
-                  const SizedBox(height: 10),
-                  const _LookChoice(),
-                  Divider(height: 28, color: AppColors.track),
-                  Kicker(s.t('language').toUpperCase()),
-                  const SizedBox(height: 4),
-                  // one line instead of nine, the list opens from the bottom
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    onTap: () => _pickLanguage(context, ref),
-                    leading: Icon(Icons.translate, color: AppColors.gold),
-                    title: Text(lang.nativeName, style: const TextStyle(fontWeight: FontWeight.w700)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(lang.code.toUpperCase(),
-                            style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.muted)),
-                        const SizedBox(width: 4),
-                        Icon(Icons.expand_more, color: AppColors.muted),
-                      ],
-                    ),
-                  ),
-                  _InfoRow(
-                    s.t('data_language'),
-                    lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback'),
-                  ),
-                  const SizedBox(height: 6),
-                  _InfoRow(s.t('wiki_source'), Uri.parse(lang.wikiBase).host),
-                  if (kIsWeb) ...[
-                    Divider(height: 28, color: AppColors.track),
-                    const _UiSizeChoice(),
-                  ],
-                ],
-              ),
-            ),
+          _AppearanceRows(lang: lang),
         ],
       ),
       if (bossAlertsReady || (signedIn && pushReady))
@@ -264,13 +184,8 @@ class SettingsScreen extends ConsumerWidget {
       // an apk cannot be installed from a browser
       if (!kIsWeb) _Section(title: s.t('settings_app'), children: const [_UpdatePanel()]),
     ];
-    // in a browser the settings are a page with its sections listed beside it, or above it on a phone;
-    // the app keeps them one under the other
-    if (kIsWeb) return _SettingsPage(sections: sections);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
-      children: sections,
-    );
+    // the sections listed beside the page where there is room, or in a row above it on a phone, in the app as on the site
+    return _SettingsPage(sections: sections);
   }
 }
 
@@ -310,55 +225,6 @@ class _Section extends StatelessWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _InfoRow extends StatelessWidget {
-  const _InfoRow(this.label, this.value);
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: AppColors.muted))),
-        Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-      ],
-    );
-  }
-}
-
-/// how large the interface is in the browser: automatic, which grows with a wide screen, or one of the sizes
-class _UiSizeChoice extends ConsumerWidget {
-  const _UiSizeChoice();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final s = ref.watch(stringsProvider);
-    final chosen = ref.watch(uiScaleProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Kicker(s.t('ui_scale').toUpperCase()),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final size in uiScaleChoices)
-              ChoiceChip(
-                label: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
-                selected: chosen == size,
-                onSelected: (_) => ref.read(uiScaleProvider.notifier).set(size),
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(s.t('ui_scale_hint'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
-      ],
     );
   }
 }
@@ -597,21 +463,23 @@ class _AppearanceRows extends ConsumerWidget {
         '${s.t('data_language')}: ${lang.apiLang == lang.code ? lang.nativeName : s.t('data_lang_fallback')} · '
             '${s.t('wiki_source')}: ${Uri.parse(lang.wikiBase).host}',
       ),
-      (
-        s.t('ui_scale'),
-        dropdown<double?>(
-          scale,
-          [
-            for (final size in uiScaleChoices)
-              DropdownMenuItem(
-                value: size,
-                child: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
-              ),
-          ],
-          (size) => ref.read(uiScaleProvider.notifier).set(size),
+      // a browser's page can be made larger; an app follows the size of the phone's text
+      if (kIsWeb)
+        (
+          s.t('ui_scale'),
+          dropdown<double?>(
+            scale,
+            [
+              for (final size in uiScaleChoices)
+                DropdownMenuItem(
+                  value: size,
+                  child: Text(size == null ? s.t('ui_scale_auto') : '${(size * 100).round()}%'),
+                ),
+            ],
+            (size) => ref.read(uiScaleProvider.notifier).set(size),
+          ),
+          s.t('ui_scale_hint'),
         ),
-        s.t('ui_scale_hint'),
-      ),
     ];
     return LayoutBuilder(builder: (context, box) {
       final side = box.maxWidth >= 520;

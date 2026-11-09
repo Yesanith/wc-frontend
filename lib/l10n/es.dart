@@ -103,6 +103,8 @@ const esStrings = <String, String>{
   'tp_col_date': 'Fecha',
   'tp_col_price': 'Precio',
   'tp_col_qty': 'Cant.',
+  'search_storage': 'Buscar por nombre de objeto',
+  'n_found': '{n} encontrados',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

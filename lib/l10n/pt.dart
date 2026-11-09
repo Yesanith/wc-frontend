@@ -105,6 +105,8 @@ const ptStrings = <String, String>{
   'tp_col_date': 'Data',
   'tp_col_price': 'Preço',
   'tp_col_qty': 'Qtd.',
+  'search_storage': 'Buscar pelo nome do item',
+  'n_found': '{n} encontrados',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
