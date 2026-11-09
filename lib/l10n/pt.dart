@@ -107,6 +107,10 @@ const ptStrings = <String, String>{
   'tp_col_qty': 'Qtd.',
   'search_storage': 'Buscar pelo nome do item',
   'n_found': '{n} encontrados',
+  'api_stale_daily':
+      'O jogo não enviou sua conta para a API desde o reset diário (último: {t}), então o que aparece ainda é de ontem. Atualiza alguns minutos depois de jogar.',
+  'api_stale_weekly':
+      'O jogo não enviou sua conta para a API desde o reset semanal (último: {t}), então o que aparece ainda é da semana passada. Atualiza alguns minutos depois de jogar.',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

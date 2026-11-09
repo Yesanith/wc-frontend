@@ -9,6 +9,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../services/icon_cache.dart';
+import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
@@ -43,6 +44,7 @@ class DailyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('daily_reset_in'), at: nextDailyReset()),
+          const StaleSinceResetNote(padding: EdgeInsets.only(top: 12)),
           const SizedBox(height: 12),
           // the quick counters first, they fit on one screen
           _ChecklistGrid(

@@ -110,6 +110,10 @@ const deStrings = <String, String>{
   'tp_col_qty': 'Anz.',
   'search_storage': 'Nach Gegenstand suchen',
   'n_found': '{n} gefunden',
+  'api_stale_daily':
+      'Das Spiel hat dein Konto seit dem täglichen Reset nicht an die API gesendet (zuletzt {t}), daher ist dies noch der Stand von gestern. Es aktualisiert sich einige Minuten nach dem Spielen.',
+  'api_stale_weekly':
+      'Das Spiel hat dein Konto seit dem wöchentlichen Reset nicht an die API gesendet (zuletzt {t}), daher ist dies noch der Stand der letzten Woche. Es aktualisiert sich einige Minuten nach dem Spielen.',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

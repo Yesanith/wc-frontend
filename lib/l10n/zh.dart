@@ -85,6 +85,8 @@ const zhStrings = <String, String>{
   'tp_col_qty': '数量',
   'search_storage': '按物品名称搜索',
   'n_found': '找到 {n} 个',
+  'api_stale_daily': '自每日重置以来，游戏尚未将你的账号同步到 API（最后一次：{t}），因此显示的仍是昨天的数据。游玩几分钟后会更新。',
+  'api_stale_weekly': '自每周重置以来，游戏尚未将你的账号同步到 API（最后一次：{t}），因此显示的仍是上周的数据。游玩几分钟后会更新。',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

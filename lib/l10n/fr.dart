@@ -107,6 +107,10 @@ const frStrings = <String, String>{
   'tp_col_qty': 'Qté',
   'search_storage': 'Chercher un objet par son nom',
   'n_found': '{n} trouvés',
+  'api_stale_daily':
+      'Le jeu n\'a pas envoyé ton compte à l\'API depuis la réinitialisation quotidienne (dernier envoi : {t}) ; ce qui s\'affiche date encore d\'hier. Cela se met à jour quelques minutes après avoir joué.',
+  'api_stale_weekly':
+      'Le jeu n\'a pas envoyé ton compte à l\'API depuis la réinitialisation hebdomadaire (dernier envoi : {t}) ; ce qui s\'affiche date encore de la semaine dernière. Cela se met à jour quelques minutes après avoir joué.',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

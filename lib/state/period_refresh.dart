@@ -21,8 +21,7 @@ class PeriodRefresh extends Notifier<int> {
   void _schedule() {
     _timer?.cancel();
     final now = DateTime.now().toUtc();
-    // a few seconds late, so the api has moved on as well
-    final at = nextResetAfter(now).add(const Duration(seconds: 20));
+    final at = nextRefreshAt(now);
     _timer = Timer(at.difference(now), () {
       state++;
       _schedule();
@@ -34,6 +33,21 @@ class PeriodRefresh extends Notifier<int> {
     _schedule();
     state++;
   }
+}
+
+/// when to read the data that resets again: a few seconds after the next reset, and again a few and ten minutes after it,
+/// since the api often still gives the previous day's for a while
+DateTime nextRefreshAt(DateTime now) {
+  final n = now.toUtc();
+  const after = [Duration(seconds: 20), Duration(minutes: 3), Duration(minutes: 10)];
+  final last = [lastDailyReset(n), lastWeeklyReset(n)];
+  final candidates = [
+    for (final reset in last)
+      for (final d in after) reset.add(d),
+    nextResetAfter(n).add(after.first),
+  ].where((t) => t.isAfter(n)).toList()
+    ..sort();
+  return candidates.first;
 }
 
 final periodRefreshProvider = NotifierProvider<PeriodRefresh, int>(PeriodRefresh.new);

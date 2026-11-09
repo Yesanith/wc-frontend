@@ -7,6 +7,7 @@ import '../state/account.dart';
 import '../state/api.dart';
 import '../state/alerts.dart';
 import '../state/clock.dart';
+import '../widgets/stale_note.dart';
 import '../widgets/clock.dart';
 import '../state/navigation.dart';
 import '../state/periodic.dart';

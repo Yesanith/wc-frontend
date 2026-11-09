@@ -38,6 +38,9 @@ class _VaultState extends ConsumerState<_Vault> {
             ),
           ),
           const SizedBox(height: 16),
+          // the special track does not reset
+          if (_track != 'special')
+            StaleSinceResetNote(weekly: _track == 'weekly', padding: const EdgeInsets.only(bottom: 12)),
           AsyncView<Json>(
             value: period,
             onRetry: () => ref.invalidate(vaultTrackProvider(_track)),

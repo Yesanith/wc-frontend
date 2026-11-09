@@ -105,6 +105,10 @@ const esStrings = <String, String>{
   'tp_col_qty': 'Cant.',
   'search_storage': 'Buscar por nombre de objeto',
   'n_found': '{n} encontrados',
+  'api_stale_daily':
+      'El juego no ha enviado tu cuenta a la API desde el reinicio diario (último: {t}), así que lo que ves sigue siendo de ayer. Se actualiza unos minutos después de jugar.',
+  'api_stale_weekly':
+      'El juego no ha enviado tu cuenta a la API desde el reinicio semanal (último: {t}), así que lo que ves sigue siendo de la semana pasada. Se actualiza unos minutos después de jugar.',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

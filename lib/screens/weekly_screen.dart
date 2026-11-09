@@ -7,6 +7,7 @@ import '../state/progression.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/vault_objectives.dart';
 import 'daily_screen.dart';
@@ -33,6 +34,7 @@ class WeeklyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('weekly_reset_in'), at: nextWeeklyReset()),
+          const StaleSinceResetNote(weekly: true, padding: EdgeInsets.only(top: 12)),
           const SizedBox(height: 12),
           FoldSection(
             title: s.t('vault_weekly'),

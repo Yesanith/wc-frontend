@@ -6,7 +6,11 @@ import 'characters.dart';
 import 'period_refresh.dart';
 import 'reference.dart';
 
-final accountProvider = FutureProvider<Json>((ref) => accountApi(ref).account());
+final accountProvider = FutureProvider<Json>((ref) {
+  // read again at each reset, so it is known whether the game has sent the account since
+  ref.watch(periodRefreshProvider);
+  return accountApi(ref).account();
+});
 
 /// track is daily, weekly or special
 final vaultTrackProvider = FutureProvider.family<Json, String>((ref, track) {

@@ -106,6 +106,10 @@ const enStrings = <String, String>{
   'tp_col_qty': 'Qty',
   'search_storage': 'Search by item name',
   'n_found': '{n} found',
+  'api_stale_daily':
+      'The game has not sent your account to the API since the daily reset (last on {t}), so what is shown is still yesterday\'s. It updates a few minutes after you play.',
+  'api_stale_weekly':
+      'The game has not sent your account to the API since the weekly reset (last on {t}), so what is shown is still last week\'s. It updates a few minutes after you play.',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':
