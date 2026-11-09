@@ -1030,6 +1030,7 @@ const frStrings = <String, String>{
   'itype_JadeTechModule': 'Modules de drone de jade',
   'itype_PowerCore': 'Noyaux d’énergie',
   'itype_Tool': 'Outils',
+  'nav_group_today': "Aujourd'hui",
   'nav_group_community': 'Communauté',
   'nav_group_account': 'Compte',
   'nav_group_economy': 'Économie',

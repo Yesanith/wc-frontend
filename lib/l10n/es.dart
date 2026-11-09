@@ -1023,6 +1023,7 @@ const esStrings = <String, String>{
   'itype_JadeTechModule': 'Módulos de dron de jade',
   'itype_PowerCore': 'Núcleos de energía',
   'itype_Tool': 'Herramientas',
+  'nav_group_today': 'Hoy',
   'nav_group_community': 'Comunidad',
   'nav_group_account': 'Cuenta',
   'nav_group_economy': 'Economía',

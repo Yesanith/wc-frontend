@@ -1019,6 +1019,7 @@ const enStrings = <String, String>{
   'itype_JadeTechModule': 'Jade bot modules',
   'itype_PowerCore': 'Power cores',
   'itype_Tool': 'Tools',
+  'nav_group_today': 'Today',
   'nav_group_community': 'Community',
   'nav_group_account': 'Account',
   'nav_group_economy': 'Economy',

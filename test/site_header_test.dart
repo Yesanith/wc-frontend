@@ -26,12 +26,16 @@ void main() {
   });
 
   group('what the bar has room for', () {
-    test(
-        'is a site from a width that has room for the whole bar, with the search as a button where the box does not fit',
-        () {
-      expect(siteMinWidth, 1360, reason: "the bar has five groups; below this the menu of the app is used");
-      expect(siteMinWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
-      expect(siteBarLayout(siteMinWidth).searchWidth, isNull);
+    test('is a site from a tablet up: the whole bar, the groups with the day in one, or a button for the menu', () {
+      expect(siteMinWidth, 768, reason: 'a phone is shown as the app');
+      expect(siteBarNav(767), SiteBarNav.menu);
+      expect(siteBarNav(siteMinWidth), SiteBarNav.menu);
+      expect(siteBarNav(1023), SiteBarNav.menu);
+      expect(siteBarNav(1024), SiteBarNav.grouped);
+      expect(siteBarNav(1359), SiteBarNav.grouped);
+      expect(siteBarNav(1360), SiteBarNav.full);
+      expect(siteBarFullWidth < 1500, isTrue, reason: 'where the box would not fit the search is a button');
+      expect(siteBarLayout(siteBarFullWidth).searchWidth, isNull);
     });
 
     test(
@@ -174,7 +178,7 @@ void main() {
         'has every section within reach at every width the page gives it, with the search the bar has room for in it',
         (tester) async {
       addTearDown(tester.view.reset);
-      for (final width in [siteMinWidth, 1300.0, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
+      for (final width in [siteBarFullWidth, 1499.0, 1500.0, 1699.0, 1700.0, 1900.0, 2560.0]) {
         final layout = siteBarLayout(width);
         tester.view.physicalSize = Size(width, 900);
         tester.view.devicePixelRatio = 1;
@@ -203,6 +207,54 @@ void main() {
         }
         expect(tester.takeException(), isNull, reason: 'at $width');
       }
+    });
+
+    testWidgets('has the day as a group on a laptop and a button for the menu on a tablet', (tester) async {
+      addTearDown(tester.view.reset);
+      var menus = 0;
+      Future<void> at(double width) async {
+        tester.view.physicalSize = Size(width, 900);
+        tester.view.devicePixelRatio = 1;
+        await tester.pumpWidget(MaterialApp(
+          theme: buildTheme(),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(0.6)),
+            child: child!,
+          ),
+          home: Scaffold(
+            appBar: SiteHeader(
+              current: AppSection.home,
+              onSelect: (_) {},
+              labels: {for (final sec in AppSection.values) sec: 'S-${sec.name}'},
+              icons: {for (final sec in AppSection.values) sec: Icons.circle},
+              groupLabels: const ['Account', 'Community', 'Economy', 'World', 'Reference'],
+              todayLabel: 'Today',
+              onMenu: () => menus++,
+              account: null,
+              search: const SizedBox(width: 48, child: Text('SEARCH')),
+            ),
+            body: const SizedBox.expand(),
+          ),
+        ));
+      }
+
+      for (final width in [1024.0, 1150.0, 1359.0]) {
+        await at(width);
+        for (final label in ['Today', 'Account', 'Community', 'Economy', 'World', 'Reference']) {
+          expect(find.text(label).hitTestable(), findsOneWidget, reason: '$label at $width');
+        }
+        expect(find.text('S-daily'), findsNothing, reason: 'the day is under its heading at $width');
+        expect(find.byIcon(Icons.menu), findsNothing);
+        expect(tester.takeException(), isNull, reason: 'at $width');
+      }
+      for (final width in [768.0, 900.0, 1023.0]) {
+        await at(width);
+        expect(find.text('Account'), findsNothing, reason: 'the menu has the sections at $width');
+        await tester.tap(find.byIcon(Icons.menu));
+        expect(find.text('SEARCH').hitTestable(), findsOneWidget);
+        expect(tester.takeException(), isNull, reason: 'at $width');
+      }
+      expect(menus, 3);
     });
 
     testWidgets('has the search between the sections and the account when it is given one, and none when it is not',

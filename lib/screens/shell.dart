@@ -539,8 +539,11 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     // a computer or a tablet held sideways keeps the menu open beside the page. in a browser the menu is a bar along the top and a
     // footer under the page, as a site has, not a panel beside it as an app has
     final wide = useSideMenu(MediaQuery.sizeOf(context));
-    _wide = wide;
-    final site = kIsWeb && wide && MediaQuery.sizeOf(context).width >= siteMinWidth;
+    final site = kIsWeb && MediaQuery.sizeOf(context).width >= siteMinWidth;
+    // a site on a tablet has its menu behind a button of the bar; elsewhere a site has none to open
+    final siteMenu = site && siteBarNav(MediaQuery.sizeOf(context).width) == SiteBarNav.menu;
+    final hasDrawer = site ? siteMenu : !wide;
+    _wide = !hasDrawer;
     // the tab of the browser says which page it is, as the tab of a site does
     if (kIsWeb) _setPageTitle(sitePageTitle(section, s.t(_titleKeys[section]!)));
     final lang = ref.watch(langProvider);
@@ -617,6 +620,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
               icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
               groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
+              todayLabel: s.t(siteTodayGroup.$1),
+              onMenu: () => _scaffoldKey.currentState?.openDrawer(),
               // the room of the bar decides what is in it: the account and a wide search, a narrower search, or a button that opens the
               // search in a window, so that the sections are always all there
               account: siteBarLayout(MediaQuery.sizeOf(context).width).account ? accountName : null,
@@ -676,7 +681,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               ],
             )
           : null,
-      drawer: wide ? null : menu,
+      drawer: hasDrawer ? menu : null,
       // the administrator's announcement above every page, and the app says it is open while it is
       body: AppPresence(
         child: SiteScope(
@@ -687,7 +692,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               Expanded(
                 child: SwipeToOpen(
                   // the map pans sideways, the menu stays on the button and back there
-                  enabled: section != AppSection.maps && !wide,
+                  enabled: section != AppSection.maps && hasDrawer && !site,
                   onOpen: () => _scaffoldKey.currentState?.openDrawer(),
                   child: IndexedStack(
                     index: section.index,

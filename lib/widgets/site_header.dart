@@ -45,9 +45,27 @@ const siteNavGroups = <(String, List<AppSection>)>[
   ('nav_group_reference', [AppSection.professions, AppSection.wiki, AppSection.news]),
 ];
 
-/// the narrowest window that is shown as a site, with the bar along the top: it has the sections, the groups and a way to search in
-/// that. a narrower one is shown as an app, with its menu beside the page
-const siteMinWidth = 1360.0;
+/// the narrowest window that is shown as a site, with the bar along the top. a narrower one, a phone, is shown as an app
+const siteMinWidth = 768.0;
+
+/// from this width the bar has every section and group along it
+const siteBarFullWidth = 1360.0;
+
+/// from this width the bar has the groups along it, the pages of the day in a group of their own and the home page behind
+/// the name; below it the bar has a button that opens the menu, as a site does on a tablet
+const siteBarGroupedWidth = 1024.0;
+
+/// the pages of the day, in one group where the bar has no room for them one by one
+const siteTodayGroup = ('nav_group_today', [AppSection.bosses, AppSection.daily, AppSection.weekly]);
+
+/// how the bar holds the sections at a width
+enum SiteBarNav { full, grouped, menu }
+
+SiteBarNav siteBarNav(double width) => width >= siteBarFullWidth
+    ? SiteBarNav.full
+    : width >= siteBarGroupedWidth
+        ? SiteBarNav.grouped
+        : SiteBarNav.menu;
 
 /// how wide the bar may grow. wider than a page: the sections, the search and the account are more than a page's width
 /// holds in the longer languages, and the search was drawn over the last of the sections
@@ -90,7 +108,15 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
     this.search,
     this.busy = false,
     this.progress,
+    this.todayLabel = '',
+    this.onMenu,
   });
+
+  /// the heading of the pages of the day where they are a group, [siteTodayGroup]
+  final String todayLabel;
+
+  /// opens the menu, where the bar has no room for the sections
+  final VoidCallback? onMenu;
 
   final AppSection current;
   final ValueChanged<AppSection> onSelect;
@@ -118,18 +144,31 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final mode = siteBarNav(width);
     final nav = <Widget>[
-      for (final sec in siteNavSingles)
-        SiteNavButton(label: labels[sec]!, selected: current == sec, onTap: () => onSelect(sec)),
-      for (var i = 0; i < siteNavGroups.length; i++)
+      if (mode == SiteBarNav.full)
+        for (final sec in siteNavSingles)
+          SiteNavButton(label: labels[sec]!, selected: current == sec, onTap: () => onSelect(sec))
+      else if (mode == SiteBarNav.grouped)
         _SiteNavMenu(
-          label: groupLabels[i],
-          sections: siteNavGroups[i].$2,
+          label: todayLabel,
+          sections: siteTodayGroup.$2,
           current: current,
           labels: labels,
           icons: icons,
           onSelect: onSelect,
         ),
+      if (mode != SiteBarNav.menu)
+        for (var i = 0; i < siteNavGroups.length; i++)
+          _SiteNavMenu(
+            label: groupLabels[i],
+            sections: siteNavGroups[i].$2,
+            current: current,
+            labels: labels,
+            icons: icons,
+            onSelect: onSelect,
+          ),
     ];
     return Material(
       color: AppColors.navBg,
@@ -145,6 +184,14 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: [
+                      if (mode == SiteBarNav.menu && onMenu != null) ...[
+                        IconButton(
+                          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                          onPressed: onMenu,
+                          icon: const Icon(Icons.menu),
+                        ),
+                        const SizedBox(width: 4),
+                      ],
                       InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () => onSelect(AppSection.home),
@@ -153,9 +200,13 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                           child: Row(
                             children: [
                               const DiamondEmblem(size: 30),
-                              const SizedBox(width: 10),
-                              Text('Wondrous Compass', style: display(20)),
-                              if (siteBarLayout(MediaQuery.sizeOf(context).width).version) ...[
+                              // between the full bar and a tablet the name gives its room to the sections; the emblem
+                              // still leads home
+                              if (mode != SiteBarNav.grouped || width >= 1200) ...[
+                                const SizedBox(width: 10),
+                                Text('Wondrous Compass', style: display(20)),
+                              ],
+                              if (siteBarLayout(width).version) ...[
                                 const SizedBox(width: 8),
                                 const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                               ],

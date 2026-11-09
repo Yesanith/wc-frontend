@@ -957,6 +957,7 @@ const zhStrings = <String, String>{
   'itype_JadeTechModule': '玉石机器人模块',
   'itype_PowerCore': '能量核心',
   'itype_Tool': '工具',
+  'nav_group_today': '今日',
   'nav_group_community': '社区',
   'nav_group_account': '账号',
   'nav_group_economy': '经济',

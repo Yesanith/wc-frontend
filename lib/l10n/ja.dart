@@ -964,6 +964,7 @@ const jaStrings = <String, String>{
   'itype_JadeTechModule': 'ジェイドボットモジュール',
   'itype_PowerCore': 'パワーコア',
   'itype_Tool': 'ツール',
+  'nav_group_today': '今日',
   'nav_group_community': 'コミュニティ',
   'nav_group_account': 'アカウント',
   'nav_group_economy': '経済',

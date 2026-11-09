@@ -1036,6 +1036,7 @@ const deStrings = <String, String>{
   'itype_JadeTechModule': 'Jadebot-Module',
   'itype_PowerCore': 'Energiekerne',
   'itype_Tool': 'Werkzeuge',
+  'nav_group_today': 'Heute',
   'nav_group_community': 'Gemeinschaft',
   'nav_group_account': 'Konto',
   'nav_group_economy': 'Wirtschaft',
