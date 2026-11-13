@@ -11,6 +11,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/clock.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 
 const _teamColors = {
   'red': Color(0xFFE0605A),
@@ -94,55 +95,59 @@ class _MatchupTab extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             children: [
-              for (final c in _teamColors.keys)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(AppRadius.card),
-                      border: Border.all(color: c == mine ? _teamColors[c]! : AppColors.line, width: c == mine ? 2 : 1),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(width: 10, height: 36, color: _teamColors[c]),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                c == mine ? '${s.t('team_$c')} · ${s.t('your_team')}' : s.t('team_$c'),
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                              ),
-                              Text(
-                                s.t('kd_line', {'k': fmtInt(kills[c]!), 'd': fmtInt(deaths[c]!)}),
-                                style: TextStyle(fontSize: 11, color: AppColors.muted),
-                              ),
-                              if (worldNames[c]!.isNotEmpty)
+              CardWrap(
+                minWidth: 340,
+                gap: 12,
+                children: [
+                  for (final c in _teamColors.keys)
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(AppRadius.card),
+                        border:
+                            Border.all(color: c == mine ? _teamColors[c]! : AppColors.line, width: c == mine ? 2 : 1),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(width: 10, height: 36, color: _teamColors[c]),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                  worldNames[c]!.join(', '),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 11, color: AppColors.textSoft),
+                                  c == mine ? '${s.t('team_$c')} · ${s.t('your_team')}' : s.t('team_$c'),
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
                                 ),
+                                Text(
+                                  s.t('kd_line', {'k': fmtInt(kills[c]!), 'd': fmtInt(deaths[c]!)}),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted),
+                                ),
+                                if (worldNames[c]!.isNotEmpty)
+                                  Text(
+                                    worldNames[c]!.join(', '),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 11, color: AppColors.textSoft),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(fmtInt(victory[c]!),
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _teamColors[c])),
+                              Text(s.t('score_n', {'n': fmtInt(scores[c]!)}),
+                                  style: TextStyle(fontSize: 11, color: AppColors.muted)),
                             ],
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(fmtInt(victory[c]!),
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: _teamColors[c])),
-                            Text(s.t('score_n', {'n': fmtInt(scores[c]!)}),
-                                style: TextStyle(fontSize: 11, color: AppColors.muted)),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+                ],
+              ),
               if (timers != null && (timers.lockout != null || timers.teamAssignment != null)) ...[
                 const SizedBox(height: 8),
                 Panel(
@@ -162,7 +167,13 @@ class _MatchupTab extends ConsumerWidget {
               const SizedBox(height: 20),
               SectionHeader(title: s.t('maps')),
               const SizedBox(height: 10),
-              for (final map in maps) _MapCard(map: Map<String, dynamic>.from(map), objectives: objectives),
+              CardWrap(
+                minWidth: 360,
+                gap: 10,
+                children: [
+                  for (final map in maps) _MapCard(map: Map<String, dynamic>.from(map), objectives: objectives)
+                ],
+              ),
             ],
           );
         },

@@ -196,3 +196,29 @@ class SiteScope extends InheritedWidget {
   @override
   bool updateShouldNotify(SiteScope oldWidget) => oldWidget.site != site;
 }
+
+/// the rows of a list in two columns where there is room, the first half down the left and the rest down the right, as the short
+/// rows of a page do; one column while the page is narrow
+class TwoColumnRows extends StatelessWidget {
+  const TwoColumnRows({super.key, required this.children, this.breakpoint = 760, this.gap = 40});
+
+  final List<Widget> children;
+  final double breakpoint;
+  final double gap;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, box) {
+      if (box.maxWidth < breakpoint || children.length < 2) return Column(children: children);
+      final half = (children.length + 1) ~/ 2;
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Column(children: children.sublist(0, half))),
+          SizedBox(width: gap),
+          Expanded(child: Column(children: children.sublist(half))),
+        ],
+      );
+    });
+  }
+}

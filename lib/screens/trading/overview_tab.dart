@@ -19,97 +19,107 @@ class _OverviewTab extends ConsumerWidget {
         children: [
           const ItemSearchField(),
           const SizedBox(height: 14),
-          Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Kicker(s.t('gem_exchange').caps),
-                const SizedBox(height: 12),
-                AsyncView<GemRates>(
-                  value: rates,
-                  onRetry: () => ref.invalidate(gemRatesProvider),
-                  builder: (r) => Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(s.t('gems_to_gold'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
-                            const SizedBox(height: 4),
-                            CoinText(r.coinsFor100Gems, size: 17),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(s.t('gold_to_gems'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
-                            const SizedBox(height: 4),
-                            Text(s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
-                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          const _GemHistoryChart(),
-          const SizedBox(height: 14),
-          const _GemCalculator(),
-          const SizedBox(height: 14),
-          Panel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Kicker(s.t('delivery').caps),
-                const SizedBox(height: 12),
-                AsyncView<Delivery>(
-                  permission: 'tradingpost',
-                  value: delivery,
-                  onRetry: () => ref.invalidate(deliveryProvider),
-                  builder: (d) {
-                    if (d.coins == 0 && d.items.isEmpty) {
-                      return Text(s.t('delivery_empty'), style: TextStyle(color: AppColors.muted));
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CoinText(d.coins, size: 20),
-                        if (d.items.isNotEmpty) ...[
-                          const SizedBox(height: 12),
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: [
-                              for (final it in d.items)
-                                GestureDetector(
-                                  onTap: () => showItemSheet(
-                                    context,
-                                    id: it.id,
-                                    name: it.name,
-                                    icon: it.icon,
-                                    rarity: it.rarity,
-                                    type: it.type,
-                                    count: it.count,
-                                  ),
-                                  child: ItemIcon(url: it.icon, rarity: it.rarity, count: it.count, size: 42),
-                                ),
-                            ],
+          // the exchange and the calculator on one side, the chart and what waits for pickup on the other
+          SplitColumns(
+            breakpoint: 820,
+            primaryFlex: 1,
+            secondaryFlex: 1,
+            spacing: 20,
+            primary: [
+              Panel(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Kicker(s.t('gem_exchange').caps),
+                    const SizedBox(height: 12),
+                    AsyncView<GemRates>(
+                      value: rates,
+                      onRetry: () => ref.invalidate(gemRatesProvider),
+                      builder: (r) => Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(s.t('gems_to_gold'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                                const SizedBox(height: 4),
+                                CoinText(r.coinsFor100Gems, size: 17),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(s.t('gold_to_gems'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                                const SizedBox(height: 4),
+                                Text(s.t('n_gems', {'n': fmtInt(r.gemsFor100Gold)}),
+                                    style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
+                              ],
+                            ),
                           ),
                         ],
-                        const SizedBox(height: 10),
-                        Text(s.t('pickup_note'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
-                      ],
-                    );
-                  },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 14),
+              const _GemCalculator(),
+            ],
+            secondary: [
+              const _GemHistoryChart(),
+              const SizedBox(height: 14),
+              Panel(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Kicker(s.t('delivery').caps),
+                    const SizedBox(height: 12),
+                    AsyncView<Delivery>(
+                      permission: 'tradingpost',
+                      value: delivery,
+                      onRetry: () => ref.invalidate(deliveryProvider),
+                      builder: (d) {
+                        if (d.coins == 0 && d.items.isEmpty) {
+                          return Text(s.t('delivery_empty'), style: TextStyle(color: AppColors.muted));
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CoinText(d.coins, size: 20),
+                            if (d.items.isNotEmpty) ...[
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 6,
+                                runSpacing: 6,
+                                children: [
+                                  for (final it in d.items)
+                                    GestureDetector(
+                                      onTap: () => showItemSheet(
+                                        context,
+                                        id: it.id,
+                                        name: it.name,
+                                        icon: it.icon,
+                                        rarity: it.rarity,
+                                        type: it.type,
+                                        count: it.count,
+                                      ),
+                                      child: ItemIcon(url: it.icon, rarity: it.rarity, count: it.count, size: 42),
+                                    ),
+                                ],
+                              ),
+                            ],
+                            const SizedBox(height: 10),
+                            Text(s.t('pickup_note'), style: TextStyle(fontSize: 12, color: AppColors.hint)),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 22),
           SectionHeader(title: s.t('watchlist')),

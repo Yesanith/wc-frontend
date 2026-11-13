@@ -40,11 +40,7 @@ class GuildsScreen extends ConsumerWidget {
             if (list.isEmpty) {
               return Panel(child: Text(s.t('no_guilds'), style: TextStyle(color: AppColors.muted)));
             }
-            return Column(
-              children: [
-                for (final id in list) Padding(padding: const EdgeInsets.only(bottom: 10), child: _GuildCard(id: id)),
-              ],
-            );
+            return CardWrap(minWidth: 400, children: [for (final id in list) _GuildCard(id: id)]);
           },
         ),
       ],

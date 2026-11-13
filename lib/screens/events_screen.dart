@@ -13,6 +13,7 @@ import '../state/progression.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import '../widgets/expansion_badge.dart';
 import '../widgets/waypoint_link.dart';
 
@@ -146,7 +147,13 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         if (maps.isEmpty)
           SliverToBoxAdapter(child: EmptyNote(s.t('nothing_pinned')))
         else if (listView)
-          _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted)
+          // on the site the rows keep to a width a row can be read in, not the width of the window
+          SiteScope.of(context)
+              ? SliverConstrainedCrossAxis(
+                  maxExtent: 940,
+                  sliver: _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted),
+                )
+              : _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted)
         else
           SliverToBoxAdapter(child: Timeline(maps: maps, kind: _kind, pins: pins, looted: looted)),
         const SliverToBoxAdapter(child: SizedBox(height: 24)),

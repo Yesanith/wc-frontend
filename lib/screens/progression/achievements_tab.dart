@@ -70,7 +70,7 @@ class _AchievementsTab extends ConsumerWidget {
               }
               return Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: Column(
+                child: TwoColumnRows(
                   children: [
                     for (final a in list.take(60))
                       InkWell(

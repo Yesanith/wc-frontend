@@ -21,7 +21,7 @@ class CollectionsScreen extends ConsumerWidget {
       children: [
         Text(s.t('collections_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
         const SizedBox(height: 12),
-        CardWrap(minWidth: 400, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
+        CardWrap(minWidth: 340, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
       ],
     );
   }

@@ -13,6 +13,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import 'craft_profit_screen.dart';
 import 'crafting_screen.dart';
 import 'goals_screen.dart';
@@ -185,25 +186,50 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
               ),
             ),
             Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-                itemCount: rows.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, i) {
-                  final (id, name, recipes) = rows[i];
-                  final from = i - i % _chunk;
-                  final to = from + _chunk > rows.length ? rows.length : from + _chunk;
-                  return _RecipeRow(
-                    id: id,
-                    name: name,
-                    recipes: recipes,
-                    // rows of the same chunk share one request for icons
-                    chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
-                    label: (d) => _label(s, d),
-                    learned: recipes.any((r) => r.id > 0 && learned.contains(r.id)),
-                  );
-                },
-              ),
+              child: SiteScope.of(context)
+                  ? GridView.builder(
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                      itemCount: rows.length,
+                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 480,
+                        mainAxisExtent: 76,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 8,
+                      ),
+                      itemBuilder: (context, i) {
+                        final (id, name, recipes) = rows[i];
+                        final from = i - i % _chunk;
+                        final to = from + _chunk > rows.length ? rows.length : from + _chunk;
+                        return _RecipeRow(
+                          id: id,
+                          name: name,
+                          recipes: recipes,
+                          // rows of the same chunk share one request for icons
+                          chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
+                          label: (d) => _label(s, d),
+                          learned: recipes.any((r) => r.id > 0 && learned.contains(r.id)),
+                        );
+                      },
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                      itemCount: rows.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      itemBuilder: (context, i) {
+                        final (id, name, recipes) = rows[i];
+                        final from = i - i % _chunk;
+                        final to = from + _chunk > rows.length ? rows.length : from + _chunk;
+                        return _RecipeRow(
+                          id: id,
+                          name: name,
+                          recipes: recipes,
+                          // rows of the same chunk share one request for icons
+                          chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
+                          label: (d) => _label(s, d),
+                          learned: recipes.any((r) => r.id > 0 && learned.contains(r.id)),
+                        );
+                      },
+                    ),
             ),
           ],
         );

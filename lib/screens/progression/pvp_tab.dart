@@ -102,9 +102,12 @@ class _PvpTab extends ConsumerWidget {
               ref.watch(pvpRanksProvider).valueOrNull ?? const [],
               asInt(data['pvp_rank']),
             );
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+            return SplitColumns(
+              breakpoint: 900,
+              primaryFlex: 1,
+              secondaryFlex: 1,
+              spacing: 20,
+              primary: [
                 Panel(
                   child: Column(
                     children: [
@@ -127,36 +130,20 @@ class _PvpTab extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                       ],
-                      Row(
+                      Wrap(
+                        spacing: 28,
+                        runSpacing: 14,
                         children: [
-                          Expanded(child: StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}')),
-                          Expanded(child: StatTile(label: s.t('win_rate'), value: ratio(aggregate))),
-                        ],
-                      ),
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: StatTile(
-                                  label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points'])))),
-                          // rollovers only mean something once there has been one
-                          Expanded(
-                            child: asInt(data['pvp_rank_rollovers']) > 0
-                                ? StatTile(
-                                    label: s.t('pvp_rollovers'),
-                                    value: fmtInt(asInt(data['pvp_rank_rollovers'])),
-                                  )
-                                : const SizedBox.shrink(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(child: StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins'])))),
-                          Expanded(
-                            child: StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
-                          ),
+                          for (final t in [
+                            StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}'),
+                            StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
+                            StatTile(label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points']))),
+                            if (asInt(data['pvp_rank_rollovers']) > 0)
+                              StatTile(label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers']))),
+                            StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins']))),
+                            StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
+                          ])
+                            SizedBox(width: SiteScope.of(context) ? 150 : 140, child: t),
                         ],
                       ),
                     ],
@@ -165,7 +152,8 @@ class _PvpTab extends ConsumerWidget {
                 const SizedBox(height: 12),
                 _Ladders(data, ratio: ratio),
                 const _SeasonStanding(),
-                const SizedBox(height: 12),
+              ],
+              secondary: [
                 Row(
                   children: [
                     Expanded(
@@ -191,7 +179,7 @@ class _PvpTab extends ConsumerWidget {
                   label: s.t('leaderboard'),
                   page: () => const PvpLadderScreen(),
                 ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 18),
                 SectionHeader(title: s.t('per_profession')),
                 const SizedBox(height: 10),
                 Panel(

@@ -62,7 +62,7 @@ class DailyScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          _Columns(two: site, children: [
+          FoldColumns(two: site, children: [
             FoldSection(
               title: s.t('wizards_vault'),
               leading: const VaultIcon(),
@@ -117,8 +117,8 @@ bool _vaultDone(Json? v) {
 }
 
 /// the folding lists one under another, or on the site in two columns that fill side by side
-class _Columns extends StatelessWidget {
-  const _Columns({required this.two, required this.children});
+class FoldColumns extends StatelessWidget {
+  const FoldColumns({super.key, required this.two, required this.children});
 
   final bool two;
   final List<Widget> children;
