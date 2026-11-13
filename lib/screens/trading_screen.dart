@@ -128,8 +128,8 @@ class _SiteHeadings extends StatelessWidget {
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.line))),
       child: Row(
         children: [
-          Expanded(child: Text(first.toUpperCase(), style: style)),
-          for (final c in columns) _siteCell(Text(c.toUpperCase(), style: style)),
+          Expanded(child: Text(first.caps, style: style)),
+          for (final c in columns) _siteCell(Text(c.caps, style: style)),
         ],
       ),
     );

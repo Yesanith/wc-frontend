@@ -42,7 +42,7 @@ class _GemCalculatorState extends ConsumerState<_GemCalculator> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('gem_calculator').toUpperCase()),
+          Kicker(s.t('gem_calculator').caps),
           const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -56,7 +56,7 @@ class _ModuleLinkPanelState extends ConsumerState<_ModuleLinkPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Kicker(s.t('module_link_title').toUpperCase()),
+          Kicker(s.t('module_link_title').caps),
           const SizedBox(height: 8),
           Text(s.t('module_link_note'), style: TextStyle(fontSize: 12, height: 1.45, color: AppColors.muted)),
           const SizedBox(height: 12),

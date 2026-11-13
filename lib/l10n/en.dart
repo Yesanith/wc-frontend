@@ -147,6 +147,10 @@ const enStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Deep navy with silver frames and an aqua glow, always dark.',
   'wvw_matchup_open': 'Open the matchup',
+  'weekdays': 'Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+  'months': 'January,February,March,April,May,June,July,August,September,October,November,December',
+  'date_full': '{wd}, {m} {d}, {y}',
+  'date_short': '{m} {d}, {y}',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

@@ -318,7 +318,7 @@ class _UpgradesTab extends ConsumerWidget {
             for (final e in byType.entries) ...[
               Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 6),
-                child: Kicker(titleCase(e.key.isEmpty ? '-' : e.key).toUpperCase()),
+                child: Kicker(titleCase(e.key.isEmpty ? '-' : e.key).caps),
               ),
               for (final u in e.value)
                 Padding(

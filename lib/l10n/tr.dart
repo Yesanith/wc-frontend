@@ -144,6 +144,10 @@ const trStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Derin lacivert, gümüş çerçeveler ve aqua parıltı; her zaman koyu.',
   'wvw_matchup_open': 'Eşleşmeyi aç',
+  'weekdays': 'Pazartesi,Salı,Çarşamba,Perşembe,Cuma,Cumartesi,Pazar',
+  'months': 'Ocak,Şubat,Mart,Nisan,Mayıs,Haziran,Temmuz,Ağustos,Eylül,Ekim,Kasım,Aralık',
+  'date_full': '{d} {m} {y} {wd}',
+  'date_short': '{d} {m} {y}',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

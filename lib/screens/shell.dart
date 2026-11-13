@@ -596,7 +596,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
             if (_groupStarts[sec] case final key?)
               Padding(
                 padding: const EdgeInsets.fromLTRB(28, 4, 28, 8),
-                child: Kicker(s.t(key).toUpperCase(), color: AppColors.hint),
+                child: Kicker(s.t(key).caps, color: AppColors.hint),
               ),
           ],
           NavigationDrawerDestination(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -171,7 +172,7 @@ class _PageBody extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label.toUpperCase(),
+              Text(label.caps,
                   style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
               const SizedBox(height: 6),
               child,

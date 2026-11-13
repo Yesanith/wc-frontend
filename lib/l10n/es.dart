@@ -146,6 +146,10 @@ const esStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Azul marino profundo con marcos plateados y un brillo aguamarina, siempre oscuro.',
   'wvw_matchup_open': 'Abrir el enfrentamiento',
+  'weekdays': 'lunes,martes,miércoles,jueves,viernes,sábado,domingo',
+  'months': 'enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre',
+  'date_full': '{wd}, {d} de {m} de {y}',
+  'date_short': '{d} de {m} de {y}',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

@@ -69,7 +69,7 @@ class _PricePanel extends ConsumerWidget {
 
     final stepper = Row(
       children: [
-        Expanded(child: Kicker(s.t('quantity').toUpperCase(), color: AppColors.hint)),
+        Expanded(child: Kicker(s.t('quantity').caps, color: AppColors.hint)),
         IconButton(
           // 1, 10 and 250 are the steps people trade in
           onPressed: qty > 1 ? () => onQty(qty == 250 ? 10 : (qty == 10 ? 1 : qty - 1)) : null,

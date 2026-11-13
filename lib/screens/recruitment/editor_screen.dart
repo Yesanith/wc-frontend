@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../l10n/strings.dart';
@@ -168,7 +169,7 @@ class _RecruitEditorScreenState extends ConsumerState<RecruitEditorScreen> {
     final languages = [...recruitLanguages, ..._draft.languages.where((l) => !recruitLanguages.contains(l))];
     Widget label(String text) => Padding(
           padding: const EdgeInsets.only(top: 18, bottom: 6),
-          child: Text(text.toUpperCase(),
+          child: Text(text.caps,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1, color: AppColors.hint)),
         );
     return ListView(

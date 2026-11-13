@@ -283,7 +283,7 @@ class _SiteEquipmentState extends ConsumerState<_SiteEquipment> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 4, bottom: 4),
-                  child: Text(title.toUpperCase(),
+                  child: Text(title.caps,
                       style: TextStyle(
                           fontSize: 11, letterSpacing: 1, fontWeight: FontWeight.w700, color: AppColors.muted)),
                 ),

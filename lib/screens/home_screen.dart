@@ -126,7 +126,7 @@ class _HomeHero extends ConsumerWidget {
         ClockBuilder(
           step: ClockStep.minute,
           builder: (context, now) => Text(
-            '${MaterialLocalizations.of(context).formatFullDate(now.toLocal())} · ${localClock(now)}'.toUpperCase(),
+            '${fullDateText(s, now.toLocal())} · ${localClock(now)}'.caps,
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.8, color: AppColors.gold),
           ),
         ),
@@ -182,7 +182,7 @@ class _HomeChip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(label.toUpperCase(),
+              Text(label.caps,
                   style: TextStyle(
                       fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
               const SizedBox(height: 2),

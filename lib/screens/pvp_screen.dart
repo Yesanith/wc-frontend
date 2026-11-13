@@ -245,7 +245,7 @@ class _PvpLadderScreenState extends ConsumerState<PvpLadderScreen> {
                   children: [
                     for (final r in const ['eu', 'na']) ...[
                       ChoiceChip(
-                        label: Text(r.toUpperCase()),
+                        label: Text(r.caps),
                         selected: _region == r,
                         onSelected: (_) => setState(() => _region = r),
                       ),

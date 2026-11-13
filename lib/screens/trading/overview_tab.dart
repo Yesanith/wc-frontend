@@ -23,7 +23,7 @@ class _OverviewTab extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Kicker(s.t('gem_exchange').toUpperCase()),
+                Kicker(s.t('gem_exchange').caps),
                 const SizedBox(height: 12),
                 AsyncView<GemRates>(
                   value: rates,
@@ -66,7 +66,7 @@ class _OverviewTab extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Kicker(s.t('delivery').toUpperCase()),
+                Kicker(s.t('delivery').caps),
                 const SizedBox(height: 12),
                 AsyncView<Delivery>(
                   permission: 'tradingpost',

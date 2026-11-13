@@ -148,6 +148,10 @@ const frStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Bleu nuit profond, cadres argentés et lueur aigue-marine, toujours sombre.',
   'wvw_matchup_open': 'Ouvrir la rencontre',
+  'weekdays': 'lundi,mardi,mercredi,jeudi,vendredi,samedi,dimanche',
+  'months': 'janvier,février,mars,avril,mai,juin,juillet,août,septembre,octobre,novembre,décembre',
+  'date_full': '{wd} {d} {m} {y}',
+  'date_short': '{d} {m} {y}',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

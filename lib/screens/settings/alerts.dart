@@ -193,7 +193,7 @@ class _ResetAlertsPanelState extends ConsumerState<_ResetAlertsPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Kicker(s.t('reset_alerts_title').toUpperCase()),
+          Kicker(s.t('reset_alerts_title').caps),
           const SizedBox(height: 4),
           Text(s.t('reset_alerts_note'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           SwitchListTile(

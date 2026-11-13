@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../util.dart';
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
@@ -125,7 +126,7 @@ class Eyebrow extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              text.toUpperCase(),
+              text.caps,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
             ),
           ),

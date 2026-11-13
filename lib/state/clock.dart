@@ -1,3 +1,4 @@
+import '../l10n/strings.dart';
 import 'periodic.dart';
 import '../util.dart';
 
@@ -39,3 +40,24 @@ int yearsSince(DateTime created, DateTime now) {
   if (u.month < c.month || (u.month == c.month && u.day < c.day)) years--;
   return years < 0 ? 0 : years;
 }
+
+String _name(S s, String key, int index) {
+  final names = s.t(key).split(',');
+  return index >= 0 && index < names.length ? names[index].trim() : '';
+}
+
+/// a date in words in the language of the app, "Friday, November 13, 2026" or "13 Kasım 2026 Cuma": the names of the days
+/// and of the months and the order of the parts are strings of each language, the system's own would be English
+String fullDateText(S s, DateTime d) => s.t('date_full', {
+      'wd': _name(s, 'weekdays', d.weekday - 1),
+      'd': d.day,
+      'm': _name(s, 'months', d.month - 1),
+      'y': d.year,
+    });
+
+/// the same without the day of the week
+String shortDateText(S s, DateTime d) => s.t('date_short', {
+      'd': d.day,
+      'm': _name(s, 'months', d.month - 1),
+      'y': d.year,
+    });

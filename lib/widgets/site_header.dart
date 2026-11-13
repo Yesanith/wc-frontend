@@ -4,6 +4,7 @@ import '../l10n/strings.dart';
 import '../services/update_check.dart' show appVersion;
 import '../state/navigation.dart';
 import '../theme.dart';
+import '../util.dart';
 import 'common.dart';
 import 'responsive.dart';
 

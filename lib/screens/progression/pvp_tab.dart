@@ -19,7 +19,7 @@ class _SeasonStanding extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('league').toUpperCase()),
+          Kicker(s.t('league').caps),
           const SizedBox(height: 6),
           Text(title, style: display(16)),
           if (standing.seasonName.isNotEmpty && standing.divisionName.isNotEmpty) ...[

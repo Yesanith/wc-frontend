@@ -203,7 +203,7 @@ class _OrderBook extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title.toUpperCase(),
+              Text(title.caps,
                   style:
                       TextStyle(fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
               const SizedBox(height: 6),
@@ -226,7 +226,7 @@ class _OrderBook extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('order_book').toUpperCase()),
+          Kicker(s.t('order_book').caps),
           const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

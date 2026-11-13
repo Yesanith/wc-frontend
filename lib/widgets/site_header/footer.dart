@@ -101,7 +101,7 @@ class SitePageHeading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (kicker != null) ...[
-          Kicker(kicker!.toUpperCase(), color: AppColors.gold),
+          Kicker(kicker!.caps, color: AppColors.gold),
           const SizedBox(height: 4),
         ],
         Text(title, style: display(30)),

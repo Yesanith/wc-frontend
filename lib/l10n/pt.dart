@@ -148,6 +148,10 @@ const ptStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Azul-marinho profundo com molduras prateadas e brilho aqua, sempre escuro.',
   'wvw_matchup_open': 'Abrir o confronto',
+  'weekdays': 'segunda-feira,terça-feira,quarta-feira,quinta-feira,sexta-feira,sábado,domingo',
+  'months': 'janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro',
+  'date_full': '{wd}, {d} de {m} de {y}',
+  'date_short': '{d} de {m} de {y}',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

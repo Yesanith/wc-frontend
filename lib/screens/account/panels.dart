@@ -27,7 +27,7 @@ class _AccountProfile extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('acc_profile').toUpperCase()),
+          Kicker(s.t('acc_profile').caps),
           const SizedBox(height: 10),
           Wrap(
             spacing: 28,
@@ -75,7 +75,7 @@ class _AccountCounters extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('account_progress').toUpperCase()),
+          Kicker(s.t('account_progress').caps),
           const SizedBox(height: 4),
           Text(s.t('account_progress_note'), style: TextStyle(fontSize: 11, height: 1.4, color: AppColors.muted)),
           const SizedBox(height: 8),
@@ -138,7 +138,7 @@ class _WealthPanel extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('wealth_history').toUpperCase()),
+          Kicker(s.t('wealth_history').caps),
           const SizedBox(height: 10),
           SizedBox(
             height: 60,

@@ -372,7 +372,7 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
                   children: [
                     Icon(activityIcon(e.activity), color: AppColors.gold),
                     const SizedBox(width: 8),
-                    Text(s.t('activity_${e.activity}').toUpperCase(),
+                    Text(s.t('activity_${e.activity}').caps,
                         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.gold)),
                     const Spacer(),
                     if (e.seriesId != null) Pill(s.t('event_weekly')),

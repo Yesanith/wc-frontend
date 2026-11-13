@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -326,7 +327,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
         ],
         if (e.hasRoles) ...[
           const SizedBox(height: 12),
-          Kicker(s.t('event_roles').toUpperCase()),
+          Kicker(s.t('event_roles').caps),
           const SizedBox(height: 6),
           Panel(
             child: Column(
@@ -424,7 +425,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
             ],
           ),
           const SizedBox(height: 16),
-          Kicker(s.t('oe_roster').toUpperCase()),
+          Kicker(s.t('oe_roster').caps),
           const SizedBox(height: 8),
           _Roster(eventId: e.id),
         ] else

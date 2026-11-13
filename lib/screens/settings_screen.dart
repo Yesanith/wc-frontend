@@ -128,7 +128,7 @@ class SettingsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Kicker(s.t('backup').toUpperCase()),
+                Kicker(s.t('backup').caps),
                 const SizedBox(height: 8),
                 Text(s.t('backup_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
                 const SizedBox(height: 12),

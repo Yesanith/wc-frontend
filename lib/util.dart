@@ -10,6 +10,14 @@ int asInt(dynamic v) {
 /// thousands separator, set by the app root when the language changes
 String groupSeparator = ',';
 
+/// whether capitals follow the Turkish rules, where the dotted i is İ and the dotless ı is I; set from the language
+bool turkishCasing = false;
+
+extension Caps on String {
+  /// the text in capitals, as a heading is set, with the Turkish i where the language asks for it
+  String get caps => (turkishCasing ? replaceAll('i', 'İ') : this).toUpperCase();
+}
+
 /// 1284567 -> 1,284,567 (or 1.284.567 etc. depending on the language)
 String fmtInt(int n) {
   final s = n.abs().toString();

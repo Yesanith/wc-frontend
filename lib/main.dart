@@ -152,6 +152,20 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
     if (context != null) openLinkNow(context, link, announce: false);
   }
 
+  /// the palette the widgets were last built with
+  AppPalette? _applied;
+
+  void _rebuildAll() {
+    if (!mounted) return;
+    void visit(Element e) {
+      e.markNeedsBuild();
+      e.visitChildren(visit);
+    }
+
+    final root = WidgetsBinding.instance.rootElement;
+    if (root != null) visit(root);
+  }
+
   @override
   Widget build(BuildContext context) {
     final lang = ref.watch(langProvider);
@@ -161,17 +175,20 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
       AppLang.ru => '\u00A0',
       _ => '.',
     };
+    turkishCasing = lang == AppLang.tr;
     final key = ref.watch(apiKeyProvider);
     final guest = ref.watch(guestModeProvider);
     final chosenScale = ref.watch(uiScaleProvider);
     // the palette is chosen here and read by every widget as it is built. the whole tree is made again
     // when it changes (the key), since widgets made once as constants would keep the old colours
     final palette = paletteFor(ref.watch(lookProvider), WidgetsBinding.instance.platformDispatcher.platformBrightness);
+    final changed = _applied != null && !identical(_applied, palette);
+    _applied = palette;
     AppColors.use(palette);
-    return KeyedSubtree(
-      key: ValueKey(palette.dark),
-      child: _app(key, guest, chosenScale),
-    );
+    // every element is built again once, in place, instead of making the tree again: nothing is thrown away, no image is
+    // loaded again and the page stays where it was, and a widget made as a constant is not skipped either
+    if (changed) WidgetsBinding.instance.addPostFrameCallback((_) => _rebuildAll());
+    return _app(key, guest, chosenScale);
   }
 
   Widget _home(String? key, bool guest) {
@@ -198,6 +215,8 @@ class _WondrousCompassAppState extends ConsumerState<WondrousCompassApp> with Wi
       title: 'Wondrous Compass',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
+      // the colours that are not the theme's change at once, so the theme's must not glide to theirs
+      themeAnimationDuration: Duration.zero,
       // on the web a wide screen shows everything larger, so a 2K monitor is not a phone's layout in the middle of it
       builder: (context, child) => UiZoom(
         scale: kIsWeb ? uiZoomFor(MediaQuery.sizeOf(context).width, chosenScale) : 1.0,

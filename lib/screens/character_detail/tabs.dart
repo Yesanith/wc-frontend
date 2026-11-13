@@ -112,7 +112,7 @@ class _EquipmentRow extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(slotLabel(s, slot).toUpperCase(),
+                    Text(slotLabel(s, slot).caps,
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                     const SizedBox(height: 2),

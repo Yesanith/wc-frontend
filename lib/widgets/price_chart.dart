@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../util.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/price_history.dart';
@@ -39,7 +40,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Kicker(s.t('price_history').toUpperCase()),
+            Kicker(s.t('price_history').caps),
             const SizedBox(height: 8),
             Text(s.t('price_history_collecting'), style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
           ],
@@ -82,7 +83,7 @@ class _PriceHistoryPanelState extends ConsumerState<PriceHistoryPanel> {
         children: [
           Row(
             children: [
-              Expanded(child: Kicker(s.t('price_history').toUpperCase())),
+              Expanded(child: Kicker(s.t('price_history').caps)),
               for (final (days, label) in [(7, '7d'), (30, '30d'), (90, '90d'), (null, s.t('all'))]) ...[
                 const SizedBox(width: 4),
                 ChoiceChip(

@@ -36,7 +36,7 @@ class SkillRow extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (slot.isNotEmpty)
-                        Text(slot.toUpperCase(),
+                        Text(slot.caps,
                             style: TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 0.6, color: AppColors.muted)),
                       Text((data['name'] as String?) ?? '-',

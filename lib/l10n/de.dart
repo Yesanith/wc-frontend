@@ -151,6 +151,10 @@ const deStrings = <String, String>{
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Tiefes Marineblau mit Silberrahmen und aquafarbenem Schimmer, immer dunkel.',
   'wvw_matchup_open': 'Matchup öffnen',
+  'weekdays': 'Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag',
+  'months': 'Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember',
+  'date_full': '{wd}, {d}. {m} {y}',
+  'date_short': '{d}. {m} {y}',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

@@ -14,7 +14,7 @@ class _SyncPanel extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Kicker(s.t('sync_now').toUpperCase()),
+          Kicker(s.t('sync_now').caps),
           const SizedBox(height: 8),
           Text(s.t('sync_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
           if (sync.running) ...[

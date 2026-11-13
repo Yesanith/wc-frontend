@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/account.dart';
+import '../state/clock.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -53,7 +55,7 @@ class VaultAwaitingLogin extends ConsumerWidget {
                     style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
                 if (updated != null) ...[
                   const SizedBox(height: 4),
-                  Text(s.t('api_last_sent', {'t': _when(context, updated)}),
+                  Text(s.t('api_last_sent', {'t': _when(s, updated)}),
                       style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
               ],
@@ -65,8 +67,7 @@ class VaultAwaitingLogin extends ConsumerWidget {
   }
 }
 
-String _when(BuildContext context, DateTime updated) {
+String _when(S s, DateTime updated) {
   final local = updated.toLocal();
-  final m = MaterialLocalizations.of(context);
-  return '${m.formatShortDate(local)} ${m.formatTimeOfDay(TimeOfDay.fromDateTime(local), alwaysUse24HourFormat: true)}';
+  return '${shortDateText(s, local)} ${pad2(local.hour)}:${pad2(local.minute)}';
 }

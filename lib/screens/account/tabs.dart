@@ -31,7 +31,7 @@ class _WalletTab extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Kicker(s.t('gold').toUpperCase()),
+                  Kicker(s.t('gold').caps),
                   const SizedBox(height: 6),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.end,
