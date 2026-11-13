@@ -103,10 +103,11 @@ const trStrings = <String, String>{
   'tp_col_qty': 'Adet',
   'search_storage': 'Eşya adıyla ara',
   'n_found': '{n} sonuç',
-  'api_stale_daily':
-      'Oyun, günlük sıfırlamadan beri hesabını API\'ye göndermedi (son: {t}); burada görünen hâlâ dünün verisi. Oynadıktan birkaç dakika sonra güncellenir.',
-  'api_stale_weekly':
-      'Oyun, haftalık sıfırlamadan beri hesabını API\'ye göndermedi (son: {t}); burada görünen hâlâ geçen haftanın verisi. Oynadıktan birkaç dakika sonra güncellenir.',
+  'vault_after_login_daily': 'Bugünün görevleri oyuna giriş yaptığında gelir',
+  'vault_after_login_weekly': 'Bu haftanın görevleri oyuna giriş yaptığında gelir',
+  'vault_after_login_note':
+      'Oyun, Wizard\'s Vault görevlerini sıfırlamadan sonraki ilk girişinde verir; o zamana kadar API\'de yalnızca öncekiler olur. Giriş yaptıktan birkaç dakika sonra burada görünürler.',
+  'api_last_sent': 'Oyunun hesabını en son gönderdiği zaman: {t}',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

@@ -107,10 +107,11 @@ const ptStrings = <String, String>{
   'tp_col_qty': 'Qtd.',
   'search_storage': 'Buscar pelo nome do item',
   'n_found': '{n} encontrados',
-  'api_stale_daily':
-      'O jogo não enviou sua conta para a API desde o reset diário (último: {t}), então o que aparece ainda é de ontem. Atualiza alguns minutos depois de jogar.',
-  'api_stale_weekly':
-      'O jogo não enviou sua conta para a API desde o reset semanal (último: {t}), então o que aparece ainda é da semana passada. Atualiza alguns minutos depois de jogar.',
+  'vault_after_login_daily': 'Os objetivos de hoje chegam quando você entra no jogo',
+  'vault_after_login_weekly': 'Os objetivos desta semana chegam quando você entra no jogo',
+  'vault_after_login_note':
+      'O jogo distribui os objetivos do Cofre do Mago no seu primeiro login após o reset; até lá a API só tem os anteriores. Eles aparecem aqui alguns minutos depois do login.',
+  'api_last_sent': 'O jogo enviou sua conta pela última vez em {t}',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

@@ -25,6 +25,7 @@ class WeeklyScreen extends ConsumerWidget {
     final raids = ref.watch(raidsProvider).valueOrNull;
     String? meta(Json? v) =>
         v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
+    final weeklyStale = ref.watch(vaultStaleProvider('weekly'));
     void openShop() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()));
 
     return RefreshIndicator(
@@ -34,12 +35,11 @@ class WeeklyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('weekly_reset_in'), at: nextWeeklyReset()),
-          const StaleSinceResetNote(weekly: true, padding: EdgeInsets.only(top: 12)),
           const SizedBox(height: 12),
           FoldSection(
             title: s.t('vault_weekly'),
             leading: const VaultIcon(),
-            summary: meta(weekly.valueOrNull),
+            summary: weeklyStale ? null : meta(weekly.valueOrNull),
             initiallyExpanded: true,
             trailing: IconButton(
               tooltip: s.t('vault_shop'),
@@ -51,7 +51,8 @@ class WeeklyScreen extends ConsumerWidget {
               value: weekly,
               permission: 'progression',
               onRetry: () => ref.invalidate(vaultTrackProvider('weekly')),
-              builder: (json) => VaultObjectives(json, framed: false),
+              builder: (json) =>
+                  weeklyStale ? const VaultAwaitingLogin(track: 'weekly') : VaultObjectives(json, framed: false),
             ),
           ),
           const SizedBox(height: 12),

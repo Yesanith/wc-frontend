@@ -17,47 +17,56 @@ bool updatedBeforeReset(DateTime? updated, {required bool weekly, DateTime? now}
   return updated.isBefore(reset);
 }
 
-/// says so above the vault and the dailies when the api has not had the account since the reset, so that yesterday's
-/// ticks are not taken for today's
-class StaleSinceResetNote extends ConsumerWidget {
-  const StaleSinceResetNote({super.key, this.weekly = false, this.padding = EdgeInsets.zero});
+/// whether the vault's [track] the api gives is the previous period's: the game hands out the new objectives only when
+/// the player logs in after the reset, and the api has the old ones until then. the special track does not reset
+final vaultStaleProvider = Provider.family<bool, String>((ref, track) {
+  if (track != 'daily' && track != 'weekly') return false;
+  final updated = accountUpdatedAt(ref.watch(accountProvider).valueOrNull);
+  return updatedBeforeReset(updated, weekly: track == 'weekly');
+});
 
-  final bool weekly;
-  final EdgeInsets padding;
+/// in place of the vault's objectives while they are the previous period's: the new ones come with the next login
+class VaultAwaitingLogin extends ConsumerWidget {
+  const VaultAwaitingLogin({super.key, required this.track});
+
+  final String track;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final updated = accountUpdatedAt(ref.watch(accountProvider).valueOrNull);
-    if (!updatedBeforeReset(updated, weekly: weekly)) return const SizedBox.shrink();
     final s = ref.watch(stringsProvider);
-    final local = updated!.toLocal();
-    final m = MaterialLocalizations.of(context);
-    final when =
-        '${m.formatShortDate(local)} ${m.formatTimeOfDay(TimeOfDay.fromDateTime(local), alwaysUse24HourFormat: true)}';
+    final updated = accountUpdatedAt(ref.watch(accountProvider).valueOrNull);
     return Padding(
-      padding: padding,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColors.amber.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.amber.withValues(alpha: 0.4)),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.schedule, size: 18, color: AppColors.amber),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                s.t(weekly ? 'api_stale_weekly' : 'api_stale_daily', {'t': when}),
-                style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.login, size: 20, color: AppColors.gold),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(s.t(track == 'weekly' ? 'vault_after_login_weekly' : 'vault_after_login_daily'),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, height: 1.35)),
+                const SizedBox(height: 4),
+                Text(s.t('vault_after_login_note'),
+                    style: TextStyle(fontSize: 13, height: 1.4, color: AppColors.textSoft)),
+                if (updated != null) ...[
+                  const SizedBox(height: 4),
+                  Text(s.t('api_last_sent', {'t': _when(context, updated)}),
+                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ],
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+}
+
+String _when(BuildContext context, DateTime updated) {
+  final local = updated.toLocal();
+  final m = MaterialLocalizations.of(context);
+  return '${m.formatShortDate(local)} ${m.formatTimeOfDay(TimeOfDay.fromDateTime(local), alwaysUse24HourFormat: true)}';
 }

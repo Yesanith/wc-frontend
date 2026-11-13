@@ -105,10 +105,11 @@ const esStrings = <String, String>{
   'tp_col_qty': 'Cant.',
   'search_storage': 'Buscar por nombre de objeto',
   'n_found': '{n} encontrados',
-  'api_stale_daily':
-      'El juego no ha enviado tu cuenta a la API desde el reinicio diario (último: {t}), así que lo que ves sigue siendo de ayer. Se actualiza unos minutos después de jugar.',
-  'api_stale_weekly':
-      'El juego no ha enviado tu cuenta a la API desde el reinicio semanal (último: {t}), así que lo que ves sigue siendo de la semana pasada. Se actualiza unos minutos después de jugar.',
+  'vault_after_login_daily': 'Los objetivos de hoy llegan cuando entras al juego',
+  'vault_after_login_weekly': 'Los objetivos de esta semana llegan cuando entras al juego',
+  'vault_after_login_note':
+      'El juego asigna los objetivos de la Cámara del Mago en tu primer inicio de sesión tras el reinicio; hasta entonces la API solo tiene los anteriores. Aparecen aquí unos minutos después de entrar.',
+  'api_last_sent': 'El juego envió tu cuenta por última vez el {t}',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

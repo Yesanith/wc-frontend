@@ -110,10 +110,11 @@ const deStrings = <String, String>{
   'tp_col_qty': 'Anz.',
   'search_storage': 'Nach Gegenstand suchen',
   'n_found': '{n} gefunden',
-  'api_stale_daily':
-      'Das Spiel hat dein Konto seit dem täglichen Reset nicht an die API gesendet (zuletzt {t}), daher ist dies noch der Stand von gestern. Es aktualisiert sich einige Minuten nach dem Spielen.',
-  'api_stale_weekly':
-      'Das Spiel hat dein Konto seit dem wöchentlichen Reset nicht an die API gesendet (zuletzt {t}), daher ist dies noch der Stand der letzten Woche. Es aktualisiert sich einige Minuten nach dem Spielen.',
+  'vault_after_login_daily': 'Die heutigen Aufgaben kommen, wenn du dich im Spiel anmeldest',
+  'vault_after_login_weekly': 'Die Aufgaben dieser Woche kommen, wenn du dich im Spiel anmeldest',
+  'vault_after_login_note':
+      'Das Spiel vergibt die Aufgaben des Zauberer-Tresors bei der ersten Anmeldung nach dem Reset; bis dahin hat die API nur die vorherigen. Sie erscheinen hier einige Minuten nach der Anmeldung.',
+  'api_last_sent': 'Das Spiel hat dein Konto zuletzt am {t} gesendet',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

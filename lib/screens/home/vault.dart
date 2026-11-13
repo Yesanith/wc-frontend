@@ -38,13 +38,12 @@ class _VaultState extends ConsumerState<_Vault> {
             ),
           ),
           const SizedBox(height: 16),
-          // the special track does not reset
-          if (_track != 'special')
-            StaleSinceResetNote(weekly: _track == 'weekly', padding: const EdgeInsets.only(bottom: 12)),
           AsyncView<Json>(
             value: period,
             onRetry: () => ref.invalidate(vaultTrackProvider(_track)),
             builder: (v) {
+              // yesterday's objectives are not shown as today's: the new ones come when the player logs in
+              if (ref.watch(vaultStaleProvider(_track))) return VaultAwaitingLogin(track: _track);
               final objectives = [
                 for (final o in (v['objectives'] as List?) ?? const [])
                   if (o is Map) Map<String, dynamic>.from(o)

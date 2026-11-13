@@ -30,6 +30,7 @@ class DailyScreen extends ConsumerWidget {
     final dungeons = ref.watch(dungeonsProvider).valueOrNull;
     // on the site the lists stand open, two side by side, as a checklist on a page does
     final site = SiteScope.of(context);
+    final dailyStale = ref.watch(vaultStaleProvider('daily'));
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -44,7 +45,6 @@ class DailyScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           ResetBanner(label: s.t('daily_reset_in'), at: nextDailyReset()),
-          const StaleSinceResetNote(padding: EdgeInsets.only(top: 12)),
           const SizedBox(height: 12),
           // the quick counters first, they fit on one screen
           _ChecklistGrid(
@@ -66,8 +66,8 @@ class DailyScreen extends ConsumerWidget {
             FoldSection(
               title: s.t('wizards_vault'),
               leading: const VaultIcon(),
-              summary: _vaultSummary(s, v),
-              initiallyExpanded: !_vaultDone(v),
+              summary: dailyStale ? null : _vaultSummary(s, v),
+              initiallyExpanded: dailyStale || !_vaultDone(v),
               trailing: IconButton(
                 tooltip: s.t('vault_shop'),
                 visualDensity: VisualDensity.compact,
@@ -79,7 +79,8 @@ class DailyScreen extends ConsumerWidget {
                 value: vault,
                 permission: 'progression',
                 onRetry: () => ref.invalidate(vaultTrackProvider('daily')),
-                builder: (json) => VaultObjectives(json, framed: false),
+                builder: (json) =>
+                    dailyStale ? const VaultAwaitingLogin(track: 'daily') : VaultObjectives(json, framed: false),
               ),
             ),
             ...?ref.watch(periodicAchievementsProvider).whenOrNull(

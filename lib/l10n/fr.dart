@@ -107,10 +107,11 @@ const frStrings = <String, String>{
   'tp_col_qty': 'Qté',
   'search_storage': 'Chercher un objet par son nom',
   'n_found': '{n} trouvés',
-  'api_stale_daily':
-      'Le jeu n\'a pas envoyé ton compte à l\'API depuis la réinitialisation quotidienne (dernier envoi : {t}) ; ce qui s\'affiche date encore d\'hier. Cela se met à jour quelques minutes après avoir joué.',
-  'api_stale_weekly':
-      'Le jeu n\'a pas envoyé ton compte à l\'API depuis la réinitialisation hebdomadaire (dernier envoi : {t}) ; ce qui s\'affiche date encore de la semaine dernière. Cela se met à jour quelques minutes après avoir joué.',
+  'vault_after_login_daily': 'Les objectifs du jour arrivent quand tu te connectes au jeu',
+  'vault_after_login_weekly': 'Les objectifs de la semaine arrivent quand tu te connectes au jeu',
+  'vault_after_login_note':
+      'Le jeu attribue les objectifs de la Chambre forte du sorcier à ta première connexion après la réinitialisation ; d\'ici là l\'API n\'a que les précédents. Ils s\'affichent ici quelques minutes après ta connexion.',
+  'api_last_sent': 'Le jeu a envoyé ton compte pour la dernière fois le {t}',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
