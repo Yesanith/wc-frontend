@@ -15,6 +15,8 @@ class CraftNode {
     required this.outputCount,
     required this.children,
     required this.disciplines,
+    this.minRating = 0,
+    this.craftMs = 0,
   });
 
   final int itemId;
@@ -25,6 +27,10 @@ class CraftNode {
   final int outputCount;
   final List<CraftNode> children;
   final List<String> disciplines;
+
+  /// the crafting level the recipe asks for, and how long one craft takes where the source tells
+  final int minRating;
+  final int craftMs;
 
   bool get isLeaf => children.isEmpty;
   String get name => (item?['name'] as String?) ?? 'Item #$itemId';
@@ -129,6 +135,7 @@ CraftNode buildFromBook(RecipeBook book, int rootId, Map<int, Json> items) {
         for (final (id, count) in recipe.ingredients) build(id, count, {...seen, itemId}, depth + 1),
       ],
       disciplines: recipe.disciplines,
+      minRating: recipe.minRating,
     );
   }
 
@@ -193,6 +200,8 @@ Future<CraftNode> _liveTree(Gw2Api api, int rootId) async {
       outputCount: output <= 0 ? 1 : output,
       children: children,
       disciplines: [for (final d in (recipe['disciplines'] as List?) ?? const []) '$d'],
+      minRating: asInt(recipe['min_rating']),
+      craftMs: asInt(recipe['time_to_craft_ms']),
     );
   }
 

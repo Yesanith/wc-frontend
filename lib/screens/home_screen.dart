@@ -22,8 +22,10 @@ import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
 import '../widgets/pin_button.dart';
+import '../widgets/vault_objectives.dart' show VaultChestReward;
 import '../widgets/waypoint_link.dart';
 import '../state/news.dart';
+import 'achievement_detail_screen.dart';
 import 'events_screen.dart';
 
 part 'home/banners.dart';

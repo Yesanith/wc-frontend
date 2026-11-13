@@ -6,6 +6,7 @@ import '../state/characters.dart';
 import '../state/crafting.dart';
 import '../state/items.dart';
 import '../state/professions.dart';
+import '../state/pvp.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';

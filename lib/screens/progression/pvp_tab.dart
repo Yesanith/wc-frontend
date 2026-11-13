@@ -136,6 +136,23 @@ class _PvpTab extends ConsumerWidget {
                       const SizedBox(height: 14),
                       Row(
                         children: [
+                          Expanded(
+                              child: StatTile(
+                                  label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points'])))),
+                          // rollovers only mean something once there has been one
+                          Expanded(
+                            child: asInt(data['pvp_rank_rollovers']) > 0
+                                ? StatTile(
+                                    label: s.t('pvp_rollovers'),
+                                    value: fmtInt(asInt(data['pvp_rank_rollovers'])),
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
                           Expanded(child: StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins'])))),
                           Expanded(
                             child: StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
@@ -146,6 +163,7 @@ class _PvpTab extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+                _Ladders(data, ratio: ratio),
                 const _SeasonStanding(),
                 const SizedBox(height: 12),
                 Row(
@@ -198,6 +216,17 @@ class _PvpTab extends ConsumerWidget {
                                 child: Text(titleCase(entry.key),
                                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
+                              if (entry.value is Map)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: Text(
+                                    '${fmtInt(asInt((entry.value as Map)['wins']))} – ${fmtInt(asInt((entry.value as Map)['losses']))}',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.muted,
+                                        fontFeatures: const [FontFeature.tabularFigures()]),
+                                  ),
+                                ),
                               Text(
                                 ratio(entry.value is Map ? Map<String, dynamic>.from(entry.value as Map) : null),
                                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold),
@@ -227,6 +256,74 @@ class _PvpTab extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// the ranked and the unranked ladder apart, and the matches left early or without an opponent, which the totals hide
+class _Ladders extends ConsumerWidget {
+  const _Ladders(this.data, {required this.ratio});
+
+  final Json data;
+  final String Function(Json?) ratio;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final ladders = data['ladders'] is Map ? Map<String, dynamic>.from(data['ladders'] as Map) : <String, dynamic>{};
+    final aggregate =
+        data['aggregate'] is Map ? Map<String, dynamic>.from(data['aggregate'] as Map) : <String, dynamic>{};
+    Json? ladder(String key) => ladders[key] is Map ? Map<String, dynamic>.from(ladders[key] as Map) : null;
+    final rows = [('ladder_ranked', ladder('ranked')), ('ladder_unranked', ladder('unranked'))];
+    final left = [
+      ('pvp_desertions', asInt(aggregate['desertions'])),
+      ('pvp_forfeits', asInt(aggregate['forfeits'])),
+      ('pvp_byes', asInt(aggregate['byes'])),
+    ].where((e) => e.$2 > 0).toList();
+    if (ladders.isEmpty && left.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Panel(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Kicker(s.t('pvp_ladders').caps),
+            const SizedBox(height: 8),
+            for (final (key, l) in rows)
+              if (l != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Text(s.t(key), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                      Text('${fmtInt(asInt(l['wins']))} – ${fmtInt(asInt(l['losses']))}',
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.muted,
+                              fontFeatures: const [FontFeature.tabularFigures()])),
+                      SizedBox(
+                        width: 54,
+                        child: Text(ratio(l),
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                      ),
+                    ],
+                  ),
+                ),
+            if (left.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 16,
+                children: [
+                  for (final (key, n) in left)
+                    Text('${s.t(key)} $n', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

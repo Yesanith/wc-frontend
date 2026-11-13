@@ -95,6 +95,7 @@ class _VaultState extends ConsumerState<_Vault> {
                     ],
                   ),
                   const SizedBox(height: 12),
+                  VaultChestReward(v),
                   for (final o in objectives) _Objective(o, done: done(o), ratio: ratio(o)),
                 ],
               );

@@ -54,42 +54,45 @@ class _PinnedAchievements extends ConsumerWidget {
               child: Column(
                 children: [
                   for (final a in list)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    if (a.done) ...[
-                                      Icon(Icons.check_circle, size: 16, color: AppColors.green),
-                                      const SizedBox(width: 6),
+                    InkWell(
+                      onTap: () => openPanel(context, (_) => AchievementDetailScreen(row: a)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      if (a.done) ...[
+                                        Icon(Icons.check_circle, size: 16, color: AppColors.green),
+                                        const SizedBox(width: 6),
+                                      ],
+                                      Expanded(
+                                        child: Text(a.name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                      ),
+                                      if (a.max > 0)
+                                        Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                                            style: TextStyle(
+                                                fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
                                     ],
-                                    Expanded(
-                                      child: Text(a.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                                    ),
-                                    if (a.max > 0)
-                                      Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                          style: TextStyle(
-                                              fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                  ),
+                                  if (a.max > 0) ...[
+                                    const SizedBox(height: 7),
+                                    Bar(value: a.done ? 1 : a.ratio, color: a.done ? AppColors.green : AppColors.gold),
                                   ],
-                                ),
-                                if (a.max > 0) ...[
-                                  const SizedBox(height: 7),
-                                  Bar(value: a.done ? 1 : a.ratio, color: a.done ? AppColors.green : AppColors.gold),
                                 ],
-                              ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          AchievementPinButton(id: a.id),
-                        ],
+                            const SizedBox(width: 4),
+                            AchievementPinButton(id: a.id),
+                          ],
+                        ),
                       ),
                     ),
                 ],

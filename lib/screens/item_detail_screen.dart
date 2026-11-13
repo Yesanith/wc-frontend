@@ -390,9 +390,26 @@ List<String> itemFlagLabels(S s, Json item) {
     'NoSalvage': 'flag_no_salvage',
   };
   final flags = {for (final f in (item['flags'] as List?) ?? const []) '$f'};
+  // an item that only some of the game's modes accept, and one that only some races or professions may use
+  const modeNames = {
+    'Pve': 'PvE',
+    'Pvp': 'PvP',
+    'PvpLobby': 'PvP lobby',
+    'Wvw': 'WvW',
+    'Dungeon': 'Dungeon',
+    'Activity': 'Activity',
+  };
+  final modes = [for (final m in (item['game_types'] as List?) ?? const []) '$m'];
+  final everywhere = {'Pve', 'Pvp', 'Wvw'}.every(modes.contains);
+  final only = [for (final r in (item['restrictions'] as List?) ?? const []) '$r'];
   return [
     for (final e in shown.entries)
       if (flags.contains(e.key)) s.t(e.value),
+    if (modes.isNotEmpty && !everywhere)
+      s.t('item_modes', {
+        'm': [for (final m in modes) modeNames[m] ?? m].join(', ')
+      }),
+    if (only.isNotEmpty) s.t('item_only', {'r': only.join(', ')}),
   ];
 }
 

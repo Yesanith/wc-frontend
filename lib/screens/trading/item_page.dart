@@ -215,6 +215,13 @@ class _OrderBook extends ConsumerWidget {
                       Expanded(child: CoinText(asInt(r['unit_price']), size: 12)),
                       Text(fmtInt(asInt(r['quantity'])),
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+                      // how many separate orders make that quantity
+                      if (asInt(r['listings']) > 0)
+                        SizedBox(
+                          width: 36,
+                          child: Text('· ${fmtInt(asInt(r['listings']))}',
+                              textAlign: TextAlign.right, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                        ),
                     ],
                   ),
                 ),
@@ -236,6 +243,8 @@ class _OrderBook extends ConsumerWidget {
               column(s.t('buy_orders'), buys, AppColors.green),
             ],
           ),
+          const SizedBox(height: 8),
+          Text(s.t('book_legend'), style: TextStyle(fontSize: 11, color: AppColors.muted)),
         ],
       ),
     );

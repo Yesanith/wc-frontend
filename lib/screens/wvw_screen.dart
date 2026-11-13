@@ -312,6 +312,7 @@ class _ObjectiveAge extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final flipped = DateTime.tryParse('${o['last_flipped'] ?? ''}')?.toUtc();
     final tick = asInt(o['points_tick']);
+    final claimedAt = DateTime.tryParse('${o['claimed_at'] ?? ''}')?.toUtc();
     if (flipped == null && tick <= 0) return const SizedBox.shrink();
     return ClockBuilder(
       step: ClockStep.second,
@@ -321,6 +322,8 @@ class _ObjectiveAge extends ConsumerWidget {
         final parts = [
           if (held != null && !held.isNegative) s.t('wvw_held', {'t': countdown(held)}),
           if (tick > 0) s.t('wvw_ppt', {'n': tick}),
+          if (claimedAt != null && !now.toUtc().isBefore(claimedAt))
+            s.t('wvw_claimed', {'t': countdown(now.toUtc().difference(claimedAt))}),
         ];
         return Row(
           children: [

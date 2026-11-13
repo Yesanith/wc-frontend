@@ -59,6 +59,7 @@ class _EquipmentTabState extends ConsumerState<_EquipmentTab> {
             _EquipmentRow(entry: e, items: map),
             const SizedBox(height: 8),
           ],
+          _PvpLoadout(c),
         ],
       ),
     );
@@ -404,6 +405,74 @@ class _LearnedRecipesCard extends ConsumerWidget {
             const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
           else
             Icon(Icons.chevron_right, color: AppColors.chevron),
+        ],
+      ),
+    );
+  }
+}
+
+/// what the character wears in the PvP arena: the amulet, the rune and the sigils, which are not part of the equipment of
+/// the open world. nothing when the character never set one
+class _PvpLoadout extends ConsumerWidget {
+  const _PvpLoadout(this.c);
+
+  final Json c;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final raw = c['equipment_pvp'];
+    if (raw is! Map) return const SizedBox.shrink();
+    final amuletId = asInt(raw['amulet']);
+    final runeId = asInt(raw['rune']);
+    final sigils = [
+      for (final v in (raw['sigils'] as List?) ?? const [])
+        if (v != null) asInt(v),
+    ];
+    if (amuletId == 0 && runeId == 0 && sigils.isEmpty) return const SizedBox.shrink();
+    final s = ref.watch(stringsProvider);
+    final amulet = amuletId == 0
+        ? null
+        : (ref.watch(pvpAmuletsProvider).valueOrNull ?? const <PvpAmulet>[]).where((a) => a.id == amuletId).firstOrNull;
+
+    Widget row(String? icon, String label, String name, {String? rarity, VoidCallback? onTap}) => InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              children: [
+                ItemIcon(url: icon, rarity: rarity, size: 30),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                      Text(name, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+
+    Widget itemRow(int id, String label) {
+      final item = ref.watch(itemProvider(id)).valueOrNull;
+      return row(item?['icon'] as String?, label, '${item?['name'] ?? s.t('item_n', {'id': id})}',
+          rarity: item?['rarity'] as String?, onTap: () => showItemDetails(context, id));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.t('pvp_loadout').caps,
+              style: TextStyle(fontSize: 11, letterSpacing: 1, fontWeight: FontWeight.w700, color: AppColors.muted)),
+          const SizedBox(height: 4),
+          if (amuletId != 0) row(amulet?.icon, s.t('amulet'), amulet?.name ?? '#$amuletId'),
+          if (runeId != 0) itemRow(runeId, s.t('rune')),
+          for (var i = 0; i < sigils.length; i++) itemRow(sigils[i], s.t('sigil_n', {'n': i + 1})),
         ],
       ),
     );

@@ -330,6 +330,7 @@ class _SiteEquipmentState extends ConsumerState<_SiteEquipment> {
                       ],
                     ),
             ),
+            _PvpLoadout(c),
           ],
         );
       },

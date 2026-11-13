@@ -114,6 +114,10 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                   children: [
                     for (final d in root.disciplines)
                       Pill(d == mysticForge ? s.t('mystic_forge') : disciplineLabel(s, d)),
+                    if (root.minRating > 0) Pill(s.t('craft_rating', {'n': root.minRating})),
+                    if (root.craftMs > 0)
+                      Pill(s.t('craft_time',
+                          {'t': (root.craftMs / 1000).toStringAsFixed(root.craftMs % 1000 == 0 ? 0 : 1)})),
                     ..._learnedPill(ref, s, widget.itemId),
                   ],
                 ),
