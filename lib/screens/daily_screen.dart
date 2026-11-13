@@ -13,7 +13,7 @@ import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
-import 'vault_shop_screen.dart';
+import 'vault_objectives_screen.dart';
 
 /// everything that resets at midnight utc on one page
 class DailyScreen extends ConsumerWidget {
@@ -68,13 +68,7 @@ class DailyScreen extends ConsumerWidget {
               leading: const VaultIcon(),
               summary: dailyStale ? null : _vaultSummary(s, v),
               initiallyExpanded: dailyStale || !_vaultDone(v),
-              trailing: IconButton(
-                tooltip: s.t('vault_shop'),
-                visualDensity: VisualDensity.compact,
-                onPressed: () =>
-                    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen())),
-                icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
-              ),
+              trailing: const VaultHeaderActions(),
               child: AsyncView(
                 value: vault,
                 permission: 'progression',

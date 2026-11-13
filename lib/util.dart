@@ -49,10 +49,15 @@ class WalletEntry {
 }
 
 class ItemSlot {
-  const ItemSlot(this.id, this.count, this.item);
+  const ItemSlot(this.id, this.count, this.item, {this.binding, this.boundTo});
   final int id;
   final int count;
   final Json? item;
+
+  /// what the item is bound to once the game has bound it: Account, or Character for a soulbound one, and the name of
+  /// that character
+  final String? binding;
+  final String? boundTo;
   String get name => (item?['name'] as String?) ?? 'Item #$id';
   String? get icon => item?['icon'] as String?;
   String? get rarity => item?['rarity'] as String?;

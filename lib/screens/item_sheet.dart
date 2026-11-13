@@ -12,5 +12,7 @@ void showItemSheet(
   String? rarity,
   String? type,
   int count = 1,
+  String? binding,
+  String? boundTo,
 }) =>
-    showItemDetails(context, id);
+    showItemDetails(context, id, binding: binding, boundTo: boundTo);

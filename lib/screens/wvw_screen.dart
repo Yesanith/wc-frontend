@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/account.dart';
+import '../state/clock.dart';
 import '../state/guilds.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../state/wvw.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/clock.dart';
 import '../widgets/common.dart';
 
 const _teamColors = {
@@ -82,8 +84,11 @@ class _MatchupTab extends ConsumerWidget {
           // the worlds on each side, for matchups that still list them. team
           // ids have no name in the api and are left out
           final worlds = ref.watch(worldsProvider).valueOrNull ?? const <int, String>{};
+          final population = ref.watch(worldPopulationProvider).valueOrNull ?? const <int, String>{};
           final worldNames = {
-            for (final c in _teamColors.keys) c: wvwWorldNames(match, c, worlds),
+            for (final c in _teamColors.keys)
+              c: wvwWorldNames(match, c, worlds,
+                  extra: (id) => population[id] == null ? null : s.t('wvw_pop_${population[id]!.toLowerCase()}')),
           };
 
           return ListView(
@@ -266,8 +271,14 @@ class _ObjectivesTab extends ConsumerWidget {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Text('${catalog['${o['id']}']?['name'] ?? o['id']}',
-                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${catalog['${o['id']}']?['name'] ?? o['id']}',
+                                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                              _ObjectiveAge(o),
+                            ],
+                          ),
                         ),
                         Text('${o['type']}', style: TextStyle(fontSize: 11, color: AppColors.muted)),
                         const SizedBox(width: 10),
@@ -281,6 +292,44 @@ class _ObjectivesTab extends ConsumerWidget {
                     ),
                   ),
               const SizedBox(height: 18),
+            ],
+          ],
+        );
+      },
+    );
+  }
+}
+
+/// how long an objective has been held, the points it gives each tick, and for the first minutes after it changed hands the
+/// time it is protected, which is five minutes in which it cannot be taken again
+class _ObjectiveAge extends ConsumerWidget {
+  const _ObjectiveAge(this.o);
+
+  final Map o;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final flipped = DateTime.tryParse('${o['last_flipped'] ?? ''}')?.toUtc();
+    final tick = asInt(o['points_tick']);
+    if (flipped == null && tick <= 0) return const SizedBox.shrink();
+    return ClockBuilder(
+      step: ClockStep.second,
+      builder: (context, now) {
+        final held = flipped == null ? null : now.toUtc().difference(flipped);
+        final left = flipped == null ? Duration.zero : flipped.add(const Duration(minutes: 5)).difference(now.toUtc());
+        final parts = [
+          if (held != null && !held.isNegative) s.t('wvw_held', {'t': countdown(held)}),
+          if (tick > 0) s.t('wvw_ppt', {'n': tick}),
+        ];
+        return Row(
+          children: [
+            Flexible(
+              child: Text(parts.join(' · '), style: TextStyle(fontSize: 11, color: AppColors.muted)),
+            ),
+            if (left > Duration.zero) ...[
+              const SizedBox(width: 6),
+              Pill(s.t('wvw_immune', {'t': countdown(left)})),
             ],
           ],
         );

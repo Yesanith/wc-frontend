@@ -26,14 +26,16 @@ part 'item_detail/sections.dart';
 ///
 /// a plain item has an address of its own (/item/19721), which is in the browser while the sheet is open and is what the sheet's button copies. one that is an
 /// item of a character, with its chosen stats and upgrades, is not the item and has none. [announce] is false for a link that was followed
-void showItemDetails(BuildContext context, int itemId, {Json? instance, bool announce = true}) {
+void showItemDetails(BuildContext context, int itemId,
+    {Json? instance, bool announce = true, String? binding, String? boundTo}) {
   final closed = instance == null
       ? linkOpened(ProviderScope.containerOf(context, listen: false), ItemLink(itemId), announce: announce)
       : null;
   // on the site the item is a page of the site, under its bar, as every page opened there is
   if (SiteScope.of(context)) {
     Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => _ItemPage(itemId: itemId, instance: instance)))
+        .push(MaterialPageRoute<void>(
+            builder: (_) => _ItemPage(itemId: itemId, instance: instance, binding: binding, boundTo: boundTo)))
         .whenComplete(() => closed?.call());
     return;
   }
@@ -49,33 +51,38 @@ void showItemDetails(BuildContext context, int itemId, {Json? instance, bool ann
       initialChildSize: 0.7,
       minChildSize: 0.4,
       maxChildSize: 0.95,
-      builder: (context, scroll) => ItemDetails(itemId: itemId, instance: instance, scroll: scroll),
+      builder: (context, scroll) =>
+          ItemDetails(itemId: itemId, instance: instance, scroll: scroll, binding: binding, boundTo: boundTo),
     ),
   ).whenComplete(() => closed?.call());
 }
 
 /// an item as a page of the site: its name in the bar of the page, everything about it under it
 class _ItemPage extends ConsumerWidget {
-  const _ItemPage({required this.itemId, this.instance});
+  const _ItemPage({required this.itemId, this.instance, this.binding, this.boundTo});
 
   final int itemId;
   final Json? instance;
+  final String? binding;
+  final String? boundTo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final name = ref.watch(itemProvider(itemId)).valueOrNull?['name'] as String?;
     return Scaffold(
       appBar: AppBar(title: Text(name ?? '')),
-      body: ItemDetails(itemId: itemId, instance: instance),
+      body: ItemDetails(itemId: itemId, instance: instance, binding: binding, boundTo: boundTo),
     );
   }
 }
 
 class ItemDetails extends ConsumerStatefulWidget {
-  const ItemDetails({super.key, required this.itemId, this.instance, this.scroll});
+  const ItemDetails({super.key, required this.itemId, this.instance, this.scroll, this.binding, this.boundTo});
 
   final int itemId;
   final Json? instance;
+  final String? binding;
+  final String? boundTo;
   final ScrollController? scroll;
 
   @override
@@ -93,6 +100,8 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
     final s = ref.watch(stringsProvider);
     final item = ref.watch(itemProvider(itemId)).valueOrNull;
     final instance = widget.instance;
+    final bound = widget.binding ?? instance?['binding'] as String?;
+    final boundTo = widget.boundTo ?? instance?['bound_to'] as String?;
 
     final upgradeIds = intList(instance?['upgrades']);
     final infusionIds = intList(instance?['infusions']);
@@ -122,6 +131,27 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
                   Text(name, style: display(21, color: rarity == null ? AppColors.text : rarityColor(rarity))),
                   const SizedBox(height: 4),
                   Text(subtitle, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                  // soulbound to a character, or bound to the account, where the account's own copy says so
+                  if (bound != null) ...[
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(bound == 'Character' ? Icons.lock : Icons.person, size: 13, color: AppColors.gold),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            bound == 'Character'
+                                ? (boundTo == null || boundTo.isEmpty
+                                    ? s.t('bound_soul')
+                                    : s.t('bound_soul_to', {'name': boundTo}))
+                                : s.t('bound_account'),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.gold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),

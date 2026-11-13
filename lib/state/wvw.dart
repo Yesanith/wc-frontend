@@ -86,7 +86,9 @@ final wvwGuildTeamsProvider = FutureProvider<Map<String, int>>((ref) async {
 
 /// names of the worlds fighting as [color] in a match, from all_worlds (or
 /// worlds on older matches). ids the world list does not know are skipped
-List<String> wvwWorldNames(Json match, String color, Map<int, String> worlds) {
+///
+/// [extra] adds to the name of a world what is known of it, such as how full it is
+List<String> wvwWorldNames(Json match, String color, Map<int, String> worlds, {String? Function(int id)? extra}) {
   for (final key in ['all_worlds', 'worlds']) {
     final side = match[key];
     if (side is! Map) continue;
@@ -94,12 +96,28 @@ List<String> wvwWorldNames(Json match, String color, Map<int, String> worlds) {
     final list = ids is List ? ids.map(asInt).toList() : [asInt(ids)];
     final names = [
       for (final id in list)
-        if (worlds[id]?.isNotEmpty ?? false) worlds[id]!,
+        if (worlds[id]?.isNotEmpty ?? false) _withExtra(worlds[id]!, extra?.call(id)),
     ];
     if (names.isNotEmpty) return names;
   }
   return const [];
 }
+
+String _withExtra(String name, String? extra) => extra == null || extra.isEmpty ? name : '$name ($extra)';
+
+/// how full each world is, as the api says it now: Low, Medium, High, VeryHigh or Full. it changes through the day, so it is
+/// not kept with the rest of the world list
+final worldPopulationProvider = FutureProvider.autoDispose<Map<int, String>>((ref) async {
+  try {
+    final rows = await ref.watch(gw2ApiProvider).get('/worlds', {'ids': 'all'});
+    return {
+      for (final r in (rows as List).whereType<Map>())
+        if (r['population'] != null) asInt(r['id']): '${r['population']}',
+    };
+  } catch (_) {
+    return const {};
+  }
+});
 
 /// the id of the account's matchup, such as "2-1"
 final wvwMatchIdProvider = FutureProvider<String?>((ref) async {

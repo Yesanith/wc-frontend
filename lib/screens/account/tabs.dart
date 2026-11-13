@@ -46,6 +46,8 @@ class _WalletTab extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
+            const _AccountProfile(),
+            const SizedBox(height: 12),
             const _AccountCounters(),
             const SizedBox(height: 12),
             const _WealthPanel(),
@@ -168,8 +170,10 @@ class _BankTab extends ConsumerWidget {
                 rarity: slot.rarity,
                 type: slot.type,
                 count: slot.count,
+                binding: slot.binding,
+                boundTo: slot.boundTo,
               ),
-              child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
+              child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count, bound: slot.binding),
             );
           }
           return dim ? Opacity(opacity: 0.15, child: IgnorePointer(child: icon)) : icon;
@@ -214,6 +218,20 @@ class _BankTab extends ConsumerWidget {
           children: [
             const _StorageSearch(kind: 'bank'),
             const SizedBox(height: 12),
+            if (slots.any((x) => x?.binding != null)) ...[
+              Row(
+                children: [
+                  Icon(Icons.lock, size: 13, color: AppColors.muted),
+                  const SizedBox(width: 4),
+                  Text(s.t('bound_soul'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                  const SizedBox(width: 14),
+                  Icon(Icons.person, size: 13, color: AppColors.muted),
+                  const SizedBox(width: 4),
+                  Text(s.t('bound_account'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
             Text(
                 query.isEmpty
                     ? s.t('slots_used', {'a': used, 'b': slots.length})

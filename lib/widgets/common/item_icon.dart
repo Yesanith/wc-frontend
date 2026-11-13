@@ -96,13 +96,16 @@ class ItemRow extends StatelessWidget {
 }
 
 class ItemIcon extends StatelessWidget {
-  const ItemIcon({super.key, this.url, this.rarity, this.size, this.count, this.empty = false});
+  const ItemIcon({super.key, this.url, this.rarity, this.size, this.count, this.empty = false, this.bound});
 
   final String? url;
   final String? rarity;
   final double? size;
   final int? count;
   final bool empty;
+
+  /// Account or Character where the item is bound, drawn as a small mark in the corner
+  final String? bound;
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +144,17 @@ class ItemIcon extends StatelessWidget {
             ),
           ),
         ),
+        if (!empty && bound != null && side >= 30)
+          Positioned(
+            left: 3,
+            top: 3,
+            child: Icon(
+              bound == 'Character' ? Icons.lock : Icons.person,
+              size: (side * 0.26).clamp(9, 14).toDouble(),
+              color: Colors.white,
+              shadows: const [Shadow(blurRadius: 3), Shadow(blurRadius: 1)],
+            ),
+          ),
         if (!empty && n != null && n > 1)
           Positioned(
             right: 3,

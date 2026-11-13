@@ -62,3 +62,17 @@ List<VaultListing> sortVaultListings(List<VaultListing> listings) {
       return byType != 0 ? byType : a.cost.compareTo(b.cost);
     });
 }
+
+/// every objective the vault can give this season, with its track (PvE, PvP or WvW) and the acclaim it pays. the game picks
+/// each day's and week's from this list
+final vaultObjectivesProvider = FutureProvider.autoDispose<List<Json>>((ref) async {
+  final api = ref.watch(gw2ApiProvider);
+  final ids = await api.idList('/wizardsvault/objectives');
+  final rows = await api.details('/wizardsvault/objectives', ids);
+  rows.sort((a, b) {
+    final byTrack = '${a['track']}'.compareTo('${b['track']}');
+    if (byTrack != 0) return byTrack;
+    return asInt(b['acclaim']).compareTo(asInt(a['acclaim']));
+  });
+  return rows;
+});

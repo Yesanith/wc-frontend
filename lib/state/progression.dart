@@ -71,6 +71,7 @@ AchievementRow achievementRowFor(int id, Json? detail, Json? progress) => Achiev
       asInt(progress?['current']),
       progress?['max'] != null ? asInt(progress?['max']) : topTierCount(detail),
       progress?['done'] == true,
+      bitsDone: intList(progress?['bits']),
     );
 
 /// the pinned achievements with their progress, in pin order

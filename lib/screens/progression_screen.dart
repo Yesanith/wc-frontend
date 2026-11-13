@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/pin_button.dart';
+import 'achievement_detail_screen.dart';
 import 'achievements_screen.dart';
 import 'pvp_screen.dart';
 

@@ -10,8 +10,8 @@ import '../util.dart';
 import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/vault_objectives.dart';
+import 'vault_objectives_screen.dart';
 import 'daily_screen.dart';
-import 'vault_shop_screen.dart';
 
 /// everything that resets on monday 07:30 utc, plus the vault's special track
 class WeeklyScreen extends ConsumerWidget {
@@ -26,7 +26,6 @@ class WeeklyScreen extends ConsumerWidget {
     String? meta(Json? v) =>
         v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
     final weeklyStale = ref.watch(vaultStaleProvider('weekly'));
-    void openShop() => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const VaultShopScreen()));
 
     return RefreshIndicator(
       color: AppColors.gold,
@@ -41,12 +40,7 @@ class WeeklyScreen extends ConsumerWidget {
             leading: const VaultIcon(),
             summary: weeklyStale ? null : meta(weekly.valueOrNull),
             initiallyExpanded: true,
-            trailing: IconButton(
-              tooltip: s.t('vault_shop'),
-              visualDensity: VisualDensity.compact,
-              onPressed: openShop,
-              icon: Icon(Icons.storefront_outlined, color: AppColors.gold, size: 20),
-            ),
+            trailing: const VaultHeaderActions(),
             child: AsyncView(
               value: weekly,
               permission: 'progression',

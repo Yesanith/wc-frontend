@@ -73,29 +73,32 @@ class _AchievementsTab extends ConsumerWidget {
                 child: Column(
                   children: [
                     for (final a in list.take(60))
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 9),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(a.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                                ),
-                                const SizedBox(width: 10),
-                                Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                    style:
-                                        TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
-                                AchievementPinButton(id: a.id),
-                              ],
-                            ),
-                            const SizedBox(height: 7),
-                            Bar(value: a.ratio),
-                          ],
+                      InkWell(
+                        onTap: () => openPanel(context, (_) => AchievementDetailScreen(row: a)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 9),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(a.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                                      style:
+                                          TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                                  AchievementPinButton(id: a.id),
+                                ],
+                              ),
+                              const SizedBox(height: 7),
+                              Bar(value: a.ratio),
+                            ],
+                          ),
                         ),
                       ),
                   ],

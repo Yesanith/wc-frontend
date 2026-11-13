@@ -272,11 +272,14 @@ class _InventoryTab extends ConsumerWidget {
                       rarity: item?['rarity'] as String?,
                       type: item?['type'] as String?,
                       count: asInt(slot['count']),
+                      binding: slot['binding'] as String?,
+                      boundTo: slot['bound_to'] as String?,
                     ),
                     child: ItemIcon(
                       url: item?['icon'] as String?,
                       rarity: item?['rarity'] as String?,
                       count: asInt(slot['count']),
+                      bound: slot['binding'] as String?,
                     ),
                   );
                 },

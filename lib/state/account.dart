@@ -47,7 +47,11 @@ final bankProvider = FutureProvider<List<ItemSlot?>>((ref) async {
       if (s != null) asInt(s['id']),
   ]);
   return <ItemSlot?>[
-    for (final s in raw) s == null ? null : ItemSlot(asInt(s['id']), asInt(s['count']), items[asInt(s['id'])]),
+    for (final s in raw)
+      s == null
+          ? null
+          : ItemSlot(asInt(s['id']), asInt(s['count']), items[asInt(s['id'])],
+              binding: s['binding'] as String?, boundTo: s['bound_to'] as String?),
   ];
 });
 
@@ -196,7 +200,7 @@ final materialGroupsProvider = FutureProvider<List<MaterialGroup>>((ref) async {
   for (final m in owned) {
     byCategory
         .putIfAbsent(asInt(m['category']), () => [])
-        .add(ItemSlot(asInt(m['id']), asInt(m['count']), items[asInt(m['id'])]));
+        .add(ItemSlot(asInt(m['id']), asInt(m['count']), items[asInt(m['id'])], binding: m['binding'] as String?));
   }
   final groups = <MaterialGroup>[];
   for (final c in categories) {

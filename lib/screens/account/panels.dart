@@ -1,5 +1,61 @@
 part of '../account_screen.dart';
 
+/// what the account itself says about the player: the points of the daily and monthly achievements, the fractal level, the
+/// commander tag, the guilds led and the slots of the build storage
+class _AccountProfile extends ConsumerWidget {
+  const _AccountProfile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final a = ref.watch(accountProvider).valueOrNull;
+    if (a == null) return const SizedBox.shrink();
+    final leads = intList(a['guild_leader']).length;
+    final tiles = <(IconData, String, String)>[
+      if (a['daily_ap'] != null) (Icons.today_outlined, s.t('acc_daily_ap'), fmtInt(asInt(a['daily_ap']))),
+      if (a['monthly_ap'] != null)
+        (Icons.calendar_month_outlined, s.t('acc_monthly_ap'), fmtInt(asInt(a['monthly_ap']))),
+      if (a['fractal_level'] != null)
+        (Icons.blur_circular_outlined, s.t('acc_fractal_level'), '${asInt(a['fractal_level'])}'),
+      if (a['commander'] == true) (Icons.flag_outlined, s.t('acc_commander'), '✓'),
+      if (leads > 0) (Icons.shield_outlined, s.t('acc_guild_leader'), '$leads'),
+      if (a['build_storage_slots'] != null)
+        (Icons.save_outlined, s.t('acc_build_slots'), '${asInt(a['build_storage_slots'])}'),
+    ];
+    if (tiles.isEmpty) return const SizedBox.shrink();
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('acc_profile').toUpperCase()),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 28,
+            runSpacing: 12,
+            children: [
+              for (final (icon, label, value) in tiles)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 20, color: AppColors.gold),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(label, style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                        Text(value, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      ],
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// luck and the fractal account augmentations, when the key may read them
 class _AccountCounters extends ConsumerWidget {
   const _AccountCounters();

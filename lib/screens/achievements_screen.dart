@@ -6,6 +6,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../widgets/common.dart';
+import 'achievement_detail_screen.dart';
 import '../widgets/pin_button.dart';
 
 /// the whole achievement catalogue, group by group. the account's own
@@ -152,50 +153,54 @@ class _AchievementCard extends StatelessWidget {
         '${row.detail?['requirement'] ?? row.detail?['description'] ?? ''}'.replaceAll(RegExp(r'<[^>]*>'), '');
     final points = row.points;
 
-    return Panel(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(row.done ? Icons.check_circle : Icons.radio_button_unchecked,
-                  size: 18, color: row.done ? AppColors.green : AppColors.track),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(row.name,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: row.done ? AppColors.text : AppColors.textSoft)),
-              ),
-              if (points > 0) ...[
-                const SizedBox(width: 8),
-                Pill('$points'),
-              ],
-              if (!row.done) ...[
-                const SizedBox(width: 4),
-                AchievementPinButton(id: row.id),
-              ],
-            ],
-          ),
-          if (description.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(description, style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
-          ],
-          if (!row.done && row.max > 0) ...[
-            const SizedBox(height: 10),
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.card),
+      onTap: () => openPanel(context, (_) => AchievementDetailScreen(row: row)),
+      child: Panel(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: Bar(value: row.ratio)),
+                Icon(row.done ? Icons.check_circle : Icons.radio_button_unchecked,
+                    size: 18, color: row.done ? AppColors.green : AppColors.track),
                 const SizedBox(width: 10),
-                Text('${fmtInt(row.current)} / ${fmtInt(row.max)}',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                Expanded(
+                  child: Text(row.name,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: row.done ? AppColors.text : AppColors.textSoft)),
+                ),
+                if (points > 0) ...[
+                  const SizedBox(width: 8),
+                  Pill('$points'),
+                ],
+                if (!row.done) ...[
+                  const SizedBox(width: 4),
+                  AchievementPinButton(id: row.id),
+                ],
               ],
             ),
+            if (description.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(description, style: TextStyle(fontSize: 12, height: 1.4, color: AppColors.muted)),
+            ],
+            if (!row.done && row.max > 0) ...[
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(child: Bar(value: row.ratio)),
+                  const SizedBox(width: 10),
+                  Text('${fmtInt(row.current)} / ${fmtInt(row.max)}',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                ],
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
