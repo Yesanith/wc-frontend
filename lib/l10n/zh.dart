@@ -89,6 +89,8 @@ const zhStrings = <String, String>{
   'vault_after_login_weekly': '本周的目标会在你登录游戏后发放',
   'vault_after_login_note': '巫师宝库的目标在重置后首次登录时发放；在此之前 API 只有之前的目标。登录几分钟后会显示在这里。',
   'api_last_sent': '游戏最后一次同步你的账号：{t}',
+  'waypoint_copied': '{name}：链接已复制，请粘贴到游戏聊天框。',
+  'copy_waypoint': '复制传送点链接',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

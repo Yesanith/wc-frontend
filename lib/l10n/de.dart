@@ -115,6 +115,8 @@ const deStrings = <String, String>{
   'vault_after_login_note':
       'Das Spiel vergibt die Aufgaben des Zauberer-Tresors bei der ersten Anmeldung nach dem Reset; bis dahin hat die API nur die vorherigen. Sie erscheinen hier einige Minuten nach der Anmeldung.',
   'api_last_sent': 'Das Spiel hat dein Konto zuletzt am {t} gesendet',
+  'waypoint_copied': '{name}: Link kopiert. Füge ihn im Spiel-Chat ein.',
+  'copy_waypoint': 'Wegpunkt-Link kopieren',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

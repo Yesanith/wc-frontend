@@ -24,10 +24,16 @@ enum Expansion {
 
 enum MetaKind { boss, hardBoss, meta }
 
+/// the event of the incursions of the fractals in the open world, whose maps are only where it is held
+const fractalIncursionPage = 'Defeat the enemy spawned by the fractal incursion';
+
 class MetaEvent {
-  const MetaEvent(this.name, this.times, {this.minutes = 15, this.kind = MetaKind.meta, this.bossId});
+  const MetaEvent(this.name, this.times, {this.minutes = 15, this.kind = MetaKind.meta, this.bossId, this.wiki});
 
   final String name;
+
+  /// the wiki page to open when it is not the one of the event's own name
+  final String? wiki;
 
   /// start times in minutes after midnight utc
   final List<int> times;
@@ -93,6 +99,13 @@ final metaMaps = <MetaMap>[
     MetaEvent('Timberline Falls', _every(_t(0, 20), 360), minutes: 20),
     MetaEvent('Iron Marches', _every(_t(2, 20), 360), minutes: 20),
     MetaEvent('Gendarran Fields', _every(_t(4, 20), 360), minutes: 20),
+  ]),
+  // an incursion from the fractals every hour, in turn on four maps, the wiki's timer has it from midnight
+  MetaMap('incursion', 'Fractal Incursion', Expansion.core, [
+    MetaEvent('Kessex Hills', _every(0, 240), wiki: fractalIncursionPage),
+    MetaEvent('Diessa Plateau', _every(60, 240), wiki: fractalIncursionPage),
+    MetaEvent('Brisban Wildlands', _every(120, 240), wiki: fractalIncursionPage),
+    MetaEvent('Snowden Drifts', _every(180, 240), wiki: fractalIncursionPage),
   ]),
 
   // living world

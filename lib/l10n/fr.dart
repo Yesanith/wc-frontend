@@ -112,6 +112,8 @@ const frStrings = <String, String>{
   'vault_after_login_note':
       'Le jeu attribue les objectifs de la Chambre forte du sorcier à ta première connexion après la réinitialisation ; d\'ici là l\'API n\'a que les précédents. Ils s\'affichent ici quelques minutes après ta connexion.',
   'api_last_sent': 'Le jeu a envoyé ton compte pour la dernière fois le {t}',
+  'waypoint_copied': '{name} : lien copié. Colle-le dans le chat du jeu.',
+  'copy_waypoint': 'Copier le lien du point de passage',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

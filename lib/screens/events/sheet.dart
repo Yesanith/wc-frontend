@@ -30,6 +30,10 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
                     style: TextStyle(fontSize: 13, color: AppColors.muted)),
                 const SizedBox(height: 2),
                 Text(when, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                if (waypointFor(o.map, o.event) case final waypoint?) ...[
+                  const SizedBox(height: 10),
+                  WaypointLink(waypoint),
+                ],
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -45,7 +49,7 @@ void showEventSheet(BuildContext context, WidgetRef ref, Occurrence o) {
                       child: OutlinedButton.icon(
                         onPressed: () {
                           // read what the page needs before the sheet goes away
-                          openWikiPage(context, ref, o.event.name);
+                          openWikiPage(context, ref, o.event.wiki ?? o.event.name);
                           Navigator.of(ctx).pop();
                         },
                         icon: const Icon(Icons.menu_book_outlined, size: 18),

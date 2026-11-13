@@ -110,6 +110,8 @@ const esStrings = <String, String>{
   'vault_after_login_note':
       'El juego asigna los objetivos de la Cámara del Mago en tu primer inicio de sesión tras el reinicio; hasta entonces la API solo tiene los anteriores. Aparecen aquí unos minutos después de entrar.',
   'api_last_sent': 'El juego envió tu cuenta por última vez el {t}',
+  'waypoint_copied': '{name}: enlace copiado. Pégalo en el chat del juego.',
+  'copy_waypoint': 'Copiar el enlace del punto de ruta',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

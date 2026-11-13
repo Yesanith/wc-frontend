@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/metas.dart';
+import '../data/waypoints.dart';
 import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
@@ -13,6 +14,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
 import '../widgets/expansion_badge.dart';
+import '../widgets/waypoint_link.dart';
 
 part 'events/timeline.dart';
 part 'events/sheet.dart';
@@ -232,7 +234,7 @@ class MetaRow extends ConsumerWidget {
       builder: (context, now) {
         final active = o.activeAt(now);
         return InkWell(
-          onTap: () => openWikiPage(context, ref, o.event.name),
+          onTap: () => openWikiPage(context, ref, o.event.wiki ?? o.event.name),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 9, 8, 9),
             child: Row(
@@ -298,6 +300,8 @@ class MetaRow extends ConsumerWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                      // right under it, the waypoint to travel to, as the wiki's timer has it
+                      if (waypointFor(o.map, o.event) case final waypoint?) WaypointLink(waypoint),
                     ],
                   ),
                 ),

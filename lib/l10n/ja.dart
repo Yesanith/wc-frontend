@@ -92,6 +92,8 @@ const jaStrings = <String, String>{
   'vault_after_login_weekly': '今週の目標はゲームにログインすると届きます',
   'vault_after_login_note': 'ウィザードヴォールトの目標はリセット後の最初のログイン時に配られます。それまでAPIには前回の目標しかありません。ログインから数分後にここに表示されます。',
   'api_last_sent': 'ゲームが最後にアカウントを送信した日時：{t}',
+  'waypoint_copied': '{name}：リンクをコピーしました。ゲームのチャットに貼り付けてください。',
+  'copy_waypoint': 'ウェイポイントのリンクをコピー',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

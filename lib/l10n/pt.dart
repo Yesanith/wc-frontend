@@ -112,6 +112,8 @@ const ptStrings = <String, String>{
   'vault_after_login_note':
       'O jogo distribui os objetivos do Cofre do Mago no seu primeiro login após o reset; até lá a API só tem os anteriores. Eles aparecem aqui alguns minutos depois do login.',
   'api_last_sent': 'O jogo enviou sua conta pela última vez em {t}',
+  'waypoint_copied': '{name}: link copiado. Cole no chat do jogo.',
+  'copy_waypoint': 'Copiar o link do waypoint',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'dart:convert';
+
 import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/data/waypoints.dart';
 import 'package:wondrous_compass/screens/events_screen.dart';
 import 'package:wondrous_compass/screens/item_detail_screen.dart';
 import 'package:wondrous_compass/state/clock.dart';
@@ -20,6 +23,44 @@ void main() {
         expect(e.minutes, greaterThan(0));
       }
     }
+  });
+
+  test('every event has a waypoint whose chat code is a waypoint link', () {
+    for (final m in metaMaps) {
+      for (final e in m.events) {
+        final w = waypointFor(m, e);
+        expect(w, isNotNull, reason: '${m.id}/${e.name}');
+        expect(w!.name, endsWith('Waypoint'), reason: w.name);
+        final match = RegExp(r'^\[&([A-Za-z0-9+/]+=*)\]$').firstMatch(w.code);
+        expect(match, isNotNull, reason: w.code);
+        final bytes = base64.decode(match!.group(1)!);
+        // a link to a point of interest is type 4 and its id in four bytes after it
+        expect(bytes, hasLength(5), reason: w.code);
+        expect(bytes.first, 4, reason: w.code);
+      }
+    }
+  });
+
+  test('the fractal incursion is one hour in four on each of its maps, one after the other, from midnight', () {
+    final map = metaMaps.firstWhere((m) => m.id == 'incursion');
+    final names = [for (final e in map.events) e.name];
+    expect(names, ['Kessex Hills', 'Diessa Plateau', 'Brisban Wildlands', 'Snowden Drifts']);
+    final from = DateTime.utc(2026, 11, 14);
+    final runs = occurrences(from, from.add(const Duration(hours: 8)), maps: [map]);
+    expect([
+      for (final o in runs) '${o.start.hour}:${o.event.name}'
+    ], [
+      '0:Kessex Hills',
+      '1:Diessa Plateau',
+      '2:Brisban Wildlands',
+      '3:Snowden Drifts',
+      '4:Kessex Hills',
+      '5:Diessa Plateau',
+      '6:Brisban Wildlands',
+      '7:Snowden Drifts',
+    ]);
+    expect(waypointFor(map, map.events[1])!.code, '[&BN0AAAA=]');
+    expect(map.events.first.wiki, fractalIncursionPage);
   });
 
   test('core bosses keep their classic rotation', () {

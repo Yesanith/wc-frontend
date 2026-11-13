@@ -108,6 +108,8 @@ const trStrings = <String, String>{
   'vault_after_login_note':
       'Oyun, Wizard\'s Vault görevlerini sıfırlamadan sonraki ilk girişinde verir; o zamana kadar API\'de yalnızca öncekiler olur. Giriş yaptıktan birkaç dakika sonra burada görünürler.',
   'api_last_sent': 'Oyunun hesabını en son gönderdiği zaman: {t}',
+  'waypoint_copied': '{name}: link kopyalandı. Oyun sohbetine yapıştır.',
+  'copy_waypoint': 'Waypoint linkini kopyala',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

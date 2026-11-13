@@ -111,6 +111,8 @@ const enStrings = <String, String>{
   'vault_after_login_note':
       'The game gives out the Wizard\'s Vault objectives at your first login after the reset; until then the API only has the previous ones. They show here a few minutes after you log in.',
   'api_last_sent': 'The game last sent your account on {t}',
+  'waypoint_copied': '{name}: link copied. Paste it in the game chat.',
+  'copy_waypoint': 'Copy the waypoint link',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':
