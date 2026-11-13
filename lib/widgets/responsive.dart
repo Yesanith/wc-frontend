@@ -209,14 +209,16 @@ class TwoColumnRows extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, box) {
-      if (box.maxWidth < breakpoint || children.length < 2) return Column(children: children);
+      if (box.maxWidth < breakpoint || children.length < 2) {
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children);
+      }
       final half = (children.length + 1) ~/ 2;
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Column(children: children.sublist(0, half))),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children.sublist(0, half))),
           SizedBox(width: gap),
-          Expanded(child: Column(children: children.sublist(half))),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children.sublist(half))),
         ],
       );
     });

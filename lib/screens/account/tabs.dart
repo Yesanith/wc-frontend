@@ -21,36 +21,41 @@ class _WalletTab extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
-                borderRadius: BorderRadius.circular(AppRadius.window),
-                border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Kicker(s.t('gold').caps),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    spacing: 12,
+            TwoColumnRows(
+              gap: 20,
+              breakpoint: 820,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
+                    borderRadius: BorderRadius.circular(AppRadius.window),
+                    border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 34),
-                      _coin('${coins.silver}', 's', AppColors.silver, 20),
-                      _coin('${coins.copper}', 'c', AppColors.copper, 20),
+                      Kicker(s.t('gold').caps),
+                      const SizedBox(height: 6),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.end,
+                        spacing: 12,
+                        children: [
+                          _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 34),
+                          _coin('${coins.silver}', 's', AppColors.silver, 20),
+                          _coin('${coins.copper}', 'c', AppColors.copper, 20),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 12),
+                const _AccountProfile(),
+                const SizedBox(height: 12),
+                const _AccountCounters(),
+                const _WealthPanel(),
+              ],
             ),
-            const SizedBox(height: 12),
-            const _AccountProfile(),
-            const SizedBox(height: 12),
-            const _AccountCounters(),
-            const SizedBox(height: 12),
-            const _WealthPanel(),
             const SizedBox(height: 14),
             // on the site the currencies are short rows in columns, three where there is room
             if (SiteScope.of(context))

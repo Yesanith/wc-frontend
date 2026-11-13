@@ -168,12 +168,13 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
             ),
         ] else ...[
           GridView(
-            gridDelegate: const AdaptiveGridDelegate(
+            // on the site the four cards share the width, in a flatter shape
+            gridDelegate: AdaptiveGridDelegate(
               minColumns: 2,
-              maxTile: 260,
+              maxTile: SiteScope.of(context) ? 300 : 260,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
-              childAspectRatio: 1.55,
+              childAspectRatio: SiteScope.of(context) ? 2.0 : 1.55,
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../state/account.dart';
 import '../state/clock.dart';
 import '../state/guilds.dart';
@@ -43,8 +44,8 @@ class WvwScreen extends ConsumerWidget {
   }
 }
 
-String _dateTime(DateTime d) =>
-    '${d.day}.${d.month}. ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+String _dateTime(S s, DateTime d) =>
+    '${shortDateText(s, d)} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
 
 class _MatchupTab extends ConsumerWidget {
   const _MatchupTab();
@@ -155,10 +156,10 @@ class _MatchupTab extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (timers.lockout != null)
-                        Text(s.t('wvw_lockout', {'d': _dateTime(timers.lockout!)}),
+                        Text(s.t('wvw_lockout', {'d': _dateTime(s, timers.lockout!.toLocal())}),
                             style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                       if (timers.teamAssignment != null)
-                        Text(s.t('wvw_relink', {'d': _dateTime(timers.teamAssignment!)}),
+                        Text(s.t('wvw_relink', {'d': _dateTime(s, timers.teamAssignment!.toLocal())}),
                             style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                     ],
                   ),
@@ -168,7 +169,7 @@ class _MatchupTab extends ConsumerWidget {
               SectionHeader(title: s.t('maps')),
               const SizedBox(height: 10),
               CardWrap(
-                minWidth: 360,
+                minWidth: 270,
                 gap: 10,
                 children: [
                   for (final map in maps) _MapCard(map: Map<String, dynamic>.from(map), objectives: objectives)
@@ -404,7 +405,7 @@ class _StatsTab extends ConsumerWidget {
               if (start != null && end != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: Text(s.t('wvw_period', {'a': _dateTime(start), 'b': _dateTime(end)}),
+                  child: Text(s.t('wvw_period', {'a': _dateTime(s, start.toLocal()), 'b': _dateTime(s, end.toLocal())}),
                       style: TextStyle(fontSize: 12, color: AppColors.textSoft)),
                 ),
               for (final c in _teamColors.keys)

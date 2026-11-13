@@ -141,10 +141,13 @@ class _ChipRow extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(children: [for (final c in children) Padding(padding: const EdgeInsets.only(right: 8), child: c)]),
-      );
+  Widget build(BuildContext context) => SiteScope.of(context)
+      // a site has the width: the chips wrap onto a second line instead of hiding behind a scroll
+      ? Wrap(spacing: 8, runSpacing: 8, children: children)
+      : SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(children: [for (final c in children) Padding(padding: const EdgeInsets.only(right: 8), child: c)]),
+        );
 }
 
 class _Notice extends ConsumerWidget {

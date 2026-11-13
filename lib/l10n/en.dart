@@ -851,7 +851,7 @@ const enStrings = <String, String>{
   'err_empty_key': 'Paste an API key first.',
   'err_missing_perms': 'The key works but these permissions are missing: {p}',
   'err_key_invalid': 'Could not verify the key: {e}',
-  'welcome': 'Welcome back',
+  'welcome': 'Welcome',
   'playtime': 'Playtime',
   'wvw_rank': 'WvW rank',
   'gold': 'Gold',
