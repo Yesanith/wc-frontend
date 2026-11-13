@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/strings.dart';
 import '../services/update_check.dart' show appVersion;
+import '../state/community.dart' show communityConfigured;
 import '../state/navigation.dart';
 import '../theme.dart';
 import '../util.dart';
@@ -81,6 +82,12 @@ const siteBarMaxWidth = 1880.0;
   if (width >= 1500) return (searchWidth: null, account: false, version: true);
   return (searchWidth: null, account: false, version: false);
 }
+
+/// guild events, public events and recruitment live on the community backend: a build without it has nothing to show
+/// there, so the bar leaves them out
+bool siteSectionAvailable(AppSection sec) =>
+    communityConfigured ||
+    (sec != AppSection.guildEvents && sec != AppSection.publicEvents && sec != AppSection.recruitment);
 
 /// which group a section is in, by its place in [siteNavGroups], or null for one that stands alone
 int? siteGroupIndex(AppSection section) {
@@ -164,7 +171,10 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
         for (var i = 0; i < siteNavGroups.length; i++)
           _SiteNavMenu(
             label: groupLabels[i],
-            sections: siteNavGroups[i].$2,
+            sections: [
+              for (final sec in siteNavGroups[i].$2)
+                if (siteSectionAvailable(sec)) sec,
+            ],
             current: current,
             labels: labels,
             icons: icons,
