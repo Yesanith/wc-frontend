@@ -172,6 +172,7 @@ const ptStrings = <String, String>{
   'item_modes': 'Usado em {m}',
   'item_only': 'Somente para {r}',
   'wvw_claimed': 'Reivindicado há {t}',
+  'latest_news': 'Últimas notícias',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

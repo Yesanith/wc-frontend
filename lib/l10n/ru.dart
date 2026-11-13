@@ -170,6 +170,7 @@ const ruStrings = <String, String>{
   'item_modes': 'Используется в: {m}',
   'item_only': 'Только для: {r}',
   'wvw_claimed': 'Захвачено {t} назад',
+  'latest_news': 'Последние новости',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

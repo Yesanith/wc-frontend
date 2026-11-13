@@ -148,6 +148,7 @@ const zhStrings = <String, String>{
   'item_modes': '可用于：{m}',
   'item_only': '仅限：{r}',
   'wvw_claimed': '{t} 前认领',
+  'latest_news': '最新消息',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

@@ -18,6 +18,7 @@ class _VaultState extends ConsumerState<_Vault> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const _VaultBars(),
           SizedBox(
             width: double.infinity,
             child: SegmentedButton<String>(

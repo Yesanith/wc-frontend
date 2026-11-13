@@ -171,6 +171,7 @@ const enStrings = <String, String>{
   'item_modes': 'Used in {m}',
   'item_only': 'Only for {r}',
   'wvw_claimed': 'Claimed {t} ago',
+  'latest_news': 'Latest news',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

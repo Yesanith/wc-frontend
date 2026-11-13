@@ -25,12 +25,15 @@ import '../widgets/pin_button.dart';
 import '../widgets/vault_objectives.dart' show VaultChestReward;
 import '../widgets/waypoint_link.dart';
 import '../state/news.dart';
+import '../state/market.dart' show TpPrice;
+import '../state/trading.dart';
 import 'achievement_detail_screen.dart';
 import 'events_screen.dart';
 
 part 'home/banners.dart';
 part 'home/vault.dart';
 part 'home/wallet.dart';
+part 'home/extras.dart';
 
 const _tabular = [FontFeature.tabularFigures()];
 
@@ -86,6 +89,10 @@ class HomeScreen extends ConsumerWidget {
                   const _Vault(),
                 ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Eyebrow(s.t('trading_post')),
+                  const _TradeBox(),
+                ]),
+                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                   Eyebrow(s.t('wallet')),
                   const _Wallet(),
                 ]),
@@ -98,6 +105,7 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
           ],
+          const _LatestNews(),
         ],
       ),
     );
