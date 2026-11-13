@@ -21,7 +21,7 @@ class CoinText extends StatelessWidget {
         if (negative) TextSpan(text: '-', style: value),
         if (c.gold > 0) ...[
           TextSpan(text: fmtInt(c.gold), style: value),
-          TextSpan(text: 'g ', style: unit.copyWith(color: AppColors.gold)),
+          TextSpan(text: 'g ', style: unit.copyWith(color: AppColors.coinGold)),
         ],
         if (c.gold > 0 || c.silver > 0) ...[
           TextSpan(text: '${c.silver}', style: value),

@@ -144,6 +144,9 @@ const enStrings = <String, String>{
   'vault_objectives_note':
       'The vault can ask for {n} objectives this season, and picks each day\'s and week\'s from them. The acclaim is what each pays.',
   'vault_objectives_search': 'Search objectives',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Deep navy with silver frames and an aqua glow, always dark.',
+  'wvw_matchup_open': 'Open the matchup',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

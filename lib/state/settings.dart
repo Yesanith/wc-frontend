@@ -30,7 +30,7 @@ final langProvider = NotifierProvider<LangNotifier, AppLang>(LangNotifier.new);
 
 /// which look the app has: the palette of the day, the one of the night, or
 /// whichever the phone is set to
-enum LookMode { system, light, dark }
+enum LookMode { system, light, dark, mistlock }
 
 class LookNotifier extends Notifier<LookMode> {
   static const _key = 'look';
@@ -53,6 +53,7 @@ final lookProvider = NotifierProvider<LookNotifier, LookMode>(LookNotifier.new);
 AppPalette paletteFor(LookMode mode, Brightness system) => switch (mode) {
       LookMode.light => AppPalette.light,
       LookMode.dark => AppPalette.night,
+      LookMode.mistlock => AppPalette.mistlock,
       LookMode.system => system == Brightness.dark ? AppPalette.night : AppPalette.light,
     };
 

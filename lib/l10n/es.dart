@@ -143,6 +143,9 @@ const esStrings = <String, String>{
   'vault_objectives_note':
       'La cámara puede pedir {n} objetivos esta temporada y elige de ellos los del día y la semana. A la derecha, el Acclaim que paga cada uno.',
   'vault_objectives_search': 'Buscar objetivos',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Azul marino profundo con marcos plateados y un brillo aguamarina, siempre oscuro.',
+  'wvw_matchup_open': 'Abrir el enfrentamiento',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

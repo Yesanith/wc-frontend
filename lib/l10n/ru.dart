@@ -143,6 +143,9 @@ const ruStrings = <String, String>{
   'vault_objectives_note':
       'В этом сезоне хранилище может дать {n} заданий и выбирает из них задания дня и недели. Справа указана награда в Acclaim.',
   'vault_objectives_search': 'Поиск заданий',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Глубокий тёмно-синий, серебристые рамки и аквамариновое свечение; всегда тёмная.',
+  'wvw_matchup_open': 'Открыть матч',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

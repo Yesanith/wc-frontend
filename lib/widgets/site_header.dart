@@ -204,7 +204,7 @@ class SiteHeader extends StatelessWidget implements PreferredSizeWidget {
                               // still leads home
                               if (mode != SiteBarNav.grouped || width >= 1200) ...[
                                 const SizedBox(width: 10),
-                                Text('Wondrous Compass', style: display(20)),
+                                Text('Wondrous Compass', style: wordmark(20)),
                               ],
                               if (siteBarLayout(width).version) ...[
                                 const SizedBox(width: 8),

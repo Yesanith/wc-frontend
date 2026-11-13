@@ -33,6 +33,9 @@ class AppPalette {
     required this.header,
     required this.onHeader,
     required this.accent,
+    required this.emblem,
+    this.coin,
+    this.cinzelTitles = false,
   });
 
   final bool dark;
@@ -45,6 +48,15 @@ class AppPalette {
 
   /// the bright gold of the header's own marks
   final Color accent;
+
+  /// the gold of the emblem, which is the same in every palette
+  final Color emblem;
+
+  /// the gold of a coin where the palette's own accent is not gold
+  final Color? coin;
+
+  /// titles in Cinzel, the Roman capitals of the game's own marks, instead of Marcellus
+  final bool cinzelTitles;
 
   /// paper, ink, a crimson for what needs the eye and gold for the rules
   static const light = AppPalette(
@@ -75,6 +87,7 @@ class AppPalette {
     header: Color(0xFF2A2017),
     onHeader: Color(0xFFD9CCB0),
     accent: Color(0xFFE8CF93),
+    emblem: Color(0xFF8A5F14),
   );
 
   static const night = AppPalette(
@@ -105,6 +118,42 @@ class AppPalette {
     header: Color(0xFF0B0804),
     onHeader: Color(0xFFCDBF9F),
     accent: Color(0xFFE8CF93),
+    emblem: Color(0xFFD9A84E),
+  );
+
+  /// deep navy with silver-blue frames and an aqua glow, the Mists. the accent is aqua where the other palettes have gold,
+  /// the emblem keeps its gold, and titles are in Cinzel
+  static const mistlock = AppPalette(
+    dark: true,
+    bg: Color(0xFF070B16),
+    navBg: Color(0xFF04060D),
+    surface: Color(0xFF0F1628),
+    surface2: Color(0xFF16203A),
+    surface3: Color(0xFF1C2745),
+    line: Color(0xFF33467A),
+    track: Color(0xFF1C2745),
+    hairline: Color(0x1AAFC4FF),
+    text: Color(0xFFE7ECFA),
+    textSoft: Color(0xFFC9D3EE),
+    muted: Color(0xFF9AA8C7),
+    hint: Color(0xFF7A89AE),
+    chevron: Color(0xFF5C6C99),
+    gold: Color(0xFF6FE3FF),
+    goldSoft: Color(0xFFB8F1FF),
+    onGold: Color(0xFF04121A),
+    ember: Color(0xFFFF9A5C),
+    amber: Color(0xFFF2C14E),
+    blue: Color(0xFF8AB4FF),
+    green: Color(0xFF6FD39B),
+    red: Color(0xFFF08783),
+    silver: Color(0xFFC9D3EE),
+    copper: Color(0xFFD69B6B),
+    header: Color(0xFF04060D),
+    onHeader: Color(0xFFC9D3EE),
+    accent: Color(0xFF8FE9FF),
+    emblem: Color(0xFFD8B25A),
+    coin: Color(0xFFF0CD7A),
+    cinzelTitles: true,
   );
 }
 
@@ -166,6 +215,10 @@ class AppColors {
   static Color get header => _p.header;
   static Color get onHeader => _p.onHeader;
   static Color get accent => _p.accent;
+  static Color get emblem => _p.emblem;
+
+  /// a coin's gold, which stays gold where the accent is not
+  static Color get coinGold => _p.coin ?? _p.gold;
 
   /// brand colours, for tiles people should recognise at a glance
   static const coffee = Color(0xFFFFDD00);
@@ -187,7 +240,23 @@ class AppRadius {
 
 /// headlines and titles, in the serif of the journal: Marcellus, which has one
 /// weight. scripts it lacks fall back to Noto Sans
-TextStyle display(double size, {Color? color}) => GoogleFonts.marcellus(
+TextStyle display(double size, {Color? color}) => (AppColors.palette.cinzelTitles
+        ? GoogleFonts.cinzel(
+            fontSize: size * 0.94,
+            fontWeight: FontWeight.w600,
+            color: color ?? AppColors.text,
+            letterSpacing: 0.5,
+          )
+        : GoogleFonts.marcellus(
+            fontSize: size,
+            fontWeight: FontWeight.w400,
+            color: color ?? AppColors.text,
+            letterSpacing: 0.3,
+          ))
+    .copyWith(fontFamilyFallback: const ['Noto Sans']);
+
+/// the name beside the emblem, which is Marcellus in every palette: it is the logo, not a title
+TextStyle wordmark(double size, {Color? color}) => GoogleFonts.marcellus(
       fontSize: size,
       fontWeight: FontWeight.w400,
       color: color ?? AppColors.text,

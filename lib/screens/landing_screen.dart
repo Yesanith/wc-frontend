@@ -91,7 +91,7 @@ class LandingScreen extends ConsumerWidget {
                                   children: [
                                     Flexible(
                                       child: Text('Wondrous Compass',
-                                          maxLines: 1, overflow: TextOverflow.ellipsis, style: display(20)),
+                                          maxLines: 1, overflow: TextOverflow.ellipsis, style: wordmark(20)),
                                     ),
                                     if (!narrow) ...[
                                       const SizedBox(width: 8),

@@ -148,6 +148,9 @@ const deStrings = <String, String>{
   'vault_objectives_note':
       'Der Tresor kann diese Saison {n} Aufgaben stellen und wählt daraus die des Tages und der Woche. Daneben steht der Acclaim.',
   'vault_objectives_search': 'Aufgaben suchen',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Tiefes Marineblau mit Silberrahmen und aquafarbenem Schimmer, immer dunkel.',
+  'wvw_matchup_open': 'Matchup öffnen',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

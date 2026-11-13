@@ -17,7 +17,7 @@ class DiamondEmblem extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: CustomPaint(painter: _EmblemPainter(color ?? AppColors.gold, filled)),
+      child: CustomPaint(painter: _EmblemPainter(color ?? AppColors.emblem, filled)),
     );
   }
 }

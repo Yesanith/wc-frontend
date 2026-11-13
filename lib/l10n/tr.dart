@@ -141,6 +141,9 @@ const trStrings = <String, String>{
   'vault_objectives_note':
       'Vault bu sezon {n} farklı görev verebiliyor, günlük ve haftalık görevleri bunların arasından seçiyor. Yanındaki sayı her görevin verdiği acclaim.',
   'vault_objectives_search': 'Görev ara',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Derin lacivert, gümüş çerçeveler ve aqua parıltı; her zaman koyu.',
+  'wvw_matchup_open': 'Eşleşmeyi aç',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

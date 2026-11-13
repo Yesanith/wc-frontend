@@ -145,6 +145,9 @@ const ptStrings = <String, String>{
   'vault_objectives_note':
       'O cofre pode pedir {n} objetivos nesta temporada e escolhe entre eles os do dia e da semana. Ao lado, o Acclaim de cada um.',
   'vault_objectives_search': 'Buscar objetivos',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Azul-marinho profundo com molduras prateadas e brilho aqua, sempre escuro.',
+  'wvw_matchup_open': 'Abrir o confronto',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

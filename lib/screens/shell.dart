@@ -571,7 +571,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                   children: [
                     Row(
                       children: [
-                        Flexible(child: Text('Wondrous Compass', style: display(18), overflow: TextOverflow.ellipsis)),
+                        Flexible(child: Text('Wondrous Compass', style: wordmark(18), overflow: TextOverflow.ellipsis)),
                         const SizedBox(width: 8),
                         const VersionPill(appVersion == 'dev' ? 'dev' : 'v$appVersion'),
                       ],

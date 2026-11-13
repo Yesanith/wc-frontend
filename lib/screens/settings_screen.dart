@@ -229,7 +229,7 @@ class _Section extends StatelessWidget {
   }
 }
 
-/// light, dark or whichever the phone is set to
+/// light, dark, the Mistlock palette, or whichever the phone is set to
 class _LookChoice extends ConsumerWidget {
   const _LookChoice({this.compact = false});
 
@@ -240,30 +240,30 @@ class _LookChoice extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final mode = ref.watch(lookProvider);
-    return SizedBox(
-      width: compact ? null : double.infinity,
-      child: SegmentedButton<LookMode>(
-        showSelectedIcon: false,
-        segments: [
-          ButtonSegment(
-            value: LookMode.system,
-            icon: const Icon(Icons.brightness_auto_outlined, size: 18),
-            label: Text(s.t(compact ? 'look_device' : 'look_system')),
-          ),
-          ButtonSegment(
-            value: LookMode.light,
-            icon: const Icon(Icons.light_mode_outlined, size: 18),
-            label: Text(s.t('look_light')),
-          ),
-          ButtonSegment(
-            value: LookMode.dark,
-            icon: const Icon(Icons.dark_mode_outlined, size: 18),
-            label: Text(s.t('look_dark')),
-          ),
+    Widget chip(LookMode value, IconData icon, String label) => ChoiceChip(
+          avatar: Icon(icon, size: 18, color: mode == value ? AppColors.goldSoft : AppColors.muted),
+          label: Text(label),
+          selected: mode == value,
+          onSelected: (_) => ref.read(lookProvider.notifier).set(value),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            chip(LookMode.system, Icons.brightness_auto_outlined, s.t(compact ? 'look_device' : 'look_system')),
+            chip(LookMode.light, Icons.light_mode_outlined, s.t('look_light')),
+            chip(LookMode.dark, Icons.dark_mode_outlined, s.t('look_dark')),
+            chip(LookMode.mistlock, Icons.auto_awesome_outlined, s.t('look_mistlock')),
+          ],
+        ),
+        if (mode == LookMode.mistlock) ...[
+          const SizedBox(height: 8),
+          Text(s.t('look_mistlock_note'), style: TextStyle(fontSize: 12.5, height: 1.4, color: AppColors.muted)),
         ],
-        selected: {mode},
-        onSelectionChanged: (picked) => ref.read(lookProvider.notifier).set(picked.first),
-      ),
+      ],
     );
   }
 }

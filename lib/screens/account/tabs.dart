@@ -37,7 +37,7 @@ class _WalletTab extends ConsumerWidget {
                     crossAxisAlignment: WrapCrossAlignment.end,
                     spacing: 12,
                     children: [
-                      _coin(fmtInt(coins.gold), 'g', AppColors.gold, 34),
+                      _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 34),
                       _coin('${coins.silver}', 's', AppColors.silver, 20),
                       _coin('${coins.copper}', 'c', AppColors.copper, 20),
                     ],

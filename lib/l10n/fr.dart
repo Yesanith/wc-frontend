@@ -145,6 +145,9 @@ const frStrings = <String, String>{
   'vault_objectives_note':
       'La chambre forte peut demander {n} objectifs cette saison et choisit dans cette liste ceux du jour et de la semaine. À droite, l\'Acclaim de chacun.',
   'vault_objectives_search': 'Chercher un objectif',
+  'look_mistlock': 'Mistlock',
+  'look_mistlock_note': 'Bleu nuit profond, cadres argentés et lueur aigue-marine, toujours sombre.',
+  'wvw_matchup_open': 'Ouvrir la rencontre',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

@@ -104,7 +104,7 @@ class _Hero extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Wondrous Compass', style: display(24)),
+                Text('Wondrous Compass', style: wordmark(24)),
                 const SizedBox(height: 6),
                 Wrap(
                   spacing: 8,
