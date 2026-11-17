@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../services/address_bar.dart';
 import '../services/boss_alerts.dart';
 import '../services/push.dart';
@@ -106,32 +107,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       pageLabel: s.t('search_page'),
       itemLabel: s.t('search_item'),
       onSelect: onSelect,
-    );
-  }
-
-  /// the search in a window of its own, for a bar with no room for the box
-  void _showSearch() {
-    showDialog<void>(
-      context: context,
-      builder: (dialog) => Dialog(
-        alignment: Alignment.topCenter,
-        insetPadding: const EdgeInsets.only(top: 80, left: 24, right: 24),
-        backgroundColor: AppColors.navBg,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            width: 440,
-            child: _search(
-              width: 440,
-              autofocus: true,
-              onSelect: (hit) {
-                Navigator.of(dialog).pop();
-                _openHit(hit);
-              },
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -504,6 +479,49 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     if (entries != null && name != null) ref.read(wealthProvider.notifier).record('$name', entries);
   }
 
+  /// on the site the pages have the rail down the left side and the strip with the search over them; on a phone they are the page
+  Widget _withRail({
+    required bool site,
+    required S s,
+    required AppSection section,
+    required bool busy,
+    required double? progress,
+    required String? accountName,
+    required Widget content,
+  }) {
+    if (!site) return content;
+    final width = MediaQuery.sizeOf(context).width;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SiteRail(
+          current: section,
+          onSelect: _select,
+          labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
+          icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
+          groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
+          busy: busy,
+          progress: progress,
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              SiteTopStrip(
+                // the strip is at the right of the page, so a search of a window's width is there too
+                search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
+                account: accountName,
+                accountBadge: communityReady
+                    ? AccountBadge(compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
+                    : null,
+              ),
+              Expanded(child: content),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -541,8 +559,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     final wide = useSideMenu(MediaQuery.sizeOf(context));
     final site = kIsWeb && MediaQuery.sizeOf(context).width >= siteMinWidth;
     // a site on a tablet has its menu behind a button of the bar; elsewhere a site has none to open
-    final siteMenu = site && siteBarNav(MediaQuery.sizeOf(context).width) == SiteBarNav.menu;
-    final hasDrawer = site ? siteMenu : !wide;
+    // a site has the rail down its side; only a phone has the drawer
+    final hasDrawer = !site && !wide;
     _wide = !hasDrawer;
     // the tab of the browser says which page it is, as the tab of a site does
     if (kIsWeb) _setPageTitle(sitePageTitle(section, s.t(_titleKeys[section]!)));
@@ -614,36 +632,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       key: _scaffoldKey,
       onDrawerChanged: _drawerChanged,
       appBar: site
-          ? SiteHeader(
-              current: section,
-              onSelect: _select,
-              labels: {for (final sec in AppSection.values) sec: s.t(_titleKeys[sec]!)},
-              icons: {for (final sec in AppSection.values) sec: _icons[sec]!.$1},
-              groupLabels: [for (final group in siteNavGroups) s.t(group.$1)],
-              todayLabel: s.t(siteTodayGroup.$1),
-              onMenu: () => _scaffoldKey.currentState?.openDrawer(),
-              // the room of the bar decides what is in it: the account and a wide search, a narrower search, or a button that opens the
-              // search in a window, so that the sections are always all there
-              account: siteBarLayout(MediaQuery.sizeOf(context).width).account ? accountName : null,
-              // with the community backend the bar says who is signed in, or offers to sign in, at every width
-              accountBadge: communityReady
-                  ? AccountBadge(
-                      compact: true,
-                      showName: siteBarLayout(MediaQuery.sizeOf(context).width).account,
-                      onOpen: () => _select(AppSection.settings),
-                    )
-                  : null,
-              search: switch (siteBarLayout(MediaQuery.sizeOf(context).width).searchWidth) {
-                final width? => _search(width: width, onSelect: _openHit),
-                null => IconButton(
-                    tooltip: s.t('search_placeholder'),
-                    onPressed: _showSearch,
-                    icon: Icon(Icons.search, color: AppColors.muted),
-                  ),
-              },
-              busy: sync.running || refreshing != 0,
-              progress: sync.running ? sync.ratio : null,
-            )
+          ? null
           : AppBar(
               surfaceTintColor: Colors.transparent,
               title: Text(s.t(_titleKeys[section]!), style: display(20, color: AppColors.accent)),
@@ -686,66 +675,75 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       body: AppPresence(
         child: SiteScope(
           site: site,
-          child: Column(
-            children: [
-              const AnnouncementBar(),
-              Expanded(
-                child: SwipeToOpen(
-                  // the map pans sideways, the menu stays on the button and back there
-                  enabled: section != AppSection.maps && hasDrawer && !site,
-                  onOpen: () => _scaffoldKey.currentState?.openDrawer(),
-                  child: IndexedStack(
-                    index: section.index,
-                    children: [
-                      for (final sec in AppSection.values)
-                        // hidden sections keep their state but stop their tickers and timers
-                        TickerMode(
-                          enabled: sec == section,
-                          // the map takes the whole window, a list keeps to a width it can be read in and a page laid
-                          // out in columns to a wider one, both in the middle
-                          child: ContentFrame(
-                            // on the site every page keeps to the width of the site, as a site's pages do; the map and the
-                            // timeline of the world's events, which are drawn across, take what there is
-                            maxWidth: sec == AppSection.maps
-                                ? double.infinity
-                                : site && sec != AppSection.bosses
-                                    ? sitePageWidth
-                                    : _readingSections.contains(sec)
-                                        ? readingMaxWidth
-                                        : contentMaxWidth,
-                            child: !_opened.contains(sec)
-                                ? const SizedBox.shrink()
-                                : (!hasKey && sectionNeedsKey(sec))
-                                    ? const NeedsKeyView()
-                                    : site &&
-                                            sec != AppSection.maps &&
-                                            sec != AppSection.home &&
-                                            // a character's page has its own way back to the list instead of the name of the list
-                                            !(sec == AppSection.characters && ref.watch(openCharacterProvider) != null)
-                                        // a page of a site has its name at the top of it, the bar of an app is where an app has it
-                                        ? CollapsingHeading(
-                                            heading: Padding(
-                                              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: SitePageHeading(
-                                                  title: s.t(_titleKeys[sec]!),
-                                                  kicker: siteGroupIndex(sec) == null
-                                                      ? null
-                                                      : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+          child: _withRail(
+            site: site,
+            s: s,
+            section: section,
+            busy: sync.running || refreshing != 0,
+            progress: sync.running ? sync.ratio : null,
+            accountName: accountName,
+            content: Column(
+              children: [
+                const AnnouncementBar(),
+                Expanded(
+                  child: SwipeToOpen(
+                    // the map pans sideways, the menu stays on the button and back there
+                    enabled: section != AppSection.maps && hasDrawer && !site,
+                    onOpen: () => _scaffoldKey.currentState?.openDrawer(),
+                    child: IndexedStack(
+                      index: section.index,
+                      children: [
+                        for (final sec in AppSection.values)
+                          // hidden sections keep their state but stop their tickers and timers
+                          TickerMode(
+                            enabled: sec == section,
+                            // the map takes the whole window, a list keeps to a width it can be read in and a page laid
+                            // out in columns to a wider one, both in the middle
+                            child: ContentFrame(
+                              // on the site every page keeps to the width of the site, as a site's pages do; the map and the
+                              // timeline of the world's events, which are drawn across, take what there is
+                              maxWidth: sec == AppSection.maps
+                                  ? double.infinity
+                                  : site && sec != AppSection.bosses
+                                      ? sitePageWidth
+                                      : _readingSections.contains(sec)
+                                          ? readingMaxWidth
+                                          : contentMaxWidth,
+                              child: !_opened.contains(sec)
+                                  ? const SizedBox.shrink()
+                                  : (!hasKey && sectionNeedsKey(sec))
+                                      ? const NeedsKeyView()
+                                      : site &&
+                                              sec != AppSection.maps &&
+                                              sec != AppSection.home &&
+                                              // a character's page has its own way back to the list instead of the name of the list
+                                              !(sec == AppSection.characters &&
+                                                  ref.watch(openCharacterProvider) != null)
+                                          // a page of a site has its name at the top of it, the bar of an app is where an app has it
+                                          ? CollapsingHeading(
+                                              heading: Padding(
+                                                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: SitePageHeading(
+                                                    title: s.t(_titleKeys[sec]!),
+                                                    kicker: siteGroupIndex(sec) == null
+                                                        ? null
+                                                        : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            body: _sectionBody(sec, site),
-                                          )
-                                        : _sectionBody(sec, site),
+                                              body: _sectionBody(sec, site),
+                                            )
+                                          : _sectionBody(sec, site),
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

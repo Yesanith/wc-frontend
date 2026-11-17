@@ -10,6 +10,7 @@ import 'common.dart';
 import 'responsive.dart';
 
 part 'site_header/footer.dart';
+part 'site_header/rail.dart';
 
 /// the page address of the static site, where the privacy policy and the terms are, in the language of the app: English at the root,
 /// the others in a folder of their own
