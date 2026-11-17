@@ -122,12 +122,14 @@ class Eyebrow extends StatelessWidget {
   /// the words on a plate of the page's colour, for where they would lie on a picture
   final bool plate;
 
-  Widget _plated(Widget child) => plate
+  Widget _plated(Widget child, bool plated) => plated
       ? GlassPlate(radius: 999, padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: child)
       : child;
 
   @override
   Widget build(BuildContext context) {
+    // on a picture the words are always on a plate
+    final plate = this.plate || OnMap.of(context);
     final label = Text(
       text.caps,
       style: TextStyle(
@@ -141,9 +143,9 @@ class Eyebrow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(4, 24, 4, 8),
       child: Row(
         children: [
-          if (plate) _plated(label) else Expanded(child: label),
+          if (plate) _plated(label, true) else Expanded(child: label),
           if (plate) const Spacer(),
-          if (trailing != null) (plate ? _plated(trailing!) : trailing!),
+          if (trailing != null) (plate ? _plated(trailing!, true) : trailing!),
         ],
       ),
     );
