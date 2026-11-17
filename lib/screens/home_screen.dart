@@ -54,6 +54,88 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // a site with room has the page over the map of the game: the greeting at the top, what the account holds in a column at the
+    // right and the next events along the foot, the map between them
+    if (!SiteScope.of(context)) return _classic(context, ref);
+    return LayoutBuilder(
+      builder: (context, box) => box.maxWidth >= 980 ? _atlas(context, ref) : _classic(context, ref),
+    );
+  }
+
+  Widget _atlas(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final hasKey = ref.watch(hasKeyProvider);
+    Widget block(String title, List<Widget> children) =>
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Eyebrow(title), ...children]);
+    return RefreshIndicator(
+      color: AppColors.gold,
+      onRefresh: () => _refresh(ref),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(28, 4, 28, 28),
+        children: [
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1600),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const _HomeHero(),
+                  const _AlertBanner(),
+                  const _NewsBanner(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // the map of the game shows here, with the pins of the next events on it
+                      const Expanded(child: SizedBox(height: 460)),
+                      SizedBox(
+                        width: 356,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (!hasKey) const _GuestCard(),
+                            if (hasKey) ...[
+                              block(s.t('wizards_vault'), const [_Vault(compact: true)]),
+                              block(s.t('trading_post'), const [_TradeBox()]),
+                              block(s.t('wallet'), const [_Wallet()]),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Eyebrow(
+                    s.t('up_next'),
+                    trailing: TextButton(
+                      onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
+                      child: Text(s.t('all_timers')),
+                    ),
+                  ),
+                  const _UpNext(),
+                  if (hasKey) ...[
+                    const SizedBox(height: 20),
+                    CardWrap(
+                      minWidth: 330,
+                      gap: 20,
+                      children: [
+                        block(s.t('daily_checklist'), const [_Checklist()]),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [_WvwMini(), _PinnedAchievements()],
+                        ),
+                      ],
+                    ),
+                  ],
+                  const _LatestNews(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _classic(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final hasKey = ref.watch(hasKeyProvider);
     return RefreshIndicator(

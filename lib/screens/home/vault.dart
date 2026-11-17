@@ -1,7 +1,10 @@
 part of '../home_screen.dart';
 
 class _Vault extends ConsumerStatefulWidget {
-  const _Vault();
+  const _Vault({this.compact = false});
+
+  /// only the two bars, as one card that opens the daily page: for the column of the home page, which has room for no list
+  final bool compact;
 
   @override
   ConsumerState<_Vault> createState() => _VaultState();
@@ -13,6 +16,15 @@ class _VaultState extends ConsumerState<_Vault> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
+    if (widget.compact) {
+      return AppCard(
+        onTap: () => ref.read(sectionProvider.notifier).state = AppSection.daily,
+        child: const Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [Expanded(child: _VaultBars()), Icon(Icons.chevron_right)],
+        ),
+      );
+    }
     final period = ref.watch(vaultTrackProvider(_track));
     return Panel(
       child: Column(

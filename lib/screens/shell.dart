@@ -33,6 +33,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/account_badge.dart';
 import '../widgets/announcement_bar.dart';
+import '../widgets/atlas_backdrop.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -504,17 +505,24 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           progress: progress,
         ),
         Expanded(
-          child: Column(
+          child: Stack(
             children: [
-              SiteTopStrip(
-                // the strip is at the right of the page, so a search of a window's width is there too
-                search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
-                account: accountName,
-                accountBadge: communityReady
-                    ? AccountBadge(compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
-                    : null,
+              // the home page is laid over the map of the game
+              if (section == AppSection.home) const Positioned.fill(child: AtlasBackdrop()),
+              Column(
+                children: [
+                  SiteTopStrip(
+                    // the strip is at the right of the page, so a search of a window's width is there too
+                    search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
+                    account: accountName,
+                    accountBadge: communityReady
+                        ? AccountBadge(
+                            compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
+                        : null,
+                  ),
+                  Expanded(child: content),
+                ],
               ),
-              Expanded(child: content),
             ],
           ),
         ),
