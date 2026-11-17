@@ -31,12 +31,7 @@ class _Wallet extends ConsumerWidget {
             const SizedBox(height: 8),
             if (SiteScope.of(context))
               // the rows have a card of their own: on the home page the map of the game is behind them
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(AppRadius.card),
-                  border: Border.all(color: AppColors.line),
-                ),
+              _RowsCard(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   child: Column(
@@ -118,6 +113,26 @@ class _CurrencyTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// the rows of the wallet on a card: glass on the map of the home page, a sheet elsewhere
+class _RowsCard extends StatelessWidget {
+  const _RowsCard({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (OnMap.of(context)) return GlassPlate(child: child);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.line),
+      ),
+      child: child,
     );
   }
 }

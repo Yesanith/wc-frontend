@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
+import '../glass.dart';
 import '../responsive.dart';
 
 import '../../theme.dart';
@@ -12,6 +13,8 @@ class Panel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // on a picture it is a plate of glass, without the marks
+    if (OnMap.of(context)) return GlassPlate(padding: padding, child: child);
     // a sheet of the journal: a thin rule, and a gold mark at two of its corners
     return CustomPaint(
       foregroundPainter: _CornerMarks(AppColors.gold),
@@ -75,6 +78,12 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final body = Padding(padding: padding, child: child);
+    if (OnMap.of(context)) {
+      return GlassPlate(
+        radius: radius,
+        child: Material(color: Colors.transparent, child: onTap == null ? body : InkWell(onTap: onTap, child: body)),
+      );
+    }
     return Material(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(

@@ -4,6 +4,7 @@ import '../util.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../theme.dart';
+import 'glass.dart';
 
 /// a gradient ring for "how far along", with an optional label inside
 class Ring extends StatelessWidget {
@@ -122,14 +123,7 @@ class Eyebrow extends StatelessWidget {
   final bool plate;
 
   Widget _plated(Widget child) => plate
-      ? DecoratedBox(
-          decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.92),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: AppColors.line),
-          ),
-          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: child),
-        )
+      ? GlassPlate(radius: 999, padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: child)
       : child;
 
   @override
@@ -167,6 +161,7 @@ class GlowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final g = glow;
+    if (OnMap.of(context)) return GlassPlate(padding: padding, child: child);
     return Container(
       padding: padding,
       decoration: BoxDecoration(

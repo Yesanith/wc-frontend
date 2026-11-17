@@ -19,6 +19,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/glass.dart';
 import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
 import '../widgets/pin_button.dart';
@@ -67,71 +68,73 @@ class HomeScreen extends ConsumerWidget {
     final hasKey = ref.watch(hasKeyProvider);
     Widget block(String title, List<Widget> children) =>
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Eyebrow(title, plate: true), ...children]);
-    return RefreshIndicator(
-      color: AppColors.gold,
-      onRefresh: () => _refresh(ref),
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(28, 4, 28, 28),
-        children: [
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1600),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const _HomeHero(onMap: true),
-                  const _AlertBanner(),
-                  const _NewsBanner(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // the map of the game shows here, with the pins of the next events on it
-                      const Expanded(child: SizedBox(height: 460)),
-                      SizedBox(
-                        width: 356,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (!hasKey) const _GuestCard(),
-                            if (hasKey) ...[
-                              block(s.t('wizards_vault'), const [_Vault(compact: true)]),
-                              block(s.t('trading_post'), const [_TradeBox()]),
-                              block(s.t('wallet'), const [_Wallet()]),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Eyebrow(
-                    s.t('up_next'),
-                    plate: true,
-                    trailing: TextButton(
-                      onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
-                      child: Text(s.t('all_timers')),
-                    ),
-                  ),
-                  const _UpNext(),
-                  if (hasKey) ...[
-                    const SizedBox(height: 20),
-                    CardWrap(
-                      minWidth: 330,
-                      gap: 20,
+    return OnMap(
+      child: RefreshIndicator(
+        color: AppColors.gold,
+        onRefresh: () => _refresh(ref),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(28, 4, 28, 28),
+          children: [
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1600),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const _HomeHero(onMap: true),
+                    const _AlertBanner(),
+                    const _NewsBanner(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        block(s.t('daily_checklist'), const [_Checklist()]),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [_WvwMini(), _PinnedAchievements()],
+                        // the map of the game shows here, with the pins of the next events on it
+                        const Expanded(child: SizedBox(height: 460)),
+                        SizedBox(
+                          width: 356,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (!hasKey) const _GuestCard(),
+                              if (hasKey) ...[
+                                block(s.t('wizards_vault'), const [_Vault(compact: true)]),
+                                block(s.t('trading_post'), const [_TradeBox()]),
+                                block(s.t('wallet'), const [_Wallet()]),
+                              ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
+                    Eyebrow(
+                      s.t('up_next'),
+                      plate: true,
+                      trailing: TextButton(
+                        onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
+                        child: Text(s.t('all_timers')),
+                      ),
+                    ),
+                    const _UpNext(),
+                    if (hasKey) ...[
+                      const SizedBox(height: 20),
+                      CardWrap(
+                        minWidth: 330,
+                        gap: 20,
+                        children: [
+                          block(s.t('daily_checklist'), const [_Checklist()]),
+                          const Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [_WvwMini(), _PinnedAchievements()],
+                          ),
+                        ],
+                      ),
+                    ],
+                    const _LatestNews(),
                   ],
-                  const _LatestNews(),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -236,14 +239,7 @@ class _HomeHero extends ConsumerWidget {
     final greetingBlock = onMap
         ? Align(
             alignment: Alignment.centerLeft,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.surface.withValues(alpha: 0.88),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.line),
-              ),
-              child: Padding(padding: const EdgeInsets.fromLTRB(18, 12, 22, 14), child: greeting),
-            ),
+            child: GlassPlate(radius: 14, padding: const EdgeInsets.fromLTRB(18, 12, 22, 14), child: greeting),
           )
         : greeting;
     final chips = Wrap(spacing: 10, runSpacing: 10, children: [
@@ -277,6 +273,28 @@ class _HomeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final content = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label.caps,
+              style:
+                  TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
+          const SizedBox(height: 2),
+          Text(value, style: display(22).copyWith(fontFeatures: _tabular)),
+        ],
+      ),
+    );
+    if (OnMap.of(context)) {
+      return GlassPlate(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(onTap: onTap, child: content),
+        ),
+      );
+    }
     return Material(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
@@ -286,20 +304,7 @@ class _HomeChip extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(AppRadius.card),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(label.caps,
-                  style: TextStyle(
-                      fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
-              const SizedBox(height: 2),
-              Text(value, style: display(22).copyWith(fontFeatures: _tabular)),
-            ],
-          ),
-        ),
+        child: content,
       ),
     );
   }
@@ -466,12 +471,13 @@ class _EventCard extends ConsumerWidget {
     final o = occurrence;
     final active = o.activeAt(now);
     final waypoint = waypointFor(o.map, o.event);
-    return Container(
+    final onMap = OnMap.of(context);
+    final card = Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: onMap ? Colors.transparent : AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: first ? AppColors.gold : AppColors.line),
-        boxShadow: first ? [BoxShadow(color: AppColors.gold.withValues(alpha: 0.18), blurRadius: 22)] : null,
+        border: onMap ? null : Border.all(color: first ? AppColors.gold : AppColors.line),
+        boxShadow: first && !onMap ? [BoxShadow(color: AppColors.gold.withValues(alpha: 0.18), blurRadius: 22)] : null,
       ),
       child: Material(
         color: Colors.transparent,
@@ -520,6 +526,7 @@ class _EventCard extends ConsumerWidget {
         ),
       ),
     );
+    return onMap ? GlassPlate(border: first ? AppColors.gold : null, child: card) : card;
   }
 }
 
