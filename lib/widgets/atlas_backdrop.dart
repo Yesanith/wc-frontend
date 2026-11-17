@@ -10,8 +10,8 @@ import '../state/world_map.dart';
 import '../theme.dart';
 import 'clock.dart';
 
-/// the home page's ground: the world map of the game, from the overview tiles shipped with the app, under a wash of the colour of the
-/// page, with the next events pinned where their waypoints are. it only sits behind the page, nothing of the page is on it
+/// the home page's ground: the world map of the game, from the overview tiles shipped with the app, as it is, with the next events
+/// pinned where their waypoints are. it only sits behind the page, nothing of the page is on it
 class AtlasBackdrop extends ConsumerWidget {
   const AtlasBackdrop({super.key});
 
@@ -69,19 +69,6 @@ class AtlasBackdrop extends ConsumerWidget {
                   ],
                 ),
               ),
-              // the wash: the page's own colour, so that what is on the page reads as it does without a map
-              Positioned.fill(child: ColoredBox(color: AppColors.bg.withValues(alpha: AppColors.isDark ? 0.74 : 0.86))),
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      radius: 1.0,
-                      colors: [Colors.transparent, AppColors.bg.withValues(alpha: 0.55)],
-                      stops: const [0.55, 1.0],
-                    ),
-                  ),
-                ),
-              ),
               ClockBuilder(
                 step: ClockStep.minute,
                 builder: (context, now) {
@@ -98,7 +85,7 @@ class AtlasBackdrop extends ConsumerWidget {
                     final dx = left + marker.x / _unitsPerPixel * scale;
                     final dy = top + marker.y / _unitsPerPixel * scale;
                     // not under the strip along the top nor under the column of cards at the right: nothing could be read there
-                    if (dx < 0 || dy < 72 || dx > box.maxWidth - 420 || dy > box.maxHeight - 140) continue;
+                    if (dx < 0 || dy < 72 || dx > box.maxWidth - 560 || dy > box.maxHeight - 140) continue;
                     pins.add(Positioned(
                       left: dx - 7,
                       top: dy - 7,

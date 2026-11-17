@@ -66,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final hasKey = ref.watch(hasKeyProvider);
     Widget block(String title, List<Widget> children) =>
-        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Eyebrow(title), ...children]);
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Eyebrow(title, plate: true), ...children]);
     return RefreshIndicator(
       color: AppColors.gold,
       onRefresh: () => _refresh(ref),
@@ -79,7 +79,7 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const _HomeHero(),
+                  const _HomeHero(onMap: true),
                   const _AlertBanner(),
                   const _NewsBanner(),
                   Row(
@@ -105,6 +105,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                   Eyebrow(
                     s.t('up_next'),
+                    plate: true,
                     trailing: TextButton(
                       onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
                       child: Text(s.t('all_timers')),
@@ -197,7 +198,10 @@ class HomeScreen extends ConsumerWidget {
 /// the date and the time in capitals, the greeting under it, and the clocks at the right of it: the daily and the weekly
 /// reset, and how far the vault is. on a phone they go under the greeting
 class _HomeHero extends ConsumerWidget {
-  const _HomeHero();
+  const _HomeHero({this.onMap = false});
+
+  /// the greeting lies on the map of the game: it gets a plate of the page's colour to be read on
+  final bool onMap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -229,6 +233,19 @@ class _HomeHero extends ConsumerWidget {
         ),
       ],
     );
+    final greetingBlock = onMap
+        ? Align(
+            alignment: Alignment.centerLeft,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.surface.withValues(alpha: 0.88),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.line),
+              ),
+              child: Padding(padding: const EdgeInsets.fromLTRB(18, 12, 22, 14), child: greeting),
+            ),
+          )
+        : greeting;
     final chips = Wrap(spacing: 10, runSpacing: 10, children: [
       const _ResetChip(weekly: false),
       const _ResetChip(weekly: true),
@@ -240,10 +257,11 @@ class _HomeHero extends ConsumerWidget {
         builder: (context, box) => box.maxWidth >= 820
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [Expanded(child: greeting), const SizedBox(width: 24), chips],
+                children: [Expanded(child: greetingBlock), const SizedBox(width: 24), chips],
               )
             : Column(
-                crossAxisAlignment: CrossAxisAlignment.start, children: [greeting, const SizedBox(height: 16), chips]),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [greetingBlock, const SizedBox(height: 16), chips]),
       ),
     );
   }

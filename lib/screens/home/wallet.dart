@@ -30,26 +30,38 @@ class _Wallet extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             if (SiteScope.of(context))
-              Column(
-                children: [
-                  for (final id in _highlights)
-                    if (byId[id] != null)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
-                        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.track))),
-                        child: Row(
-                          children: [
-                            SizedBox.square(
-                                dimension: 20, child: byId[id]!.icon == null ? null : CachedIcon(url: byId[id]!.icon!)),
-                            const SizedBox(width: 10),
-                            Expanded(child: Text(byId[id]!.name, style: const TextStyle(fontSize: 14))),
-                            Text(fmtInt(byId[id]!.value),
-                                style:
-                                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, fontFeatures: _tabular)),
-                          ],
-                        ),
-                      ),
-                ],
+              // the rows have a card of their own: on the home page the map of the game is behind them
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(AppRadius.card),
+                  border: Border.all(color: AppColors.line),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  child: Column(
+                    children: [
+                      for (final id in _highlights)
+                        if (byId[id] != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 7),
+                            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.track))),
+                            child: Row(
+                              children: [
+                                SizedBox.square(
+                                    dimension: 20,
+                                    child: byId[id]!.icon == null ? null : CachedIcon(url: byId[id]!.icon!)),
+                                const SizedBox(width: 10),
+                                Expanded(child: Text(byId[id]!.name, style: const TextStyle(fontSize: 14))),
+                                Text(fmtInt(byId[id]!.value),
+                                    style: const TextStyle(
+                                        fontSize: 14, fontWeight: FontWeight.w700, fontFeatures: _tabular)),
+                              ],
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
               )
             else
               GridView(

@@ -113,24 +113,43 @@ class Meter extends StatelessWidget {
 
 /// small caps label over a section, with room for an action on the right
 class Eyebrow extends StatelessWidget {
-  const Eyebrow(this.text, {super.key, this.trailing});
+  const Eyebrow(this.text, {super.key, this.trailing, this.plate = false});
 
   final String text;
   final Widget? trailing;
 
+  /// the words on a plate of the page's colour, for where they would lie on a picture
+  final bool plate;
+
+  Widget _plated(Widget child) => plate
+      ? DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.surface.withValues(alpha: 0.92),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: AppColors.line),
+          ),
+          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4), child: child),
+        )
+      : child;
+
   @override
   Widget build(BuildContext context) {
+    final label = Text(
+      text.caps,
+      style: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.1,
+        color: plate ? AppColors.muted : AppColors.hint,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 24, 4, 8),
       child: Row(
         children: [
-          Expanded(
-            child: Text(
-              text.caps,
-              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.hint),
-            ),
-          ),
-          if (trailing != null) trailing!,
+          if (plate) _plated(label) else Expanded(child: label),
+          if (plate) const Spacer(),
+          if (trailing != null) (plate ? _plated(trailing!) : trailing!),
         ],
       ),
     );
