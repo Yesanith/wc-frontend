@@ -723,22 +723,20 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                             // a character's page has its own way back to the list instead of the name of the list
                                             !(sec == AppSection.characters && ref.watch(openCharacterProvider) != null)
                                         // a page of a site has its name at the top of it, the bar of an app is where an app has it
-                                        ? Column(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: SitePageHeading(
-                                                    title: s.t(_titleKeys[sec]!),
-                                                    kicker: siteGroupIndex(sec) == null
-                                                        ? null
-                                                        : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
-                                                  ),
+                                        ? CollapsingHeading(
+                                            heading: Padding(
+                                              padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: SitePageHeading(
+                                                  title: s.t(_titleKeys[sec]!),
+                                                  kicker: siteGroupIndex(sec) == null
+                                                      ? null
+                                                      : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
                                                 ),
                                               ),
-                                              Expanded(child: _sectionBody(sec, site)),
-                                            ],
+                                            ),
+                                            body: _sectionBody(sec, site),
                                           )
                                         : _sectionBody(sec, site),
                           ),
