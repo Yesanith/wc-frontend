@@ -37,7 +37,7 @@ void main() {
       expect(parseUiScale('1.5'), 1.5);
       expect(parseUiScale('2.0'), 2.0);
       expect(parseUiScale('auto'), isNull);
-      expect(parseUiScale(null), isNull);
+      expect(parseUiScale(null), 1.0);
       expect(parseUiScale('3.0'), isNull);
       expect(parseUiScale('0.5'), isNull);
       expect(parseUiScale('big'), isNull);

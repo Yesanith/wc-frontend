@@ -157,7 +157,7 @@ class CharacterSortNotifier extends Notifier<CharacterSort> {
 
 final characterSortProvider = NotifierProvider<CharacterSortNotifier, CharacterSort>(CharacterSortNotifier.new);
 
-/// how large the interface is on the web: a number, or null for the automatic size that grows with a wide screen
+/// how large the interface is on the web: a number (100% until someone chooses otherwise), or null for the automatic size that grows with a wide screen
 class UiScaleNotifier extends Notifier<double?> {
   static const _key = 'ui_scale';
 
@@ -170,8 +170,10 @@ class UiScaleNotifier extends Notifier<double?> {
   }
 }
 
-/// what was saved as the interface size: a size of the ones there are, anything else is automatic
+/// what was saved as the interface size: a size of the ones there are, 'auto' for the automatic one, and the normal size,
+/// one to one, when nothing was chosen yet
 double? parseUiScale(String? saved) {
+  if (saved == null) return 1.0;
   final n = double.tryParse(saved ?? '');
   return n != null && const [1.0, 1.25, 1.5, 1.75, 2.0].contains(n) ? n : null;
 }
