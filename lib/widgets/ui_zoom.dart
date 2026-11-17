@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// the interface sizes a player may choose on the web. null is automatic
 const uiScaleChoices = <double?>[null, 1.0, 1.25, 1.5, 1.75, 2.0];

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// a row of filter chips. on a phone it is one line that scrolls sideways, which a thumb does without
 /// thinking; where there is room it wraps onto more lines instead, so that every chip is in sight and
