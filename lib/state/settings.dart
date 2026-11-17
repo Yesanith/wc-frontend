@@ -174,7 +174,7 @@ class UiScaleNotifier extends Notifier<double?> {
 /// one to one, when nothing was chosen yet
 double? parseUiScale(String? saved) {
   if (saved == null) return 1.0;
-  final n = double.tryParse(saved ?? '');
+  final n = double.tryParse(saved);
   return n != null && const [1.0, 1.25, 1.5, 1.75, 2.0].contains(n) ? n : null;
 }
 
