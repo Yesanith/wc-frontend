@@ -712,11 +712,14 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                               // timeline of the world's events, which are drawn across, take what there is
                               maxWidth: sec == AppSection.maps || (sec == AppSection.home && site)
                                   ? double.infinity
-                                  : site && sec != AppSection.bosses
-                                      ? sitePageWidth
-                                      : _readingSections.contains(sec)
-                                          ? readingMaxWidth
-                                          : contentMaxWidth,
+                                  // the week of the guilds' events has seven days to fit, which want more than the page of a site
+                                  : site && sec == AppSection.guildEvents
+                                      ? sitePageWidth * 1.5
+                                      : site && sec != AppSection.bosses
+                                          ? sitePageWidth
+                                          : _readingSections.contains(sec)
+                                              ? readingMaxWidth
+                                              : contentMaxWidth,
                               child: !_opened.contains(sec)
                                   ? const SizedBox.shrink()
                                   : (!hasKey && sectionNeedsKey(sec))
