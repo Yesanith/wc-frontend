@@ -227,3 +227,88 @@ class _EmptyTab extends StatelessWidget {
     );
   }
 }
+
+/// what the account says about itself, in the empty corner of the heading of the page on a site: the points, the fractal level, luck, and the
+/// gold over the last week with its line
+class AccountHeadingSummary extends ConsumerWidget {
+  const AccountHeadingSummary({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final a = ref.watch(accountProvider).valueOrNull;
+    if (a == null) return const SizedBox.shrink();
+    final luck = ref.watch(accountLuckProvider).valueOrNull?['luck'] ?? 0;
+    final leads = intList(a['guild_leader']).length;
+    final stats = <(String, String)>[
+      if (a['daily_ap'] != null) (s.t('acc_daily_ap'), fmtInt(asInt(a['daily_ap']))),
+      if (a['monthly_ap'] != null) (s.t('acc_monthly_ap'), fmtInt(asInt(a['monthly_ap']))),
+      if (a['fractal_level'] != null) (s.t('acc_fractal_level'), '${asInt(a['fractal_level'])}'),
+      if (luck > 0) (s.t('luck'), fmtInt(luck)),
+      if (leads > 0) (s.t('acc_guild_leader'), '$leads'),
+      if (a['build_storage_slots'] != null) (s.t('acc_build_slots'), '${asInt(a['build_storage_slots'])}'),
+    ];
+    final name = '${a['name'] ?? ''}';
+    final points = ref.watch(wealthProvider)[name] ?? const <WealthPoint>[];
+    final week = points.length < 2 ? null : changeOver(points, 7, (p) => p.coins);
+    final recent = points.length > 60 ? points.sublist(points.length - 60) : points;
+    return Padding(
+      padding: const EdgeInsets.only(top: 22, right: 20),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 640),
+        child: Panel(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Wrap(
+                    spacing: 22,
+                    runSpacing: 8,
+                    children: [
+                      for (final (label, value) in stats)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(label, style: TextStyle(fontSize: 10.5, color: AppColors.muted)),
+                            Text(value, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+                if (recent.length >= 2) ...[
+                  const SizedBox(width: 18),
+                  VerticalDivider(width: 1, color: AppColors.track),
+                  const SizedBox(width: 18),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 34,
+                        child: CustomPaint(painter: _SparkPainter([for (final p in recent) p.coins.toDouble()])),
+                      ),
+                      const SizedBox(height: 4),
+                      if (week != null)
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          Icon(week >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                              size: 12, color: week >= 0 ? AppColors.green : AppColors.red),
+                          const SizedBox(width: 2),
+                          CoinText(week.abs(), size: 11.5),
+                          Text('  ${s.t('last_7_days')}', style: TextStyle(fontSize: 10.5, color: AppColors.muted)),
+                        ]),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

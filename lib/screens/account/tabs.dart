@@ -25,13 +25,8 @@ class _WalletTab extends ConsumerWidget {
             ...[
               if (SiteScope.of(context)) ...[
                 // the gold is one of the currencies of the table, under the gems
+                // the account's own figures are in the corner of the heading
                 _WalletSite(entries: list),
-                const SizedBox(height: 20),
-                const TwoColumnRows(
-                  gap: 20,
-                  breakpoint: 820,
-                  children: [_AccountProfile(), SizedBox(height: 12), _AccountCounters(), _WealthPanel()],
-                ),
               ] else ...[
                 TwoColumnRows(
                   gap: 20,

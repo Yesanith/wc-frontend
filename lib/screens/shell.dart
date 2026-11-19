@@ -724,17 +724,28 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                                   ref.watch(openCharacterProvider) != null)
                                           // a page of a site has its name at the top of it, the bar of an app is where an app has it
                                           ? CollapsingHeading(
-                                              heading: Padding(
-                                                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: SitePageHeading(
-                                                    title: s.t(_titleKeys[sec]!),
-                                                    kicker: siteGroupIndex(sec) == null
-                                                        ? null
-                                                        : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                              heading: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                                                      child: Align(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: SitePageHeading(
+                                                          title: s.t(_titleKeys[sec]!),
+                                                          kicker: siteGroupIndex(sec) == null
+                                                              ? null
+                                                              : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  // the account's own figures fill the corner of the heading where there is room
+                                                  if (sec == AppSection.account &&
+                                                      MediaQuery.sizeOf(context).width >= 1180)
+                                                    const Flexible(child: AccountHeadingSummary()),
+                                                ],
                                               ),
                                               body: _sectionBody(sec, site),
                                             )
