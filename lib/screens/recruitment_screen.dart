@@ -1,12 +1,16 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/gw2_api.dart';
+import '../state/api.dart' show gw2ApiProvider;
 import '../state/community.dart';
 import '../state/navigation.dart';
 import '../state/recruitment.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../util.dart' show Json;
 import '../widgets/common.dart';
+import '../widgets/guild_emblem.dart';
 import '../widgets/responsive.dart';
 import 'recruitment/editor_screen.dart';
 import 'recruitment/page_screen.dart';
@@ -14,6 +18,18 @@ import 'recruitment/recruiters_screen.dart';
 
 /// the guilds that are looking for players, in a list that anybody may read and that can be filtered by language, region and what is looked for, with the pages of the guilds the player
 /// may manage above it. a page is opened to read how to reach the guild
+/// the emblem of a guild as the game draws it, read with the guild's number in the game. it is public: no key is asked for
+final recruitEmblemProvider = FutureProvider.family<Json?, String>((ref, gw2GuildId) async {
+  if (gw2GuildId.isEmpty) return null;
+  try {
+    final guild = await ref.watch(gw2ApiProvider).guild(gw2GuildId);
+    return guild['emblem'] is Map ? Map<String, dynamic>.from(guild['emblem'] as Map) : null;
+  } catch (_) {
+    // a guild without an emblem is shown with the shield
+    return null;
+  }
+});
+
 class RecruitmentScreen extends ConsumerStatefulWidget {
   const RecruitmentScreen({super.key});
 
@@ -224,14 +240,6 @@ class _CardTile extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     // on a site a guild is a row of its own: a badge at the left, what it says in the middle, where and when at the right
     if (SiteScope.of(context)) {
-      final initials = card.title
-          .replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '')
-          .trim()
-          .split(RegExp(r'\s+'))
-          .where((w) => w.isNotEmpty)
-          .take(2)
-          .map((w) => w[0].toUpperCase())
-          .join();
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: AppCard(
@@ -240,16 +248,7 @@ class _CardTile extends ConsumerWidget {
           radius: AppRadius.card,
           child: Row(
             children: [
-              Container(
-                width: 56,
-                height: 56,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  gradient: LinearGradient(colors: [AppColors.gold, AppColors.text]),
-                ),
-                child: Text(initials, style: display(22, color: Colors.white)),
-              ),
+              GuildEmblem(emblem: ref.watch(recruitEmblemProvider(card.gw2GuildId)).valueOrNull, size: 60),
               const SizedBox(width: 18),
               Expanded(
                 child: Column(
@@ -330,6 +329,8 @@ class _CardTile extends ConsumerWidget {
               children: [
                 Row(
                   children: [
+                    GuildEmblem(emblem: ref.watch(recruitEmblemProvider(card.gw2GuildId)).valueOrNull, size: 32),
+                    const SizedBox(width: 10),
                     Expanded(
                         child: Text(card.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800))),
                     Text(

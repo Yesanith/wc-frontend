@@ -10,6 +10,8 @@ import '../../state/recruitment.dart';
 import '../../state/settings.dart';
 import '../../theme.dart';
 import '../../widgets/common.dart';
+import '../../widgets/guild_emblem.dart';
+import '../recruitment_screen.dart' show recruitEmblemProvider;
 import '../../widgets/responsive.dart';
 import 'editor_screen.dart';
 
@@ -191,7 +193,7 @@ class _PageBody extends ConsumerWidget {
     final header = <Widget>[
       Row(
         children: [
-          Icon(Icons.groups, size: 36, color: AppColors.gold),
+          GuildEmblem(emblem: ref.watch(recruitEmblemProvider(page.gw2GuildId)).valueOrNull, size: 56),
           const SizedBox(width: 12),
           Expanded(child: Text(page.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
         ],
