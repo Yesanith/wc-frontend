@@ -175,6 +175,7 @@ const ptStrings = <String, String>{
   'latest_news': 'Últimas notícias',
   'selected': 'Selecionado',
   'event_next_runs': 'Próximas vezes',
+  'vault_to_chest': 'até o baú',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

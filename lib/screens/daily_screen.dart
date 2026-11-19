@@ -13,6 +13,7 @@ import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
+import 'daily_site.dart';
 import 'vault_objectives_screen.dart';
 
 /// everything that resets at midnight utc on one page
@@ -31,6 +32,32 @@ class DailyScreen extends ConsumerWidget {
     // on the site the lists stand open, two side by side, as a checklist on a page does
     final site = SiteScope.of(context);
     final dailyStale = ref.watch(vaultStaleProvider('daily'));
+
+    final refresh = [
+      vaultTrackProvider,
+      periodicAchievementsProvider,
+      doneTodayProvider,
+      dailyProgressProvider,
+      dungeonsProvider,
+    ];
+    // a site has the day in one list under tabs, the vault and the counters in a column beside it
+    if (site) {
+      return RefreshIndicator(
+        color: AppColors.gold,
+        onRefresh: () => refreshProviders(ref, refresh),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+          children: [
+            DailySite(counters: [
+              (s.t('world_bosses'), bosses == null ? '…' : '${bosses.length}'),
+              (s.t('daily_crafts'), crafts == null ? '…' : '${crafts.done}/${crafts.total}'),
+              (s.t('map_chests'), chests == null ? '…' : '${chests.done}/${chests.total}'),
+              (s.t('dungeon_paths'), dungeons == null ? '…' : '${dungeons.fold<int>(0, (n, d) => n + d.done)}'),
+            ]),
+          ],
+        ),
+      );
+    }
 
     return RefreshIndicator(
       color: AppColors.gold,

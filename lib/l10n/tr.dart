@@ -171,6 +171,7 @@ const trStrings = <String, String>{
   'latest_news': 'Son haberler',
   'selected': 'Seçili',
   'event_next_runs': 'Sonraki seferler',
+  'vault_to_chest': 'sandığa',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

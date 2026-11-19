@@ -175,6 +175,7 @@ const frStrings = <String, String>{
   'latest_news': 'Dernières actualités',
   'selected': 'Sélectionné',
   'event_next_runs': 'Prochains passages',
+  'vault_to_chest': 'avant le coffre',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

@@ -173,6 +173,7 @@ const ruStrings = <String, String>{
   'latest_news': 'Последние новости',
   'selected': 'Выбрано',
   'event_next_runs': 'Ближайшие запуски',
+  'vault_to_chest': 'до сундука',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

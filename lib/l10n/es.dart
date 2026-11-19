@@ -173,6 +173,7 @@ const esStrings = <String, String>{
   'latest_news': 'Últimas noticias',
   'selected': 'Seleccionado',
   'event_next_runs': 'Próximas veces',
+  'vault_to_chest': 'hasta el cofre',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

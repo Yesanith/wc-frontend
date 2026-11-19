@@ -174,6 +174,7 @@ const enStrings = <String, String>{
   'latest_news': 'Latest news',
   'selected': 'Selected',
   'event_next_runs': 'Next runs',
+  'vault_to_chest': 'to the chest',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

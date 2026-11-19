@@ -178,6 +178,7 @@ const deStrings = <String, String>{
   'latest_news': 'Neueste Nachrichten',
   'selected': 'Ausgewählt',
   'event_next_runs': 'Nächste Termine',
+  'vault_to_chest': 'bis zur Truhe',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
