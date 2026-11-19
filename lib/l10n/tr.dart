@@ -197,6 +197,7 @@ const trStrings = <String, String>{
   'armory_trinkets': 'Takılar',
   'armory_owned': 'Sahip olunan',
   'armory_shelf_note': '{n} tür · {c} kopya',
+  'builds_slots_used': '{n} depolama yuvası kullanıldı',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

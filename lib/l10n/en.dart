@@ -200,6 +200,7 @@ const enStrings = <String, String>{
   'armory_trinkets': 'Trinkets',
   'armory_owned': 'Owned',
   'armory_shelf_note': '{n} kinds · {c} copies',
+  'builds_slots_used': '{n} storage slots used',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

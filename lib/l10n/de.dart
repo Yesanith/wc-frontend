@@ -204,6 +204,7 @@ const deStrings = <String, String>{
   'armory_trinkets': 'Schmuck',
   'armory_owned': 'Besessen',
   'armory_shelf_note': '{n} Arten · {c} Exemplare',
+  'builds_slots_used': '{n} Speicherplätze belegt',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

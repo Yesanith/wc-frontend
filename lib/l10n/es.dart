@@ -199,6 +199,7 @@ const esStrings = <String, String>{
   'armory_trinkets': 'Joyas',
   'armory_owned': 'Poseídos',
   'armory_shelf_note': '{n} tipos · {c} copias',
+  'builds_slots_used': '{n} ranuras usadas',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

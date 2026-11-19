@@ -593,6 +593,109 @@ class _ArmorySite extends ConsumerWidget {
   }
 }
 
+class _BuildsSite extends ConsumerStatefulWidget {
+  const _BuildsSite({required this.builds});
+
+  final List<Json> builds;
+
+  @override
+  ConsumerState<_BuildsSite> createState() => _BuildsSiteState();
+}
+
+class _BuildsSiteState extends ConsumerState<_BuildsSite> {
+  var _selected = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final list = widget.builds;
+    final index = _selected < list.length ? _selected : 0;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 340,
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 24),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10, left: 4),
+                  child: Text(s.t('builds_slots_used', {'n': list.length}),
+                      style: TextStyle(fontSize: 13, color: AppColors.muted)),
+                ),
+                for (var i = 0; i < list.length; i++)
+                  Builder(builder: (context) {
+                    final build = list[i];
+                    final profession = '${build['profession'] ?? ''}';
+                    final name = '${build['name'] ?? ''}'.trim();
+                    final specs = ((build['specializations'] as List?) ?? const []).whereType<Map>().length;
+                    final on = i == index;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: Material(
+                        color: on ? AppColors.surface : Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.card),
+                          side: BorderSide(color: on ? AppColors.gold : AppColors.line),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: InkWell(
+                          onTap: () => setState(() => _selected = i),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 5,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: professionColor(profession),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(name.isEmpty ? s.t('unnamed_build') : name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
+                                      Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                                          style: TextStyle(fontSize: 12, color: professionColor(profession))),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+              ],
+            ),
+          ),
+          const SizedBox(width: 22),
+          Expanded(
+            child: Panel(
+              padding: EdgeInsets.zero,
+              child: BuildView(
+                key: ValueKey(index),
+                buildData: list[index],
+                padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// saved build templates from the account wide build storage
 class _BuildsTab extends ConsumerWidget {
   const _BuildsTab();
@@ -606,8 +709,9 @@ class _BuildsTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(buildStorageProvider),
       builder: (list) {
         if (list.isEmpty) return _EmptyTab(s.t('builds_empty'));
-        // on the site the builds are the rows of a list, not cards
+        // on the site the list stands at the left and the chosen build is shown whole beside it
         final site = SiteScope.of(context);
+        if (site) return _BuildsSite(builds: list);
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: list.length,

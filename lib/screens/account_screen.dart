@@ -10,6 +10,7 @@ import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/build_view.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'build_detail_screen.dart';

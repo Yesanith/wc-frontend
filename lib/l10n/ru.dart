@@ -199,6 +199,7 @@ const ruStrings = <String, String>{
   'armory_trinkets': 'Бижутерия',
   'armory_owned': 'В наличии',
   'armory_shelf_note': '{n} видов · {c} копий',
+  'builds_slots_used': 'Занято ячеек: {n}',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':
