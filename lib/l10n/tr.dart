@@ -173,6 +173,11 @@ const trStrings = <String, String>{
   'event_next_runs': 'Sonraki seferler',
   'vault_to_chest': 'sandığa',
   'raid_wings': 'Raid kanatları',
+  'wallet_search': '{n} para birimi ara',
+  'wallet_hide_empty': 'Boşları gizle',
+  'wallet_sort_game': 'Oyun sırası',
+  'wallet_sort_most': 'En çok',
+  'wallet_sort_name': 'Ad',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

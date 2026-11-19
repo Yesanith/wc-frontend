@@ -180,6 +180,11 @@ const deStrings = <String, String>{
   'event_next_runs': 'Nächste Termine',
   'vault_to_chest': 'bis zur Truhe',
   'raid_wings': 'Raid-Flügel',
+  'wallet_search': '{n} Währungen suchen',
+  'wallet_hide_empty': 'Leere ausblenden',
+  'wallet_sort_game': 'Spielreihenfolge',
+  'wallet_sort_most': 'Meiste',
+  'wallet_sort_name': 'Name',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

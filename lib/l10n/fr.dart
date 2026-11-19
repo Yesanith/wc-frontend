@@ -177,6 +177,11 @@ const frStrings = <String, String>{
   'event_next_runs': 'Prochains passages',
   'vault_to_chest': 'avant le coffre',
   'raid_wings': 'Ailes de raid',
+  'wallet_search': 'Chercher {n} monnaies',
+  'wallet_hide_empty': 'Masquer les vides',
+  'wallet_sort_game': 'Ordre du jeu',
+  'wallet_sort_most': 'Plus',
+  'wallet_sort_name': 'Nom',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

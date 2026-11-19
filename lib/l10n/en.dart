@@ -176,6 +176,11 @@ const enStrings = <String, String>{
   'event_next_runs': 'Next runs',
   'vault_to_chest': 'to the chest',
   'raid_wings': 'Raid wings',
+  'wallet_search': 'Search {n} currencies',
+  'wallet_hide_empty': 'Hide empty',
+  'wallet_sort_game': 'Game order',
+  'wallet_sort_most': 'Most',
+  'wallet_sort_name': 'Name',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

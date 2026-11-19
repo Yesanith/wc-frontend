@@ -175,6 +175,11 @@ const ruStrings = <String, String>{
   'event_next_runs': 'Ближайшие запуски',
   'vault_to_chest': 'до сундука',
   'raid_wings': 'Крылья рейдов',
+  'wallet_search': 'Поиск среди {n} валют',
+  'wallet_hide_empty': 'Скрыть пустые',
+  'wallet_sort_game': 'Порядок игры',
+  'wallet_sort_most': 'Больше',
+  'wallet_sort_name': 'Название',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

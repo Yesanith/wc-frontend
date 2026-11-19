@@ -175,6 +175,11 @@ const esStrings = <String, String>{
   'event_next_runs': 'Próximas veces',
   'vault_to_chest': 'hasta el cofre',
   'raid_wings': 'Alas de incursión',
+  'wallet_search': 'Buscar {n} monedas',
+  'wallet_hide_empty': 'Ocultar vacías',
+  'wallet_sort_game': 'Orden del juego',
+  'wallet_sort_most': 'Más',
+  'wallet_sort_name': 'Nombre',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

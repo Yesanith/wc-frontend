@@ -177,6 +177,11 @@ const ptStrings = <String, String>{
   'event_next_runs': 'Próximas vezes',
   'vault_to_chest': 'até o baú',
   'raid_wings': 'Alas de raid',
+  'wallet_search': 'Buscar {n} moedas',
+  'wallet_hide_empty': 'Ocultar vazias',
+  'wallet_sort_game': 'Ordem do jogo',
+  'wallet_sort_most': 'Mais',
+  'wallet_sort_name': 'Nome',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

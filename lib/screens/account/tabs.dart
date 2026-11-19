@@ -21,77 +21,78 @@ class _WalletTab extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
-            TwoColumnRows(
-              gap: 20,
-              breakpoint: 820,
-              children: [
+            // the gold is the first thing, on a site the table of currencies comes next and the account's own panels after it
+            ...[
+              if (SiteScope.of(context)) ...[
                 Container(
-                  padding: const EdgeInsets.all(18),
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                   decoration: BoxDecoration(
                     color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
-                    borderRadius: BorderRadius.circular(AppRadius.window),
+                    borderRadius: BorderRadius.circular(AppRadius.card),
                     border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // the gold is one line: what is under it is the currencies, and they are the page
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Kicker(s.t('gold').caps),
-                      const SizedBox(height: 6),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.end,
-                        spacing: 12,
-                        children: [
-                          _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 34),
-                          _coin('${coins.silver}', 's', AppColors.silver, 20),
-                          _coin('${coins.copper}', 'c', AppColors.copper, 20),
-                        ],
-                      ),
+                      const SizedBox(width: 20),
+                      _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 26),
+                      const SizedBox(width: 10),
+                      _coin('${coins.silver}', 's', AppColors.silver, 18),
+                      const SizedBox(width: 10),
+                      _coin('${coins.copper}', 'c', AppColors.copper, 18),
                     ],
                   ),
                 ),
-                const SizedBox(height: 12),
-                const _AccountProfile(),
-                const SizedBox(height: 12),
-                const _AccountCounters(),
-                const _WealthPanel(),
-              ],
-            ),
-            const SizedBox(height: 14),
-            // on the site the currencies are short rows in columns, three where there is room
-            if (SiteScope.of(context))
-              LayoutBuilder(builder: (context, box) {
-                final columns = box.maxWidth >= 840 ? 3 : (box.maxWidth >= 520 ? 2 : 1);
-                final width = (box.maxWidth - (columns - 1) * 24) / columns;
-                return Wrap(
-                  spacing: 24,
+                const SizedBox(height: 14),
+                _WalletSite(entries: others),
+                const SizedBox(height: 20),
+                const TwoColumnRows(
+                  gap: 20,
+                  breakpoint: 820,
+                  children: [_AccountProfile(), SizedBox(height: 12), _AccountCounters(), _WealthPanel()],
+                ),
+              ] else ...[
+                TwoColumnRows(
+                  gap: 20,
+                  breakpoint: 820,
                   children: [
-                    for (final e in others)
-                      Container(
-                        width: width,
-                        padding: const EdgeInsets.symmetric(vertical: 7),
-                        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.track))),
-                        child: Row(
-                          children: [
-                            SizedBox.square(
-                              dimension: 22,
-                              child: e.icon == null
-                                  ? Icon(Icons.circle_outlined, size: 16, color: AppColors.muted)
-                                  : CachedIcon(url: e.icon!, fit: BoxFit.contain),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                                child: Text(e.name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 14))),
-                            Text(fmtInt(e.value), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                          ],
-                        ),
+                    Container(
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
+                        borderRadius: BorderRadius.circular(AppRadius.window),
+                        border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Kicker(s.t('gold').caps),
+                          const SizedBox(height: 6),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.end,
+                            spacing: 12,
+                            children: [
+                              _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 34),
+                              _coin('${coins.silver}', 's', AppColors.silver, 20),
+                              _coin('${coins.copper}', 'c', AppColors.copper, 20),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const _AccountProfile(),
+                    const SizedBox(height: 12),
+                    const _AccountCounters(),
+                    const _WealthPanel(),
                   ],
-                );
-              })
-            else
+                ),
+              ],
+            ],
+            if (!SiteScope.of(context)) ...[
+              const SizedBox(height: 14),
               Panel(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                 child: Column(
@@ -126,6 +127,7 @@ class _WalletTab extends ConsumerWidget {
                   ],
                 ),
               ),
+            ],
           ],
         );
       },
@@ -547,6 +549,136 @@ class _StorageSearchState extends ConsumerState<_StorageSearch> {
           ),
         ),
       ),
+    );
+  }
+}
+
+enum _WalletSort { game, most, name }
+
+/// the currencies on a site: all in one table of four columns, with a search, the empty ones to hide and a choice of order
+class _WalletSite extends ConsumerStatefulWidget {
+  const _WalletSite({required this.entries});
+
+  final List<WalletEntry> entries;
+
+  @override
+  ConsumerState<_WalletSite> createState() => _WalletSiteState();
+}
+
+class _WalletSiteState extends ConsumerState<_WalletSite> {
+  var _query = '';
+  var _hideEmpty = false;
+  var _sort = _WalletSort.game;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final q = _query.trim().toLowerCase();
+    final list = [
+      for (final e in widget.entries)
+        if ((!_hideEmpty || e.value > 0) && (q.isEmpty || e.name.toLowerCase().contains(q))) e,
+    ];
+    switch (_sort) {
+      case _WalletSort.game:
+        break;
+      case _WalletSort.most:
+        list.sort((a, b) => b.value.compareTo(a.value));
+      case _WalletSort.name:
+        list.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            SizedBox(
+              width: 280,
+              child: TextField(
+                onChanged: (v) => setState(() => _query = v),
+                decoration: InputDecoration(
+                  isDense: true,
+                  prefixIcon: const Icon(Icons.search, size: 18),
+                  hintText: s.t('wallet_search', {'n': widget.entries.length}),
+                ),
+              ),
+            ),
+            FilterChip(
+              label: Text(s.t('wallet_hide_empty')),
+              selected: _hideEmpty,
+              onSelected: (v) => setState(() => _hideEmpty = v),
+            ),
+            const SizedBox(width: 8),
+            for (final (sort, label) in [
+              (_WalletSort.game, s.t('wallet_sort_game')),
+              (_WalletSort.most, s.t('wallet_sort_most')),
+              (_WalletSort.name, s.t('wallet_sort_name')),
+            ])
+              ChoiceChip(label: Text(label), selected: _sort == sort, onSelected: (_) => setState(() => _sort = sort)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LayoutBuilder(builder: (context, box) {
+          final columns = box.maxWidth >= 1000 ? 4 : (box.maxWidth >= 720 ? 3 : (box.maxWidth >= 480 ? 2 : 1));
+          final rows = (list.length / columns).ceil();
+          Widget cell(WalletEntry e, int index) {
+            final lastColumn = (index + 1) % columns == 0;
+            final lastRow = index ~/ columns == rows - 1;
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+              decoration: BoxDecoration(
+                border: Border(
+                  right: lastColumn ? BorderSide.none : BorderSide(color: AppColors.track),
+                  bottom: lastRow ? BorderSide.none : BorderSide(color: AppColors.track),
+                ),
+              ),
+              child: Opacity(
+                opacity: e.value == 0 ? 0.45 : 1,
+                child: Row(
+                  children: [
+                    SizedBox.square(
+                      dimension: 22,
+                      child: e.icon == null
+                          ? Icon(Icons.circle_outlined, size: 16, color: AppColors.muted)
+                          : CachedIcon(url: e.icon!, fit: BoxFit.contain),
+                    ),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(e.name,
+                          maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13.5)),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(fmtInt(e.value),
+                        style: const TextStyle(
+                            fontSize: 13.5, fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()])),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Panel(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var r = 0; r < rows; r++)
+                  Row(
+                    children: [
+                      for (var c = 0; c < columns; c++)
+                        Expanded(
+                          child: r * columns + c < list.length
+                              ? cell(list[r * columns + c], r * columns + c)
+                              : const SizedBox.shrink(),
+                        ),
+                    ],
+                  ),
+              ],
+            ),
+          );
+        }),
+      ],
     );
   }
 }
