@@ -139,19 +139,36 @@ class CollapsingHeading extends StatefulWidget {
 class _CollapsingHeadingState extends State<CollapsingHeading> {
   var _collapsed = false;
 
+  /// once the heading has folded away it is not painted at all: a folded one still left the edge of its panels along the top
+  var _gone = false;
+
+  /// how far each scrolling thing under the heading is scrolled, and whether it has room to scroll. a page with several (a list
+  /// beside a detail) would otherwise have the one at its top call the heading back while the other is still scrolled
+  final _scrolls = <BuildContext, ({double pixels, double max})>{};
+
   void _set(bool value) {
     if (_collapsed == value) return;
     // the notification can come while the tree is being laid out
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _collapsed != value) setState(() => _collapsed = value);
+      if (!mounted || _collapsed == value) return;
+      setState(() {
+        _collapsed = value;
+        if (!value) _gone = false;
+      });
     });
   }
 
-  bool _onMetrics(ScrollMetrics m) {
-    if (m.axis != Axis.vertical) return false;
-    if (!_collapsed && m.pixels > CollapsingHeading.collapseAt && m.maxScrollExtent > CollapsingHeading.minScrollable) {
+  bool _onMetrics(ScrollNotification? n, ScrollMetrics m, BuildContext? context) {
+    if (m.axis != Axis.vertical || context == null) return false;
+    _scrolls.removeWhere((c, _) => !c.mounted);
+    _scrolls[context] = (pixels: m.pixels, max: m.maxScrollExtent);
+    final scrolled = _scrolls.values.any(
+      (s) => s.pixels > CollapsingHeading.collapseAt && s.max > CollapsingHeading.minScrollable,
+    );
+    final atTop = _scrolls.values.every((s) => s.pixels <= 0.5);
+    if (!_collapsed && scrolled) {
       _set(true);
-    } else if (_collapsed && m.pixels <= 0.5) {
+    } else if (_collapsed && atTop) {
       _set(false);
     }
     return false;
@@ -168,14 +185,17 @@ class _CollapsingHeadingState extends State<CollapsingHeading> {
             alignment: Alignment.topCenter,
             heightFactor: _collapsed ? 0 : 1,
             widthFactor: 1,
-            child: widget.heading,
+            onEnd: () {
+              if (mounted && _collapsed && !_gone) setState(() => _gone = true);
+            },
+            child: Offstage(offstage: _gone, child: widget.heading),
           ),
         ),
         Expanded(
           child: NotificationListener<ScrollNotification>(
-            onNotification: (n) => _onMetrics(n.metrics),
+            onNotification: (n) => _onMetrics(n, n.metrics, n.context),
             child: NotificationListener<ScrollMetricsNotification>(
-              onNotification: (n) => _onMetrics(n.metrics),
+              onNotification: (n) => _onMetrics(null, n.metrics, n.context),
               child: widget.body,
             ),
           ),

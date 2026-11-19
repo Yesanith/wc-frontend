@@ -12,7 +12,7 @@ class CollectionKind {
   final String accountPath;
   final String staticPath;
 
-  /// false for wardrobe skins, there are far too many to list one by one
+  /// whether a page opens with the entries one by one
   final bool hasDetails;
 }
 
@@ -30,7 +30,7 @@ const collectionKinds = <CollectionKind>[
   CollectionKind('emotes', '/account/emotes', '/emotes'),
   CollectionKind('wardrobe', '/account/skins', '/skins'),
   CollectionKind('home_cats', '/account/home/cats', '/home/cats'),
-  CollectionKind('home_nodes', '/account/home/nodes', '/home/nodes', hasDetails: false),
+  CollectionKind('home_nodes', '/account/home/nodes', '/home/nodes'),
   CollectionKind('homestead_decorations', '/account/homestead/decorations', '/homestead/decorations'),
   CollectionKind('homestead_glyphs', '/account/homestead/glyphs', '/homestead/glyphs'),
   CollectionKind('jadebots', '/account/jadebots', '/jadebots'),

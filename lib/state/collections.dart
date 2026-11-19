@@ -125,6 +125,8 @@ final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, S
     () async => switch (kind.key) {
       'pvp_heroes' => await _heroSkins(api),
       'wardrobe' => [for (final r in await api.details(kind.staticPath, ids)) compactSkin(r)],
+      // the nodes are a list of ids only, with nothing to ask for: they are named by their ids
+      'home_nodes' => const <Json>[],
       _ => await api.details(kind.staticPath, ids),
     },
   );

@@ -200,7 +200,8 @@ class _AchievementsSiteState extends ConsumerState<_AchievementsSite> {
   Widget _paneHeader(String text, {Widget? trailing}) => Container(
         height: 40,
         padding: const EdgeInsets.symmetric(horizontal: 18),
-        color: AppColors.track.withValues(alpha: 0.5),
+        // solid, or the list scrolling under it shows through
+        color: Color.alphaBlend(AppColors.track.withValues(alpha: 0.5), AppColors.surface),
         child: Row(
           children: [
             Expanded(

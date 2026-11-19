@@ -330,7 +330,9 @@ class _MaterialsTab extends ConsumerWidget {
       builder: (list) {
         if (list.isEmpty) return _EmptyTab(s.t('materials_empty'));
         // a site has the materials as a table with what each is worth
-        if (SiteScope.of(context)) return _MaterialsSite(groups: list);
+        if (SiteScope.of(context)) {
+          return ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 24), children: [_MaterialsSite(groups: list)]);
+        }
         // one grid per storage category, like the game shows it. a tap on a
         // category's title folds it away, and the choice is remembered
         final query = ref.watch(_storageQueryProvider('materials')).trim().toLowerCase();
