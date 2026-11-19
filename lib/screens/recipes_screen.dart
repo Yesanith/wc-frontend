@@ -527,7 +527,9 @@ class _RecipeTableRow extends ConsumerWidget {
                 alignment: Alignment.centerRight,
                 child: learned
                     ? Icon(Icons.check_circle, size: 20, color: AppColors.green)
-                    : Text(s.t('recipe_not_learned_short'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                    : recipes.any((r) => r.id > 0)
+                        ? Text(s.t('recipe_not_learned_short'), style: TextStyle(fontSize: 12, color: AppColors.muted))
+                        : Text('–', style: TextStyle(color: AppColors.muted)),
               ),
             ),
           ],
