@@ -24,29 +24,8 @@ class _WalletTab extends ConsumerWidget {
             // the gold is the first thing, on a site the table of currencies comes next and the account's own panels after it
             ...[
               if (SiteScope.of(context)) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color.lerp(AppColors.surface, AppColors.gold, 0.07),
-                    borderRadius: BorderRadius.circular(AppRadius.card),
-                    border: Border.all(color: AppColors.gold.withValues(alpha: 0.35)),
-                  ),
-                  // the gold is one line: what is under it is the currencies, and they are the page
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Kicker(s.t('gold').caps),
-                      const SizedBox(width: 20),
-                      _coin(fmtInt(coins.gold), 'g', AppColors.coinGold, 26),
-                      const SizedBox(width: 10),
-                      _coin('${coins.silver}', 's', AppColors.silver, 18),
-                      const SizedBox(width: 10),
-                      _coin('${coins.copper}', 'c', AppColors.copper, 18),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 14),
-                _WalletSite(entries: others),
+                // the gold is one of the currencies of the table, under the gems
+                _WalletSite(entries: list),
                 const SizedBox(height: 20),
                 const TwoColumnRows(
                   gap: 20,
@@ -622,6 +601,11 @@ class _WalletSiteState extends ConsumerState<_WalletSite> {
         const SizedBox(height: 12),
         LayoutBuilder(builder: (context, box) {
           final columns = box.maxWidth >= 1000 ? 4 : (box.maxWidth >= 720 ? 3 : (box.maxWidth >= 480 ? 2 : 1));
+          // in the game's order the gold sits right under the gems, which are the first
+          final coin = list.indexWhere((e) => e.id == 1);
+          if (_sort == _WalletSort.game && coin > 0 && list.length > columns) {
+            list.insert(columns, list.removeAt(coin));
+          }
           final rows = (list.length / columns).ceil();
           Widget cell(WalletEntry e, int index) {
             final lastColumn = (index + 1) % columns == 0;
@@ -650,9 +634,14 @@ class _WalletSiteState extends ConsumerState<_WalletSite> {
                           maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13.5)),
                     ),
                     const SizedBox(width: 6),
-                    Text(fmtInt(e.value),
-                        style: const TextStyle(
-                            fontSize: 13.5, fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()])),
+                    if (e.id == 1)
+                      CoinText(e.value, size: 13.5)
+                    else
+                      Text(fmtInt(e.value),
+                          style: const TextStyle(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w700,
+                              fontFeatures: [FontFeature.tabularFigures()])),
                   ],
                 ),
               ),
