@@ -220,6 +220,13 @@ const deStrings = <String, String>{
   'almost_done': 'Fast fertig',
   'not_started': 'Nicht begonnen',
   'closest_to_done': 'Am nächsten am Ziel',
+  'guild_level_n': 'Stufe {n}',
+  'guild_motd': 'Nachricht des Tages',
+  'guild_favor': 'Gunst',
+  'guild_aetherium': 'Äther',
+  'guild_resonance': 'Resonanz',
+  'guild_influence': 'Einfluss',
+  'n_going': '{n} dabei',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

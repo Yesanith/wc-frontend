@@ -215,6 +215,13 @@ const esStrings = <String, String>{
   'almost_done': 'Casi listo',
   'not_started': 'Sin empezar',
   'closest_to_done': 'Más cerca de completarse',
+  'guild_level_n': 'Nivel {n}',
+  'guild_motd': 'Mensaje del día',
+  'guild_favor': 'Favor',
+  'guild_aetherium': 'Aetherium',
+  'guild_resonance': 'Resonancia',
+  'guild_influence': 'Influencia',
+  'n_going': '{n} van',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

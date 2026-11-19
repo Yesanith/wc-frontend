@@ -213,6 +213,13 @@ const trStrings = <String, String>{
   'almost_done': 'Neredeyse bitti',
   'not_started': 'Başlanmadı',
   'closest_to_done': 'Bitmeye en yakın',
+  'guild_level_n': 'Seviye {n}',
+  'guild_motd': 'Günün mesajı',
+  'guild_favor': 'Favor',
+  'guild_aetherium': 'Aetherium',
+  'guild_resonance': 'Rezonans',
+  'guild_influence': 'Etki',
+  'n_going': '{n} katılıyor',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

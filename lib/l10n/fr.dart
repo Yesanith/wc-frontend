@@ -217,6 +217,13 @@ const frStrings = <String, String>{
   'almost_done': 'Presque terminé',
   'not_started': 'Pas commencé',
   'closest_to_done': 'Le plus proche de la fin',
+  'guild_level_n': 'Niveau {n}',
+  'guild_motd': 'Message du jour',
+  'guild_favor': 'Faveur',
+  'guild_aetherium': 'Éthérium',
+  'guild_resonance': 'Résonance',
+  'guild_influence': 'Influence',
+  'n_going': '{n} participent',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

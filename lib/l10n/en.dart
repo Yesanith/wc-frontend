@@ -216,6 +216,13 @@ const enStrings = <String, String>{
   'almost_done': 'Almost done',
   'not_started': 'Not started',
   'closest_to_done': 'Closest to done',
+  'guild_level_n': 'Level {n}',
+  'guild_motd': 'Message of the day',
+  'guild_favor': 'Favor',
+  'guild_aetherium': 'Aetherium',
+  'guild_resonance': 'Resonance',
+  'guild_influence': 'Influence',
+  'n_going': '{n} going',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

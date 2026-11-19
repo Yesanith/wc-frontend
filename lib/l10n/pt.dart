@@ -217,6 +217,13 @@ const ptStrings = <String, String>{
   'almost_done': 'Quase pronto',
   'not_started': 'Não iniciado',
   'closest_to_done': 'Mais perto de concluir',
+  'guild_level_n': 'Nível {n}',
+  'guild_motd': 'Mensagem do dia',
+  'guild_favor': 'Favor',
+  'guild_aetherium': 'Aetherium',
+  'guild_resonance': 'Ressonância',
+  'guild_influence': 'Influência',
+  'n_going': '{n} vão',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

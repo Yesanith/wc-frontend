@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../api/gw2_api.dart';
 import '../services/icon_cache.dart';
 import '../state/community.dart';
-import '../state/guild_events.dart' show guildRosterProvider;
+import '../state/guild_events.dart' show EventSummary, guildRosterProvider, upcomingEventsProvider;
 import '../state/guilds.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -19,6 +19,7 @@ import 'item_sheet.dart';
 
 part 'guilds/rank.dart';
 part 'guilds/tabs.dart';
+part 'guilds/site.dart';
 
 class GuildsScreen extends ConsumerWidget {
   const GuildsScreen({super.key});
@@ -27,6 +28,23 @@ class GuildsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final ids = ref.watch(guildIdsProvider);
+
+    // on a site the guilds are a row of them over the tabs of the one chosen
+    if (SiteScope.of(context)) {
+      return AsyncView<List<String>>(
+        value: ids,
+        onRetry: () => ref.invalidate(guildIdsProvider),
+        builder: (list) {
+          if (list.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Panel(child: Text(s.t('no_guilds'), style: TextStyle(color: AppColors.muted))),
+            );
+          }
+          return _GuildsSite(ids: list);
+        },
+      );
+    }
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),

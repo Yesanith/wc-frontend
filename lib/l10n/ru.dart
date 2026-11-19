@@ -215,6 +215,13 @@ const ruStrings = <String, String>{
   'almost_done': 'Почти готово',
   'not_started': 'Не начато',
   'closest_to_done': 'Ближе всего к завершению',
+  'guild_level_n': 'Уровень {n}',
+  'guild_motd': 'Сообщение дня',
+  'guild_favor': 'Милость',
+  'guild_aetherium': 'Этериум',
+  'guild_resonance': 'Резонанс',
+  'guild_influence': 'Влияние',
+  'n_going': 'идут: {n}',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':
