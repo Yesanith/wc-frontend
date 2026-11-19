@@ -217,6 +217,7 @@ const zhStrings = <String, String>{
   'joined': '加入时间',
   'upgrade_built': '已建成',
   'log_last_n': '游戏保留的最近 {n} 条记录',
+  'this_week': '本周',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

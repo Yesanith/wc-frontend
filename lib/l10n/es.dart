@@ -239,6 +239,7 @@ const esStrings = <String, String>{
   'joined': 'Se unió',
   'upgrade_built': 'Construida',
   'log_last_n': 'Las últimas {n} entradas del juego',
+  'this_week': 'Esta semana',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

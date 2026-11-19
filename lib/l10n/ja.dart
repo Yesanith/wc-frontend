@@ -220,6 +220,7 @@ const jaStrings = <String, String>{
   'joined': '加入日',
   'upgrade_built': '建設済み',
   'log_last_n': 'ゲームが保持する直近 {n} 件',
+  'this_week': '今週',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

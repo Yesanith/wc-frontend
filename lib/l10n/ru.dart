@@ -239,6 +239,7 @@ const ruStrings = <String, String>{
   'joined': 'Вступил',
   'upgrade_built': 'Построено',
   'log_last_n': 'Последние {n} записей игры',
+  'this_week': 'Эта неделя',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

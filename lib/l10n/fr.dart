@@ -241,6 +241,7 @@ const frStrings = <String, String>{
   'joined': 'Entré',
   'upgrade_built': 'Construit',
   'log_last_n': 'Les {n} dernières entrées du jeu',
+  'this_week': 'Cette semaine',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

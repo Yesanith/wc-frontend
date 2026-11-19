@@ -244,6 +244,7 @@ const deStrings = <String, String>{
   'joined': 'Beigetreten',
   'upgrade_built': 'Gebaut',
   'log_last_n': 'Die letzten {n} Einträge des Spiels',
+  'this_week': 'Diese Woche',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

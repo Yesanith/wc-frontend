@@ -241,6 +241,7 @@ const ptStrings = <String, String>{
   'joined': 'Entrou',
   'upgrade_built': 'Construída',
   'log_last_n': 'As últimas {n} entradas do jogo',
+  'this_week': 'Esta semana',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

@@ -137,6 +137,8 @@ class GuildEventsScreen extends ConsumerWidget {
                 ],
               );
             }
+            // on a site the events are a week of days, with the chosen one in full beside it
+            if (SiteScope.of(context)) return _EventsWeek(events: events);
             return ListView(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 96),
               children: [
@@ -274,6 +276,204 @@ class _GuildLinks extends ConsumerWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// a week on a site
+
+Color _activityTint(String activity) => switch (activity) {
+      'raid' => AppColors.green,
+      'strike' => AppColors.green,
+      'fractal' => AppColors.blue,
+      'meta' || 'worldboss' => AppColors.gold,
+      'wvw' || 'pvp' => AppColors.red,
+      _ => AppColors.muted,
+    };
+
+/// the guilds' events as a week: a column for each day, the events of it in the order they start, and the chosen one in full at the right
+class _EventsWeek extends ConsumerStatefulWidget {
+  const _EventsWeek({required this.events});
+
+  final List<EventSummary> events;
+
+  @override
+  ConsumerState<_EventsWeek> createState() => _EventsWeekState();
+}
+
+class _EventsWeekState extends ConsumerState<_EventsWeek> {
+  var _week = 0;
+  String? _guild;
+  String? _selected;
+
+  DateTime _monday(DateTime d) => DateTime(d.year, d.month, d.day).subtract(Duration(days: d.weekday - 1));
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final now = DateTime.now();
+    final monday = _monday(now).add(Duration(days: 7 * _week));
+    final guilds = <String, String>{
+      for (final e in widget.events) e.event.guildId: e.event.guildName,
+    };
+    final inWeek = [
+      for (final e in widget.events)
+        if (!e.event.startAt.toLocal().isBefore(monday) &&
+            e.event.startAt.toLocal().isBefore(monday.add(const Duration(days: 7))) &&
+            (_guild == null || e.event.guildId == _guild))
+          e,
+    ]..sort((a, b) => a.event.startAt.compareTo(b.event.startAt));
+    final chosen = inWeek.where((e) => e.event.id == _selected).firstOrNull ?? (inWeek.isEmpty ? null : inWeek.first);
+    String dm(DateTime d) => '${pad2(d.day)}.${pad2(d.month)}';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              if (guilds.length > 1) ...[
+                ChoiceChip(
+                    label: Text(s.t('all')),
+                    selected: _guild == null,
+                    onSelected: (_) => setState(() => _guild = null)),
+                for (final g in guilds.entries)
+                  ChoiceChip(
+                    label: Text(g.value),
+                    selected: _guild == g.key,
+                    onSelected: (_) => setState(() => _guild = g.key),
+                  ),
+              ],
+              IconButton(onPressed: () => setState(() => _week--), icon: const Icon(Icons.chevron_left)),
+              Text('${dm(monday)} – ${dm(monday.add(const Duration(days: 6)))}',
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+              IconButton(onPressed: () => setState(() => _week++), icon: const Icon(Icons.chevron_right)),
+              if (_week != 0) TextButton(onPressed: () => setState(() => _week = 0), child: Text(s.t('this_week'))),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (var d = 0; d < 7; d++) ...[
+                        if (d > 0) const SizedBox(width: 8),
+                        Expanded(
+                          child: Builder(builder: (context) {
+                            final day = monday.add(Duration(days: d));
+                            final today = day.year == now.year && day.month == now.month && day.day == now.day;
+                            final list = [
+                              for (final e in inWeek)
+                                if (e.event.startAt.toLocal().day == day.day &&
+                                    e.event.startAt.toLocal().month == day.month)
+                                  e,
+                            ];
+                            return Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.surface,
+                                borderRadius: BorderRadius.circular(AppRadius.card),
+                                border:
+                                    Border.all(color: today ? AppColors.gold : AppColors.line, width: today ? 1.5 : 1),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(4, 2, 4, 8),
+                                    child: Row(
+                                      children: [
+                                        Text(s.t('wd_${day.weekday}'),
+                                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                                        const Spacer(),
+                                        Text('${day.day}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListView(
+                                      children: [
+                                        for (final e in list)
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 6),
+                                            child: Material(
+                                              color: _activityTint(e.event.activity).withValues(alpha: 0.16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                                side: e.event.id == chosen?.event.id
+                                                    ? BorderSide(color: AppColors.gold, width: 2)
+                                                    : BorderSide.none,
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: InkWell(
+                                                onTap: () => setState(() => _selected = e.event.id),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(_clock(e.event.startAt.toLocal()),
+                                                          style: TextStyle(
+                                                              fontSize: 11.5,
+                                                              fontWeight: FontWeight.w700,
+                                                              color: AppColors.muted)),
+                                                      Text(e.event.title,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w800,
+                                                              decoration: e.event.cancelled
+                                                                  ? TextDecoration.lineThrough
+                                                                  : null)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                SizedBox(
+                  width: 390,
+                  child: Panel(
+                    padding: EdgeInsets.zero,
+                    child: chosen == null
+                        ? Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Text(s.t('events_none'),
+                                  textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
+                            ),
+                          )
+                        : GuildEventScreen(key: ValueKey(chosen.event.id), eventId: chosen.event.id, embedded: true),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
     );
   }
 }

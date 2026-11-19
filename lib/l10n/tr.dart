@@ -237,6 +237,7 @@ const trStrings = <String, String>{
   'joined': 'Katıldı',
   'upgrade_built': 'Yapıldı',
   'log_last_n': 'Oyunun tuttuğu son {n} kayıt',
+  'this_week': 'Bu hafta',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

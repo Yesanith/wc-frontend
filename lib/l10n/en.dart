@@ -240,6 +240,7 @@ const enStrings = <String, String>{
   'joined': 'Joined',
   'upgrade_built': 'Built',
   'log_last_n': 'The last {n} entries the game keeps',
+  'this_week': 'This week',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

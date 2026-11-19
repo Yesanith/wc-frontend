@@ -4,9 +4,12 @@ part of '../guild_events_screen.dart';
 // detail
 
 class GuildEventScreen extends ConsumerStatefulWidget {
-  const GuildEventScreen({super.key, required this.eventId});
+  const GuildEventScreen({super.key, required this.eventId, this.embedded = false});
 
   final String eventId;
+
+  /// shown in a pane of the site, without a bar of its own
+  final bool embedded;
 
   @override
   ConsumerState<GuildEventScreen> createState() => _GuildEventScreenState();
@@ -344,7 +347,8 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
     final myAccounts = ref.watch(myGuildAccountsProvider).valueOrNull ?? const <GuildAccount>[];
 
     return Scaffold(
-      appBar: AppBar(title: Text(s.t('guild_events'))),
+      backgroundColor: widget.embedded ? Colors.transparent : null,
+      appBar: widget.embedded ? null : AppBar(title: Text(s.t('guild_events'))),
       body: RefreshIndicator(
         color: AppColors.gold,
         onRefresh: () async {
