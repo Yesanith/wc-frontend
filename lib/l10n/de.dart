@@ -200,6 +200,10 @@ const deStrings = <String, String>{
   'mat_sort_most': 'Meiste',
   'mat_sort_name': 'Name',
   'mat_material': 'Material',
+  'armory_armor': 'Rüstung',
+  'armory_trinkets': 'Schmuck',
+  'armory_owned': 'Besessen',
+  'armory_shelf_note': '{n} Arten · {c} Exemplare',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

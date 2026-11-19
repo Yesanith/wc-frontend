@@ -197,6 +197,10 @@ const frStrings = <String, String>{
   'mat_sort_most': 'Plus',
   'mat_sort_name': 'Nom',
   'mat_material': 'Matériau',
+  'armory_armor': 'Armure',
+  'armory_trinkets': 'Bijoux',
+  'armory_owned': 'Possédés',
+  'armory_shelf_note': '{n} types · {c} exemplaires',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

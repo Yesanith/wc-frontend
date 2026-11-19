@@ -195,6 +195,10 @@ const ruStrings = <String, String>{
   'mat_sort_most': 'Больше',
   'mat_sort_name': 'Название',
   'mat_material': 'Материал',
+  'armory_armor': 'Броня',
+  'armory_trinkets': 'Бижутерия',
+  'armory_owned': 'В наличии',
+  'armory_shelf_note': '{n} видов · {c} копий',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

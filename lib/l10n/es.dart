@@ -195,6 +195,10 @@ const esStrings = <String, String>{
   'mat_sort_most': 'Más',
   'mat_sort_name': 'Nombre',
   'mat_material': 'Material',
+  'armory_armor': 'Armadura',
+  'armory_trinkets': 'Joyas',
+  'armory_owned': 'Poseídos',
+  'armory_shelf_note': '{n} tipos · {c} copias',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

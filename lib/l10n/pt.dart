@@ -197,6 +197,10 @@ const ptStrings = <String, String>{
   'mat_sort_most': 'Mais',
   'mat_sort_name': 'Nome',
   'mat_material': 'Material',
+  'armory_armor': 'Armadura',
+  'armory_trinkets': 'Joias',
+  'armory_owned': 'Possuídos',
+  'armory_shelf_note': '{n} tipos · {c} cópias',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

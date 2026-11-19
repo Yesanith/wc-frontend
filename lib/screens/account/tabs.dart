@@ -440,6 +440,8 @@ class _ArmoryTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(armoryProvider),
       builder: (list) {
         if (list.isEmpty) return _EmptyTab(s.t('armory_empty'));
+        // a site has the armory as shelves, one for the weapons, the armor and the trinkets
+        if (SiteScope.of(context)) return _ArmorySite(items: list, max: max);
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: list.length,
@@ -473,6 +475,120 @@ class _ArmoryTab extends ConsumerWidget {
           },
         );
       },
+    );
+  }
+}
+
+/// the legendary armory on a site: a few totals, then a shelf for the weapons, one for the armor and one for the trinkets
+class _ArmorySite extends ConsumerWidget {
+  const _ArmorySite({required this.items, required this.max});
+
+  final List<ItemSlot> items;
+  final Map<int, int> max;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    String kind(ItemSlot i) => switch (i.type) {
+          'Weapon' => 'weapons',
+          'Armor' => 'armor',
+          'Trinket' || 'Back' => 'trinkets',
+          _ => 'other',
+        };
+    final shelves = <String, List<ItemSlot>>{};
+    for (final i in items) {
+      shelves.putIfAbsent(kind(i), () => []).add(i);
+    }
+    const order = ['weapons', 'armor', 'trinkets', 'other'];
+    final label = {
+      'weapons': s.t('weapons'),
+      'armor': s.t('armory_armor'),
+      'trinkets': s.t('armory_trinkets'),
+      'other': s.t('other'),
+    };
+    int copies(List<ItemSlot> l) => l.fold<int>(0, (n, i) => n + i.count);
+
+    Widget stat(String name, int n) => Padding(
+          padding: const EdgeInsets.only(right: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name.caps,
+                  style: TextStyle(
+                      fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
+              Text(fmtInt(n), style: display(28)),
+            ],
+          ),
+        );
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      children: [
+        Wrap(children: [
+          stat(s.t('armory_owned'), items.length),
+          for (final k in order)
+            if (shelves.containsKey(k)) stat(label[k]!, shelves[k]!.length),
+        ]),
+        for (final k in order)
+          if (shelves.containsKey(k)) ...[
+            const SizedBox(height: 14),
+            Panel(
+              padding: const EdgeInsets.fromLTRB(22, 16, 22, 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Expanded(child: Text(label[k]!, style: display(22))),
+                      Text(s.t('armory_shelf_note', {'n': shelves[k]!.length, 'c': copies(shelves[k]!)}),
+                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: AppColors.muted)),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 14,
+                    runSpacing: 16,
+                    children: [
+                      for (final i in shelves[k]!)
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () => showItemSheet(
+                            context,
+                            id: i.id,
+                            name: i.name,
+                            icon: i.icon,
+                            rarity: i.rarity,
+                            type: i.type,
+                            count: i.count,
+                          ),
+                          child: SizedBox(
+                            width: 96,
+                            child: Column(
+                              children: [
+                                ItemIcon(url: i.icon, rarity: i.rarity, size: 64, count: i.count > 1 ? i.count : null),
+                                const SizedBox(height: 6),
+                                Text(i.name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 11.5, height: 1.25)),
+                                if ((max[i.id] ?? 0) > i.count)
+                                  Text('${i.count}/${max[i.id]}',
+                                      style:
+                                          TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+      ],
     );
   }
 }

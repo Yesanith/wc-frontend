@@ -196,6 +196,10 @@ const enStrings = <String, String>{
   'mat_sort_most': 'Most',
   'mat_sort_name': 'Name',
   'mat_material': 'Material',
+  'armory_armor': 'Armor',
+  'armory_trinkets': 'Trinkets',
+  'armory_owned': 'Owned',
+  'armory_shelf_note': '{n} kinds · {c} copies',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':
