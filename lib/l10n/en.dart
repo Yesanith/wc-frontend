@@ -255,6 +255,10 @@ const enStrings = <String, String>{
   'sold_per_day': 'Sold per day',
   'rarity': 'Rarity',
   'alert_none': 'No alert is set for this item.',
+  'recipe': 'Recipe',
+  'recipe_not_learned_short': 'Not learned',
+  'counting_held': 'counting what you hold',
+  'craft_time_label': 'Craft time',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

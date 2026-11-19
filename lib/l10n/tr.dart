@@ -252,6 +252,10 @@ const trStrings = <String, String>{
   'sold_per_day': 'Günlük satış',
   'rarity': 'Nadirlik',
   'alert_none': 'Bu eşya için alarm kurulu değil.',
+  'recipe': 'Tarif',
+  'recipe_not_learned_short': 'Öğrenilmedi',
+  'counting_held': 'elindekiler dahil',
+  'craft_time_label': 'Yapım süresi',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

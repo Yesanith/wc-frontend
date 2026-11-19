@@ -12,6 +12,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import 'trading_screen.dart';
 
 class CraftingDetailScreen extends ConsumerStatefulWidget {
@@ -84,6 +85,196 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
           // comparison with buying, since owned materials could be sold too
           final materialValue = missingCost + ownedValue;
           final unpriced = leaves.keys.where((id) => (prices[id] ?? 0) == 0).length;
+
+          // on a site the recipe is four boxes of figures, the tree at the left and the materials with the verdict at the right
+          if (SiteScope.of(context)) {
+            final cheaperToBuy = buyInstead > 0 && buyInstead < materialValue;
+            Widget box(String label, Widget value, [String note = '']) => Expanded(
+                  child: Panel(
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(label.caps,
+                            style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.2,
+                                color: AppColors.muted)),
+                        const SizedBox(height: 4),
+                        value,
+                        if (note.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(note, style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+            final tree = Panel(
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 0, 6),
+                      child: Text(s.t('recipe_tree'), style: display(18))),
+                  for (final child in plan.children) _CraftNodeTile(line: child, totals: totals),
+                ],
+              ),
+            );
+            final side = Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Panel(
+                  padding: const EdgeInsets.fromLTRB(22, 16, 22, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(s.t('base_materials'), style: display(18)),
+                      const SizedBox(height: 4),
+                      for (final e in leaves.entries)
+                        MaterialRow(itemId: e.key, need: e.value, have: totals[e.key] ?? 0),
+                    ],
+                  ),
+                ),
+                if (buyInstead > 0) ...[
+                  const SizedBox(height: 14),
+                  Panel(
+                    padding: const EdgeInsets.all(18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(cheaperToBuy ? s.t('buying_cheaper') : s.t('crafting_cheaper'),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: cheaperToBuy ? AppColors.red : AppColors.green)),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Expanded(
+                                child:
+                                    Text(s.t('buy_instead'), style: TextStyle(fontSize: 13, color: AppColors.muted))),
+                            CoinText(buyInstead, size: 14),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Text(s.t('already_owned_value'),
+                                    style: TextStyle(fontSize: 13, color: AppColors.muted))),
+                            CoinText(ownedValue, size: 14),
+                          ],
+                        ),
+                        if (unpriced > 0) ...[
+                          const SizedBox(height: 6),
+                          Text(s.t('unpriced_materials', {'n': unpriced}),
+                              style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            );
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+              children: [
+                Row(
+                  children: [
+                    ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 64),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            [
+                              for (final d in root.disciplines)
+                                d == mysticForge ? s.t('mystic_forge') : disciplineLabel(s, d)
+                            ].join(' · ').caps,
+                            style: TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: AppColors.gold),
+                          ),
+                          const SizedBox(height: 2),
+                          Text((item?['name'] as String?) ?? s.t('crafting'), style: display(30)),
+                        ],
+                      ),
+                    ),
+                    Panel(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: _quantity <= 1 ? null : () => setState(() => _quantity--),
+                            icon: Icon(Icons.remove_circle_outline, color: AppColors.gold),
+                          ),
+                          Text('$_quantity', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                          IconButton(
+                            onPressed: () => setState(() => _quantity++),
+                            icon: Icon(Icons.add_circle_outline, color: AppColors.gold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    FilledButton.icon(
+                      onPressed: () async {
+                        final goals = ref.read(goalsProvider.notifier);
+                        if (!goals.has(widget.itemId) && ref.read(goalsProvider).length >= maxGoals) {
+                          showToast(context, s.t('goals_full'));
+                          return;
+                        }
+                        await goals.add(widget.itemId, _quantity);
+                        if (context.mounted) showToast(context, s.t('goal_added'));
+                      },
+                      icon: const Icon(Icons.playlist_add),
+                      label: Text(s.t('goal_add')),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    box(s.t('material_value'), CoinText(materialValue, size: 24), s.t('counting_held')),
+                    const SizedBox(width: 14),
+                    box(s.t('buy_instead'),
+                        buyInstead > 0 ? CoinText(buyInstead, size: 24) : Text('–', style: display(24))),
+                    const SizedBox(width: 14),
+                    box(s.t('missing_materials_cost'), CoinText(missingCost, size: 24)),
+                    const SizedBox(width: 14),
+                    box(
+                      s.t('craft_time_label'),
+                      Text(
+                          root.craftMs > 0
+                              ? '${(root.craftMs / 1000).toStringAsFixed(root.craftMs % 1000 == 0 ? 0 : 1)} s'
+                              : '–',
+                          style: display(26)),
+                      root.minRating > 0 ? s.t('craft_rating', {'n': root.minRating}) : '',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                LayoutBuilder(builder: (context, box) {
+                  if (box.maxWidth < 900) {
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [tree, const SizedBox(height: 16), side]);
+                  }
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 6, child: tree),
+                      const SizedBox(width: 16),
+                      Expanded(flex: 5, child: side)
+                    ],
+                  );
+                }),
+              ],
+            );
+          }
 
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),

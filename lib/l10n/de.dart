@@ -259,6 +259,10 @@ const deStrings = <String, String>{
   'sold_per_day': 'Verkauft pro Tag',
   'rarity': 'Seltenheit',
   'alert_none': 'Für diesen Gegenstand ist kein Alarm gesetzt.',
+  'recipe': 'Rezept',
+  'recipe_not_learned_short': 'Nicht gelernt',
+  'counting_held': 'mit dem, was du hältst',
+  'craft_time_label': 'Herstellzeit',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

@@ -256,6 +256,10 @@ const ptStrings = <String, String>{
   'sold_per_day': 'Vendido por dia',
   'rarity': 'Raridade',
   'alert_none': 'Nenhum alerta para este item.',
+  'recipe': 'Receita',
+  'recipe_not_learned_short': 'Não aprendida',
+  'counting_held': 'contando o que você tem',
+  'craft_time_label': 'Tempo de criação',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

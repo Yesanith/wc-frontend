@@ -256,6 +256,10 @@ const frStrings = <String, String>{
   'sold_per_day': 'Vendu par jour',
   'rarity': 'Rareté',
   'alert_none': 'Aucune alerte pour cet objet.',
+  'recipe': 'Recette',
+  'recipe_not_learned_short': 'Non apprise',
+  'counting_held': 'en comptant ce que tu as',
+  'craft_time_label': 'Temps de fabrication',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

@@ -254,6 +254,10 @@ const esStrings = <String, String>{
   'sold_per_day': 'Vendido por día',
   'rarity': 'Rareza',
   'alert_none': 'No hay alerta para este objeto.',
+  'recipe': 'Receta',
+  'recipe_not_learned_short': 'No aprendida',
+  'counting_held': 'contando lo que tienes',
+  'craft_time_label': 'Tiempo de fabricación',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

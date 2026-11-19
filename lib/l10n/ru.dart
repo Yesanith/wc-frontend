@@ -254,6 +254,10 @@ const ruStrings = <String, String>{
   'sold_per_day': 'Продано за день',
   'rarity': 'Редкость',
   'alert_none': 'Для этого предмета нет оповещения.',
+  'recipe': 'Рецепт',
+  'recipe_not_learned_short': 'Не изучен',
+  'counting_held': 'с учётом имеющегося',
+  'craft_time_label': 'Время создания',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

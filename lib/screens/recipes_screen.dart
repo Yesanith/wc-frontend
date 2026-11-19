@@ -9,9 +9,11 @@ import '../services/recipe_book.dart';
 import '../state/account.dart';
 import '../state/goals.dart';
 import '../state/items.dart';
+import '../state/market.dart' show TpPrice;
 import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
+import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'craft_profit_screen.dart';
@@ -108,6 +110,164 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
           rows.add((entry.key, name, entry.value));
         }
         rows.sort((a, b) => a.$2.compareTo(b.$2));
+
+        // on a site the disciplines stand in a list at the left and the recipes in a table beside it
+        if (SiteScope.of(context)) {
+          final goals = ref.watch(goalsProvider).length;
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: 250,
+                  child: Panel(
+                    padding: const EdgeInsets.all(8),
+                    child: ListView(
+                      children: [
+                        for (final d in [_legendary, ...b.disciplines])
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: Material(
+                              color: _query.isEmpty && _filter == d ? AppColors.text : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              clipBehavior: Clip.antiAlias,
+                              child: InkWell(
+                                onTap: () => setState(() {
+                                  _filter = d;
+                                  _ctrl.clear();
+                                  _query = '';
+                                }),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                  child: Text(_label(s, d),
+                                      style: TextStyle(
+                                          fontSize: 13.5,
+                                          fontWeight: FontWeight.w700,
+                                          color: _query.isEmpty && _filter == d ? AppColors.bg : AppColors.text)),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 18),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              controller: _ctrl,
+                              onChanged: _onChanged,
+                              decoration: fieldDecoration(s.t('search_recipes'),
+                                  prefixIcon: Icon(Icons.search, color: AppColors.muted)),
+                            ),
+                          ),
+                          if (learned.isNotEmpty)
+                            for (final (value, key) in const [
+                              (null, 'all'),
+                              (true, 'recipe_learned'),
+                              (false, 'recipe_not_learned')
+                            ])
+                              ChoiceChip(
+                                  label: Text(s.t(key)),
+                                  selected: _learned == value,
+                                  onSelected: (_) => setState(() => _learned = value)),
+                          Text(s.t('recipes_count', {'n': fmtInt(total)}),
+                              style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                          OutlinedButton.icon(
+                            onPressed: () => openPanel(context, (_) => const CraftProfitScreen()),
+                            icon: const Icon(Icons.trending_up, size: 18),
+                            label: Text(s.t('craft_profit')),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: () => openPanel(context, (_) => const GoalsScreen()),
+                            icon: const Icon(Icons.checklist, size: 18),
+                            label: Text(goals > 0 ? '${s.t('goals')} · $goals' : s.t('goals')),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: Panel(
+                          padding: EdgeInsets.zero,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 40,
+                                padding: const EdgeInsets.symmetric(horizontal: 18),
+                                color: Color.alphaBlend(AppColors.track.withValues(alpha: 0.5), AppColors.surface),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(s.t('recipe').caps,
+                                            style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w700,
+                                                letterSpacing: 1.1,
+                                                color: AppColors.muted))),
+                                    SizedBox(
+                                        width: 130,
+                                        child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(s.t('tp_col_sell').caps,
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w700,
+                                                    letterSpacing: 1.1,
+                                                    color: AppColors.muted)))),
+                                    SizedBox(
+                                        width: 120,
+                                        child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(s.t('recipe_learned').caps,
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w700,
+                                                    letterSpacing: 1.1,
+                                                    color: AppColors.muted)))),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: rows.length,
+                                  itemBuilder: (context, i) {
+                                    final (id, name, recipes) = rows[i];
+                                    final from = i - i % _chunk;
+                                    final to = from + _chunk > rows.length ? rows.length : from + _chunk;
+                                    return _RecipeTableRow(
+                                      id: id,
+                                      name: name,
+                                      recipes: recipes,
+                                      chunkKey: [for (var j = from; j < to; j++) rows[j].$1].join(','),
+                                      label: (d) => _label(s, d),
+                                      learned: recipes.any((r) => r.id > 0 && learned.contains(r.id)),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
 
         return Column(
           children: [
@@ -294,6 +454,84 @@ class _RecipeRow extends ConsumerWidget {
           ],
           Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
+      ),
+    );
+  }
+}
+
+/// a recipe as a row of the table of a site: what it makes, in which disciplines, what that sells for and whether it is learned
+class _RecipeTableRow extends ConsumerWidget {
+  const _RecipeTableRow({
+    required this.id,
+    required this.name,
+    required this.recipes,
+    required this.chunkKey,
+    required this.label,
+    required this.learned,
+  });
+
+  final int id;
+  final String name;
+  final List<BookRecipe> recipes;
+  final String chunkKey;
+  final String Function(String discipline) label;
+  final bool learned;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final item = ref.watch(itemBatchProvider(chunkKey)).valueOrNull?[id];
+    final priceJson = ref.watch(priceBatchProvider(chunkKey)).valueOrNull?[id];
+    final sell = priceJson == null ? null : TpPrice.fromJson(priceJson).sell;
+    final disciplines = {for (final r in recipes) ...r.disciplines};
+    final legendary = recipes.any((r) => r.legendary);
+    return InkWell(
+      onTap: () => openPanel(context, (_) => CraftingDetailScreen(itemId: id)),
+      child: Container(
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.track))),
+        child: Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: legendary ? rarityColor('Legendary') : AppColors.text)),
+                  ),
+                  const SizedBox(width: 10),
+                  for (final d in disciplines.take(2)) ...[Pill(label(d)), const SizedBox(width: 4)],
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 130,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: sell == null || sell == 0
+                    ? Text('–', style: TextStyle(color: AppColors.muted))
+                    : CoinText(sell, size: 13.5),
+              ),
+            ),
+            SizedBox(
+              width: 120,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: learned
+                    ? Icon(Icons.check_circle, size: 20, color: AppColors.green)
+                    : Text(s.t('recipe_not_learned_short'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
