@@ -329,6 +329,8 @@ class _MaterialsTab extends ConsumerWidget {
       onRetry: () => ref.invalidate(materialGroupsProvider),
       builder: (list) {
         if (list.isEmpty) return _EmptyTab(s.t('materials_empty'));
+        // a site has the materials as a table with what each is worth
+        if (SiteScope.of(context)) return _MaterialsSite(groups: list);
         // one grid per storage category, like the game shows it. a tap on a
         // category's title folds it away, and the choice is remembered
         final query = ref.watch(_storageQueryProvider('materials')).trim().toLowerCase();
@@ -746,4 +748,255 @@ class _WalletSiteState extends ConsumerState<_WalletSite> {
       ],
     );
   }
+}
+
+/// what each material sells for on the trading post, by item id; an item the trading post does not take is not in it
+final _materialPricesProvider = FutureProvider.autoDispose<Map<int, int>>((ref) async {
+  final groups = await ref.watch(materialGroupsProvider.future);
+  final ids = {
+    for (final g in groups)
+      for (final m in g.slots) m.id
+  };
+  final prices = await ref.watch(gw2ApiProvider).prices(ids);
+  return {
+    for (final e in prices.entries)
+      if (TpPrice.fromJson(e.value).sell > 0) e.key: TpPrice.fromJson(e.value).sell,
+  };
+});
+
+enum _MatSort { worth, count, name }
+
+/// the material storage on a site: what is stored and what it is worth in four boxes, then every material in one table, with its price
+/// each and the worth of the stack, a search and the category to look at
+class _MaterialsSite extends ConsumerStatefulWidget {
+  const _MaterialsSite({required this.groups});
+
+  final List<MaterialGroup> groups;
+
+  @override
+  ConsumerState<_MaterialsSite> createState() => _MaterialsSiteState();
+}
+
+class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
+  var _query = '';
+  int? _category;
+  var _sort = _MatSort.worth;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final prices = ref.watch(_materialPricesProvider).valueOrNull ?? const <int, int>{};
+    final rows = [
+      for (final g in widget.groups)
+        for (final m in g.slots) (group: g, slot: m, unit: prices[m.id] ?? 0),
+    ];
+    final totalItems = rows.fold<int>(0, (n, r) => n + r.slot.count);
+    final totalWorth = rows.fold<int>(0, (n, r) => n + r.unit * r.slot.count);
+    final top = rows.isEmpty ? null : rows.reduce((a, b) => a.unit * a.slot.count >= b.unit * b.slot.count ? a : b);
+    final q = _query.trim().toLowerCase();
+    final shown = [
+      for (final r in rows)
+        if ((_category == null || r.group.id == _category) && (q.isEmpty || r.slot.name.toLowerCase().contains(q))) r,
+    ];
+    switch (_sort) {
+      case _MatSort.worth:
+        shown.sort((a, b) => (b.unit * b.slot.count).compareTo(a.unit * a.slot.count));
+      case _MatSort.count:
+        shown.sort((a, b) => b.slot.count.compareTo(a.slot.count));
+      case _MatSort.name:
+        shown.sort((a, b) => a.slot.name.toLowerCase().compareTo(b.slot.name.toLowerCase()));
+    }
+    final maxCount = shown.isEmpty ? 1 : shown.map((r) => r.slot.count).reduce((a, b) => a > b ? a : b);
+
+    Widget stat(String label, Widget value, String note) => Expanded(
+          child: Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label.caps,
+                    style: TextStyle(
+                        fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
+                const SizedBox(height: 4),
+                value,
+                const SizedBox(height: 2),
+                Text(note,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12, color: AppColors.muted)),
+              ],
+            ),
+          ),
+        );
+
+    Widget cell(Widget child, {double? width, Alignment align = Alignment.centerRight}) =>
+        SizedBox(width: width, child: Align(alignment: align, child: child));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            stat(s.t('mat_stored'), Text(fmtInt(totalItems), style: display(28)),
+                s.t('mat_items_kinds', {'n': rows.length})),
+            const SizedBox(width: 14),
+            stat(s.t('mat_worth_tp'), CoinText(totalWorth, size: 24), s.t('mat_worth_note')),
+            const SizedBox(width: 14),
+            stat(s.t('mat_categories'), Text('${widget.groups.length}', style: display(28)), s.t('mat_in_storage')),
+            const SizedBox(width: 14),
+            stat(
+              s.t('mat_most_valuable'),
+              Text(top?.slot.name ?? '–', maxLines: 1, overflow: TextOverflow.ellipsis, style: display(20)),
+              top == null || top.unit == 0 ? '' : '${fmtInt(top.slot.count)} × ${_coinWords(top.unit)}',
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            SizedBox(
+              width: 280,
+              child: TextField(
+                onChanged: (v) => setState(() => _query = v),
+                decoration: InputDecoration(
+                  isDense: true,
+                  prefixIcon: const Icon(Icons.search, size: 18),
+                  hintText: s.t('mat_search', {'n': rows.length}),
+                ),
+              ),
+            ),
+            ChoiceChip(
+                label: Text(s.t('all')),
+                selected: _category == null,
+                onSelected: (_) => setState(() => _category = null)),
+            for (final g in widget.groups)
+              ChoiceChip(
+                label: Text(g.name),
+                selected: _category == g.id,
+                onSelected: (_) => setState(() => _category = g.id),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Wrap(spacing: 8, children: [
+          for (final (sort, label) in [
+            (_MatSort.worth, s.t('mat_sort_worth')),
+            (_MatSort.count, s.t('mat_sort_most')),
+            (_MatSort.name, s.t('mat_sort_name')),
+          ])
+            ChoiceChip(label: Text(label), selected: _sort == sort, onSelected: (_) => setState(() => _sort = sort)),
+        ]),
+        const SizedBox(height: 12),
+        Panel(
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: [
+              Container(
+                height: 40,
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                decoration:
+                    BoxDecoration(color: AppColors.surface2, border: Border(bottom: BorderSide(color: AppColors.line))),
+                child: Row(
+                  children: [
+                    Expanded(child: _hd(s.t('mat_material'), left: true)),
+                    cell(const SizedBox.shrink(), width: 150),
+                    cell(_hd(s.t('mat_count')), width: 90),
+                    cell(_hd(s.t('mat_price_each')), width: 120),
+                    cell(_hd(s.t('mat_worth')), width: 120),
+                  ],
+                ),
+              ),
+              for (final r in shown)
+                InkWell(
+                  onTap: () => showItemSheet(
+                    context,
+                    id: r.slot.id,
+                    name: r.slot.name,
+                    icon: r.slot.icon,
+                    rarity: r.slot.rarity,
+                    type: r.slot.type,
+                    count: r.slot.count,
+                    binding: r.slot.binding,
+                    boundTo: r.slot.boundTo,
+                  ),
+                  child: Container(
+                    height: 46,
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.track))),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SizedBox.square(
+                                dimension: 28,
+                                child: r.slot.icon == null ? null : CachedIcon(url: r.slot.icon!, fit: BoxFit.contain),
+                              ),
+                              const SizedBox(width: 10),
+                              Flexible(
+                                child: Text(r.slot.name,
+                                    maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14)),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(r.group.name, maxLines: 1, style: TextStyle(fontSize: 11.5, color: AppColors.hint)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: LinearProgressIndicator(
+                                value: r.slot.count / maxCount,
+                                minHeight: 7,
+                                backgroundColor: AppColors.track,
+                                color: AppColors.gold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        cell(
+                            Text(fmtInt(r.slot.count),
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                            width: 90),
+                        cell(
+                            r.unit == 0
+                                ? Text('–', style: TextStyle(color: AppColors.muted))
+                                : CoinText(r.unit, size: 13),
+                            width: 120),
+                        cell(
+                            r.unit == 0
+                                ? Text('–', style: TextStyle(color: AppColors.muted))
+                                : CoinText(r.unit * r.slot.count, size: 13),
+                            width: 120),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _hd(String text, {bool left = false}) => Text(text.caps,
+      textAlign: left ? TextAlign.left : TextAlign.right,
+      style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.muted));
+}
+
+/// "2s 40c" as words, for a line of text
+String _coinWords(int copper) {
+  final c = Coins(copper);
+  return [
+    if (c.gold > 0) '${fmtInt(c.gold)}g',
+    if (c.silver > 0) '${c.silver}s',
+    if (c.copper > 0 || copper == 0) '${c.copper}c'
+  ].join(' ');
 }

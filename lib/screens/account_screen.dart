@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/icon_cache.dart';
 import '../state/account.dart';
+import '../state/api.dart';
 import '../state/builds.dart';
+import '../state/market.dart' show TpPrice;
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
