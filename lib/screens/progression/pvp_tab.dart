@@ -292,13 +292,16 @@ class _PvpTab extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          pill(Icons.history, s.t('match_history'), () => const PvpMatchesScreen()),
-                          pill(Icons.shield_moon_outlined, s.t('amulets'), () => const PvpAmuletsScreen()),
-                          pill(Icons.leaderboard_outlined, s.t('leaderboard'), () => const PvpLadderScreen()),
-                        ],
+                      SizedBox(
+                        width: 200,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            pill(Icons.history, s.t('match_history'), () => const PvpMatchesScreen()),
+                            pill(Icons.shield_moon_outlined, s.t('amulets'), () => const PvpAmuletsScreen()),
+                            pill(Icons.leaderboard_outlined, s.t('leaderboard'), () => const PvpLadderScreen()),
+                          ],
+                        ),
                       ),
                     ],
                   ),
