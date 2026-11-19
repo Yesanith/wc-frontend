@@ -5,6 +5,7 @@ import '../services/icon_cache.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/builds.dart';
+import '../state/characters.dart';
 import '../state/market.dart' show TpPrice;
 import '../state/reference.dart';
 import '../state/settings.dart';

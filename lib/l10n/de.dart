@@ -205,6 +205,8 @@ const deStrings = <String, String>{
   'armory_owned': 'Besessen',
   'armory_shelf_note': '{n} Arten · {c} Exemplare',
   'builds_slots_used': '{n} Speicherplätze belegt',
+  'builds_stored': 'Gespeichert',
+  'builds_on_characters': 'Auf Charakteren',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

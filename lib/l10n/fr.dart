@@ -202,6 +202,8 @@ const frStrings = <String, String>{
   'armory_owned': 'Possédés',
   'armory_shelf_note': '{n} types · {c} exemplaires',
   'builds_slots_used': '{n} emplacements utilisés',
+  'builds_stored': 'Enregistrés',
+  'builds_on_characters': 'Sur les personnages',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

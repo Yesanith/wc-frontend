@@ -198,6 +198,8 @@ const trStrings = <String, String>{
   'armory_owned': 'Sahip olunan',
   'armory_shelf_note': '{n} tür · {c} kopya',
   'builds_slots_used': '{n} depolama yuvası kullanıldı',
+  'builds_stored': 'Depolanan',
+  'builds_on_characters': 'Karakterlerde',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

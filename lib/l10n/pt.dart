@@ -202,6 +202,8 @@ const ptStrings = <String, String>{
   'armory_owned': 'Possuídos',
   'armory_shelf_note': '{n} tipos · {c} cópias',
   'builds_slots_used': '{n} espaços usados',
+  'builds_stored': 'Guardadas',
+  'builds_on_characters': 'Nos personagens',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

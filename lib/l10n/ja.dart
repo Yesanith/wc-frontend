@@ -181,6 +181,8 @@ const jaStrings = <String, String>{
   'armory_owned': '所持',
   'armory_shelf_note': '{n} 種 · {c} 個',
   'builds_slots_used': '{n} 個のスロットを使用中',
+  'builds_stored': '保存済み',
+  'builds_on_characters': 'キャラクター',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

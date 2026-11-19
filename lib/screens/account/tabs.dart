@@ -604,12 +604,24 @@ class _BuildsSite extends ConsumerStatefulWidget {
 
 class _BuildsSiteState extends ConsumerState<_BuildsSite> {
   var _selected = 0;
+  var _onCharacters = false;
 
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final list = widget.builds;
+    // the build each character carries now, read from the characters
+    final onCharacters = [
+      for (final c in ref.watch(charactersProvider).valueOrNull ?? const <Json>[])
+        if (activeBuild(c) case final b?)
+          {
+            ...b,
+            'profession': c['profession'],
+            'name': '${b['name'] ?? ''}'.trim().isEmpty ? '${c['name']}' : '${c['name']} · ${b['name']}',
+          },
+    ];
+    final list = _onCharacters ? onCharacters : widget.builds;
     final index = _selected < list.length ? _selected : 0;
+    final empty = list.isEmpty;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Row(
@@ -622,8 +634,29 @@ class _BuildsSiteState extends ConsumerState<_BuildsSite> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10, left: 4),
-                  child: Text(s.t('builds_slots_used', {'n': list.length}),
+                  child: Text(s.t('builds_slots_used', {'n': widget.builds.length}),
                       style: TextStyle(fontSize: 13, color: AppColors.muted)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Wrap(spacing: 8, children: [
+                    ChoiceChip(
+                      label: Text(s.t('builds_stored')),
+                      selected: !_onCharacters,
+                      onSelected: (_) => setState(() {
+                        _onCharacters = false;
+                        _selected = 0;
+                      }),
+                    ),
+                    ChoiceChip(
+                      label: Text(s.t('builds_on_characters')),
+                      selected: _onCharacters,
+                      onSelected: (_) => setState(() {
+                        _onCharacters = true;
+                        _selected = 0;
+                      }),
+                    ),
+                  ]),
                 ),
                 for (var i = 0; i < list.length; i++)
                   Builder(builder: (context) {
@@ -683,11 +716,16 @@ class _BuildsSiteState extends ConsumerState<_BuildsSite> {
           Expanded(
             child: Panel(
               padding: EdgeInsets.zero,
-              child: BuildView(
-                key: ValueKey(index),
-                buildData: list[index],
-                padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
-              ),
+              child: empty
+                  ? Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Center(child: Text(s.t('no_build'), style: TextStyle(color: AppColors.muted))),
+                    )
+                  : BuildView(
+                      key: ValueKey('$_onCharacters$index'),
+                      buildData: list[index],
+                      padding: const EdgeInsets.fromLTRB(22, 16, 22, 24),
+                    ),
             ),
           ),
         ],

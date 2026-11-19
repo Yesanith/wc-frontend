@@ -178,6 +178,8 @@ const zhStrings = <String, String>{
   'armory_owned': '已拥有',
   'armory_shelf_note': '{n} 种 · {c} 件',
   'builds_slots_used': '已使用 {n} 个存储位',
+  'builds_stored': '已保存',
+  'builds_on_characters': '角色当前',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

@@ -200,6 +200,8 @@ const ruStrings = <String, String>{
   'armory_owned': 'В наличии',
   'armory_shelf_note': '{n} видов · {c} копий',
   'builds_slots_used': 'Занято ячеек: {n}',
+  'builds_stored': 'Сохранённые',
+  'builds_on_characters': 'У персонажей',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':
