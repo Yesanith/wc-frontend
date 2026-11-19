@@ -212,6 +212,9 @@ const esStrings = <String, String>{
   'of_n': 'de {n}',
   'skins_missing_same': 'Skins del mismo conjunto que faltan:',
   'n_more': '{n} más',
+  'almost_done': 'Casi listo',
+  'not_started': 'Sin empezar',
+  'closest_to_done': 'Más cerca de completarse',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

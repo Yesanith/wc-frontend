@@ -214,6 +214,9 @@ const frStrings = <String, String>{
   'of_n': 'sur {n}',
   'skins_missing_same': 'Skins du même set qui manquent :',
   'n_more': '{n} de plus',
+  'almost_done': 'Presque terminé',
+  'not_started': 'Pas commencé',
+  'closest_to_done': 'Le plus proche de la fin',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

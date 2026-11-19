@@ -19,8 +19,14 @@ extension Gw2ReferenceApi on Gw2Api {
   /// single bad id would cost 200 names
   Future<List<Json>> details(String path, List<String> ids) async {
     final out = <Json>[];
-    for (final chunk in _chunks(ids)) {
-      out.addAll(await _detailChunk(path, chunk));
+    // a few batches at a time, in the order they were asked for: ten thousand wardrobe skins are fifty batches, which one after another
+    // is a long wait
+    final chunks = _chunks(ids).toList();
+    for (var i = 0; i < chunks.length; i += 6) {
+      final group = chunks.sublist(i, i + 6 > chunks.length ? chunks.length : i + 6);
+      for (final rows in await Future.wait([for (final chunk in group) _detailChunk(path, chunk)])) {
+        out.addAll(rows);
+      }
     }
     return out;
   }

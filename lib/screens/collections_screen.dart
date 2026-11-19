@@ -10,18 +10,191 @@ import '../util.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 
-class CollectionsScreen extends ConsumerWidget {
+/// the collections the page warms up once it is open, so that opening one is quick. the wardrobe and the decorations are too many to
+/// fetch unasked: they start when the pointer comes to them
+const _warmKinds = ['minis', 'dyes', 'gliders', 'outfits', 'finishers', 'titles', 'emotes', 'mount_skins', 'mounts'];
+
+class CollectionsScreen extends ConsumerStatefulWidget {
   const CollectionsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CollectionsScreen> createState() => _CollectionsScreenState();
+}
+
+class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
+  // 0 all, 1 almost done, 2 not started
+  var _filter = 0;
+  var _warmed = false;
+
+  /// one after another, so that the page itself and the first thing opened do not wait behind them
+  Future<void> _warm() async {
+    for (final key in _warmKinds) {
+      if (!mounted) return;
+      try {
+        await ref.read(collectionEntriesProvider(key).future);
+      } catch (_) {
+        // no permission or no network: opening it says so
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
+    if (!_warmed) {
+      _warmed = true;
+      Future.delayed(const Duration(seconds: 2), _warm);
+    }
+    if (SiteScope.of(context)) return _site(s);
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       children: [
         Text(s.t('collections_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
         const SizedBox(height: 12),
         CardWrap(minWidth: 340, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
+      ],
+    );
+  }
+
+  static const _ringColors = [
+    Color(0xFF8A5A12),
+    Color(0xFF4F7A3F),
+    Color(0xFF3A8A9A),
+    Color(0xFF8A5AB8),
+    Color(0xFFC9514D),
+    Color(0xFFB08A2A),
+    Color(0xFF2E7A6A),
+    Color(0xFF7A2E2E),
+  ];
+
+  /// on a site every collection is a ring with its share, the one closest to done first and larger
+  Widget _site(S s) {
+    final rows = <({CollectionKind kind, CollectionProgress? p, Color color})>[];
+    for (var i = 0; i < collectionKinds.length; i++) {
+      final kind = collectionKinds[i];
+      rows.add((
+        kind: kind,
+        p: ref.watch(collectionProgressProvider(kind.key)).valueOrNull,
+        color: _ringColors[i % _ringColors.length],
+      ));
+    }
+    final shown = [
+      for (final r in rows)
+        if (_filter == 0 ||
+            (_filter == 1 && r.p != null && r.p!.ratio >= 0.75 && r.p!.ratio < 1) ||
+            (_filter == 2 && r.p != null && r.p!.unlocked == 0))
+          r,
+    ]..sort((a, b) => (b.p?.ratio ?? -1).compareTo(a.p?.ratio ?? -1));
+    Widget ring(double ratio, double size, Color color, double stroke) => SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox.expand(
+                child: CircularProgressIndicator(
+                  value: ratio,
+                  strokeWidth: stroke,
+                  strokeCap: StrokeCap.round,
+                  backgroundColor: AppColors.track,
+                  color: color,
+                ),
+              ),
+              Text('${(ratio * 100).round()}%', style: display(size * 0.22)),
+            ],
+          ),
+        );
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(s.t('collections_note'), style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+            ),
+            for (var i = 0; i < 3; i++) ...[
+              const SizedBox(width: 8),
+              ChoiceChip(
+                label: Text(s.t(['all', 'almost_done', 'not_started'][i])),
+                selected: _filter == i,
+                onSelected: (_) => setState(() => _filter = i),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(builder: (context, box) {
+          final cols = box.maxWidth >= 1150 ? 6 : (box.maxWidth >= 860 ? 4 : (box.maxWidth >= 560 ? 3 : 2));
+          const gap = 16.0;
+          final unit = (box.maxWidth - gap * (cols - 1)) / cols;
+          return Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            children: [
+              for (var i = 0; i < shown.length; i++)
+                Builder(builder: (context) {
+                  final r = shown[i];
+                  final big = i == 0 && _filter == 0 && r.p != null;
+                  final p = r.p;
+                  return SizedBox(
+                    width: big ? unit * 2 + gap : unit,
+                    child: MouseRegion(
+                      // the one about to be opened starts loading
+                      onEnter: (_) => ref.read(collectionEntriesProvider(r.kind.key).future).ignore(),
+                      child: AppCard(
+                        onTap: r.kind.hasDetails
+                            ? () => Navigator.of(context).push(
+                                  MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: r.kind)),
+                                )
+                            : null,
+                        padding: EdgeInsets.all(big ? 22 : 16),
+                        radius: 18,
+                        child: big
+                            ? Row(
+                                children: [
+                                  ring(p!.ratio, 96, r.color, 7),
+                                  const SizedBox(width: 22),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Kicker(s.t('closest_to_done').caps),
+                                        const SizedBox(height: 4),
+                                        Text(s.t('col_${r.kind.key}'), style: display(24)),
+                                        Text(
+                                            '${fmtInt(p.unlocked)} / ${fmtInt(p.total)} · ${s.t('n_to_go', {
+                                                  'n': fmtInt(p.total - p.unlocked)
+                                                })}',
+                                            style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  p == null
+                                      ? SizedBox(
+                                          width: 80,
+                                          height: 80,
+                                          child: Center(
+                                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.gold)),
+                                        )
+                                      : ring(p.ratio, 80, r.color, 5),
+                                  const SizedBox(height: 10),
+                                  Text(s.t('col_${r.kind.key}'), textAlign: TextAlign.center, style: display(16)),
+                                  const SizedBox(height: 2),
+                                  Text(p == null ? '' : '${fmtInt(p.unlocked)} / ${fmtInt(p.total)}',
+                                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                                ],
+                              ),
+                      ),
+                    ),
+                  );
+                }),
+            ],
+          );
+        }),
       ],
     );
   }

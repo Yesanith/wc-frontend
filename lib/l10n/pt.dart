@@ -214,6 +214,9 @@ const ptStrings = <String, String>{
   'of_n': 'de {n}',
   'skins_missing_same': 'Skins do mesmo conjunto que faltam:',
   'n_more': 'mais {n}',
+  'almost_done': 'Quase pronto',
+  'not_started': 'Não iniciado',
+  'closest_to_done': 'Mais perto de concluir',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

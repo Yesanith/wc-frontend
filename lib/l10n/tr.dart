@@ -210,6 +210,9 @@ const trStrings = <String, String>{
   'of_n': '{n} içinden',
   'skins_missing_same': 'Aynı setten eksik olan skinler:',
   'n_more': '{n} tane daha',
+  'almost_done': 'Neredeyse bitti',
+  'not_started': 'Başlanmadı',
+  'closest_to_done': 'Bitmeye en yakın',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

@@ -212,6 +212,9 @@ const ruStrings = <String, String>{
   'of_n': 'из {n}',
   'skins_missing_same': 'Недостающие скины этого набора:',
   'n_more': 'ещё {n}',
+  'almost_done': 'Почти готово',
+  'not_started': 'Не начато',
+  'closest_to_done': 'Ближе всего к завершению',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

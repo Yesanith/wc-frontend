@@ -213,6 +213,9 @@ const enStrings = <String, String>{
   'of_n': 'of {n}',
   'skins_missing_same': 'Skins of the same set you are missing:',
   'n_more': '{n} more',
+  'almost_done': 'Almost done',
+  'not_started': 'Not started',
+  'closest_to_done': 'Closest to done',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

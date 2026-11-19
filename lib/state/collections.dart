@@ -107,7 +107,8 @@ String? skinSubtype(Json? raw) {
 
 /// every entry of a collection with its unlock state. details are cached
 /// on disk because they only change with a patch
-final collectionEntriesProvider = FutureProvider.autoDispose.family<List<CollectionEntry>, String>((ref, key) async {
+// kept for the session: a browser has no disk cache here, and a page that was left would fetch every entry again on its next opening
+final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, String>((ref, key) async {
   final api = accountApi(ref);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);

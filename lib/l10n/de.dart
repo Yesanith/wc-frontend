@@ -217,6 +217,9 @@ const deStrings = <String, String>{
   'of_n': 'von {n}',
   'skins_missing_same': 'Fehlende Skins desselben Sets:',
   'n_more': '{n} weitere',
+  'almost_done': 'Fast fertig',
+  'not_started': 'Nicht begonnen',
+  'closest_to_done': 'Am nächsten am Ziel',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':
