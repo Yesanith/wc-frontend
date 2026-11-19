@@ -252,6 +252,8 @@ const ruStrings = <String, String>{
   'after_fee': 'после комиссии 15%',
   'sales': 'продаж',
   'sold_per_day': 'Продано за день',
+  'rarity': 'Редкость',
+  'alert_none': 'Для этого предмета нет оповещения.',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

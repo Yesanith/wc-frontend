@@ -36,85 +36,87 @@ class TradingItemScreen extends ConsumerWidget {
       body: RefreshIndicator(
         color: AppColors.gold,
         onRefresh: () => refreshProviders(ref, [priceProvider(itemId)]),
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-          children: [
-            Row(
-              children: [
-                ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 64),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: SiteScope.of(context)
+            ? _ItemSite(itemId: itemId, item: item, name: name, rarity: rarity, price: price, watched: watched)
+            : ListView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                children: [
+                  Row(
                     children: [
-                      Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 2),
-                      Text(
-                        [if (rarity != null) rarity, if (item?['type'] != null) _typeLabel(s, '${item?['type']}')]
-                            .join(' · '),
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
+                      ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 64),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                            const SizedBox(height: 2),
+                            Text(
+                              [if (rarity != null) rarity, if (item?['type'] != null) _typeLabel(s, '${item?['type']}')]
+                                  .join(' · '),
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: rarityColor(rarity)),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            AsyncView<Json?>(
-              value: price,
-              onRetry: () => ref.invalidate(priceProvider(itemId)),
-              builder: (p) => p == null
-                  ? Panel(child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)))
-                  : _PricePanel(p),
-            ),
-            const SizedBox(height: 12),
-            PriceHistoryPanel(itemId: itemId),
-            const SizedBox(height: 12),
-            _OrderBook(itemId: itemId),
-            // what the item is: description, stats, how it binds, vendor
-            // value and the recipes it goes into
-            ItemFacts(itemId: itemId),
-            const SizedBox(height: 12),
-            Panel(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(s.t('you_own'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                  const SizedBox(height: 18),
+                  AsyncView<Json?>(
+                    value: price,
+                    onRetry: () => ref.invalidate(priceProvider(itemId)),
+                    builder: (p) => p == null
+                        ? Panel(child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)))
+                        : _PricePanel(p),
                   ),
-                  totals.when(
-                    data: (t) => Text(fmtInt(t[itemId] ?? 0),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
-                    loading: () =>
-                        const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-                    error: (_, __) => const Text('-'),
+                  const SizedBox(height: 12),
+                  PriceHistoryPanel(itemId: itemId),
+                  const SizedBox(height: 12),
+                  _OrderBook(itemId: itemId),
+                  // what the item is: description, stats, how it binds, vendor
+                  // value and the recipes it goes into
+                  ItemFacts(itemId: itemId),
+                  const SizedBox(height: 12),
+                  Panel(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(s.t('you_own'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
+                        ),
+                        totals.when(
+                          data: (t) => Text(fmtInt(t[itemId] ?? 0),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                          loading: () =>
+                              const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+                          error: (_, __) => const Text('-'),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton.icon(
+                          onPressed: () => ref.read(watchlistProvider.notifier).toggle(itemId),
+                          icon: Icon(watched ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                          label: Text(watched ? s.t('unwatch') : s.t('watch')),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: () => openWikiPage(context, ref, name),
+                          icon: const Icon(Icons.menu_book_outlined),
+                          label: Text(s.t('wiki')),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  Text(s.t('tp_note'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
                 ],
               ),
-            ),
-            const SizedBox(height: 18),
-            Row(
-              children: [
-                Expanded(
-                  child: FilledButton.icon(
-                    onPressed: () => ref.read(watchlistProvider.notifier).toggle(itemId),
-                    icon: Icon(watched ? Icons.visibility_off_outlined : Icons.visibility_outlined),
-                    label: Text(watched ? s.t('unwatch') : s.t('watch')),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => openWikiPage(context, ref, name),
-                    icon: const Icon(Icons.menu_book_outlined),
-                    label: Text(s.t('wiki')),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Text(s.t('tp_note'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
-          ],
-        ),
       ),
     );
   }

@@ -135,6 +135,167 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
     if (picked != null) _set(_f.copyWith(minLevel: picked.start.round(), maxLevel: picked.end.round()));
   }
 
+  Widget _site(S s, List<MarketEntry> list, List<int> ids, AsyncValue<Map<int, TpPrice>> prices, double progress) {
+    final counts = <String, int>{};
+    for (final e in list) {
+      counts[e.type] = (counts[e.type] ?? 0) + 1;
+    }
+    final types = counts.keys.toList()..sort((a, b) => counts[b]!.compareTo(counts[a]!));
+    final subCounts = <String, int>{};
+    for (final e in list) {
+      if (e.type == _f.type && e.subtype.isNotEmpty) subCounts[e.subtype] = (subCounts[e.subtype] ?? 0) + 1;
+    }
+    final subs = subCounts.keys.toList()..sort();
+    Widget label(String text) => Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 8),
+          child: Text(text.caps,
+              style:
+                  TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: AppColors.muted)),
+        );
+    final range = RangeValues(_f.minLevel.toDouble(), _f.maxLevel.toDouble());
+    final panel = Panel(
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+      child: ListView(
+        children: [
+          TextField(
+            controller: _ctrl,
+            onChanged: (v) {
+              _debounce?.cancel();
+              _debounce = Timer(const Duration(milliseconds: 250), () => _set(_f.copyWith(query: v)));
+            },
+            decoration: fieldDecoration(s.t('search_items'), prefixIcon: Icon(Icons.search, color: AppColors.gold)),
+          ),
+          label(s.t('item_type')),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              ChoiceChip(
+                  label: Text(s.t('all')),
+                  selected: _f.type == null,
+                  onSelected: (_) => _set(_f.copyWith(type: () => null, subtype: () => null))),
+              for (final t in types)
+                ChoiceChip(
+                  label: Text(_typeLabel(s, t)),
+                  selected: _f.type == t,
+                  onSelected: (_) => _set(_f.copyWith(type: () => t, subtype: () => null)),
+                ),
+            ],
+          ),
+          if (subs.length > 1) ...[
+            label(s.t('item_subtype')),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                ChoiceChip(
+                    label: Text(s.t('all')),
+                    selected: _f.subtype == null,
+                    onSelected: (_) => _set(_f.copyWith(subtype: () => null))),
+                for (final t in subs)
+                  ChoiceChip(
+                    label: Text(spacedType(t)),
+                    selected: _f.subtype == t,
+                    onSelected: (_) => _set(_f.copyWith(subtype: () => t)),
+                  ),
+              ],
+            ),
+          ],
+          label(s.t('level_range_n', {'a': _f.minLevel, 'b': _f.maxLevel})),
+          RangeSlider(
+            values: range,
+            min: 0,
+            max: 80,
+            divisions: 80,
+            activeColor: AppColors.gold,
+            onChanged: (v) => _set(_f.copyWith(minLevel: v.start.round(), maxLevel: v.end.round())),
+          ),
+          label(s.t('rarity')),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final r in _rarities)
+                FilterChip(
+                  avatar: CircleAvatar(radius: 5, backgroundColor: rarityColor(r)),
+                  label: Text(r),
+                  selected: _f.rarities.contains(r),
+                  onSelected: (_) {
+                    final next = {..._f.rarities};
+                    next.contains(r) ? next.remove(r) : next.add(r);
+                    _set(_f.copyWith(rarities: next));
+                  },
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            title: Text(s.t('only_listed'), style: const TextStyle(fontSize: 13.5)),
+            value: _f.minSupply > 0,
+            activeThumbColor: AppColors.gold,
+            onChanged: (v) => _set(_f.copyWith(minSupply: v ? 1 : 0)),
+          ),
+        ],
+      ),
+    );
+    final table = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(s.t('n_items', {'n': fmtInt(ids.length)}),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.textSoft)),
+            Text(s.t('sort_by'), style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+            for (final m in MarketSort.values)
+              ChoiceChip(
+                  label: Text(s.t('msort_${m.name}')),
+                  selected: _f.sort == m,
+                  onSelected: (_) => _set(_f.copyWith(sort: m))),
+            if (prices.isLoading)
+              Text(s.t('prices_loading', {'n': (progress * 100).round()}),
+                  style: TextStyle(fontSize: 12, color: AppColors.muted)),
+            if (prices.hasError)
+              TextButton(onPressed: () => ref.invalidate(allPricesProvider), child: Text(s.t('retry'))),
+          ],
+        ),
+        if (prices.isLoading) ...[
+          const SizedBox(height: 6),
+          LinearProgressIndicator(
+              value: progress, minHeight: 2, color: AppColors.gold, backgroundColor: AppColors.track),
+        ],
+        const SizedBox(height: 10),
+        _SiteHeadings(
+            first: s.t('item'),
+            columns: [s.t('tp_col_buy'), s.t('tp_col_sell'), s.t('supply'), s.t('demand'), s.t('tp_col_flip')]),
+        Expanded(
+          child: ids.isEmpty
+              ? EmptyNote(s.t('no_results'))
+              : ListView.builder(
+                  itemCount: ids.length,
+                  itemBuilder: (context, n) => _BrowseRow(
+                    id: ids[n],
+                    batchKey: pageKey(ids, n),
+                    price: prices.valueOrNull?[ids[n]],
+                    sort: _f.sort,
+                  ),
+                ),
+        ),
+      ],
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [SizedBox(width: 300, child: panel), const SizedBox(width: 18), Expanded(child: table)],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -161,6 +322,8 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
               ),
             );
         final levelOn = _f.minLevel > 0 || _f.maxLevel < 80;
+        // on a site the filters stand in a panel at the left and the items in a table beside it
+        if (SiteScope.of(context)) return _site(s, list, ids, prices, progress);
         final header = <Widget>[
           TextField(
             controller: _ctrl,

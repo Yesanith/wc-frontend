@@ -257,6 +257,8 @@ const deStrings = <String, String>{
   'after_fee': 'nach den 15 % Gebühr',
   'sales': 'Verkäufe',
   'sold_per_day': 'Verkauft pro Tag',
+  'rarity': 'Seltenheit',
+  'alert_none': 'Für diesen Gegenstand ist kein Alarm gesetzt.',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

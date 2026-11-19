@@ -254,6 +254,8 @@ const ptStrings = <String, String>{
   'after_fee': 'após a taxa de 15%',
   'sales': 'vendas',
   'sold_per_day': 'Vendido por dia',
+  'rarity': 'Raridade',
+  'alert_none': 'Nenhum alerta para este item.',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

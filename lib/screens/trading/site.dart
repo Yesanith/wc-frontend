@@ -716,3 +716,155 @@ String _words(int copper) {
     if (c.copper > 0 || copper == 0) '${c.copper}c',
   ].join(' ');
 }
+
+/// an item on the trading post, on a site: what it is, four boxes of its prices, the chart and the order book at the left, and what to do with it at the right
+class _ItemSite extends ConsumerWidget {
+  const _ItemSite({
+    required this.itemId,
+    required this.item,
+    required this.name,
+    required this.rarity,
+    required this.price,
+    required this.watched,
+  });
+
+  final int itemId;
+  final Json? item;
+  final String name;
+  final String? rarity;
+  final AsyncValue<Json?> price;
+  final bool watched;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final totals = ref.watch(accountTotalsProvider).valueOrNull;
+    final alert = ref.watch(priceAlertsProvider)[itemId];
+    final p = price.valueOrNull;
+    final buys = p?['buys'] is Map ? p!['buys'] as Map : const {};
+    final sells = p?['sells'] is Map ? p!['sells'] as Map : const {};
+    final buy = asInt(buys['unit_price']);
+    final sell = asInt(sells['unit_price']);
+    final profit = buy > 0 && sell > 0 ? afterTradingFees(sell - 1) - buy : 0;
+
+    final left = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        PriceHistoryPanel(itemId: itemId),
+        const SizedBox(height: 16),
+        _OrderBook(itemId: itemId),
+        ItemFacts(itemId: itemId),
+      ],
+    );
+    final right = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Panel(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _kicker(s.t('price_alert')),
+              const SizedBox(height: 10),
+              Text(
+                alert == null
+                    ? s.t('alert_none')
+                    : [
+                        if (alert.sellBelow != null) '${s.t('alert_sell_below')}: ${_words(alert.sellBelow!)}',
+                        if (alert.buyAbove != null) '${s.t('alert_buy_above')}: ${_words(alert.buyAbove!)}',
+                      ].join('\n'),
+                style: TextStyle(fontSize: 13.5, height: 1.5, color: AppColors.textSoft),
+              ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: () => showPriceAlertDialog(context, ref, itemId, name),
+                icon: Icon(alert == null ? Icons.notifications_none : Icons.notifications_active, size: 18),
+                label: Text(alert == null ? s.t('save_alert') : s.t('price_alert')),
+              ),
+              const SizedBox(height: 10),
+              Text(s.t('alert_push_hint'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.muted)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Panel(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilledButton.icon(
+                onPressed: () => ref.read(watchlistProvider.notifier).toggle(itemId),
+                icon: Icon(watched ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                label: Text(watched ? s.t('unwatch') : s.t('watch')),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () => openWikiPage(context, ref, name),
+                icon: const Icon(Icons.menu_book_outlined),
+                label: Text(s.t('wiki')),
+              ),
+              const SizedBox(height: 14),
+              Text(s.t('tp_note'), style: TextStyle(fontSize: 12, height: 1.5, color: AppColors.hint)),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      children: [
+        Row(
+          children: [
+            ItemIcon(url: item?['icon'] as String?, rarity: rarity, size: 72),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    [if (item?['type'] != null) _typeLabel(s, '${item?['type']}'), if (rarity != null) rarity!]
+                        .join(' · ')
+                        .caps,
+                    style: TextStyle(
+                        fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: rarityColor(rarity)),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(name, style: display(32)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (p == null && !price.isLoading)
+          Panel(child: Text(s.t('not_tradeable'), style: TextStyle(color: AppColors.muted)))
+        else
+          Row(
+            children: [
+              _statBox(s.t('lowest_sell'), CoinText(sell, size: 24),
+                  s.t('n_listed', {'n': fmtInt(asInt(sells['quantity']))})),
+              const SizedBox(width: 14),
+              _statBox(
+                  s.t('highest_buy'), CoinText(buy, size: 24), s.t('n_listed', {'n': fmtInt(asInt(buys['quantity']))})),
+              const SizedBox(width: 14),
+              _statBox(s.t('flip_profit'), CoinText(profit, size: 24), s.t('after_fee')),
+              const SizedBox(width: 14),
+              _statBox(s.t('you_own'), Text(fmtInt(totals?[itemId] ?? 0), style: display(28))),
+            ],
+          ),
+        const SizedBox(height: 16),
+        LayoutBuilder(builder: (context, box) {
+          if (box.maxWidth < 900) {
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch, children: [left, const SizedBox(height: 16), right]);
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [Expanded(child: left), const SizedBox(width: 16), SizedBox(width: 340, child: right)],
+          );
+        }),
+      ],
+    );
+  }
+}

@@ -233,6 +233,8 @@ const jaStrings = <String, String>{
   'after_fee': '手数料 15% を引いた後',
   'sales': '件の販売',
   'sold_per_day': '1 日あたりの販売',
+  'rarity': 'レアリティ',
+  'alert_none': 'このアイテムにはアラートがありません。',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

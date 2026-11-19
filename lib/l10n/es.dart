@@ -252,6 +252,8 @@ const esStrings = <String, String>{
   'after_fee': 'tras la comisión del 15 %',
   'sales': 'ventas',
   'sold_per_day': 'Vendido por día',
+  'rarity': 'Rareza',
+  'alert_none': 'No hay alerta para este objeto.',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

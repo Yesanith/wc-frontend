@@ -250,6 +250,8 @@ const trStrings = <String, String>{
   'after_fee': '%15 kesintiden sonra',
   'sales': 'satış',
   'sold_per_day': 'Günlük satış',
+  'rarity': 'Nadirlik',
+  'alert_none': 'Bu eşya için alarm kurulu değil.',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

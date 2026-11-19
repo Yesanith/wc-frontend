@@ -253,6 +253,8 @@ const enStrings = <String, String>{
   'after_fee': 'after the 15% fee',
   'sales': 'sales',
   'sold_per_day': 'Sold per day',
+  'rarity': 'Rarity',
+  'alert_none': 'No alert is set for this item.',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

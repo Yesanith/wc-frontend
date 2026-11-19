@@ -230,6 +230,8 @@ const zhStrings = <String, String>{
   'after_fee': '扣除 15% 手续费后',
   'sales': '笔销售',
   'sold_per_day': '每日销售额',
+  'rarity': '稀有度',
+  'alert_none': '此物品未设置提醒。',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

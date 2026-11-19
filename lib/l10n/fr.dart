@@ -254,6 +254,8 @@ const frStrings = <String, String>{
   'after_fee': 'après les 15 % de frais',
   'sales': 'ventes',
   'sold_per_day': 'Vendu par jour',
+  'rarity': 'Rareté',
+  'alert_none': 'Aucune alerte pour cet objet.',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
