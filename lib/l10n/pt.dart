@@ -260,6 +260,7 @@ const ptStrings = <String, String>{
   'recipe_not_learned_short': 'Não aprendida',
   'counting_held': 'contando o que você tem',
   'craft_time_label': 'Tempo de criação',
+  'goals_make': 'O que você quer criar',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

@@ -258,6 +258,7 @@ const ruStrings = <String, String>{
   'recipe_not_learned_short': 'Не изучен',
   'counting_held': 'с учётом имеющегося',
   'craft_time_label': 'Время создания',
+  'goals_make': 'Что вы хотите создать',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

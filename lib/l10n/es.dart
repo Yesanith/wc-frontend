@@ -258,6 +258,7 @@ const esStrings = <String, String>{
   'recipe_not_learned_short': 'No aprendida',
   'counting_held': 'contando lo que tienes',
   'craft_time_label': 'Tiempo de fabricación',
+  'goals_make': 'Lo que quieres fabricar',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

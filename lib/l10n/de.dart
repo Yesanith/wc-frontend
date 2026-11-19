@@ -263,6 +263,7 @@ const deStrings = <String, String>{
   'recipe_not_learned_short': 'Nicht gelernt',
   'counting_held': 'mit dem, was du hältst',
   'craft_time_label': 'Herstellzeit',
+  'goals_make': 'Was du herstellen willst',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

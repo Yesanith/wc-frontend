@@ -256,6 +256,7 @@ const trStrings = <String, String>{
   'recipe_not_learned_short': 'Öğrenilmedi',
   'counting_held': 'elindekiler dahil',
   'craft_time_label': 'Yapım süresi',
+  'goals_make': 'Yapmak istediklerin',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

@@ -259,6 +259,7 @@ const enStrings = <String, String>{
   'recipe_not_learned_short': 'Not learned',
   'counting_held': 'counting what you hold',
   'craft_time_label': 'Craft time',
+  'goals_make': 'What you want to make',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

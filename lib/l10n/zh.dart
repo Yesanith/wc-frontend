@@ -236,6 +236,7 @@ const zhStrings = <String, String>{
   'recipe_not_learned_short': '未学会',
   'counting_held': '含你持有的',
   'craft_time_label': '制作时间',
+  'goals_make': '你想制作的',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

@@ -239,6 +239,7 @@ const jaStrings = <String, String>{
   'recipe_not_learned_short': '未習得',
   'counting_held': '所持分を含む',
   'craft_time_label': '製作時間',
+  'goals_make': '作りたいもの',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

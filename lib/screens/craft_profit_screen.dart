@@ -10,6 +10,8 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
+import '../util.dart';
 import 'crafting_screen.dart';
 
 /// icons are fetched for this many rows at a time, as they scroll in
@@ -186,6 +188,38 @@ class _Page extends ConsumerWidget {
         const SizedBox(height: 12),
         if (rows.isEmpty)
           Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('craft_profit_empty')))
+        else if (SiteScope.of(context))
+          // on a site the recipes are a table: what making one costs, what it sells for, what it earns and what that is of the cost
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Panel(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    color: Color.alphaBlend(AppColors.track.withValues(alpha: 0.5), AppColors.surface),
+                    child: Row(
+                      children: [
+                        Expanded(child: _head(s.t('recipe'))),
+                        SizedBox(width: 130, child: _head(s.t('craft_cost'), right: true)),
+                        SizedBox(width: 130, child: _head(s.t('tp_col_sell'), right: true)),
+                        SizedBox(width: 130, child: _head(s.t('profit'), right: true)),
+                        SizedBox(width: 90, child: _head(s.t('sort_return'), right: true)),
+                      ],
+                    ),
+                  ),
+                  for (var i = 0; i < rows.length; i++)
+                    _ProfitTableRow(
+                      entry: rows[i],
+                      name: index.nameOf(rows[i].itemId) ?? s.t('item_n', {'id': rows[i].itemId}),
+                      chunkKey: _chunkKey(rows, i),
+                    ),
+                ],
+              ),
+            ),
+          )
         else
           for (var i = 0; i < rows.length; i++)
             Padding(
@@ -199,6 +233,12 @@ class _Page extends ConsumerWidget {
       ],
     );
   }
+
+  static Widget _head(String text, {bool right = false}) => Align(
+        alignment: right ? Alignment.centerRight : Alignment.centerLeft,
+        child: Text(text.caps,
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.muted)),
+      );
 
   /// the rows of one chunk share one request for icons
   static String _chunkKey(List<CraftProfit> rows, int i) {
@@ -263,6 +303,66 @@ class _ProfitRow extends ConsumerWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ProfitTableRow extends ConsumerWidget {
+  const _ProfitTableRow({required this.entry, required this.name, required this.chunkKey});
+
+  final CraftProfit entry;
+  final String name;
+  final String chunkKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final item = ref.watch(itemBatchProvider(chunkKey)).valueOrNull?[entry.itemId];
+    final percent = (entry.returnOnCost * 100).round();
+    final earns = entry.profit >= 0;
+    return InkWell(
+      onTap: () => openPanel(context, (_) => CraftingDetailScreen(itemId: entry.itemId)),
+      child: Container(
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.track))),
+        child: Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  ItemIcon(url: item?['icon'] as String?, rarity: item?['rarity'] as String?, size: 36),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                  ),
+                  const SizedBox(width: 10),
+                  for (final d in entry.disciplines.take(2)) ...[Pill(disciplineLabel(s, d)), const SizedBox(width: 4)],
+                ],
+              ),
+            ),
+            SizedBox(
+                width: 130, child: Align(alignment: Alignment.centerRight, child: CoinText(entry.cost, size: 13.5))),
+            SizedBox(
+                width: 130,
+                child: Align(alignment: Alignment.centerRight, child: CoinText(entry.cost + entry.profit, size: 13.5))),
+            SizedBox(
+                width: 130, child: Align(alignment: Alignment.centerRight, child: CoinText(entry.profit, size: 13.5))),
+            SizedBox(
+              width: 90,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text('${earns ? '+' : ''}$percent%',
+                    style: TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.w800, color: earns ? AppColors.green : AppColors.red)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

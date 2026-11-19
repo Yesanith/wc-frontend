@@ -9,6 +9,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/responsive.dart';
 import 'crafting_screen.dart';
 
 /// the things the player wants made, with one list of everything they take: what is already in the
@@ -47,34 +48,99 @@ class GoalsScreen extends ConsumerWidget {
       ),
       body: goals.isEmpty
           ? Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('goals_empty')))
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              children: [
-                Panel(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
-                    children: [for (final g in goals) _GoalRow(goal: g)],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                if (trees.isLoading && list.isEmpty)
-                  const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator()))
-                else if (trees.hasError)
-                  ErrorBox(error: trees.error, onRetry: () => ref.invalidate(goalTreesProvider))
-                else ...[
-                  _TotalsPanel(list: list),
-                  const SizedBox(height: 22),
-                  SectionHeader(title: s.t('goals_shopping'), trailing: '${list.rows.length}'),
-                  const SizedBox(height: 10),
-                  Panel(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    child: Column(
-                      children: [for (final r in list.rows) MaterialRow(itemId: r.itemId, need: r.need, have: r.have)],
+          : SiteScope.of(context)
+              // on a site the goals and the shopping list stand at the left, what it all costs in a column at the right
+              ? ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  children: [
+                    LayoutBuilder(builder: (context, box) {
+                      final left = Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Panel(
+                            padding: const EdgeInsets.fromLTRB(22, 16, 22, 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(s.t('goals_make'), style: display(18)),
+                                const SizedBox(height: 4),
+                                for (final g in goals) _GoalRow(goal: g),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          if (!trees.isLoading || list.rows.isNotEmpty)
+                            Panel(
+                              padding: const EdgeInsets.fromLTRB(22, 16, 22, 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(child: Text(s.t('goals_shopping'), style: display(18))),
+                                      Text('${list.rows.length}',
+                                          style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  for (final r in list.rows) MaterialRow(itemId: r.itemId, need: r.need, have: r.have),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                      final right = trees.isLoading && list.isEmpty
+                          ? const Padding(
+                              padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator()))
+                          : trees.hasError
+                              ? ErrorBox(error: trees.error, onRetry: () => ref.invalidate(goalTreesProvider))
+                              : _TotalsPanel(list: list);
+                      if (box.maxWidth < 900) {
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [right, const SizedBox(height: 16), left]);
+                      }
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: left),
+                          const SizedBox(width: 18),
+                          SizedBox(width: 420, child: right)
+                        ],
+                      );
+                    }),
+                  ],
+                )
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  children: [
+                    Panel(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      child: Column(
+                        children: [for (final g in goals) _GoalRow(goal: g)],
+                      ),
                     ),
-                  ),
-                ],
-              ],
-            ),
+                    const SizedBox(height: 16),
+                    if (trees.isLoading && list.isEmpty)
+                      const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator()))
+                    else if (trees.hasError)
+                      ErrorBox(error: trees.error, onRetry: () => ref.invalidate(goalTreesProvider))
+                    else ...[
+                      _TotalsPanel(list: list),
+                      const SizedBox(height: 22),
+                      SectionHeader(title: s.t('goals_shopping'), trailing: '${list.rows.length}'),
+                      const SizedBox(height: 10),
+                      Panel(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                        child: Column(
+                          children: [
+                            for (final r in list.rows) MaterialRow(itemId: r.itemId, need: r.need, have: r.have)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
     );
   }
 

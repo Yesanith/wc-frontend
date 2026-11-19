@@ -71,7 +71,14 @@ class _ItemPage extends ConsumerWidget {
     final name = ref.watch(itemProvider(itemId)).valueOrNull?['name'] as String?;
     return Scaffold(
       appBar: AppBar(title: Text(name ?? '')),
-      body: ItemDetails(itemId: itemId, instance: instance, binding: binding, boundTo: boundTo),
+      // a page of text and small figures keeps to a width it can be read in, in the middle of a wide window
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: ItemDetails(itemId: itemId, instance: instance, binding: binding, boundTo: boundTo),
+        ),
+      ),
     );
   }
 }
