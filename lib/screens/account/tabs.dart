@@ -120,6 +120,9 @@ class _WalletTab extends ConsumerWidget {
   }
 }
 
+/// the tab of the bank that is looked at on a site: null is all of them
+final _bankTabProvider = StateProvider<int?>((ref) => null);
+
 class _BankTab extends ConsumerWidget {
   const _BankTab();
 
@@ -194,14 +197,12 @@ class _BankTab extends ConsumerWidget {
           );
         }
 
-        return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          children: [
-            const _StorageSearch(kind: 'bank'),
-            const SizedBox(height: 12),
-            if (slots.any((x) => x?.binding != null)) ...[
-              Row(
-                children: [
+        final chosen = ref.watch(_bankTabProvider);
+        final one = site && chosen != null && chosen < (slots.length / perTab).ceil() ? chosen : null;
+
+        Widget legend() => Row(
+              children: [
+                if (slots.any((x) => x?.binding != null)) ...[
                   Icon(Icons.lock, size: 13, color: AppColors.muted),
                   const SizedBox(width: 4),
                   Text(s.t('bound_soul'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
@@ -210,27 +211,107 @@ class _BankTab extends ConsumerWidget {
                   const SizedBox(width: 4),
                   Text(s.t('bound_account'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                 ],
-              ),
-              const SizedBox(height: 8),
+              ],
+            );
+        final count = Text(
+            query.isEmpty
+                ? s.t('slots_used', {'a': used, 'b': slots.length})
+                : found == 0
+                    ? s.t('no_results')
+                    : s.t('n_found', {'n': found}),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold));
+
+        if (!site) {
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            children: [
+              const _StorageSearch(kind: 'bank'),
+              const SizedBox(height: 12),
+              if (slots.any((x) => x?.binding != null)) ...[legend(), const SizedBox(height: 8)],
+              count,
+              const SizedBox(height: 12),
+              for (final t in tabs) Padding(padding: const EdgeInsets.only(bottom: 16), child: tab(t)),
             ],
-            Text(
-                query.isEmpty
-                    ? s.t('slots_used', {'a': used, 'b': slots.length})
-                    : found == 0
-                        ? s.t('no_results')
-                        : s.t('n_found', {'n': found}),
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: AppColors.gold)),
-            const SizedBox(height: 12),
-            if (site)
-              Wrap(
+          );
+        }
+
+        // a site has the tabs down the side, as the game has them, and the slots of the one that is chosen, or of all, beside them
+        Widget tabButton(String label, String fill, bool selected, VoidCallback onTap) => InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: onTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                margin: const EdgeInsets.only(bottom: 4),
+                decoration: BoxDecoration(
+                  color: selected ? AppColors.text : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(label,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: selected ? AppColors.bg : AppColors.textSoft)),
+                    ),
+                    Text(fill,
+                        style: TextStyle(
+                            fontSize: 12, color: selected ? AppColors.bg.withValues(alpha: 0.75) : AppColors.muted)),
+                  ],
+                ),
+              ),
+            );
+        final tabCount = (slots.length / perTab).ceil();
+        final side = Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            tabButton(s.t('all'), '$used/${slots.length}', one == null,
+                () => ref.read(_bankTabProvider.notifier).state = null),
+            for (var t = 0; t < tabCount; t++)
+              tabButton(
+                s.t('bank_tab_n', {'n': t + 1}),
+                '${slots.skip(t * perTab).take(perTab).where((x) => x != null).length}/${slots.skip(t * perTab).take(perTab).length}',
+                one == t,
+                () => ref.read(_bankTabProvider.notifier).state = t,
+              ),
+          ],
+        );
+        Widget bigSlot(int i) => SizedBox.square(dimension: 56, child: slotOf(slots[i]));
+        final body = one != null
+            ? Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [for (var i = one * perTab; i < (one + 1) * perTab && i < slots.length; i++) bigSlot(i)],
+              )
+            : Wrap(
                 spacing: 32,
                 runSpacing: 20,
                 children: [for (final t in tabs) SizedBox(width: 10 * 46 + 9 * 5, child: tab(t))],
-              )
-            else
-              for (final t in tabs) Padding(padding: const EdgeInsets.only(bottom: 16), child: tab(t)),
-          ],
-        );
+              );
+        return LayoutBuilder(builder: (context, box) {
+          final narrow = box.maxWidth < 900;
+          final main = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _StorageSearch(kind: 'bank'),
+              const SizedBox(height: 12),
+              Row(children: [count, const Spacer(), legend()]),
+              const SizedBox(height: 14),
+              body,
+            ],
+          );
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            children: [
+              if (narrow) ...[side, const SizedBox(height: 16), main] else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [SizedBox(width: 220, child: side), const SizedBox(width: 24), Expanded(child: main)],
+                ),
+            ],
+          );
+        });
       },
     );
   }
