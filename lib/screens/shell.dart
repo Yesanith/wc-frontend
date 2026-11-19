@@ -714,9 +714,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                                   ? double.infinity
                                   // the week of the guilds' events has seven days to fit, which want more than the page of a site
                                   : site && sec == AppSection.guildEvents
-                                      ? sitePageWidth * 1.5
+                                      ? sitePageWidthFor(MediaQuery.sizeOf(context).width) * 1.15
                                       : site && sec != AppSection.bosses
-                                          ? sitePageWidth
+                                          ? sitePageWidthFor(MediaQuery.sizeOf(context).width)
                                           : _readingSections.contains(sec)
                                               ? readingMaxWidth
                                               : contentMaxWidth,
