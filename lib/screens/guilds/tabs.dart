@@ -22,6 +22,7 @@ class _TreasuryTab extends ConsumerWidget {
             child: EmptyNote(s.t('nothing_here')),
           );
         }
+        if (SiteScope.of(context)) return _TreasurySite(rows: rows);
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: rows.length,
@@ -89,6 +90,7 @@ class _StashTab extends ConsumerWidget {
             child: EmptyNote(s.t('nothing_here')),
           );
         }
+        if (SiteScope.of(context)) return _StashSite(tabs: tabs);
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
@@ -155,6 +157,7 @@ class _LogTab extends ConsumerWidget {
             child: EmptyNote(s.t('nothing_here')),
           );
         }
+        if (SiteScope.of(context)) return _LogSite(entries: entries);
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           itemCount: entries.length,
@@ -225,6 +228,7 @@ class _MembersTab extends ConsumerWidget {
         for (final m in members) {
           byRank['${m['rank']}'] = (byRank['${m['rank']}'] ?? 0) + 1;
         }
+        if (SiteScope.of(context)) return _MembersSite(members: members, ranks: ranks, teams: teams);
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
@@ -310,6 +314,7 @@ class _UpgradesTab extends ConsumerWidget {
         for (final u in built) {
           byType.putIfAbsent(u.type, () => []).add(u);
         }
+        if (SiteScope.of(context)) return _UpgradesSite(built: built, storage: storage);
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
