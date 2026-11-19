@@ -183,9 +183,12 @@ class _RailItem extends StatelessWidget {
                   const SizedBox(height: 4),
                   SizedBox(
                     width: SiteRail.width - 14,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: color)),
+                    // the item is named by the Semantics above: the same name again from the text would read twice
+                    child: ExcludeSemantics(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: color)),
+                      ),
                     ),
                   ),
                 ],

@@ -503,23 +503,28 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           busy: busy,
           progress: progress,
         ),
+        // the page is a boundary of its own for what a screen reader reads: something in it that covers what was painted before it, the
+        // rail, would otherwise take the rail out of the tree the browser reads the app by
         Expanded(
-          child: () {
-            // the strip with the search and the account
-            final strip = SiteTopStrip(
-              // the strip is at the right of the page, so a search of a window's width is there too
-              search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
-              account: accountName,
-              accountBadge: communityReady
-                  ? AccountBadge(compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
-                  : null,
-            );
-            // the home page is the map of the game, which goes all the way up: the strip lies over it
-            if (section == AppSection.home) {
-              return Stack(children: [content, Positioned(top: 0, left: 0, right: 0, child: strip)]);
-            }
-            return Column(children: [strip, Expanded(child: content)]);
-          }(),
+          child: Semantics(
+              container: true,
+              explicitChildNodes: true,
+              child: () {
+                // the strip with the search and the account
+                final strip = SiteTopStrip(
+                  // the strip is at the right of the page, so a search of a window's width is there too
+                  search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
+                  account: accountName,
+                  accountBadge: communityReady
+                      ? AccountBadge(compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
+                      : null,
+                );
+                // the home page is the map of the game, which goes all the way up: the strip lies over it
+                if (section == AppSection.home) {
+                  return Stack(children: [content, Positioned(top: 0, left: 0, right: 0, child: strip)]);
+                }
+                return Column(children: [strip, Expanded(child: content)]);
+              }()),
         ),
       ],
     );
