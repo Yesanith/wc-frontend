@@ -223,6 +223,8 @@ const enStrings = <String, String>{
   'guild_resonance': 'Resonance',
   'guild_influence': 'Influence',
   'n_going': '{n} going',
+  'show_more': 'Show more',
+  'show_less': 'Show less',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

@@ -222,6 +222,8 @@ const ruStrings = <String, String>{
   'guild_resonance': 'Резонанс',
   'guild_influence': 'Влияние',
   'n_going': 'идут: {n}',
+  'show_more': 'Показать больше',
+  'show_less': 'Показать меньше',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

@@ -24,17 +24,17 @@ class _GuildsSiteState extends ConsumerState<_GuildsSite> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                for (var i = 0; i < ids.length; i++) ...[
-                  if (i > 0) const SizedBox(width: 14),
-                  Expanded(child: _GuildSwitch(id: ids[i], on: i == index, onTap: () => setState(() => _selected = i))),
-                ],
-                // a few guilds fill the row, more than three are for the one who has them to scroll to
-                if (ids.length < 3) Spacer(flex: 3 - ids.length),
-              ],
+          // the guilds side by side, each as wide as its name needs, and sideways to scroll when there are more than fit
+          SizedBox(
+            height: 66,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemCount: ids.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 14),
+              itemBuilder: (context, i) => SizedBox(
+                  width: 280,
+                  child: _GuildSwitch(id: ids[i], on: i == index, onTap: () => setState(() => _selected = i))),
             ),
           ),
           const SizedBox(height: 4),
@@ -188,7 +188,7 @@ class _OverviewTab extends ConsumerWidget {
               children: [
                 Kicker(s.t('guild_motd').caps),
                 const SizedBox(height: 8),
-                Text(motd, style: const TextStyle(fontSize: 15, height: 1.55)),
+                _Expandable(text: motd),
               ],
             ),
           ),
@@ -328,6 +328,41 @@ class _OverviewTab extends ConsumerWidget {
             ],
           );
         }),
+      ],
+    );
+  }
+}
+
+/// a long text cut to a few lines, with a line to read all of it
+class _Expandable extends ConsumerStatefulWidget {
+  const _Expandable({required this.text});
+
+  final String text;
+
+  @override
+  ConsumerState<_Expandable> createState() => _ExpandableState();
+}
+
+class _ExpandableState extends ConsumerState<_Expandable> {
+  var _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    // a long message of the day has its lines counted, not its words
+    final long = '\n'.allMatches(widget.text).length >= 6 || widget.text.length > 420;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(widget.text,
+            maxLines: _open || !long ? null : 6,
+            overflow: _open || !long ? TextOverflow.clip : TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 15, height: 1.55)),
+        if (long)
+          TextButton(
+            onPressed: () => setState(() => _open = !_open),
+            child: Text(s.t(_open ? 'show_less' : 'show_more')),
+          ),
       ],
     );
   }

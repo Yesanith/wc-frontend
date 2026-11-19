@@ -224,6 +224,8 @@ const frStrings = <String, String>{
   'guild_resonance': 'Résonance',
   'guild_influence': 'Influence',
   'n_going': '{n} participent',
+  'show_more': 'Voir plus',
+  'show_less': 'Voir moins',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

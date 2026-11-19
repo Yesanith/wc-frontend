@@ -200,6 +200,8 @@ const zhStrings = <String, String>{
   'guild_resonance': '共鸣',
   'guild_influence': '影响力',
   'n_going': '{n} 人参加',
+  'show_more': '显示更多',
+  'show_less': '收起',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

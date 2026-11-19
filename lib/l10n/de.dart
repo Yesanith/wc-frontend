@@ -227,6 +227,8 @@ const deStrings = <String, String>{
   'guild_resonance': 'Resonanz',
   'guild_influence': 'Einfluss',
   'n_going': '{n} dabei',
+  'show_more': 'Mehr anzeigen',
+  'show_less': 'Weniger anzeigen',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

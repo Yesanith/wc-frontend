@@ -220,6 +220,8 @@ const trStrings = <String, String>{
   'guild_resonance': 'Rezonans',
   'guild_influence': 'Etki',
   'n_going': '{n} katılıyor',
+  'show_more': 'Devamını göster',
+  'show_less': 'Daha az göster',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

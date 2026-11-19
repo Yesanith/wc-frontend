@@ -203,6 +203,8 @@ const jaStrings = <String, String>{
   'guild_resonance': '共鳴',
   'guild_influence': '影響力',
   'n_going': '{n} 人参加',
+  'show_more': 'もっと見る',
+  'show_less': '閉じる',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

@@ -222,6 +222,8 @@ const esStrings = <String, String>{
   'guild_resonance': 'Resonancia',
   'guild_influence': 'Influencia',
   'n_going': '{n} van',
+  'show_more': 'Ver más',
+  'show_less': 'Ver menos',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

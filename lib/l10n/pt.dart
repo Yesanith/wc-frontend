@@ -224,6 +224,8 @@ const ptStrings = <String, String>{
   'guild_resonance': 'Ressonância',
   'guild_influence': 'Influência',
   'n_going': '{n} vão',
+  'show_more': 'Ver mais',
+  'show_less': 'Ver menos',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
