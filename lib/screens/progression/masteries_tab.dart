@@ -9,6 +9,24 @@ class _MasteriesTab extends ConsumerWidget {
     final rows = ref.watch(masteriesProvider);
     final points = ref.watch(masteryPointsProvider).valueOrNull ?? const <Json>[];
 
+    // on a site the regions stand side by side, each track as a path of its levels
+    if (SiteScope.of(context)) {
+      return ListView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        children: [
+          AsyncView<List<MasteryRow>>(
+            permission: 'progression',
+            value: rows,
+            onRetry: () => ref.invalidate(masteriesProvider),
+            builder: (list) {
+              if (list.isEmpty) return Panel(child: EmptyNote(s.t('nothing_here'), center: false));
+              return _MasteriesSite(rows: list, points: points);
+            },
+          ),
+        ],
+      );
+    }
+
     return RefreshIndicator(
       color: AppColors.gold,
       onRefresh: () => refreshProviders(ref, [masteriesProvider, masteryPointsProvider]),
@@ -170,5 +188,144 @@ class _MasteryLevelRow extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// the mastery regions as columns, every track a row of numbered nodes, and below them the track to learn next
+class _MasteriesSite extends ConsumerWidget {
+  const _MasteriesSite({required this.rows, required this.points});
+
+  final List<MasteryRow> rows;
+  final List<Json> points;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final regions = _regionsOf(rows);
+    final unspent = points.fold<int>(0, (n, p) => n + (asInt(p['earned']) - asInt(p['spent'])));
+    MasteryRow? next;
+    for (final m in rows) {
+      if (m.started && m.level < m.total) {
+        next = m;
+        break;
+      }
+    }
+    Widget node(int n, {required bool done, required bool isNext}) => Container(
+          width: 24,
+          height: 24,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: done ? AppColors.green : null,
+            border: Border.all(color: done ? AppColors.green : (isNext ? AppColors.gold : AppColors.track), width: 2),
+          ),
+          child: Text('$n',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: done ? Colors.white : (isNext ? AppColors.gold : AppColors.muted))),
+        );
+
+    return LayoutBuilder(builder: (context, box) {
+      final cols = box.maxWidth >= 1100 ? 4 : (box.maxWidth >= 800 ? 3 : (box.maxWidth >= 520 ? 2 : 1));
+      final width = (box.maxWidth - (cols - 1) * 16) / cols;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            crossAxisAlignment: WrapCrossAlignment.start,
+            children: [
+              for (final region in regions)
+                SizedBox(
+                  width: width,
+                  child: Panel(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(child: Text(region, style: display(17, color: AppColors.gold))),
+                            Text(
+                              '${rows.where((m) => m.region == region).fold<int>(0, (n, m) => n + m.level)}'
+                              ' / ${rows.where((m) => m.region == region).fold<int>(0, (n, m) => n + m.total)}',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted),
+                            ),
+                          ],
+                        ),
+                        for (final m in rows.where((m) => m.region == region))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(m.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w700,
+                                        color: m.started ? AppColors.text : AppColors.muted)),
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    for (var i = 0; i < m.total; i++) ...[
+                                      if (i > 0)
+                                        Expanded(
+                                          child: Container(
+                                            height: 2,
+                                            color: i <= m.level - 1 ? AppColors.green : AppColors.track,
+                                          ),
+                                        ),
+                                      Tooltip(
+                                        message: '${m.levels[i]['name'] ?? ''}',
+                                        child: node(i + 1, done: i < m.level, isNext: i == m.level && m.started),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          if (next != null) ...[
+            const SizedBox(height: 18),
+            Panel(
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Kicker(s.t('mastery_next').caps),
+                      const SizedBox(height: 2),
+                      Text('${next.name}, ${s.t('mastery_rank_n', {'n': next.level + 1})}', style: display(22)),
+                    ],
+                  ),
+                  const SizedBox(width: 30),
+                  Expanded(
+                    child: Text(
+                      [
+                        if (asInt(next.levels[next.level]['point_cost']) > 0)
+                          s.t('mastery_cost_n', {'n': asInt(next.levels[next.level]['point_cost'])}),
+                        s.t('mastery_unspent_n', {'n': unspent}),
+                      ].join(' · '),
+                      style: TextStyle(fontSize: 14, color: AppColors.muted),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      );
+    });
   }
 }

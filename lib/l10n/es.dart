@@ -202,6 +202,10 @@ const esStrings = <String, String>{
   'builds_slots_used': '{n} ranuras usadas',
   'builds_stored': 'Guardadas',
   'builds_on_characters': 'En personajes',
+  'mastery_next': 'Siguiente',
+  'mastery_rank_n': 'rango {n}',
+  'mastery_cost_n': 'Cuesta {n} puntos de maestría',
+  'mastery_unspent_n': '{n} sin gastar',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

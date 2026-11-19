@@ -102,84 +102,90 @@ class _PvpTab extends ConsumerWidget {
               ref.watch(pvpRanksProvider).valueOrNull ?? const [],
               asInt(data['pvp_rank']),
             );
-            return SplitColumns(
+            final site = SiteScope.of(context);
+            final losses = asInt(aggregate['losses']);
+            final wins = asInt(aggregate['wins']);
+            final body = SplitColumns(
               breakpoint: 900,
               primaryFlex: 1,
               secondaryFlex: 1,
               spacing: 20,
               primary: [
-                Panel(
-                  child: Column(
-                    children: [
-                      if (tier != null) ...[
-                        Row(
-                          children: [
-                            ItemIcon(url: tier.icon, rarity: 'Exotic', size: 44),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(tier.name, style: display(18)),
-                                  Text(s.t('rank_n', {'n': asInt(data['pvp_rank'])}),
-                                      style: TextStyle(fontSize: 12, color: AppColors.muted)),
-                                ],
+                if (!site)
+                  Panel(
+                    child: Column(
+                      children: [
+                        if (tier != null) ...[
+                          Row(
+                            children: [
+                              ItemIcon(url: tier.icon, rarity: 'Exotic', size: 44),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(tier.name, style: display(18)),
+                                    Text(s.t('rank_n', {'n': asInt(data['pvp_rank'])}),
+                                        style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                        Wrap(
+                          spacing: 28,
+                          runSpacing: 14,
+                          children: [
+                            for (final t in [
+                              StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}'),
+                              StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
+                              StatTile(label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points']))),
+                              if (asInt(data['pvp_rank_rollovers']) > 0)
+                                StatTile(label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers']))),
+                              StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins']))),
+                              StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
+                            ])
+                              SizedBox(width: SiteScope.of(context) ? 150 : 140, child: t),
                           ],
                         ),
-                        const SizedBox(height: 16),
                       ],
-                      Wrap(
-                        spacing: 28,
-                        runSpacing: 14,
-                        children: [
-                          for (final t in [
-                            StatTile(label: s.t('pvp_rank'), value: '${asInt(data['pvp_rank'])}'),
-                            StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
-                            StatTile(label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points']))),
-                            if (asInt(data['pvp_rank_rollovers']) > 0)
-                              StatTile(label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers']))),
-                            StatTile(label: s.t('wins'), value: fmtInt(asInt(aggregate['wins']))),
-                            StatTile(label: s.t('losses'), value: fmtInt(asInt(aggregate['losses']))),
-                          ])
-                            SizedBox(width: SiteScope.of(context) ? 150 : 140, child: t),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
                 const SizedBox(height: 12),
                 _Ladders(data, ratio: ratio),
                 const _SeasonStanding(),
               ],
               secondary: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _PvpLink(
-                        icon: Icons.history,
-                        label: s.t('match_history'),
-                        page: () => const PvpMatchesScreen(),
+                if (!site) ...[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _PvpLink(
+                          icon: Icons.history,
+                          label: s.t('match_history'),
+                          page: () => const PvpMatchesScreen(),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _PvpLink(
-                        icon: Icons.shield_moon_outlined,
-                        label: s.t('amulets'),
-                        page: () => const PvpAmuletsScreen(),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _PvpLink(
+                          icon: Icons.shield_moon_outlined,
+                          label: s.t('amulets'),
+                          page: () => const PvpAmuletsScreen(),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _PvpLink(
-                  icon: Icons.leaderboard_outlined,
-                  label: s.t('leaderboard'),
-                  page: () => const PvpLadderScreen(),
-                ),
-                const SizedBox(height: 18),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  _PvpLink(
+                    icon: Icons.leaderboard_outlined,
+                    label: s.t('leaderboard'),
+                    page: () => const PvpLadderScreen(),
+                  ),
+                  const SizedBox(height: 18),
+                ],
                 SectionHeader(title: s.t('per_profession')),
                 const SizedBox(height: 10),
                 Panel(
@@ -204,6 +210,20 @@ class _PvpTab extends ConsumerWidget {
                                 child: Text(titleCase(entry.key),
                                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
+                              if (site && entry.value is Map)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 14),
+                                  child: SizedBox(
+                                    width: 140,
+                                    child: Bar(
+                                      value: () {
+                                        final w = asInt((entry.value as Map)['wins']);
+                                        final l = asInt((entry.value as Map)['losses']);
+                                        return w + l == 0 ? 0.0 : w / (w + l);
+                                      }(),
+                                    ),
+                                  ),
+                                ),
                               if (entry.value is Map)
                                 Padding(
                                   padding: const EdgeInsets.only(right: 12),
@@ -225,6 +245,60 @@ class _PvpTab extends ConsumerWidget {
                     ],
                   ),
                 ),
+              ],
+            );
+            if (!site) return body;
+            Widget pill(IconData icon, String label, Widget Function() page) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: OutlinedButton.icon(
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page())),
+                    icon: Icon(icon, size: 16),
+                    label: Text(label),
+                  ),
+                );
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Panel(
+                  padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 22),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Kicker(s.t('pvp_rank').caps),
+                          Text('${asInt(data['pvp_rank'])}', style: display(56, color: AppColors.gold)),
+                          if (tier != null) Text(tier.name, style: display(18)),
+                        ],
+                      ),
+                      const SizedBox(width: 40),
+                      Expanded(
+                        child: Wrap(
+                          spacing: 40,
+                          runSpacing: 14,
+                          children: [
+                            StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
+                            StatTile(label: s.t('wins'), value: fmtInt(wins)),
+                            StatTile(label: s.t('losses'), value: fmtInt(losses)),
+                            StatTile(label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points']))),
+                            if (asInt(data['pvp_rank_rollovers']) > 0)
+                              StatTile(label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers']))),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          pill(Icons.history, s.t('match_history'), () => const PvpMatchesScreen()),
+                          pill(Icons.shield_moon_outlined, s.t('amulets'), () => const PvpAmuletsScreen()),
+                          pill(Icons.leaderboard_outlined, s.t('leaderboard'), () => const PvpLadderScreen()),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
+                body,
               ],
             );
           },

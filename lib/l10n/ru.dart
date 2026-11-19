@@ -202,6 +202,10 @@ const ruStrings = <String, String>{
   'builds_slots_used': 'Занято ячеек: {n}',
   'builds_stored': 'Сохранённые',
   'builds_on_characters': 'У персонажей',
+  'mastery_next': 'Следующее',
+  'mastery_rank_n': 'ранг {n}',
+  'mastery_cost_n': 'Стоит {n} очков мастерства',
+  'mastery_unspent_n': 'не потрачено: {n}',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

@@ -204,6 +204,10 @@ const ptStrings = <String, String>{
   'builds_slots_used': '{n} espaços usados',
   'builds_stored': 'Guardadas',
   'builds_on_characters': 'Nos personagens',
+  'mastery_next': 'A seguir',
+  'mastery_rank_n': 'nível {n}',
+  'mastery_cost_n': 'Custa {n} pontos de maestria',
+  'mastery_unspent_n': '{n} sem gastar',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

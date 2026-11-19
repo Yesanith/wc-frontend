@@ -200,6 +200,10 @@ const trStrings = <String, String>{
   'builds_slots_used': '{n} depolama yuvası kullanıldı',
   'builds_stored': 'Depolanan',
   'builds_on_characters': 'Karakterlerde',
+  'mastery_next': 'Sıradaki',
+  'mastery_rank_n': 'seviye {n}',
+  'mastery_cost_n': '{n} ustalık puanı',
+  'mastery_unspent_n': '{n} harcanmamış',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

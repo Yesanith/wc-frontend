@@ -203,6 +203,10 @@ const enStrings = <String, String>{
   'builds_slots_used': '{n} storage slots used',
   'builds_stored': 'Stored',
   'builds_on_characters': 'On characters',
+  'mastery_next': 'Next to learn',
+  'mastery_rank_n': 'rank {n}',
+  'mastery_cost_n': 'Costs {n} mastery points',
+  'mastery_unspent_n': '{n} unspent',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

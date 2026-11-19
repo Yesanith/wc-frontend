@@ -12,9 +12,12 @@ import '../widgets/pin_button.dart';
 /// one achievement: what it asks, how far the account is, the pieces of it that are a collection with which ones are still
 /// missing, its tiers and its rewards
 class AchievementDetailScreen extends ConsumerWidget {
-  const AchievementDetailScreen({super.key, required this.row});
+  const AchievementDetailScreen({super.key, required this.row, this.embedded = false});
 
   final AchievementRow row;
+
+  /// shown inside a pane of the site: the name leads the page and there is no bar of its own
+  final bool embedded;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,14 +32,26 @@ class AchievementDetailScreen extends ConsumerWidget {
     final hasBits = ((row.detail?['bits'] as List?) ?? const []).isNotEmpty;
 
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        title: Text(row.name),
-        actions: [if (!row.done) AchievementPinButton(id: row.id)],
-      ),
+      backgroundColor: embedded ? Colors.transparent : null,
+      appBar: embedded
+          ? null
+          : AppBar(
+              surfaceTintColor: Colors.transparent,
+              title: Text(row.name),
+              actions: [if (!row.done) AchievementPinButton(id: row.id)],
+            ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
         children: [
+          if (embedded) ...[
+            Row(
+              children: [
+                Expanded(child: Text(row.name, style: display(24))),
+                if (!row.done) AchievementPinButton(id: row.id),
+              ],
+            ),
+            const SizedBox(height: 14),
+          ],
           Row(
             children: [
               Icon(row.done ? Icons.check_circle : Icons.radio_button_unchecked,

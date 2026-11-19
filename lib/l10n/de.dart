@@ -207,6 +207,10 @@ const deStrings = <String, String>{
   'builds_slots_used': '{n} Speicherplätze belegt',
   'builds_stored': 'Gespeichert',
   'builds_on_characters': 'Auf Charakteren',
+  'mastery_next': 'Als Nächstes',
+  'mastery_rank_n': 'Rang {n}',
+  'mastery_cost_n': 'Kostet {n} Meisterschaftspunkte',
+  'mastery_unspent_n': '{n} unausgegeben',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

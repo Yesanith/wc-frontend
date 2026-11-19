@@ -204,6 +204,10 @@ const frStrings = <String, String>{
   'builds_slots_used': '{n} emplacements utilisés',
   'builds_stored': 'Enregistrés',
   'builds_on_characters': 'Sur les personnages',
+  'mastery_next': 'À apprendre',
+  'mastery_rank_n': 'rang {n}',
+  'mastery_cost_n': 'Coûte {n} points de maîtrise',
+  'mastery_unspent_n': '{n} non dépensés',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
