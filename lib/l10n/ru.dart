@@ -171,6 +171,8 @@ const ruStrings = <String, String>{
   'item_only': 'Только для: {r}',
   'wvw_claimed': 'Захвачено {t} назад',
   'latest_news': 'Последние новости',
+  'selected': 'Выбрано',
+  'event_next_runs': 'Ближайшие запуски',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

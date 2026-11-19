@@ -169,6 +169,8 @@ const trStrings = <String, String>{
   'item_only': 'Yalnızca: {r}',
   'wvw_claimed': '{t} önce sahiplenildi',
   'latest_news': 'Son haberler',
+  'selected': 'Seçili',
+  'event_next_runs': 'Sonraki seferler',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

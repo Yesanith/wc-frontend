@@ -228,6 +228,7 @@ class _Block extends ConsumerWidget {
     final o = occurrence;
     final dim = past || looted;
     final pinned = ref.watch(pinnedEventsProvider).contains(eventKey(o.map, o.event));
+    final selected = ref.watch(selectedEventProvider) == o;
     // a tap opens the event, where it can be pinned. the old tooltip only
     // showed the name, so nothing on the timeline could be pinned
     // the label of a narrow block is cut, so the whole name shows on hover; a tap still opens the event
@@ -237,15 +238,21 @@ class _Block extends ConsumerWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () => showEventSheet(context, ref, o),
+          // beside a panel the event is shown in it, otherwise in a sheet
+          onTap: () => eventPanelFits(context)
+              ? ref.read(selectedEventProvider.notifier).state = o
+              : showEventSheet(context, ref, o),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6),
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
               color: tint.withValues(alpha: dim ? 0.08 : (active ? 0.34 : 0.18)),
               borderRadius: BorderRadius.circular(8),
-              border:
-                  Border.all(color: tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)), width: active ? 1.5 : 1),
+              border: Border.all(
+                color: selected ? AppColors.gold : tint.withValues(alpha: active ? 1 : (dim ? 0.2 : 0.5)),
+                width: selected ? 2.5 : (active ? 1.5 : 1),
+              ),
+              boxShadow: selected ? [BoxShadow(color: AppColors.gold.withValues(alpha: 0.4), blurRadius: 10)] : null,
             ),
             // narrow blocks cut their label instead of overflowing
             child: ClipRect(

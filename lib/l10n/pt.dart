@@ -173,6 +173,8 @@ const ptStrings = <String, String>{
   'item_only': 'Somente para {r}',
   'wvw_claimed': 'Reivindicado há {t}',
   'latest_news': 'Últimas notícias',
+  'selected': 'Selecionado',
+  'event_next_runs': 'Próximas vezes',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

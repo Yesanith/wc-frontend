@@ -152,6 +152,8 @@ const jaStrings = <String, String>{
   'item_only': '対象: {r}',
   'wvw_claimed': '{t} 前に確保',
   'latest_news': '最新ニュース',
+  'selected': '選択中',
+  'event_next_runs': '次回',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

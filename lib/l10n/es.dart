@@ -171,6 +171,8 @@ const esStrings = <String, String>{
   'item_only': 'Solo para {r}',
   'wvw_claimed': 'Reclamado hace {t}',
   'latest_news': 'Últimas noticias',
+  'selected': 'Seleccionado',
+  'event_next_runs': 'Próximas veces',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

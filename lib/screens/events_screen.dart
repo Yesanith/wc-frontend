@@ -6,7 +6,9 @@ import '../data/waypoints.dart';
 import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
+import '../state/world_map.dart';
 import '../util.dart';
+import '../widgets/mini_map.dart';
 import '../widgets/clock.dart';
 import '../state/periodic.dart';
 import '../state/progression.dart';
@@ -19,6 +21,7 @@ import '../widgets/waypoint_link.dart';
 
 part 'events/timeline.dart';
 part 'events/sheet.dart';
+part 'events/panel.dart';
 
 String localClock(DateTime t) {
   final l = t.toLocal();
@@ -160,11 +163,27 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       ],
     );
 
-    final refreshable = RefreshIndicator(
+    final scrolling = RefreshIndicator(
       color: AppColors.gold,
       onRefresh: () => refreshProviders(ref, [doneTodayProvider('worldbosses')]),
       child: body,
     );
+    // a site with room has the event that is selected in a panel beside the timeline, which stays where it is as the lanes scroll
+    final refreshable = eventPanelFits(context) && !listView && maps.isNotEmpty
+        ? Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: scrolling),
+              SizedBox(
+                width: 364,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 20, 20),
+                  child: SingleChildScrollView(child: _EventPanel(maps: maps, kind: _kind, pins: pins)),
+                ),
+              ),
+            ],
+          )
+        : scrolling;
     if (widget.embedded) return refreshable;
     return Scaffold(
       appBar: AppBar(

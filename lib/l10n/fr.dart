@@ -173,6 +173,8 @@ const frStrings = <String, String>{
   'item_only': 'Réservé à {r}',
   'wvw_claimed': 'Revendiqué il y a {t}',
   'latest_news': 'Dernières actualités',
+  'selected': 'Sélectionné',
+  'event_next_runs': 'Prochains passages',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':
