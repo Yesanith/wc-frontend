@@ -32,6 +32,7 @@ part 'trading/gem_chart.dart';
 part 'trading/history_tab.dart';
 part 'trading/stats_tab.dart';
 part 'trading/browse_tab.dart';
+part 'trading/site.dart';
 
 class WatchRow extends ConsumerWidget {
   const WatchRow(this.w, {super.key});
@@ -150,14 +151,20 @@ class TradingHubScreen extends ConsumerWidget {
           AppTabBar(
               scrollable: true,
               labels: [s.t('overview'), s.t('tp_all_items'), s.t('orders'), s.t('history'), s.t('stats')]),
-          const Expanded(
+          Expanded(
             child: TabBarView(
               children: [
-                _OverviewTab(),
-                _BrowseTab(),
-                _TxTab(first: 'current/buys', second: 'current/sells', firstKey: 'buying', secondKey: 'selling'),
-                _TxTab(first: 'history/sells', second: 'history/buys', firstKey: 'sold', secondKey: 'bought'),
-                _StatsTab(),
+                SiteScope.of(context) ? const _OverviewSite() : const _OverviewTab(),
+                const _BrowseTab(),
+                SiteScope.of(context)
+                    ? const _OrdersSite()
+                    : const _TxTab(
+                        first: 'current/buys', second: 'current/sells', firstKey: 'buying', secondKey: 'selling'),
+                SiteScope.of(context)
+                    ? const _HistorySite()
+                    : const _TxTab(
+                        first: 'history/sells', second: 'history/buys', firstKey: 'sold', secondKey: 'bought'),
+                SiteScope.of(context) ? const _StatsSite() : const _StatsTab(),
               ],
             ),
           ),
