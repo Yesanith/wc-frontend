@@ -330,14 +330,20 @@ class _GalleryCard extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-            child: Text(race, style: TextStyle(fontSize: 13, color: AppColors.muted)),
+            child: Row(children: [
+              Expanded(child: Text(race, style: TextStyle(fontSize: 13, color: AppColors.muted))),
+              // the line is long in some languages: it has the rest of the row to itself
+              Flexible(
+                  flex: 2,
+                  child:
+                      Align(alignment: Alignment.centerRight, child: BirthdayLine(created: c['created'] as String?))),
+            ]),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
             child: Row(children: [
               stat(s.t('played'), fmtHours(c['age'], s.t('hours_short'))),
               stat(s.t('deaths'), fmtInt(asInt(c['deaths']))),
-              Expanded(child: Center(child: BirthdayLine(created: c['created'] as String?))),
             ]),
           ),
         ],
