@@ -107,6 +107,9 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
         _ => titleCase(type),
       };
 
+  /// the game marks some names with colour tags, which a page has no use for
+  String _clean(String name) => name.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+
   Widget _ringBox(S s, List<CollectionEntry> all) {
     final done = all.where((e) => e.unlocked).length;
     final ratio = all.isEmpty ? 0.0 : done / all.length;
@@ -147,33 +150,35 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
   }
 
   /// the search, the three filters and the count, over every layout of a site
-  Widget _siteToolbar(S s, List<CollectionEntry> list, {bool sortToggle = false}) => Row(
+  Widget _siteToolbar(S s, List<CollectionEntry> list, {bool sortToggle = false}) => Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           SizedBox(
-            width: 300,
+            width: 260,
             child: TextField(
               onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
               decoration: fieldDecoration(s.t('search'), prefixIcon: Icon(Icons.search, color: AppColors.muted)),
             ),
           ),
-          const SizedBox(width: 10),
-          for (var i = 0; i < 3; i++) ...[
+          for (var i = 0; i < 3; i++)
             ChoiceChip(
               label: Text(s.t(['all', 'unlocked', 'missing'][i])),
               selected: _filter == i,
               onSelected: (_) => setState(() => _filter = i),
             ),
-            const SizedBox(width: 8),
-          ],
           if (sortToggle)
             ChoiceChip(
               label: Text(s.t('missing_first')),
               selected: _missingFirst,
               onSelected: (v) => setState(() => _missingFirst = v),
             ),
-          const Spacer(),
-          Text('${fmtInt(list.where((e) => e.unlocked).length)} / ${fmtInt(list.length)}',
-              style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          Padding(
+            padding: const EdgeInsets.only(left: 6),
+            child: Text('${fmtInt(list.where((e) => e.unlocked).length)} / ${fmtInt(list.length)}',
+                style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+          ),
         ],
       );
 
@@ -246,7 +251,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                 child: ItemIcon(url: e.icon, rarity: e.unlocked ? (e.rarity ?? 'Exotic') : null, size: size),
               ),
               const SizedBox(height: 5),
-              Text(e.name.isEmpty ? '#${e.id}' : e.name,
+              Text(e.name.isEmpty ? '#${e.id}' : _clean(e.name),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -349,7 +354,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(e.name, style: display(22)),
+                    Text(_clean(e.name), style: display(22)),
                     const SizedBox(height: 3),
                     Text([if (e.subtype != null) e.subtype!, if (e.rarity != null) e.rarity!].join(' · '),
                         style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
@@ -445,7 +450,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                             size: 20, color: e.unlocked ? AppColors.green : AppColors.hint),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : e.name,
+                          child: Text(e.name.isEmpty ? s.t('unnamed_entry', {'id': e.id}) : _clean(e.name),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: 14, color: e.unlocked ? AppColors.text : AppColors.muted)),
