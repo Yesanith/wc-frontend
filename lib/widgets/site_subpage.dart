@@ -7,7 +7,7 @@ const sitePageWidth = 1200.0;
 
 /// the width a page keeps to on a window of this width (as the app lays it out, after its zoom): the width of the site on a laptop,
 /// and most of what the rail leaves on a larger window, so a page does not sit in the middle of a wide screen with room on both sides
-double sitePageWidthFor(double windowWidth) => ((windowWidth - 84) * 0.92).clamp(sitePageWidth, 2000.0).toDouble();
+double sitePageWidthFor(double windowWidth) => ((windowWidth - 84) * 0.92).clamp(sitePageWidth, 3000.0).toDouble();
 
 /// how a page opened from a section looks on the site: its bar is a heading on the page, not the dark bar of an app, and the page
 /// keeps to the width of the site
