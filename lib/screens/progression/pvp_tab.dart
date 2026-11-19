@@ -277,12 +277,18 @@ class _PvpTab extends ConsumerWidget {
                           spacing: 40,
                           runSpacing: 14,
                           children: [
-                            StatTile(label: s.t('win_rate'), value: ratio(aggregate)),
-                            StatTile(label: s.t('wins'), value: fmtInt(wins)),
-                            StatTile(label: s.t('losses'), value: fmtInt(losses)),
-                            StatTile(label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points']))),
+                            SizedBox(width: 120, child: StatTile(label: s.t('win_rate'), value: ratio(aggregate))),
+                            SizedBox(width: 120, child: StatTile(label: s.t('wins'), value: fmtInt(wins))),
+                            SizedBox(width: 120, child: StatTile(label: s.t('losses'), value: fmtInt(losses))),
+                            SizedBox(
+                                width: 120,
+                                child: StatTile(
+                                    label: s.t('pvp_rank_points'), value: fmtInt(asInt(data['pvp_rank_points'])))),
                             if (asInt(data['pvp_rank_rollovers']) > 0)
-                              StatTile(label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers']))),
+                              SizedBox(
+                                  width: 120,
+                                  child: StatTile(
+                                      label: s.t('pvp_rollovers'), value: fmtInt(asInt(data['pvp_rank_rollovers'])))),
                           ],
                         ),
                       ),
