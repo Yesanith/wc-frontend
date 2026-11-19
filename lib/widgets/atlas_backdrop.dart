@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/gestures.dart' show PointerScrollEvent;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -12,7 +11,7 @@ import '../theme.dart';
 import 'clock.dart';
 import 'common.dart';
 
-/// the home page's ground: the world map of the game, as it is, which can be dragged and zoomed, with the next events pinned where their
+/// the home page's ground: the world map of the game, as it is, which can be dragged, with the next events pinned where their
 /// waypoints are. a pin opens the wiki page of its event. it sits behind the page: what the page leaves free of its own is the map
 class AtlasBackdrop extends ConsumerStatefulWidget {
   const AtlasBackdrop({super.key});
@@ -34,18 +33,11 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
   /// how much closer than the width of the page the map is drawn to begin with
   static const _closer = 1.35;
 
-  /// the farthest in: the tiles of the third level are the last the service has at the scale of the continent
-  static const _zoomIn = 4.4;
-
   Size _size = Size.zero;
 
   /// how many screen pixels one pixel of the first level is, and where the map's top left corner is
   double _k = 1;
   Offset _origin = Offset.zero;
-
-  double _startK = 1;
-  Offset _startOrigin = Offset.zero;
-  Offset _startFocal = Offset.zero;
 
   double _minK(Size box) => math.max(box.width / _width, box.height / _height);
 
@@ -62,15 +54,6 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
         o.dy.clamp(math.min(0.0, box.height - _height * k), 0.0),
       );
 
-  void _zoomAt(Offset focal, double newK, Offset fromOrigin, double fromK, Size box) {
-    final k = newK.clamp(_minK(box), _minK(box) * _zoomIn);
-    final origin = focal - (focal - fromOrigin) * (k / fromK);
-    setState(() {
-      _k = k;
-      _origin = _clamp(origin, k, box);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final markers = ref.watch(worldMarkersProvider(defaultFloor)).valueOrNull ?? const <MapMarker>[];
@@ -79,39 +62,20 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
         final size = Size(box.maxWidth, box.maxHeight);
         if (size != _size) _reset(size);
         return ClipRect(
-          child: Listener(
-            onPointerSignal: (event) {
-              if (event is PointerScrollEvent) {
-                _zoomAt(event.localPosition, _k * math.exp(-event.scrollDelta.dy / 400), _origin, _k, size);
-              }
-            },
-            child: MouseRegion(
-              cursor: SystemMouseCursors.grab,
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onScaleStart: (d) {
-                  _startK = _k;
-                  _startOrigin = _origin;
-                  _startFocal = d.localFocalPoint;
-                },
-                onScaleUpdate: (d) {
-                  final k = (_startK * d.scale).clamp(_minK(size), _minK(size) * _zoomIn);
-                  // the point of the map under the fingers stays under them, which moves the map when they move
-                  final origin = d.localFocalPoint - (_startFocal - _startOrigin) * (k / _startK);
-                  setState(() {
-                    _k = k;
-                    _origin = _clamp(origin, k, size);
-                  });
-                },
-                child: Stack(
-                  children: [
-                    ..._tiles(size),
-                    ClockBuilder(
-                      step: ClockStep.minute,
-                      builder: (context, now) => Stack(children: _pins(now, markers, size)),
-                    ),
-                  ],
-                ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.grab,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              // the map is only moved, to see the pins: to look at it closely there is the map page
+              onPanUpdate: (d) => setState(() => _origin = _clamp(_origin + d.delta, _k, size)),
+              child: Stack(
+                children: [
+                  ..._tiles(size),
+                  ClockBuilder(
+                    step: ClockStep.minute,
+                    builder: (context, now) => Stack(children: _pins(now, markers, size)),
+                  ),
+                ],
               ),
             ),
           ),
