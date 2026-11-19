@@ -208,6 +208,11 @@ const enStrings = <String, String>{
   'mastery_cost_n': 'Costs {n} mastery points',
   'mastery_unspent_n': '{n} unspent',
   'categories': 'Categories',
+  'missing_first': 'Missing first',
+  'n_to_go': '{n} to go',
+  'of_n': 'of {n}',
+  'skins_missing_same': 'Skins of the same set you are missing:',
+  'n_more': '{n} more',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

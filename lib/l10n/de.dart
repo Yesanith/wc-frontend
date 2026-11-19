@@ -212,6 +212,11 @@ const deStrings = <String, String>{
   'mastery_cost_n': 'Kostet {n} Meisterschaftspunkte',
   'mastery_unspent_n': '{n} unausgegeben',
   'categories': 'Kategorien',
+  'missing_first': 'Fehlende zuerst',
+  'n_to_go': 'noch {n}',
+  'of_n': 'von {n}',
+  'skins_missing_same': 'Fehlende Skins desselben Sets:',
+  'n_more': '{n} weitere',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

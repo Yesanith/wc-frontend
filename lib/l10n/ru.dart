@@ -207,6 +207,11 @@ const ruStrings = <String, String>{
   'mastery_cost_n': 'Стоит {n} очков мастерства',
   'mastery_unspent_n': 'не потрачено: {n}',
   'categories': 'Категории',
+  'missing_first': 'Сначала недостающие',
+  'n_to_go': 'осталось {n}',
+  'of_n': 'из {n}',
+  'skins_missing_same': 'Недостающие скины этого набора:',
+  'n_more': 'ещё {n}',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

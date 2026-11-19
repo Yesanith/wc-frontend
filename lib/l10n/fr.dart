@@ -209,6 +209,11 @@ const frStrings = <String, String>{
   'mastery_cost_n': 'Coûte {n} points de maîtrise',
   'mastery_unspent_n': '{n} non dépensés',
   'categories': 'Catégories',
+  'missing_first': 'Manquants d’abord',
+  'n_to_go': '{n} restants',
+  'of_n': 'sur {n}',
+  'skins_missing_same': 'Skins du même set qui manquent :',
+  'n_more': '{n} de plus',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

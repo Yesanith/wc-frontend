@@ -207,6 +207,11 @@ const esStrings = <String, String>{
   'mastery_cost_n': 'Cuesta {n} puntos de maestría',
   'mastery_unspent_n': '{n} sin gastar',
   'categories': 'Categorías',
+  'missing_first': 'Faltantes primero',
+  'n_to_go': 'faltan {n}',
+  'of_n': 'de {n}',
+  'skins_missing_same': 'Skins del mismo conjunto que faltan:',
+  'n_more': '{n} más',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

@@ -209,6 +209,11 @@ const ptStrings = <String, String>{
   'mastery_cost_n': 'Custa {n} pontos de maestria',
   'mastery_unspent_n': '{n} sem gastar',
   'categories': 'Categorias',
+  'missing_first': 'Faltando primeiro',
+  'n_to_go': 'faltam {n}',
+  'of_n': 'de {n}',
+  'skins_missing_same': 'Skins do mesmo conjunto que faltam:',
+  'n_more': 'mais {n}',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

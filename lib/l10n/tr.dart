@@ -205,6 +205,11 @@ const trStrings = <String, String>{
   'mastery_cost_n': '{n} ustalık puanı',
   'mastery_unspent_n': '{n} harcanmamış',
   'categories': 'Kategoriler',
+  'missing_first': 'Eksikler önce',
+  'n_to_go': '{n} kaldı',
+  'of_n': '{n} içinden',
+  'skins_missing_same': 'Aynı setten eksik olan skinler:',
+  'n_more': '{n} tane daha',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
