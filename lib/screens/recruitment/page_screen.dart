@@ -188,94 +188,126 @@ class _PageBody extends ConsumerWidget {
               border: Border.all(color: color)),
           child: Text(text, style: TextStyle(fontSize: 13, color: color, height: 1.35)),
         );
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-      children: [
-        Row(
-          children: [
-            Icon(Icons.groups, size: 36, color: AppColors.gold),
-            const SizedBox(width: 12),
-            Expanded(child: Text(page.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 8,
-          children: [
-            Chip(
-              label: Text(page.recruiting ? s.t('rec_recruiting') : s.t('rec_closed')),
-              backgroundColor: AppColors.surface,
-              side: BorderSide(color: page.recruiting ? AppColors.gold : AppColors.line),
-              labelStyle: TextStyle(color: page.recruiting ? AppColors.gold : AppColors.muted, fontSize: 12),
-            ),
-          ],
-        ),
-        if (page.hidden)
-          note(s.t('rec_hidden_note') + (page.hiddenReason == null ? '' : '\n${page.hiddenReason}'), AppColors.ember)
-        else if (!page.published)
-          note(s.t('rec_draft_note'), AppColors.amber),
-        if (page.stale && page.published && !page.hidden) note(s.t('rec_stale'), AppColors.amber),
-        if (page.headline.isNotEmpty)
-          Padding(
-              padding: const EdgeInsets.only(top: 14),
-              child: Text(page.headline,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
-        if (page.description.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SelectableText(page.description,
-                style: TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
+    final header = <Widget>[
+      Row(
+        children: [
+          Icon(Icons.groups, size: 36, color: AppColors.gold),
+          const SizedBox(width: 12),
+          Expanded(child: Text(page.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
+        ],
+      ),
+      const SizedBox(height: 10),
+      Wrap(
+        spacing: 8,
+        children: [
+          Chip(
+            label: Text(page.recruiting ? s.t('rec_recruiting') : s.t('rec_closed')),
+            backgroundColor: AppColors.surface,
+            side: BorderSide(color: page.recruiting ? AppColors.gold : AppColors.line),
+            labelStyle: TextStyle(color: page.recruiting ? AppColors.gold : AppColors.muted, fontSize: 12),
           ),
-        if (page.lookingFor.isNotEmpty)
-          fact(
-              s.t('rec_page_looking_for'),
-              Wrap(
-                  spacing: 8, runSpacing: 4, children: [for (final t in page.lookingFor) _Tag(recruitTagLabel(s, t))])),
-        if (page.requirements.isNotEmpty)
-          fact(s.t('rec_page_requirements'), SelectableText(page.requirements, style: const TextStyle(height: 1.4))),
-        if (page.playTimes.isNotEmpty) fact(s.t('rec_page_play_times'), SelectableText(page.playTimes)),
-        if (page.languages.isNotEmpty)
-          fact(
-              s.t('rec_page_languages'),
-              Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: [for (final l in page.languages) _Tag(recruitLanguageLabel(l))])),
-        if (page.region != RecruitRegion.any) fact(s.t('rec_page_region'), Text(recruitRegionLabel(s, page.region))),
-        if (page.canBeReached)
-          fact(
-            s.t('rec_page_contact'),
-            Column(
+        ],
+      ),
+      if (page.hidden)
+        note(s.t('rec_hidden_note') + (page.hiddenReason == null ? '' : '\n${page.hiddenReason}'), AppColors.ember)
+      else if (!page.published)
+        note(s.t('rec_draft_note'), AppColors.amber),
+      if (page.stale && page.published && !page.hidden) note(s.t('rec_stale'), AppColors.amber),
+    ];
+    final left = <Widget>[
+      if (page.headline.isNotEmpty)
+        Padding(
+            padding: const EdgeInsets.only(top: 14),
+            child: Text(page.headline,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.text))),
+      if (page.description.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child:
+              SelectableText(page.description, style: TextStyle(fontSize: 14, height: 1.5, color: AppColors.textSoft)),
+        ),
+      if (page.lookingFor.isNotEmpty)
+        fact(s.t('rec_page_looking_for'),
+            Wrap(spacing: 8, runSpacing: 4, children: [for (final t in page.lookingFor) _Tag(recruitTagLabel(s, t))])),
+      if (page.requirements.isNotEmpty)
+        fact(s.t('rec_page_requirements'), SelectableText(page.requirements, style: const TextStyle(height: 1.4))),
+    ];
+    final right = <Widget>[
+      if (page.playTimes.isNotEmpty) fact(s.t('rec_page_play_times'), SelectableText(page.playTimes)),
+      if (page.languages.isNotEmpty)
+        fact(s.t('rec_page_languages'),
+            Wrap(spacing: 8, runSpacing: 4, children: [for (final l in page.languages) _Tag(recruitLanguageLabel(l))])),
+      if (page.region != RecruitRegion.any) fact(s.t('rec_page_region'), Text(recruitRegionLabel(s, page.region))),
+      if (page.canBeReached)
+        fact(
+          s.t('rec_page_contact'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (page.discordInvite != null && isDiscordInvite(page.discordInvite!))
+                FilledButton.icon(
+                  onPressed: () => launchUrl(Uri.parse(page.discordInvite!), mode: LaunchMode.externalApplication),
+                  icon: const Icon(Icons.open_in_new, size: 18),
+                  label: Text(s.t('rec_discord_join')),
+                ),
+              if (page.contact.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: page.discordInvite == null ? 0 : 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: SelectableText(page.contact,
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
+                      IconButton(
+                        icon: const Icon(Icons.copy, size: 18),
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: page.contact));
+                          showToast(context, s.t('copied'));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+    ];
+    // on a site the page is two columns: what the guild looks for at the left, when and how to reach it at the right
+    if (SiteScope.of(context)) {
+      return ListView(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        children: [
+          ...header,
+          const SizedBox(height: 8),
+          LayoutBuilder(builder: (context, box) {
+            final leftPanel = Panel(
+              padding: const EdgeInsets.fromLTRB(22, 4, 22, 22),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: left),
+            );
+            final rightPanel = Panel(
+              padding: const EdgeInsets.fromLTRB(22, 4, 22, 22),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: right),
+            );
+            if (box.maxWidth < 800) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [leftPanel, const SizedBox(height: 16), rightPanel]);
+            }
+            return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (page.discordInvite != null && isDiscordInvite(page.discordInvite!))
-                  FilledButton.icon(
-                    onPressed: () => launchUrl(Uri.parse(page.discordInvite!), mode: LaunchMode.externalApplication),
-                    icon: const Icon(Icons.open_in_new, size: 18),
-                    label: Text(s.t('rec_discord_join')),
-                  ),
-                if (page.contact.isNotEmpty)
-                  Padding(
-                    padding: EdgeInsets.only(top: page.discordInvite == null ? 0 : 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: SelectableText(page.contact,
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700))),
-                        IconButton(
-                          icon: const Icon(Icons.copy, size: 18),
-                          onPressed: () {
-                            Clipboard.setData(ClipboardData(text: page.contact));
-                            showToast(context, s.t('copied'));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                Expanded(child: leftPanel),
+                const SizedBox(width: 20),
+                SizedBox(width: 380, child: rightPanel)
               ],
-            ),
-          ),
-      ],
+            );
+          }),
+        ],
+      );
+    }
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      children: [...header, ...left, ...right],
     );
   }
 }

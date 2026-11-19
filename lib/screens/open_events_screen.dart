@@ -122,7 +122,7 @@ class _Discover extends ConsumerWidget {
                     if (events.isEmpty)
                       Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('oe_none')))
                     else
-                      CardWrap(children: [for (final e in events) _OpenEventCard(event: e)]),
+                      CardWrap(minWidth: 340, gap: 16, children: [for (final e in events) _OpenEventCard(event: e)]),
                     if (hidden.isNotEmpty)
                       Align(
                         alignment: Alignment.center,
@@ -239,7 +239,7 @@ class _Mine extends ConsumerWidget {
             if (events.isEmpty)
               Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('oe_none_mine')))
             else
-              CardWrap(children: [for (final e in events) _OpenEventCard(event: e)]),
+              CardWrap(minWidth: 340, gap: 16, children: [for (final e in events) _OpenEventCard(event: e)]),
           ],
         ),
       ),
@@ -257,6 +257,62 @@ class _OpenEventCard extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final e = event;
     final live = e.isLive(DateTime.now());
+    // on a site an event is a card with its kind and time on top, what it is called, who by, and how full it is
+    if (SiteScope.of(context)) {
+      final ratio =
+          e.maxParticipants == null || e.maxParticipants == 0 ? 0.0 : (e.going / e.maxParticipants!).clamp(0.0, 1.0);
+      return AppCard(
+        onTap: () async {
+          final container = ProviderScope.containerOf(context, listen: false);
+          await showOpenEvent(context, e.id);
+          container.invalidate(openEventsFeedProvider);
+          container.invalidate(myOpenEventsProvider);
+        },
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+        radius: AppRadius.card,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Pill(s.t('activity_${e.activity}')),
+                if (live) ...[const SizedBox(width: 6), Pill(s.t('event_live'), color: AppColors.green)],
+                if (e.cancelled) ...[const SizedBox(width: 6), Pill(s.t('oe_cancelled'), color: AppColors.red)],
+                const Spacer(),
+                Text(eventWhen(s, e.startAt), style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(e.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: display(20).copyWith(
+                  decoration: e.cancelled ? TextDecoration.lineThrough : null,
+                  color: e.cancelled ? AppColors.muted : null,
+                )),
+            const SizedBox(height: 4),
+            Text('${s.t('oe_region_${e.region}')} · ${openEventLanguageName(s, e.language)} · ${e.organizer}',
+                maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+            const SizedBox(height: 12),
+            if (e.maxParticipants != null) Bar(value: ratio, color: e.isFull ? AppColors.red : AppColors.gold),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                      e.maxParticipants == null
+                          ? s.t('oe_going', {'n': e.going})
+                          : s.t('oe_places', {'n': e.going, 'max': e.maxParticipants}),
+                      style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                ),
+                if (e.myStatus != null) Pill(s.t('rsvp_${e.myStatus}'), color: statusColor(e.myStatus)),
+                if (e.isFull && !e.mine && e.myStatus != 'going') Pill(s.t('oe_full'), color: AppColors.red),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
     return AppCard(
       onTap: () async {
         // an event deleted or left in its page is gone from the list, and this card with it, when the page closes

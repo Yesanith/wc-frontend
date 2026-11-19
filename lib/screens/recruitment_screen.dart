@@ -6,6 +6,7 @@ import '../state/navigation.dart';
 import '../state/recruitment.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'recruitment/editor_screen.dart';
 import 'recruitment/page_screen.dart';
@@ -56,24 +57,30 @@ class _RecruitmentScreenState extends ConsumerState<RecruitmentScreen> {
           Text(s.t('rec_intro'), style: TextStyle(fontSize: 13, height: 1.45, color: AppColors.textSoft)),
           const SizedBox(height: 16),
           const _MyPages(),
-          TextField(
-            key: const Key('rec-search'),
-            controller: _search,
-            textInputAction: TextInputAction.search,
-            onSubmitted: (text) => _change(() => _text = text.trim()),
-            decoration: InputDecoration(
-              hintText: s.t('rec_search'),
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: _text.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: s.t('cancel'),
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _search.clear();
-                        _change(() => _text = '');
-                      },
-                    ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: SiteScope.of(context) ? 420 : double.infinity),
+              child: TextField(
+                key: const Key('rec-search'),
+                controller: _search,
+                textInputAction: TextInputAction.search,
+                onSubmitted: (text) => _change(() => _text = text.trim()),
+                decoration: InputDecoration(
+                  hintText: s.t('rec_search'),
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _text.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: s.t('cancel'),
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _search.clear();
+                            _change(() => _text = '');
+                          },
+                        ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -215,6 +222,97 @@ class _CardTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
+    // on a site a guild is a row of its own: a badge at the left, what it says in the middle, where and when at the right
+    if (SiteScope.of(context)) {
+      final initials = card.title
+          .replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '')
+          .trim()
+          .split(RegExp(r'\s+'))
+          .where((w) => w.isNotEmpty)
+          .take(2)
+          .map((w) => w[0].toUpperCase())
+          .join();
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: AppCard(
+          onTap: () => showRecruitPage(context, card.guildId),
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
+          radius: AppRadius.card,
+          child: Row(
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  gradient: LinearGradient(colors: [AppColors.gold, AppColors.text]),
+                ),
+                child: Text(initials, style: display(22, color: Colors.white)),
+              ),
+              const SizedBox(width: 18),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                            child: Text(card.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: display(20))),
+                        const SizedBox(width: 10),
+                        Pill(card.recruiting ? s.t('rec_recruiting') : s.t('rec_closed'),
+                            color: card.recruiting ? AppColors.green : null),
+                      ],
+                    ),
+                    if (card.headline.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(card.headline,
+                            maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14)),
+                      ),
+                    const SizedBox(height: 10),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [for (final t in card.lookingFor.take(5)) Pill(recruitTagLabel(s, t))],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 18),
+              SizedBox(
+                width: 210,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      [
+                        if (card.region != RecruitRegion.any) recruitRegionLabel(s, card.region),
+                        for (final l in card.languages) recruitLanguageLabel(l),
+                      ].join(' · '),
+                      textAlign: TextAlign.right,
+                      style: TextStyle(fontSize: 12.5, color: AppColors.muted),
+                    ),
+                    if (card.playTimes.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(card.playTimes,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+                      ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                        onPressed: () => showRecruitPage(context, card.guildId), child: Text(s.t('rec_view'))),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
