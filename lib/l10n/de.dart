@@ -211,6 +211,7 @@ const deStrings = <String, String>{
   'mastery_rank_n': 'Rang {n}',
   'mastery_cost_n': 'Kostet {n} Meisterschaftspunkte',
   'mastery_unspent_n': '{n} unausgegeben',
+  'categories': 'Kategorien',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

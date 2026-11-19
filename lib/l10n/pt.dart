@@ -208,6 +208,7 @@ const ptStrings = <String, String>{
   'mastery_rank_n': 'nível {n}',
   'mastery_cost_n': 'Custa {n} pontos de maestria',
   'mastery_unspent_n': '{n} sem gastar',
+  'categories': 'Categorias',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':

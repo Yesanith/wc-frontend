@@ -181,10 +181,11 @@ class _AchievementsTab extends ConsumerWidget {
   }
 }
 
-/// the achievements in progress as a list, and the chosen one in full beside it
+/// three panes: the categories of the game, the achievements of the chosen one, and the chosen achievement in full
 class _AchievementsSite extends ConsumerStatefulWidget {
   const _AchievementsSite({required this.rows});
 
+  /// the ones in progress, shown while no category is chosen
   final List<AchievementRow> rows;
 
   @override
@@ -192,64 +193,173 @@ class _AchievementsSite extends ConsumerStatefulWidget {
 }
 
 class _AchievementsSiteState extends ConsumerState<_AchievementsSite> {
-  var _selected = 0;
+  /// null for the achievements in progress
+  AchievementCategory? _category;
+  int? _selectedId;
+
+  Widget _paneHeader(String text, {Widget? trailing}) => Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        color: AppColors.track.withValues(alpha: 0.5),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(text.caps,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style:
+                      TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.muted)),
+            ),
+            if (trailing != null) trailing,
+          ],
+        ),
+      );
+
+  Widget _categoryRow(String label, String? note, {required bool on, required VoidCallback onTap, bool sub = false}) =>
+      InkWell(
+        onTap: onTap,
+        child: Container(
+          color: on ? AppColors.gold.withValues(alpha: 0.14) : null,
+          padding: EdgeInsets.fromLTRB(sub ? 28 : 18, 9, 14, 9),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 13.5, fontWeight: on ? FontWeight.w800 : FontWeight.w600)),
+              ),
+              if (note != null) Text(note, style: TextStyle(fontSize: 11.5, color: AppColors.muted)),
+            ],
+          ),
+        ),
+      );
+
+  Widget _achievementRow(AchievementRow a, {required bool on}) => InkWell(
+        onTap: () => setState(() => _selectedId = a.id),
+        child: Container(
+          color: on ? AppColors.gold.withValues(alpha: 0.12) : null,
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (a.done) ...[
+                    Icon(Icons.check_circle, size: 16, color: AppColors.green),
+                    const SizedBox(width: 8),
+                  ],
+                  Expanded(
+                    child: Text(a.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: a.done ? AppColors.muted : AppColors.text)),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(a.done ? '' : '${fmtInt(a.current)} / ${fmtInt(a.max)}',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                ],
+              ),
+              if (!a.done) ...[const SizedBox(height: 7), Bar(value: a.ratio)],
+            ],
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final list = widget.rows;
-    final index = _selected < list.length ? _selected : 0;
+    final groups = ref.watch(achievementCatalogueProvider).valueOrNull ?? const <AchievementGroup>[];
+    final category = _category;
+
+    Widget centre(List<AchievementRow> list) {
+      if (list.isEmpty) return EmptyNote(s.t('nothing_here'));
+      // the chosen one, or the first while none is chosen
+      final chosen = list.firstWhere((a) => a.id == _selectedId, orElse: () => list.first);
+      // the ones still to do go first, the closest to done on top
+      final sorted = [...list]..sort((a, b) {
+          if (a.done != b.done) return a.done ? 1 : -1;
+          return b.ratio.compareTo(a.ratio);
+        });
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Panel(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  _paneHeader(
+                    category == null ? '${s.t('in_progress')} · ${fmtInt(list.length)}' : category.name,
+                    trailing: category == null
+                        ? null
+                        : Text('${list.where((a) => a.done).length} / ${list.length}',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.gold)),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: sorted.length,
+                      itemBuilder: (context, i) => _achievementRow(sorted[i], on: sorted[i].id == chosen.id),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          SizedBox(
+            width: 380,
+            child: Panel(
+              padding: EdgeInsets.zero,
+              child: AchievementDetailScreen(key: ValueKey(chosen.id), row: chosen, embedded: true),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
+        SizedBox(
+          width: 270,
           child: Panel(
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  alignment: Alignment.centerLeft,
-                  color: AppColors.track.withValues(alpha: 0.5),
-                  child: Text('${s.t('in_progress')} · ${fmtInt(list.length)}'.caps,
-                      style: TextStyle(
-                          fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.1, color: AppColors.muted)),
-                ),
+                _paneHeader(s.t('categories')),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (context, i) {
-                      final a = list[i];
-                      return InkWell(
-                        onTap: () => setState(() => _selected = i),
-                        child: Container(
-                          color: i == index ? AppColors.gold.withValues(alpha: 0.12) : null,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(a.name,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text('${fmtInt(a.current)} / ${fmtInt(a.max)}',
-                                      style:
-                                          TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.muted)),
-                                ],
-                              ),
-                              const SizedBox(height: 7),
-                              Bar(value: a.ratio),
-                            ],
-                          ),
+                  child: ListView(
+                    children: [
+                      _categoryRow(s.t('in_progress'), fmtInt(widget.rows.length),
+                          on: category == null,
+                          onTap: () => setState(() {
+                                _category = null;
+                                _selectedId = null;
+                              })),
+                      for (final g in groups) ...[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 14, 14, 4),
+                          child: Text(g.name.caps,
+                              style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.1,
+                                  color: AppColors.gold)),
                         ),
-                      );
-                    },
+                        for (final c in g.categories)
+                          _categoryRow(c.name, fmtInt(c.achievementIds.length),
+                              sub: true,
+                              on: category?.id == c.id,
+                              onTap: () => setState(() {
+                                    _category = c;
+                                    _selectedId = null;
+                                  })),
+                      ],
+                    ],
                   ),
                 ),
               ],
@@ -257,12 +367,14 @@ class _AchievementsSiteState extends ConsumerState<_AchievementsSite> {
           ),
         ),
         const SizedBox(width: 16),
-        SizedBox(
-          width: 400,
-          child: Panel(
-            padding: EdgeInsets.zero,
-            child: AchievementDetailScreen(key: ValueKey(list[index].id), row: list[index], embedded: true),
-          ),
+        Expanded(
+          child: category == null
+              ? centre(widget.rows)
+              : AsyncView<List<AchievementRow>>(
+                  value: ref.watch(categoryAchievementsProvider(category.id)),
+                  onRetry: () => ref.invalidate(categoryAchievementsProvider(category.id)),
+                  builder: centre,
+                ),
         ),
       ],
     );

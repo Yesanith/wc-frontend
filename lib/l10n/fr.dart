@@ -208,6 +208,7 @@ const frStrings = <String, String>{
   'mastery_rank_n': 'rang {n}',
   'mastery_cost_n': 'Coûte {n} points de maîtrise',
   'mastery_unspent_n': '{n} non dépensés',
+  'categories': 'Catégories',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

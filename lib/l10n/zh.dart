@@ -184,6 +184,7 @@ const zhStrings = <String, String>{
   'mastery_rank_n': '第 {n} 级',
   'mastery_cost_n': '需要 {n} 点精通点',
   'mastery_unspent_n': '未使用 {n}',
+  'categories': '分类',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

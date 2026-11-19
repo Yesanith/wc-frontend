@@ -204,6 +204,7 @@ const trStrings = <String, String>{
   'mastery_rank_n': 'seviye {n}',
   'mastery_cost_n': '{n} ustalık puanı',
   'mastery_unspent_n': '{n} harcanmamış',
+  'categories': 'Kategoriler',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

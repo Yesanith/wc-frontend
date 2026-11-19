@@ -187,6 +187,7 @@ const jaStrings = <String, String>{
   'mastery_rank_n': 'ランク {n}',
   'mastery_cost_n': 'マスタリーポイント {n} 必要',
   'mastery_unspent_n': '未使用 {n}',
+  'categories': 'カテゴリ',
   'bank_tab_n': 'タブ {n}',
   'guest_continue': 'API キーなしで続ける',
   'guest_note': 'ワールドボス、マップ、レシピ、トレーディングポストの価格、Wiki、ニュースはキーなしで使えます。キャラクターや進行状況にはキーが必要です。',

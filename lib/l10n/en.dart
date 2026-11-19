@@ -207,6 +207,7 @@ const enStrings = <String, String>{
   'mastery_rank_n': 'rank {n}',
   'mastery_cost_n': 'Costs {n} mastery points',
   'mastery_unspent_n': '{n} unspent',
+  'categories': 'Categories',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

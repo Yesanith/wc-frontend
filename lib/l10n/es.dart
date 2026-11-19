@@ -206,6 +206,7 @@ const esStrings = <String, String>{
   'mastery_rank_n': 'rango {n}',
   'mastery_cost_n': 'Cuesta {n} puntos de maestría',
   'mastery_unspent_n': '{n} sin gastar',
+  'categories': 'Categorías',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':
