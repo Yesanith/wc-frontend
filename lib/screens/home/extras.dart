@@ -81,12 +81,7 @@ class _VaultBars extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    Widget bar(String track, String label) {
-      final v = ref.watch(vaultTrackProvider(track)).valueOrNull;
-      final stale = ref.watch(vaultStaleProvider(track));
-      final goal = v == null ? 0 : asInt(v['meta_progress_complete']);
-      final now = v == null ? 0 : asInt(v['meta_progress_current']);
-      final shown = stale || goal <= 0 ? null : (now > goal ? goal : now);
+    Widget bar(String label, int? shown, int goal) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: Column(
@@ -112,7 +107,44 @@ class _VaultBars extends ConsumerWidget {
       );
     }
 
-    return Column(children: [bar('daily', s.t('vault_daily')), bar('weekly', s.t('vault_weekly'))]);
+    // a track's own bar is the chest it ends in
+    Widget track(String track, String label) {
+      final v = ref.watch(vaultTrackProvider(track)).valueOrNull;
+      final stale = ref.watch(vaultStaleProvider(track));
+      final goal = v == null ? 0 : asInt(v['meta_progress_complete']);
+      final now = v == null ? 0 : asInt(v['meta_progress_current']);
+      return bar(label, stale || goal <= 0 ? null : (now > goal ? goal : now), goal);
+    }
+
+    // the special objectives of the season have no chest: the bar is how many of them are done
+    final special = ref.watch(vaultTrackProvider('special')).valueOrNull;
+    final objectives = [
+      for (final o in (special?['objectives'] as List?) ?? const [])
+        if (o is Map) o
+    ];
+    final done = objectives
+        .where(
+            (o) => asInt(o['progress_complete']) > 0 && asInt(o['progress_current']) >= asInt(o['progress_complete']))
+        .length;
+    final season = ref.watch(vaultSeasonProvider).valueOrNull;
+    final end = DateTime.tryParse('${season?['end'] ?? ''}')?.toLocal();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        track('daily', s.t('vault_daily')),
+        track('weekly', s.t('vault_weekly')),
+        bar(
+          s.t('vault_special'),
+          ref.watch(vaultStaleProvider('special')) || objectives.isEmpty ? null : done,
+          objectives.length,
+        ),
+        if (end != null)
+          Text(
+            s.t('season_ends', {'d': '${shortDateText(s, end)} (${countdown(end.difference(DateTime.now()))})'}),
+            style: TextStyle(fontSize: 12, color: AppColors.muted),
+          ),
+      ],
+    );
   }
 }
 

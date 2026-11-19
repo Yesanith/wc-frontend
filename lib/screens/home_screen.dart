@@ -19,6 +19,7 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
+import '../widgets/atlas_backdrop.dart';
 import '../widgets/glass.dart';
 import '../widgets/responsive.dart';
 import '../widgets/meters.dart';
@@ -28,6 +29,7 @@ import '../widgets/waypoint_link.dart';
 import '../state/news.dart';
 import '../state/market.dart' show TpPrice;
 import '../state/trading.dart';
+import '../state/vault.dart' show vaultSeasonProvider;
 import 'achievement_detail_screen.dart';
 import 'events_screen.dart';
 
@@ -66,64 +68,73 @@ class HomeScreen extends ConsumerWidget {
   Widget _atlas(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final hasKey = ref.watch(hasKeyProvider);
-    return OnMap(
-      child: RefreshIndicator(
-        color: AppColors.gold,
-        onRefresh: () => _refresh(ref),
-        // the page is as tall as the window, so that the next events lie along its foot with the map between them and the greeting; a
-        // window too low for it scrolls
-        child: LayoutBuilder(
-          builder: (context, box) => SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(28, 4, 28, 20),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1600),
-                child: SizedBox(
-                  height: (box.maxHeight - 24).clamp(640.0, double.infinity),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const _HomeHero(onMap: true),
-                      const _AlertBanner(),
-                      const _NewsBanner(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // the map of the game shows here, with the pins of the next events on it
-                          const Expanded(child: SizedBox.shrink()),
-                          SizedBox(
-                            width: 356,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                if (!hasKey) const _GuestCard(),
-                                if (hasKey) ...[
-                                  Eyebrow(s.t('wizards_vault'), plate: true),
-                                  const _Vault(compact: true),
-                                ],
+    // what the page leaves free is the map, which is dragged and zoomed: the page does not scroll under the hand unless the window is too
+    // low for it
+    Widget page(double height) => Padding(
+          // the top is clear of the strip with the search, which lies over the map
+          padding: const EdgeInsets.fromLTRB(28, 56, 28, 20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1600),
+              child: SizedBox(
+                height: height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const _HomeHero(onMap: true),
+                    const _AlertBanner(),
+                    const _NewsBanner(),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // the map of the game shows here, with the pins of the next events on it
+                        const Expanded(child: SizedBox.shrink()),
+                        SizedBox(
+                          width: 356,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (!hasKey) const _GuestCard(),
+                              if (hasKey) ...[
+                                Eyebrow(s.t('wizards_vault'), plate: true),
+                                const _Vault(compact: true),
+                                Eyebrow(s.t('trading_post'), plate: true),
+                                const _TradeBox(),
                               ],
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                      const Expanded(child: SizedBox.shrink()),
-                      Eyebrow(
-                        s.t('up_next'),
-                        plate: true,
-                        trailing: TextButton(
-                          onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
-                          child: Text(s.t('all_timers')),
                         ),
+                      ],
+                    ),
+                    const Expanded(child: SizedBox.shrink()),
+                    Eyebrow(
+                      s.t('up_next'),
+                      plate: true,
+                      trailing: TextButton(
+                        onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
+                        child: Text(s.t('all_timers')),
                       ),
-                      const _UpNext(),
-                    ],
-                  ),
+                    ),
+                    const _UpNext(),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
+        );
+    return OnMap(
+      // the map is part of the page, not under it: a page of a site is in a route, which keeps the pointer from what lies under it
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // a page that is not the one shown has no map to load
+          if (TickerMode.valuesOf(context).enabled) const AtlasBackdrop(),
+          LayoutBuilder(
+            builder: (context, box) => box.maxHeight >= 700
+                ? page(box.maxHeight - 24)
+                : SingleChildScrollView(physics: const AlwaysScrollableScrollPhysics(), child: page(700)),
+          ),
+        ],
       ),
     );
   }

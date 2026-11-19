@@ -33,7 +33,6 @@ import '../theme.dart';
 import '../util.dart';
 import '../widgets/account_badge.dart';
 import '../widgets/announcement_bar.dart';
-import '../widgets/atlas_backdrop.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
@@ -505,26 +504,22 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
           progress: progress,
         ),
         Expanded(
-          child: Stack(
-            children: [
-              // the home page is laid over the map of the game
-              if (section == AppSection.home) const Positioned.fill(child: AtlasBackdrop()),
-              Column(
-                children: [
-                  SiteTopStrip(
-                    // the strip is at the right of the page, so a search of a window's width is there too
-                    search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
-                    account: accountName,
-                    accountBadge: communityReady
-                        ? AccountBadge(
-                            compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
-                        : null,
-                  ),
-                  Expanded(child: content),
-                ],
-              ),
-            ],
-          ),
+          child: () {
+            // the strip with the search and the account
+            final strip = SiteTopStrip(
+              // the strip is at the right of the page, so a search of a window's width is there too
+              search: _search(width: width >= 1100 ? 320 : 220, onSelect: _openHit),
+              account: accountName,
+              accountBadge: communityReady
+                  ? AccountBadge(compact: true, showName: width >= 1000, onOpen: () => _select(AppSection.settings))
+                  : null,
+            );
+            // the home page is the map of the game, which goes all the way up: the strip lies over it
+            if (section == AppSection.home) {
+              return Stack(children: [content, Positioned(top: 0, left: 0, right: 0, child: strip)]);
+            }
+            return Column(children: [strip, Expanded(child: content)]);
+          }(),
         ),
       ],
     );
@@ -710,7 +705,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                             child: ContentFrame(
                               // on the site every page keeps to the width of the site, as a site's pages do; the map and the
                               // timeline of the world's events, which are drawn across, take what there is
-                              maxWidth: sec == AppSection.maps
+                              maxWidth: sec == AppSection.maps || (sec == AppSection.home && site)
                                   ? double.infinity
                                   : site && sec != AppSection.bosses
                                       ? sitePageWidth
