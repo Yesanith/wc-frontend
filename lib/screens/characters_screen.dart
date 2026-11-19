@@ -6,6 +6,7 @@ import '../state/professions.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../services/icon_cache.dart';
 import '../util.dart';
 import '../widgets/class_icon.dart';
 import '../widgets/birthday.dart';
@@ -111,6 +112,10 @@ class _CharactersScreenState extends ConsumerState<CharactersScreen> {
                 );
               }
               // one under the other on a phone, side by side where there is room
+              // on a site the characters are a gallery: each has the art of its elite line over it, where a phone has a row
+              if (SiteScope.of(context)) {
+                return CardWrap(minWidth: 280, gap: 18, children: [for (final c in filtered) _GalleryCard(c)]);
+              }
               return CardWrap(children: [for (final c in filtered) _CharacterCard(c)]);
             },
           ),
@@ -186,6 +191,154 @@ class _CharacterCard extends ConsumerWidget {
               size: 20,
               color: ref.watch(favoriteCharactersProvider).contains(name) ? AppColors.gold : AppColors.chevron,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// a character as a card of a gallery: the art of the elite line it plays (or the colour of its profession) over the top, the big
+/// profession mark, its name and level over that, and its numbers under it. the game has no portrait of a character to show
+class _GalleryCard extends ConsumerWidget {
+  const _GalleryCard(this.c);
+
+  final Json c;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final name = '${c['name'] ?? ''}';
+    final prof = '${c['profession'] ?? ''}';
+    final color = professionColor(prof);
+    final info = ref.watch(professionsProvider).valueOrNull?[prof];
+    final elite = activeElite(c, info);
+    final art = elite?['background'] as String?;
+    final mark = classIcon(c, info, big: true);
+    final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
+    final favorite = ref.watch(favoriteCharactersProvider).contains(name);
+    const white = Colors.white;
+    Widget stat(String label, String value) => Expanded(
+          child: Column(children: [
+            Text(label.caps,
+                maxLines: 1,
+                style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, letterSpacing: 1, color: AppColors.muted)),
+            const SizedBox(height: 2),
+            Text(value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+          ]),
+        );
+    return AppCard(
+      padding: EdgeInsets.zero,
+      radius: 16,
+      onTap: () => ref.read(openCharacterProvider.notifier).state = name,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 168,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color.lerp(color, Colors.black, 0.2)!, Color.lerp(color, Colors.black, 0.75)!],
+                    ),
+                  ),
+                ),
+                // the art is a wide strip that is dark at its right: it fills the header from its left, where the art is
+                if (art != null && art.isNotEmpty)
+                  Positioned.fill(
+                    child: ClipRect(
+                      // the strip has a dark band along its top: the picture is drawn larger from its foot to leave it out
+                      child: Transform.scale(
+                        scale: 1.4,
+                        alignment: Alignment.bottomLeft,
+                        child: Image.network(art,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.centerLeft,
+                            errorBuilder: (_, __, ___) => const SizedBox.shrink()),
+                      ),
+                    ),
+                  ),
+                // the foot is darker, so that the name can be read over any art
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0x00000000), Color(0xCC000000)],
+                      stops: [0.35, 1],
+                    ),
+                  ),
+                ),
+                if (mark != null)
+                  Positioned(
+                    right: 14,
+                    top: 14,
+                    child: Opacity(
+                        opacity: 0.92,
+                        child: SizedBox(width: 64, height: 64, child: CachedIcon(url: mark, fit: BoxFit.contain))),
+                  ),
+                Positioned(
+                  left: 4,
+                  top: 4,
+                  child: IconButton(
+                    tooltip: s.t('favorite'),
+                    onPressed: () => ref.read(favoriteCharactersProvider.notifier).toggle(name),
+                    icon: Icon(favorite ? Icons.star : Icons.star_border,
+                        size: 22, color: favorite ? AppColors.gold : white),
+                  ),
+                ),
+                Positioned(
+                  left: 16,
+                  right: 16,
+                  bottom: 12,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: display(22, color: white)
+                                    .copyWith(shadows: const [Shadow(blurRadius: 6, color: Colors.black54)])),
+                            Text(elite?['name'] as String? ?? info?.name ?? prof,
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: white)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(12)),
+                        child: Text('${s.t('level_short')} ${asInt(c['level'])}',
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: white)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            child: Text(race, style: TextStyle(fontSize: 13, color: AppColors.muted)),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
+            child: Row(children: [
+              stat(s.t('played'), fmtHours(c['age'], s.t('hours_short'))),
+              stat(s.t('deaths'), fmtInt(asInt(c['deaths']))),
+              Expanded(child: Center(child: BirthdayLine(created: c['created'] as String?))),
+            ]),
           ),
         ],
       ),
