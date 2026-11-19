@@ -176,6 +176,7 @@ const frStrings = <String, String>{
   'selected': 'Sélectionné',
   'event_next_runs': 'Prochains passages',
   'vault_to_chest': 'avant le coffre',
+  'raid_wings': 'Ailes de raid',
   'bank_tab_n': 'Onglet {n}',
   'guest_continue': 'Continuer sans clé API',
   'guest_note':

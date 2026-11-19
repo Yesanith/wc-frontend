@@ -175,6 +175,7 @@ const enStrings = <String, String>{
   'selected': 'Selected',
   'event_next_runs': 'Next runs',
   'vault_to_chest': 'to the chest',
+  'raid_wings': 'Raid wings',
   'bank_tab_n': 'Tab {n}',
   'guest_continue': 'Continue without an API key',
   'guest_note':

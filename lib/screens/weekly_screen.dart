@@ -13,6 +13,7 @@ import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
 import 'vault_objectives_screen.dart';
 import 'daily_screen.dart';
+import 'period_site.dart';
 
 /// everything that resets on monday 07:30 utc, plus the vault's special track
 class WeeklyScreen extends ConsumerWidget {
@@ -27,6 +28,26 @@ class WeeklyScreen extends ConsumerWidget {
     String? meta(Json? v) =>
         v == null ? null : '${v['meta_progress_current'] ?? 0}/${v['meta_progress_complete'] ?? 0}';
     final weeklyStale = ref.watch(vaultStaleProvider('weekly'));
+
+    // a site has the week in one list under tabs, the vault and the counters in a column beside it
+    if (SiteScope.of(context)) {
+      final cleared = raids?.fold<int>(0, (n, w) => n + w.done);
+      final total = raids?.fold<int>(0, (n, w) => n + w.encounters.length);
+      final wings = raids?.where((w) => w.encounters.isNotEmpty && w.done >= w.encounters.length).length;
+      return RefreshIndicator(
+        color: AppColors.gold,
+        onRefresh: () => refreshProviders(ref, [vaultTrackProvider, raidsProvider, periodicAchievementsProvider]),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+          children: [
+            PeriodSite(weekly: true, counters: [
+              (s.t('raids'), raids == null ? '…' : '$cleared/$total'),
+              (s.t('raid_wings'), raids == null ? '…' : '$wings/${raids.length}'),
+            ]),
+          ],
+        ),
+      );
+    }
 
     return RefreshIndicator(
       color: AppColors.gold,

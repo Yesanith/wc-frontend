@@ -174,6 +174,7 @@ const ruStrings = <String, String>{
   'selected': 'Выбрано',
   'event_next_runs': 'Ближайшие запуски',
   'vault_to_chest': 'до сундука',
+  'raid_wings': 'Крылья рейдов',
   'bank_tab_n': 'Вкладка {n}',
   'guest_continue': 'Продолжить без API-ключа',
   'guest_note':

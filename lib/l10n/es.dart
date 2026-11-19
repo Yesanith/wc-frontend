@@ -174,6 +174,7 @@ const esStrings = <String, String>{
   'selected': 'Seleccionado',
   'event_next_runs': 'Próximas veces',
   'vault_to_chest': 'hasta el cofre',
+  'raid_wings': 'Alas de incursión',
   'bank_tab_n': 'Pestaña {n}',
   'guest_continue': 'Continuar sin clave API',
   'guest_note':

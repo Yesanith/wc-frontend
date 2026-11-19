@@ -179,6 +179,7 @@ const deStrings = <String, String>{
   'selected': 'Ausgewählt',
   'event_next_runs': 'Nächste Termine',
   'vault_to_chest': 'bis zur Truhe',
+  'raid_wings': 'Raid-Flügel',
   'bank_tab_n': 'Fach {n}',
   'guest_continue': 'Ohne API-Schlüssel fortfahren',
   'guest_note':

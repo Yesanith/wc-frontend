@@ -172,6 +172,7 @@ const trStrings = <String, String>{
   'selected': 'Seçili',
   'event_next_runs': 'Sonraki seferler',
   'vault_to_chest': 'sandığa',
+  'raid_wings': 'Raid kanatları',
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':

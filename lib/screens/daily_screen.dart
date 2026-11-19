@@ -13,7 +13,7 @@ import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import '../widgets/vault_objectives.dart';
-import 'daily_site.dart';
+import 'period_site.dart';
 import 'vault_objectives_screen.dart';
 
 /// everything that resets at midnight utc on one page
@@ -48,7 +48,7 @@ class DailyScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           children: [
-            DailySite(counters: [
+            PeriodSite(counters: [
               (s.t('world_bosses'), bosses == null ? '…' : '${bosses.length}'),
               (s.t('daily_crafts'), crafts == null ? '…' : '${crafts.done}/${crafts.total}'),
               (s.t('map_chests'), chests == null ? '…' : '${chests.done}/${chests.total}'),

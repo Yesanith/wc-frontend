@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/clock.dart';
 import '../state/account.dart';
 import '../state/periodic.dart';
+import '../state/progression.dart';
 import '../state/settings.dart';
 import '../state/vault.dart';
 import '../theme.dart';
@@ -26,41 +27,53 @@ class _Task {
   final String? icon;
 }
 
-/// the daily page of a site: what the day asks for in one list under tabs, the vault and the counters in a column beside it
-class DailySite extends ConsumerStatefulWidget {
-  const DailySite({super.key, required this.counters});
+/// the daily or the weekly page of a site: what the day or the week asks for in one list under tabs, the vault and the counters in a column
+/// beside it
+class PeriodSite extends ConsumerStatefulWidget {
+  const PeriodSite({super.key, required this.counters, this.weekly = false});
+
+  final bool weekly;
 
   /// the small counters of the day: label and value
   final List<(String, String)> counters;
 
   @override
-  ConsumerState<DailySite> createState() => _DailySiteState();
+  ConsumerState<PeriodSite> createState() => _PeriodSiteState();
 }
 
-class _DailySiteState extends ConsumerState<DailySite> {
+class _PeriodSiteState extends ConsumerState<PeriodSite> {
   String? _group;
 
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final stale = ref.watch(vaultStaleProvider('daily'));
-    final daily = ref.watch(vaultTrackProvider('daily')).valueOrNull;
+    final track = widget.weekly ? 'weekly' : 'daily';
+    final stale = ref.watch(vaultStaleProvider(track));
+    final daily = ref.watch(vaultTrackProvider(track)).valueOrNull;
     final periodic = ref.watch(periodicAchievementsProvider).valueOrNull;
-    final vaultName = s.t('wizards_vault');
+    final categories = widget.weekly ? periodic?.weekly : periodic?.daily;
+    final vaultName = s.t(widget.weekly ? 'vault_weekly' : 'wizards_vault');
+    final special = widget.weekly ? ref.watch(vaultTrackProvider('special')).valueOrNull : null;
+    final raids = widget.weekly ? ref.watch(raidsProvider).valueOrNull : null;
+
+    List<_Task> objectives(Json? v, String group) => [
+          for (final o in (v?['objectives'] as List?) ?? const [])
+            if (o is Map)
+              _Task(
+                group: group,
+                name: '${o['title']}',
+                done:
+                    asInt(o['progress_complete']) > 0 && asInt(o['progress_current']) >= asInt(o['progress_complete']),
+                current: asInt(o['progress_current']),
+                max: asInt(o['progress_complete']),
+              ),
+        ];
 
     final tasks = <_Task>[
-      if (!stale && daily != null)
-        for (final o in (daily['objectives'] as List?) ?? const [])
-          if (o is Map)
-            _Task(
-              group: vaultName,
-              name: '${o['title']}',
-              done: asInt(o['progress_complete']) > 0 && asInt(o['progress_current']) >= asInt(o['progress_complete']),
-              current: asInt(o['progress_current']),
-              max: asInt(o['progress_complete']),
-            ),
-      if (periodic != null)
-        for (final c in periodic.daily)
+      if (!stale && daily != null) ...objectives(daily, vaultName),
+      ...objectives(special, s.t('vault_special')),
+      if (categories != null)
+        for (final c in categories)
           for (final r in c.rows)
             _Task(
               group: c.name,
@@ -70,6 +83,15 @@ class _DailySiteState extends ConsumerState<DailySite> {
               max: r.max,
               icon: (r.detail?['icon'] as String?) ?? c.icon,
             ),
+      if (raids != null)
+        for (final w in raids)
+          _Task(
+            group: s.t('raids'),
+            name: w.label,
+            done: w.encounters.isNotEmpty && w.done >= w.encounters.length,
+            current: w.done,
+            max: w.encounters.length,
+          ),
     ];
     final groups = <String>[];
     for (final t in tasks) {
@@ -85,7 +107,7 @@ class _DailySiteState extends ConsumerState<DailySite> {
 
     return LayoutBuilder(
       builder: (context, box) {
-        final column = _SideColumn(counters: widget.counters);
+        final column = _SideColumn(counters: widget.counters, weekly: widget.weekly);
         final main = Panel(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 10),
           child: Column(
@@ -209,7 +231,9 @@ class _TaskRow extends StatelessWidget {
 
 /// the vault with the chest that is being filled, its other two tracks, and the day's counters
 class _SideColumn extends ConsumerWidget {
-  const _SideColumn({required this.counters});
+  const _SideColumn({required this.counters, required this.weekly});
+
+  final bool weekly;
 
   final List<(String, String)> counters;
 
@@ -224,8 +248,9 @@ class _SideColumn extends ConsumerWidget {
       return (stale || goal <= 0 ? null : (now > goal ? goal : now), goal);
     }
 
-    final (dailyNow, dailyGoal) = track('daily');
-    final (weeklyNow, weeklyGoal) = track('weekly');
+    // the track the page is about is the big number, the other one a line under it
+    final (dailyNow, dailyGoal) = track(weekly ? 'weekly' : 'daily');
+    final (otherNow, otherGoal) = track(weekly ? 'daily' : 'weekly');
     final special = ref.watch(vaultTrackProvider('special')).valueOrNull;
     final objectives = [
       for (final o in (special?['objectives'] as List?) ?? const [])
@@ -235,7 +260,7 @@ class _SideColumn extends ConsumerWidget {
         .where(
             (o) => asInt(o['progress_complete']) > 0 && asInt(o['progress_current']) >= asInt(o['progress_complete']))
         .length;
-    final daily = ref.watch(vaultTrackProvider('daily')).valueOrNull;
+    final daily = ref.watch(vaultTrackProvider(weekly ? 'weekly' : 'daily')).valueOrNull;
     final season = ref.watch(vaultSeasonProvider).valueOrNull;
     final end = DateTime.tryParse('${season?['end'] ?? ''}')?.toLocal();
 
@@ -250,7 +275,10 @@ class _SideColumn extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ResetBanner(label: s.t('daily_reset_in'), at: nextDailyReset()),
+        ResetBanner(
+          label: s.t(weekly ? 'weekly_reset_in' : 'daily_reset_in'),
+          at: weekly ? nextWeeklyReset() : nextDailyReset(),
+        ),
         const SizedBox(height: 14),
         Panel(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 18),
@@ -286,7 +314,7 @@ class _SideColumn extends ConsumerWidget {
                   color: dailyNow != null && dailyNow >= dailyGoal && dailyGoal > 0 ? AppColors.green : AppColors.gold,
                 ),
               ),
-              line(s.t('vault_weekly'), weeklyNow == null ? '–' : '$weeklyNow / $weeklyGoal'),
+              line(s.t(weekly ? 'vault_daily' : 'vault_weekly'), otherNow == null ? '–' : '$otherNow / $otherGoal'),
               line(s.t('vault_special'), objectives.isEmpty ? '–' : '$specialDone / ${objectives.length}'),
               if (daily != null) ...[const SizedBox(height: 12), VaultChestReward(daily)],
               if (end != null) ...[

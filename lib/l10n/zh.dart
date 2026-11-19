@@ -152,6 +152,7 @@ const zhStrings = <String, String>{
   'selected': '已选择',
   'event_next_runs': '接下来',
   'vault_to_chest': '到宝箱',
+  'raid_wings': '团队副本区域',
   'bank_tab_n': '标签页 {n}',
   'guest_continue': '不使用 API 密钥继续',
   'guest_note': '世界首领、地图、配方、交易所价格、维基和新闻无需密钥即可使用。角色和进度需要密钥。',

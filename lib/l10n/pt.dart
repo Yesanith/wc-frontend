@@ -176,6 +176,7 @@ const ptStrings = <String, String>{
   'selected': 'Selecionado',
   'event_next_runs': 'Próximas vezes',
   'vault_to_chest': 'até o baú',
+  'raid_wings': 'Alas de raid',
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
