@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../util.dart';
 import 'account.dart';
 import 'api.dart';
+import 'community.dart';
 import 'period_refresh.dart';
 import 'progression.dart';
 import 'settings.dart';
@@ -37,7 +41,8 @@ String timeUntil(DateTime at, {DateTime? now}) {
 
 /// a rotating achievement category with today's entries
 class PeriodicCategory {
-  const PeriodicCategory(this.name, this.icon, this.rows);
+  const PeriodicCategory(this.name, this.icon, this.rows, {this.id = 0});
+  final int id;
   final String name;
   final String? icon;
   final List<AchievementRow> rows;
@@ -56,6 +61,24 @@ bool entryApplies(Json entry, Set<String> access) {
 }
 
 String _utcDay(DateTime d) => '${d.year}-${d.month}-${d.day}';
+
+/// the categories the administrator keeps off the daily and weekly pages (the festivals that are over), by the game's id. none when
+/// the community backend cannot be reached. asked again every ten minutes while a page is open
+final hiddenCategoriesProvider = FutureProvider<Set<int>>((ref) async {
+  if (!communityReady) return const {};
+  final timer = Timer(const Duration(minutes: 10), ref.invalidateSelf);
+  ref.onDispose(timer.cancel);
+  try {
+    final v = await Supabase.instance.client.rpc('app_hidden_categories');
+    return {
+      if (v is List)
+        for (final e in v)
+          if (e is num) e.toInt()
+    };
+  } catch (_) {
+    return const {};
+  }
+});
 
 /// rotating achievements split by their own flag: the weekly ones go to the
 /// weekly page even when they share a category with daily ones
@@ -123,9 +146,12 @@ final periodicAchievementsProvider = FutureProvider<PeriodicAchievements>((ref) 
       for (final id in entry.value)
         if (_isWeekly(details[id])) row(id)
     ];
-    if (d.isNotEmpty) daily.add(PeriodicCategory(name, icon, d));
-    if (w.isNotEmpty) weekly.add(PeriodicCategory(name, icon, w));
+    if (d.isNotEmpty) daily.add(PeriodicCategory(name, icon, d, id: asInt(entry.key['id'])));
+    if (w.isNotEmpty) weekly.add(PeriodicCategory(name, icon, w, id: asInt(entry.key['id'])));
   }
+  final hidden = await ref.watch(hiddenCategoriesProvider.future);
+  daily.removeWhere((c) => hidden.contains(c.id));
+  weekly.removeWhere((c) => hidden.contains(c.id));
   daily.sort((a, b) => a.name.compareTo(b.name));
   weekly.sort((a, b) => a.name.compareTo(b.name));
   return PeriodicAchievements(daily, weekly);
