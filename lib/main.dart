@@ -28,22 +28,23 @@ Future<void> main() async {
   // the page a link opened is read now, before the app has begun: the navigator tells the browser its own address ("/") as it begins, and what is read after is that
   final startLink = initialLink();
   final startSection = initialSection();
-  final prefs = await SharedPreferences.getInstance();
+  // what does not wait on anything else is begun at once and waited for together: the first frame waited on each in turn
+  final prefsReady = SharedPreferences.getInstance();
   // a browser has no disk to keep them on, everything then comes from the network
-  final cache = kIsWeb ? null : await DiskCache.open();
-  final icons = kIsWeb ? null : await IconCache.open();
-  // the community account is optional, a failure here never blocks the app
-  await initCommunity();
-  // push notifications need the community account, and are off without firebase values. a browser has them through
-  // the page's bridge (web_push.js) when the site was built with the Firebase web app
-  await initPush();
-  if (!kIsWeb) {
-    // alerts before pinned world events, from the phone's own alarms
-    await initBossAlerts();
-    // the look at the trading post while the app is closed, asked for again each time in case an update of the app lost it
-    await initTradeBackground();
-    if (prefs.getBool(tradeNotifyPref) == true) await setTradeBackground(true);
-  }
+  final cacheReady = kIsWeb ? Future<DiskCache?>.value(null) : DiskCache.open();
+  final iconsReady = kIsWeb ? Future<IconCache?>.value(null) : IconCache.open();
+  // the community account is optional, a failure here never blocks the app. push notifications need it, and are off
+  // without firebase values. a browser has them through the page's bridge (web_push.js) when the site was built with the
+  // Firebase web app
+  final communityReady = initCommunity().then((_) => initPush());
+  // alerts before pinned world events, from the phone's own alarms, and the look at the trading post while the app is
+  // closed, asked for again each time in case an update of the app lost it
+  final phoneReady = kIsWeb ? Future<void>.value() : Future.wait([initBossAlerts(), initTradeBackground()]);
+  final prefs = await prefsReady;
+  final cache = await cacheReady;
+  final icons = await iconsReady;
+  await Future.wait([communityReady, phoneReady]);
+  if (!kIsWeb && prefs.getBool(tradeNotifyPref) == true) await setTradeBackground(true);
   runApp(
     ProviderScope(
       overrides: [
