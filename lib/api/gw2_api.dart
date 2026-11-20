@@ -227,9 +227,9 @@ class Gw2Api {
     DateTime? notBefore,
   }) async {
     final store = cache;
-    if (store == null) return get(path, query);
     final suffix = query == null ? '' : '_${query.values.join('_')}';
     final name = 'acct_${_account}_${path.replaceAll('/', '_')}${suffix}_$lang';
+    if (store == null) return _fromMemory(name, path, query, ttl: ttl, force: force, notBefore: notBefore);
     // how old a copy may be and still belong to the current period
     final maxAge = copyMaxAge(notBefore, DateTime.now());
 
@@ -248,6 +248,40 @@ class Gw2Api {
       if (stale != null && stale.containsKey('value')) return stale['value'];
       rethrow;
     }
+  }
+
+  /// where there is no disk (the web), what was read is kept in memory for as long as a copy on disk would be fresh: five
+  /// screens that read the account's achievements, a megabyte, had each download them, and every visit of a page again
+  final Map<String, (DateTime, dynamic)> _memory = {};
+  static const _memoryFor = Duration(minutes: 5);
+
+  Future<dynamic> _fromMemory(
+    String name,
+    String path,
+    Map<String, String>? query, {
+    required Duration ttl,
+    required bool force,
+    DateTime? notBefore,
+  }) async {
+    final kept = _memory[name];
+    final now = DateTime.now();
+    if (!force && !_forcing && kept != null) {
+      final (at, value) = kept;
+      // never longer than five minutes, about as long as the game itself keeps an account's answer: a page opened again
+      // a while later shows what changed in the game meanwhile
+      final young = now.difference(at) <= (ttl < _memoryFor ? ttl : _memoryFor);
+      final inPeriod = notBefore == null || !at.isBefore(notBefore);
+      if (young && inPeriod) return value;
+    }
+    return _inFlight.putIfAbsent(name, () async {
+      try {
+        final value = await get(path, query);
+        _memory[name] = (DateTime.now(), value);
+        return value;
+      } finally {
+        _inFlight.remove(name);
+      }
+    });
   }
 
   /// one network request per cache entry at a time. the launch sync, a pull

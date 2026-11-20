@@ -28,8 +28,13 @@ class ItemIndex {
 
   late final Map<int, String> _byId = {for (final item in items) item.id: item.name};
 
+  late final Map<int, String> _lowerById = {for (final item in items) item.id: item.lower};
+
   /// display name of an item without asking the api
   String? nameOf(int id) => _byId[id];
+
+  /// the name in small letters, made once at load: a search of the market does not lower some 27,000 names each time
+  String? lowerNameOf(int id) => _lowerById[id];
 
   static Future<ItemIndex> load(AppLang lang) async {
     for (final code in {lang.apiLang, 'en'}) {

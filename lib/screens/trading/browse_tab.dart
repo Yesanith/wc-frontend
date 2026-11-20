@@ -311,7 +311,8 @@ class _BrowseTabState extends ConsumerState<_BrowseTab> {
         if (list.isEmpty) {
           return Padding(padding: const EdgeInsets.all(24), child: EmptyNote(s.t('market_index_missing')));
         }
-        final ids = filterMarket(list, _f, nameOf: namesFrom(index), prices: prices.valueOrNull);
+        final ids = filterMarket(list, _f,
+            nameOf: namesFrom(index), lowerNameOf: (id) => index?.lowerNameOf(id), prices: prices.valueOrNull);
         Widget chip(String label, bool on, VoidCallback onTap, {IconData? icon}) => Padding(
               padding: const EdgeInsets.only(right: 8),
               child: FilterChip(

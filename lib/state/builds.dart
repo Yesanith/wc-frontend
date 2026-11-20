@@ -49,7 +49,8 @@ List<int> skillIdsOf(Json? set) {
 }
 
 final buildDetailProvider = FutureProvider.autoDispose.family<BuildDetail, String>((ref, encoded) async {
-  final api = accountApi(ref);
+  // specializations, traits and skills are the game's, not the account's: not read again when the account is
+  final api = ref.watch(gw2ApiProvider);
   final build = Map<String, dynamic>.from(jsonDecode(encoded) as Map);
 
   final specIds = <int>[];
@@ -118,7 +119,7 @@ final buildDetailProvider = FutureProvider.autoDispose.family<BuildDetail, Strin
 });
 
 final skillProvider = FutureProvider.autoDispose.family<Json?, int>((ref, id) async {
-  final skills = await accountApi(ref).skills([id]);
+  final skills = await ref.watch(gw2ApiProvider).skills([id]);
   return skills[id];
 });
 

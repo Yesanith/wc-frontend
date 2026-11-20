@@ -72,7 +72,10 @@ class SyncNotifier extends Notifier<SyncState> {
   /// running one still works for the previous key, so another follows it
   bool _again = false;
 
-  Future<void> run() async {
+  /// [manual] is a press of the button: on a device without a disk (the web) the launch and a new key do nothing, since
+  /// what would be downloaded has nowhere to be kept and the screens read what they show anyway, while the button has the
+  /// open screens read again
+  Future<void> run({bool manual = false}) async {
     if (state.running) {
       _again = true;
       return;
@@ -80,6 +83,15 @@ class SyncNotifier extends Notifier<SyncState> {
     _again = false;
     final api = ref.read(gw2ApiProvider);
     if ((api.apiKey ?? '').isEmpty) return;
+    if (api.cache == null) {
+      // on the web every one of these requests was thrown away, and the count going up after it had every open screen
+      // download its part a second time
+      if (manual) {
+        state = SyncState(finishedAt: DateTime.now());
+        ref.read(accountRevisionProvider.notifier).state++;
+      }
+      return;
+    }
 
     final queue = [..._endpoints];
     var done = 0;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show compute;
@@ -115,6 +116,11 @@ const marketPricesTtl = Duration(minutes: 10);
 /// megabytes every few minutes while the tab sat behind another section.
 /// released when the browse tab closes
 final allPricesProvider = FutureProvider.autoDispose<Map<int, TpPrice>>((ref) async {
+  // kept for as long as a copy is good: on the web there is no disk copy, and leaving the tab and coming back
+  // downloaded the whole list again each time
+  final keep = ref.keepAlive();
+  final release = Timer(marketPricesTtl, keep.close);
+  ref.onDispose(release.cancel);
   final entries = await ref.watch(marketIndexProvider.future);
   final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
@@ -222,6 +228,7 @@ List<int> filterMarket(
   List<MarketEntry> entries,
   MarketFilter f, {
   required String? Function(int id) nameOf,
+  String? Function(int id)? lowerNameOf,
   Map<int, TpPrice>? prices,
 }) {
   final words = f.query.trim().toLowerCase().split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
@@ -232,7 +239,7 @@ List<int> filterMarket(
     if (f.rarities.isNotEmpty && !f.rarities.contains(e.rarity)) continue;
     if (e.level < f.minLevel || e.level > f.maxLevel) continue;
     if (words.isNotEmpty) {
-      final name = (nameOf(e.id) ?? '').toLowerCase();
+      final name = lowerNameOf?.call(e.id) ?? (nameOf(e.id) ?? '').toLowerCase();
       if (!words.every(name.contains)) continue;
     }
     if (prices != null && f.minSupply > 0 && (prices[e.id]?.supply ?? 0) < f.minSupply) continue;

@@ -105,6 +105,26 @@ void main() {
       if (await dir.exists()) await dir.delete(recursive: true);
     });
 
+    test('without a disk, what was read is kept in memory a while, shared, and read again when asked to', () async {
+      var calls = 0;
+      final api = Gw2Api('key', client: MockClient((req) async {
+        calls++;
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+        return http.Response('{"n":$calls}', 200);
+      }));
+      final both = await Future.wait([api.cachedGet('/account/achievements'), api.cachedGet('/account/achievements')]);
+      expect(calls, 1, reason: 'two screens asking at once share one request');
+      expect(both[0], both[1]);
+      expect(await api.cachedGet('/account/achievements'), {'n': 1},
+          reason: 'and a screen opened later is answered from memory');
+      expect(calls, 1);
+      expect(await api.cachedGet('/account/achievements', force: true), {'n': 2}, reason: 'a refresh reads it again');
+      expect(await api.cachedGet('/account/achievements', ttl: Duration.zero), {'n': 3},
+          reason: 'as does a copy that is too old');
+      await api.cachedGet('/account/wallet');
+      expect(calls, 4, reason: 'each path is its own');
+    });
+
     test('the key goes in a header, never in the url', () async {
       late http.Request seen;
       final api = Gw2Api('SECRET', client: MockClient((req) async {

@@ -39,7 +39,7 @@ class _SyncPanel extends ConsumerWidget {
           ],
           const SizedBox(height: 10),
           OutlinedButton.icon(
-            onPressed: sync.running ? null : () => ref.read(syncProvider.notifier).run(),
+            onPressed: sync.running ? null : () => ref.read(syncProvider.notifier).run(manual: true),
             icon: const Icon(Icons.sync, size: 18),
             label: Text(s.t('sync_now')),
           ),

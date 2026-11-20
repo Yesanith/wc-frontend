@@ -16,7 +16,8 @@ class CollectionProgress {
 
 /// all ids of a static collection endpoint, kept on disk for a month
 final collectionIdsProvider = FutureProvider.family<List<String>, String>((ref, key) async {
-  final api = accountApi(ref);
+  // the lists of the game are not the account's: they are not read again when the account is
+  final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
   final kind = collectionKinds.firstWhere((k) => k.key == key);
   final rows = await cachedList(
@@ -51,7 +52,10 @@ final collectionProgressProvider = FutureProvider.autoDispose.family<CollectionP
   final unlocked = ref.watch(collectionUnlockedProvider(key).future);
   final all = await ids;
   final owned = await unlocked;
-  return CollectionProgress(owned.where(all.contains).length, all.length);
+  // the ids of a kind as a set: a wardrobe has some ten thousand, and looking each unlocked one up in a list was some
+  // hundred million comparisons on the thread that draws
+  final known = all.toSet();
+  return CollectionProgress(owned.where(known.contains).length, all.length);
 });
 
 class CollectionEntry {
@@ -109,7 +113,8 @@ String? skinSubtype(Json? raw) {
 /// on disk because they only change with a patch
 // kept for the session: a browser has no disk cache here, and a page that was left would fetch every entry again on its next opening
 final collectionEntriesProvider = FutureProvider.family<List<CollectionEntry>, String>((ref, key) async {
-  final api = accountApi(ref);
+  // the lists of the game are not the account's: they are not read again when the account is
+  final api = ref.watch(gw2ApiProvider);
   final cache = ref.watch(diskCacheProvider);
   final lang = ref.watch(langProvider);
   final kind = collectionKinds.firstWhere((k) => k.key == key);
