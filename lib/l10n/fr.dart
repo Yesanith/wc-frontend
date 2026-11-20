@@ -1082,8 +1082,7 @@ const frStrings = <String, String>{
   'learned_recipes': 'Recettes apprises',
   'learned_recipes_of': 'Recettes de {name}',
   'professions': 'Professions',
-  'support_note':
-      'Wondrous Compass est gratuit et sans publicité. S\'il t\'est utile, tu peux m\'offrir un café.',
+  'support_note': 'Wondrous Compass est gratuit et sans publicité. S\'il t\'est utile, tu peux m\'offrir un café.',
   'buy_coffee': 'Offre-moi un café',
   'price_history': 'Historique des prix',
   'price_history_collecting':

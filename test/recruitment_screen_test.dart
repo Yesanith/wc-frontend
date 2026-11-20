@@ -1148,8 +1148,8 @@ void main() {
       await tester.tap(find.text('Allow a member'));
       await tester.pumpAndSettle();
       expect(find.widgetWithText(SimpleDialogOption, 'Leo.1'), findsNothing);
-      expect(
-          find.descendant(of: find.byType(SimpleDialog), matching: find.text('There is no member left to allow.')), findsOneWidget);
+      expect(find.descendant(of: find.byType(SimpleDialog), matching: find.text('There is no member left to allow.')),
+          findsOneWidget);
     });
 
     testWidgets('tells why the database refused to allow or to take back', (tester) async {
