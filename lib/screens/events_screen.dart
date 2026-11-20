@@ -255,8 +255,10 @@ class MetaRow extends ConsumerWidget {
     final key = eventKey(o.map, o.event);
     // watched outside the clock, whose ticks rebuild only the clock
     final pinned = ref.watch(pinnedEventsProvider).contains(key);
+    // the row is built again each minute, when an event can begin or end (they begin on the minute); only the countdown
+    // under the time is built each second: the whole list was built again every second
     return ClockBuilder(
-      step: ClockStep.second,
+      step: ClockStep.minute,
       builder: (context, now) {
         final active = o.activeAt(now);
         return InkWell(
@@ -279,13 +281,16 @@ class MetaRow extends ConsumerWidget {
                           fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
-                      Text(
-                        active
-                            ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
-                            : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
-                        maxLines: 1,
-                        style: TextStyle(
-                            fontSize: 11, color: AppColors.muted, fontFeatures: const [FontFeature.tabularFigures()]),
+                      ClockBuilder(
+                        step: ClockStep.second,
+                        builder: (context, now) => Text(
+                          o.activeAt(now)
+                              ? s.t('ends_in', {'t': countdown(o.end.difference(now))})
+                              : s.t('starts_in', {'t': countdown(o.start.difference(now))}),
+                          maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 11, color: AppColors.muted, fontFeatures: const [FontFeature.tabularFigures()]),
+                        ),
                       ),
                     ],
                   ),

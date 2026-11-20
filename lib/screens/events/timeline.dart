@@ -227,8 +227,10 @@ class _Block extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final o = occurrence;
     final dim = past || looted;
-    final pinned = ref.watch(pinnedEventsProvider).contains(eventKey(o.map, o.event));
-    final selected = ref.watch(selectedEventProvider) == o;
+    // each block hears only whether it is pinned or chosen: a tap on one block built every one of the five hundred again
+    final key = eventKey(o.map, o.event);
+    final pinned = ref.watch(pinnedEventsProvider.select((pins) => pins.contains(key)));
+    final selected = ref.watch(selectedEventProvider.select((chosen) => chosen == o));
     // a tap opens the event, where it can be pinned. the old tooltip only
     // showed the name, so nothing on the timeline could be pinned
     // the label of a narrow block is cut, so the whole name shows on hover; a tap still opens the event
