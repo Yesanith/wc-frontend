@@ -40,15 +40,56 @@ class ProfessionsScreen extends ConsumerWidget {
   }
 }
 
-class _ProfessionCard extends StatelessWidget {
+class _ProfessionCard extends ConsumerWidget {
   const _ProfessionCard(this.p);
 
   final ProfessionInfo p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final color = professionColor(p.id);
     final elites = p.specializations.where((l) => l['elite'] == true).toList();
+    if (SiteScope.of(context)) {
+      final s = ref.watch(stringsProvider);
+      return AppCard(
+        onTap: () => openPanel(context, (_) => ProfessionDetailScreen(id: p.id)),
+        padding: const EdgeInsets.all(20),
+        radius: AppRadius.card,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ProfessionIcon(url: p.iconBig ?? p.icon, size: 56),
+                const SizedBox(width: 16),
+                Expanded(child: Text(p.name, style: display(24, color: color))),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                Pill('${s.t('specializations')} ${p.specializations.length}'),
+                Pill('${s.t('weapons')} ${p.weapons.length}'),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                for (final e in elites) ...[
+                  Tooltip(
+                    message: '${e['name'] ?? ''}',
+                    child: ProfessionIcon(url: e['profession_icon'] as String?, size: 28),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ],
+            ),
+          ],
+        ),
+      );
+    }
     return AppCard(
       onTap: () => openPanel(context, (_) => ProfessionDetailScreen(id: p.id)),
       padding: const EdgeInsets.all(14),
@@ -107,25 +148,28 @@ class ProfessionDetailScreen extends ConsumerWidget {
               onRetry: () => ref.invalidate(professionsProvider),
               builder: (_) => EmptyNote(s.t('nothing_here')),
             )
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              children: [
-                SectionHeader(title: s.t('specializations'), trailing: '${p.specializations.length}'),
-                const SizedBox(height: 10),
-                for (final line in p.specializations) _SpecTile(line: line, color: color),
-                const SizedBox(height: 18),
-                SectionHeader(title: s.t('weapons'), trailing: '${p.weapons.length}'),
-                const SizedBox(height: 10),
-                Panel(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: Column(
-                    children: [
-                      for (final e in _sortedWeapons(p.weapons)) _WeaponRow(name: e.key, weapon: e.value, p: p, s: s),
-                    ],
-                  ),
+          : SiteScope.of(context)
+              ? _ProfessionSite(p: p, color: color)
+              : ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                  children: [
+                    SectionHeader(title: s.t('specializations'), trailing: '${p.specializations.length}'),
+                    const SizedBox(height: 10),
+                    for (final line in p.specializations) _SpecTile(line: line, color: color),
+                    const SizedBox(height: 18),
+                    SectionHeader(title: s.t('weapons'), trailing: '${p.weapons.length}'),
+                    const SizedBox(height: 10),
+                    Panel(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      child: Column(
+                        children: [
+                          for (final e in _sortedWeapons(p.weapons))
+                            _WeaponRow(name: e.key, weapon: e.value, p: p, s: s),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
     );
   }
 }
@@ -241,7 +285,7 @@ class _SpecTileState extends ConsumerState<_SpecTile> {
 }
 
 class _Traits extends ConsumerWidget {
-  const _Traits({required this.line});
+  const _Traits({super.key, required this.line});
 
   final Json line;
 
@@ -256,23 +300,56 @@ class _Traits extends ConsumerWidget {
       child: AsyncView<Map<int, Json>>(
         value: traits,
         onRetry: () => ref.invalidate(_traitsProvider([...minors, ...majors].join(','))),
-        builder: (byId) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // three tiers, each a minor trait followed by its three majors
-            for (var tier = 0; tier < 3; tier++) ...[
-              Text(s.t('tier_n', {'n': tier + 1}),
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
-              const SizedBox(height: 4),
-              for (final id in [
-                if (tier < minors.length) minors[tier],
-                ...majors.skip(tier * 3).take(3),
-              ])
-                if (byId[id] != null) _TraitRow(trait: byId[id]!, minor: minors.contains(id)),
-              const SizedBox(height: 8),
-            ],
-          ],
-        ),
+        builder: (byId) => SiteScope.of(context)
+            ? Column(
+                children: [
+                  // the minor trait of a tier and its three majors side by side
+                  for (var tier = 0; tier < 3; tier++)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 64,
+                            child: Text(s.t('tier_n', {'n': tier + 1}),
+                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                          ),
+                          for (final id in [
+                            if (tier < minors.length) minors[tier],
+                            ...majors.skip(tier * 3).take(3),
+                          ])
+                            Expanded(
+                              child: byId[id] == null
+                                  ? const SizedBox.shrink()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(right: 12),
+                                      child: _TraitRow(trait: byId[id]!, minor: minors.contains(id)),
+                                    ),
+                            ),
+                        ],
+                      ),
+                    ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // three tiers, each a minor trait followed by its three majors
+                  for (var tier = 0; tier < 3; tier++) ...[
+                    Text(s.t('tier_n', {'n': tier + 1}),
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.muted)),
+                    const SizedBox(height: 4),
+                    for (final id in [
+                      if (tier < minors.length) minors[tier],
+                      ...majors.skip(tier * 3).take(3),
+                    ])
+                      if (byId[id] != null) _TraitRow(trait: byId[id]!, minor: minors.contains(id)),
+                    const SizedBox(height: 8),
+                  ],
+                ],
+              ),
       ),
     );
   }
@@ -325,6 +402,127 @@ class _TraitRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// a profession on the site: its lines in a list at the left, the traits of the chosen one and the weapons beside it
+class _ProfessionSite extends ConsumerStatefulWidget {
+  const _ProfessionSite({required this.p, required this.color});
+
+  final ProfessionInfo p;
+  final Color color;
+
+  @override
+  ConsumerState<_ProfessionSite> createState() => _ProfessionSiteState();
+}
+
+class _ProfessionSiteState extends ConsumerState<_ProfessionSite> {
+  int _line = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final p = widget.p;
+    final lines = p.specializations;
+    final line = lines.isEmpty ? null : lines[_line.clamp(0, lines.length - 1)];
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
+      children: [
+        Panel(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              ProfessionIcon(url: p.iconBig ?? p.icon, size: 72),
+              const SizedBox(width: 18),
+              Expanded(child: Text(p.name, style: display(34, color: widget.color))),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 300,
+              child: Panel(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < lines.length; i++)
+                      InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => setState(() => _line = i),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: i == _line ? AppColors.surface2 : null,
+                            border: Border.all(color: i == _line ? AppColors.gold : Colors.transparent),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 34,
+                                height: 34,
+                                child: lines[i]['icon'] is String
+                                    ? CachedIcon(url: lines[i]['icon'] as String, fit: BoxFit.contain)
+                                    : null,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text('${lines[i]['name'] ?? ''}',
+                                    style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
+                              ),
+                              if (lines[i]['elite'] == true) Pill(s.t('elite'), color: widget.color),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (line != null)
+                    Panel(
+                      padding: const EdgeInsets.all(18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${line['name'] ?? ''}', style: display(22)),
+                          const SizedBox(height: 10),
+                          _Traits(key: ValueKey(line['id']), line: line),
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 16),
+                  Panel(
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(s.t('weapons'), style: display(20)),
+                            const Spacer(),
+                            Text('${p.weapons.length}', style: TextStyle(color: AppColors.muted)),
+                          ],
+                        ),
+                        for (final e in _sortedWeapons(p.weapons)) _WeaponRow(name: e.key, weapon: e.value, p: p, s: s),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

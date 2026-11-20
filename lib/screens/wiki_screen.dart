@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/wiki_api.dart';
+import '../l10n/strings.dart';
 import '../state/api.dart';
 import '../state/navigation.dart';
 import '../state/settings.dart';
@@ -167,44 +168,68 @@ class _WikiScreenState extends ConsumerState<WikiScreen> {
               ),
             ),
         ] else ...[
-          GridView(
-            // on the site the four cards share the width, in a flatter shape
-            gridDelegate: AdaptiveGridDelegate(
-              minColumns: 2,
-              maxTile: SiteScope.of(context) ? 300 : 260,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: SiteScope.of(context) ? 2.0 : 1.55,
-            ),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              for (final c in _categories)
-                _CategoryCard(s.t(c.$1), s.t('${c.$1}_sub'), c.$2, () => _searchFor(s.t('${c.$1}_q'))),
-            ],
-          ),
-          const SizedBox(height: 22),
-          SectionHeader(title: s.t('recently_viewed')),
-          const SizedBox(height: 10),
-          if (_recent.isEmpty)
-            Panel(child: Text(s.t('recent_empty'), style: TextStyle(color: AppColors.muted)))
-          else
-            Panel(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: Column(
-                children: [
-                  for (final t in _recent)
-                    ListTile(
-                      leading: Icon(Icons.history, color: AppColors.muted),
-                      title: Text(t, style: const TextStyle(fontWeight: FontWeight.w700)),
-                      onTap: () => _open(t),
-                    ),
-                ],
-              ),
-            ),
+          if (SiteScope.of(context))
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 3, child: _browse(s)),
+                const SizedBox(width: 20),
+                Expanded(flex: 2, child: _recentList(s)),
+              ],
+            )
+          else ...[
+            _browse(s),
+            const SizedBox(height: 22),
+            _recentList(s),
+          ],
         ],
         const SizedBox(height: 20),
         Text(s.t('wiki_attribution'), style: TextStyle(fontSize: 11, height: 1.5, color: AppColors.hint)),
+      ],
+    );
+  }
+
+  Widget _browse(S s) {
+    return GridView(
+      // on the site the four cards share the width, in a flatter shape
+      gridDelegate: AdaptiveGridDelegate(
+        minColumns: 2,
+        maxTile: SiteScope.of(context) ? 300 : 260,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: SiteScope.of(context) ? 2.0 : 1.55,
+      ),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        for (final c in _categories)
+          _CategoryCard(s.t(c.$1), s.t('${c.$1}_sub'), c.$2, () => _searchFor(s.t('${c.$1}_q'))),
+      ],
+    );
+  }
+
+  Widget _recentList(S s) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(title: s.t('recently_viewed')),
+        const SizedBox(height: 10),
+        if (_recent.isEmpty)
+          Panel(child: Text(s.t('recent_empty'), style: TextStyle(color: AppColors.muted)))
+        else
+          Panel(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Column(
+              children: [
+                for (final t in _recent)
+                  ListTile(
+                    leading: Icon(Icons.history, color: AppColors.muted),
+                    title: Text(t, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    onTap: () => _open(t),
+                  ),
+              ],
+            ),
+          ),
       ],
     );
   }
