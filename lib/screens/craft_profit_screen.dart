@@ -204,7 +204,7 @@ class _Page extends ConsumerWidget {
                       children: [
                         Expanded(child: _head(s.t('recipe'))),
                         SizedBox(width: 130, child: _head(s.t('craft_cost'), right: true)),
-                        SizedBox(width: 130, child: _head(s.t('tp_col_sell'), right: true)),
+                        SizedBox(width: 130, child: _head(s.t('craft_net'), right: true)),
                         SizedBox(width: 130, child: _head(s.t('profit'), right: true)),
                         SizedBox(width: 90, child: _head(s.t('sort_return'), right: true)),
                       ],

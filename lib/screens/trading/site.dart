@@ -213,7 +213,8 @@ class _OverviewSite extends ConsumerWidget {
                   final sells = w.price?['sells'] is Map ? w.price!['sells'] as Map : const {};
                   final buys = w.price?['buys'] is Map ? w.price!['buys'] as Map : const {};
                   final month = lastDays(history[w.id] ?? const <PricePoint>[], 30);
-                  final change = percentChange(lastDays(history[w.id] ?? const <PricePoint>[], 1), (p) => p.sell);
+                  // the change of a day: from yesterday's point to today's (the points of the last day alone are only today's one)
+                  final change = percentChange(lastDays(history[w.id] ?? const <PricePoint>[], 2), (p) => p.sell);
                   return InkWell(
                     onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: w.id)),
                     child: Container(

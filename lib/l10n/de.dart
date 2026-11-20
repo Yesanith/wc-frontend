@@ -668,6 +668,7 @@ const deStrings = <String, String>{
   'stats': 'Statistik',
   'last_90_days': 'Die API hält die letzten 90 Tage vor.',
   'sold_for': 'Verkauft, nach Gebühren',
+  'craft_net': 'Nach Gebühren',
   'spent_on_buys': 'Für Käufe ausgegeben',
   'net': 'Netto',
   'items_sold': 'Verkaufte Gegenstände',
@@ -755,6 +756,7 @@ const deStrings = <String, String>{
   'rec_rec_intro':
       'Du leitest diese Gilde und entscheidest, wer ihre Gildensuche-Seite anlegen und bearbeiten darf. Das ist nicht dasselbe wie Offizier zu sein.',
   'rec_rec_none': 'Außer dir niemand.',
+  'rec_rec_no_members': 'Es gibt kein Mitglied mehr, das du zulassen kannst.',
   'rec_rec_add': 'Mitglied berechtigen',
   'rec_rec_remove': 'Zurücknehmen',
   'rec_rec_pick': 'Mitglied wählen',

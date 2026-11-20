@@ -134,7 +134,7 @@ class _PeriodSiteState extends ConsumerState<PeriodSite> {
                 ),
               ),
               const SizedBox(height: 8),
-              if (stale) const VaultAwaitingLogin(track: 'daily'),
+              if (stale) VaultAwaitingLogin(track: track),
               if (periodic == null && tasks.isEmpty)
                 const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
               for (final t in list) _TaskRow(task: t, showGroup: shown == null),

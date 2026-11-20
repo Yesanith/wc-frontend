@@ -659,6 +659,7 @@ const enStrings = <String, String>{
   'stats': 'Stats',
   'last_90_days': 'The API keeps the last 90 days of transactions.',
   'sold_for': 'Sold for, after fees',
+  'craft_net': 'After fees',
   'spent_on_buys': 'Spent on buys',
   'net': 'Net',
   'items_sold': 'Items sold',
@@ -744,6 +745,7 @@ const enStrings = <String, String>{
   'rec_rec_intro':
       'You lead this guild, so you decide who may open and edit its recruitment page. This is not the same as being an officer.',
   'rec_rec_none': 'Nobody besides you.',
+  'rec_rec_no_members': 'There is no member left to allow.',
   'rec_rec_add': 'Allow a member',
   'rec_rec_remove': 'Take it back',
   'rec_rec_pick': 'Choose a member',

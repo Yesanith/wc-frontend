@@ -327,7 +327,13 @@ class _GuildEventScreenState extends ConsumerState<GuildEventScreen> {
       container.invalidate(upcomingEventsProvider);
       if (mounted) {
         showToast(context, s.t('event_deleted'));
-        Navigator.of(context).pop();
+        // on its own page the page closes; beside the week on the site the list loses the event and shows another, and
+        // closing would take the site's own page away
+        if (widget.embedded) {
+          setState(() => _busy = false);
+        } else {
+          Navigator.of(context).pop();
+        }
       }
     } catch (err) {
       if (mounted) {

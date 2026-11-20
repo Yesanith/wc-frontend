@@ -663,6 +663,7 @@ const frStrings = <String, String>{
   'stats': 'Stats',
   'last_90_days': 'L\'API conserve les 90 derniers jours.',
   'sold_for': 'Vendu, après taxes',
+  'craft_net': 'Après taxes',
   'spent_on_buys': 'Dépensé en achats',
   'net': 'Net',
   'items_sold': 'Objets vendus',
@@ -730,7 +731,7 @@ const frStrings = <String, String>{
   'rec_f_contact': 'Nom à chuchoter en jeu (facultatif)',
   'rec_f_languages': 'Langue',
   'rec_f_tags_hint':
-      'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis une langue et jusqu à 4 choses que vous cherchez. {n} sur 5 choisis.',
+      'La page est publiée dans le forum du serveur Discord officiel avec ceux-ci comme tags, et une publication en a 5 au maximum : choisis une langue et jusqu\'à 4 choses que tu cherches. {n} sur 5 choisis.',
   'rec_f_recruiting': 'Nous recrutons en ce moment',
   'rec_f_recruiting_hint':
       'Si tu le désactives, la publication de cette page dans le forum du serveur Discord officiel est verrouillée : personne ne peut y répondre.',
@@ -748,6 +749,7 @@ const frStrings = <String, String>{
   'rec_rec_intro':
       'Tu diriges cette guilde, c\'est donc toi qui décides qui peut créer et modifier sa page de recrutement. Ce n\'est pas la même chose qu\'être officier.',
   'rec_rec_none': 'Personne d\'autre que toi.',
+  'rec_rec_no_members': 'Il ne reste aucun membre à autoriser.',
   'rec_rec_add': 'Autoriser un membre',
   'rec_rec_remove': 'Retirer',
   'rec_rec_pick': 'Choisis un membre',
@@ -1081,18 +1083,18 @@ const frStrings = <String, String>{
   'learned_recipes_of': 'Recettes de {name}',
   'professions': 'Professions',
   'support_note':
-      'Wondrous Compass est gratuit et sans publicité. S\'il vous est utile, vous pouvez m\'offrir un café.',
-  'buy_coffee': 'Offrez-moi un café',
+      'Wondrous Compass est gratuit et sans publicité. S\'il t\'est utile, tu peux m\'offrir un café.',
+  'buy_coffee': 'Offre-moi un café',
   'price_history': 'Historique des prix',
   'price_history_collecting':
-      'Le comptoir ne garde aucun historique, l\'app note donc un prix par jour quand elle tourne. Suivez l\'objet et son graphique se construit à partir d\'aujourd\'hui.',
+      'Le comptoir ne garde aucun historique, l\'app note donc un prix par jour quand elle tourne. Suis l\'objet et son graphique se construit à partir d\'aujourd\'hui.',
   'price_history_note':
       'Enregistré sur ce téléphone, un point par jour où l\'app a vu le prix. Les objets suivis sont mis à jour à chaque lancement.',
   'pinned_achievements': 'Succès épinglés',
   'about': 'À propos',
   'about_by': 'par {name}',
   'about_summary':
-      'Un compagnon non officiel pour Guild Wars 2 : vos personnages, votre compte, le comptoir, les succès et la carte du monde, directement depuis l\'API officielle.',
+      'Un compagnon non officiel pour Guild Wars 2 : tes personnages, ton compte, le comptoir, les succès et la carte du monde, directement depuis l\'API officielle.',
   'about_community': 'Communauté',
   'about_github': 'GitHub',
   'about_github_note': 'Le code source, les versions et chaque apk.',
@@ -1132,10 +1134,10 @@ const frStrings = <String, String>{
   'vendor_value': 'Valeur marchande',
   'demand': 'Demande',
   'supply': 'Offre',
-  'welcome_title': 'Votre Tyrie,\nen un coup d\'œil.',
+  'welcome_title': 'Ta Tyrie,\nen un coup d\'œil.',
   'welcome_body':
-      'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que vous possédez, au même endroit. Connectez-vous avec une clé API en lecture seule d\'ArenaNet.',
-  'step_create': 'Créez une clé sur account.arena.net avec les autorisations que vous voulez partager.',
+      'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que tu possèdes, au même endroit. Connecte-toi avec une clé API en lecture seule d\'ArenaNet.',
+  'step_create': 'Crée une clé sur account.arena.net avec les autorisations que tu veux partager.',
   'step_paste':
       'Colle-la ici. Elle est stockée chiffrée sur cet appareil, et dans ton compte seulement si tu le choisis.',
   'continue': 'Continuer',

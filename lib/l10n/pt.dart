@@ -660,6 +660,7 @@ const ptStrings = <String, String>{
   'stats': 'Estatísticas',
   'last_90_days': 'A API guarda os últimos 90 dias de transações.',
   'sold_for': 'Vendido por, após as taxas',
+  'craft_net': 'Após taxas',
   'spent_on_buys': 'Gasto em compras',
   'net': 'Saldo',
   'items_sold': 'Itens vendidos',
@@ -745,6 +746,7 @@ const ptStrings = <String, String>{
   'rec_rec_intro':
       'Você lidera esta guilda, então decide quem pode criar e editar a página de recrutamento. Isso não é o mesmo que ser oficial.',
   'rec_rec_none': 'Ninguém além de você.',
+  'rec_rec_no_members': 'Não há mais membros para autorizar.',
   'rec_rec_add': 'Permitir um membro',
   'rec_rec_remove': 'Retirar',
   'rec_rec_pick': 'Escolha um membro',
@@ -1253,9 +1255,9 @@ const ptStrings = <String, String>{
   'oe_region_na': 'América do Norte',
   'oe_region_all': 'Todas as regiões',
   'oe_region_note':
-      'Um evento de uma região é para jogadores com uma conta do jogo num mundo dessa região. A região da tua conta é lida do seu mundo ao vinculá-la ou atualizá-la.',
+      'Um evento de uma região é para jogadores com uma conta do jogo num mundo dessa região. A região da sua conta é lida do mundo dela ao vinculá-la ou atualizá-la.',
   'oe_region_unknown':
-      'A região da tua conta ainda não é conhecida, por isso só podes criar e participar em eventos para todas as regiões. Abre a tua ligação ao Guild Wars 2 nas definições e atualiza-a.',
+      'A região da sua conta ainda não é conhecida, então você só pode criar e participar de eventos para todas as regiões. Abra o seu vínculo com o Guild Wars 2 nas configurações e atualize-o.',
   'oe_tags': 'Etiquetas (até 3)',
   'oe_tag_any': 'Qualquer etiqueta',
   'oe_tag_meta': 'Meta',
@@ -1267,8 +1269,8 @@ const ptStrings = <String, String>{
   'oe_map': 'ID do mapa (opcional)',
   'oe_err_map': 'Esse ID de mapa não é válido.',
   'oe_err_region': 'Essa região não é válida.',
-  'oe_err_wrong_region': 'Precisas de uma conta do jogo nessa região.',
-  'oe_err_tags': 'Escolhe até três etiquetas da lista.',
+  'oe_err_wrong_region': 'Você precisa de uma conta do jogo nessa região.',
+  'oe_err_tags': 'Escolha até três etiquetas da lista.',
   'oe_join_as': 'Inscrever-se como',
   'oe_roles_title': 'Discord oficial',
   'oe_roles_body':

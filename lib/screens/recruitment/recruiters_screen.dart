@@ -79,7 +79,14 @@ class RecruitersScreen extends ConsumerWidget {
   /// the members the leader may allow: those of the guild who are not its leader and are not allowed already
   Future<void> _pick(BuildContext context, WidgetRef ref, Set<String> already) async {
     final s = ref.read(stringsProvider);
-    final roster = await ref.read(guildRosterProvider(guild.guildId).future);
+    final List<RosterMember> roster;
+    try {
+      roster = await ref.read(guildRosterProvider(guild.guildId).future);
+    } catch (e) {
+      // the members could not be read: said, and nothing is opened
+      if (context.mounted) showToast(context, s.t(recruitErrorKey(e)));
+      return;
+    }
     if (!context.mounted) return;
     final candidates = [
       for (final m in roster)
@@ -93,7 +100,7 @@ class RecruitersScreen extends ConsumerWidget {
           if (candidates.isEmpty)
             Padding(
                 padding: const EdgeInsets.all(24),
-                child: Text(s.t('rec_rec_none'), style: TextStyle(color: AppColors.muted))),
+                child: Text(s.t('rec_rec_no_members'), style: TextStyle(color: AppColors.muted))),
           for (final m in candidates)
             SimpleDialogOption(onPressed: () => Navigator.of(context).pop(m), child: Text(m.accountName)),
         ],
