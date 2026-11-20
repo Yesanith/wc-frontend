@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../data/metas.dart';
+import '../data/waypoint_points.dart';
 import '../data/waypoints.dart';
 import '../services/icon_cache.dart';
 import '../state/world_map.dart';
@@ -56,7 +57,6 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
 
   @override
   Widget build(BuildContext context) {
-    final markers = ref.watch(worldMarkersProvider(defaultFloor)).valueOrNull ?? const <MapMarker>[];
     return LayoutBuilder(
       builder: (context, box) {
         final size = Size(box.maxWidth, box.maxHeight);
@@ -73,7 +73,7 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
                   ..._tiles(size),
                   ClockBuilder(
                     step: ClockStep.minute,
-                    builder: (context, now) => Stack(children: _pins(now, markers, size)),
+                    builder: (context, now) => Stack(children: _pins(now, size)),
                   ),
                 ],
               ),
@@ -124,19 +124,18 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
     ];
   }
 
-  List<Widget> _pins(DateTime now, List<MapMarker> markers, Size box) {
-    final byCode = {
-      for (final m in markers)
-        if (m.kind == 'waypoint') m.chatLink: m
-    };
+  /// the places of the waypoints are a small table that comes with the app: the whole world map, a megabyte, was unpacked on
+  /// the home page for five of them
+  List<Widget> _pins(DateTime now, Size box) {
     final pins = <Widget>[];
     var first = true;
     for (final o in upNext(now, count: 5)) {
       final waypoint = waypointFor(o.map, o.event);
-      final marker = waypoint == null ? null : byCode[waypoint.code];
-      if (marker == null) continue;
-      final dx = _origin.dx + marker.x / _unitsPerPixel * _k;
-      final dy = _origin.dy + marker.y / _unitsPerPixel * _k;
+      final point = waypoint == null ? null : waypointPoints[waypoint.code];
+      if (point == null) continue;
+      final (x, y) = point;
+      final dx = _origin.dx + x / _unitsPerPixel * _k;
+      final dy = _origin.dy + y / _unitsPerPixel * _k;
       // not under the strip along the top nor under the column of cards at the right: nothing could be read there
       if (dx < 0 || dy < 72 || dx > box.width - 560 || dy > box.height - 140) continue;
       pins.add(Positioned(

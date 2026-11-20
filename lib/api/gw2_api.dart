@@ -118,6 +118,7 @@ class Gw2Api {
   final Map<int, Json> _specCache = {};
   final Map<int, Json> _achievementCache = {};
   final Map<int, Json> _masteryCache = {};
+  final Map<int, Json> _mapCache = {};
   final Map<int, Json> _traitCache = {};
   final Map<int, Json> _skillCache = {};
   final Map<int, Json> _petCache = {};

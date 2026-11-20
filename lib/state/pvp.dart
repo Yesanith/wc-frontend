@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/cache.dart';
 import '../util.dart';
 import 'api.dart';
-import 'maps.dart';
 import 'settings.dart';
 
 /// one of the nine rank tiers, Rabbit through Dragon
@@ -115,8 +114,13 @@ final pvpGamesProvider = FutureProvider<List<PvpGame>>((ref) async {
   // the match only carries a map id, the names come from the map list
   var names = const <int, String>{};
   try {
-    // pvp maps are not open world ones, so the list of every map is asked
-    names = await ref.watch(mapNamesProvider.future);
+    // the few maps of the matches, not the list of every map of the game (some thousand), which this was the only reason to download
+    final ids = {for (final raw in rows) asInt(raw['map_id'])}..remove(0);
+    final maps = await ref.watch(gw2ApiProvider).mapsById(ids);
+    names = {
+      for (final e in maps.entries)
+        if ('${e.value['name'] ?? ''}'.isNotEmpty) e.key: '${e.value['name']}',
+    };
   } catch (_) {
     // a missing map list only costs the label
   }

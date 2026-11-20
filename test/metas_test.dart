@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
 
 import 'package:wondrous_compass/data/metas.dart';
+import 'package:wondrous_compass/data/waypoint_points.dart';
 import 'package:wondrous_compass/data/waypoints.dart';
 import 'package:wondrous_compass/screens/events_screen.dart';
 import 'package:wondrous_compass/screens/item_detail_screen.dart';
@@ -37,6 +38,8 @@ void main() {
         // a link to a point of interest is type 4 and its id in four bytes after it
         expect(bytes, hasLength(5), reason: w.code);
         expect(bytes.first, 4, reason: w.code);
+        // the home page and the event panel put it on the map from the small table, not the whole map
+        expect(waypointPoints[w.code], isNotNull, reason: '${w.code}: run python3 tools/waypoint_points.py');
       }
     }
   });

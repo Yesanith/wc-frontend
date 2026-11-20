@@ -101,6 +101,9 @@ extension Gw2ReferenceApi on Gw2Api {
     return details('/dungeons', ids);
   }
 
+  /// some maps by their ids, each asked once
+  Future<Map<int, Json>> mapsById(Iterable<int> ids) => _batch('/maps', ids, _mapCache);
+
   /// every map of the game, static data
   Future<List<Json>> maps() async => _list(await get('/maps', {'ids': 'all'}));
 

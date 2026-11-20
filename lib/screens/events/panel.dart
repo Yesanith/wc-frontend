@@ -17,7 +17,6 @@ class _EventPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final markers = ref.watch(worldMarkersProvider(defaultFloor)).valueOrNull ?? const <MapMarker>[];
     final chosen = ref.watch(selectedEventProvider);
     return ClockBuilder(
       step: ClockStep.minute,
@@ -29,12 +28,7 @@ class _EventPanel extends ConsumerWidget {
         final key = eventKey(o.map, o.event);
         final pinned = pins.contains(key);
         final waypoint = waypointFor(o.map, o.event);
-        MapMarker? marker;
-        if (waypoint != null) {
-          for (final m in markers) {
-            if (m.kind == 'waypoint' && m.chatLink == waypoint.code) marker = m;
-          }
-        }
+        final point = waypoint == null ? null : waypointPoints[waypoint.code];
         final when = o.activeAt(now)
             ? s.t('event_running')
             : o.start.isAfter(now)
@@ -79,9 +73,9 @@ class _EventPanel extends ConsumerWidget {
               ),
               const SizedBox(height: 2),
               Text(o.map.name, style: const TextStyle(fontSize: 14)),
-              if (marker != null) ...[
+              if (point != null) ...[
                 const SizedBox(height: 12),
-                MiniMap(x: marker.x, y: marker.y),
+                MiniMap(x: point.$1, y: point.$2),
               ],
               if (waypoint != null) ...[
                 const SizedBox(height: 12),

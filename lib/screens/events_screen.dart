@@ -2,11 +2,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/metas.dart';
+import '../data/waypoint_points.dart';
 import '../data/waypoints.dart';
 import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
-import '../state/world_map.dart';
 import '../util.dart';
 import '../widgets/mini_map.dart';
 import '../widgets/clock.dart';

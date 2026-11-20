@@ -57,12 +57,3 @@ final _mapRowsProvider = FutureProvider<List<Json>>((ref) async {
   final raw = await cachedList(cache, 'maps_${lang.apiLang}', 'rows', () => api.maps());
   return raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
 });
-
-/// the name of every map by its id, the ones that are not open world too: a pvp match is played on a map of its own
-final mapNamesProvider = FutureProvider<Map<int, String>>((ref) async {
-  final rows = await ref.watch(_mapRowsProvider.future);
-  return {
-    for (final r in rows)
-      if ('${r['name'] ?? ''}'.isNotEmpty) asInt(r['id']): '${r['name']}',
-  };
-});

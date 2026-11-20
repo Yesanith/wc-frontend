@@ -64,10 +64,7 @@ String _utcDay(DateTime d) => '${d.year}-${d.month}-${d.day}';
 
 /// the categories the administrator keeps off the daily and weekly pages (the festivals that are over), by the game's id. none when
 /// the community backend cannot be reached. asked again every ten minutes while a page is open
-final hiddenCategoriesProvider = FutureProvider<Set<int>>((ref) async {
-  if (!communityReady) return const {};
-  final timer = Timer(const Duration(minutes: 10), ref.invalidateSelf);
-  ref.onDispose(timer.cancel);
+Future<Set<int>> _readHiddenCategories() async {
   try {
     final v = await Supabase.instance.client.rpc('app_hidden_categories');
     return {
@@ -78,7 +75,25 @@ final hiddenCategoriesProvider = FutureProvider<Set<int>>((ref) async {
   } catch (_) {
     return const {};
   }
-});
+}
+
+/// asked again every ten minutes, and told to the pages only when it changed: each new answer, the same as the last, had
+/// the daily and weekly achievements downloaded again
+class HiddenCategories extends AsyncNotifier<Set<int>> {
+  @override
+  Future<Set<int>> build() async {
+    if (!communityReady) return const {};
+    final timer = Timer.periodic(const Duration(minutes: 10), (_) async {
+      final next = await _readHiddenCategories();
+      final now = state.valueOrNull;
+      if (now == null || now.length != next.length || !now.containsAll(next)) state = AsyncData(next);
+    });
+    ref.onDispose(timer.cancel);
+    return _readHiddenCategories();
+  }
+}
+
+final hiddenCategoriesProvider = AsyncNotifierProvider<HiddenCategories, Set<int>>(HiddenCategories.new);
 
 /// rotating achievements split by their own flag: the weekly ones go to the
 /// weekly page even when they share a category with daily ones
