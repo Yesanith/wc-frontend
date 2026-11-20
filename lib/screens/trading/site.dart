@@ -480,6 +480,18 @@ class _HistorySiteState extends ConsumerState<_HistorySite> {
   var _sold = true;
   var _query = '';
 
+  /// ninety days can be thousands of rows: they are shown a hundred at a time, and the search waits for a pause in the
+  /// typing, so a key pressed does not build all of them again
+  static const _page = 100;
+  var _shown = _page;
+  Timer? _typing;
+
+  @override
+  void dispose() {
+    _typing?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -494,12 +506,34 @@ class _HistorySiteState extends ConsumerState<_HistorySite> {
           runSpacing: 8,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            ChoiceChip(label: Text(s.t('sold')), selected: _sold, onSelected: (_) => setState(() => _sold = true)),
-            ChoiceChip(label: Text(s.t('bought')), selected: !_sold, onSelected: (_) => setState(() => _sold = false)),
+            ChoiceChip(
+                label: Text(s.t('sold')),
+                selected: _sold,
+                onSelected: (_) => setState(() {
+                      _sold = true;
+                      _shown = _page;
+                    })),
+            ChoiceChip(
+                label: Text(s.t('bought')),
+                selected: !_sold,
+                onSelected: (_) => setState(() {
+                      _sold = false;
+                      _shown = _page;
+                    })),
             SizedBox(
               width: 280,
               child: TextField(
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _typing?.cancel();
+                  _typing = Timer(const Duration(milliseconds: 250), () {
+                    if (mounted) {
+                      setState(() {
+                        _query = v;
+                        _shown = _page;
+                      });
+                    }
+                  });
+                },
                 decoration: fieldDecoration(s.t('search'), prefixIcon: Icon(Icons.search, color: AppColors.muted)),
               ),
             ),
@@ -531,7 +565,7 @@ class _HistorySiteState extends ConsumerState<_HistorySite> {
                     (s.t('price_each'), 130),
                     (s.t('total'), 150)
                   ]),
-                  for (final r in rows)
+                  for (final r in rows.take(_shown))
                     InkWell(
                       onTap: () => openPanel(context, (_) => TradingItemScreen(itemId: asInt(r.tx['item_id']))),
                       child: Container(
@@ -569,6 +603,14 @@ class _HistorySiteState extends ConsumerState<_HistorySite> {
                             _siteCell(CoinText(asInt(r.tx['price']) * asInt(r.tx['quantity']), size: 13.5), 150),
                           ],
                         ),
+                      ),
+                    ),
+                  if (rows.length > _shown)
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextButton(
+                        onPressed: () => setState(() => _shown += _page),
+                        child: Text('${s.t('show_more')} (${rows.length - _shown})'),
                       ),
                     ),
                 ],

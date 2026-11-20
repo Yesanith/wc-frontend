@@ -1042,6 +1042,18 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
   int? _category;
   var _sort = _MatSort.worth;
 
+  /// some four hundred materials: shown a hundred at a time, and the search waits for a pause in the typing, so a key
+  /// pressed does not build every row again
+  static const _page = 100;
+  var _shown = _page;
+  Timer? _typing;
+
+  @override
+  void dispose() {
+    _typing?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
@@ -1121,7 +1133,17 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
             SizedBox(
               width: 280,
               child: TextField(
-                onChanged: (v) => setState(() => _query = v),
+                onChanged: (v) {
+                  _typing?.cancel();
+                  _typing = Timer(const Duration(milliseconds: 250), () {
+                    if (mounted) {
+                      setState(() {
+                        _query = v;
+                        _shown = _page;
+                      });
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                   isDense: true,
                   prefixIcon: const Icon(Icons.search, size: 18),
@@ -1132,12 +1154,18 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
             ChoiceChip(
                 label: Text(s.t('all')),
                 selected: _category == null,
-                onSelected: (_) => setState(() => _category = null)),
+                onSelected: (_) => setState(() {
+                      _category = null;
+                      _shown = _page;
+                    })),
             for (final g in widget.groups)
               ChoiceChip(
                 label: Text(g.name),
                 selected: _category == g.id,
-                onSelected: (_) => setState(() => _category = g.id),
+                onSelected: (_) => setState(() {
+                  _category = g.id;
+                  _shown = _page;
+                }),
               ),
           ],
         ),
@@ -1170,7 +1198,7 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
                   ],
                 ),
               ),
-              for (final r in shown)
+              for (final r in shown.take(_shown))
                 InkWell(
                   onTap: () => showItemSheet(
                     context,
@@ -1237,6 +1265,14 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
                             width: 120),
                       ],
                     ),
+                  ),
+                ),
+              if (shown.length > _shown)
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextButton(
+                    onPressed: () => setState(() => _shown += _page),
+                    child: Text('${s.t('show_more')} (${shown.length - _shown})'),
                   ),
                 ),
             ],
