@@ -109,7 +109,7 @@ const deStrings = <String, String>{
   'vault_after_login_daily': 'Die heutigen Aufgaben kommen, wenn du dich im Spiel anmeldest',
   'vault_after_login_weekly': 'Die Aufgaben dieser Woche kommen, wenn du dich im Spiel anmeldest',
   'vault_after_login_note':
-      'Das Spiel vergibt die Aufgaben des Zauberer-Tresors bei der ersten Anmeldung nach dem Reset; bis dahin hat die API nur die vorherigen. Sie erscheinen hier einige Minuten nach der Anmeldung.',
+      'Das Spiel vergibt die Aufgaben des Magiergewölbes bei der ersten Anmeldung nach dem Reset; bis dahin hat die API nur die vorherigen. Sie erscheinen hier einige Minuten nach der Anmeldung.',
   'api_last_sent': 'Das Spiel hat dein Konto zuletzt am {t} gesendet',
   'waypoint_copied': '{name}: Link kopiert. Füge ihn im Spiel-Chat ein.',
   'copy_waypoint': 'Wegpunkt-Link kopieren',
@@ -142,7 +142,7 @@ const deStrings = <String, String>{
   'ach_reward_mastery': 'Meisterschaftspunkt: {region}',
   'vault_objectives_all': 'Alle Aufgaben der Saison',
   'vault_objectives_note':
-      'Der Tresor kann diese Saison {n} Aufgaben stellen und wählt daraus die des Tages und der Woche. Daneben steht der Acclaim.',
+      'Das Magiergewölbe kann diese Saison {n} Aufgaben stellen und wählt daraus die des Tages und der Woche. Daneben steht der Acclaim.',
   'vault_objectives_search': 'Aufgaben suchen',
   'look_mistlock': 'Mistlock',
   'look_mistlock_note': 'Tiefes Marineblau mit Silberrahmen und aquafarbenem Schimmer, immer dunkel.',

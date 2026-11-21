@@ -106,7 +106,7 @@ const ptStrings = <String, String>{
   'vault_after_login_daily': 'Os objetivos de hoje chegam quando você entra no jogo',
   'vault_after_login_weekly': 'Os objetivos desta semana chegam quando você entra no jogo',
   'vault_after_login_note':
-      'O jogo distribui os objetivos do Cofre do Mago no seu primeiro login após o reset; até lá a API só tem os anteriores. Eles aparecem aqui alguns minutos depois do login.',
+      'O jogo distribui os objetivos do Wizard\'s Vault no seu primeiro login após o reset; até lá a API só tem os anteriores. Eles aparecem aqui alguns minutos depois do login.',
   'api_last_sent': 'O jogo enviou sua conta pela última vez em {t}',
   'waypoint_copied': '{name}: link copiado. Cole no chat do jogo.',
   'copy_waypoint': 'Copiar o link do waypoint',
@@ -260,11 +260,11 @@ const ptStrings = <String, String>{
   'bank_tab_n': 'Aba {n}',
   'guest_continue': 'Continuar sem chave de API',
   'guest_note':
-      'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',
+      'Chefes do mundo, mapa, receitas, preços do Trading Post, wiki e notícias funcionam sem ela. Seus personagens e progresso precisam de uma chave.',
   'guest': 'Convidado',
   'guest_home_title': 'Você está olhando como convidado',
   'guest_home_body':
-      'Chefes do mundo, mapa, receitas, preços do Posto Comercial, wiki e notícias funcionam sem chave. Adicione uma chave de API para ver personagens, carteira, Cofre do Mago e progresso.',
+      'Chefes do mundo, mapa, receitas, preços do Trading Post, wiki e notícias funcionam sem chave. Adicione uma chave de API para ver personagens, carteira, Wizard\'s Vault e progresso.',
   'needs_key_title': 'Isso precisa de uma chave de API',
   'needs_key_body':
       'Esta seção mostra sua própria conta: personagens, progresso, coleções e guildas. Adicione uma chave de API somente leitura da ArenaNet para vê-la. Todo o resto funciona sem ela.',
@@ -898,13 +898,13 @@ const ptStrings = <String, String>{
   'sort_profit': 'Maior lucro',
   'sort_return': 'Melhor retorno',
   'reset_alerts_title': 'Lembretes de reinício',
-  'reset_alerts_note': 'Um lembrete uma hora antes do reinício, para não esquecer o Cofre do Mago nem as diárias.',
+  'reset_alerts_note': 'Um lembrete uma hora antes do reinício, para não esquecer o Wizard\'s Vault nem as diárias.',
   'reset_alert_daily': 'Reinício diário',
   'reset_alert_weekly': 'Reinício semanal',
   'reset_notify_daily_title': 'Reinício diário em uma hora',
-  'reset_notify_daily_body': 'Termine o Cofre do Mago e suas metas diárias antes que reiniciem.',
+  'reset_notify_daily_body': 'Termine o Wizard\'s Vault e suas metas diárias antes que reiniciem.',
   'reset_notify_weekly_title': 'Reinício semanal em uma hora',
-  'reset_notify_weekly_body': 'Termine as metas semanais do Cofre do Mago e os raides antes que reiniciem.',
+  'reset_notify_weekly_body': 'Termine as metas semanais do Wizard\'s Vault e os raides antes que reiniciem.',
   'alert_push_hint': 'Com login e notificações permitidas, você é avisado também com o app fechado.',
   'landing_title': 'Seu companheiro de Guild Wars 2',
   'landing_sub':

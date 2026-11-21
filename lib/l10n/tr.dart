@@ -256,11 +256,11 @@ const trStrings = <String, String>{
   'bank_tab_n': 'Sekme {n}',
   'guest_continue': 'API key olmadan devam et',
   'guest_note':
-      'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
+      'Dünya boss\'ları, harita, tarifler, Trading Post fiyatları, wiki ve haberler olmadan da çalışır. Karakterlerin ve ilerlemen için key gerekir.',
   'guest': 'Misafir',
   'guest_home_title': 'Misafir olarak göz atıyorsun',
   'guest_home_body':
-      'Dünya boss\'ları, harita, tarifler, Ticaret Merkezi fiyatları, wiki ve haberler key olmadan çalışır. Karakterlerini, cüzdanını, Wizard\'s Vault\'unu ve ilerlemeni görmek için bir API key ekle.',
+      'Dünya boss\'ları, harita, tarifler, Trading Post fiyatları, wiki ve haberler key olmadan çalışır. Karakterlerini, cüzdanını, Wizard\'s Vault\'unu ve ilerlemeni görmek için bir API key ekle.',
   'needs_key_title': 'Bunun için API key gerekli',
   'needs_key_body':
       'Bu bölüm kendi hesabını gösterir: karakterler, ilerleme, koleksiyonlar ve loncalar. Görmek için ArenaNet\'ten salt okunur bir API key ekle. Geri kalan her şey key olmadan çalışır.',
@@ -893,13 +893,13 @@ const trStrings = <String, String>{
   'sort_profit': 'En çok kâr',
   'sort_return': 'En iyi getiri',
   'reset_alerts_title': 'Sıfırlama hatırlatıcıları',
-  'reset_alerts_note': 'Sıfırlamadan bir saat önce bir hatırlatma; Büyücü Kasası ve günlükler unutulmasın.',
+  'reset_alerts_note': 'Sıfırlamadan bir saat önce bir hatırlatma; Wizard\'s Vault ve günlükler unutulmasın.',
   'reset_alert_daily': 'Günlük sıfırlama',
   'reset_alert_weekly': 'Haftalık sıfırlama',
   'reset_notify_daily_title': 'Günlük sıfırlamaya bir saat var',
-  'reset_notify_daily_body': 'Büyücü Kasası\'nı ve günlük hedeflerini sıfırlanmadan önce bitir.',
+  'reset_notify_daily_body': 'Wizard\'s Vault\'u ve günlük hedeflerini sıfırlanmadan önce bitir.',
   'reset_notify_weekly_title': 'Haftalık sıfırlamaya bir saat var',
-  'reset_notify_weekly_body': 'Haftalık Büyücü Kasası hedeflerini ve baskınları sıfırlanmadan önce bitir.',
+  'reset_notify_weekly_body': 'Haftalık Wizard\'s Vault hedeflerini ve baskınları sıfırlanmadan önce bitir.',
   'alert_push_hint': 'Giriş yapıp bildirimlere izin verirsen uygulama kapalıyken de haber verilir.',
   'landing_title': 'Guild Wars 2 yardımcın',
   'landing_sub':

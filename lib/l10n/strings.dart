@@ -40,9 +40,26 @@ class S {
 
   String t(String key, [Map<String, Object?>? args]) {
     var text = _strings[lang.code]?[key] ?? _strings['en']![key] ?? key;
+    if (args != null && text.contains('|')) text = _plurals(text, args);
     args?.forEach((k, v) => text = text.replaceAll('{$k}', '$v'));
     return text;
   }
+
+  /// `{n|one|few|many}` picks the word that goes with the number [n]: three forms follow the Slavic rule (1, 21 · 2–4, 22–24 ·
+  /// the rest), two are one and the rest
+  static String _plurals(String text, Map<String, Object?> args) => text.replaceAllMapped(_pluralPattern, (m) {
+        final v = args[m[1]];
+        final n = v is num ? v.abs().floor() : int.tryParse('$v');
+        final forms = m[2]!.split('|');
+        if (n == null) return forms.last;
+        if (forms.length == 2) return n == 1 ? forms[0] : forms[1];
+        final ten = n % 10, hundred = n % 100;
+        if (ten == 1 && hundred != 11) return forms[0];
+        if (ten >= 2 && ten <= 4 && (hundred < 12 || hundred > 14)) return forms[1];
+        return forms[2];
+      });
+
+  static final _pluralPattern = RegExp(r'\{(\w+)\|([^{}]*)\}');
 }
 
 /// one file per language, so a table of a few hundred keys stays readable. english is always there, as the words every other
