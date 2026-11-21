@@ -1,12 +1,12 @@
-import 'de.dart';
+import 'de.dart' deferred as de;
 import 'en.dart';
-import 'es.dart';
-import 'fr.dart';
-import 'ja.dart';
-import 'pt.dart';
-import 'ru.dart';
-import 'tr.dart';
-import 'zh.dart';
+import 'es.dart' deferred as es;
+import 'fr.dart' deferred as fr;
+import 'ja.dart' deferred as ja;
+import 'pt.dart' deferred as pt;
+import 'ru.dart' deferred as ru;
+import 'tr.dart' deferred as tr;
+import 'zh.dart' deferred as zh;
 
 /// app languages. the gw2 api has no turkish, portuguese, russian or
 /// japanese data, those fall back to english item names and the english wiki
@@ -45,15 +45,50 @@ class S {
   }
 }
 
-/// one file per language, so a table of a few hundred keys stays readable
-const _strings = <String, Map<String, String>>{
-  'en': enStrings,
-  'de': deStrings,
-  'es': esStrings,
-  'fr': frStrings,
-  'tr': trStrings,
-  'pt': ptStrings,
-  'ru': ruStrings,
-  'ja': jaStrings,
-  'zh': zhStrings,
-};
+/// one file per language, so a table of a few hundred keys stays readable. english is always there, as the words every other
+/// language falls back to; the others are loaded when they are chosen: in a browser each is a part of its own, so the page does
+/// not download the words of nine languages to show one
+final _strings = <String, Map<String, String>>{'en': enStrings};
+
+/// whether the words of [lang] are there to be shown
+bool languageLoaded(AppLang lang) => _strings.containsKey(lang.code);
+
+/// loads the words of [lang], once. a language that cannot be loaded (the network dropped) is shown in english
+Future<void> loadLanguage(AppLang lang) async {
+  if (languageLoaded(lang)) return;
+  try {
+    switch (lang) {
+      case AppLang.en:
+        return;
+      case AppLang.de:
+        await de.loadLibrary();
+        _strings['de'] = de.deStrings;
+      case AppLang.es:
+        await es.loadLibrary();
+        _strings['es'] = es.esStrings;
+      case AppLang.fr:
+        await fr.loadLibrary();
+        _strings['fr'] = fr.frStrings;
+      case AppLang.tr:
+        await tr.loadLibrary();
+        _strings['tr'] = tr.trStrings;
+      case AppLang.pt:
+        await pt.loadLibrary();
+        _strings['pt'] = pt.ptStrings;
+      case AppLang.ru:
+        await ru.loadLibrary();
+        _strings['ru'] = ru.ruStrings;
+      case AppLang.ja:
+        await ja.loadLibrary();
+        _strings['ja'] = ja.jaStrings;
+      case AppLang.zh:
+        await zh.loadLibrary();
+        _strings['zh'] = zh.zhStrings;
+    }
+  } catch (_) {
+    // the english words stand in
+  }
+}
+
+/// every language at once, for the tests
+Future<void> loadAllLanguages() => Future.wait(AppLang.values.map(loadLanguage));

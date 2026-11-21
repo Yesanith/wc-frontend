@@ -41,9 +41,11 @@ Future<void> main() async {
   // closed, asked for again each time in case an update of the app lost it
   final phoneReady = kIsWeb ? Future<void>.value() : Future.wait([initBossAlerts(), initTradeBackground()]);
   final prefs = await prefsReady;
+  // the words of the language the app opens in, the one part of them it needs
+  final wordsReady = loadLanguage(startLanguage(prefs));
   final cache = await cacheReady;
   final icons = await iconsReady;
-  await Future.wait([communityReady, phoneReady]);
+  await Future.wait([communityReady, phoneReady, wordsReady]);
   if (!kIsWeb && prefs.getBool(tradeNotifyPref) == true) await setTradeBackground(true);
   runApp(
     ProviderScope(

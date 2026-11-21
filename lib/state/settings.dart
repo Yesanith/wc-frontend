@@ -12,21 +12,25 @@ class LangNotifier extends Notifier<AppLang> {
   static const _key = 'lang';
 
   @override
-  AppLang build() {
-    final saved = ref.read(prefsProvider).getString(_key);
-    if (saved != null) return AppLang.fromCode(saved);
-    // first launch: follow the phone language if we support it
-    final device = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
-    return AppLang.fromCode(device);
-  }
+  AppLang build() => startLanguage(ref.read(prefsProvider));
 
+  /// the words of a language are loaded before it is shown, so the page does not show english for a moment
   Future<void> set(AppLang lang) async {
+    await loadLanguage(lang);
     state = lang;
     await ref.read(prefsProvider).setString(_key, lang.code);
   }
 }
 
 final langProvider = NotifierProvider<LangNotifier, AppLang>(LangNotifier.new);
+
+/// the language the app opens in: the one chosen, or on a first launch the phone's when it is one the app speaks
+AppLang startLanguage(SharedPreferences prefs) {
+  final saved = prefs.getString(LangNotifier._key);
+  if (saved != null) return AppLang.fromCode(saved);
+  final device = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+  return AppLang.fromCode(device);
+}
 
 /// which look the app has: the palette of the day, the one of the night, or
 /// whichever the phone is set to
