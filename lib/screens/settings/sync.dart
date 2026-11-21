@@ -16,7 +16,8 @@ class _SyncPanel extends ConsumerWidget {
         children: [
           Kicker(s.t('sync_now').caps),
           const SizedBox(height: 8),
-          Text(s.t('sync_note'), style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
+          Text(s.t(kIsWeb ? 'sync_note_web' : 'sync_note'),
+              style: TextStyle(fontSize: 13, color: AppColors.textSoft, height: 1.4)),
           if (sync.running) ...[
             const SizedBox(height: 12),
             Bar(value: sync.ratio),

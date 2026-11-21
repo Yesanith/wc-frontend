@@ -976,6 +976,8 @@ const trStrings = <String, String>{
   'world_bosses': 'Dünya etkinlikleri',
   'sync_now': 'Şimdi eşitle',
   'syncing': 'Eşitleniyor',
+  'sync_note_web':
+      'Tarayıcıda hesap, sayfaları açtıkça okunur ve sekme açık kaldıkça tutulur. Hepsini bir kerede çekmek için bas.',
   'sync_note':
       'Hesabın açılışta bir kez indirilip cihazda tutulur, böylece bölümler beklemeden açılır. Oynadıktan sonra tekrar eşitle.',
   'pinned': 'Sabitlenenler',

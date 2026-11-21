@@ -93,7 +93,11 @@ class _Hero extends StatelessWidget {
             Color.lerp(AppColors.navBg, AppColors.gold, 0.05)!,
           ],
         ),
-        boxShadow: const [BoxShadow(color: Color(0x80000000), blurRadius: 16, offset: Offset(0, 6))],
+        // a heavy shadow on the night theme, a light one on parchment
+        boxShadow: [
+          BoxShadow(
+              color: Color(AppColors.isDark ? 0x80000000 : 0x24000000), blurRadius: 16, offset: const Offset(0, 6))
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

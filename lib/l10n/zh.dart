@@ -926,6 +926,7 @@ const zhStrings = <String, String>{
   'world_bosses': '世界事件',
   'sync_now': '立即同步',
   'syncing': '正在同步',
+  'sync_note_web': '在浏览器中，账号会在打开页面时逐页读取，并在标签页打开期间保留。点击可一次性获取全部。',
   'sync_note': '账号会在启动时下载一次并保存在设备上，所以各页面打开无需等待。玩完后请再同步一次。',
   'pinned': '已置顶',
   'pin': '置顶',

@@ -982,6 +982,8 @@ const enStrings = <String, String>{
   'world_bosses': 'World events',
   'sync_now': 'Sync now',
   'syncing': 'Syncing',
+  'sync_note_web':
+      'In the browser the account is read page by page as you open it and kept while the tab is open. Press to fetch all of it at once.',
   'sync_note':
       'Your account is downloaded once on launch and kept on the device, so sections open without waiting. Sync again after playing.',
   'pinned': 'Pinned',

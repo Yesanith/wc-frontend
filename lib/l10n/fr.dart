@@ -990,6 +990,8 @@ const frStrings = <String, String>{
   'world_bosses': 'Événements du monde',
   'sync_now': 'Synchroniser',
   'syncing': 'Synchronisation',
+  'sync_note_web':
+      'Dans le navigateur, le compte est lu page par page à l\'ouverture et gardé tant que l\'onglet reste ouvert. Appuie pour tout récupérer d\'un coup.',
   'sync_note':
       'Ton compte est téléchargé une fois au lancement et gardé sur l\'appareil, pour que les sections s\'ouvrent sans attente. Resynchronise après avoir joué.',
   'pinned': 'Épinglés',

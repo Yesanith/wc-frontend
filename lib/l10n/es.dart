@@ -985,6 +985,8 @@ const esStrings = <String, String>{
   'world_bosses': 'Eventos del mundo',
   'sync_now': 'Sincronizar ahora',
   'syncing': 'Sincronizando',
+  'sync_note_web':
+      'En el navegador la cuenta se lee página a página al abrirlas y se guarda mientras la pestaña siga abierta. Pulsa para traerla entera de una vez.',
   'sync_note':
       'Tu cuenta se descarga una vez al abrir la app y se guarda en el dispositivo, así las secciones abren sin esperar. Vuelve a sincronizar después de jugar.',
   'pinned': 'Fijados',

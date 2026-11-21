@@ -982,6 +982,8 @@ const ptStrings = <String, String>{
   'world_bosses': 'Eventos do mundo',
   'sync_now': 'Sincronizar agora',
   'syncing': 'Sincronizando',
+  'sync_note_web':
+      'No navegador a conta é lida página a página ao abri-las e guardada enquanto a aba estiver aberta. Toque para buscar tudo de uma vez.',
   'sync_note':
       'Sua conta é baixada uma vez ao abrir e fica no aparelho, então as seções abrem sem espera. Sincronize de novo depois de jogar.',
   'pinned': 'Fixados',

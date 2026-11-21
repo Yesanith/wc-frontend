@@ -997,6 +997,8 @@ const deStrings = <String, String>{
   'world_bosses': 'Weltevents',
   'sync_now': 'Jetzt synchronisieren',
   'syncing': 'Synchronisiere',
+  'sync_note_web':
+      'Im Browser wird das Konto Seite für Seite beim Öffnen gelesen und gehalten, solange der Tab offen ist. Drücke, um alles auf einmal zu laden.',
   'sync_note':
       'Dein Konto wird beim Start einmal geladen und auf dem Gerät behalten, damit Bereiche ohne Wartezeit öffnen. Nach dem Spielen erneut synchronisieren.',
   'pinned': 'Angeheftet',
