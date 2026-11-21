@@ -291,15 +291,6 @@ void main() {
     });
   });
 
-  test('the roster texts about roles following the game exist in every language', () {
-    for (final lang in AppLang.values) {
-      final s = S(lang);
-      for (final key in ['roster_manual', 'roster_follow_game', 'roster_auto']) {
-        expect(s.t(key), isNot(key), reason: '${lang.code} $key');
-      }
-    }
-  });
-
   group('the leader chooses before the members see', () {
     test('a guild is reviewed once the leader has confirmed, not before', () {
       expect(GuildDetails.fromRow({}).reviewed, isFalse);

@@ -17,10 +17,6 @@ const frStrings = <String, String>{
   'gshare_later': 'Plus tard',
   'roster_note_game':
       'Membres de cette guilde sur Wondrous Compass, avec le rang que leur donne le jeu. Les rangs qui peuvent inviter, promouvoir ou exclure, ou modifier les rangs, peuvent créer et gérer des événements.',
-  'roster_manual': 'défini à la main',
-  'roster_follow_game': 'Suivre à nouveau le rang du jeu',
-  'roster_auto':
-      'Les rôles suivent le jeu : un rang qui peut inviter, promouvoir ou exclure, ou modifier les rangs, fait des officiers. Ce que tu attribues à la main reste jusqu\'à ce que tu le rendes au jeu.',
   'roster_can_create': 'peut créer des événements',
   'ecreate_title': 'Qui peut créer des événements',
   'ecreate_note':
@@ -395,7 +391,6 @@ const frStrings = <String, String>{
   'guild_role_leader': 'Chef',
   'guild_role_officer': 'Officier',
   'guild_role_member': 'Membre',
-  'community_account': 'Compte Wondrous Compass',
   'community_intro':
       'Connecte-toi pour participer aux événements de guilde, trouver des amis et relier le Discord de ta guilde. Tes clés API restent sur cet appareil, sauf si tu choisis de les garder dans ton compte.',
   'community_sign_in_discord': 'Se connecter avec Discord',

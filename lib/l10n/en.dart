@@ -17,10 +17,6 @@ const enStrings = <String, String>{
   'gshare_later': 'Later',
   'roster_note_game':
       'Members of this guild on Wondrous Compass, with the rank the game gives them. Ranks that may invite, promote or kick, or edit ranks, can create and manage events.',
-  'roster_manual': 'set by hand',
-  'roster_follow_game': 'Follow the game\'s rank again',
-  'roster_auto':
-      'Roles follow the game: a rank that may invite, promote or kick, or edit ranks, makes officers. What you appoint by hand stays until you hand it back to the game.',
   'roster_can_create': 'can create events',
   'ecreate_title': 'Who can create events',
   'ecreate_note':
@@ -392,7 +388,6 @@ const enStrings = <String, String>{
   'guild_role_leader': 'Leader',
   'guild_role_officer': 'Officer',
   'guild_role_member': 'Member',
-  'community_account': 'Wondrous Compass account',
   'community_intro':
       'Sign in to take part in guild events, find friends and connect your guild\'s Discord. Your API keys stay on this device, unless you choose to keep them in your account.',
   'community_sign_in_discord': 'Sign in with Discord',

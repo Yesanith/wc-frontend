@@ -70,8 +70,9 @@ extension Gw2TradingApi on Gw2Api {
     final uri = gw2Uri(Gw2Api._base, '/commerce/transactions/$kind',
         query: {'page_size': '1', 'page': '0'}, lang: lang, key: key, web: kIsWeb);
     final res = await _send(uri, gw2Headers(key, web: kIsWeb));
-    if (res.statusCode < 200 || res.statusCode >= 300)
+    if (res.statusCode < 200 || res.statusCode >= 300) {
       throw Gw2ApiException('API error (${res.statusCode})', res.statusCode);
+    }
     final total = int.tryParse(res.headers['x-result-total'] ?? '');
     if (total != null) return total;
     final body = jsonDecode(utf8.decode(res.bodyBytes));

@@ -17,10 +17,6 @@ const ptStrings = <String, String>{
   'gshare_later': 'Depois',
   'roster_note_game':
       'Membros desta guilda no Wondrous Compass, com o posto que o jogo lhes dá. Postos que podem convidar, promover ou expulsar, ou editar postos, podem criar e gerenciar eventos.',
-  'roster_manual': 'definido à mão',
-  'roster_follow_game': 'Voltar a seguir o posto do jogo',
-  'roster_auto':
-      'Os cargos seguem o jogo: um posto que pode convidar, promover ou expulsar, ou editar postos, faz oficiais. O que você definir à mão fica até devolver ao jogo.',
   'roster_can_create': 'pode criar eventos',
   'ecreate_title': 'Quem pode criar eventos',
   'ecreate_note':
@@ -393,7 +389,6 @@ const ptStrings = <String, String>{
   'guild_role_leader': 'Líder',
   'guild_role_officer': 'Oficial',
   'guild_role_member': 'Membro',
-  'community_account': 'Conta Wondrous Compass',
   'community_intro':
       'Entre para participar de eventos da guilda, encontrar amigos e conectar o Discord da sua guilda. Suas chaves de API ficam neste dispositivo, a menos que você escolha guardá-las na sua conta.',
   'community_sign_in_discord': 'Entrar com Discord',

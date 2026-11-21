@@ -17,10 +17,6 @@ const deStrings = <String, String>{
   'gshare_later': 'Später',
   'roster_note_game':
       'Mitglieder dieser Gilde auf Wondrous Compass, mit dem Rang aus dem Spiel. Ränge, die einladen, befördern, kicken oder Ränge bearbeiten dürfen, können Events erstellen und verwalten.',
-  'roster_manual': 'von Hand gesetzt',
-  'roster_follow_game': 'Wieder dem Rang im Spiel folgen',
-  'roster_auto':
-      'Rollen folgen dem Spiel: Ein Rang, der einladen, befördern, kicken oder Ränge bearbeiten darf, macht Offiziere. Was du von Hand vergibst, bleibt, bis du es dem Spiel zurückgibst.',
   'roster_can_create': 'darf Events erstellen',
   'ecreate_title': 'Wer Events erstellen darf',
   'ecreate_note':
@@ -399,7 +395,6 @@ const deStrings = <String, String>{
   'guild_role_leader': 'Anführer',
   'guild_role_officer': 'Offizier',
   'guild_role_member': 'Mitglied',
-  'community_account': 'Wondrous-Compass-Konto',
   'community_intro':
       'Melde dich an, um an Gildenevents teilzunehmen, Freunde zu finden und den Discord deiner Gilde zu verbinden. Deine API-Schlüssel bleiben auf diesem Gerät, außer du speicherst sie in deinem Konto.',
   'community_sign_in_discord': 'Mit Discord anmelden',

@@ -17,10 +17,6 @@ const esStrings = <String, String>{
   'gshare_later': 'Más tarde',
   'roster_note_game':
       'Miembros de este gremio en Wondrous Compass, con el rango que les da el juego. Los rangos que pueden invitar, ascender o expulsar, o editar rangos, pueden crear y gestionar eventos.',
-  'roster_manual': 'asignado a mano',
-  'roster_follow_game': 'Volver a seguir el rango del juego',
-  'roster_auto':
-      'Los roles siguen al juego: un rango que puede invitar, ascender o expulsar, o editar rangos, hace oficiales. Lo que asignes a mano se mantiene hasta que lo devuelvas al juego.',
   'roster_can_create': 'puede crear eventos',
   'ecreate_title': 'Quién puede crear eventos',
   'ecreate_note':
@@ -392,7 +388,6 @@ const esStrings = <String, String>{
   'guild_role_leader': 'Líder',
   'guild_role_officer': 'Oficial',
   'guild_role_member': 'Miembro',
-  'community_account': 'Cuenta de Wondrous Compass',
   'community_intro':
       'Inicia sesión para participar en eventos de gremio, encontrar amigos y conectar el Discord de tu gremio. Tus claves API se quedan en este dispositivo, salvo que elijas guardarlas en tu cuenta.',
   'community_sign_in_discord': 'Iniciar sesión con Discord',

@@ -16,10 +16,6 @@ const trStrings = <String, String>{
   'gshare_later': 'Sonra',
   'roster_note_game':
       'Bu loncanın Wondrous Compass üyeleri, oyundaki rütbeleriyle. Davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen rütbeler etkinlik oluşturup yönetebilir.',
-  'roster_manual': 'elle atandı',
-  'roster_follow_game': 'Yine oyundaki rütbeyi izle',
-  'roster_auto':
-      'Roller oyunu izler: davet edebilen, terfi ettirebilen, atabilen ya da rütbeleri düzenleyebilen bir rütbe subay yapar. Elle atadığın, oyuna geri verene kadar kalır.',
   'roster_can_create': 'etkinlik açabilir',
   'ecreate_title': 'Etkinlik açabilenler',
   'ecreate_note':
@@ -390,7 +386,6 @@ const trStrings = <String, String>{
   'guild_role_leader': 'Lider',
   'guild_role_officer': 'Subay',
   'guild_role_member': 'Üye',
-  'community_account': 'Wondrous Compass hesabı',
   'community_intro':
       'Lonca etkinliklerine katılmak, arkadaş bulmak ve loncanın Discord\'unu bağlamak için giriş yap. API key\'lerin bu cihazda kalır; hesabında saklamayı seçersen orada da durur.',
   'community_sign_in_discord': 'Discord ile giriş yap',

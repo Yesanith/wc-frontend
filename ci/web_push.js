@@ -37,8 +37,19 @@
     return reg;
   }
 
-  async function start(config) {
-    if (started) return started;
+  // the promise is kept at once: two asks at the same time share one start, a second one made the app again and
+  // Firebase refused it as a duplicate. a start that failed may be tried again
+  function start(config) {
+    if (!started) {
+      started = begin(config).catch(function (e) {
+        started = null;
+        throw e;
+      });
+    }
+    return started;
+  }
+
+  async function begin(config) {
     var app = await import(SDK + 'firebase-app.js');
     var m = await import(SDK + 'firebase-messaging.js');
     var messaging = m.getMessaging(app.initializeApp(config, 'wc-push'));
@@ -53,8 +64,7 @@
         data: { link: (payload.fcmOptions && payload.fcmOptions.link) || base.href },
       });
     });
-    started = { m: m, messaging: messaging };
-    return started;
+    return { m: m, messaging: messaging };
   }
 
   window.wcPush = {

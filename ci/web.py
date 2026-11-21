@@ -58,6 +58,9 @@ def patch_index(html: str) -> str:
       var look = JSON.parse(localStorage.getItem('flutter.look') || 'null');
       var night = look === 'dark' || (look !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
       document.documentElement.className = night ? 'night' : 'day';
+      // the bar of a phone's browser takes the colour of the look, not always the dark one
+      var bar = document.querySelector('meta[name="theme-color"]');
+      if (bar) bar.setAttribute('content', night ? '{BG}' : '#F4ECDA');
     }} catch (e) {{}}
   </script>
 """
