@@ -116,11 +116,6 @@ class _StashTab extends ConsumerWidget {
                         onTap: () => showItemSheet(
                           context,
                           id: slot.id,
-                          name: slot.name,
-                          icon: slot.icon,
-                          rarity: slot.rarity,
-                          type: slot.type,
-                          count: slot.count,
                         ),
                         child: ItemIcon(url: slot.icon, rarity: slot.rarity, count: slot.count),
                       ),

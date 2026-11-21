@@ -263,16 +263,10 @@ class _InventoryTab extends ConsumerWidget {
                 (context, i) {
                   final slot = filled[i];
                   final item = map[asInt(slot['id'])];
-                  final itemName = (item?['name'] as String?) ?? s.t('item_n', {'id': slot['id']});
                   return GestureDetector(
                     onTap: () => showItemSheet(
                       context,
                       id: asInt(slot['id']),
-                      name: itemName,
-                      icon: item?['icon'] as String?,
-                      rarity: item?['rarity'] as String?,
-                      type: item?['type'] as String?,
-                      count: asInt(slot['count']),
                       binding: slot['binding'] as String?,
                       boundTo: slot['bound_to'] as String?,
                     ),

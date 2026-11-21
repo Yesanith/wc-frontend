@@ -200,6 +200,11 @@ class _CraftingDetailScreenState extends ConsumerState<CraftingDetailScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text((item?['name'] as String?) ?? s.t('crafting'), style: display(30)),
+                          // whether the character's account knows the recipe, as on a phone
+                          ...[
+                            for (final p in _learnedPill(ref, s, widget.itemId))
+                              Padding(padding: const EdgeInsets.only(top: 6), child: p),
+                          ],
                         ],
                       ),
                     ),

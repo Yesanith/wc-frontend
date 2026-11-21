@@ -7,11 +7,6 @@ import 'item_detail_screen.dart';
 void showItemSheet(
   BuildContext context, {
   required int id,
-  String? name,
-  String? icon,
-  String? rarity,
-  String? type,
-  int count = 1,
   String? binding,
   String? boundTo,
 }) =>

@@ -149,11 +149,6 @@ class _OverviewSite extends ConsumerWidget {
                                   onTap: () => showItemSheet(
                                     context,
                                     id: it.id,
-                                    name: it.name,
-                                    icon: it.icon,
-                                    rarity: it.rarity,
-                                    type: it.type,
-                                    count: it.count,
                                   ),
                                   child: ItemIcon(url: it.icon, rarity: it.rarity, count: it.count, size: 44),
                                 ),

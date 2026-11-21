@@ -885,25 +885,12 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                 ),
               ),
               Expanded(
-                // on the site the entries are a grid of short tiles, as a collection is shown on a page
-                child: SiteScope.of(context)
-                    ? GridView.builder(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 290,
-                          mainAxisExtent: 62,
-                          mainAxisSpacing: 8,
-                          crossAxisSpacing: 8,
-                        ),
-                        itemCount: list.length,
-                        itemBuilder: (context, i) => entry(list[i]),
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                        itemCount: list.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
-                        itemBuilder: (context, i) => entry(list[i]),
-                      ),
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                  itemCount: list.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, i) => entry(list[i]),
+                ),
               ),
             ],
           );

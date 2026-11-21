@@ -6,6 +6,7 @@ import '../services/update_check.dart' show appVersion;
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import '../widgets/glow.dart';
 import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
 import 'about_screen.dart' show repositoryUrl;
@@ -68,8 +69,8 @@ class LandingScreen extends ConsumerWidget {
       body: Stack(
         children: [
           // two soft glows behind the title, as the sign in page has
-          Positioned(top: -140, left: -100, child: _Glow(color: AppColors.gold.withValues(alpha: 0.18), size: 460)),
-          Positioned(top: 60, right: -140, child: _Glow(color: AppColors.ember.withValues(alpha: 0.12), size: 380)),
+          Positioned(top: -140, left: -100, child: Glow(color: AppColors.gold.withValues(alpha: 0.18), size: 460)),
+          Positioned(top: 60, right: -140, child: Glow(color: AppColors.ember.withValues(alpha: 0.12), size: 380)),
           SafeArea(
             child: ListView(
               children: [
@@ -219,28 +220,6 @@ class LandingScreen extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// a soft round light behind the title
-class _Glow extends StatelessWidget {
-  const _Glow({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
-        ),
       ),
     );
   }

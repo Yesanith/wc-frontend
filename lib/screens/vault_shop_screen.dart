@@ -110,11 +110,6 @@ class _ListingRow extends ConsumerWidget {
           onTap: () => showItemSheet(
             context,
             id: row.itemId,
-            name: row.name,
-            icon: row.item?['icon'] as String?,
-            rarity: row.item?['rarity'] as String?,
-            type: row.item?['type'] as String?,
-            count: row.count,
           ),
         ),
       ),

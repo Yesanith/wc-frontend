@@ -10,6 +10,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/account_badge.dart' show discordBlurple;
 import '../widgets/common.dart';
+import '../widgets/glow.dart';
 
 /// the first screen: sign in with Discord, or use the app with an API key alone. with [linking] it is the screen of a
 /// player signed in with Discord whose Discord account has no Guild Wars 2 account yet: the key is asked for, and the
@@ -168,12 +169,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           Positioned(
             top: -120,
             left: -80,
-            child: _Glow(color: AppColors.gold.withValues(alpha: 0.2), size: 360),
+            child: Glow(color: AppColors.gold.withValues(alpha: 0.2), size: 360),
           ),
           Positioned(
             top: 40,
             right: -120,
-            child: _Glow(color: AppColors.ember.withValues(alpha: 0.14), size: 300),
+            child: Glow(color: AppColors.ember.withValues(alpha: 0.14), size: 300),
           ),
           SafeArea(
             // on a wide screen the form keeps to a width it can be read in, in the middle
@@ -372,27 +373,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Glow extends StatelessWidget {
-  const _Glow({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
-        ),
       ),
     );
   }

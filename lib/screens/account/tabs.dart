@@ -149,11 +149,6 @@ class _BankTab extends ConsumerWidget {
               onTap: () => showItemSheet(
                 context,
                 id: slot.id,
-                name: slot.name,
-                icon: slot.icon,
-                rarity: slot.rarity,
-                type: slot.type,
-                count: slot.count,
                 binding: slot.binding,
                 boundTo: slot.boundTo,
               ),
@@ -408,11 +403,6 @@ class _MaterialsTab extends ConsumerWidget {
                         onTap: () => showItemSheet(
                           context,
                           id: m.id,
-                          name: m.name,
-                          icon: m.icon,
-                          rarity: m.rarity,
-                          type: m.type,
-                          count: m.count,
                           binding: m.binding,
                         ),
                         child: ItemIcon(url: m.icon, rarity: m.rarity, count: m.count, bound: m.binding),
@@ -467,11 +457,6 @@ class _ArmoryTab extends ConsumerWidget {
               onTap: () => showItemSheet(
                 context,
                 id: item.id,
-                name: item.name,
-                icon: item.icon,
-                rarity: item.rarity,
-                type: item.type,
-                count: item.count,
               ),
             );
           },
@@ -559,11 +544,6 @@ class _ArmorySite extends ConsumerWidget {
                           onTap: () => showItemSheet(
                             context,
                             id: i.id,
-                            name: i.name,
-                            icon: i.icon,
-                            rarity: i.rarity,
-                            type: i.type,
-                            count: i.count,
                           ),
                           child: SizedBox(
                             width: 96,
@@ -1206,11 +1186,6 @@ class _MaterialsSiteState extends ConsumerState<_MaterialsSite> {
                   onTap: () => showItemSheet(
                     context,
                     id: r.slot.id,
-                    name: r.slot.name,
-                    icon: r.slot.icon,
-                    rarity: r.slot.rarity,
-                    type: r.slot.type,
-                    count: r.slot.count,
                     binding: r.slot.binding,
                     boundTo: r.slot.boundTo,
                   ),

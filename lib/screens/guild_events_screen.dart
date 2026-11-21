@@ -355,6 +355,9 @@ class _EventsWeekState extends ConsumerState<_EventsWeek> {
               if (_week != 0) TextButton(onPressed: () => setState(() => _week = 0), child: Text(s.t('this_week'))),
             ],
           ),
+          // the members and officers of each guild, as on a phone
+          const SizedBox(height: 6),
+          const _GuildLinks(),
           const SizedBox(height: 8),
           Expanded(
             child: Row(

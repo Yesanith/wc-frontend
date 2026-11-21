@@ -293,6 +293,14 @@ class _OpenEventCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Text('${s.t('oe_region_${e.region}')} · ${openEventLanguageName(s, e.language)} · ${e.organizer}',
                 maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+            // a hidden event (seen by its organizer) and the tags, as on a phone
+            if (e.hidden || e.tags.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(spacing: 6, runSpacing: 6, children: [
+                if (e.hidden) Pill(s.t('oe_hidden'), color: AppColors.amber),
+                for (final t in e.tags) Pill(s.t('oe_tag_$t')),
+              ]),
+            ],
             const SizedBox(height: 12),
             if (e.maxParticipants != null) Bar(value: ratio, color: e.isFull ? AppColors.red : AppColors.gold),
             const SizedBox(height: 8),
