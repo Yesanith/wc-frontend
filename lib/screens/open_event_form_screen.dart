@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
+import '../state/professions.dart';
 import '../state/guild_events.dart' show eventRoleKeys, eventRolePresets;
 import '../state/open_events.dart';
 import '../state/settings.dart';
@@ -265,7 +266,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
                     if (p != null && mounted) setState(() => _myProfession = p);
                   },
             icon: const Icon(Icons.shield_outlined, size: 18),
-            label: Text(_myProfession ?? s.t('oe_profession_btn')),
+            label: Text(_myProfession == null ? s.t('oe_profession_btn') : professionName(ref, _myProfession!)),
           ),
         ],
       ],

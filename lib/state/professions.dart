@@ -107,3 +107,8 @@ String? classIcon(Json character, ProfessionInfo? profession, {bool big = false}
   if (eliteIcon != null && eliteIcon.isNotEmpty) return eliteIcon;
   return big ? (profession?.iconBig ?? profession?.icon) : (profession?.icon ?? profession?.iconBig);
 }
+
+/// a profession by the name the game gives it in the language of the app (Wächter, Gardien, 守护者), or as the api names
+/// it (Guardian) when the game has no words in that language or the list has not come yet
+String professionName(WidgetRef ref, String profession) =>
+    ref.watch(professionsProvider).valueOrNull?[profession]?.name ?? profession;

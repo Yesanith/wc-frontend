@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/strings.dart';
 import '../api/gw2_api.dart';
 import '../services/icon_cache.dart';
 import '../state/community.dart';

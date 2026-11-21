@@ -216,8 +216,7 @@ class _WeaponRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(titleCase(professionWeaponKey(name)),
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                Text(weaponLabel(s, name), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                 Text(weaponHands(s, weapon), style: TextStyle(fontSize: 11, color: AppColors.muted)),
               ],
             ),

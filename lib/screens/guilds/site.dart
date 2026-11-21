@@ -244,7 +244,7 @@ class _OverviewTab extends ConsumerWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
                               Text(
-                                  '${pad2(e.event.startAt.toLocal().hour)}:${pad2(e.event.startAt.toLocal().minute)} · ${titleCase(e.event.activity)}',
+                                  '${pad2(e.event.startAt.toLocal().hour)}:${pad2(e.event.startAt.toLocal().minute)} · ${s.t('activity_${e.event.activity}')}',
                                   style: TextStyle(fontSize: 12, color: AppColors.muted)),
                             ],
                           ),
@@ -290,7 +290,7 @@ class _OverviewTab extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: Text(_logLine(entry),
+                              child: Text(_logLine(s, entry),
                                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4))),
                           const SizedBox(width: 10),
                           Text('${entry['time'] ?? ''}'.length >= 10 ? '${entry['time']}'.substring(0, 10) : '',
@@ -858,7 +858,7 @@ class _UpgradesSite extends ConsumerWidget {
           for (final e in byType.entries) ...[
             Padding(
               padding: const EdgeInsets.only(top: 14, bottom: 4),
-              child: Kicker(titleCase(e.key.isEmpty ? '-' : e.key).caps),
+              child: Kicker((e.key.isEmpty ? '-' : guildUpgradeTypeLabel(s, e.key)).caps),
             ),
             for (final u in e.value)
               Container(
@@ -980,7 +980,8 @@ class _LogSiteState extends ConsumerState<_LogSite> {
             ChoiceChip(
                 label: Text(s.t('all')), selected: _type == null, onSelected: (_) => setState(() => _type = null)),
             for (final t in types)
-              ChoiceChip(label: Text(titleCase(t)), selected: _type == t, onSelected: (_) => setState(() => _type = t)),
+              ChoiceChip(
+                  label: Text(guildLogLabel(s, t)), selected: _type == t, onSelected: (_) => setState(() => _type = t)),
             Text(s.t('log_last_n', {'n': widget.entries.length}),
                 style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
           ],
@@ -1001,7 +1002,7 @@ class _LogSiteState extends ConsumerState<_LogSite> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Text(_logLine(d.value[i]),
+                          child: Text(_logLine(s, d.value[i]),
                               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4)),
                         ),
                         Text(

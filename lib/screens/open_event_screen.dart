@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import '../state/professions.dart';
 import '../util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -487,7 +488,7 @@ class _Roster extends ConsumerWidget {
                                       Text(
                                         [
                                           if (p.role != null) s.t('role_${p.role}'),
-                                          if (p.profession != null) p.profession!
+                                          if (p.profession != null) professionName(ref, p.profession!)
                                         ].join(' · '),
                                         style: TextStyle(fontSize: 12, color: AppColors.muted),
                                       ),

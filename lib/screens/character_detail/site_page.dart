@@ -379,7 +379,8 @@ class _SiteEquipmentRow extends ConsumerWidget {
                     TextSpan(children: [
                       if (rarity != null)
                         TextSpan(
-                            text: rarity, style: TextStyle(fontWeight: FontWeight.w700, color: rarityColor(rarity))),
+                            text: rarityLabel(s, rarity),
+                            style: TextStyle(fontWeight: FontWeight.w700, color: rarityColor(rarity))),
                       TextSpan(text: '${rarity == null ? '' : ' · '}${slotLabel(s, slot)}'),
                       if (comboName != null) TextSpan(text: ' · $comboName'),
                     ]),

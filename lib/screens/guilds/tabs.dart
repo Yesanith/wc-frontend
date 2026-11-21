@@ -168,7 +168,8 @@ class _LogTab extends ConsumerWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_logLine(entry), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
+                Text(_logLine(s, entry),
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
                 const SizedBox(height: 2),
                 Text(date.length >= 10 ? date.substring(0, 10) : date,
                     style: TextStyle(fontSize: 11, color: AppColors.hint)),
@@ -182,8 +183,8 @@ class _LogTab extends ConsumerWidget {
 }
 
 /// the log entries are typed records, turn them into one readable line
-String _logLine(Json entry) {
-  final type = titleCase('${entry['type'] ?? ''}');
+String _logLine(S s, Json entry) {
+  final type = guildLogLabel(s, '${entry['type'] ?? ''}');
   final user = '${entry['user'] ?? ''}';
   final parts = <String>[
     if (user.isNotEmpty) user,
@@ -323,7 +324,7 @@ class _UpgradesTab extends ConsumerWidget {
             for (final e in byType.entries) ...[
               Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 6),
-                child: Kicker(titleCase(e.key.isEmpty ? '-' : e.key).caps),
+                child: Kicker((e.key.isEmpty ? '-' : guildUpgradeTypeLabel(s, e.key)).caps),
               ),
               for (final u in e.value)
                 Padding(

@@ -207,7 +207,7 @@ class _PvpTab extends ConsumerWidget {
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Text(titleCase(entry.key),
+                                child: Text(professionName(ref, titleCase(entry.key)),
                                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
                               if (site && entry.value is Map)

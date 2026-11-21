@@ -118,8 +118,11 @@ class _ItemDetailsState extends ConsumerState<ItemDetails> {
     final chatLink = '${item?['chat_link'] ?? ''}';
     final watching = ref.watch(watchlistProvider).contains(itemId);
     final subtitle = [
-      if (rarity != null) rarity,
-      if (details?['type'] != null) '${details?['type']}' else if (item?['type'] != null) '${item?['type']}',
+      if (rarity != null) rarityLabel(s, rarity),
+      if (details?['type'] != null)
+        weaponLabel(s, '${details?['type']}')
+      else if (item?['type'] != null)
+        weaponLabel(s, '${item?['type']}'),
       if (asInt(item?['level']) > 0) s.t('level_n', {'n': asInt(item?['level'])}),
     ].join(' · ');
 

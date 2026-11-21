@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
+import '../state/professions.dart';
 import '../state/characters.dart';
 import '../state/reference.dart';
 import '../state/settings.dart';
@@ -123,13 +124,13 @@ String _crafting(S s, Json c) {
   return rows.map((r) => '${disciplineLabel(s, '${r['discipline']}')} ${asInt(r['rating'])}').join('\n');
 }
 
-class _Head extends StatelessWidget {
+class _Head extends ConsumerWidget {
   const _Head({required this.c});
 
   final Json c;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final profession = '${c['profession'] ?? ''}';
     return Panel(
       padding: const EdgeInsets.all(12),
@@ -137,7 +138,7 @@ class _Head extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('${c['name'] ?? ''}', maxLines: 1, overflow: TextOverflow.ellipsis, style: display(16)),
-          Text(profession,
+          Text(professionName(ref, profession),
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: professionColor(profession))),
         ],
       ),

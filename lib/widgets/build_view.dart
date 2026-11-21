@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/chat_code.dart';
 import '../services/icon_cache.dart';
+import '../state/professions.dart';
 import '../state/builds.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -69,7 +70,7 @@ class BuildView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name.isEmpty ? s.t('unnamed_build') : name, style: display(20)),
-                      Text(profession,
+                      Text(professionName(ref, profession),
                           style:
                               TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: professionColor(profession))),
                     ],

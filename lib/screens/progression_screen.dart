@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../state/professions.dart';
 import '../state/account.dart';
 import '../state/progression.dart';
 import '../state/pvp.dart';

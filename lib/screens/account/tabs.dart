@@ -699,7 +699,10 @@ class _BuildsSiteState extends ConsumerState<_BuildsSite> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800)),
-                                      Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                                      Text(
+                                          '${professionName(ref, profession)} · ${s.t('n_specializations', {
+                                                'n': specs
+                                              })}',
                                           style: TextStyle(fontSize: 12, color: professionColor(profession))),
                                     ],
                                   ),
@@ -793,7 +796,7 @@ class _BuildsTab extends ConsumerWidget {
                           children: [
                             Text(name.isEmpty ? s.t('unnamed_build') : name,
                                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                            Text('$profession · ${s.t('n_specializations', {'n': specs})}',
+                            Text('${professionName(ref, profession)} · ${s.t('n_specializations', {'n': specs})}',
                                 style: TextStyle(fontSize: 12, color: professionColor(profession))),
                           ],
                         ),

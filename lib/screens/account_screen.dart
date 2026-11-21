@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/icon_cache.dart';
+import '../state/professions.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/builds.dart';
