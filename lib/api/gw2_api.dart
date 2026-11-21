@@ -403,22 +403,50 @@ class Gw2Api {
     await _loadCache(name);
     final wanted = ids.where((id) => id > 0).toSet();
     final missing = wanted.where((id) => !store.containsKey(id)).toList();
-    for (final chunk in _chunks(missing)) {
-      try {
-        final raw = await get(path, {'ids': chunk.join(',')});
-        for (final e in _list(raw)) {
-          store[asInt(e['id'])] = e;
-        }
-        _scheduleSave(name);
-      } on Gw2ApiException catch (e) {
-        // 404 = none of the ids exist, skip them instead of failing the whole screen
-        if (e.status != 404) rethrow;
-      }
-    }
+    if (missing.isNotEmpty) await _fetchTogether(path, name, missing, store);
     return {
       for (final id in wanted)
         if (store.containsKey(id)) id: store[id]!,
     };
+  }
+
+  /// the ids of a path asked for in the same turn, gathered and fetched together, two hundred to a request and those at
+  /// once: a page that asks for each of its items on its own (a rune, a sigil, an infusion each) made a request for each,
+  /// and the pieces of a long list were asked one after another
+  final Map<String, ({Set<int> ids, Completer<void> done})> _gathering = {};
+
+  Future<void> _fetchTogether(String path, String name, List<int> missing, Map<int, Json> store) {
+    var batch = _gathering[path];
+    if (batch == null) {
+      final started = (ids: <int>{}, done: Completer<void>());
+      batch = started;
+      _gathering[path] = started;
+      Timer.run(() async {
+        _gathering.remove(path);
+        try {
+          await Future.wait([
+            for (final chunk in _chunks(started.ids.toList()))
+              () async {
+                try {
+                  final raw = await get(path, {'ids': chunk.join(',')});
+                  for (final e in _list(raw)) {
+                    store[asInt(e['id'])] = e;
+                  }
+                } on Gw2ApiException catch (e) {
+                  // 404 = none of the ids exist, skip them instead of failing the whole screen
+                  if (e.status != 404) rethrow;
+                }
+              }(),
+          ]);
+          _scheduleSave(name);
+          started.done.complete();
+        } catch (e, stack) {
+          started.done.completeError(e, stack);
+        }
+      });
+    }
+    batch.ids.addAll(missing);
+    return batch.done.future;
   }
 }
 

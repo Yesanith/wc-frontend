@@ -137,6 +137,26 @@ void main() {
       expect(await bare.transactionCount('current/sells'), 2, reason: 'without the header the rows are counted');
     });
 
+    test('items asked for on their own at the same time are fetched in one request', () async {
+      final asked = <String>[];
+      final api = Gw2Api(null, client: MockClient((req) async {
+        asked.add(req.url.queryParameters['ids'] ?? '');
+        final ids = (req.url.queryParameters['ids'] ?? '').split(',');
+        return http.Response('[${ids.map((i) => '{"id":$i,"name":"item $i"}').join(',')}]', 200);
+      }));
+      final got = await Future.wait([
+        api.items([1]),
+        api.items([2]),
+        api.items([2, 3])
+      ]);
+      expect(asked, hasLength(1));
+      expect(asked.single.split(',')..sort(), ['1', '2', '3']);
+      expect(got[0][1]?['name'], 'item 1');
+      expect(got[2].keys, containsAll([2, 3]));
+      await api.items([1, 2]);
+      expect(asked, hasLength(1), reason: 'what was fetched is kept');
+    });
+
     test('the key goes in a header, never in the url', () async {
       late http.Request seen;
       final api = Gw2Api('SECRET', client: MockClient((req) async {
