@@ -402,7 +402,7 @@ class _OpenEventFormScreenState extends ConsumerState<OpenEventFormScreen> {
               // offered too, so that the field shows it and saving keeps it
               items: [
                 for (final d in ({...openEventDurations, _duration}.toList()..sort()))
-                  DropdownMenuItem(value: d, child: Text(openEventDuration(d)))
+                  DropdownMenuItem(value: d, child: Text(openEventDuration(s, d)))
               ],
               onChanged: (v) => setState(() => _duration = v ?? _duration),
             ),

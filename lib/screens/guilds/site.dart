@@ -293,8 +293,7 @@ class _OverviewTab extends ConsumerWidget {
                               child: Text(_logLine(s, entry),
                                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4))),
                           const SizedBox(width: 10),
-                          Text('${entry['time'] ?? ''}'.length >= 10 ? '${entry['time']}'.substring(0, 10) : '',
-                              style: TextStyle(fontSize: 11, color: AppColors.hint)),
+                          Text(_logDay(s, entry), style: TextStyle(fontSize: 11, color: AppColors.hint)),
                         ],
                       ),
                     ),
@@ -378,9 +377,19 @@ class _ExpandableState extends ConsumerState<_Expandable> {
 // -------------------------------------------------------------------------
 // the other tabs of a guild on a site
 
-String _logDay(Json entry) {
-  final time = '${entry['time'] ?? ''}';
-  return time.length >= 10 ? time.substring(0, 10) : '';
+/// when an entry of the log happened, in the time of the player: the game writes it in UTC
+DateTime? _logTime(Json entry) => DateTime.tryParse('${entry['time'] ?? ''}')?.toLocal();
+
+/// the day of an entry, in the time of the player and the words of the app
+String _logDay(S s, Json entry) {
+  final t = _logTime(entry);
+  return t == null ? '' : shortDateText(s, t);
+}
+
+/// the hour of an entry, in the time of the player
+String _logClock(Json entry) {
+  final t = _logTime(entry);
+  return t == null ? '' : '${pad2(t.hour)}:${pad2(t.minute)}';
 }
 
 /// the treasury: what is stored against what the upgrades still ask for, in cards, with a search and what to look at
@@ -967,7 +976,7 @@ class _LogSiteState extends ConsumerState<_LogSite> {
     ];
     final days = <String, List<Json>>{};
     for (final e in shown) {
-      days.putIfAbsent(_logDay(e), () => []).add(e);
+      days.putIfAbsent(_logDay(s, e), () => []).add(e);
     }
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
@@ -1005,9 +1014,7 @@ class _LogSiteState extends ConsumerState<_LogSite> {
                           child: Text(_logLine(s, d.value[i]),
                               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4)),
                         ),
-                        Text(
-                            '${d.value[i]['time'] ?? ''}'.length >= 16 ? '${d.value[i]['time']}'.substring(11, 16) : '',
-                            style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                        Text(_logClock(d.value[i]), style: TextStyle(fontSize: 12, color: AppColors.muted)),
                       ],
                     ),
                   ),

@@ -262,12 +262,14 @@ void main() {
   });
 
   group('a length', () {
-    test('is told in minutes, hours, or both', () {
-      expect(openEventDuration(30), '30 min');
-      expect(openEventDuration(60), '1 h');
-      expect(openEventDuration(90), '1 h 30 min');
-      expect(openEventDuration(120), '2 h');
-      expect(openEventDuration(360), '6 h');
+    test('is told in minutes, hours, or both, in the words of the language', () {
+      const en = S(AppLang.en);
+      expect(openEventDuration(en, 30), '30 min');
+      expect(openEventDuration(en, 60), '1 h');
+      expect(openEventDuration(en, 90), '1 h 30 min');
+      expect(openEventDuration(en, 120), '2 h');
+      expect(openEventDuration(en, 360), '6 h');
+      expect(openEventDuration(const S(AppLang.tr), 90), '1 sa 30 dk');
     });
 
     test('is one of the lengths the form offers, which the database takes', () {

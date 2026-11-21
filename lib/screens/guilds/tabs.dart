@@ -164,14 +164,13 @@ class _LogTab extends ConsumerWidget {
           separatorBuilder: (_, __) => Divider(color: AppColors.track, height: 16),
           itemBuilder: (context, i) {
             final entry = entries[i];
-            final date = '${entry['time'] ?? ''}';
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(_logLine(s, entry),
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.4)),
                 const SizedBox(height: 2),
-                Text(date.length >= 10 ? date.substring(0, 10) : date,
+                Text('${_logDay(s, entry)} ${_logClock(entry)}'.trim(),
                     style: TextStyle(fontSize: 11, color: AppColors.hint)),
               ],
             );

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/strings.dart';
 import '../api/gw2_api.dart';
 import '../services/icon_cache.dart';
+import '../state/clock.dart';
 import '../state/community.dart';
 import '../state/guild_events.dart' show EventSummary, guildRosterProvider, upcomingEventsProvider;
 import '../state/guilds.dart';

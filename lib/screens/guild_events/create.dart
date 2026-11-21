@@ -271,7 +271,7 @@ class _CreateGuildEventScreenState extends ConsumerState<CreateGuildEventScreen>
         children: [
           for (final m in durations)
             ChoiceChip(
-              label: Text(openEventDuration(m)),
+              label: Text(openEventDuration(s, m)),
               selected: _duration == m,
               onSelected: (_) => setState(() => _duration = m),
             ),

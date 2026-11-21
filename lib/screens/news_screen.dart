@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/strings.dart';
 import '../services/icon_cache.dart';
+import '../state/clock.dart';
 import '../state/news.dart';
 import '../state/settings.dart';
 import '../theme.dart';
@@ -10,10 +11,9 @@ import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 
 /// [utc] for a day with no time, which is the same day everywhere: the date of an update in the wiki
-String _date(DateTime? d, {bool utc = false}) {
+String _date(S s, DateTime? d, {bool utc = false}) {
   if (d == null) return '';
-  final local = utc ? d : d.toLocal();
-  return '${local.day.toString().padLeft(2, '0')}.${local.month.toString().padLeft(2, '0')}.${local.year}';
+  return shortDateText(s, utc ? d : d.toLocal());
 }
 
 /// the official news of guildwars2.com and the update notes of the wiki
@@ -120,7 +120,7 @@ class _NewsCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_date(item.date), style: TextStyle(fontSize: 11, color: AppColors.muted)),
+                Text(_date(s, item.date), style: TextStyle(fontSize: 11, color: AppColors.muted)),
                 const SizedBox(height: 4),
                 Text(item.title, style: display(17)),
                 if (item.excerpt.isNotEmpty) ...[
@@ -172,7 +172,7 @@ class _PatchNotesTabState extends ConsumerState<_PatchNotesTab> {
                             Icon(Icons.description_outlined, color: AppColors.gold, size: 20),
                             const SizedBox(width: 12),
                             Expanded(
-                              child: Text(s.t('game_update_on', {'d': _date(n.date, utc: true)}),
+                              child: Text(s.t('game_update_on', {'d': _date(s, n.date, utc: true)}),
                                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                             ),
                             Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
@@ -218,7 +218,8 @@ class _PatchNotesTabState extends ConsumerState<_PatchNotesTab> {
                             Icon(Icons.description_outlined, color: AppColors.gold, size: 22),
                             const SizedBox(width: 14),
                             Expanded(
-                              child: Text(s.t('game_update_on', {'d': _date(n.date, utc: true)}), style: display(18)),
+                              child:
+                                  Text(s.t('game_update_on', {'d': _date(s, n.date, utc: true)}), style: display(18)),
                             ),
                             Icon(Icons.open_in_new, size: 16, color: AppColors.chevron),
                           ],

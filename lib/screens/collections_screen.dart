@@ -570,7 +570,8 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
           OutlinedButton(
             onPressed: () => openUrl(
               context,
-              'https://wiki.guildwars2.com/index.php?search=${Uri.encodeQueryComponent(e.name)}',
+              // the name is in the language of the app, and so is the wiki it is looked for in
+              '${ref.read(langProvider).wikiBase}/index.php?search=${Uri.encodeQueryComponent(e.name)}',
               failMessage: s.t('open_failed'),
             ),
             child: Text(s.t('wiki')),

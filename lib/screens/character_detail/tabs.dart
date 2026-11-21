@@ -343,7 +343,8 @@ class _CraftingTab extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(discipline, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                child: Text(disciplineLabel(s, discipline),
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
               ),
               Text(active ? s.t('active') : s.t('inactive'),
                   style: TextStyle(

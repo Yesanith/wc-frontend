@@ -269,7 +269,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
                 children: [
                   Text(e.title, style: display(20)),
                   const SizedBox(height: 2),
-                  Text('${eventWhen(s, e.startAt)} · ${openEventDuration(e.durationMinutes)}',
+                  Text('${eventWhen(s, e.startAt)} · ${openEventDuration(s, e.durationMinutes)}',
                       style: TextStyle(color: AppColors.muted)),
                 ],
               ),
