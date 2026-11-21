@@ -40,6 +40,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/
+    # the fonts of the app, with the app: the page and the phone do not ask Google Fonts for them
+    - assets/google_fonts/
     - assets/tiles/1/0/
     - assets/tiles/1/1/
     - assets/tiles/1/2/

@@ -230,7 +230,7 @@
    [
     "<strong>Supabase</strong> hesap veritabanını, girişi ve oyunla ve Discord'la konuşan fonksiyonları Avrupa Birliği'nde (Frankfurt) barındırır. Tarayıcı sürümünün haber akışı, oyunun sitesi tarayıcıya izin vermediği için bu fonksiyonlardan birinden geçer.",
     "<strong>Google Firebase Cloud Messaging</strong> bildirimleri telefonlara iletir.",
-    "<strong>Google Fonts</strong> uygulamanın yazı tipini sağlar, bu isteği Google görür.",
+    "<strong>Google Fonts</strong>: uygulamanın yazı tipleri kendisiyle gelir, ama tarayıcı sürümü bir metinde bu yazı tiplerinde olmayan harfler olduğunda (Çince, Japonca, emoji) Google Fonts'tan yedek bir yazı tipi ister; bu isteği Google görür.",
     "<strong>Discord</strong> girişi yönetir ve botu bağlayan sunuculardaki mesajları gösterir.",
     "<strong>ArenaNet'in Guild Wars 2 API'si ve sitesi</strong> tüm oyun verilerini, simgeleri ve haberleri sağlar.",
     "<strong>dps.report</strong>'tan, bir üyenin eklediği rapor bağlantısının açık bilgileri istenir.",

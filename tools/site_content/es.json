@@ -230,7 +230,7 @@
    [
     "<strong>Supabase</strong> aloja la base de datos de cuentas, el inicio de sesión y las funciones que hablan con el juego y con Discord, en la Unión Europea (Fráncfort). El feed de noticias de la versión del navegador pasa por una de estas funciones, porque el sitio del juego no permite que un navegador lo lea.",
     "<strong>Google Firebase Cloud Messaging</strong> entrega las notificaciones a los teléfonos.",
-    "<strong>Google Fonts</strong> proporciona la tipografía de la app, por lo que Google ve esa petición.",
+    "<strong>Google Fonts</strong>: las tipografías de la app vienen con ella, pero la versión del navegador pide a Google Fonts una tipografía de reserva cuando un texto tiene caracteres que no incluyen (chino, japonés, emoji), y Google ve esa petición.",
     "<strong>Discord</strong> gestiona el inicio de sesión y muestra mensajes en los servidores que conectaron el bot.",
     "<strong>La API y el sitio de Guild Wars 2 de ArenaNet</strong> proporcionan todos los datos del juego, iconos y noticias.",
     "<strong>dps.report</strong> recibe la consulta de los datos públicos de un enlace de informe que añade un miembro.",

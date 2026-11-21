@@ -1,4 +1,6 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart' show LicenseEntryWithLineBreaks, LicenseRegistry, kIsWeb;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +27,13 @@ import 'widgets/ui_zoom.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // the fonts come with the app (assets/google_fonts): nothing is asked of Google Fonts, and their licenses are in the list
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    for (final (family, file) in [('Source Sans 3', 'SourceSans3'), ('Marcellus', 'Marcellus'), ('Cinzel', 'Cinzel')]) {
+      yield LicenseEntryWithLineBreaks([family], await rootBundle.loadString('assets/google_fonts/$file-OFL.txt'));
+    }
+  });
   // the page a link opened is read now, before the app has begun: the navigator tells the browser its own address ("/") as it begins, and what is read after is that
   final startLink = initialLink();
   final startSection = initialSection();

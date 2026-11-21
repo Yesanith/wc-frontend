@@ -230,7 +230,7 @@
    [
     "<strong>Supabase</strong> は、アカウントのデータベース、ログイン、ゲームおよび Discord と通信する関数を、欧州連合（フランクフルト）でホストします。ゲームのサイトがブラウザからの読み取りを許可していないため、ブラウザ版のニュースフィードはこれらの関数のひとつを経由します。",
     "<strong>Google Firebase Cloud Messaging</strong> は、スマートフォンに通知を届けます。",
-    "<strong>Google Fonts</strong> はアプリの書体を提供するため、Google はそのリクエストを確認できます。",
+    "<strong>Google Fonts</strong>：アプリの書体はアプリに含まれていますが、ブラウザ版はそれらにない文字（中国語、日本語、絵文字）を含むテキストのために Google Fonts から代替フォントを取得するため、Google はそのリクエストを確認できます。",
     "<strong>Discord</strong> はログインを処理し、ボットを接続したサーバーにメッセージを表示します。",
     "<strong>ArenaNet の Guild Wars 2 API とサイト</strong>が、すべてのゲームデータ、アイコン、ニュースを提供します。",
     "<strong>dps.report</strong> には、メンバーが追加したレポートリンクの公開情報を問い合わせます。",

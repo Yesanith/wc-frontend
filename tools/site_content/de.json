@@ -230,7 +230,7 @@
    [
     "<strong>Supabase</strong> hostet die Kontodatenbank, die Anmeldung und die Funktionen, die mit dem Spiel und mit Discord sprechen, in der Europäischen Union (Frankfurt). Der Nachrichtenfeed der Browserversion läuft über eine dieser Funktionen, weil die Website des Spiels einem Browser das Lesen nicht erlaubt.",
     "<strong>Google Firebase Cloud Messaging</strong> liefert Benachrichtigungen an Handys.",
-    "<strong>Google Fonts</strong> liefert die Schrift der App, daher sieht Google diese Anfrage.",
+    "<strong>Google Fonts</strong>: Die Schriften der App werden mit ihr ausgeliefert, aber die Browserversion lädt eine Ersatzschrift von Google Fonts, wenn ein Text Zeichen enthält, die ihnen fehlen (Chinesisch, Japanisch, Emoji); diese Anfrage sieht Google.",
     "<strong>Discord</strong> übernimmt die Anmeldung und zeigt Nachrichten auf Servern, die den Bot verbunden haben.",
     "<strong>Die Guild-Wars-2-API und die Website von ArenaNet</strong> liefern alle Spieldaten, Symbole und Neuigkeiten.",
     "<strong>dps.report</strong> wird nach den öffentlichen Angaben zu einem Berichtslink gefragt, den ein Mitglied hinzufügt.",

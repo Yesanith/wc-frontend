@@ -230,7 +230,7 @@
    [
     "<strong>Supabase</strong> 在欧盟（法兰克福）托管账号数据库、登录，以及与游戏和 Discord 通信的函数。浏览器版的新闻源会经过其中一个函数，因为游戏网站不允许浏览器直接读取。",
     "<strong>Google Firebase Cloud Messaging</strong> 向手机发送通知。",
-    "<strong>Google Fonts</strong> 提供应用的字体，因此 Google 能看到该请求。",
+    "<strong>Google Fonts</strong>：应用自带其字体，但当文本包含这些字体没有的字符（中文、日文、表情符号）时，浏览器版本会向 Google Fonts 请求备用字体，因此 Google 能看到该请求。",
     "<strong>Discord</strong> 负责登录，并在连接了机器人的服务器中显示消息。",
     "<strong>ArenaNet 的《激战2》API 和网站</strong>提供所有游戏数据、图标和新闻。",
     "<strong>dps.report</strong> 会被查询成员所添加报告链接的公开信息。",

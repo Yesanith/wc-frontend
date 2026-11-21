@@ -271,7 +271,7 @@
     [
      "<strong>Supabase</strong> hosts the account database, sign in and the functions that talk to the game and to Discord, in the European Union (Frankfurt). The news feed of the browser version passes through one of these functions, because the game's site does not allow a browser to read it.",
      "<strong>Google Firebase Cloud Messaging</strong> delivers notifications to phones.",
-     "<strong>Google Fonts</strong> provides the app's typeface, so Google sees that request.",
+     "<strong>Google Fonts</strong>: the app's own typefaces come with it, but the browser version asks Google Fonts for a fallback font when a text has letters they lack (Chinese, Japanese, emoji), so Google sees that request.",
      "<strong>Discord</strong> handles sign in and shows messages in servers that connected the bot.",
      "<strong>ArenaNet's Guild Wars 2 API and site</strong> provide all game data, icons and news.",
      "<strong>dps.report</strong> is asked for the public details of a report link a member adds.",
