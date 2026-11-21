@@ -69,7 +69,8 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
   @override
   Widget build(BuildContext context) {
     final s = ref.watch(stringsProvider);
-    final chars = ref.watch(charactersProvider).valueOrNull;
+    final charsValue = ref.watch(charactersProvider);
+    final chars = charsValue.valueOrNull;
     final account = ref.watch(accountProvider).valueOrNull;
     final c = chars == null ? null : characterByName(chars, widget.name);
 
@@ -78,43 +79,48 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
         surfaceTintColor: Colors.transparent,
         title: Text(s.t('hero_card')),
       ),
-      body: c == null
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-              children: [
-                RepaintBoundary(
-                  key: _cardKey,
-                  child: _HeroCard(c: c, account: account, style: _style),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    for (final st in CardStyle.values) ...[
-                      Expanded(
-                        child: Center(
-                          child: ChoiceChip(
-                            label: Text(s.t('style_${st.name}')),
-                            selected: _style == st,
-                            onSelected: (_) => setState(() => _style = st),
+      // the characters could not be read, or this one is not among them: said, not turned on for ever
+      body: c == null && charsValue.hasError
+          ? ErrorBox(error: charsValue.error, onRetry: () => ref.invalidate(charactersProvider))
+          : c == null && chars != null
+              ? ErrorBox(message: s.t('character_not_found'))
+              : c == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+                      children: [
+                        RepaintBoundary(
+                          key: _cardKey,
+                          child: _HeroCard(c: c, account: account, style: _style),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            for (final st in CardStyle.values) ...[
+                              Expanded(
+                                child: Center(
+                                  child: ChoiceChip(
+                                    label: Text(s.t('style_${st.name}')),
+                                    selected: _style == st,
+                                    onSelected: (_) => setState(() => _style = st),
+                                  ),
+                                ),
+                              ),
+                              if (st != CardStyle.values.last) const SizedBox(width: 8),
+                            ],
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          height: 52,
+                          child: FilledButton.icon(
+                            onPressed: _busy ? null : _share,
+                            icon: const Icon(Icons.ios_share),
+                            label: Text(s.t('share')),
                           ),
                         ),
-                      ),
-                      if (st != CardStyle.values.last) const SizedBox(width: 8),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 52,
-                  child: FilledButton.icon(
-                    onPressed: _busy ? null : _share,
-                    icon: const Icon(Icons.ios_share),
-                    label: Text(s.t('share')),
-                  ),
-                ),
-              ],
-            ),
+                      ],
+                    ),
     );
   }
 }

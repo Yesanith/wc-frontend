@@ -106,46 +106,48 @@ class AchievementDetailScreen extends ConsumerWidget {
                 ),
               ),
           ],
-          AsyncView<AchievementExtras>(
-            value: extras,
-            onRetry: () => ref.invalidate(achievementExtrasProvider(row.id)),
-            builder: (data) => data.rewards.isEmpty
-                ? const SizedBox.shrink()
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 22),
-                      SectionHeader(title: s.t('ach_rewards')),
-                      const SizedBox(height: 8),
-                      for (final r in data.rewards)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Row(
-                            children: [
-                              if (r.icon != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: ItemIcon(url: r.icon, size: 28),
-                                ),
-                              if (r.kind == 'Coins')
-                                CoinText(r.copper, size: 14)
-                              else
-                                Expanded(
-                                  child: Text(
-                                    switch (r.kind) {
-                                      'Title' => s.t('ach_reward_title', {'name': r.label}),
-                                      'Mastery' => s.t('ach_reward_mastery', {'region': r.label}),
-                                      _ => r.label,
-                                    },
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+          // the pieces above already say when the request failed, with their own way to try again: one box is enough
+          if (!(hasBits && extras.hasError))
+            AsyncView<AchievementExtras>(
+              value: extras,
+              onRetry: () => ref.invalidate(achievementExtrasProvider(row.id)),
+              builder: (data) => data.rewards.isEmpty
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 22),
+                        SectionHeader(title: s.t('ach_rewards')),
+                        const SizedBox(height: 8),
+                        for (final r in data.rewards)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                if (r.icon != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: ItemIcon(url: r.icon, size: 28),
                                   ),
-                                ),
-                            ],
+                                if (r.kind == 'Coins')
+                                  CoinText(r.copper, size: 14)
+                                else
+                                  Expanded(
+                                    child: Text(
+                                      switch (r.kind) {
+                                        'Title' => s.t('ach_reward_title', {'name': r.label}),
+                                        'Mastery' => s.t('ach_reward_mastery', {'region': r.label}),
+                                        _ => r.label,
+                                      },
+                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                    ],
-                  ),
-          ),
+                      ],
+                    ),
+            ),
         ],
       ),
     );

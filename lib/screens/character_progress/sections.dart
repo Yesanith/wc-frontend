@@ -146,9 +146,24 @@ class _Story extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
-    final quests = ref.watch(questsProvider).valueOrNull;
-    final stories = ref.watch(storiesProvider).valueOrNull;
-    final seasons = ref.watch(storySeasonsProvider).valueOrNull;
+    final questsValue = ref.watch(questsProvider);
+    final storiesValue = ref.watch(storiesProvider);
+    final seasonsValue = ref.watch(storySeasonsProvider);
+    final quests = questsValue.valueOrNull;
+    final stories = storiesValue.valueOrNull;
+    final seasons = seasonsValue.valueOrNull;
+    // a list of the game that could not be read is said, with a way to try again, instead of turning for ever
+    final failed = [questsValue, storiesValue, seasonsValue].where((v) => v.hasError).firstOrNull;
+    if (failed != null && (quests == null || stories == null || seasons == null)) {
+      return ErrorBox(
+        error: failed.error,
+        onRetry: () {
+          ref.invalidate(questsProvider);
+          ref.invalidate(storiesProvider);
+          ref.invalidate(storySeasonsProvider);
+        },
+      );
+    }
     return AsyncView<dynamic>(
       value: ref.watch(characterPartProvider('$name|quests')),
       permission: 'progression',
@@ -297,8 +312,10 @@ class _Backstory extends ConsumerWidget {
       onRetry: () => ref.invalidate(characterPartProvider('$name|backstory')),
       builder: (raw) {
         final ids = [for (final a in ((raw is Map ? raw['backstory'] : raw) as List?) ?? const []) '$a'];
-        if (ids.isEmpty || answers == null || questions == null) {
-          return EmptyNote(s.t('nothing_here'), center: false);
+        if (ids.isEmpty) return EmptyNote(s.t('nothing_here'), center: false);
+        // the questions and answers of the game have not come yet: that is loading, not nothing
+        if (answers == null || questions == null) {
+          return const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()));
         }
         return Panel(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

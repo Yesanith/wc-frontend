@@ -29,6 +29,9 @@ class OpenEventRolesScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             if (info.isLoading)
               const Center(child: CircularProgressIndicator())
+            // a server that could not be asked is not one that has no roles
+            else if (info.hasError)
+              ErrorBox(error: info.error, onRetry: () => ref.invalidate(officialDiscordProvider))
             else if (!configured)
               Text(s.t('oe_roles_none'), style: TextStyle(color: AppColors.muted))
             else if (invite != null)

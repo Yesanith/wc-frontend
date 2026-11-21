@@ -50,10 +50,14 @@ class _PeriodSiteState extends ConsumerState<PeriodSite> {
     final track = widget.weekly ? 'weekly' : 'daily';
     final stale = ref.watch(vaultStaleProvider(track));
     final daily = ref.watch(vaultTrackProvider(track)).valueOrNull;
-    final periodic = ref.watch(periodicAchievementsProvider).valueOrNull;
+    final periodicValue = ref.watch(periodicAchievementsProvider);
+    final periodic = periodicValue.valueOrNull;
     final categories = widget.weekly ? periodic?.weekly : periodic?.daily;
     final vaultName = s.t(widget.weekly ? 'vault_weekly' : 'wizards_vault');
-    final special = widget.weekly ? ref.watch(vaultTrackProvider('special')).valueOrNull : null;
+    // the special objectives of a week that ended and has not been read again yet are not this week's
+    final special = widget.weekly && !ref.watch(vaultStaleProvider('special'))
+        ? ref.watch(vaultTrackProvider('special')).valueOrNull
+        : null;
     final raids = widget.weekly ? ref.watch(raidsProvider).valueOrNull : null;
 
     List<_Task> objectives(Json? v, String group) => [
@@ -135,7 +139,13 @@ class _PeriodSiteState extends ConsumerState<PeriodSite> {
               ),
               const SizedBox(height: 8),
               if (stale) VaultAwaitingLogin(track: track),
-              if (periodic == null && tasks.isEmpty)
+              // a list that could not be read says so, with a way to try again, instead of turning for ever
+              if (periodic == null && tasks.isEmpty && periodicValue.hasError)
+                ErrorBox(
+                  error: periodicValue.error,
+                  onRetry: () => refreshProviders(ref, [periodicAchievementsProvider, vaultTrackProvider]),
+                )
+              else if (periodic == null && tasks.isEmpty)
                 const Padding(padding: EdgeInsets.all(24), child: Center(child: CircularProgressIndicator())),
               for (final t in list) _TaskRow(task: t, showGroup: shown == null),
             ],

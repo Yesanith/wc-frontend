@@ -10,6 +10,7 @@ import '../state/navigation.dart';
 import '../state/open_events.dart';
 import '../state/settings.dart';
 import '../theme.dart';
+import '../widgets/clock.dart';
 import '../widgets/common.dart';
 import '../widgets/event_pickers.dart';
 import '../widgets/responsive.dart';
@@ -244,11 +245,15 @@ class _EventBodyState extends ConsumerState<_EventBody> {
     Navigator.of(context).pop();
   }
 
+  // built again each minute, so that an event that begins or ends while the page is open says so and its buttons follow
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      ClockBuilder(step: ClockStep.minute, builder: (context, now) => _page(context, now));
+
+  Widget _page(BuildContext context, DateTime now) {
     final s = ref.watch(stringsProvider);
     final e = widget.event;
-    final over = e.isOver(DateTime.now());
+    final over = e.isOver(now);
     // the organizer is going already, and can change how they come
     final canSignUp = !e.cancelled && !e.hidden && !over;
     return ListView(
@@ -283,7 +288,7 @@ class _EventBodyState extends ConsumerState<_EventBody> {
           children: [
             if (e.cancelled) Pill(s.t('oe_cancelled'), color: AppColors.red),
             if (e.hidden) Pill(s.t('oe_hidden'), color: AppColors.amber),
-            if (e.isLive(DateTime.now())) Pill(s.t('event_live'), color: AppColors.green),
+            if (e.isLive(now)) Pill(s.t('event_live'), color: AppColors.green),
             Pill(s.t('activity_${e.activity}')),
             Pill(s.t('oe_region_${e.region}')),
             Pill(openEventLanguageName(s, e.language)),

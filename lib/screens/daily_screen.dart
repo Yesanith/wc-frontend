@@ -9,6 +9,7 @@ import '../state/settings.dart';
 import '../theme.dart';
 import '../util.dart';
 import '../services/icon_cache.dart';
+import '../widgets/clock.dart';
 import '../widgets/stale_note.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
@@ -352,7 +353,12 @@ class ResetBanner extends StatelessWidget {
           Icon(Icons.hourglass_bottom, color: AppColors.gold, size: 20),
           const SizedBox(width: 10),
           Expanded(child: Text(label, style: TextStyle(fontSize: 14, color: AppColors.textSoft))),
-          Text(timeUntil(at), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+          // counts down while the page is open, it stood still until the page was built again
+          ClockBuilder(
+            step: ClockStep.minute,
+            builder: (context, _) =>
+                Text(timeUntil(at), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.gold)),
+          ),
         ],
       ),
     );

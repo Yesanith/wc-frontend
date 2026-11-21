@@ -53,6 +53,12 @@ class HomeScreen extends ConsumerWidget {
         dailyProgressProvider,
         doneTodayProvider,
         pinnedAchievementRowsProvider,
+        // the boxes of the trading post and of the news, which a pull left as they were
+        deliveryProvider,
+        transactionCountProvider,
+        watchlistPricesProvider,
+        newsProvider,
+        wvwMatchProvider,
       ]);
 
   @override
@@ -212,12 +218,15 @@ class _HomeHero extends ConsumerWidget {
     final hasKey = ref.watch(hasKeyProvider);
     final name = '${ref.watch(accountProvider).valueOrNull?['name'] ?? ''}';
     final short = name.contains('.') ? name.substring(0, name.lastIndexOf('.')) : name;
-    final hour = DateTime.now().hour;
-    final key = hour < 12
-        ? 'good_morning'
-        : hour < 18
-            ? 'good_afternoon'
-            : 'good_evening';
+    String greetingKey(DateTime now) {
+      final hour = now.toLocal().hour;
+      return hour < 12
+          ? 'good_morning'
+          : hour < 18
+              ? 'good_afternoon'
+              : 'good_evening';
+    }
+
     final site = SiteScope.of(context);
     final greeting = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,9 +239,13 @@ class _HomeHero extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          short.isEmpty ? s.t('welcome') : s.t(key, {'name': short}),
-          style: display(site ? 40 : 28).copyWith(height: 1.1),
+        // the morning turns into the afternoon while the page is open
+        ClockBuilder(
+          step: ClockStep.minute,
+          builder: (context, now) => Text(
+            short.isEmpty ? s.t('welcome') : s.t(greetingKey(now), {'name': short}),
+            style: display(site ? 40 : 28).copyWith(height: 1.1),
+          ),
         ),
       ],
     );

@@ -139,6 +139,8 @@ class _EventCreatorsPanelState extends ConsumerState<EventCreatorsPanel> {
     setState(() => _busy = true);
     try {
       await action();
+      // the page may have been left meanwhile: its ref is gone with it
+      if (!mounted) return;
       // the roster says who may make events too
       ref.invalidate(guildRosterProvider(widget.guildId));
       ref.invalidate(eventCreatorsProvider(widget.guildId));
@@ -321,6 +323,7 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
     setState(() => _busy = true);
     try {
       await setGuildPartShared(widget.guildId, part, shared);
+      if (!mounted) return;
       ref.invalidate(guildDetailsProvider(widget.guildId));
       await ref.read(guildDetailsProvider(widget.guildId).future);
     } catch (e) {
@@ -336,6 +339,7 @@ class _GuildSharingPanelState extends ConsumerState<GuildSharingPanel> {
     setState(() => _busy = true);
     try {
       await confirmGuildSharing(widget.guildId);
+      if (!mounted) return;
       ref.invalidate(guildDetailsProvider(widget.guildId));
       await ref.read(guildDetailsProvider(widget.guildId).future);
       widget.onConfirmed?.call();

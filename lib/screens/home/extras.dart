@@ -137,9 +137,13 @@ class _VaultBars extends ConsumerWidget {
           objectives.length,
         ),
         if (end != null)
-          Text(
-            s.t('season_ends', {'d': '${shortDateText(s, end)} (${countdown(end.difference(DateTime.now()))})'}),
-            style: TextStyle(fontSize: 12, color: AppColors.muted),
+          // the countdown follows the clock while the page is open
+          ClockBuilder(
+            step: ClockStep.minute,
+            builder: (context, now) => Text(
+              s.t('season_ends', {'d': '${shortDateText(s, end)} (${countdown(end.difference(now))})'}),
+              style: TextStyle(fontSize: 12, color: AppColors.muted),
+            ),
           ),
       ],
     );
