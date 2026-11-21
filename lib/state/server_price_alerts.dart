@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../services/item_index.dart';
 import '../util.dart';
 import 'alerts.dart';
+import 'api.dart';
 import 'community.dart';
 
 /// an alert as the server keeps it: the item, what it is called in the notification, and its two prices in copper
@@ -126,11 +126,13 @@ final priceAlertSyncProvider = FutureProvider<void>((ref) async {
   if (session == null) return;
   final local = ref.read(priceAlertsProvider);
   if (local.isEmpty) return;
-  ItemIndex? index;
+  // the names of the few items that have an alert, in one request: the whole index of items (some seventy thousand names,
+  // unpacked on the thread that draws) was read at every launch only for them
+  var items = const <int, Json>{};
   try {
-    index = await ref.read(itemIndexProvider.future);
+    items = await ref.read(gw2ApiProvider).items(local.keys);
   } catch (_) {
     // a name is only for the notification: the number of the item stands in
   }
-  await ref.read(priceAlertMirrorProvider).syncAll(local, (id) => index?.nameOf(id) ?? '');
+  await ref.read(priceAlertMirrorProvider).syncAll(local, (id) => '${items[id]?['name'] ?? ''}');
 });

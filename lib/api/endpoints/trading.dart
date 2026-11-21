@@ -63,6 +63,21 @@ extension Gw2TradingApi on Gw2Api {
     return out;
   }
 
+  /// how many rows one side has (current/buys, current/sells...), from the total the game sends with a page of one row: the
+  /// home page only says how many orders are open, and read every page of them with the item of each to count them
+  Future<int> transactionCount(String kind) async {
+    final key = apiKey;
+    final uri = gw2Uri(Gw2Api._base, '/commerce/transactions/$kind',
+        query: {'page_size': '1', 'page': '0'}, lang: lang, key: key, web: kIsWeb);
+    final res = await _send(uri, gw2Headers(key, web: kIsWeb));
+    if (res.statusCode < 200 || res.statusCode >= 300)
+      throw Gw2ApiException('API error (${res.statusCode})', res.statusCode);
+    final total = int.tryParse(res.headers['x-result-total'] ?? '');
+    if (total != null) return total;
+    final body = jsonDecode(utf8.decode(res.bodyBytes));
+    return body is List ? body.length : 0;
+  }
+
   /// the newest page of one side of the history (history/sells or history/buys), as it is now and not from the disk: what a look for what completed needs.
   /// needs the tradingpost permission
   Future<List<Json>> recentTransactions(String kind) async =>

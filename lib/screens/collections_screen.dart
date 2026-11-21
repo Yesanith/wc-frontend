@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -261,6 +263,23 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
   int _filter = 0;
   String _query = '';
 
+  /// the search waits for a pause in the typing: a wardrobe of ten thousand skins was sorted into its kinds and filtered
+  /// again at every key
+  Timer? _typing;
+
+  void _search(String v) {
+    _typing?.cancel();
+    _typing = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) setState(() => _query = v.trim().toLowerCase());
+    });
+  }
+
+  @override
+  void dispose() {
+    _typing?.cancel();
+    super.dispose();
+  }
+
   // wardrobe only: Armor, Weapon, Back or Gathering, then a slot or weapon
   String? _type;
   String? _subtype;
@@ -331,7 +350,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
           SizedBox(
             width: 260,
             child: TextField(
-              onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+              onChanged: _search,
               decoration: fieldDecoration(s.t('search'), prefixIcon: Icon(Icons.search, color: AppColors.muted)),
             ),
           ),
@@ -807,7 +826,7 @@ class _CollectionDetailScreenState extends ConsumerState<CollectionDetailScreen>
                 child: Column(
                   children: [
                     TextField(
-                      onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
+                      onChanged: _search,
                       decoration: fieldDecoration(
                         s.t('search'),
                         prefixIcon: Icon(Icons.search, color: AppColors.muted),

@@ -9,8 +9,8 @@ class _TradeBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final delivery = ref.watch(deliveryProvider).valueOrNull;
-    final buys = ref.watch(transactionsProvider('current/buys')).valueOrNull;
-    final sells = ref.watch(transactionsProvider('current/sells')).valueOrNull;
+    final buys = ref.watch(transactionCountProvider('current/buys')).valueOrNull;
+    final sells = ref.watch(transactionCountProvider('current/sells')).valueOrNull;
     final watched = ref.watch(watchlistPricesProvider).valueOrNull ?? const <WatchedItem>[];
     final waiting = delivery == null ? 0 : delivery.items.length;
     return AppCard(
@@ -33,9 +33,7 @@ class _TradeBox extends ConsumerWidget {
           _TradeLine(
             label: s.t('orders'),
             value: Text(
-              buys == null || sells == null
-                  ? '–'
-                  : '${s.t('buying')} ${buys.length} · ${s.t('selling')} ${sells.length}',
+              buys == null || sells == null ? '–' : '${s.t('buying')} $buys · ${s.t('selling')} $sells',
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
             ),
           ),

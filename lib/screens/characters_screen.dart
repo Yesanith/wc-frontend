@@ -259,7 +259,9 @@ class _GalleryCard extends ConsumerWidget {
                       child: Transform.scale(
                         scale: 1.4,
                         alignment: Alignment.bottomLeft,
+                        // the strips are large pictures: they are kept in memory at about the width the card draws them
                         child: Image.network(art,
+                            cacheWidth: 900,
                             fit: BoxFit.cover,
                             alignment: Alignment.centerLeft,
                             errorBuilder: (_, __, ___) => const SizedBox.shrink()),

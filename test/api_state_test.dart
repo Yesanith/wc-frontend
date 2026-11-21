@@ -125,6 +125,18 @@ void main() {
       expect(calls, 4, reason: 'each path is its own');
     });
 
+    test('the orders are counted from the total the game sends, with one row asked for', () async {
+      late Uri asked;
+      final api = Gw2Api('key', client: MockClient((req) async {
+        asked = req.url;
+        return http.Response('[{"id":1}]', 200, headers: {'x-result-total': '37'});
+      }));
+      expect(await api.transactionCount('current/buys'), 37);
+      expect(asked.queryParameters['page_size'], '1');
+      final bare = Gw2Api('key', client: MockClient((req) async => http.Response('[{"id":1},{"id":2}]', 200)));
+      expect(await bare.transactionCount('current/sells'), 2, reason: 'without the header the rows are counted');
+    });
+
     test('the key goes in a header, never in the url', () async {
       late http.Request seen;
       final api = Gw2Api('SECRET', client: MockClient((req) async {

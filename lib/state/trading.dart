@@ -38,6 +38,10 @@ final transactionsProvider = FutureProvider.family<List<TxRow>, String>((ref, ki
   return [for (final t in txs) TxRow(t, items[asInt(t['item_id'])])];
 });
 
+/// how many orders one side has open, without reading them
+final transactionCountProvider =
+    FutureProvider.family<int, String>((ref, kind) => accountApi(ref).transactionCount(kind));
+
 class Delivery {
   const Delivery(this.coins, this.items);
   final int coins;
