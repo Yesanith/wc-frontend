@@ -102,10 +102,14 @@ Future<bool> enablePush(String lang, {bool quiet = false}) async {
   final messaging = FirebaseMessaging.instance;
   final permission = await messaging.requestPermission();
   if (permission.authorizationStatus == AuthorizationStatus.denied) return false;
+  // the token of FCM, which the server sends to. register() and onRegistered, which replace it, give an installation id for
+  // Firebase's direct sending instead, which the server does not use: it stays the token until the server moves
+  // ignore: deprecated_member_use
   final token = await messaging.getToken();
   if (token == null) return false;
   await _register(token, lang);
   // firebase renews tokens now and then, the new one replaces the old
+  // ignore: deprecated_member_use
   _tokenRefresh ??= messaging.onTokenRefresh.listen((fresh) => _register(fresh, _lang).catchError((_) {}));
   return true;
 }
@@ -134,6 +138,7 @@ Future<void> disablePush() async {
   await _tokenRefresh?.cancel();
   _tokenRefresh = null;
   try {
+    // ignore: deprecated_member_use
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null && Supabase.instance.client.auth.currentSession != null) {
       await Supabase.instance.client.rpc('unregister_push_device', params: {'p_token': token});
