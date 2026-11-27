@@ -23,8 +23,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       # the icon tests draw with pillow
@@ -36,8 +36,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: python tools/build_recipes.py book
@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir -p out/assets/data
           cp assets/data/recipe_book.json.gz assets/data/item_index_en.txt.gz assets/data/market_index.txt.gz out/assets/data/
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         with:
           key: data-book-${{ github.run_id }}
           path: out/
@@ -60,8 +60,8 @@ jobs:
       matrix:
         lang: [de, es, fr, zh]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: python tools/build_recipes.py index ${{ matrix.lang }}
@@ -69,7 +69,7 @@ jobs:
         run: |
           mkdir -p out/assets/data
           cp assets/data/item_index_${{ matrix.lang }}.txt.gz out/assets/data/
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         with:
           key: data-index-${{ matrix.lang }}-${{ github.run_id }}
           path: out/
@@ -78,8 +78,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Build world map markers and overview tiles
@@ -89,7 +89,7 @@ jobs:
           mkdir -p out/assets/data
           cp assets/data/worldmap_1_*.json.gz out/assets/data/
           cp -r assets/tiles out/assets/
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v6
         with:
           key: data-worldmap-${{ github.run_id }}
           path: out/
@@ -100,34 +100,34 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # each part was saved to out/ under its own key; restored one after another they add up in out/
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-book-${{ github.run_id }}
           path: out/
           fail-on-cache-miss: true
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-index-de-${{ github.run_id }}
           path: out/
           fail-on-cache-miss: true
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-index-es-${{ github.run_id }}
           path: out/
           fail-on-cache-miss: true
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-index-fr-${{ github.run_id }}
           path: out/
           fail-on-cache-miss: true
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-index-zh-${{ github.run_id }}
           path: out/
           fail-on-cache-miss: true
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v6
         with:
           key: data-worldmap-${{ github.run_id }}
           path: out/

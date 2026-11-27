@@ -43,7 +43,7 @@ jobs:
           done
           echo "::warning::gave up waiting for the recipe job, building with the data of this commit"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # the recipe job commits its data to main after the code it was started
       # by. take the newest data from main so the release includes it
@@ -53,7 +53,7 @@ jobs:
           git checkout FETCH_HEAD -- assets/data assets/tiles
           git status --short assets/data assets/tiles
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           # 21: the lint of the Android Gradle Plugin that Flutter's template brings now calls List.removeLast, which 17 does not have
           distribution: temurin
@@ -100,7 +100,7 @@ jobs:
 
       # caches ~/.gradle between runs, so a build does not download the whole
       # kotlin and android plugin tree from maven central every time
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Patch manifest
         run: |
@@ -246,7 +246,7 @@ jobs:
       # never part of a release (the repository is public)
       - name: Keep the Play bundle
         if: inputs.play
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: wondrous-compass-play-bundle
           path: build/app/outputs/bundle/release/app-release.aab
@@ -257,7 +257,7 @@ jobs:
       # itself
       - name: Publish release
         if: inputs.release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.version.outputs.value }}
           files: wondrous-compass.apk
