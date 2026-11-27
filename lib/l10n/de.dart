@@ -514,6 +514,12 @@ const deStrings = <String, String>{
   'legendary_have_pct': '{n} % vorhanden',
   'legendary_unpriced': '{n} nicht am Handelsposten',
   'legendary_to_buy': 'noch zu kaufen',
+  'meta_train': 'Meta-Zug',
+  'meta_train_note':
+      'So viele Events, wie hintereinander in deine Zeit passen, mit zwei Minuten Reisezeit dazwischen. Heute schon gelootete Bosse fehlen, der Erweiterungsfilter der Timer gilt.',
+  'meta_train_none': 'In diese Zeit passt nichts.',
+  'meta_train_wait': '{t} bis zum nächsten',
+  'n_hours': '{n} Std.',
   'map_search': 'Wegmarken, Sehenswürdigkeiten, Karten suchen',
   'floor_n': 'Ebene {n}',
   'map_layers': 'Kartenebenen',

@@ -507,6 +507,12 @@ const esStrings = <String, String>{
   'legendary_have_pct': '{n} % en mano',
   'legendary_unpriced': '{n} no se venden en el Bazar',
   'legendary_to_buy': 'por comprar',
+  'meta_train': 'Tren de metas',
+  'meta_train_note':
+      'Tantos eventos como quepan seguidos en tu tiempo, con dos minutos para viajar entre ellos. Se omiten los jefes ya saqueados hoy y se aplica el filtro de expansión.',
+  'meta_train_none': 'No cabe nada en este tiempo.',
+  'meta_train_wait': '{t} hasta el siguiente',
+  'n_hours': '{n} h',
   'map_search': 'Buscar puntos de ruta, lugares, mapas',
   'floor_n': 'Nivel {n}',
   'map_layers': 'Capas del mapa',

@@ -509,6 +509,12 @@ const frStrings = <String, String>{
   'legendary_have_pct': '{n} % en main',
   'legendary_unpriced': '{n} pas au Comptoir',
   'legendary_to_buy': 'encore à acheter',
+  'meta_train': 'Train de métas',
+  'meta_train_note':
+      'Autant d\'événements que possible à la suite dans votre temps, avec deux minutes de trajet entre eux. Les boss déjà pillés aujourd\'hui sont exclus, le filtre d\'extension des minuteurs s\'applique.',
+  'meta_train_none': 'Rien ne tient dans ce temps.',
+  'meta_train_wait': '{t} avant le suivant',
+  'n_hours': '{n} h',
   'map_search': 'Chercher points de passage, sites, cartes',
   'floor_n': 'Niveau {n}',
   'map_layers': 'Couches de la carte',

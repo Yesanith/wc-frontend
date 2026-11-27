@@ -507,6 +507,12 @@ const ptStrings = <String, String>{
   'legendary_have_pct': '{n}% em mãos',
   'legendary_unpriced': '{n} não vendidos no Trading Post',
   'legendary_to_buy': 'a comprar',
+  'meta_train': 'Trem de metas',
+  'meta_train_note':
+      'O máximo de eventos que cabem em sequência no seu tempo, com dois minutos de viagem entre eles. Chefes já saqueados hoje ficam de fora e o filtro de expansão vale.',
+  'meta_train_none': 'Nada cabe neste tempo.',
+  'meta_train_wait': '{t} até o próximo',
+  'n_hours': '{n} h',
   'map_search': 'Buscar waypoints, pontos de interesse, mapas',
   'floor_n': 'Nível {n}',
   'map_layers': 'Camadas do mapa',

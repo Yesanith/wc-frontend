@@ -506,6 +506,12 @@ const enStrings = <String, String>{
   'legendary_have_pct': '{n}% in hand',
   'legendary_unpriced': '{n} not sold on the Trading Post',
   'legendary_to_buy': 'still to buy',
+  'meta_train': 'Meta train',
+  'meta_train_note':
+      'As many events as fit one after another in the time you have, with two minutes to travel between them. Bosses already looted today are left out, and the expansion filter of the timers applies.',
+  'meta_train_none': 'Nothing fits in this time.',
+  'meta_train_wait': '{t} until the next',
+  'n_hours': '{n} h',
   'map_search': 'Search waypoints, points of interest, maps',
   'floor_n': 'Level {n}',
   'map_layers': 'Map layers',

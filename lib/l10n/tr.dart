@@ -504,6 +504,12 @@ const trStrings = <String, String>{
   'legendary_have_pct': '%{n} elde',
   'legendary_unpriced': '{n} tanesi Trading Post\'ta satılmıyor',
   'legendary_to_buy': 'alınacak',
+  'meta_train': 'Meta treni',
+  'meta_train_note':
+      'Elindeki sürede arka arkaya sığan en çok etkinlik, aralarında yolculuk için iki dakika. Bugün loot aldığın boss\'lar çıkarılır; timer\'lardaki genişleme filtresi geçerlidir.',
+  'meta_train_none': 'Bu süreye sığan bir şey yok.',
+  'meta_train_wait': 'Sonrakine {t}',
+  'n_hours': '{n} sa',
   'map_search': 'Waypoint, nokta veya harita ara',
   'floor_n': 'Katman {n}',
   'map_layers': 'Harita katmanları',

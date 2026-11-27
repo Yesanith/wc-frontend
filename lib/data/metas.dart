@@ -271,3 +271,29 @@ List<Occurrence> upNext(DateTime now, {int count = 5, bool Function(Occurrence)?
   final picked = where == null ? all : all.where(where).toList();
   return picked.take(count).toList();
 }
+
+/// a train of events for the next [window]: as many as can be done one after another, each started on time, with [gap] between the end
+/// of one and the start of the next to travel. the earliest to end is taken first, which fits the most of them in. an event that began a
+/// little before [now] can still be joined
+List<Occurrence> planTrain(
+  DateTime now,
+  Duration window, {
+  Iterable<MetaMap>? maps,
+  bool Function(Occurrence)? where,
+  Duration gap = const Duration(minutes: 2),
+  Duration late = const Duration(minutes: 3),
+}) {
+  final from = now.subtract(late);
+  final candidates = [
+    for (final o in occurrences(from, now.add(window), maps: maps))
+      if (!o.start.isBefore(from) && !o.end.isAfter(now.add(window)) && (where == null || where(o))) o
+  ]..sort((a, b) => a.end.compareTo(b.end));
+  final out = <Occurrence>[];
+  DateTime? free;
+  for (final o in candidates) {
+    if (free != null && o.start.isBefore(free)) continue;
+    out.add(o);
+    free = o.end.add(gap);
+  }
+  return out;
+}

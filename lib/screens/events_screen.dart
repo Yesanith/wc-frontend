@@ -24,6 +24,7 @@ import '../widgets/waypoint_link.dart';
 part 'events/timeline.dart';
 part 'events/sheet.dart';
 part 'events/panel.dart';
+part 'events/train.dart';
 
 String localClock(DateTime t) {
   final l = t.toLocal();
@@ -114,6 +115,14 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
               children: [
                 Expanded(
                   child: Text(s.t('timer_note'), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+                ),
+                // a train of events for the next hours
+                IconButton(
+                  tooltip: s.t('meta_train'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => const MetaTrainScreen()),
+                  ),
+                  icon: Icon(Icons.route_outlined, color: AppColors.gold),
                 ),
                 IconButton(
                   tooltip: listView ? s.t('timeline_view') : s.t('list_view'),
