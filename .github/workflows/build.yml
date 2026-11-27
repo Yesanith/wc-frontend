@@ -55,8 +55,9 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
+          # 21: the lint of the Android Gradle Plugin that Flutter's template brings now calls List.removeLast, which 17 does not have
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - uses: subosito/flutter-action@v2
         with:
