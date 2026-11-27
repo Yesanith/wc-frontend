@@ -21,10 +21,12 @@ import '../widgets/responsive.dart';
 import 'build_detail_screen.dart';
 import 'item_sheet.dart';
 import '../state/wealth.dart';
+import '../state/cleanup.dart';
 import '../widgets/coin_text.dart';
 
 part 'account/panels.dart';
 part 'account/tabs.dart';
+part 'account/cleanup_tab.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
@@ -33,14 +35,14 @@ class AccountScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Column(
         children: [
           // refreshing is a pull on each tab, a row of its own above the
           // tabs only left an empty band
           AppTabBar(
             scrollable: true,
-            labels: [s.t('wallet'), s.t('bank'), s.t('materials'), s.t('armory'), s.t('builds')],
+            labels: [s.t('wallet'), s.t('bank'), s.t('materials'), s.t('cleanup'), s.t('armory'), s.t('builds')],
           ),
           Expanded(
             child: TabBarView(
@@ -50,6 +52,9 @@ class AccountScreen extends ConsumerWidget {
                     child: const ContentFrame(maxWidth: readingMaxWidth, child: _WalletTab())),
                 _Pull(providers: [bankProvider], child: const _BankTab()),
                 _Pull(providers: [materialGroupsProvider], child: const _MaterialsTab()),
+                _Pull(
+                    providers: [cleanupProvider],
+                    child: const ContentFrame(maxWidth: readingMaxWidth, child: _CleanupTab())),
                 _Pull(
                     providers: [armoryProvider],
                     child: const ContentFrame(maxWidth: readingMaxWidth, child: _ArmoryTab())),
