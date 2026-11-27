@@ -7,7 +7,7 @@ import 'settings.dart';
 
 /// one day of the wallet: gold in copper, karma and gems
 class WealthPoint {
-  const WealthPoint(this.day, this.coins, this.karma, this.gems);
+  const WealthPoint(this.day, this.coins, this.karma, this.gems, {this.age = 0});
 
   /// yyyy-mm-dd in local time, one point per day
   final String day;
@@ -15,10 +15,13 @@ class WealthPoint {
   final int karma;
   final int gems;
 
-  Map<String, dynamic> toJson() => {'d': day, 'c': coins, 'k': karma, 'g': gems};
+  /// the seconds the account has been played, 0 in the points kept before it was
+  final int age;
+
+  Map<String, dynamic> toJson() => {'d': day, 'c': coins, 'k': karma, 'g': gems, if (age > 0) 'a': age};
 
   static WealthPoint fromJson(Map<String, dynamic> j) =>
-      WealthPoint('${j['d']}', asInt(j['c']), asInt(j['k']), asInt(j['g']));
+      WealthPoint('${j['d']}', asInt(j['c']), asInt(j['k']), asInt(j['g']), age: asInt(j['a']));
 }
 
 /// wallet currency ids the history keeps
@@ -48,7 +51,7 @@ class WealthNotifier extends Notifier<Map<String, List<WealthPoint>>> {
   }
 
   /// stores today's values, replacing an earlier snapshot of the same day
-  Future<void> record(String account, List<WalletEntry> wallet, {DateTime? now}) async {
+  Future<void> record(String account, List<WalletEntry> wallet, {int age = 0, DateTime? now}) async {
     if (account.isEmpty || wallet.isEmpty) return;
     int value(int id) {
       for (final e in wallet) {
@@ -57,11 +60,13 @@ class WealthNotifier extends Notifier<Map<String, List<WealthPoint>>> {
       return 0;
     }
 
-    final point = WealthPoint(dayKey(now ?? DateTime.now()), value(_coins), value(_karma), value(_gems));
+    final point = WealthPoint(dayKey(now ?? DateTime.now()), value(_coins), value(_karma), value(_gems), age: age);
     final list = [...(state[account] ?? const <WealthPoint>[])];
     if (list.isNotEmpty && list.last.day == point.day) {
       final last = list.last;
-      if (last.coins == point.coins && last.karma == point.karma && last.gems == point.gems) return;
+      if (last.coins == point.coins && last.karma == point.karma && last.gems == point.gems && last.age == point.age) {
+        return;
+      }
       list[list.length - 1] = point;
     } else {
       list.add(point);

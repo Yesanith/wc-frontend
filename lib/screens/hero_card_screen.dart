@@ -1,13 +1,7 @@
-import 'dart:io';
-import 'dart:ui' as ui;
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
+import '../services/share_card.dart';
 import '../state/account.dart';
 import '../state/characters.dart';
 import '../state/professions.dart';
@@ -37,26 +31,7 @@ class _HeroCardScreenState extends ConsumerState<HeroCardScreen> {
     final s = ref.read(stringsProvider);
     setState(() => _busy = true);
     try {
-      final boundary = _cardKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) return;
-      final image = await boundary.toImage(pixelRatio: 3);
-      final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (bytes == null) return;
-      final png = bytes.buffer.asUint8List();
-      final name = 'hero_card_${DateTime.now().millisecondsSinceEpoch}.png';
-      if (kIsWeb) {
-        // a browser has no temporary directory, the picture is shared from its bytes
-        await SharePlus.instance.share(ShareParams(
-          files: [XFile.fromData(png, mimeType: 'image/png', name: name)],
-          text: '${widget.name} · Wondrous Compass',
-        ));
-      } else {
-        final dir = await getTemporaryDirectory();
-        final file = File('${dir.path}/$name');
-        await file.writeAsBytes(png);
-        await SharePlus.instance
-            .share(ShareParams(files: [XFile(file.path)], text: '${widget.name} · Wondrous Compass'));
-      }
+      await shareCard(_cardKey, name: 'hero_card', text: '${widget.name} · Wondrous Compass');
     } catch (_) {
       if (mounted) {
         showToast(context, s.t('share_failed'));

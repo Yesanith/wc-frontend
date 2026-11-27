@@ -463,7 +463,8 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     if (wallet.isLoading || account.isLoading) return;
     final entries = wallet.valueOrNull;
     final name = account.valueOrNull?['name'];
-    if (entries != null && name != null) ref.read(wealthProvider.notifier).record('$name', entries);
+    final age = asInt(account.valueOrNull?['age']);
+    if (entries != null && name != null) ref.read(wealthProvider.notifier).record('$name', entries, age: age);
   }
 
   /// on the site the pages have the rail down the left side and the strip with the search over them; on a phone they are the page

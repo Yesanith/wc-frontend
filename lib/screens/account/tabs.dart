@@ -21,6 +21,9 @@ class _WalletTab extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
+            // the recap of the year and of the vault season, made from the wallet's history among others
+            const _RecapLink(),
+            const SizedBox(height: 14),
             // the gold is the first thing, on a site the table of currencies comes next and the account's own panels after it
             ...[
               if (SiteScope.of(context)) ...[
@@ -1292,4 +1295,40 @@ String _coinWords(int copper) {
     if (c.silver > 0) '${c.silver}s',
     if (c.copper > 0 || copper == 0) '${c.copper}c'
   ].join(' ');
+}
+
+/// opens the recap of the year or of the season
+class _RecapLink extends ConsumerWidget {
+  const _RecapLink();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return Material(
+      color: AppColors.surface,
+      borderRadius: BorderRadius.circular(AppRadius.window),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.window),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const RecapScreen())),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadius.window),
+            border: Border.all(color: AppColors.line),
+          ),
+          child: Row(children: [
+            Icon(Icons.auto_awesome_outlined, color: AppColors.gold),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(s.t('recap'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                Text(s.t('recap_link_sub'), style: TextStyle(fontSize: 12.5, color: AppColors.muted)),
+              ]),
+            ),
+            Icon(Icons.chevron_right, color: AppColors.muted),
+          ]),
+        ),
+      ),
+    );
+  }
 }

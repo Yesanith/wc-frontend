@@ -20,6 +20,7 @@ import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'build_detail_screen.dart';
 import 'item_sheet.dart';
+import 'recap_screen.dart';
 import '../state/wealth.dart';
 import '../state/cleanup.dart';
 import '../widgets/coin_text.dart';
