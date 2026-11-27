@@ -312,74 +312,69 @@ class _CardTile extends ConsumerWidget {
         ),
       );
     }
+    // a phone: the emblem at the left, the name large, where and in which languages under it, what it says, what it looks for
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppRadius.card),
-          onTap: () => showRecruitPage(context, card.guildId),
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppRadius.card), border: Border.all(color: AppColors.line)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    GuildEmblem(emblem: ref.watch(recruitEmblemProvider(card.gw2GuildId)).valueOrNull, size: 32),
-                    const SizedBox(width: 10),
-                    Expanded(
-                        child: Text(card.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800))),
-                    Text(
-                      card.recruiting ? s.t('rec_recruiting') : s.t('rec_closed'),
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: card.recruiting ? AppColors.gold : AppColors.hint),
+      padding: const EdgeInsets.only(bottom: 10),
+      child: AppCard(
+        onTap: () => showRecruitPage(context, card.guildId),
+        padding: const EdgeInsets.all(14),
+        radius: AppRadius.card,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GuildEmblem(emblem: ref.watch(recruitEmblemProvider(card.gw2GuildId)).valueOrNull, size: 48),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Text(card.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: display(19))),
+                      const SizedBox(width: 8),
+                      Pill(card.recruiting ? s.t('rec_recruiting') : s.t('rec_closed'),
+                          color: card.recruiting ? AppColors.green : null),
+                    ],
+                  ),
+                  Text(
+                    [
+                      if (card.region != RecruitRegion.any) recruitRegionLabel(s, card.region),
+                      for (final l in card.languages) recruitLanguageLabel(l),
+                    ].join(' · '),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 12.5, color: AppColors.muted),
+                  ),
+                  if (card.headline.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(card.headline,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 13.5, height: 1.4, color: AppColors.textSoft)),
+                    ),
+                  if (card.lookingFor.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [for (final t in card.lookingFor.take(4)) Pill(recruitTagLabel(s, t))],
                     ),
                   ],
-                ),
-                if (card.headline.isNotEmpty)
-                  Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(card.headline, style: TextStyle(fontSize: 13, color: AppColors.textSoft))),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
-                  children: [
-                    for (final t in card.lookingFor.take(4)) _Mini(recruitTagLabel(s, t)),
-                    for (final l in card.languages) _Mini(recruitLanguageLabel(l)),
-                    if (card.region != RecruitRegion.any) _Mini(recruitRegionLabel(s, card.region)),
-                  ],
-                ),
-                if (card.playTimes.isNotEmpty)
-                  Padding(
+                  if (card.playTimes.isNotEmpty)
+                    Padding(
                       padding: const EdgeInsets.only(top: 6),
-                      child: Text(card.playTimes, style: TextStyle(fontSize: 12, color: AppColors.hint))),
-              ],
+                      child: Text(card.playTimes, style: TextStyle(fontSize: 12, color: AppColors.hint)),
+                    ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
-}
-
-class _Mini extends StatelessWidget {
-  const _Mini(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(999), border: Border.all(color: AppColors.line)),
-        child: Text(text, style: TextStyle(fontSize: 11, color: AppColors.muted)),
-      );
 }
 
 /// the guilds the player may manage the page of: where each page is, and the way to make it, change it, see it and, for the leader, say who else may. a player who is not signed in is told how to be

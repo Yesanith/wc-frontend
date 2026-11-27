@@ -257,8 +257,8 @@ class _OpenEventCard extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
     final e = event;
     final live = e.isLive(DateTime.now());
-    // on a site an event is a card with its kind and time on top, what it is called, who by, and how full it is
-    if (SiteScope.of(context)) {
+    // on a site, and on a phone, an event is a card with its kind and time on top, what it is called, who by, and how full it is
+    if (SiteScope.of(context) || MediaQuery.sizeOf(context).width < 600) {
       final ratio =
           e.maxParticipants == null || e.maxParticipants == 0 ? 0.0 : (e.going / e.maxParticipants!).clamp(0.0, 1.0);
       return AppCard(

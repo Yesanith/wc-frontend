@@ -339,8 +339,10 @@ void main() {
 
     testWidgets('shows what each looks for, the languages and the region, in its own card', (tester) async {
       await show(tester, FakeRecruit(cards: two), home: const RecruitmentScreen());
+      // a tag is a text of its own, the region and the languages are one line with dots between them
       Finder inCard(String title, String text) => find.descendant(
-          of: find.ancestor(of: find.text(title), matching: find.byType(InkWell)), matching: find.text(text));
+          of: find.ancestor(of: find.text(title), matching: find.byType(InkWell)),
+          matching: find.byWidgetPredicate((w) => w is Text && (w.data ?? '').split(' · ').contains(text)));
       for (final t in ['Raids', 'Fractals', 'English', 'Europe']) {
         expect(inCard('Mistwalkers [MIST]', t), findsOneWidget, reason: t);
       }
