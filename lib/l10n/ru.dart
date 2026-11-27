@@ -235,6 +235,8 @@ const ruStrings = <String, String>{
   'joined': 'Вступил',
   'upgrade_built': 'Построено',
   'log_last_n': 'Последние записи игры: {n}',
+  'week_previous': 'Предыдущая неделя',
+  'week_next': 'Следующая неделя',
   'this_week': 'Эта неделя',
   'coin_waiting': 'Деньги ждут',
   'days_30': '30 дней',

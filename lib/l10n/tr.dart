@@ -233,6 +233,8 @@ const trStrings = <String, String>{
   'joined': 'Katıldı',
   'upgrade_built': 'Yapıldı',
   'log_last_n': 'Oyunun tuttuğu son {n} kayıt',
+  'week_previous': 'Önceki hafta',
+  'week_next': 'Sonraki hafta',
   'this_week': 'Bu hafta',
   'coin_waiting': 'Bekleyen para',
   'days_30': '30 gün',

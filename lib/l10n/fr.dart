@@ -237,6 +237,8 @@ const frStrings = <String, String>{
   'joined': 'Entré',
   'upgrade_built': 'Construit',
   'log_last_n': 'Les {n} dernières entrées du jeu',
+  'week_previous': 'Semaine précédente',
+  'week_next': 'Semaine suivante',
   'this_week': 'Cette semaine',
   'coin_waiting': 'Argent en attente',
   'days_30': '30 jours',

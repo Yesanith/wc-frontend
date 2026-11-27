@@ -217,6 +217,8 @@ const jaStrings = <String, String>{
   'joined': '加入日',
   'upgrade_built': '建設済み',
   'log_last_n': 'ゲームが保持する直近 {n} 件',
+  'week_previous': '前の週',
+  'week_next': '次の週',
   'this_week': '今週',
   'coin_waiting': '受け取り待ちのコイン',
   'days_30': '30 日',

@@ -240,6 +240,8 @@ const deStrings = <String, String>{
   'joined': 'Beigetreten',
   'upgrade_built': 'Gebaut',
   'log_last_n': 'Die letzten {n} Einträge des Spiels',
+  'week_previous': 'Vorherige Woche',
+  'week_next': 'Nächste Woche',
   'this_week': 'Diese Woche',
   'coin_waiting': 'Wartendes Geld',
   'days_30': '30 Tage',

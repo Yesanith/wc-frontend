@@ -144,8 +144,11 @@ class GuildEventsScreen extends ConsumerWidget {
               children: [
                 const _GuildLinks(),
                 const SizedBox(height: 10),
-                // one under the other on a phone, in rows where there is room
-                CardWrap(minWidth: 440, children: [for (final e in events) _EventCard(summary: e)]),
+                // a phone has the week as a strip of days and the chosen day's events under it; a tablet has them in rows
+                if (MediaQuery.sizeOf(context).width < 600)
+                  _PhoneWeek(events: events)
+                else
+                  CardWrap(minWidth: 440, children: [for (final e in events) _EventCard(summary: e)]),
               ],
             );
           },
@@ -275,6 +278,105 @@ class _GuildLinks extends ConsumerWidget {
               MaterialPageRoute(builder: (_) => GuildRosterScreen(guild: g)),
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// the week on a phone: seven days in a strip, a dot under each that has events, and the events of the chosen day under it
+class _PhoneWeek extends ConsumerStatefulWidget {
+  const _PhoneWeek({required this.events});
+
+  final List<EventSummary> events;
+
+  @override
+  ConsumerState<_PhoneWeek> createState() => _PhoneWeekState();
+}
+
+class _PhoneWeekState extends ConsumerState<_PhoneWeek> {
+  var _week = 0;
+  DateTime? _day;
+
+  static DateTime _date(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  @override
+  Widget build(BuildContext context) {
+    final s = ref.watch(stringsProvider);
+    final today = _date(DateTime.now());
+    final monday = today.subtract(Duration(days: today.weekday - 1)).add(Duration(days: 7 * _week));
+    final days = [for (var i = 0; i < 7; i++) monday.add(Duration(days: i))];
+    final chosen = _day != null && !_day!.isBefore(monday) && _day!.isBefore(monday.add(const Duration(days: 7)))
+        ? _day!
+        : (_week == 0 ? today : monday);
+    List<EventSummary> on(DateTime day) => [
+          for (final e in widget.events)
+            if (_date(e.event.startAt.toLocal()) == day) e
+        ]..sort((a, b) => a.event.startAt.compareTo(b.event.startAt));
+    final list = on(chosen);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            IconButton(
+              tooltip: s.t('week_previous'),
+              onPressed: () => setState(() => _week--),
+              icon: const Icon(Icons.chevron_left),
+            ),
+            for (final d in days)
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () => setState(() => _day = d),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    decoration: BoxDecoration(
+                      color: d == chosen ? AppColors.header : null,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(s.t('wd_${d.weekday}').caps,
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                color: d == chosen ? AppColors.accent : AppColors.muted)),
+                        const SizedBox(height: 2),
+                        Text('${d.day}',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: d == chosen ? const Color(0xFFFFF8E6) : AppColors.text)),
+                        const SizedBox(height: 3),
+                        Container(
+                          width: 5,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                on(d).isEmpty ? Colors.transparent : (d == chosen ? AppColors.accent : AppColors.gold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            IconButton(
+              tooltip: s.t('week_next'),
+              onPressed: () => setState(() => _week++),
+              icon: const Icon(Icons.chevron_right),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (list.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Text(s.t('events_none'), textAlign: TextAlign.center, style: TextStyle(color: AppColors.muted)),
+          )
+        else
+          for (final e in list) Padding(padding: const EdgeInsets.only(bottom: 10), child: _EventCard(summary: e)),
       ],
     );
   }

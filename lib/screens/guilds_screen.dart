@@ -129,9 +129,41 @@ class GuildDetailScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        // the guild's own dark header, as the mockup of the phone has it: its emblem, tag and level over the name
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          title: Text(name),
+          backgroundColor: AppColors.header,
+          foregroundColor: AppColors.onHeader,
+          iconTheme: IconThemeData(color: AppColors.onHeader),
+          toolbarHeight: 72,
+          titleSpacing: 0,
+          title: Row(
+            children: [
+              GuildEmblem(emblem: _emblemOf(guild), size: 44),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (guild != null)
+                      Text(
+                        [
+                          if ('${guild['tag'] ?? ''}'.isNotEmpty) '[${guild['tag']}]',
+                          if (guild['level'] != null) s.t('guild_level_n', {'n': guild['level']}),
+                        ].join(' · ').caps,
+                        style: TextStyle(
+                            fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: AppColors.accent),
+                      ),
+                    Text(name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: display(22, color: const Color(0xFFFFF8E6))),
+                  ],
+                ),
+              ),
+            ],
+          ),
           actions: [
             if (leads)
               IconButton(
@@ -150,14 +182,12 @@ class GuildDetailScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: GuildEmblem(emblem: _emblemOf(guild), size: 36),
-            ),
           ],
-          bottom: AppTabBar(
-            scrollable: true,
-            labels: [s.t('treasury'), s.t('stash'), s.t('members'), s.t('upgrades_guild'), s.t('log')],
+          bottom: _LightTabs(
+            AppTabBar(
+              scrollable: true,
+              labels: [s.t('treasury'), s.t('stash'), s.t('members'), s.t('upgrades_guild'), s.t('log')],
+            ),
           ),
         ),
         body: TabBarView(
@@ -172,4 +202,17 @@ class GuildDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// the tabs under a dark header, on a strip of the page's own colour so they read as they do everywhere else
+class _LightTabs extends StatelessWidget implements PreferredSizeWidget {
+  const _LightTabs(this.tabs);
+
+  final PreferredSizeWidget tabs;
+
+  @override
+  Size get preferredSize => tabs.preferredSize;
+
+  @override
+  Widget build(BuildContext context) => ColoredBox(color: AppColors.navBg, child: tabs);
 }

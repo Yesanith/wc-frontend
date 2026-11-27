@@ -235,6 +235,8 @@ const esStrings = <String, String>{
   'joined': 'Se unió',
   'upgrade_built': 'Construida',
   'log_last_n': 'Las últimas {n} entradas del juego',
+  'week_previous': 'Semana anterior',
+  'week_next': 'Semana siguiente',
   'this_week': 'Esta semana',
   'coin_waiting': 'Dinero esperando',
   'days_30': '30 días',

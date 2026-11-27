@@ -236,6 +236,8 @@ const enStrings = <String, String>{
   'joined': 'Joined',
   'upgrade_built': 'Built',
   'log_last_n': 'The last {n} entries the game keeps',
+  'week_previous': 'Previous week',
+  'week_next': 'Next week',
   'this_week': 'This week',
   'coin_waiting': 'Coin waiting',
   'days_30': '30 days',

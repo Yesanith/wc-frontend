@@ -214,6 +214,8 @@ const zhStrings = <String, String>{
   'joined': '加入时间',
   'upgrade_built': '已建成',
   'log_last_n': '游戏保留的最近 {n} 条记录',
+  'week_previous': '上一周',
+  'week_next': '下一周',
   'this_week': '本周',
   'coin_waiting': '待领取的钱币',
   'days_30': '30 天',

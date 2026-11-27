@@ -237,6 +237,8 @@ const ptStrings = <String, String>{
   'joined': 'Entrou',
   'upgrade_built': 'Construída',
   'log_last_n': 'As últimas {n} entradas do jogo',
+  'week_previous': 'Semana anterior',
+  'week_next': 'Próxima semana',
   'this_week': 'Esta semana',
   'coin_waiting': 'Dinheiro esperando',
   'days_30': '30 dias',
