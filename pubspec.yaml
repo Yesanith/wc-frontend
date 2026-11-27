@@ -42,6 +42,8 @@ flutter:
     - assets/data/
     # the fonts of the app, with the app: the page and the phone do not ask Google Fonts for them
     - assets/google_fonts/
+    # the map icons the game's files do not have, from the Guild Wars 2 wiki: the mastery points of each region
+    - assets/map_icons/
     - assets/tiles/1/0/
     - assets/tiles/1/1/
     - assets/tiles/1/2/

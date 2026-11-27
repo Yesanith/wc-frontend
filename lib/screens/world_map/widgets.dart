@@ -12,8 +12,9 @@ class _MarkerIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // the game's files have no map icon for a mastery point: it is drawn, in its region's colour
-    if (kind == 'mastery') return CustomPaint(painter: _MasteryMark(_masteryColor(region)));
+    // the game's files have no map icon for a mastery point: the wiki's, one per region, come with the app
+    if (kind == 'mastery')
+      return Image.asset(_masteryIcon(region), fit: BoxFit.contain, filterQuality: FilterQuality.medium);
     final url = icon;
     if (url != null) return CachedIcon(url: url, fit: BoxFit.contain);
     final (IconData glyph, Color color) = switch (kind) {
@@ -118,60 +119,9 @@ class _Tile extends StatelessWidget {
   }
 }
 
-/// the colour of a mastery region, close to the one the game gives its points
-Color _masteryColor(String region) => switch (region) {
-      'Maguuma' => const Color(0xFF3F9A3A),
-      'Desert' => const Color(0xFFB0459C),
-      'Tundra' => const Color(0xFF4F9AD6),
-      'Jade' => const Color(0xFF1F9C8C),
-      'Sky' => const Color(0xFFE0A020),
-      'Wild' => const Color(0xFF7A9A2A),
-      'Magic' => const Color(0xFF7A5BD0),
-      _ => const Color(0xFFC0392B),
-    };
-
-/// a mastery point: a shield in the region's colour with a white rim and a rising chevron
-class _MasteryMark extends CustomPainter {
-  const _MasteryMark(this.color);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width, h = size.height;
-    final shield = Path()
-      ..moveTo(w * 0.5, h * 0.06)
-      ..lineTo(w * 0.88, h * 0.2)
-      ..lineTo(w * 0.84, h * 0.58)
-      ..quadraticBezierTo(w * 0.78, h * 0.82, w * 0.5, h * 0.96)
-      ..quadraticBezierTo(w * 0.22, h * 0.82, w * 0.16, h * 0.58)
-      ..lineTo(w * 0.12, h * 0.2)
-      ..close();
-    canvas.drawShadow(shield, Colors.black, 2, false);
-    canvas.drawPath(shield, Paint()..color = color);
-    canvas.drawPath(
-      shield,
-      Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = math.max(1.2, w * 0.08)
-        ..strokeJoin = StrokeJoin.round,
-    );
-    final chevron = Path()
-      ..moveTo(w * 0.32, h * 0.6)
-      ..lineTo(w * 0.5, h * 0.4)
-      ..lineTo(w * 0.68, h * 0.6);
-    canvas.drawPath(
-      chevron,
-      Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = math.max(1.4, w * 0.1)
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_MasteryMark old) => old.color != color;
+/// the wiki's icon of a mastery point of [region], the region the api names it by. central tyria's for a region it does not
+/// know yet
+String _masteryIcon(String region) {
+  const known = {'Tyria', 'Maguuma', 'Desert', 'Tundra', 'Jade', 'Sky', 'Wild', 'Magic'};
+  return 'assets/map_icons/mastery_${known.contains(region) ? region.toLowerCase() : 'tyria'}.png';
 }
