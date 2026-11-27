@@ -513,7 +513,7 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                 _showMarker(s, m);
               }
             },
-            child: _MarkerIcon(kind: m.kind, icon: icons[m.kind]),
+            child: _MarkerIcon(kind: m.kind, icon: icons[m.kind], region: m.kind == 'mastery' ? m.name : ''),
           ),
         ),
     ];
@@ -551,11 +551,15 @@ class _WorldMapScreenState extends ConsumerState<WorldMapScreen> {
                   SizedBox(
                     width: 30,
                     height: 30,
-                    child: _MarkerIcon(kind: m.kind, icon: ref.read(markerIconsProvider).valueOrNull?[m.kind]),
+                    child: _MarkerIcon(
+                        kind: m.kind,
+                        icon: ref.read(markerIconsProvider).valueOrNull?[m.kind],
+                        region: m.kind == 'mastery' ? m.name : ''),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(m.name.isEmpty ? _kindLabel(s, m.kind) : m.name, style: display(18)),
+                    child: Text(m.name.isEmpty || m.kind == 'mastery' ? _kindLabel(s, m.kind) : m.name,
+                        style: display(18)),
                   ),
                 ],
               ),

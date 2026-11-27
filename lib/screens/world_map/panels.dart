@@ -65,14 +65,17 @@ class _MarkerPopover extends ConsumerWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(width: 22, height: 22, child: _MarkerIcon(kind: marker.kind, icon: icon)),
+          SizedBox(
+              width: 22,
+              height: 22,
+              child: _MarkerIcon(kind: marker.kind, icon: icon, region: marker.kind == 'mastery' ? marker.name : '')),
           const SizedBox(width: 10),
           Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(marker.name.isEmpty ? kindLabel : marker.name,
+                Text(marker.name.isEmpty || marker.kind == 'mastery' ? kindLabel : marker.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
