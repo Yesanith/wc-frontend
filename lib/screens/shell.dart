@@ -38,7 +38,6 @@ import '../widgets/responsive.dart';
 import '../widgets/site_header.dart';
 import '../widgets/site_subpage.dart';
 import '../widgets/site_search.dart';
-import '../widgets/swipe_open.dart';
 import 'about_screen.dart';
 import 'account_screen.dart';
 import 'characters_screen.dart';
@@ -65,6 +64,7 @@ import 'world_map_screen.dart';
 import 'wvw_screen.dart';
 
 part 'shell/sections.dart';
+part 'shell/phone_nav.dart';
 
 class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key});
@@ -78,6 +78,37 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
 
   /// the window is wide enough for a menu that stays open, set on every build
   bool _wide = false;
+
+  /// whether the sheet of "more" is up, which the bar of a phone shows
+  bool _moreOpen = false;
+
+  void _setMoreOpen(bool open) => setState(() => _moreOpen = open);
+
+  /// a phone's search, in a window at the top
+  void _openPhoneSearch() {
+    final width = MediaQuery.sizeOf(context).width;
+    showDialog<void>(
+      context: context,
+      barrierColor: const Color(0x73140F0B),
+      builder: (dialog) => Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 56, 12, 0),
+          child: Material(
+            color: Colors.transparent,
+            child: _search(
+              width: width - 24,
+              autofocus: true,
+              onSelect: (hit) {
+                Navigator.of(dialog).pop();
+                _openHit(hit);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   /// what the tab of the browser says now, set when it changes
   String? _pageTitle;
@@ -371,10 +402,6 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     return _rootBack();
   }
 
-  /// set while a section is picked from the menu, so that closing the menu
-  /// for navigation is not mistaken for a back press
-  bool _selecting = false;
-
   /// after the menu was dismissed, a back press within this window exits
   DateTime? _exitArmedUntil;
 
@@ -400,71 +427,30 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     if (next == ref.read(sectionProvider)) {
       _sectionNavigators[next]?.currentState?.popUntil((route) => route.isFirst);
     }
-    // a menu that is always there has no closing to be mistaken for a back press
-    if (!_wide) _selecting = true;
     // the characters, chosen again, are the list again
     if (next == AppSection.characters) ref.read(openCharacterProvider.notifier).state = null;
     ref.read(sectionProvider.notifier).state = next;
-    _scaffoldKey.currentState?.closeDrawer();
   }
-
-  /// when the menu was last dismissed by something other than picking a
-  /// section. on some flutter versions the navigator closes the menu on back
-  /// before we hear about it, this lets us still treat that as our back press
-  DateTime? _dismissedAt;
-
-  void _drawerChanged(bool open) {
-    if (open) return;
-    if (_selecting) {
-      _selecting = false;
-      return;
-    }
-    _dismissedAt = DateTime.now();
-  }
-
-  bool _within(DateTime? at, Duration window) => at != null && DateTime.now().difference(at) < window;
 
   void _armExit() {
     _exitArmedUntil = DateTime.now().add(const Duration(seconds: 2));
     showToast(context, ref.read(stringsProvider).t('back_again_to_exit'), duration: const Duration(seconds: 2));
   }
 
-  /// back on the first page of any section, never switching sections:
-  /// the first press opens the menu, the second press with the menu open
-  /// shows the exit hint and keeps the menu, and a third press within two
-  /// seconds of that hint leaves the app
+  /// back on the first page of a section: a phone goes home first; then a second press within two seconds of the hint
+  /// leaves the app. a browser keeps its own history
   bool _rootBack() {
-    if (_wide) {
-      // the menu is always there, back has none to open. a browser keeps its own history
-      if (kIsWeb) return false;
-      final until = _exitArmedUntil;
-      if (until != null && DateTime.now().isBefore(until)) {
-        SystemNavigator.pop();
-        return true;
-      }
-      _armExit();
+    if (!_wide && ref.read(sectionProvider) != AppSection.home) {
+      _select(AppSection.home);
       return true;
     }
-    final scaffold = _scaffoldKey.currentState;
-    if (scaffold == null) return false;
-    final armed = _exitArmedUntil;
-    if (armed != null && DateTime.now().isBefore(armed)) {
+    if (kIsWeb) return false;
+    final until = _exitArmedUntil;
+    if (until != null && DateTime.now().isBefore(until)) {
       SystemNavigator.pop();
       return true;
     }
-    if (scaffold.isDrawerOpen) {
-      _armExit();
-      return true;
-    }
-    // the navigator already closed the menu for this press: reopen it and
-    // treat the press as the second one
-    if (_within(_dismissedAt, const Duration(milliseconds: 1500))) {
-      _dismissedAt = null;
-      scaffold.openDrawer();
-      _armExit();
-      return true;
-    }
-    scaffold.openDrawer();
+    _armExit();
     return true;
   }
 
@@ -569,8 +555,9 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     final site = kIsWeb && MediaQuery.sizeOf(context).width >= siteMinWidth;
     // a site on a tablet has its menu behind a button of the bar; elsewhere a site has none to open
     // a site has the rail down its side; only a phone has the drawer
-    final hasDrawer = !site && !wide;
-    _wide = !hasDrawer;
+    // a phone has the bar along its bottom and "more" for the rest of the sections, no drawer
+    final phone = !site && !wide;
+    _wide = !phone;
     // the tab of the browser says which page it is, as the tab of a site does
     if (kIsWeb) _setPageTitle(sitePageTitle(section, s.t(_titleKeys[section]!)));
     final lang = ref.watch(langProvider);
@@ -639,12 +626,32 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     // does not start the sections over
     final scaffold = Scaffold(
       key: _scaffoldKey,
-      onDrawerChanged: _drawerChanged,
       appBar: site
           ? null
           : AppBar(
               surfaceTintColor: Colors.transparent,
-              title: Text(s.t(_titleKeys[section]!), style: display(20, color: AppColors.accent)),
+              // a phone has the name of the page at the top of the page, as the site has: the bar keeps the emblem, the search and the account
+              backgroundColor: phone ? AppColors.bg : null,
+              automaticallyImplyLeading: false,
+              titleSpacing: phone ? 16 : null,
+              title: phone
+                  ? const Align(alignment: Alignment.centerLeft, child: DiamondEmblem(size: 26))
+                  : Text(s.t(_titleKeys[section]!), style: display(20, color: AppColors.accent)),
+              actions: phone
+                  ? [
+                      IconButton(
+                        tooltip: s.t('search_placeholder'),
+                        onPressed: _openPhoneSearch,
+                        icon: Icon(Icons.search, color: AppColors.textSoft),
+                      ),
+                      if (communityReady)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child:
+                              AccountBadge(compact: true, showName: false, onOpen: () => _select(AppSection.settings)),
+                        ),
+                    ]
+                  : null,
               // a full sync shows real progress, a background refresh only says
               // that something is updating
               bottom: !sync.running && refreshing == 0
@@ -660,26 +667,27 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
                     ),
             ),
       // the footer of the site closes its home page; on every other page it would only take a line off the content
-      bottomNavigationBar: site && section == AppSection.home
-          ? SiteFooter(
-              note: s.t('site_footer_note'),
-              links: [
-                (
-                  label: s.t('site_privacy'),
-                  onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))
-                ),
-                (
-                  label: s.t('site_terms'),
-                  onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))
-                ),
-                (
-                  label: s.t('site_source'),
-                  onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))
-                ),
-              ],
-            )
-          : null,
-      drawer: hasDrawer ? menu : null,
+      bottomNavigationBar: phone
+          ? _PhoneTabBar(section: section, onSelect: _select, onMore: _openMore, moreOpen: _moreOpen)
+          : site && section == AppSection.home
+              ? SiteFooter(
+                  note: s.t('site_footer_note'),
+                  links: [
+                    (
+                      label: s.t('site_privacy'),
+                      onTap: () => openUrl(context, sitePageUrl(lang, 'privacy'), failMessage: s.t('open_failed'))
+                    ),
+                    (
+                      label: s.t('site_terms'),
+                      onTap: () => openUrl(context, sitePageUrl(lang, 'terms'), failMessage: s.t('open_failed'))
+                    ),
+                    (
+                      label: s.t('site_source'),
+                      onTap: () => openUrl(context, repositoryUrl, failMessage: s.t('open_failed'))
+                    ),
+                  ],
+                )
+              : null,
       // the administrator's announcement above every page, and the app says it is open while it is
       body: AppPresence(
         child: SiteScope(
@@ -695,74 +703,68 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
               children: [
                 const AnnouncementBar(),
                 Expanded(
-                  child: SwipeToOpen(
-                    // the map pans sideways, the menu stays on the button and back there
-                    enabled: section != AppSection.maps && hasDrawer && !site,
-                    onOpen: () => _scaffoldKey.currentState?.openDrawer(),
-                    child: IndexedStack(
-                      index: section.index,
-                      children: [
-                        for (final sec in AppSection.values)
-                          // hidden sections keep their state but stop their tickers and timers
-                          TickerMode(
-                            enabled: sec == section,
-                            // the map takes the whole window, a list keeps to a width it can be read in and a page laid
-                            // out in columns to a wider one, both in the middle
-                            child: ContentFrame(
-                              // on the site every page keeps to the width of the site, as a site's pages do; the map and the
-                              // timeline of the world's events, which are drawn across, take what there is
-                              maxWidth: sec == AppSection.maps || (sec == AppSection.home && site)
-                                  ? double.infinity
-                                  // the week of the guilds' events has seven days to fit, which want more than the page of a site
-                                  : site && sec == AppSection.guildEvents
-                                      ? sitePageWidthFor(MediaQuery.sizeOf(context).width) * 1.15
-                                      : site && sec != AppSection.bosses
-                                          ? sitePageWidthFor(MediaQuery.sizeOf(context).width)
-                                          : _readingSections.contains(sec)
-                                              ? readingMaxWidth
-                                              : contentMaxWidth,
-                              child: !_opened.contains(sec)
-                                  ? const SizedBox.shrink()
-                                  : (!hasKey && sectionNeedsKey(sec))
-                                      ? const NeedsKeyView()
-                                      : site &&
-                                              sec != AppSection.maps &&
-                                              sec != AppSection.home &&
-                                              // a character's page has its own way back to the list instead of the name of the list
-                                              !(sec == AppSection.characters &&
-                                                  ref.watch(openCharacterProvider) != null)
-                                          // a page of a site has its name at the top of it, the bar of an app is where an app has it
-                                          ? CollapsingHeading(
-                                              heading: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
-                                                      child: Align(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: SitePageHeading(
-                                                          title: s.t(_titleKeys[sec]!),
-                                                          kicker: siteGroupIndex(sec) == null
-                                                              ? null
-                                                              : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
-                                                        ),
+                  child: IndexedStack(
+                    index: section.index,
+                    children: [
+                      for (final sec in AppSection.values)
+                        // hidden sections keep their state but stop their tickers and timers
+                        TickerMode(
+                          enabled: sec == section,
+                          // the map takes the whole window, a list keeps to a width it can be read in and a page laid
+                          // out in columns to a wider one, both in the middle
+                          child: ContentFrame(
+                            // on the site every page keeps to the width of the site, as a site's pages do; the map and the
+                            // timeline of the world's events, which are drawn across, take what there is
+                            maxWidth: sec == AppSection.maps || (sec == AppSection.home && site)
+                                ? double.infinity
+                                // the week of the guilds' events has seven days to fit, which want more than the page of a site
+                                : site && sec == AppSection.guildEvents
+                                    ? sitePageWidthFor(MediaQuery.sizeOf(context).width) * 1.15
+                                    : site && sec != AppSection.bosses
+                                        ? sitePageWidthFor(MediaQuery.sizeOf(context).width)
+                                        : _readingSections.contains(sec)
+                                            ? readingMaxWidth
+                                            : contentMaxWidth,
+                            child: !_opened.contains(sec)
+                                ? const SizedBox.shrink()
+                                : (!hasKey && sectionNeedsKey(sec))
+                                    ? const NeedsKeyView()
+                                    : (site || phone) &&
+                                            sec != AppSection.maps &&
+                                            sec != AppSection.home &&
+                                            // a character's page has its own way back to the list instead of the name of the list
+                                            !(sec == AppSection.characters && ref.watch(openCharacterProvider) != null)
+                                        // a page of a site has its name at the top of it, the bar of an app is where an app has it
+                                        ? CollapsingHeading(
+                                            heading: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(20, phone ? 4 : 24, 20, 8),
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: SitePageHeading(
+                                                        title: s.t(_titleKeys[sec]!),
+                                                        kicker: siteGroupIndex(sec) == null
+                                                            ? null
+                                                            : s.t(siteNavGroups[siteGroupIndex(sec)!].$1),
                                                       ),
                                                     ),
                                                   ),
-                                                  // the account's own figures fill the corner of the heading where there is room
-                                                  if (sec == AppSection.account &&
-                                                      MediaQuery.sizeOf(context).width >= 1180)
-                                                    const Flexible(child: AccountHeadingSummary()),
-                                                ],
-                                              ),
-                                              body: _sectionBody(sec, site),
-                                            )
-                                          : _sectionBody(sec, site),
-                            ),
+                                                ),
+                                                // the account's own figures fill the corner of the heading where there is room
+                                                if (sec == AppSection.account &&
+                                                    MediaQuery.sizeOf(context).width >= 1180)
+                                                  const Flexible(child: AccountHeadingSummary()),
+                                              ],
+                                            ),
+                                            body: _sectionBody(sec, site),
+                                          )
+                                        : _sectionBody(sec, site),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
               ],
