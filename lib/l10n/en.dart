@@ -512,6 +512,13 @@ const enStrings = <String, String>{
   'meta_train_none': 'Nothing fits in this time.',
   'meta_train_wait': '{t} until the next',
   'n_hours': '{n} h',
+  'attendance': 'Attendance',
+  'attendance_note':
+      'What members answered to the guild\'s events: going, maybe or not. It is what they said, not who actually came.',
+  'attendance_none': 'No guild events in this span yet.',
+  'attendance_events': '{n} events',
+  'attendance_no_answer': 'No answer',
+  'attendance_last': 'last going {d}',
   'map_search': 'Search waypoints, points of interest, maps',
   'floor_n': 'Level {n}',
   'map_layers': 'Map layers',

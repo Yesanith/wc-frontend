@@ -510,6 +510,13 @@ const trStrings = <String, String>{
   'meta_train_none': 'Bu süreye sığan bir şey yok.',
   'meta_train_wait': 'Sonrakine {t}',
   'n_hours': '{n} sa',
+  'attendance': 'Katılım',
+  'attendance_note':
+      'Üyelerin guild etkinliklerine verdiği cevaplar: geliyor, belki ya da gelmiyor. Gerçekte kimin geldiği değil, ne dedikleri.',
+  'attendance_none': 'Bu aralıkta henüz guild etkinliği yok.',
+  'attendance_events': '{n} etkinlik',
+  'attendance_no_answer': 'Cevapsız',
+  'attendance_last': 'son katılım {d}',
   'map_search': 'Waypoint, nokta veya harita ara',
   'floor_n': 'Katman {n}',
   'map_layers': 'Harita katmanları',

@@ -515,6 +515,13 @@ const frStrings = <String, String>{
   'meta_train_none': 'Rien ne tient dans ce temps.',
   'meta_train_wait': '{t} avant le suivant',
   'n_hours': '{n} h',
+  'attendance': 'Participation',
+  'attendance_note':
+      'Ce que les membres ont répondu aux événements de la guilde : présent, peut-être ou absent. Ce sont leurs réponses, pas qui est vraiment venu.',
+  'attendance_none': 'Aucun événement de guilde sur cette période.',
+  'attendance_events': '{n} événements',
+  'attendance_no_answer': 'Sans réponse',
+  'attendance_last': 'dernière présence {d}',
   'map_search': 'Chercher points de passage, sites, cartes',
   'floor_n': 'Niveau {n}',
   'map_layers': 'Couches de la carte',

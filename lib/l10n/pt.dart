@@ -513,6 +513,13 @@ const ptStrings = <String, String>{
   'meta_train_none': 'Nada cabe neste tempo.',
   'meta_train_wait': '{t} até o próximo',
   'n_hours': '{n} h',
+  'attendance': 'Participação',
+  'attendance_note':
+      'O que os membros responderam aos eventos da guilda: vou, talvez ou não. São as respostas, não quem realmente veio.',
+  'attendance_none': 'Ainda não há eventos da guilda neste período.',
+  'attendance_events': '{n} eventos',
+  'attendance_no_answer': 'Sem resposta',
+  'attendance_last': 'última vez {d}',
   'map_search': 'Buscar waypoints, pontos de interesse, mapas',
   'floor_n': 'Nível {n}',
   'map_layers': 'Camadas do mapa',

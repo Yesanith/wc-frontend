@@ -520,6 +520,13 @@ const deStrings = <String, String>{
   'meta_train_none': 'In diese Zeit passt nichts.',
   'meta_train_wait': '{t} bis zum nächsten',
   'n_hours': '{n} Std.',
+  'attendance': 'Teilnahme',
+  'attendance_note':
+      'Was die Mitglieder auf die Gildenevents geantwortet haben: dabei, vielleicht oder nicht. Es zeigt die Antworten, nicht wer wirklich kam.',
+  'attendance_none': 'In diesem Zeitraum gab es noch keine Gildenevents.',
+  'attendance_events': '{n} Events',
+  'attendance_no_answer': 'Keine Antwort',
+  'attendance_last': 'zuletzt dabei {d}',
   'map_search': 'Wegmarken, Sehenswürdigkeiten, Karten suchen',
   'floor_n': 'Ebene {n}',
   'map_layers': 'Kartenebenen',

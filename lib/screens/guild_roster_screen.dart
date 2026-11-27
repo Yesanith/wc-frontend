@@ -7,6 +7,7 @@ import '../state/link_refresh.dart';
 import '../state/settings.dart';
 import '../theme.dart';
 import '../widgets/common.dart';
+import 'guild_attendance_screen.dart';
 import 'guild_events_screen.dart' show eventWhen;
 
 /// a guild's wondrous compass members with their roles. the leader appoints
@@ -41,7 +42,20 @@ class _GuildRosterScreenState extends ConsumerState<GuildRosterScreen> {
     final managing = leading || g.role == 'officer';
 
     return Scaffold(
-      appBar: AppBar(title: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]')),
+      appBar: AppBar(
+        title: Text(g.tag.isEmpty ? g.name : '${g.name} [${g.tag}]'),
+        actions: [
+          // how the members answered the guild's events, for those who run them
+          if (managing)
+            IconButton(
+              tooltip: s.t('attendance'),
+              icon: Icon(Icons.how_to_reg_outlined, color: AppColors.gold),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => GuildAttendanceScreen(guild: g)),
+              ),
+            ),
+        ],
+      ),
       body: RefreshIndicator(
         color: AppColors.gold,
         onRefresh: () async {

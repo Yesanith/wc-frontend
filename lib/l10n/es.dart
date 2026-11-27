@@ -513,6 +513,13 @@ const esStrings = <String, String>{
   'meta_train_none': 'No cabe nada en este tiempo.',
   'meta_train_wait': '{t} hasta el siguiente',
   'n_hours': '{n} h',
+  'attendance': 'Asistencia',
+  'attendance_note':
+      'Lo que respondieron los miembros a los eventos del gremio: voy, quizá o no. Son sus respuestas, no quién vino de verdad.',
+  'attendance_none': 'Aún no hay eventos del gremio en este periodo.',
+  'attendance_events': '{n} eventos',
+  'attendance_no_answer': 'Sin respuesta',
+  'attendance_last': 'última vez {d}',
   'map_search': 'Buscar puntos de ruta, lugares, mapas',
   'floor_n': 'Nivel {n}',
   'map_layers': 'Capas del mapa',
