@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/metas.dart';
 import '../data/waypoints.dart';
 import '../services/icon_cache.dart';
+import '../l10n/strings.dart';
 import '../state/account.dart';
 import '../state/api.dart';
 import '../state/alerts.dart';
@@ -153,52 +154,99 @@ class HomeScreen extends ConsumerWidget {
       color: AppColors.gold,
       onRefresh: () => _refresh(ref),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+        padding: const EdgeInsets.only(bottom: 24),
         children: [
-          // the day's name, the greeting and the clocks everyone plans around, in one strip
-          const _HomeHero(),
-          const _AlertBanner(),
-          const _NewsBanner(),
-          // a guest has no vault, checklist or wallet to show
-          if (!hasKey) const _GuestCard(),
-          // what is coming, as cards in a row where there is room
-          Eyebrow(
-            s.t('up_next'),
-            trailing: TextButton(
-              onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
-              child: Text(s.t('all_timers')),
+          // the day's name, the greeting and the clocks everyone plans around, on the map of the game as on the site
+          const _PhoneMapBand(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _classicBody(ref, s, hasKey),
             ),
           ),
-          const _UpNext(),
-          // what the account holds, side by side where there is room: the vault, the purse, the day's tallies
-          if (hasKey) ...[
-            const SizedBox(height: 8),
-            CardWrap(
-              minWidth: 330,
-              gap: 20,
-              children: [
-                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Eyebrow(s.t('wizards_vault')),
-                  const _Vault(),
-                ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Eyebrow(s.t('trading_post')),
-                  const _TradeBox(),
-                ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Eyebrow(s.t('wallet')),
-                  const _Wallet(),
-                ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Eyebrow(s.t('daily_checklist')),
-                  const _Checklist(),
-                  const _WvwMini(),
-                  const _PinnedAchievements(),
-                ]),
-              ],
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _classicBody(WidgetRef ref, S s, bool hasKey) => [
+        const _AlertBanner(),
+        const _NewsBanner(),
+        // a guest has no vault, checklist or wallet to show
+        if (!hasKey) const _GuestCard(),
+        // what is coming, as cards in a row where there is room
+        Eyebrow(
+          s.t('up_next'),
+          trailing: TextButton(
+            onPressed: () => ref.read(sectionProvider.notifier).state = AppSection.bosses,
+            child: Text(s.t('all_timers')),
+          ),
+        ),
+        const _UpNext(),
+        // what the account holds, side by side where there is room: the vault, the purse, the day's tallies
+        if (hasKey) ...[
+          const SizedBox(height: 8),
+          CardWrap(
+            minWidth: 330,
+            gap: 20,
+            children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Eyebrow(s.t('wizards_vault')),
+                const _Vault(),
+              ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Eyebrow(s.t('trading_post')),
+                const _TradeBox(),
+              ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Eyebrow(s.t('wallet')),
+                const _Wallet(),
+              ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Eyebrow(s.t('daily_checklist')),
+                const _Checklist(),
+                const _WvwMini(),
+                const _PinnedAchievements(),
+              ]),
+            ],
+          ),
+        ],
+        const _LatestNews(),
+      ];
+}
+
+/// the top of a phone's home page: a band of the map of the game, as the site's home has it whole, with the greeting and the
+/// clocks on it. it is not dragged here: the page scrolls under the finger
+class _PhoneMapBand extends StatelessWidget {
+  const _PhoneMapBand();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: Stack(
+        children: [
+          const Positioned.fill(child: IgnorePointer(child: ClipRect(child: AtlasBackdrop()))),
+          // the map fades into the page under it
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 90,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.bg.withValues(alpha: 0), AppColors.bg],
+                  ),
+                ),
+              ),
             ),
-          ],
-          const _LatestNews(),
+          ),
+          const Padding(padding: EdgeInsets.fromLTRB(12, 8, 12, 0), child: OnMap(child: _HomeHero(onMap: true))),
         ],
       ),
     );
@@ -452,9 +500,17 @@ class _UpNext extends ConsumerWidget {
               where: (o) => !lootedRun(o, looted, now) && now.difference(o.start) < const Duration(minutes: 10),
             );
             if (!wide) {
-              return Panel(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Column(children: [for (final o in next) MetaRow(occurrence: o, looted: false)]),
+              // a phone has them side by side, swiped sideways, as cards
+              return SizedBox(
+                height: 168,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  itemCount: next.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  itemBuilder: (context, i) => SizedBox(
+                      width: 236, child: _EventCard(occurrence: next[i], first: i == 0, now: now, compact: true)),
+                ),
               );
             }
             return CardWrap(
@@ -474,11 +530,14 @@ class _UpNext extends ConsumerWidget {
 
 /// one event as a card: its time large, how long until it, the name, the map and the waypoint to copy
 class _EventCard extends ConsumerWidget {
-  const _EventCard({required this.occurrence, required this.first, required this.now});
+  const _EventCard({required this.occurrence, required this.first, required this.now, this.compact = false});
 
   final Occurrence occurrence;
   final bool first;
   final DateTime now;
+
+  /// a phone's: smaller, to show more than one across
+  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -500,7 +559,7 @@ class _EventCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(AppRadius.card),
           onTap: () => openWikiPage(context, ref, o.event.wiki ?? o.event.name),
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(compact ? 14 : 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -509,7 +568,7 @@ class _EventCard extends ConsumerWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(localClock(o.start),
-                        style: display(30)
+                        style: display(compact ? 24 : 30)
                             .copyWith(color: first ? AppColors.goldSoft : AppColors.text, fontFeatures: _tabular)),
                     const SizedBox(width: 10),
                     Expanded(

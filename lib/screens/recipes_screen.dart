@@ -417,7 +417,11 @@ class _RecipeRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
     final item = ref.watch(itemBatchProvider(chunkKey)).valueOrNull?[id];
+    // what it sells for, at the right of the row as the site has it in a column
+    final priceJson = ref.watch(priceBatchProvider(chunkKey)).valueOrNull?[id];
+    final sell = priceJson == null ? null : TpPrice.fromJson(priceJson).sell;
     final disciplines = {for (final r in recipes) ...r.disciplines};
     final legendary = recipes.any((r) => r.legendary);
     return AppCard(
@@ -443,16 +447,18 @@ class _RecipeRow extends ConsumerWidget {
                 Wrap(
                   spacing: 4,
                   runSpacing: 4,
-                  children: [for (final d in disciplines) Pill(label(d))],
+                  children: [
+                    for (final d in disciplines) Pill(label(d)),
+                    if (learned) Pill(s.t('recipe_learned'), color: AppColors.green),
+                  ],
                 ),
               ],
             ),
           ),
-          if (learned) ...[
-            Icon(Icons.check_circle, size: 18, color: AppColors.green),
-            const SizedBox(width: 4),
-          ],
-          Icon(Icons.chevron_right, color: AppColors.chevron),
+          if (sell != null && sell > 0)
+            Padding(padding: const EdgeInsets.only(left: 8, right: 4), child: CoinText(sell, size: 13))
+          else
+            Icon(Icons.chevron_right, color: AppColors.chevron),
         ],
       ),
     );

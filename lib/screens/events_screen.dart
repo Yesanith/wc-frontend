@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,7 +67,10 @@ final releaseFilterProvider = NotifierProvider<ReleaseFilterNotifier, Set<Expans
 /// the timeline or the list, remembered between visits
 class TimerViewNotifier extends Notifier<bool> {
   @override
-  bool build() => ref.watch(prefsProvider).getBool('timer_list') ?? false;
+  // a phone starts with the list: the lanes of the timeline are too narrow on it to be read
+  bool build() =>
+      ref.watch(prefsProvider).getBool('timer_list') ??
+      (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
 
   void toggle() {
     state = !state;
@@ -150,15 +154,23 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         const SliverToBoxAdapter(child: SizedBox(height: 8)),
         if (maps.isEmpty)
           SliverToBoxAdapter(child: EmptyNote(s.t('nothing_pinned')))
-        else if (listView)
+        else if (listView) ...[
+          // a phone has what runs now, or comes next, in full over the list, as the site has it beside the timeline
+          if (!SiteScope.of(context))
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                child: _EventPanel(maps: maps, kind: _kind, pins: pins),
+              ),
+            ),
           // on the site the rows keep to a width a row can be read in, not the width of the window
           SiteScope.of(context)
               ? SliverConstrainedCrossAxis(
                   maxExtent: 940,
                   sliver: _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted),
                 )
-              : _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted)
-        else
+              : _AgendaList(maps: maps, kind: _kind, pins: pins, looted: looted),
+        ] else
           SliverToBoxAdapter(child: Timeline(maps: maps, kind: _kind, pins: pins, looted: looted)),
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
       ],

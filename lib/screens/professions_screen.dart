@@ -29,6 +29,20 @@ class ProfessionsScreen extends ConsumerWidget {
           for (final p in all.values)
             if (!professionOrder.contains(p.id)) p,
         ];
+        // a phone has two of them across, as small cards
+        if (!SiteScope.of(context) && MediaQuery.sizeOf(context).width < 600) {
+          return GridView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              mainAxisExtent: 150,
+            ),
+            itemCount: list.length,
+            itemBuilder: (context, i) => _ProfessionTile(list[i]),
+          );
+        }
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
@@ -36,6 +50,35 @@ class ProfessionsScreen extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// a profession on a phone: its emblem, its name in its colour, and how many specializations and weapons it has
+class _ProfessionTile extends ConsumerWidget {
+  const _ProfessionTile(this.p);
+
+  final ProfessionInfo p;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    return AppCard(
+      onTap: () => openPanel(context, (_) => ProfessionDetailScreen(id: p.id)),
+      padding: const EdgeInsets.all(12),
+      radius: AppRadius.card,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ProfessionIcon(url: p.iconBig ?? p.icon, size: 40),
+          const Spacer(),
+          Text(p.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: display(19, color: professionColor(p.id))),
+          const SizedBox(height: 4),
+          Text('${s.t('specializations')} ${p.specializations.length}',
+              style: TextStyle(fontSize: 12, color: AppColors.muted)),
+          Text('${s.t('weapons')} ${p.weapons.length}', style: TextStyle(fontSize: 12, color: AppColors.muted)),
+        ],
+      ),
     );
   }
 }
