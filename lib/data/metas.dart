@@ -266,8 +266,8 @@ List<Occurrence> occurrences(DateTime from, DateTime to, {Iterable<MetaMap>? map
 }
 
 /// what is on now, then what comes next, for a short list
-List<Occurrence> upNext(DateTime now, {int count = 5, bool Function(Occurrence)? where}) {
-  final all = occurrences(now, now.add(const Duration(hours: 4)));
+List<Occurrence> upNext(DateTime now, {int count = 5, bool Function(Occurrence)? where, Iterable<MetaMap>? maps}) {
+  final all = occurrences(now, now.add(const Duration(hours: 4)), maps: maps);
   final picked = where == null ? all : all.where(where).toList();
   return picked.take(count).toList();
 }

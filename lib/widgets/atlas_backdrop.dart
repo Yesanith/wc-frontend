@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../data/metas.dart';
 import '../data/waypoint_points.dart';
+import '../state/hidden_timers.dart';
 import '../data/waypoints.dart';
 import '../services/icon_cache.dart';
 import '../state/world_map.dart';
@@ -57,6 +58,8 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
 
   @override
   Widget build(BuildContext context) {
+    // the pins follow the timers the administrator hides
+    ref.watch(shownMetaMapsProvider);
     return LayoutBuilder(
       builder: (context, box) {
         final size = Size(box.maxWidth, box.maxHeight);
@@ -129,7 +132,7 @@ class _AtlasBackdropState extends ConsumerState<AtlasBackdrop> {
   List<Widget> _pins(DateTime now, Size box) {
     final pins = <Widget>[];
     var first = true;
-    for (final o in upNext(now, count: 5)) {
+    for (final o in upNext(now, count: 5, maps: ref.read(shownMetaMapsProvider))) {
       final waypoint = waypointFor(o.map, o.event);
       final point = waypoint == null ? null : waypointPoints[waypoint.code];
       if (point == null) continue;

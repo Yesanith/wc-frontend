@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/strings.dart';
 import '../services/boss_alerts.dart';
+import 'hidden_timers.dart';
 import 'settings.dart';
 
 /// how long before an event starts the alert comes, in minutes
@@ -152,7 +153,10 @@ Future<void> syncBossAlerts({
 /// or the language change, and when the app comes back. pins change in bursts,
 /// so one pass follows the last change
 final bossAlertsSyncProvider = Provider<void>((ref) {
-  final pins = ref.watch(pinnedEventsProvider);
+  // a hidden timer has no alerts while it is hidden, its pin is kept for when it is back
+  final hidden = ref.watch(hiddenEventKeysProvider);
+  final pinned = ref.watch(pinnedEventsProvider);
+  final pins = hidden.isEmpty ? pinned : {...pinned}.difference(hidden);
   final settings = ref.watch(bossAlertSettingsProvider);
   final s = ref.watch(stringsProvider);
   ref.watch(bossAlertsRecheckProvider);

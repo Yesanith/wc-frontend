@@ -7,6 +7,7 @@ import '../data/waypoints.dart';
 import '../services/boss_alerts.dart' show maxBossAlerts;
 import '../state/boss_alerts.dart';
 import '../state/clock.dart';
+import '../state/hidden_timers.dart';
 import '../util.dart';
 import '../widgets/mini_map.dart';
 import '../widgets/clock.dart';
@@ -96,7 +97,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
     final listView = ref.watch(timerListViewProvider);
     final looted = ref.watch(doneTodayProvider('worldbosses')).valueOrNull ?? const <String>{};
     final maps = [
-      for (final m in metaMaps)
+      for (final m in ref.watch(shownMetaMapsProvider))
         if ((releases.isEmpty || releases.contains(m.release)) && m.events.any((e) => _matches(m, e, _kind, pins))) m
     ];
 

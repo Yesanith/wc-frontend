@@ -8,6 +8,7 @@ import '../state/account.dart';
 import '../state/api.dart';
 import '../state/alerts.dart';
 import '../state/clock.dart';
+import '../state/hidden_timers.dart';
 import '../widgets/stale_note.dart';
 import '../widgets/clock.dart';
 import '../state/navigation.dart';
@@ -446,6 +447,7 @@ class _UpNext extends ConsumerWidget {
           builder: (context, now) {
             final next = upNext(
               now,
+              maps: ref.watch(shownMetaMapsProvider),
               count: wide ? 4 : 5,
               where: (o) => !lootedRun(o, looted, now) && now.difference(o.start) < const Duration(minutes: 10),
             );
