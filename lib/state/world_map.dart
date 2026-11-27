@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui' show Offset, Rect;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -9,6 +10,7 @@ import '../util.dart';
 import 'api.dart';
 import 'settings.dart';
 import '../services/gunzip.dart';
+import 'reference.dart' show referenceRows;
 
 /// tyria. the mists continent has its own coordinates and is left out
 const worldContinent = 1;
@@ -247,3 +249,63 @@ List<dynamic> _decodeBundled(Uint8List gz) {
 /// zoom level
 const bundledTileFloor = defaultFloor;
 const bundledTileMaxLevel = 2;
+
+/// what the map page tells of a map: its levels, its region and where it lies on the continent
+class MapDetail {
+  const MapDetail(this.id, this.name, this.minLevel, this.maxLevel, this.region, this.rect);
+
+  final int id;
+  final String name;
+  final int minLevel;
+  final int maxLevel;
+  final String region;
+
+  /// in continent coordinates
+  final Rect rect;
+
+  double get area => rect.width * rect.height;
+}
+
+/// the open world maps of tyria by name, the names the markers carry. a name used twice (a map and its instance) is the
+/// larger of the two
+Map<String, MapDetail> mapDetailsFrom(Iterable<Json> rows) {
+  final out = <String, MapDetail>{};
+  for (final r in rows) {
+    if (asInt(r['continent_id']) != worldContinent) continue;
+    final rect = r['continent_rect'];
+    if (rect is! List || rect.length < 2 || rect[0] is! List || rect[1] is! List) continue;
+    final a = rect[0] as List, b = rect[1] as List;
+    if (a.length < 2 || b.length < 2) continue;
+    final name = '${r['name'] ?? ''}';
+    if (name.isEmpty) continue;
+    final detail = MapDetail(
+      asInt(r['id']),
+      name,
+      asInt(r['min_level']),
+      asInt(r['max_level']),
+      '${r['region_name'] ?? ''}',
+      Rect.fromPoints(
+        Offset((a[0] as num).toDouble(), (a[1] as num).toDouble()),
+        Offset((b[0] as num).toDouble(), (b[1] as num).toDouble()),
+      ),
+    );
+    final had = out[name];
+    if (had == null || detail.area > had.area) out[name] = detail;
+  }
+  return out;
+}
+
+final mapDetailsProvider = FutureProvider<Map<String, MapDetail>>((ref) async {
+  return mapDetailsFrom(await referenceRows(ref, 'maps', '/maps'));
+});
+
+/// the smallest of [maps] that holds the point, the one the player pointed at: a city inside a larger map's frame is
+/// itself
+MapDetail? mapAt(Iterable<MapDetail> maps, Offset point) {
+  MapDetail? best;
+  for (final m in maps) {
+    if (!m.rect.contains(point)) continue;
+    if (best == null || m.area < best.area) best = m;
+  }
+  return best;
+}

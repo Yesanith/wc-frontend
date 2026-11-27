@@ -24,43 +24,6 @@ class _MarkerIcon extends StatelessWidget {
   }
 }
 
-class _FloorButton extends StatelessWidget {
-  const _FloorButton({required this.floor, required this.label, required this.levelLabel, required this.onPick});
-
-  final int floor;
-  final String label;
-  final String Function(int floor) levelLabel;
-  final ValueChanged<int> onPick;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<int>(
-      initialValue: floor,
-      color: AppColors.surface,
-      onSelected: onPick,
-      itemBuilder: (context) => [
-        for (final f in worldFloors) PopupMenuItem(value: f, child: Text(levelLabel(f))),
-      ],
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.surface.withValues(alpha: 0.92),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.line),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.stairs_outlined, size: 18, color: AppColors.gold),
-            const SizedBox(width: 6),
-            Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _SearchBox extends StatelessWidget {
   const _SearchBox({
     required this.controller,
