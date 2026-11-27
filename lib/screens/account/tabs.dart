@@ -193,7 +193,7 @@ class _BankTab extends ConsumerWidget {
         }
 
         final chosen = ref.watch(_bankTabProvider);
-        final one = site && chosen != null && chosen < (slots.length / perTab).ceil() ? chosen : null;
+        final one = chosen != null && chosen < (slots.length / perTab).ceil() ? chosen : null;
 
         Widget legend() => Row(
               children: [
@@ -224,8 +224,27 @@ class _BankTab extends ConsumerWidget {
               const SizedBox(height: 12),
               if (slots.any((x) => x?.binding != null)) ...[legend(), const SizedBox(height: 8)],
               count,
-              const SizedBox(height: 12),
-              for (final t in tabs) Padding(padding: const EdgeInsets.only(bottom: 16), child: tab(t)),
+              const SizedBox(height: 10),
+              // a phone has a chip for each tab of the bank, to see one at a time, as the mockup has it
+              if (query.isEmpty && tabs.length > 1) ...[
+                ChipRow(children: [
+                  ChoiceChip(
+                    label: Text(s.t('all')),
+                    selected: one == null,
+                    onSelected: (_) => ref.read(_bankTabProvider.notifier).state = null,
+                  ),
+                  for (final t in tabs)
+                    ChoiceChip(
+                      label: Text(s.t('bank_tab_n', {'n': t + 1})),
+                      selected: one == t,
+                      onSelected: (_) => ref.read(_bankTabProvider.notifier).state = t,
+                    ),
+                ]),
+                const SizedBox(height: 12),
+              ],
+              for (final t in tabs)
+                if (one == null || one == t || query.isNotEmpty)
+                  Padding(padding: const EdgeInsets.only(bottom: 16), child: tab(t)),
             ],
           );
         }
