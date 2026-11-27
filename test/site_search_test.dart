@@ -161,6 +161,17 @@ void main() {
       expect(find.byType(ListTile), findsNothing, reason: 'the results are shut');
     });
 
+    testWidgets('Enter pressed at once after typing, before the list is there, goes to the first hit', (tester) async {
+      final picked = await show(tester);
+      await tester.showKeyboard(find.byType(TextField));
+      tester.testTextInput.enterText('S-daily');
+      // no frame between typing and Enter: the list of the new text is not drawn yet
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(picked.single.section, AppSection.daily);
+      expect(tester.widget<TextField>(find.byType(TextField)).controller!.text, isEmpty);
+    });
+
     testWidgets('goes to a page, and to the wiki with what was typed', (tester) async {
       final picked = await show(tester);
       await tester.enterText(find.byType(TextField), 'S-wik');

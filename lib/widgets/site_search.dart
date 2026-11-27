@@ -100,6 +100,16 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
   final _controller = TextEditingController();
   final _focus = FocusNode();
 
+  /// the text the list of hits was last drawn for. Enter right after typing can come before the list of the new text is
+  /// there, and then chose nothing: it takes the first hit of the text itself then
+  String? _listedFor;
+
+  void _choose(SearchHit hit) {
+    widget.onSelect(hit);
+    _controller.clear();
+    _focus.unfocus();
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -131,16 +141,16 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
             searchHits(value.text, index: index, labels: widget.labels, wikiLabel: widget.wikiLabel),
         // what is chosen is gone to, and the box is empty again
         displayStringForOption: (_) => '',
-        onSelected: (hit) {
-          widget.onSelect(hit);
-          _controller.clear();
-          _focus.unfocus();
-        },
+        onSelected: _choose,
         fieldViewBuilder: (context, controller, focusNode, onSubmitted) => TextField(
           controller: controller,
           focusNode: focusNode,
           autofocus: widget.autofocus,
-          onSubmitted: (_) => onSubmitted(),
+          onSubmitted: (text) {
+            if (_listedFor == text) return onSubmitted();
+            final hits = searchHits(text, index: index, labels: widget.labels, wikiLabel: widget.wikiLabel);
+            if (hits.isNotEmpty) _choose(hits.first);
+          },
           style: const TextStyle(fontSize: 14),
           decoration: InputDecoration(
             hintText: widget.placeholder,
@@ -158,41 +168,44 @@ class _SiteSearchState extends ConsumerState<SiteSearch> {
                 borderRadius: BorderRadius.circular(999), borderSide: BorderSide(color: AppColors.gold)),
           ),
         ),
-        optionsViewBuilder: (context, onSelected, options) => Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 6),
-            child: Material(
-              color: AppColors.surface,
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14), side: BorderSide(color: AppColors.line)),
-              clipBehavior: Clip.antiAlias,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: widget.width + 140, maxHeight: 420),
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  shrinkWrap: true,
-                  children: [
-                    for (final (i, hit) in options.indexed)
-                      Builder(builder: (context) {
-                        final highlighted = AutocompleteHighlightedOption.of(context) == i;
-                        return ListTile(
-                          dense: true,
-                          selected: highlighted,
-                          selectedTileColor: AppColors.surface2,
-                          leading: Icon(_icon(hit), size: 20, color: highlighted ? AppColors.gold : AppColors.muted),
-                          title: Text(hit.label, maxLines: 1, overflow: TextOverflow.ellipsis),
-                          subtitle: Text(_kind(hit), style: TextStyle(fontSize: 11, color: AppColors.hint)),
-                          onTap: () => onSelected(hit),
-                        );
-                      }),
-                  ],
+        optionsViewBuilder: (context, onSelected, options) {
+          _listedFor = _controller.text;
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Material(
+                color: AppColors.surface,
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14), side: BorderSide(color: AppColors.line)),
+                clipBehavior: Clip.antiAlias,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: widget.width + 140, maxHeight: 420),
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    shrinkWrap: true,
+                    children: [
+                      for (final (i, hit) in options.indexed)
+                        Builder(builder: (context) {
+                          final highlighted = AutocompleteHighlightedOption.of(context) == i;
+                          return ListTile(
+                            dense: true,
+                            selected: highlighted,
+                            selectedTileColor: AppColors.surface2,
+                            leading: Icon(_icon(hit), size: 20, color: highlighted ? AppColors.gold : AppColors.muted),
+                            title: Text(hit.label, maxLines: 1, overflow: TextOverflow.ellipsis),
+                            subtitle: Text(_kind(hit), style: TextStyle(fontSize: 11, color: AppColors.hint)),
+                            onTap: () => onSelected(hit),
+                          );
+                        }),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
