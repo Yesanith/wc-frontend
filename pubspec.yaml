@@ -45,3 +45,8 @@ flutter:
     - assets/tiles/1/0/
     - assets/tiles/1/1/
     - assets/tiles/1/2/
+
+# the browser part of the secure storage that runs as webassembly. its storage is the one of 1.x: the same keys in
+# localStorage, the same AES-GCM key, so what a browser saved before is read as it was. the phones are not touched by it
+dependency_overrides:
+  flutter_secure_storage_web: 2.0.0-beta.2

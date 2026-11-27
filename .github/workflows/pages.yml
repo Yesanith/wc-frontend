@@ -138,7 +138,9 @@ jobs:
           TAG="$APP_TAG"
           # no service worker: it keeps the app on the device and shows the old one until a second
           # load, and the app is updated often. the page is fetched fresh, GitHub keeps it ten minutes
-          flutter build web --release \
+          # webassembly where the browser runs it (Chrome, Edge, Firefox, Safari 18.2 and later), javascript elsewhere: the page
+          # picks one itself. the secure storage of the browser is the one that runs as webassembly, see pubspec.yaml
+          flutter build web --release --wasm \
             --pwa-strategy=none \
             --base-href "/$REPO/app/" \
             --dart-define=APP_VERSION="${TAG#v}-web" \
