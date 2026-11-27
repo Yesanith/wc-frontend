@@ -13,8 +13,9 @@ class _MarkerIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // the game's files have no map icon for a mastery point: the wiki's, one per region, come with the app
-    if (kind == 'mastery')
+    if (kind == 'mastery') {
       return Image.asset(_masteryIcon(region), fit: BoxFit.contain, filterQuality: FilterQuality.medium);
+    }
     final url = icon;
     if (url != null) return CachedIcon(url: url, fit: BoxFit.contain);
     final (IconData glyph, Color color) = switch (kind) {
