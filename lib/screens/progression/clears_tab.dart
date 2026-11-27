@@ -13,18 +13,18 @@ class _ClearsTab extends ConsumerWidget {
     final counts = ref.watch(clearCountsProvider);
     final mine = clearsOf(counts.valueOrNull ?? const [], name);
 
-    return RefreshIndicator(
-      color: AppColors.gold,
-      onRefresh: () async {
-        ref.invalidate(clearCountsProvider);
-        ref.invalidate(legendaryCountProvider);
-      },
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        children: [
-          ContentFrame(
-            maxWidth: readingMaxWidth,
-            child: Column(
+    return ContentFrame(
+      maxWidth: readingMaxWidth,
+      child: RefreshIndicator(
+        color: AppColors.gold,
+        onRefresh: () async {
+          ref.invalidate(clearCountsProvider);
+          ref.invalidate(legendaryCountProvider);
+        },
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (!signedIn)
@@ -41,8 +41,8 @@ class _ClearsTab extends ConsumerWidget {
                 const _LegendaryPanel(),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
