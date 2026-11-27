@@ -9,8 +9,10 @@ import '../services/item_index.dart';
 import '../state/account.dart';
 import '../state/alerts.dart';
 import '../state/api.dart';
+import '../state/community.dart' show communityReady;
 import '../state/gem_history.dart';
 import '../state/items.dart';
+import '../state/market_movers.dart';
 import '../state/market.dart';
 import '../state/price_history.dart';
 import '../state/server_price_alerts.dart';
@@ -33,6 +35,7 @@ part 'trading/history_tab.dart';
 part 'trading/stats_tab.dart';
 part 'trading/browse_tab.dart';
 part 'trading/site.dart';
+part 'trading/movers_tab.dart';
 
 class WatchRow extends ConsumerWidget {
   const WatchRow(this.w, {super.key});
@@ -145,17 +148,23 @@ class TradingHubScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Column(
         children: [
-          AppTabBar(
-              scrollable: true,
-              labels: [s.t('overview'), s.t('tp_all_items'), s.t('orders'), s.t('history'), s.t('stats')]),
+          AppTabBar(scrollable: true, labels: [
+            s.t('overview'),
+            s.t('tp_all_items'),
+            s.t('movers'),
+            s.t('orders'),
+            s.t('history'),
+            s.t('stats'),
+          ]),
           Expanded(
             child: TabBarView(
               children: [
                 SiteScope.of(context) ? const _OverviewSite() : const _OverviewTab(),
                 const _BrowseTab(),
+                const _MoversTab(),
                 SiteScope.of(context)
                     ? const _OrdersSite()
                     : const _TxTab(
