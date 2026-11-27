@@ -18,4 +18,10 @@ void main() {
     expect(guildLogLabel(const S(AppLang.en), 'something_new'), 'Something new');
     expect(guildUpgradeTypeLabel(const S(AppLang.en), 'NewKind'), 'New Kind');
   });
+
+  test('the fractal augmentations have the names the game gives them', () {
+    expect(const S(AppLang.de).t('prog_fractal_agony_impedance'), 'Qual-Impedanz');
+    expect(const S(AppLang.fr).t('prog_fractal_empowerment'), 'Stimulation des fractales');
+    expect(const S(AppLang.tr).t('prog_fractal_karmic_retribution'), 'Karmic Retribution');
+  });
 }

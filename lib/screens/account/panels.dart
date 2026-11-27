@@ -68,7 +68,7 @@ class _AccountCounters extends ConsumerWidget {
     final rows = <(String, int)>[
       if (luck > 0) (s.t('luck'), luck),
       for (final e in progression.entries)
-        if (e.key != 'luck' && e.value > 0) (titleCase(e.key.replaceAll('_', ' ')), e.value),
+        if (e.key != 'luck' && e.value > 0) (_progressionName(s, e.key), e.value),
     ];
     if (rows.isEmpty) return const SizedBox.shrink();
     return Panel(
@@ -311,4 +311,11 @@ class AccountHeadingSummary extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// the game's own name of a fractal augmentation, in the language of the app; one the app does not know yet by its id
+String _progressionName(S s, String id) {
+  final key = 'prog_$id';
+  final name = s.t(key);
+  return name == key ? titleCase(id.replaceAll('_', ' ')) : name;
 }
