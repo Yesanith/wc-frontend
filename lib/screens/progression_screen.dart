@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/professions.dart';
 import '../state/account.dart';
+import '../state/api.dart';
+import '../state/clears.dart';
+import '../state/clock.dart';
+import '../state/community.dart';
 import '../state/progression.dart';
 import '../state/pvp.dart';
 import '../state/settings.dart';
@@ -19,6 +23,7 @@ part 'progression/achievements_tab.dart';
 part 'progression/masteries_tab.dart';
 part 'progression/instances_tab.dart';
 part 'progression/pvp_tab.dart';
+part 'progression/clears_tab.dart';
 
 class ProgressionScreen extends ConsumerWidget {
   const ProgressionScreen({super.key});
@@ -27,16 +32,16 @@ class ProgressionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Column(
         children: [
           AppTabBar(
             scrollable: true,
-            labels: [s.t('achievements'), s.t('masteries'), s.t('instances'), s.t('pvp_wvw')],
+            labels: [s.t('achievements'), s.t('masteries'), s.t('instances'), s.t('clears_tab'), s.t('pvp_wvw')],
           ),
           const Expanded(
             child: TabBarView(
-              children: [_AchievementsTab(), _MasteriesTab(), _InstancesTab(), _PvpTab()],
+              children: [_AchievementsTab(), _MasteriesTab(), _InstancesTab(), _ClearsTab(), _PvpTab()],
             ),
           ),
         ],

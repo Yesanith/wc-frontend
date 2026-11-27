@@ -26,6 +26,7 @@ import '../state/reference.dart';
 import '../state/server_price_alerts.dart';
 import '../state/settings.dart';
 import '../state/trade_notify.dart';
+import '../state/clears.dart';
 import '../state/trade_watch.dart';
 import '../state/trading.dart';
 import '../state/wealth.dart';
@@ -161,6 +162,7 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
     await refreshLink(ProviderScope.containerOf(context, listen: false));
     if (!mounted) return;
     unawaited(_renewTradeWatch());
+    unawaited(_renewClearWatch());
     try {
       final guilds = await ref.read(myGuildsProvider.future);
       for (final g in guilds) {
@@ -197,6 +199,24 @@ class _AppShellState extends ConsumerState<AppShell> with WidgetsBindingObserver
       if (watch == null || !watch.renewalDue(DateTime.now())) return;
       await startTradeWatch(container.read(gw2ApiProvider));
       container.invalidate(tradeWatchesProvider);
+    } catch (_) {
+      // renewed at the next opening
+    }
+  }
+
+  /// the count of what the player has done needs a new subtoken before the one the server has runs out, or after the
+  /// game turned it down. only for an account the player turned it on for. never fails
+  Future<void> _renewClearWatch() async {
+    if (!communityReady) return;
+    final container = ProviderScope.containerOf(context, listen: false);
+    try {
+      if (container.read(sessionProvider).valueOrNull == null || !container.read(hasKeyProvider)) return;
+      final name = '${(await container.read(accountProvider.future))['name'] ?? ''}';
+      if (name.isEmpty) return;
+      final mine = clearsOf(await container.read(clearCountsProvider.future), name);
+      if (mine == null || !mine.renewalDue(DateTime.now())) return;
+      await startClearWatch(container.read(gw2ApiProvider));
+      container.invalidate(clearCountsProvider);
     } catch (_) {
       // renewed at the next opening
     }
