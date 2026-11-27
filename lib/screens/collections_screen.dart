@@ -53,7 +53,19 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
       children: [
         Text(s.t('collections_note'), style: TextStyle(fontSize: 12, color: AppColors.muted, height: 1.4)),
         const SizedBox(height: 12),
-        CardWrap(minWidth: 340, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
+        // a phone has them two across, each its count, a bar and of how many
+        if (MediaQuery.sizeOf(context).width < 600)
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 1.25,
+            children: [for (final kind in collectionKinds) _CollectionTile(kind: kind, compact: true)],
+          )
+        else
+          CardWrap(minWidth: 340, children: [for (final kind in collectionKinds) _CollectionTile(kind: kind)]),
       ],
     );
   }
@@ -203,15 +215,51 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
 }
 
 class _CollectionTile extends ConsumerWidget {
-  const _CollectionTile({required this.kind});
+  const _CollectionTile({required this.kind, this.compact = false});
 
   final CollectionKind kind;
+
+  /// a phone's: the name small over the count, the bar, and of how many
+  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final s = ref.watch(stringsProvider);
     final progress = ref.watch(collectionProgressProvider(kind.key));
     final p = progress.valueOrNull;
+    if (compact) {
+      return AppCard(
+        onTap: kind.hasDetails
+            ? () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (_) => CollectionDetailScreen(kind: kind)),
+                )
+            : null,
+        padding: const EdgeInsets.all(12),
+        radius: AppRadius.card,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(s.t('col_${kind.key}').caps,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: AppColors.muted)),
+            const Spacer(),
+            if (progress.hasError)
+              Text(s.t('needs_permission', {'p': 'unlocks'}), style: TextStyle(fontSize: 11.5, color: AppColors.muted))
+            else if (p == null)
+              LinearProgressIndicator(minHeight: 2, color: AppColors.gold)
+            else ...[
+              Text(fmtInt(p.unlocked), style: display(26)),
+              const SizedBox(height: 6),
+              Bar(value: p.ratio, color: p.ratio >= 1 ? AppColors.green : AppColors.gold),
+              const SizedBox(height: 4),
+              Text(s.t('of_n', {'n': fmtInt(p.total)}), style: TextStyle(fontSize: 12, color: AppColors.muted)),
+            ],
+          ],
+        ),
+      );
+    }
 
     return AppCard(
       onTap: kind.hasDetails

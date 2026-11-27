@@ -382,65 +382,68 @@ class _CostPanel extends ConsumerWidget {
     // included: using them costs what they would have sold for
     final cheaperToBuy = buyInstead > 0 && buyInstead < materialValue;
 
-    return Panel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(s.t('missing_materials_cost'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
-              ),
-              CoinText(missingCost, size: 16),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Text(s.t('already_owned_value'), style: TextStyle(fontSize: 13, color: AppColors.muted)),
-              ),
-              CoinText(ownedValue, size: 13),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Text(s.t('material_value'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
-              ),
-              CoinText(materialValue, size: 16),
-            ],
-          ),
-          if (unpriced > 0) ...[
-            const SizedBox(height: 6),
-            Text(s.t('unpriced_materials', {'n': unpriced}),
-                style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
-          ],
-          if (buyInstead > 0) ...[
-            const SizedBox(height: 10),
-            Divider(color: AppColors.track, height: 1),
-            const SizedBox(height: 10),
-            Row(
+    // the four figures two by two, as the site has them in a row: what is still to buy, what is owned, the materials in all,
+    // and buying it instead, coloured by which way is cheaper
+    Widget figure(String label, int coins, {Color? tint, String? note}) => Expanded(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+            decoration: BoxDecoration(
+              color: tint?.withValues(alpha: 0.10) ?? AppColors.surface,
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(color: tint ?? AppColors.line),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(s.t('buy_instead'), style: TextStyle(fontSize: 14, color: AppColors.textSoft)),
-                ),
-                CoinText(buyInstead, size: 16),
+                Text(label.caps,
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.1,
+                        color: tint ?? AppColors.muted)),
+                const SizedBox(height: 6),
+                CoinText(coins, size: 16),
+                if (note != null) ...[
+                  const SizedBox(height: 4),
+                  Text(note, style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: tint)),
+                ],
               ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              cheaperToBuy ? s.t('buying_cheaper') : s.t('crafting_cheaper'),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: cheaperToBuy ? AppColors.red : AppColors.green,
-              ),
-            ),
-          ],
+          ),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        IntrinsicHeight(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            figure(s.t('missing_materials_cost'), missingCost),
+            const SizedBox(width: 10),
+            figure(s.t('already_owned_value'), ownedValue),
+          ]),
+        ),
+        const SizedBox(height: 10),
+        IntrinsicHeight(
+          child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            figure(s.t('material_value'), materialValue),
+            const SizedBox(width: 10),
+            if (buyInstead > 0)
+              figure(
+                s.t('buy_instead'),
+                buyInstead,
+                tint: cheaperToBuy ? AppColors.red : AppColors.green,
+                note: cheaperToBuy ? s.t('buying_cheaper') : s.t('crafting_cheaper'),
+              )
+            else
+              const Expanded(child: SizedBox.shrink()),
+          ]),
+        ),
+        if (unpriced > 0) ...[
+          const SizedBox(height: 8),
+          Text(s.t('unpriced_materials', {'n': unpriced}),
+              style: TextStyle(fontSize: 11, height: 1.35, color: AppColors.hint)),
         ],
-      ),
+      ],
     );
   }
 }

@@ -95,9 +95,13 @@ class CharacterDetailScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        // the character's own dark header, the bar is part of it: the name is large in it, under the bar
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          title: Text(name),
+          backgroundColor: AppColors.header,
+          foregroundColor: AppColors.onHeader,
+          iconTheme: IconThemeData(color: AppColors.onHeader),
+          title: c == null ? Text(name) : null,
           actions: [
             if (c != null)
               IconButton(
@@ -105,7 +109,7 @@ class CharacterDetailScreen extends ConsumerWidget {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => CompareScreen(first: name)),
                 ),
-                icon: Icon(Icons.compare_arrows, color: AppColors.gold),
+                icon: Icon(Icons.compare_arrows, color: AppColors.accent),
               ),
             if (c != null)
               IconButton(
@@ -113,7 +117,7 @@ class CharacterDetailScreen extends ConsumerWidget {
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (_) => HeroCardScreen(name: name)),
                 ),
-                icon: Icon(Icons.ios_share, color: AppColors.gold),
+                icon: Icon(Icons.ios_share, color: AppColors.accent),
               ),
           ],
         ),
@@ -137,30 +141,41 @@ class _Hero extends ConsumerWidget {
     final elite = activeElite(c, info)?['name'] as String?;
     final profName = info?.name ?? prof;
     final race = ref.watch(racesProvider).valueOrNull?['${c['race']}'] ?? '${c['race'] ?? ''}';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+    final light = AppColors.onHeader;
+    return Container(
+      color: AppColors.header,
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       child: Row(
         children: [
-          ClassIcon(character: c, size: 72, fallback: Icon(Icons.shield_outlined, color: color, size: 38)),
+          ClassIcon(character: c, size: 64, fallback: Icon(Icons.shield_outlined, color: color, size: 36)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(elite == null ? profName : '$elite · $profName',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: color)),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    Pill(s.t('level_n', {'n': asInt(c['level'])})),
-                    Pill(race),
-                    Pill(fmtHours(c['age'], s.t('hours_short'))),
-                    Pill(s.t('deaths_n', {'n': fmtInt(asInt(c['deaths']))})),
-                    BirthdayLine(created: c['created'] as String?, pill: true),
-                  ],
+                Text(
+                  '${elite == null ? profName : '$elite · $profName'} · ${s.t('level_n', {'n': asInt(c['level'])})}'
+                      .caps,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style:
+                      TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: AppColors.accent),
                 ),
+                const SizedBox(height: 2),
+                Text('${c['name'] ?? ''}',
+                    maxLines: 1, overflow: TextOverflow.ellipsis, style: display(26, color: const Color(0xFFFFF8E6))),
+                const SizedBox(height: 4),
+                Text(
+                  [
+                    race,
+                    fmtHours(c['age'], s.t('hours_short')),
+                    s.t('deaths_n', {'n': fmtInt(asInt(c['deaths']))}),
+                  ].join(' · '),
+                  style: TextStyle(fontSize: 13, color: light),
+                ),
+                const SizedBox(height: 2),
+                DefaultTextStyle.merge(
+                    style: TextStyle(color: light), child: BirthdayLine(created: c['created'] as String?)),
               ],
             ),
           ),

@@ -160,10 +160,7 @@ class _CharacterCard extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                Text(name, maxLines: 1, overflow: TextOverflow.ellipsis, style: display(19)),
                 const SizedBox(height: 2),
                 Text(eliteName ?? profName, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
                 const SizedBox(height: 2),

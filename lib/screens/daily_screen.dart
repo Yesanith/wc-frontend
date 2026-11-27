@@ -74,6 +74,11 @@ class DailyScreen extends ConsumerWidget {
         children: [
           ResetBanner(label: s.t('daily_reset_in'), at: nextDailyReset()),
           const SizedBox(height: 12),
+          // how far the day's vault is, large, as the mockup of the phone has it over the lists
+          if (v != null && !dailyStale) ...[
+            _VaultHero(v),
+            const SizedBox(height: 12),
+          ],
           // the quick counters first, they fit on one screen
           _ChecklistGrid(
             tiles: [
@@ -127,6 +132,33 @@ class DailyScreen extends ConsumerWidget {
                 builder: (_) => const SizedBox.shrink(),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// the vault of the day in a card: how many of its objectives are done, large, and a bar
+class _VaultHero extends ConsumerWidget {
+  const _VaultHero(this.v);
+
+  final Json v;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(stringsProvider);
+    final total = asInt(v['meta_progress_complete']);
+    final now = asInt(v['meta_progress_current']);
+    final done = total > 0 && now >= total;
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Kicker(s.t('wizards_vault').caps),
+          const SizedBox(height: 4),
+          Text(done ? s.t('all_done') : '${now > total ? total : now} / $total', style: display(28)),
+          const SizedBox(height: 10),
+          Bar(value: total <= 0 ? 0 : (now / total).clamp(0.0, 1.0), color: done ? AppColors.green : AppColors.gold),
         ],
       ),
     );
