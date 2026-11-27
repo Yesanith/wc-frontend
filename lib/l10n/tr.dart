@@ -497,6 +497,13 @@ const trStrings = <String, String>{
   'cleanup_deposit': 'Materyal deposuna koy',
   'cleanup_deposit_note': 'Bankada ya da çantada yer kaplayan crafting materyalleri.',
   'cleanup_nothing': 'Temizlenecek bir şey yok: kalanların hepsi bağlı, tutulan ya da alıcısı olmayan eşyalar.',
+  'legendary_closest': 'En yakın legendary\'ler',
+  'legendary_closest_note':
+      'Henüz sahip olmadığın legendary\'ler, materyallerini en düşük satış fiyatından almanın kalan maliyetine göre. Sahip oldukların hesaba katılır.',
+  'legendary_closest_none': 'Tarif kitabındaki tüm legendary\'lere sahipsin.',
+  'legendary_have_pct': '%{n} elde',
+  'legendary_unpriced': '{n} tanesi Trading Post\'ta satılmıyor',
+  'legendary_to_buy': 'alınacak',
   'map_search': 'Waypoint, nokta veya harita ara',
   'floor_n': 'Katman {n}',
   'map_layers': 'Harita katmanları',

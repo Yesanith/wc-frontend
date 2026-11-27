@@ -507,6 +507,13 @@ const deStrings = <String, String>{
   'cleanup_deposit': 'Im Materiallager einlagern',
   'cleanup_deposit_note': 'Handwerksmaterialien, die einen Platz in Bank oder Tasche belegen.',
   'cleanup_nothing': 'Nichts aufzuräumen: alles Übrige ist gebunden, behalten oder hat keinen Käufer.',
+  'legendary_closest': 'Nächste Legendäre',
+  'legendary_closest_note':
+      'Legendäre, die du noch nicht hast, nach den Kosten der fehlenden Materialien zum günstigsten Verkaufspreis. Was du besitzt, zählt mit.',
+  'legendary_closest_none': 'Du hast alle Legendären, die das Rezeptbuch kennt.',
+  'legendary_have_pct': '{n} % vorhanden',
+  'legendary_unpriced': '{n} nicht am Handelsposten',
+  'legendary_to_buy': 'noch zu kaufen',
   'map_search': 'Wegmarken, Sehenswürdigkeiten, Karten suchen',
   'floor_n': 'Ebene {n}',
   'map_layers': 'Kartenebenen',

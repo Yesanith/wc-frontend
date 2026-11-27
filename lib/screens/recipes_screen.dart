@@ -7,6 +7,7 @@ import '../l10n/strings.dart';
 import '../services/item_index.dart';
 import '../services/recipe_book.dart';
 import '../state/account.dart';
+import '../state/api.dart' show hasKeyProvider;
 import '../state/goals.dart';
 import '../state/items.dart';
 import '../state/market.dart' show TpPrice;
@@ -17,6 +18,7 @@ import '../widgets/coin_text.dart';
 import '../widgets/common.dart';
 import '../widgets/responsive.dart';
 import 'craft_profit_screen.dart';
+import 'legendary_proximity_screen.dart';
 import 'crafting_screen.dart';
 import 'goals_screen.dart';
 
@@ -290,6 +292,13 @@ class _RecipesScreenState extends ConsumerState<RecipesScreen> {
                     icon: Icon(Icons.trending_up, color: AppColors.gold),
                     onPressed: () => openPanel(context, (_) => const CraftProfitScreen()),
                   ),
+                  // the legendaries the account is closest to
+                  if (ref.watch(hasKeyProvider))
+                    IconButton(
+                      tooltip: s.t('legendary_closest'),
+                      icon: Icon(Icons.auto_awesome_outlined, color: AppColors.gold),
+                      onPressed: () => openPanel(context, (_) => const LegendaryProximityScreen()),
+                    ),
                   // what the player wants made, and everything it takes
                   Badge.count(
                     count: ref.watch(goalsProvider).length,

@@ -502,6 +502,13 @@ const frStrings = <String, String>{
   'cleanup_deposit': 'Déposer dans le stockage de matériaux',
   'cleanup_deposit_note': 'Matériaux d\'artisanat qui prennent une place de banque ou de sac.',
   'cleanup_nothing': 'Rien à ranger : tout le reste est lié, gardé ou sans acheteur.',
+  'legendary_closest': 'Légendaires les plus proches',
+  'legendary_closest_note':
+      'Les légendaires que vous n\'avez pas encore, selon ce que coûtent encore leurs matériaux au prix de vente le plus bas. Ce que vous possédez compte.',
+  'legendary_closest_none': 'Vous avez tous les légendaires connus du livre de recettes.',
+  'legendary_have_pct': '{n} % en main',
+  'legendary_unpriced': '{n} pas au Comptoir',
+  'legendary_to_buy': 'encore à acheter',
   'map_search': 'Chercher points de passage, sites, cartes',
   'floor_n': 'Niveau {n}',
   'map_layers': 'Couches de la carte',

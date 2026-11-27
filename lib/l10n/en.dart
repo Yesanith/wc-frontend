@@ -499,6 +499,13 @@ const enStrings = <String, String>{
   'cleanup_deposit': 'Deposit in material storage',
   'cleanup_deposit_note': 'Crafting materials that take a slot of the bank or of a bag.',
   'cleanup_nothing': 'Nothing to clean up: everything left is bound, kept or has no buyer.',
+  'legendary_closest': 'Closest legendaries',
+  'legendary_closest_note':
+      'The legendaries you do not have yet, by what their materials still cost to buy at the lowest sell listing. What you own counts, its own parts first.',
+  'legendary_closest_none': 'You have every legendary the recipe book knows.',
+  'legendary_have_pct': '{n}% in hand',
+  'legendary_unpriced': '{n} not sold on the Trading Post',
+  'legendary_to_buy': 'still to buy',
   'map_search': 'Search waypoints, points of interest, maps',
   'floor_n': 'Level {n}',
   'map_layers': 'Map layers',

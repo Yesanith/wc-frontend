@@ -500,6 +500,13 @@ const ptStrings = <String, String>{
   'cleanup_deposit': 'Depositar no armazém de materiais',
   'cleanup_deposit_note': 'Materiais de criação ocupando espaço no banco ou numa bolsa.',
   'cleanup_nothing': 'Nada para limpar: o resto está vinculado, é guardado ou não tem comprador.',
+  'legendary_closest': 'Lendárias mais próximas',
+  'legendary_closest_note':
+      'As lendárias que você ainda não tem, pelo custo restante dos materiais no menor preço de venda. O que você já tem conta.',
+  'legendary_closest_none': 'Você tem todas as lendárias do livro de receitas.',
+  'legendary_have_pct': '{n}% em mãos',
+  'legendary_unpriced': '{n} não vendidos no Trading Post',
+  'legendary_to_buy': 'a comprar',
   'map_search': 'Buscar waypoints, pontos de interesse, mapas',
   'floor_n': 'Nível {n}',
   'map_layers': 'Camadas do mapa',

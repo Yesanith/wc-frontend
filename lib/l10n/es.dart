@@ -500,6 +500,13 @@ const esStrings = <String, String>{
   'cleanup_deposit': 'Depositar en el almacén de materiales',
   'cleanup_deposit_note': 'Materiales de artesanía que ocupan un hueco del banco o de una bolsa.',
   'cleanup_nothing': 'Nada que limpiar: todo lo demás está ligado, se guarda o no tiene comprador.',
+  'legendary_closest': 'Legendarias más cercanas',
+  'legendary_closest_note':
+      'Las legendarias que aún no tienes, según lo que cuestan sus materiales al precio de venta más bajo. Lo que ya tienes cuenta.',
+  'legendary_closest_none': 'Tienes todas las legendarias del libro de recetas.',
+  'legendary_have_pct': '{n} % en mano',
+  'legendary_unpriced': '{n} no se venden en el Bazar',
+  'legendary_to_buy': 'por comprar',
   'map_search': 'Buscar puntos de ruta, lugares, mapas',
   'floor_n': 'Nivel {n}',
   'map_layers': 'Capas del mapa',
