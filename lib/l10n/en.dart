@@ -1230,7 +1230,7 @@ const enStrings = <String, String>{
   'vendor_value': 'Vendor value',
   'demand': 'Demand',
   'supply': 'Supply',
-  'welcome_title': 'Your Tyria,\nat a glance.',
+  'welcome_title': 'What\'s happening\nin Tyria?',
   'welcome_body':
       'Resets, metas, the Wizard\'s Vault and everything you own, in one place. Connect with a read only API key from ArenaNet.',
   'step_create': 'Create a key on account.arena.net with the permissions you want to share.',

@@ -1247,7 +1247,7 @@ const deStrings = <String, String>{
   'vendor_value': 'Händlerwert',
   'demand': 'Nachfrage',
   'supply': 'Angebot',
-  'welcome_title': 'Dein Tyria,\nauf einen Blick.',
+  'welcome_title': 'Was passiert\nin Tyria?',
   'welcome_body':
       'Resets, Metas, das Gewölbe des Zauberers und alles, was du besitzt, an einem Ort. Verbinde dich mit einem schreibgeschützten API-Schlüssel von ArenaNet.',
   'step_create': 'Erstelle auf account.arena.net einen Schlüssel mit den Berechtigungen, die du teilen möchtest.',

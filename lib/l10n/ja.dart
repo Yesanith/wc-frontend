@@ -1166,7 +1166,7 @@ const jaStrings = <String, String>{
   'vendor_value': '売却価格',
   'demand': '需要',
   'supply': '供給',
-  'welcome_title': 'あなたの Tyria を\nひと目で。',
+  'welcome_title': 'いま、タイリアで\n何が起きている？',
   'welcome_body': 'リセット、メタイベント、Wizard\'s Vault、所持品のすべてをひとつに。ArenaNet の読み取り専用 API キーで接続します。',
   'step_create': 'account.arena.net で、共有したい権限を付けてキーを作成します。',
   'step_paste': 'ここに貼り付けてください。キーはこの端末に暗号化して保存され、アカウントへの保存は選んだ場合だけです。',

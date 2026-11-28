@@ -1230,7 +1230,7 @@ const ptStrings = <String, String>{
   'vendor_value': 'Valor no mercador',
   'demand': 'Demanda',
   'supply': 'Oferta',
-  'welcome_title': 'Sua Tyria,\nnum relance.',
+  'welcome_title': 'O que está\nacontecendo em Tyria?',
   'welcome_body':
       'Resets, metas, o Wizard\'s Vault e tudo o que você tem, em um só lugar. Conecte com uma chave de API somente leitura da ArenaNet.',
   'step_create': 'Crie uma chave em account.arena.net com as permissões que quer compartilhar.',

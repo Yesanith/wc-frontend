@@ -1159,7 +1159,7 @@ const zhStrings = <String, String>{
   'vendor_value': '商人收购价',
   'demand': '需求',
   'supply': '供应',
-  'welcome_title': '你的泰瑞亚，\n一目了然。',
+  'welcome_title': '泰瑞亚\n正在发生什么？',
   'welcome_body': '重置时间、元事件、巫师宝库以及你拥有的一切，尽在一处。使用 ArenaNet 的只读 API 密钥连接。',
   'step_create': '在 account.arena.net 创建密钥，勾选你想分享的权限。',
   'step_paste': '粘贴到这里。它会加密保存在此设备上，只有在你选择时才会保存到你的账号中。',

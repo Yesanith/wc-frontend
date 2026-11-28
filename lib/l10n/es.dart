@@ -1234,7 +1234,7 @@ const esStrings = <String, String>{
   'vendor_value': 'Valor de venta',
   'demand': 'Demanda',
   'supply': 'Oferta',
-  'welcome_title': 'Tu Tyria,\nde un vistazo.',
+  'welcome_title': '¿Qué pasa\nen Tyria?',
   'welcome_body':
       'Reinicios, metas, la Cámara del Brujo y todo lo que tienes, en un solo lugar. Conéctate con una clave API de solo lectura de ArenaNet.',
   'step_create': 'Crea una clave en account.arena.net con los permisos que quieras compartir.',

@@ -33,7 +33,7 @@
   "limits": "The browser version has no notifications, no alerts for world events and no cache on the device, so it loads more slowly. Your API key stays in this browser and is sent only to the Guild Wars 2 servers, unless you choose to keep it in your account.",
   "fan": "Wondrous Compass is a fan project and is not affiliated with or endorsed by ArenaNet or NCSOFT. Guild Wars 2 and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation.",
   "eyebrow": "Unofficial Guild Wars 2 companion",
-  "hero_h": "Your Tyria, <em>at a glance</em>.",
+  "hero_h": "What's happening <em>in Tyria</em>?",
   "chips": [
    "Free",
    "No ads",

@@ -1229,7 +1229,7 @@ const ruStrings = <String, String>{
   'vendor_value': 'Цена у торговца',
   'demand': 'Спрос',
   'supply': 'Предложение',
-  'welcome_title': 'Ваша Тирия\nс первого взгляда.',
+  'welcome_title': 'Что происходит\nв Тирии?',
   'welcome_body':
       'Сбросы, мета-события, Wizard\'s Vault и всё, что у вас есть, в одном месте. Подключитесь с API-ключом ArenaNet только для чтения.',
   'step_create': 'Создайте ключ на account.arena.net с разрешениями, которыми хотите поделиться.',

@@ -1224,7 +1224,7 @@ const trStrings = <String, String>{
   'vendor_value': 'Satıcı değeri',
   'demand': 'Talep',
   'supply': 'Arz',
-  'welcome_title': 'Tyria\'n,\ntek bakışta.',
+  'welcome_title': 'Tyria\'da\nneler oluyor?',
   'welcome_body':
       'Sıfırlamalar, metalar, Wizard\'s Vault ve sahip olduğun her şey tek yerde. ArenaNet\'ten alacağın salt okunur bir API anahtarıyla bağlan.',
   'step_create': 'account.arena.net üzerinde paylaşmak istediğin izinlerle bir anahtar oluştur.',

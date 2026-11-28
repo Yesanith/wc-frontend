@@ -33,7 +33,7 @@
   "limits": "La version navigateur n'a ni notifications, ni alertes d'événements du monde, ni cache sur l'appareil, elle charge donc plus lentement. Ta clé API reste dans ce navigateur et n'est envoyée qu'aux serveurs de Guild Wars 2, sauf si tu choisis de la garder dans ton compte.",
   "fan": "Wondrous Compass est un projet de fans, sans lien avec ArenaNet ni NCSOFT et non soutenu par eux. Guild Wars 2 et tous les logos et designs associés sont des marques ou des marques déposées de NCSOFT Corporation.",
   "eyebrow": "Compagnon non officiel de Guild Wars 2",
-  "hero_h": "Ton Tyria, <em>d'un coup d'œil</em>.",
+  "hero_h": "Que se passe-t-il <em>en Tyrie</em> ?",
   "chips": [
    "Gratuit",
    "Sans publicité",

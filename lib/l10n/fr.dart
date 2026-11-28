@@ -1240,7 +1240,7 @@ const frStrings = <String, String>{
   'vendor_value': 'Valeur marchande',
   'demand': 'Demande',
   'supply': 'Offre',
-  'welcome_title': 'Ta Tyrie,\nen un coup d\'œil.',
+  'welcome_title': 'Que se passe-t-il\nen Tyrie ?',
   'welcome_body':
       'Réinitialisations, métas, la Chambre forte du sorcier et tout ce que tu possèdes, au même endroit. Connecte-toi avec une clé API en lecture seule d\'ArenaNet.',
   'step_create': 'Crée une clé sur account.arena.net avec les autorisations que tu veux partager.',
